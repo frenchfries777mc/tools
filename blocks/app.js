@@ -269,5 +269,5 @@ var saved=null; try{ saved=JSON.parse(lsGet(LS)||'null'); }catch(e){}
 if(saved&&saved.ws){ $('projName').value=saved.name||T('나의 웹페이지'); setImgs(saved.imgs); try{ loadJSON(saved.ws); }catch(e){ console.error(e); blank(); } }
 else { $('projName').value=T(BH_EXAMPLES[0].name); loadXML(BH_EXAMPLES[0].xml()); arrange(); save(); }
 setTimeout(syncBar,50);
-window.__bh={ws:ws,copy:copyBlock,paste:pasteBlock,deleteAll:deleteAll,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,examples:BH_EXAMPLES};
+window.__bh={ws:ws,copy:copyBlock,paste:pasteBlock,deleteAll:deleteAll,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,loadJSON:loadJSON,save:save,toast:toast,examples:BH_EXAMPLES};
 })();
