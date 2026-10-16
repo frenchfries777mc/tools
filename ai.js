@@ -7,6 +7,7 @@
          FFAI.isLocal()          -> true when the built-in AI is chosen (smaller context: send shorter prompts)
          FFAI.settings(onSaved)  -> opens the settings dialog
          FFAI.ask({system, prompt, json, maxTokens}) -> Promise<string> (opens settings first when no key)
+         FFAI.ask({…, onText}) streams the answer as it is written; FFAI.stop() stops it
          FFAI.parseJSON(text)    -> JSON from a reply, tolerating ``` fences
    Load after i18n.js. New tools should reuse this file instead of adding their own AI code. */
 (function(){
@@ -22,6 +23,7 @@ var PROVIDERS={
 };
 
 FFT.add({
+'멈췄어요':['Stopped','Detenido','Arrêté','Gestoppt','止めました'],
 '자체 AI':['Built-in AI','IA integrada','IA intégrée','Eingebaute KI','内蔵AI'],
 '기본 · 약 1GB':['Standard · about 1 GB','Estándar · unos 1 GB','Standard · environ 1 Go','Standard · ca. 1 GB','標準 · 約1GB'],
 '가벼움 · 약 0.5GB':['Light · about 0.5 GB','Ligero · unos 0,5 GB','Léger · environ 0,5 Go','Leicht · ca. 0,5 GB','軽量 · 約0.5GB'],
@@ -80,39 +82,68 @@ function sdk(){ // the official Anthropic SDK, bundled into lib/ and loaded only
     s.onerror=function(){ sdkP=null; rej(AIError(T('AI에 연결하지 못했어요'),'net')); }; document.head.appendChild(s); });
   return sdkP;
 }
+/* o.onText(textSoFar) streams the answer as it is written; o.signal (AbortSignal) stops it. */
+var stopNow=null;
+function claudeErr(Anthropic,err){
+  if(err instanceof Anthropic.APIUserAbortError) return AIError(T('멈췄어요'),'stop');
+  if(err instanceof Anthropic.AuthenticationError||err instanceof Anthropic.PermissionDeniedError) return AIError(T('키가 맞지 않아요'),'auth');
+  if(err instanceof Anthropic.RateLimitError) return AIError(T('요청이 너무 많아요. 조금 뒤에 다시 해 주세요'),'rate');
+  if(err instanceof Anthropic.APIError&&err.status) return AIError(T('AI에 연결하지 못했어요')+' ('+err.status+')','api');
+  return AIError(T('AI에 연결하지 못했어요'),'net');
+}
 function askClaude(c,o){
   return sdk().then(function(Anthropic){
     var client=new Anthropic({apiKey:c.key, dangerouslyAllowBrowser:true});
     var req={model:c.model, max_tokens:o.maxTokens||16000, system:o.system||undefined, messages:[{role:'user',content:o.prompt}]};
     if(c.model==='claude-opus-5-5'||c.model==='claude-sonnet-5-5'){ req.betas=['server-side-fallback-2026-07-01']; req.fallbacks='default'; }
-    var call=req.betas?client.beta.messages.create(req):client.messages.create(req);
-    return call.then(function(r){
+    var api=req.betas?client.beta.messages:client.messages, done;
+    if(o.onText){ var so='', st=api.stream(req); stopNow=function(){ st.abort(); };
+      st.on('text',function(d){ so+=d; o.onText(so); }); done=st.finalMessage(); }
+    else done=api.create(req);
+    return done.then(function(r){
       if(r.stop_reason==='refusal') throw AIError(T('AI가 이 요청에는 답하지 않았어요'),'refusal');
       return r.content.filter(function(b){ return b.type==='text'; }).map(function(b){ return b.text; }).join('');
-    },function(err){
-      if(err instanceof Anthropic.AuthenticationError||err instanceof Anthropic.PermissionDeniedError) throw AIError(T('키가 맞지 않아요'),'auth');
-      if(err instanceof Anthropic.RateLimitError) throw AIError(T('요청이 너무 많아요. 조금 뒤에 다시 해 주세요'),'rate');
-      if(err instanceof Anthropic.APIError&&err.status) throw AIError(T('AI에 연결하지 못했어요')+' ('+err.status+')','api');
-      throw AIError(T('AI에 연결하지 못했어요'),'net');
-    });
+    },function(err){ if(err&&err.kind) throw err; throw claudeErr(Anthropic,err); });
   });
 }
 function httpErr(res){ return res.text().then(function(t){ var k=res.status===401||res.status===403||(res.status===400&&/API[_ ]?key/i.test(t))?'auth':res.status===429?'rate':'api';
   throw AIError(k==='auth'?T('키가 맞지 않아요'):k==='rate'?T('요청이 너무 많아요. 조금 뒤에 다시 해 주세요'):T('AI에 연결하지 못했어요')+' ('+res.status+')',k); }); }
+/* reads a server-sent-events body; each "data:" JSON goes to pick(), which returns the new text piece */
+function sse(res,pick,o){
+  var rd=res.body.getReader(), dec=new TextDecoder(), buf='', out='';
+  function step(){ return rd.read().then(function(r){
+    if(r.done) return out;
+    buf+=dec.decode(r.value,{stream:true}); var lines=buf.split('\n'); buf=lines.pop();
+    lines.forEach(function(l){ l=l.trim(); if(l.indexOf('data:')!==0) return; var d=l.slice(5).trim(); if(!d||d==='[DONE]') return;
+      var j; try{ j=JSON.parse(d); }catch(e){ return; } var t=pick(j); if(t){ out+=t; o.onText(out); } });
+    return step(); }); }
+  return step();
+}
+function post(url,headers,body,o){
+  var ac=new AbortController(); if(o.onText) stopNow=function(){ ac.abort(); };
+  return fetch(url,{method:'POST',headers:headers,body:JSON.stringify(body),signal:ac.signal})
+    .then(function(res){ if(!res.ok) return httpErr(res); return res; },function(e){ throw e&&e.name==='AbortError'?AIError(T('멈췄어요'),'stop'):AIError(T('AI에 연결하지 못했어요'),'net'); });
+}
+function streamErr(e){ if(e&&e.kind) throw e; throw e&&e.name==='AbortError'?AIError(T('멈췄어요'),'stop'):AIError(T('AI에 연결하지 못했어요'),'net'); }
 function askGemini(c,o){
   var body={contents:[{role:'user',parts:[{text:o.prompt}]}], generationConfig:{maxOutputTokens:o.maxTokens||16000}};
   if(o.system) body.systemInstruction={parts:[{text:o.system}]};
   if(o.json) body.generationConfig.responseMimeType='application/json';
-  return fetch('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(c.model)+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':c.key},body:JSON.stringify(body)})
-    .then(function(res){ if(!res.ok) return httpErr(res); return res.json(); },function(){ throw AIError(T('AI에 연결하지 못했어요'),'net'); })
-    .then(function(j){ var cand=j.candidates&&j.candidates[0]; if(!cand||!cand.content){ throw AIError(T('AI가 이 요청에는 답하지 않았어요'),'refusal'); }
-      return (cand.content.parts||[]).map(function(p){ return p.text||''; }).join(''); });
+  var base='https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(c.model), h={'Content-Type':'application/json','x-goog-api-key':c.key};
+  var parts=function(j){ var cand=j.candidates&&j.candidates[0]; return cand&&cand.content?(cand.content.parts||[]).map(function(p){ return p.text||''; }).join(''):''; };
+  if(o.onText) return post(base+':streamGenerateContent?alt=sse',h,body,o).then(function(res){ return sse(res,parts,o); })
+    .then(function(t){ if(!t) throw AIError(T('AI가 이 요청에는 답하지 않았어요'),'refusal'); return t; },streamErr);
+  return post(base+':generateContent',h,body,o).then(function(res){ return res.json(); })
+    .then(function(j){ var cand=j.candidates&&j.candidates[0]; if(!cand||!cand.content){ throw AIError(T('AI가 이 요청에는 답하지 않았어요'),'refusal'); } return parts(j); });
 }
 function askOpenAI(c,o){
   var body={model:c.model, max_completion_tokens:o.maxTokens||16000, messages:(o.system?[{role:'system',content:o.system}]:[]).concat([{role:'user',content:o.prompt}])};
   if(o.json) body.response_format={type:'json_object'};
-  return fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+c.key},body:JSON.stringify(body)})
-    .then(function(res){ if(!res.ok) return httpErr(res); return res.json(); },function(){ throw AIError(T('AI에 연결하지 못했어요'),'net'); })
+  var h={'Content-Type':'application/json','Authorization':'Bearer '+c.key};
+  if(o.onText){ body.stream=true; return post('https://api.openai.com/v1/chat/completions',h,body,o)
+    .then(function(res){ return sse(res,function(j){ var d=j.choices&&j.choices[0]&&j.choices[0].delta; return d&&d.content||''; },o); })
+    .then(function(t){ if(!t) throw AIError(T('AI가 이 요청에는 답하지 않았어요'),'refusal'); return t; },streamErr); }
+  return post('https://api.openai.com/v1/chat/completions',h,body,o).then(function(res){ return res.json(); })
     .then(function(j){ var m=j.choices&&j.choices[0]&&j.choices[0].message; if(!m||m.refusal) throw AIError(T('AI가 이 요청에는 답하지 않았어요'),'refusal'); return m.content||''; });
 }
 /* ---------- built-in AI (WebLLM + WebGPU) ---------- */
@@ -131,7 +162,7 @@ function webllm(){
 function mlcId(m){ return m+'-'+(f16?'q4f16_1':'q4f32_1')+'-MLC'; }
 var prog=null;
 function progress(p,text){
-  if(!prog){ prog=document.createElement('div'); prog.className='ffai-prog'; prog.setAttribute('data-notr',''); prog.innerHTML='<b></b><span><i></i></span>'; document.body.appendChild(prog); }
+  if(!prog){ addCSS(); prog=document.createElement('div'); prog.className='ffai-prog'; prog.setAttribute('data-notr',''); prog.innerHTML='<b></b><span><i></i></span>'; document.body.appendChild(prog); }
   if(p==null){ prog.classList.remove('on'); return; }
   prog.classList.add('on'); prog.querySelector('b').textContent=text; prog.querySelector('i').style.width=Math.round(p*100)+'%';
   if(ov&&ov.classList.contains('open')) msg(text,'');
@@ -156,12 +187,21 @@ function engine(model){
 function askLocal(c,o){
   var run=function(){ return engine(c.model).then(function(e){
     var msgs=(o.system?[{role:'system',content:o.system}]:[]).concat([{role:'user',content:o.prompt}]);
-    var req={messages:msgs, max_tokens:Math.min(o.maxTokens||2048,2560), temperature:0.3, extra_body:{enable_thinking:false}};
-    return e.chat.completions.create(req).then(function(r){
-      var t=(r.choices&&r.choices[0]&&r.choices[0].message&&r.choices[0].message.content)||'';
-      return t.replace(/<think>[\s\S]*?<\/think>/g,'').trim();
-    },function(err){ console.error(err); var m=String(err&&err.message||'');
-      throw AIError(/context|prompt.*(long|length)|exceed/i.test(m)?T('자체 AI에게는 너무 긴 요청이에요. 고를 칸을 줄이거나 API 키를 써 보세요'):T('자체 AI가 답하지 못했어요'),'api'); });
+    var req={messages:msgs, max_tokens:Math.min(o.maxTokens||2048,2560), temperature:0.3, extra_body:{enable_thinking:false}}, stopped=false;
+    var clean=function(t){ return t.replace(/<think>[\s\S]*?(<\/think>|$)/g,'').replace(/^\s+/,''); };
+    var fail=function(err){ if(err&&err.kind) throw err; console.error(err); var m=String(err&&err.message||'');
+      throw AIError(/context|prompt.*(long|length)|exceed/i.test(m)?T('자체 AI에게는 너무 긴 요청이에요. 고를 칸을 줄이거나 API 키를 써 보세요'):T('자체 AI가 답하지 못했어요'),'api'); };
+    if(!o.onText) return e.chat.completions.create(req).then(function(r){
+      return clean((r.choices&&r.choices[0]&&r.choices[0].message&&r.choices[0].message.content)||'').trim(); },fail);
+    req.stream=true; stopNow=function(){ stopped=true; e.interruptGenerate(); };
+    return e.chat.completions.create(req).then(function(it){
+      var out='', ai=it[Symbol.asyncIterator]();
+      function next(){ return ai.next().then(function(r){
+        if(r.done){ if(stopped) throw AIError(T('멈췄어요'),'stop'); return clean(out).trim(); }
+        var d=r.value.choices&&r.value.choices[0]&&r.value.choices[0].delta; if(d&&d.content){ out+=d.content; o.onText(clean(out)); }
+        return next(); }); }
+      return next();
+    }).then(null,fail);
   }); };
   var p=chain.then(run,run); chain=p.then(function(){},function(){}); return p;
 }
@@ -197,8 +237,9 @@ var css='.ffai-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;d
 '.ffai-prog.on{display:flex}.ffai-prog b{font-weight:600}.ffai-prog span{height:6px;border-radius:9px;background:var(--panel2,#151925);overflow:hidden}.ffai-prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--fry,#ffc93c),var(--fry2,#ff8a3d));transition:width .2s}';
 var ov=null, onOk=null, onCancel=null, cur=null;
 function el(h){ var d=document.createElement('div'); d.innerHTML=h; return d.firstChild; }
+var cssOn=false; function addCSS(){ if(cssOn) return; cssOn=true; var st=document.createElement('style'); st.textContent=css; document.head.appendChild(st); }
 function build(){
-  var st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
+  addCSS();
   ov=el('<div class="ffai-ov" data-notr><div class="ffai-d" role="dialog" aria-modal="true"><div class="ffai-h"><h3></h3><button class="ffai-x" aria-label="">×</button></div>'+
     '<div class="ffai-b"><label class="l-p"></label><div class="ffai-seg"></div>'+
     '<label class="l-k"></label><div class="ffai-row r-k"><input type="password" class="k" autocomplete="off" spellcheck="false"><button class="ffai-sm show"></button></div>'+
@@ -247,5 +288,6 @@ function close(){ ov.classList.remove('open'); }
 function cancel(){ close(); var f=onCancel; onOk=onCancel=null; if(f) f(); }
 function settings(ok,no){ if(!ov) build(); cur=load(); onOk=ok||null; onCancel=no||null; fill(); ov.classList.add('open'); setTimeout(function(){ var k=ov.querySelector('.k'); if(!k.value) k.focus(); },50); }
 
-window.FFAI={ready:ready, isLocal:isLocal, settings:settings, ask:ask, parseJSON:parseJSON, config:cfg};
+function stop(){ if(stopNow){ var f=stopNow; stopNow=null; try{ f(); }catch(e){} } }
+window.FFAI={ready:ready, isLocal:isLocal, stop:stop, settings:settings, ask:ask, parseJSON:parseJSON, config:cfg};
 })();

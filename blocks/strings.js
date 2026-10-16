@@ -298,7 +298,7 @@ FFT.add({
 'AI로 블록 만들기':['Build blocks with AI','Crear bloques con IA','Créer des blocs avec l’IA','Blöcke mit KI bauen','AIでブロックを作る'],
 '새로 만들기':['New project','Proyecto nuevo','Nouveau projet','Neues Projekt','新しく作る'],
 '지금 블록 고치기':['Change my blocks','Cambiar mis bloques','Modifier mes blocs','Meine Blöcke ändern','今のブロックを直す'],
-'만들고 싶은 페이지를 글로 써 주세요. AI가 블록을 짜면 지금 블록 자리에 들어가요.':['Describe the page you want. The blocks the AI builds replace the current ones.','Describe la página que quieres. Los bloques de la IA reemplazan los actuales.','Décris la page voulue. Les blocs de l’IA remplacent les blocs actuels.','Beschreibe die Seite. Die Blöcke der KI ersetzen die aktuellen.','作りたいページを文章で書いてください。AIが作ったブロックが今のブロックと入れ替わります。'],
+'만들고 싶은 페이지를 글로 써 주세요. AI가 블록을 짜면 지금 블록 자리에 들어가요. 예시를 누르면 바로 써져요.':['Describe the page you want. The blocks the AI builds replace the current ones. Tap an example to use it.','Describe la página que quieres. Los bloques de la IA reemplazan los actuales. Toca un ejemplo para usarlo.','Décris la page voulue. Les blocs de l’IA remplacent les blocs actuels. Touche un exemple pour l’utiliser.','Beschreibe die Seite. Die Blöcke der KI ersetzen die aktuellen. Tippe auf ein Beispiel.','作りたいページを文章で書いてください。AIが作ったブロックが今のブロックと入れ替わります。例を押すとすぐ入ります。'],
 '예: 1부터 100 사이 숫자 맞히기 게임. 크다/작다를 알려 주고 맞히면 축하해 줘요':['e.g. A 1 to 100 number guessing game that says higher or lower and cheers when you win','p. ej. Juego de adivinar un número del 1 al 100 que dice más alto o más bajo','ex. Jeu pour deviner un nombre de 1 à 100 qui dit plus grand ou plus petit','z. B. Zahlenraten von 1 bis 100, das höher/niedriger sagt und am Ende jubelt','例: 1〜100の数当てゲーム。大きい/小さいを教えて、当たったらお祝い'],
 '예: 버튼을 누를 때마다 배경색이 바뀌게 해 줘':['e.g. Change the background color every time the button is pressed','p. ej. Que el fondo cambie de color cada vez que se pulsa el botón','ex. Change la couleur de fond à chaque appui sur le bouton','z. B. Bei jedem Knopfdruck die Hintergrundfarbe ändern','例: ボタンを押すたびに背景色が変わるようにして'],
 '만들기':['Build','Crear','Créer','Bauen','作る'],
@@ -310,4 +310,21 @@ FFT.add({
 'AI가 블록을 만들었어요':['The AI built the blocks','La IA creó los bloques','L’IA a créé les blocs','Die KI hat die Blöcke gebaut','AIがブロックを作りました'],
 'AI 전으로 되돌리기':['Undo AI change','Deshacer cambio de IA','Annuler le changement IA','KI-Änderung rückgängig','AIの前に戻す'],
 'AI 전으로 되돌렸어요':['Back to before the AI','Volvió a antes de la IA','Retour avant l’IA','Zurück zum Stand vor der KI','AIの前に戻しました']
+});
+FFT.add({
+'1부터 100 사이 숫자 맞히기 게임. 크다/작다를 알려 주고 맞히면 축하해 줘요':['A 1 to 100 number guessing game that says higher or lower and cheers when you get it','Juego de adivinar un número del 1 al 100 que dice más alto o más bajo y celebra al acertar','Jeu pour deviner un nombre de 1 à 100 qui dit plus grand ou plus petit et félicite','Zahlenraten von 1 bis 100, sagt höher oder niedriger und jubelt beim Treffer','1〜100の数当てゲーム。大きい/小さいを教えて、当たったらお祝い'],
+'버튼을 누를 때마다 숫자가 올라가는 클릭 카운터':['A click counter that goes up each time the button is pressed','Un contador que sube cada vez que pulsas el botón','Un compteur qui monte à chaque appui sur le bouton','Ein Klickzähler, der bei jedem Druck steigt','ボタンを押すたびに数が増えるクリックカウンター'],
+'할 일을 쓰고 추가 버튼을 누르면 목록에 쌓이는 할 일 목록':['A to-do list: type a task and press Add to put it on the list','Lista de tareas: escribe una tarea y pulsa Añadir','Liste de tâches : écris une tâche et appuie sur Ajouter','To-do-Liste: Aufgabe eintippen und Hinzufügen drücken','やることを書いて追加ボタンを押すとたまっていくリスト'],
+'그림판에 공이 튀어 다니는 애니메이션':['An animation of a ball bouncing around the canvas','Una animación de una pelota rebotando en el lienzo','Une animation de balle qui rebondit sur le canevas','Eine Animation mit einem hüpfenden Ball','キャンバスでボールがはね回るアニメーション'],
+'화면이 초록색으로 바뀌면 빨리 누르는 반응 속도 게임':['A reaction game: press as fast as you can when the screen turns green','Juego de reflejos: pulsa rápido cuando la pantalla se ponga verde','Jeu de réflexes : appuie vite quand l’écran devient vert','Reaktionsspiel: schnell drücken, wenn der Bildschirm grün wird','画面が緑になったらすばやく押す反応速度ゲーム'],
+'배경을 밤하늘로 바꿔 줘':['Change the background to night sky','Cambia el fondo a cielo nocturno','Mets le fond en ciel de nuit','Hintergrund auf Nachthimmel ändern','背景を夜空にして'],
+'버튼을 누르면 소리가 나게 해 줘':['Play a sound when the button is pressed','Que suene algo al pulsar el botón','Joue un son quand on appuie sur le bouton','Beim Knopfdruck einen Ton spielen','ボタンを押したら音が鳴るようにして'],
+'점수가 10이 되면 축하 메시지를 띄워 줘':['Show a congratulations message when the score reaches 10','Muestra un mensaje de felicitación cuando la puntuación llegue a 10','Affiche un message de bravo quand le score atteint 10','Bei 10 Punkten eine Glückwunschmeldung zeigen','スコアが10になったらお祝いメッセージを出して'],
+'제목 글자를 더 크고 빨갛게 해 줘':['Make the heading bigger and red','Haz el título más grande y rojo','Rends le titre plus grand et rouge','Überschrift größer und rot machen','タイトルをもっと大きく赤くして']
+});
+FFT.add({
+'AI가 생각하는 중… {0}초':['The AI is thinking… {0}s','La IA está pensando… {0} s','L’IA réfléchit… {0} s','Die KI denkt nach… {0} s','AIが考え中… {0}秒'],
+'AI가 블록 코드를 쓰는 중… 글자 {0}개 · {1}초':['The AI is writing the block code… {0} characters · {1}s','La IA escribe el código… {0} caracteres · {1} s','L’IA écrit le code… {0} caractères · {1} s','Die KI schreibt den Code… {0} Zeichen · {1} s','AIがブロックのコードを書いています… {0}文字 · {1}秒'],
+'AI 답을 고치는 중… {0}초':['Fixing the AI answer… {0}s','Corrigiendo la respuesta… {0} s','Correction de la réponse… {0} s','Antwort wird korrigiert… {0} s','AIの答えを直しています… {0}秒'],
+'멈추기':['Stop','Detener','Arrêter','Stopp','止める']
 });
