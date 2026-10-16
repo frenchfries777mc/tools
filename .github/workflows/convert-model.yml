@@ -1,0 +1,47 @@
+# Converts a Hugging Face Qwen3 model to the MLC format the site's in-browser AI (WebLLM) loads,
+# and uploads it to Hugging Face. Run it from the Actions tab ("Run workflow").
+# Upload needs a repository secret named HF_TOKEN (a Hugging Face token with write access).
+name: Convert model for the browser
+
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: Hugging Face model to convert
+        default: Frenchfries777/FF-Tools-1.7B-merged
+      name:
+        description: Name of the uploaded model (FF-Tools-1.7B or FF-Tools-4B)
+        default: FF-Tools-1.7B
+      quants:
+        description: Quantizations, separated by spaces
+        default: q4f16_1 q4f32_1
+      upload:
+        description: Upload to Hugging Face
+        type: boolean
+        default: true
+  # A pull request that changes the converter runs a test conversion of the base model (no upload).
+  pull_request:
+    paths: [train/convert.py, .github/workflows/convert-model.yml]
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - name: Free disk space
+        run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL && df -h /
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install converter
+        run: |
+          python -m pip install -q --upgrade pip
+          python -m pip install -q torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -q --pre -f https://mlc.ai/wheels mlc-llm-nightly-cpu mlc-ai-nightly-cpu
+          python -m pip install -q safetensors huggingface_hub transformers sentencepiece tiktoken
+          python -m pip list 2>/dev/null | grep -i -E "mlc|numpy|torch|transformers|ml.dtypes"
+      - name: Convert and upload
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: python -u train/convert.py "${{ inputs.source || 'Qwen/Qwen3-1.7B' }}" "${{ inputs.name || 'test' }}" "${{ inputs.quants || 'q4f16_1' }}" "${{ inputs.upload || 'false' }}"
