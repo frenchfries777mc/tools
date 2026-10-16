@@ -14,6 +14,14 @@
 <script src="i18n.js"></script>
 <script>
 FFT.add({
+'실험실':['Lab','Laboratorio','Labo','Labor','実験室'],
+'실험 9가지':['9 experiments','9 experimentos','9 expériences','9 Experimente','実験9種'],
+'기록·그래프·CSV':['Records · graphs · CSV','Registros · gráficas · CSV','Mesures · graphiques · CSV','Messwerte · Graphen · CSV','記録・グラフ・CSV'],
+'슬라이더를 움직이면 바로 바뀌는 중고등 과학·수학 실험실이에요. 값을 재서 표에 기록하고, 그래프로 규칙을 찾아요.':['A science and math lab for middle and high school where everything reacts as you move the sliders. Measure, record values in a table and find the rule on a graph.','Un laboratorio de ciencias y matemáticas para secundaria que reacciona al mover los controles. Mide, anota en una tabla y descubre la regla en una gráfica.','Un labo de sciences et de maths pour le collège et le lycée qui réagit dès qu’on bouge les curseurs. Mesure, note dans un tableau et trouve la loi sur un graphique.','Ein Mathe- und Naturwissenschaftslabor für die Sekundarstufe, das sofort auf die Regler reagiert. Messen, in eine Tabelle eintragen und die Regel im Graphen finden.','スライダーを動かすとすぐ変わる、中高生向けの理科・数学の実験室。値を測って表に記録し、グラフで規則を見つけます。'],
+'함수 그래프, 확률, 삼각함수, 포물선 운동, 진자, 용수철, 빛의 굴절, 물결파 간섭, 옴의 법칙':['Function graphs, probability, trigonometry, projectile motion, pendulum, spring, refraction, wave interference, Ohm’s law','Gráficas de funciones, probabilidad, trigonometría, tiro parabólico, péndulo, resorte, refracción, interferencia de ondas, ley de Ohm','Graphes de fonctions, probabilités, trigonométrie, tir parabolique, pendule, ressort, réfraction, interférences, loi d’Ohm','Funktionsgraphen, Wahrscheinlichkeit, Trigonometrie, schiefer Wurf, Pendel, Feder, Brechung, Welleninterferenz, ohmsches Gesetz','関数のグラフ、確率、三角関数、放物運動、振り子、ばね、光の屈折、水面波の干渉、オームの法則'],
+'끌어서 바꾸는 시뮬레이션과 실시간 측정값, 해 볼 만한 탐구 과제':['Simulations you can drag, live measurements and things to try','Simulaciones que se arrastran, medidas en vivo y retos para probar','Simulations à manipuler, mesures en direct et défis à essayer','Simulationen zum Ziehen, Live-Messwerte und Ideen zum Ausprobieren','ドラッグで変えられるシミュレーション、リアルタイムの測定値、試してみたい課題'],
+'기록한 표로 그래프와 추세선을 그리고 CSV로 내보내기':['Graph your records with a trend line and export them as CSV','Grafica tus registros con línea de tendencia y expórtalos en CSV','Trace tes mesures avec une droite de tendance et exporte-les en CSV','Messwerte mit Trendlinie zeichnen und als CSV exportieren','記録した表でグラフと近似直線を描き、CSVで書き出し'],
+'AI 도우미가 지금 값과 내 기록으로 원리를 설명':['The AI helper explains the idea using your current values and records','El asistente IA explica la idea con tus valores y registros','L’assistant IA explique le principe avec tes valeurs et tes mesures','Der KI-Helfer erklärt das Prinzip mit deinen Werten und Messungen','AIアシスタントが今の値と記録を使って原理を説明'],
 '발표 자료':['Presentations','Presentaciones','Présentations','Präsentationen','プレゼン資料'],
 'AI가 슬라이드 작성':['AI writes the slides','La IA escribe las diapositivas','L’IA écrit les diapositives','KI schreibt die Folien','AIがスライドを作成'],
 'PPTX 파일':['PPTX file','Archivo PPTX','Fichier PPTX','PPTX-Datei','PPTXファイル'],
@@ -133,6 +141,14 @@ FFT.add({
   .sl .tags span{background:rgba(255,122,89,.08); color:#ffd9cf; border:1px solid rgba(255,122,89,.28);}
   .sl .desc{color:#b8a7a2;} .sl .desc li::marker{color:#ff7a59;}
   .sl .play{background:#ff7a59; color:#1f0904;}
+  .fl{--card:#110f1a; background:#110f1a; border-color:#2e2648;}
+  .fl:hover{border-color:#a78bfa; box-shadow:0 18px 50px rgba(167,139,250,.16);}
+  .fl .badge{background:rgba(167,139,250,.92); color:#140a2b;}
+  .fl h2 b{color:#a78bfa;}
+  .fl .motto{color:#c4b5fd;} .fl .motto i{background:#c4b5fd;}
+  .fl .tags span{background:rgba(167,139,250,.08); color:#e4dcff; border:1px solid rgba(167,139,250,.28);}
+  .fl .desc{color:#aba5bd;} .fl .desc li::marker{color:#a78bfa;}
+  .fl .play{background:#a78bfa; color:#140a2b;}
   .why{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin:40px 0 0;}
   .why > div{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px 18px 16px;}
   .why .ic{font-size:24px;} .why h3{margin:6px 0 4px; font-size:16.5px;} .why p{margin:0; color:var(--dim); font-size:14.5px;}
@@ -216,6 +232,24 @@ FFT.add({
           </ul>
         </div>
         <div class="acts"><a class="play" href="slides/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
+      </div>
+    </article>
+    <article class="game fl">
+      <a class="shot" href="lab/" aria-label="Fry Lab 열기"><span class="badge">실험실</span><img src="lab.webp" alt="Fry Lab 화면" loading="lazy"></a>
+      <div class="body">
+        <h2>FRY <b>LAB</b></h2>
+        <div class="motto"><i></i>SCIENCE &amp; MATH LAB<i></i></div>
+        <div class="tags"><span>실험 9가지</span><span>기록·그래프·CSV</span><span>AI 도우미</span><span>로그인 없이</span></div>
+        <div class="desc">
+          슬라이더를 움직이면 바로 바뀌는 중고등 과학·수학 실험실이에요. 값을 재서 표에 기록하고, 그래프로 규칙을 찾아요.
+          <ul>
+            <li>함수 그래프, 확률, 삼각함수, 포물선 운동, 진자, 용수철, 빛의 굴절, 물결파 간섭, 옴의 법칙</li>
+            <li>끌어서 바꾸는 시뮬레이션과 실시간 측정값, 해 볼 만한 탐구 과제</li>
+            <li>기록한 표로 그래프와 추세선을 그리고 CSV로 내보내기</li>
+            <li>AI 도우미가 지금 값과 내 기록으로 원리를 설명</li>
+          </ul>
+        </div>
+        <div class="acts"><a class="play" href="lab/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
       </div>
     </article>
   </section>
