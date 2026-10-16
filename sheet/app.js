@@ -532,6 +532,9 @@ function structural(isRow,at,count){
     var d=-count, e=at+d-1; if(o[b]<at) return true; if(o[a]>e){ o[a]-=d; o[b]-=d; return true; }
     var na=o[a]<at?o[a]:at, nb=o[b]>e?o[b]-d:at-1; if(nb<na) return false; o[a]=na; o[b]=nb; return true; }
   sh.cfs=sh.cfs.filter(adj); sh.charts=sh.charts.filter(adj);
+  if(!isRow) sh.charts.forEach(function(ch){ if(!ch.cols) return; // picked series columns move with the columns too
+    ch.cols=ch.cols.map(function(x){ if(count>0) return x>=at?x+count:x; return x>=at&&x<at-count?-1:x>=at-count?x+count:x; }).filter(function(x){ return x>=0; });
+    if(!ch.cols.length) delete ch.cols; });
   if(isRow) sh.rows=Math.max(10,Math.min(MAXR,sh.rows+count)); else sh.cols=Math.max(5,Math.min(MAXC,sh.cols+count));
   buildGrid();
 }
@@ -663,7 +666,7 @@ function chartData(ch){
   if(ch.c2>ch.c1&&textCol(ch.c1)){ lab=true; while(lc+1<ch.c2&&textCol(lc+1)) lc++; } // label = the last of the leading text columns
   var c0=lab?lc+1:ch.c1, labels=[], series=[];
   for(r=r0;r<=ch.r2;r++) labels.push(lab?E.formatValue(v(r,lc)):String(r-r0+1));
-  for(c=c0;c<=ch.c2;c++){ var vals=[]; for(r=r0;r<=ch.r2;r++){ var z=v(r,c); vals.push(typeof z==='number'?z:(typeof z==='boolean'?(z?1:0):null)); }
+  for(c=c0;c<=ch.c2;c++){ if(ch.cols&&ch.cols.indexOf(c)<0) continue; var vals=[]; for(r=r0;r<=ch.r2;r++){ var z=v(r,c); vals.push(typeof z==='number'?z:(typeof z==='boolean'?(z?1:0):null)); }
     if(vals.some(function(x){ return x!=null; })) series.push({name:hdr?E.formatValue(v(ch.r1,c)):F('계열 {0}',c-c0+1),vals:vals}); }
   return {labels:labels,series:series};
 }
@@ -752,7 +755,7 @@ function renderCharts(){
     d.querySelector('.rg').onclick=function(){ selectRange(ch); };
     d.addEventListener('click',function(e){ var a=e.target.dataset.a; if(!a) return;
       if(a==='del'){ pushUndo(); sh.charts=sh.charts.filter(function(x){ return x!==ch; }); saveSoon(); renderCharts(); }
-      if(a==='rg'){ if(sel.r1===sel.r2&&sel.c1===sel.c2) return toast(T('차트로 만들 범위를 먼저 고르세요')); pushUndo(); ch.r1=sel.r1; ch.c1=sel.c1; ch.r2=Math.min(sel.r2,sel.r1+500); ch.c2=Math.min(sel.c2,sel.c1+20); saveSoon(); renderCharts(); }
+      if(a==='rg'){ if(sel.r1===sel.r2&&sel.c1===sel.c2) return toast(T('차트로 만들 범위를 먼저 고르세요')); pushUndo(); ch.r1=sel.r1; ch.c1=sel.c1; ch.r2=Math.min(sel.r2,sel.r1+500); ch.c2=Math.min(sel.c2,sel.c1+20); delete ch.cols; saveSoon(); renderCharts(); }
       if(a==='png'){ cv.toBlob(function(b){ download(b,(ch.title||doc.name||'chart')+'.png'); }); } });
     body.appendChild(d); drawChart(cv,ch);
   });

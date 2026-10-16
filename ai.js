@@ -5,6 +5,7 @@
    the key stays in this browser (localStorage 'ffai.v1') and goes straight to that company, never to this site.
    API:  FFAI.ready()            -> true when the chosen AI can answer without asking first
          FFAI.isLocal()          -> true when the built-in AI is chosen (smaller context: send shorter prompts)
+         FFAI.isTuned()          -> true for the Tools-trained built-in models: send the short prompts from ai-prompts.js (FFP)
          FFAI.settings(onSaved)  -> opens the settings dialog
          FFAI.ask({system, prompt, json, maxTokens}) -> Promise<string> (opens settings first when no key)
          FFAI.ask({…, onText}) streams the answer as it is written; FFAI.stop() stops it
@@ -71,6 +72,7 @@ function store(o){ try{ localStorage.setItem(LS,JSON.stringify(o)); }catch(e){} 
 function cfg(){ var o=load(), p=o.provider; var m=o.models[p]||PROVIDERS[p].models[0][0]; return {provider:p, key:o.keys[p]||'', model:m, local:p==='local', localOk:p==='local'&&!!o.local[m]}; }
 function ready(){ var c=cfg(); return c.local?c.localOk&&gpuOk!==false:!!c.key; }
 function isLocal(){ return cfg().local; }
+function isTuned(){ var c=cfg(); return c.local&&/^FF-/.test(c.model); } // the Tools-trained models answer the short prompts in ai-prompts.js
 
 /* ---------- requests ---------- */
 function AIError(msg,kind){ var e=new Error(msg); e.kind=kind; return e; }
@@ -289,5 +291,5 @@ function cancel(){ close(); var f=onCancel; onOk=onCancel=null; if(f) f(); }
 function settings(ok,no){ if(!ov) build(); cur=load(); onOk=ok||null; onCancel=no||null; fill(); ov.classList.add('open'); setTimeout(function(){ var k=ov.querySelector('.k'); if(!k.value) k.focus(); },50); }
 
 function stop(){ if(stopNow){ var f=stopNow; stopNow=null; try{ f(); }catch(e){} } }
-window.FFAI={ready:ready, isLocal:isLocal, stop:stop, settings:settings, ask:ask, parseJSON:parseJSON, config:cfg};
+window.FFAI={ready:ready, isLocal:isLocal, isTuned:isTuned, stop:stop, settings:settings, ask:ask, parseJSON:parseJSON, config:cfg};
 })();
