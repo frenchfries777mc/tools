@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fry Sheet · Frenchfries777 Tools</title>
+<meta name="description" content="브라우저에서 바로 쓰는 스프레드시트. 수식, 차트, 색 단계, 체크박스, 엑셀 파일 열기와 저장.">
+<meta name="theme-color" content="#08090d">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="../i18n.js"></script>
+<script src="strings.js"></script>
+<style>
+:root{ --bg:#08090d; --panel:#10131b; --panel2:#151925; --line:#222837; --grid:#1c2130; --text:#eef0f5; --dim:#8a93a6; --fry:#ffc93c; --fry2:#ff8a3d; --sel:#ffc93c; --hd:#0d1017; }
+*{box-sizing:border-box;}
+html,body{margin:0; height:100%; background:var(--bg); color:var(--text); overscroll-behavior:none;}
+body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif; font-size:14px; display:flex; flex-direction:column; height:100vh; height:100dvh; overflow:hidden;
+  padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0); -webkit-tap-highlight-color:transparent;}
+button,input,select{font:inherit; color:inherit;}
+.top{display:flex; align-items:center; gap:10px; padding:8px 12px; border-bottom:1px solid var(--line); background:var(--panel);}
+.home{display:grid; place-items:center; width:34px; height:34px; border-radius:9px; background:linear-gradient(135deg,var(--fry),var(--fry2)); text-decoration:none; font-size:18px; flex:0 0 auto;}
+.brand{font-family:'Oswald',sans-serif; font-weight:700; font-size:18px; letter-spacing:.04em; white-space:nowrap;}
+.brand b{color:var(--fry);}
+#docName{flex:1 1 120px; min-width:60px; max-width:320px; background:transparent; border:1px solid transparent; border-radius:8px; padding:6px 8px; font-size:15px; font-weight:500;}
+#docName:hover,#docName:focus{border-color:var(--line); background:var(--bg); outline:none;}
+.top .sp{flex:1;}
+.tbtn{display:inline-flex; align-items:center; gap:6px; height:34px; padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--panel2); cursor:pointer; white-space:nowrap;}
+.tbtn:hover{border-color:#3a4256;} .tbtn.pri{background:linear-gradient(90deg,var(--fry),var(--fry2)); color:#1c1405; border:0; font-weight:700;}
+.langSel{background:var(--panel2); color:var(--dim); border:1px solid var(--line); border-radius:8px; padding:6px 8px; font-size:13px;}
+.saved{color:var(--dim); font-size:12px; white-space:nowrap;}
+.ribbon{display:flex; align-items:center; gap:4px; padding:6px 10px; border-bottom:1px solid var(--line); background:var(--panel); overflow-x:auto; scrollbar-width:none; flex:0 0 auto;}
+.ribbon::-webkit-scrollbar{display:none;}
+.rb{display:inline-flex; align-items:center; justify-content:center; gap:5px; min-width:34px; height:34px; padding:0 8px; border-radius:7px; border:1px solid transparent; background:transparent; cursor:pointer; white-space:nowrap; flex:0 0 auto; position:relative;}
+.rb:hover{background:var(--panel2); border-color:var(--line);}
+.rb.on{background:rgba(255,201,60,.14); border-color:rgba(255,201,60,.45); color:var(--fry);}
+.rb svg{width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+.rb .lb{font-size:13px;}
+.rb input[type=color]{position:absolute; inset:0; opacity:0; width:100%; height:100%; cursor:pointer; border:0; padding:0;}
+.rb .chip{position:absolute; left:8px; right:8px; bottom:4px; height:3px; border-radius:2px;}
+.sepv{width:1px; height:22px; background:var(--line); margin:0 4px; flex:0 0 auto;}
+.ribbon select{height:32px; background:var(--panel2); border:1px solid var(--line); border-radius:7px; padding:0 6px; font-size:13px; flex:0 0 auto;}
+.fbar{display:flex; align-items:stretch; border-bottom:1px solid var(--line); background:var(--hd); flex:0 0 auto;}
+#nameBox{width:84px; flex:0 0 auto; border:0; border-right:1px solid var(--line); background:transparent; padding:0 10px; font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--fry);}
+#nameBox:focus{outline:none; background:var(--panel);}
+.fx{display:grid; place-items:center; padding:0 10px; color:var(--dim); font-style:italic; font-family:Georgia,serif; border-right:1px solid var(--line);}
+#fin{flex:1; min-width:0; border:0; background:transparent; padding:8px 10px; font-family:'JetBrains Mono','Noto Sans KR',monospace; font-size:13.5px;}
+#fin:focus{outline:none; background:var(--panel);}
+.main{flex:1; display:flex; min-height:0; position:relative;}
+#gridWrap{flex:1; overflow:auto; position:relative; background:var(--bg); -webkit-overflow-scrolling:touch;}
+#gridIn{position:relative; width:max-content;}
+#grid{border-collapse:separate; border-spacing:0; table-layout:fixed; font-size:13.5px;}
+#grid th,#grid td{height:26px; border-right:1px solid var(--grid); border-bottom:1px solid var(--grid); padding:0 6px; overflow:hidden; white-space:nowrap; text-overflow:clip; line-height:25px;}
+#grid thead th{position:sticky; top:0; z-index:3; background:var(--hd); color:var(--dim); font-weight:500; font-size:12px; text-align:center; user-select:none; -webkit-user-select:none; cursor:pointer; touch-action:manipulation;}
+#grid tbody th{position:sticky; left:0; z-index:2; background:var(--hd); color:var(--dim); font-weight:500; font-size:12px; text-align:center; min-width:46px; width:46px; user-select:none; -webkit-user-select:none; cursor:pointer; touch-action:manipulation;}
+#grid thead th.corner{left:0; z-index:4;}
+#grid th.hl{color:var(--fry); background:#1a1708;}
+#grid td{user-select:none; -webkit-user-select:none; cursor:cell; touch-action:manipulation; position:relative;}
+#grid td.num{text-align:right;} #grid td.ctr{text-align:center;} #grid td.err{color:#ff6b6b;}
+#grid td.al-l{text-align:left;} #grid td.al-c{text-align:center;} #grid td.al-r{text-align:right;}
+#grid td.act,#gridWrap.refmode #grid td{touch-action:none;}
+#grid td .cb{display:inline-block; width:16px; height:16px; border-radius:4px; border:2px solid #6b7488; vertical-align:-3px; cursor:pointer;}
+#grid td .cb.on{background:var(--fry); border-color:var(--fry); position:relative;}
+#grid td .cb.on::after{content:''; position:absolute; left:3px; top:0px; width:5px; height:9px; border:solid #1c1405; border-width:0 2px 2px 0; transform:rotate(45deg);}
+.rz{position:absolute; top:0; right:-4px; width:9px; height:100%; cursor:col-resize; z-index:5; touch-action:none;}
+#selBox{position:absolute; border:2px solid var(--sel); background:rgba(255,201,60,.08); pointer-events:none; z-index:1; display:none;}
+#actBox{position:absolute; border:2px solid var(--sel); pointer-events:none; z-index:1; display:none;}
+#fillH{position:absolute; width:12px; height:12px; background:var(--sel); border:2px solid var(--bg); border-radius:3px; z-index:2; display:none; touch-action:none; cursor:crosshair;}
+#fillH::before{content:''; position:absolute; inset:-12px;}
+#fillBox{position:absolute; border:2px dashed var(--fry2); pointer-events:none; z-index:1; display:none;}
+#refBox{position:absolute; border:2px dashed #5ab0ff; background:rgba(90,176,255,.08); pointer-events:none; z-index:1; display:none;}
+#cellEd{position:absolute; z-index:6; display:none; border:2px solid var(--sel); background:#0b0d13; color:var(--text); padding:0 5px; font-family:inherit; font-size:13.5px; outline:none; box-shadow:0 6px 24px rgba(0,0,0,.5); min-width:60px;}
+#cellEd.on{display:block;}
+#cellEd.ghost{display:block; opacity:0; pointer-events:none; width:1px!important; min-width:0; height:1px!important;}
+.more{display:flex; gap:8px; padding:10px 0 30px 56px;}
+.more button{height:30px; padding:0 12px; border-radius:7px; border:1px dashed var(--line); background:transparent; color:var(--dim); cursor:pointer;}
+.foot{display:flex; align-items:center; border-top:1px solid var(--line); background:var(--panel); flex:0 0 auto; min-height:40px;}
+#tabs{display:flex; overflow-x:auto; flex:0 1 auto; min-width:0; scrollbar-width:none; align-items:stretch;}
+#tabs::-webkit-scrollbar{display:none;}
+.tab{padding:0 16px; display:flex; align-items:center; border-right:1px solid var(--line); color:var(--dim); cursor:pointer; white-space:nowrap; user-select:none; -webkit-user-select:none; min-height:40px;}
+.tab.on{color:var(--text); background:var(--bg); box-shadow:inset 0 2px 0 var(--fry);}
+.addTab{width:40px; border:0; background:transparent; color:var(--dim); font-size:20px; cursor:pointer; flex:0 0 auto;}
+#stats{padding:0 14px; color:var(--dim); font-size:12.5px; white-space:nowrap; font-family:'JetBrains Mono','Noto Sans KR',monospace; overflow:hidden; text-overflow:ellipsis; flex:0 1 auto;}
+#stats b{color:var(--text); font-weight:500;}
+.zoom{display:flex; align-items:center; gap:2px; padding-right:8px; flex:0 0 auto;}
+.zoom button{width:28px; height:28px; border:0; border-radius:6px; background:transparent; color:var(--dim); cursor:pointer; font-size:16px;}
+.zoom span{font-size:12px; color:var(--dim); width:40px; text-align:center;}
+/* side drawer (charts) */
+#drawer{width:360px; max-width:100%; border-left:1px solid var(--line); background:var(--panel); display:none; flex-direction:column; min-height:0;}
+#drawer.open{display:flex;}
+.dh{display:flex; align-items:center; gap:8px; padding:10px 12px; border-bottom:1px solid var(--line);}
+.dh h3{margin:0; font-size:15px; flex:1;}
+.x{width:32px; height:32px; border:0; background:transparent; color:var(--dim); font-size:20px; cursor:pointer; border-radius:7px;}
+.x:hover{background:var(--panel2); color:var(--text);}
+.dbody{overflow:auto; padding:12px; flex:1;}
+.chart{border:1px solid var(--line); border-radius:12px; padding:10px; margin-bottom:12px; background:var(--bg);}
+.chart .row{display:flex; gap:6px; align-items:center; margin-bottom:8px; flex-wrap:wrap;}
+.chart input.ct{flex:1; min-width:100px; background:transparent; border:1px solid var(--line); border-radius:7px; padding:5px 8px;}
+.chart select{background:var(--panel2); border:1px solid var(--line); border-radius:7px; height:30px; padding:0 6px;}
+.chart .rg{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--fry);}
+.chart canvas{width:100%; height:220px; display:block;}
+.chart .sm{height:28px; padding:0 10px; border-radius:7px; border:1px solid var(--line); background:var(--panel2); cursor:pointer; font-size:12.5px;}
+.empty{color:var(--dim); text-align:center; padding:30px 10px; line-height:1.7;}
+@media(max-width:760px){ #drawer{position:absolute; inset:auto 0 0 0; width:auto; height:62%; border-left:0; border-top:1px solid var(--line); z-index:20; box-shadow:0 -10px 40px rgba(0,0,0,.5);} }
+/* dialogs and menus */
+.ov{position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:50; display:none; align-items:center; justify-content:center; padding:16px;}
+.ov.open{display:flex;}
+.dlg{background:var(--panel); border:1px solid var(--line); border-radius:16px; width:min(560px,100%); max-height:86vh; display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,.6);}
+.dlg .dbody{padding:14px 16px;}
+.dlg label{display:block; color:var(--dim); font-size:13px; margin:10px 0 4px;}
+.dlg input[type=text]{width:100%; background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:9px 10px;}
+.dlg .acts{display:flex; gap:8px; justify-content:flex-end; padding:12px 16px; border-top:1px solid var(--line); flex-wrap:wrap;}
+.fnSearch{width:100%; background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:9px 10px; margin-bottom:10px;}
+.fnCat{color:var(--fry); font-size:12px; font-weight:700; letter-spacing:.08em; margin:14px 0 6px;}
+.fn{display:block; width:100%; text-align:left; padding:8px 10px; border-radius:8px; border:1px solid var(--line); background:var(--bg); margin-bottom:6px; cursor:pointer;}
+.fn:hover{border-color:var(--fry);}
+.fn code{font-family:'JetBrains Mono',monospace; color:var(--fry); font-size:13px;}
+.fn span{display:block; color:var(--dim); font-size:12.5px; margin-top:2px;}
+.menu{position:fixed; z-index:60; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:6px; min-width:220px; box-shadow:0 20px 50px rgba(0,0,0,.55); display:none; max-height:80vh; overflow:auto;}
+.menu.open{display:block;}
+.menu button{display:flex; width:100%; align-items:center; gap:10px; padding:9px 12px; border:0; background:transparent; border-radius:8px; cursor:pointer; text-align:left; white-space:nowrap;}
+.menu button:hover{background:var(--panel2);}
+.menu button.dang{color:#ff7b7b;}
+.menu hr{border:0; border-top:1px solid var(--line); margin:6px 4px;}
+.menu .mh{color:var(--dim); font-size:12px; padding:6px 12px 2px;}
+.menu .doc{justify-content:space-between;}
+.menu .doc small{color:var(--dim);}
+#toast{position:fixed; left:50%; bottom:64px; transform:translateX(-50%); background:#1d2230; border:1px solid var(--line); padding:9px 16px; border-radius:99px; z-index:70; opacity:0; transition:opacity .2s; pointer-events:none; white-space:nowrap;}
+#toast.on{opacity:1;}
+@media(max-width:620px){ .brand{display:none;} .saved{display:none;} .tbtn .lb{display:none;} }
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="home" href="../" aria-label="도구 목록">🍟</a>
+  <span class="brand" data-notr>FRY <b>SHEET</b></span>
+  <input id="docName" value="새 시트" aria-label="문서 이름" spellcheck="false">
+  <span class="saved" id="saved"></span>
+  <span class="sp"></span>
+  <button class="tbtn" id="fileBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg><span class="lb">파일</span></button>
+  <button class="tbtn pri" id="saveBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg><span class="lb">엑셀로 저장</span></button>
+  <span data-lang-slot></span>
+</header>
+
+<div class="ribbon" id="ribbon">
+  <button class="rb" data-cmd="undo" title="실행 취소"><svg viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button>
+  <button class="rb" data-cmd="redo" title="다시 실행"><svg viewBox="0 0 24 24"><path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></svg></button>
+  <span class="sepv"></span>
+  <button class="rb" data-cmd="copy" title="복사"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+  <button class="rb" data-cmd="cut" title="잘라내기"><svg viewBox="0 0 24 24"><circle cx="6" cy="18" r="3"/><circle cx="18" cy="18" r="3"/><path d="M8 16L19 3M16 16L5 3"/></svg></button>
+  <button class="rb" data-cmd="paste" title="붙여넣기"><svg viewBox="0 0 24 24"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V2.5h6V4"/></svg></button>
+  <span class="sepv"></span>
+  <button class="rb" data-cmd="bold" id="bBold" title="굵게"><b style="font-size:15px">B</b></button>
+  <button class="rb" data-cmd="italic" id="bItal" title="기울임"><i style="font-family:Georgia,serif;font-size:16px">I</i></button>
+  <span class="rb" title="글자색"><b style="font-size:15px">A</b><span class="chip" id="fcChip" style="background:#ff5d5d"></span><input type="color" id="fcPick" value="#ff5d5d"></span>
+  <span class="rb" title="채우기 색"><svg viewBox="0 0 24 24"><path d="M5 12l7-7 7 7-7 7z"/><path d="M19 15s2 2.5 2 4a2 2 0 0 1-4 0c0-1.5 2-4 2-4z"/></svg><span class="chip" id="bgChip" style="background:#3a5bd9"></span><input type="color" id="bgPick" value="#3a5bd9"></span>
+  <span class="sepv"></span>
+  <button class="rb" data-cmd="al-l" title="왼쪽 정렬"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h14"/></svg></button>
+  <button class="rb" data-cmd="al-c" title="가운데 정렬"><svg viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M5 18h14"/></svg></button>
+  <button class="rb" data-cmd="al-r" title="오른쪽 정렬"><svg viewBox="0 0 24 24"><path d="M4 6h16M10 12h10M6 18h14"/></svg></button>
+  <select id="nfSel" title="표시 형식">
+    <option value="">일반</option><option value="n0">1,234</option><option value="n2">1,234.56</option><option value="p0">12%</option><option value="p1">12.3%</option><option value="t">텍스트</option>
+  </select>
+  <button class="rb" data-cmd="clearfmt" title="서식 지우기"><svg viewBox="0 0 24 24"><path d="M4 20h16"/><path d="M14 4l6 6-8 8H8l-4-4z"/></svg></button>
+  <span class="sepv"></span>
+  <button class="rb" data-cmd="sum" title="자동 합계"><b style="font-size:17px">Σ</b></button>
+  <button class="rb" data-cmd="fn" title="함수 넣기"><i style="font-family:Georgia,serif;font-size:15px">fx</i><span class="lb">함수</span></button>
+  <button class="rb" data-cmd="sortA" title="오름차순 정렬"><svg viewBox="0 0 24 24"><path d="M7 4v16m0 0l-3-3m3 3l3-3"/><path d="M14 6h3M14 12h5M14 18h7"/></svg></button>
+  <button class="rb" data-cmd="sortD" title="내림차순 정렬"><svg viewBox="0 0 24 24"><path d="M7 4v16m0 0l-3-3m3 3l3-3"/><path d="M14 6h7M14 12h5M14 18h3"/></svg></button>
+  <button class="rb" data-cmd="find" title="찾기와 바꾸기"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></button>
+  <span class="sepv"></span>
+  <button class="rb" data-cmd="chart" title="차트 만들기"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span class="lb">차트</span></button>
+  <button class="rb" data-cmd="scale" title="색 단계"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1" fill="#ff6b6b" stroke="none"/><rect x="9.5" y="4" width="5" height="16" rx="1" fill="#ffc93c" stroke="none"/><rect x="16" y="4" width="5" height="16" rx="1" fill="#3fe08f" stroke="none"/></svg><span class="lb">색 단계</span></button>
+  <button class="rb" data-cmd="bars" title="데이터 막대"><svg viewBox="0 0 24 24"><path d="M3 6h12M3 12h17M3 18h7" stroke-width="3"/></svg><span class="lb">막대</span></button>
+  <button class="rb" data-cmd="check" title="체크박스"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/></svg><span class="lb">체크박스</span></button>
+  <span class="sepv"></span>
+  <button class="rb" data-cmd="rowmenu" title="행과 열"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg><span class="lb">행·열</span></button>
+</div>
+
+<div class="fbar">
+  <input id="nameBox" value="A1" aria-label="셀 주소" spellcheck="false" autocomplete="off" autocapitalize="characters">
+  <span class="fx">fx</span>
+  <input id="fin" aria-label="수식 입력줄" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off">
+</div>
+
+<div class="main">
+  <div id="gridWrap">
+    <div id="gridIn">
+      <table id="grid" data-notr><colgroup id="cols"></colgroup><thead><tr id="hrow"></tr></thead><tbody id="gbody"></tbody></table>
+      <div id="selBox"></div><div id="actBox"></div><div id="fillBox"></div><div id="refBox"></div><div id="fillH"></div>
+      <input id="cellEd" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off">
+      <div class="more"><button id="addRows">+ 행 50개</button><button id="addCols">+ 열 10개</button></div>
+    </div>
+  </div>
+  <aside id="drawer">
+    <div class="dh"><h3>차트</h3><button class="tbtn" id="addChart" style="height:30px">+ 선택 범위로</button><button class="x" id="closeDrawer" aria-label="닫기">×</button></div>
+    <div class="dbody" id="charts"></div>
+  </aside>
+</div>
+
+<div class="foot">
+  <div id="tabs"></div><button class="addTab" id="addTab" title="시트 추가">+</button>
+  <span style="flex:1"></span><span id="stats"></span>
+  <span class="zoom"><button id="zOut" aria-label="축소">−</button><span id="zLbl">100%</span><button id="zIn" aria-label="확대">+</button></span>
+</div>
+
+<div class="menu" id="fileMenu">
+  <button data-f="new">새 문서</button>
+  <button data-f="open">파일 열기 (엑셀, CSV)</button>
+  <hr>
+  <button data-f="xlsx">엑셀 파일로 저장 (.xlsx)</button>
+  <button data-f="csv">이 시트를 CSV로 저장</button>
+  <hr>
+  <div class="mh">내 문서</div>
+  <div id="docList"></div>
+  <hr>
+  <button data-f="del" class="dang">이 문서 지우기</button>
+</div>
+<div class="menu" id="rowMenu">
+  <button data-r="insRowA">위에 행 넣기</button>
+  <button data-r="insRowB">아래에 행 넣기</button>
+  <button data-r="delRow" class="dang">선택한 행 지우기</button>
+  <hr>
+  <button data-r="insColL">왼쪽에 열 넣기</button>
+  <button data-r="insColR">오른쪽에 열 넣기</button>
+  <button data-r="delCol" class="dang">선택한 열 지우기</button>
+  <hr>
+  <button data-r="clearCf">선택 범위의 색 단계·막대 없애기</button>
+</div>
+<div class="menu" id="tabMenu">
+  <button data-t="rename">이름 바꾸기</button>
+  <button data-t="dup">복제</button>
+  <button data-t="left">왼쪽으로</button>
+  <button data-t="right">오른쪽으로</button>
+  <hr>
+  <button data-t="del" class="dang">시트 지우기</button>
+</div>
+
+<div class="ov" id="fnDlg"><div class="dlg">
+  <div class="dh"><h3>함수 넣기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><input class="fnSearch" id="fnSearch" placeholder="함수 찾기 (예: 합계, IF)"><div id="fnList"></div></div>
+</div></div>
+<div class="ov" id="findDlg"><div class="dlg">
+  <div class="dh"><h3>찾기와 바꾸기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><label>찾을 내용</label><input type="text" id="fFind"><label>바꿀 내용</label><input type="text" id="fRep"></div>
+  <div class="acts"><button class="tbtn" id="fNext">다음 찾기</button><button class="tbtn" id="fOne">바꾸기</button><button class="tbtn pri" id="fAll">모두 바꾸기</button></div>
+</div></div>
+<div class="ov" id="askDlg"><div class="dlg">
+  <div class="dh"><h3 id="askT"></h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><p id="askP" style="margin:0 0 6px;color:var(--dim)"></p><input type="text" id="askI"></div>
+  <div class="acts"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="askOk">확인</button></div>
+</div></div>
+<input type="file" id="fileIn" accept=".xlsx,.xls,.xlsm,.ods,.csv,.tsv,.txt" hidden>
+<div id="toast"></div>
+
+<script src="engine.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
