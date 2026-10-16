@@ -1,5 +1,28 @@
 /* Fry Sheet strings: UI translations ([en, es, fr, de, ja]) and the function list shown in "함수 넣기". */
 FFT.add({
+'시각화':['Visualize','Visualizar','Visualiser','Visualisieren','可視化'],
+'그래프':['Graph','Gráfico','Graphique','Diagramm','グラフ'],
+'표':['Table','Tabla','Tableau','Tabelle','表'],
+'다이어그램':['Diagram','Diagrama','Diagramme','Schaubild','ダイアグラム'],
+'마인드맵':['Mind map','Mapa mental','Carte mentale','Mindmap','マインドマップ'],
+'제목':['Title','Título','Titre','Titel','タイトル'],
+'PNG 저장':['Save PNG','Guardar PNG','Enregistrer PNG','PNG speichern','PNG保存'],
+'산점도':['Scatter','Dispersión','Nuage de points','Streudiagramm','散布図'],
+'트리':['Tree','Árbol','Arbre','Baum','ツリー'],
+'흐름도':['Flowchart','Diagrama de flujo','Organigramme','Flussdiagramm','フローチャート'],
+'벤 다이어그램':['Venn diagram','Diagrama de Venn','Diagramme de Venn','Venn-Diagramm','ベン図'],
+'시트에 차트로 고정':['Pin as chart','Fijar como gráfico','Épingler en graphique','Als Diagramm anheften','グラフとして固定'],
+'제목 칸을 누르면 정렬돼요':['Tap a header to sort','Toca un encabezado para ordenar','Touchez un en-tête pour trier','Zum Sortieren Kopf antippen','見出しをタップで並べ替え'],
+'처음 {0}줄만 보여요':['Showing the first {0} rows','Se muestran las primeras {0} filas','Seules les {0} premières lignes','Nur die ersten {0} Zeilen','最初の{0}行のみ表示'],
+'외 {0}개':['+{0} more','+{0} más','+{0} autres','+{0} weitere','ほか{0}件'],
+'어디에도 없음':['In none','En ninguno','Dans aucun','In keinem','どれにもない'],
+'3개까지 고를 수 있어요':['Up to 3 can be picked','Puedes elegir hasta 3','Jusqu’à 3 au choix','Bis zu 3 wählbar','3つまで選べます'],
+'표를 먼저 고르세요':['Select a table first','Selecciona una tabla primero','Sélectionnez d’abord un tableau','Zuerst eine Tabelle wählen','先に表を選んでください'],
+'표에 내용이 없어요':['The table is empty','La tabla está vacía','Le tableau est vide','Die Tabelle ist leer','表が空です'],
+'글자로 된 첫 열이 있는 표를 골라 주세요':['Pick a table whose first column is text','Elige una tabla cuya primera columna sea texto','Choisissez un tableau dont la 1re colonne est du texte','Wähle eine Tabelle mit Text in der ersten Spalte','最初の列が文字の表を選んでください'],
+'O/X나 체크박스처럼 예·아니오로 된 열이 2개 이상 있어야 해요':['Needs 2+ yes/no columns (O/X or checkboxes)','Se necesitan 2+ columnas sí/no (O/X o casillas)','Il faut 2+ colonnes oui/non (O/X ou cases)','Braucht 2+ Ja/Nein-Spalten (O/X oder Kästchen)','O/Xやチェックのような列が2つ以上必要です'],
+});
+FFT.add({
 '도구 목록':['Tools','Herramientas','Outils','Werkzeuge','ツール一覧'],
 '새 시트':['New sheet','Hoja nueva','Nouvelle feuille','Neues Blatt','新しいシート'],
 '문서 이름':['Document name','Nombre del documento','Nom du document','Dokumentname','文書名'],

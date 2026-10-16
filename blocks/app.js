@@ -4,7 +4,7 @@
 var T=FFT.T, F=FFT.F, $=function(id){ return document.getElementById(id); };
 var LS='ffblocks.v1';
 function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
-function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); return true; }catch(e){ return false; } }
 
 var theme=Blockly.Theme.defineTheme('ffdark',{name:'ffdark',base:Blockly.Themes.Classic,
   componentStyles:{workspaceBackgroundColour:'#0b0d13',toolboxBackgroundColour:'#10131b',toolboxForegroundColour:'#eef0f5',flyoutBackgroundColour:'#151925',flyoutForegroundColour:'#cfd5e1',flyoutOpacity:.97,scrollbarColour:'#3a4256',scrollbarOpacity:.7,insertionMarkerColour:'#ffffff',insertionMarkerOpacity:.3,cursorColour:'#ffc93c',selectedGlowColour:'#ffc93c'},
@@ -88,20 +88,23 @@ function download(blob,name){ var a=document.createElement('a'); a.href=URL.crea
 function downloadHTML(){ download(new Blob([finalHTML()],{type:'text/html;charset=utf-8'}),fname('.html')); toast(T('HTML 파일을 만들었어요')); }
 $('dlBtn').onclick=downloadHTML;
 var saveT=null;
-function save(){ clearTimeout(saveT); saveT=setTimeout(function(){ lsSet(LS,JSON.stringify({name:$('projName').value,ws:Blockly.serialization.workspaces.save(ws)})); },300); }
+var fullWarned=false;
+function save(){ clearTimeout(saveT); saveT=setTimeout(function(){ var ok=lsSet(LS,JSON.stringify({name:$('projName').value,ws:Blockly.serialization.workspaces.save(ws),imgs:BH.IMGS}));
+  if(!ok&&!fullWarned){ fullWarned=true; toast(T('저장 공간이 꽉 찼어요. 프로젝트 파일로 저장해 두세요')); } if(ok) fullWarned=false; },300); }
+function setImgs(o){ var I=BH.IMGS; Object.keys(I).forEach(function(k){ delete I[k]; }); if(o&&typeof o==='object') Object.keys(o).forEach(function(k){ var m=o[k]; if(m&&typeof m.data==='string'&&/^data:image\//.test(m.data)) I[k]=m; }); }
 $('projName').addEventListener('input',save);
 $('projName').addEventListener('keydown',function(e){ if(e.key==='Enter') this.blur(); });
 function blank(){ loadJSON({blocks:{languageVersion:0,blocks:[{type:'page_root',x:30,y:30,fields:{TITLE:T('나의 웹페이지'),BG:'#ffffff',CENTER:true},inputs:{BODY:{block:{type:'el_heading',fields:{SIZE:'h1',TEXT:T('안녕하세요'),NAME:T('제목')+'1'}}}}}]}}); }
 $('fileMenu').addEventListener('click',function(e){
   var b=e.target.closest('[data-f]'); if(!b) return; closeMenus(); var f=b.dataset.f;
-  if(f==='new'){ if(!confirm(T('지금 블록을 모두 지우고 새로 시작할까요?'))) return; $('projName').value=T('나의 웹페이지'); blank(); save(); }
-  else if(f==='save'){ download(new Blob([JSON.stringify({app:'block-html',v:1,name:$('projName').value,ws:Blockly.serialization.workspaces.save(ws)},null,1)],{type:'application/json'}),fname('.json')); }
+  if(f==='new'){ if(!confirm(T('지금 블록을 모두 지우고 새로 시작할까요?'))) return; $('projName').value=T('나의 웹페이지'); setImgs(null); blank(); save(); }
+  else if(f==='save'){ download(new Blob([JSON.stringify({app:'block-html',v:1,name:$('projName').value,ws:Blockly.serialization.workspaces.save(ws),imgs:BH.IMGS},null,1)],{type:'application/json'}),fname('.json')); }
   else if(f==='open') $('fileIn').click();
   else if(f==='html') downloadHTML();
 });
 $('fileIn').addEventListener('change',function(){
   var file=this.files&&this.files[0]; this.value=''; if(!file) return;
-  var r=new FileReader(); r.onload=function(){ try{ var o=JSON.parse(r.result); if(!o.ws) throw 0; $('projName').value=o.name||file.name.replace(/\.json$/i,''); loadJSON(o.ws); save(); toast(T('프로젝트를 열었어요')); }catch(e){ toast(T('이 파일은 열 수 없어요')); } };
+  var r=new FileReader(); r.onload=function(){ try{ var o=JSON.parse(r.result); if(!o.ws) throw 0; $('projName').value=o.name||file.name.replace(/\.json$/i,''); setImgs(o.imgs); loadJSON(o.ws); save(); toast(T('프로젝트를 열었어요')); }catch(e){ toast(T('이 파일은 열 수 없어요')); } };
   r.readAsText(file);
 });
 
@@ -117,12 +120,117 @@ function closeMenus(){ document.querySelectorAll('.menu.open').forEach(function(
 $('exBtn').onclick=function(){ openMenu(exMenu,this); };
 $('fileBtn').onclick=function(){ openMenu($('fileMenu'),this); };
 document.addEventListener('pointerdown',function(e){ if(!e.target.closest('.menu,#exBtn,#fileBtn')) closeMenus(); },true);
+document.querySelectorAll('.ov [data-close]').forEach(function(b){ b.onclick=function(){ b.closest('.ov').classList.remove('open'); }; });
 var tt=null; function toast(s){ var t=$('toast'); t.textContent=s; t.classList.add('on'); clearTimeout(tt); tt=setTimeout(function(){ t.classList.remove('on'); },1800); }
 window.addEventListener('resize',function(){ Blockly.svgResize(ws); });
 
+/* ---------- 내 그림: drawing pad, photos, manager ---------- */
+var I=BH.IMGS;
+function uniqName(base,skip){ base=(base||T('그림')).trim().slice(0,30)||T('그림'); var names=Object.keys(I).filter(function(k){ return k!==skip; }).map(function(k){ return I[k].name; }); if(names.indexOf(base)<0) return base; var b=base.replace(/\d+$/,''), k=2; while(names.indexOf(b+k)>=0) k++; return b+k; }
+function thumbOf(img,w,h){ var k=Math.min(1,88/Math.max(w,h)), c=document.createElement('canvas'); c.width=Math.max(1,Math.round(w*k)); c.height=Math.max(1,Math.round(h*k)); c.getContext('2d').drawImage(img,0,0,c.width,c.height); return c.toDataURL('image/png'); }
+function putImage(id,name,data,w,h,src){ I[id]={name:name,data:data,w:w,h:h,thumb:thumbOf(src,w,h)}; }
+function usedBy(id){ return ws.getAllBlocks(false).filter(function(b){ return b.getField&&b.getField('IMG')&&b.getFieldValue('IMG')===id; }); }
+function afterImgChange(){ ws.getAllBlocks(false).forEach(function(b){ var f=b.getField&&b.getField('IMG'); if(f){ var v=f.getValue(); if(f.getOptions) f.getOptions(false); f.setValue(v); if(f.forceRerender) f.forceRerender(); } }); var tb=ws.getToolbox(); if(tb&&tb.refreshSelection) tb.refreshSelection(); refresh(true); save(); }
+function addToPage(id){
+  Blockly.Events.setGroup(true);
+  try{
+    var b=ws.newBlock('el_picture'); b.setFieldValue(id,'IMG'); b.initSvg(); b.render();
+    var page=ws.getTopBlocks(false).filter(function(x){ return x.type==='page_root'; })[0];
+    if(page){ var inp=page.getInput('BODY'), last=inp.connection.targetBlock();
+      if(!last) inp.connection.connect(b.previousConnection); else { while(last.getNextBlock()) last=last.getNextBlock(); last.nextConnection.connect(b.previousConnection); } }
+    else b.moveBy(40,40);
+    b.select&&b.select(); ws.centerOnBlock&&ws.centerOnBlock(b.id);
+  }finally{ Blockly.Events.setGroup(false); }
+}
+function newId(){ return 'img'+Date.now().toString(36)+Math.floor(Math.random()*1e3); }
+
+/* drawing pad */
+var pad=$('padCv'), pg=pad.getContext('2d',{willReadFrequently:true}), PW=800, PH=600, padId=null, tool='pen', col='#111111', size=8, hist=[], drawing=null;
+var SW=['#111111','#ffffff','#ef4444','#f97316','#facc15','#22c55e','#38bdf8','#3b82f6','#a855f7','#ec4899','#92400e','#9ca3af'];
+$('padSw').innerHTML=SW.map(function(c){ return '<button class="sw" data-c="'+c+'" style="background:'+c+'"></button>'; }).join('')+'<label class="sw pick" title=""><input type="color" id="padPick" value="#ff8a3d"></label>';
+function setCol(c){ col=c; tool=tool==='eraser'?'pen':tool; document.querySelectorAll('#padSw .sw').forEach(function(b){ b.classList.toggle('on',b.dataset.c===c); }); syncTools(); }
+$('padSw').addEventListener('click',function(e){ var b=e.target.closest('[data-c]'); if(b) setCol(b.dataset.c); });
+$('padPick').addEventListener('input',function(){ setCol(this.value); });
+function syncTools(){ document.querySelectorAll('[data-tool]').forEach(function(b){ b.classList.toggle('on',b.dataset.tool===tool); }); }
+document.querySelectorAll('[data-tool]').forEach(function(b){ b.onclick=function(){ tool=b.dataset.tool; syncTools(); }; });
+$('padSize').addEventListener('input',function(){ size=+this.value; $('padDot').style.width=$('padDot').style.height=Math.max(3,size)+'px'; });
+function snap(){ hist.push(pg.getImageData(0,0,PW,PH)); if(hist.length>25) hist.shift(); }
+$('padUndo').onclick=function(){ if(hist.length) pg.putImageData(hist.pop(),0,0); };
+$('padClear').onclick=function(){ snap(); pg.clearRect(0,0,PW,PH); };
+$('padBg').addEventListener('change',function(){ $('padWrap').classList.toggle('clear',this.checked); });
+function pt(e){ var r=pad.getBoundingClientRect(); return {x:(e.clientX-r.left)*PW/r.width, y:(e.clientY-r.top)*PH/r.height, p:e.pointerType==='pen'&&e.pressure?Math.max(.25,e.pressure*1.6):1}; }
+function stroke(a,b){ pg.save(); pg.globalCompositeOperation=tool==='eraser'?'destination-out':'source-over'; pg.strokeStyle=col; pg.fillStyle=col; pg.lineCap='round'; pg.lineJoin='round';
+  pg.lineWidth=size*(tool==='eraser'?2:1)*b.p; pg.beginPath(); pg.moveTo(a.x,a.y); pg.lineTo(b.x,b.y); pg.stroke(); pg.restore(); }
+pad.addEventListener('pointerdown',function(e){ if(drawing) return; e.preventDefault(); pad.setPointerCapture(e.pointerId); snap(); var p=pt(e);
+  if(tool==='fill'){ flood(p.x|0,p.y|0); return; }
+  drawing={id:e.pointerId,last:p}; stroke(p,{x:p.x+.01,y:p.y,p:p.p}); });
+pad.addEventListener('pointermove',function(e){ if(!drawing||e.pointerId!==drawing.id) return; e.preventDefault(); var evs=e.getCoalescedEvents?e.getCoalescedEvents():[e]; (evs.length?evs:[e]).forEach(function(ev){ var p=pt(ev); stroke(drawing.last,p); drawing.last=p; }); });
+['pointerup','pointercancel'].forEach(function(t){ pad.addEventListener(t,function(e){ if(drawing&&e.pointerId===drawing.id) drawing=null; }); });
+function flood(x,y){
+  var d=pg.getImageData(0,0,PW,PH), a=d.data, i0=(y*PW+x)*4, t=[a[i0],a[i0+1],a[i0+2],a[i0+3]];
+  var h=col.replace('#',''), f=[parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16),255];
+  if(t[0]===f[0]&&t[1]===f[1]&&t[2]===f[2]&&t[3]===255) return;
+  var same=function(i){ return Math.abs(a[i]-t[0])+Math.abs(a[i+1]-t[1])+Math.abs(a[i+2]-t[2])+Math.abs(a[i+3]-t[3])<90; }, st=[x,y];
+  while(st.length){ var yy=st.pop(), xx=st.pop(), i=(yy*PW+xx)*4; if(xx<0||yy<0||xx>=PW||yy>=PH||!same(i)) continue;
+    var l=xx, r=xx; while(l>0&&same((yy*PW+l-1)*4)) l--; while(r<PW-1&&same((yy*PW+r+1)*4)) r++;
+    for(var k=l;k<=r;k++){ var j=(yy*PW+k)*4; a[j]=f[0]; a[j+1]=f[1]; a[j+2]=f[2]; a[j+3]=255; if(yy>0&&same(j-PW*4)) st.push(k,yy-1); if(yy<PH-1&&same(j+PW*4)) st.push(k,yy+1); } }
+  pg.putImageData(d,0,0);
+}
+function openPad(id){
+  padId=id||null; hist=[]; pg.clearRect(0,0,PW,PH); $('padName').value=id?I[id].name:uniqName(T('내 그림')); $('padBg').checked=false; $('padWrap').classList.remove('clear');
+  tool='pen'; syncTools(); setCol(col);
+  if(id){ var im=new Image(); im.onload=function(){ var k=Math.min(PW/im.width,PH/im.height,1), w=im.width*k, h=im.height*k; pg.drawImage(im,(PW-w)/2,(PH-h)/2,w,h); }; im.src=I[id].data; $('padBg').checked=!!I[id].clear; $('padWrap').classList.toggle('clear',!!I[id].clear); }
+  $('padDlg').classList.add('open');
+}
+$('padSave').onclick=function(){
+  var clear=$('padBg').checked, d=pg.getImageData(0,0,PW,PH).data, x0=PW, y0=PH, x1=-1, y1=-1;
+  for(var y=0;y<PH;y++) for(var x=0;x<PW;x++) if(d[(y*PW+x)*4+3]>8){ if(x<x0) x0=x; if(x>x1) x1=x; if(y<y0) y0=y; if(y>y1) y1=y; }
+  if(x1<0){ toast(T('그림이 비어 있어요')); return; }
+  if(clear){ x0=Math.max(0,x0-6); y0=Math.max(0,y0-6); x1=Math.min(PW-1,x1+6); y1=Math.min(PH-1,y1+6); } else { x0=0; y0=0; x1=PW-1; y1=PH-1; }
+  var w=x1-x0+1, h=y1-y0+1, c=document.createElement('canvas'); c.width=w; c.height=h; var g=c.getContext('2d');
+  if(!clear){ g.fillStyle='#ffffff'; g.fillRect(0,0,w,h); } g.drawImage(pad,x0,y0,w,h,0,0,w,h);
+  var isNew=!padId, id=padId||newId(); putImage(id,uniqName($('padName').value,id),c.toDataURL('image/png'),w,h,c); I[id].clear=clear;
+  $('padDlg').classList.remove('open'); if(isNew) addToPage(id); afterImgChange(); renderMgr(); toast(isNew?T('그림을 페이지에 넣었어요'):T('그림을 고쳤어요'));
+};
+
+/* photos */
+$('photoIn').addEventListener('change',function(){
+  var file=this.files&&this.files[0]; this.value=''; if(!file) return;
+  var url=URL.createObjectURL(file), im=new Image();
+  im.onload=function(){ URL.revokeObjectURL(url);
+    var k=Math.min(1,1024/Math.max(im.width,im.height)), w=Math.max(1,Math.round(im.width*k)), h=Math.max(1,Math.round(im.height*k)), c=document.createElement('canvas'); c.width=w; c.height=h; var g=c.getContext('2d'); g.drawImage(im,0,0,w,h);
+    var alpha=false; if(/png|gif|webp/.test(file.type)){ var d=g.getImageData(0,0,w,h).data; for(var i=3;i<d.length;i+=4*7) if(d[i]<250){ alpha=true; break; } }
+    var data=alpha?c.toDataURL('image/png'):c.toDataURL('image/jpeg',0.84), id=newId();
+    putImage(id,uniqName(file.name.replace(/\.[^.]+$/,'')),data,w,h,c); addToPage(id); afterImgChange(); renderMgr(); toast(T('사진을 페이지에 넣었어요')); };
+  im.onerror=function(){ URL.revokeObjectURL(url); toast(T('이 사진은 열 수 없어요')); };
+  im.src=url;
+});
+
+/* manager */
+function renderMgr(){
+  var ids=Object.keys(I), box=$('mgrList');
+  if(!ids.length){ box.innerHTML='<div class="empty">'+T('아직 그림이 없어요. 그림을 그리거나 사진을 넣어 보세요.')+'</div>'; return; }
+  box.innerHTML=''; ids.forEach(function(id){ var m=I[id], d=document.createElement('div'); d.className='pic';
+    d.innerHTML='<div class="th'+(m.clear?' clear':'')+'"><img alt=""></div><input data-notr spellcheck="false"><div class="pa"><button data-a="add">'+T('넣기')+'</button>'+(/png/.test(m.data.slice(0,15))?'<button data-a="edit">'+T('고치기')+'</button>':'')+'<button data-a="del" class="dang">'+T('삭제')+'</button></div>';
+    d.querySelector('img').src=m.thumb||m.data; var inp=d.querySelector('input'); inp.value=m.name;
+    inp.onchange=function(){ m.name=uniqName(this.value,id); this.value=m.name; afterImgChange(); };
+    d.querySelector('.pa').onclick=function(e){ var a=e.target.dataset.a; if(!a) return;
+      if(a==='add'){ addToPage(id); $('mgrDlg').classList.remove('open'); }
+      if(a==='edit'){ $('mgrDlg').classList.remove('open'); openPad(id); }
+      if(a==='del'){ var u=usedBy(id); if(u.length&&!confirm(F('이 그림을 쓰는 블록이 {0}개 있어요. 그래도 지울까요?',u.length))) return; delete I[id]; afterImgChange(); renderMgr(); } };
+    box.appendChild(d); });
+}
+ws.registerButtonCallback('imgDraw',function(){ openPad(null); });
+ws.registerButtonCallback('imgPhoto',function(){ $('photoIn').click(); });
+ws.registerButtonCallback('imgManage',function(){ renderMgr(); $('mgrDlg').classList.add('open'); });
+$('mgrDraw').onclick=function(){ $('mgrDlg').classList.remove('open'); openPad(null); };
+$('mgrPhoto').onclick=function(){ $('photoIn').click(); };
+/* section headings in the toolbox */
+[['make','화면 만들기'],['move','움직이게 하기'],['calc','계산과 논리']].forEach(function(h){ var el=document.querySelector('.tbHead-'+h[0]); if(el) el.textContent=T(h[1]); });
+
 /* ---------- start ---------- */
 var saved=null; try{ saved=JSON.parse(lsGet(LS)||'null'); }catch(e){}
-if(saved&&saved.ws){ $('projName').value=saved.name||T('나의 웹페이지'); try{ loadJSON(saved.ws); }catch(e){ console.error(e); blank(); } }
+if(saved&&saved.ws){ $('projName').value=saved.name||T('나의 웹페이지'); setImgs(saved.imgs); try{ loadJSON(saved.ws); }catch(e){ console.error(e); blank(); } }
 else { $('projName').value=T(BH_EXAMPLES[0].name); loadXML(BH_EXAMPLES[0].xml()); arrange(); save(); }
 window.__bh={ws:ws,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,examples:BH_EXAMPLES};
 })();

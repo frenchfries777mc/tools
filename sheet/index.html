@@ -128,6 +128,26 @@ button,input,select{font:inherit; color:inherit;}
 #toast{position:fixed; left:50%; bottom:64px; transform:translateX(-50%); background:#1d2230; border:1px solid var(--line); padding:9px 16px; border-radius:99px; z-index:70; opacity:0; transition:opacity .2s; pointer-events:none; white-space:nowrap;}
 #toast.on{opacity:1;}
 @media(max-width:620px){ .brand{display:none;} .saved{display:none;} .tbtn .lb{display:none;} }
+/* 시각화 */
+.vizDlg .dlg{width:min(1100px,100%); height:min(88vh,820px); max-height:none;}
+.vtabs{display:flex; gap:4px; padding:8px 12px 0; flex-wrap:wrap; border-bottom:1px solid var(--line);}
+.vtab{height:38px; padding:0 14px; border:1px solid transparent; border-bottom:0; border-radius:10px 10px 0 0; background:transparent; color:var(--dim); cursor:pointer; font-weight:700; display:flex; align-items:center; gap:6px;}
+.vtab svg{width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+.vtab.on{background:var(--bg); border-color:var(--line); color:var(--fry); margin-bottom:-1px;}
+.vbar{display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding:10px 12px;}
+.vbar input[type=text]{flex:1 1 180px; min-width:0; background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:8px 10px;}
+.vbar select{height:36px; background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:0 8px;}
+.vbar .rg{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--fry);}
+#vizOpts{display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+.vchk{display:flex; align-items:center; gap:5px; padding:6px 10px; border:1px solid var(--line); border-radius:99px; background:var(--panel2); font-size:13px; cursor:pointer;}
+.vhint{color:var(--dim); font-size:13px;}
+.vz{display:inline-flex; border:1px solid var(--line); border-radius:8px; overflow:hidden;}
+.vz button{width:38px; height:34px; border:0; background:var(--panel2); cursor:pointer; font-size:18px;}
+.vz button+button{border-left:1px solid var(--line);}
+#vizBox{flex:1; min-height:0; margin:0 12px 12px; border:1px solid var(--line); border-radius:12px; background:#0b0d13; overflow:hidden; display:flex; align-items:center; justify-content:center;}
+#vizBox.scroll{overflow:auto; display:block; -webkit-overflow-scrolling:touch;}
+#vizBox canvas{display:block; margin:auto;}
+@media(max-width:620px){ .vtab .lb{display:none;} .vtab{padding:0 12px;} }
 </style>
 </head>
 <body>
@@ -169,6 +189,7 @@ button,input,select{font:inherit; color:inherit;}
   <button class="rb" data-cmd="sortD" title="내림차순 정렬"><svg viewBox="0 0 24 24"><path d="M7 4v16m0 0l-3-3m3 3l3-3"/><path d="M14 6h7M14 12h5M14 18h3"/></svg></button>
   <button class="rb" data-cmd="find" title="찾기와 바꾸기"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></button>
   <span class="sepv"></span>
+  <button class="rb" data-cmd="viz" title="시각화"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="4.5" cy="5" r="2"/><circle cx="19.5" cy="5" r="2"/><circle cx="4.5" cy="19" r="2"/><circle cx="19.5" cy="19" r="2"/><path d="M6 6.5l3.8 3.8M18 6.5l-3.8 3.8M6 17.5l3.8-3.8M18 17.5l-3.8-3.8"/></svg><span class="lb">시각화</span></button>
   <button class="rb" data-cmd="chart" title="차트 만들기"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span class="lb">차트</span></button>
   <button class="rb" data-cmd="scale" title="색 단계"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1" fill="#ff6b6b" stroke="none"/><rect x="9.5" y="4" width="5" height="16" rx="1" fill="#ffc93c" stroke="none"/><rect x="16" y="4" width="5" height="16" rx="1" fill="#3fe08f" stroke="none"/></svg><span class="lb">색 단계</span></button>
   <button class="rb" data-cmd="bars" title="데이터 막대"><svg viewBox="0 0 24 24"><path d="M3 6h12M3 12h17M3 18h7" stroke-width="3"/></svg><span class="lb">막대</span></button>
@@ -250,10 +271,22 @@ button,input,select{font:inherit; color:inherit;}
   <div class="dbody"><p id="askP" style="margin:0 0 6px;color:var(--dim)"></p><input type="text" id="askI"></div>
   <div class="acts"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="askOk">확인</button></div>
 </div></div>
+<div class="ov vizDlg" id="vizDlg"><div class="dlg">
+  <div class="dh"><h3>시각화</h3><button class="x" id="vizClose" aria-label="닫기">×</button></div>
+  <div class="vtabs">
+    <button class="vtab on" data-m="graph"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span class="lb">그래프</span></button>
+    <button class="vtab" data-m="table"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M10 4v16"/></svg><span class="lb">표</span></button>
+    <button class="vtab" data-m="diagram"><svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="5" rx="1"/><rect x="2" y="17" width="6" height="5" rx="1"/><rect x="16" y="17" width="6" height="5" rx="1"/><path d="M12 7v5M5 17v-5h14v5"/></svg><span class="lb">다이어그램</span></button>
+    <button class="vtab" data-m="mind"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M9 12c-3 0-3-6-6-6M9 12c-3 0-3 6-6 6M15 12c3 0 3-6 6-6M15 12c3 0 3 6 6 6"/></svg><span class="lb">마인드맵</span></button>
+  </div>
+  <div class="vbar"><input type="text" id="vizTitle" placeholder="제목" data-notr><span class="rg" id="vizRange" data-notr></span><span id="vizOpts"></span><button class="tbtn" id="vizPng">PNG 저장</button></div>
+  <div id="vizBox"><canvas id="vizCv"></canvas></div>
+</div></div>
 <input type="file" id="fileIn" accept=".xlsx,.xls,.xlsm,.ods,.csv,.tsv,.txt" hidden>
 <div id="toast"></div>
 
 <script src="engine.js"></script>
 <script src="app.js"></script>
+<script src="viz.js"></script>
 </body>
 </html>

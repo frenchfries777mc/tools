@@ -77,6 +77,47 @@ button,input,select{font:inherit; color:inherit;}
 .blocklyText,.blocklyFlyoutLabelText{font-family:'Noto Sans KR',sans-serif!important;}
 .blocklyMainBackground{stroke:none!important;}
 .blocklyWidgetDiv .blocklyMenu,.blocklyDropDownDiv{font-family:'Noto Sans KR',sans-serif!important;}
+/* toolbox section headings */
+.blocklyTreeSeparator.tbHead{border:0!important; height:auto!important; margin:10px 0 4px!important; padding:4px 10px 2px; font-size:11px; font-weight:700; letter-spacing:.08em; color:var(--fry); white-space:nowrap;}
+.blocklyTreeSeparator.tbHead-make{margin-top:2px!important;}
+.blocklyFlyoutLabelText{fill:#8a93a6!important; font-size:16px!important; font-weight:700;}
+.blocklyFlyoutButton .blocklyFlyoutButtonBackground,.blocklyFlyoutButtonBackground{fill:#2a3142!important; stroke:#3a4256!important;}
+.blocklyFlyoutButton .blocklyText{fill:#eef0f5!important; font-size:19px!important;}
+/* dialogs */
+.ov{position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:80; display:none; align-items:center; justify-content:center; padding:12px;}
+.ov.open{display:flex;}
+.dlg{background:var(--panel); border:1px solid var(--line); border-radius:16px; width:min(900px,100%); max-height:94vh; display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,.6);}
+.dh{display:flex; align-items:center; gap:8px; padding:10px 12px 10px 16px; border-bottom:1px solid var(--line);}
+.dh h3{margin:0; font-size:16px; flex:1;}
+.x{width:36px; height:36px; border:0; background:transparent; color:var(--dim); font-size:24px; cursor:pointer; border-radius:8px;}
+.x:hover{background:var(--panel2); color:var(--text);}
+.padTools{display:flex; flex-wrap:wrap; gap:8px; align-items:center; padding:10px 12px;}
+.padTools .grp{display:flex; gap:4px; align-items:center;}
+.tl{height:38px; min-width:38px; padding:0 10px; border-radius:9px; border:1px solid var(--line); background:var(--panel2); cursor:pointer; display:inline-flex; align-items:center; gap:5px;}
+.tl.on{border-color:var(--fry); color:var(--fry); background:#2a2410;}
+.sw{width:30px; height:30px; border-radius:50%; border:2px solid #3a4256; cursor:pointer; padding:0; position:relative; flex:0 0 auto;}
+.sw.on{outline:3px solid var(--fry); outline-offset:1px;}
+.sw.pick{background:conic-gradient(#ef4444,#facc15,#22c55e,#38bdf8,#a855f7,#ef4444); overflow:hidden;}
+.sw.pick input{position:absolute; inset:0; opacity:0; width:100%; height:100%; cursor:pointer;}
+#padSw{display:flex; flex-wrap:wrap; gap:6px; align-items:center;}
+#padSize{width:110px;}
+#padDot{display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--text);}
+#padWrap{margin:0 12px; border-radius:12px; overflow:hidden; background:#fff; border:1px solid var(--line); display:flex; justify-content:center; min-height:0; flex:1 1 auto;}
+#padWrap.clear{background-color:#e5e7eb; background-image:linear-gradient(45deg,#cbd0d8 25%,transparent 25%,transparent 75%,#cbd0d8 75%),linear-gradient(45deg,#cbd0d8 25%,transparent 25%,transparent 75%,#cbd0d8 75%); background-size:20px 20px; background-position:0 0,10px 10px;}
+#padCv{display:block; width:100%; max-width:calc((94vh - 230px) * 4 / 3); aspect-ratio:4/3; touch-action:none; cursor:crosshair;}
+.padFoot{display:flex; gap:8px; align-items:center; padding:10px 12px; flex-wrap:wrap;}
+.padFoot input[type=text]{flex:1 1 160px; min-width:0; background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:8px 10px;}
+.padFoot label{display:flex; align-items:center; gap:6px; color:var(--dim); font-size:13px;}
+#mgrList{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; padding:12px; overflow:auto;}
+.pic{border:1px solid var(--line); border-radius:12px; background:var(--panel2); padding:8px; display:flex; flex-direction:column; gap:6px;}
+.pic .th{height:100px; border-radius:8px; background:#fff; display:grid; place-items:center; overflow:hidden;}
+.pic .th.clear{background:#e5e7eb;}
+.pic .th img{max-width:100%; max-height:100%;}
+.pic input{background:var(--bg); border:1px solid var(--line); border-radius:7px; padding:5px 8px; font-size:13px; width:100%;}
+.pa{display:flex; gap:4px;}
+.pa button{flex:1; height:30px; border-radius:7px; border:1px solid var(--line); background:var(--panel); cursor:pointer; font-size:12.5px; padding:0 4px;}
+.pa button.dang{color:#ff7b7b;}
+.empty{color:var(--dim); text-align:center; padding:30px 10px; grid-column:1/-1;}
 </style>
 </head>
 <body class="v-blocks">
@@ -115,6 +156,22 @@ button,input,select{font:inherit; color:inherit;}
   <hr>
   <button data-f="html">HTML 파일로 받기<small>어디서든 열리는 웹페이지 파일</small></button>
 </div>
+<div class="ov" id="padDlg"><div class="dlg">
+  <div class="dh"><h3>그림 그리기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="padTools">
+    <span class="grp"><button class="tl on" data-tool="pen">✏️ 펜</button><button class="tl" data-tool="fill">🪣 채우기</button><button class="tl" data-tool="eraser">🧽 지우개</button></span>
+    <span id="padSw"></span>
+    <span class="grp"><input type="range" id="padSize" min="2" max="60" value="8" aria-label="굵기"><span id="padDot"></span></span>
+    <span class="grp"><button class="tl" id="padUndo">↶ 되돌리기</button><button class="tl" id="padClear">모두 지우기</button></span>
+  </div>
+  <div id="padWrap"><canvas id="padCv" width="800" height="600"></canvas></div>
+  <div class="padFoot"><input type="text" id="padName" aria-label="그림 이름" data-notr><label><input type="checkbox" id="padBg"> 투명 배경</label><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="padSave">저장하고 넣기</button></div>
+</div></div>
+<div class="ov" id="mgrDlg"><div class="dlg">
+  <div class="dh"><h3>내 그림</h3><button class="tbtn" id="mgrDraw">✏️ 그림 그리기</button><button class="tbtn" id="mgrPhoto">📷 사진 넣기</button><button class="x" data-close aria-label="닫기">×</button></div>
+  <div id="mgrList"></div>
+</div></div>
+<input type="file" id="photoIn" accept="image/*" hidden>
 <input type="file" id="fileIn" accept=".json,application/json" hidden>
 <div id="toast"></div>
 <script src="blocks.js"></script>

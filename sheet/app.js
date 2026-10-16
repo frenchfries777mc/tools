@@ -445,6 +445,7 @@ function cmd(n){
     case 'sortA': return sortSel(true);
     case 'sortD': return sortSel(false);
     case 'find': return openDlg('findDlg',$('fFind'));
+    case 'viz': if(window.FSViz) window.FSViz.open(); return;
     case 'chart': openDrawer(); if(!(sel.r1===sel.r2&&sel.c1===sel.c2)||(!sh.charts.length&&region(act.r,act.c))) addChart(); return;
     case 'scale': case 'bars': return addCf(n==='scale'?'scale':'bar');
     case 'rowmenu': return openMenu($('rowMenu'),document.querySelector('[data-cmd=rowmenu]'));
@@ -656,11 +657,13 @@ function chartData(ch){
   var si=doc.active, v=function(r,c){ return eng.value(si,r,c); };
   var hdr=false, lab=false, r, c;
   if(ch.r2>ch.r1) for(c=ch.c1+(ch.c2>ch.c1?1:0);c<=ch.c2;c++){ var x=v(ch.r1,c); if(typeof x==='string'&&x!=='') hdr=true; }
-  if(ch.c2>ch.c1) for(r=ch.r1+(hdr?1:0);r<=ch.r2;r++){ var y=v(r,ch.c1); if(typeof y==='string'&&y!=='') lab=true; }
-  var r0=ch.r1+(hdr?1:0), c0=ch.c1+(lab?1:0), labels=[], series=[];
-  for(r=r0;r<=ch.r2;r++) labels.push(lab?E.formatValue(v(r,ch.c1)):String(r-r0+1));
+  var lc=ch.c1, r0=ch.r1+(hdr?1:0);
+  function textCol(c){ var t=0,n=0; for(var r=r0;r<=ch.r2;r++){ var y=v(r,c); if(typeof y==='string'&&y!=='') t++; else if(typeof y==='number') n++; } return t>0&&t>=n; }
+  if(ch.c2>ch.c1&&textCol(ch.c1)){ lab=true; while(lc+1<ch.c2&&textCol(lc+1)) lc++; } // label = the last of the leading text columns
+  var c0=lab?lc+1:ch.c1, labels=[], series=[];
+  for(r=r0;r<=ch.r2;r++) labels.push(lab?E.formatValue(v(r,lc)):String(r-r0+1));
   for(c=c0;c<=ch.c2;c++){ var vals=[]; for(r=r0;r<=ch.r2;r++){ var z=v(r,c); vals.push(typeof z==='number'?z:(typeof z==='boolean'?(z?1:0):null)); }
-    series.push({name:hdr?E.formatValue(v(ch.r1,c)):F('계열 {0}',c-c0+1),vals:vals}); }
+    if(vals.some(function(x){ return x!=null; })) series.push({name:hdr?E.formatValue(v(ch.r1,c)):F('계열 {0}',c-c0+1),vals:vals}); }
   return {labels:labels,series:series};
 }
 function niceStep(range){ var e=Math.pow(10,Math.floor(Math.log10(range||1))), f=range/e; return (f<=1?1:f<=2?2:f<=5?5:10)*e; }
@@ -673,8 +676,8 @@ function drawChart(cv,ch){
   if(ch.title){ g.fillStyle='#eef0f5'; g.font='600 14px "Noto Sans KR",sans-serif'; g.textAlign='center'; g.fillText(ch.title,W/2,15); g.font=font; }
   if(!d.series.length||!d.labels.length){ g.fillStyle='#8a93a6'; g.textAlign='center'; g.fillText(T('숫자 데이터가 없어요'),W/2,H/2); return; }
   // legend
-  var lg=d.series.length>1||ch.type==='pie', lx=10, ly=H-12;
-  var items=ch.type==='pie'?d.labels:d.series.map(function(s){ return s.name; });
+  var lg=(ch.type==='scatter'?d.series.length>2:d.series.length>1)||ch.type==='pie', lx=10, ly=H-12;
+  var items=ch.type==='pie'?d.labels:(ch.type==='scatter'&&d.series.length>1?d.series.slice(1):d.series).map(function(s){ return s.name; });
   if(lg){ g.textAlign='left'; items.slice(0,12).forEach(function(n,i){ var w=g.measureText(n).width+26; if(lx+w>W-6){ lx=10; ly-=18; } g.fillStyle=PAL[i%PAL.length]; g.fillRect(lx,ly-5,10,10); g.fillStyle='#b8bfcc'; g.fillText(n,lx+14,ly); lx+=w; }); }
   var bottom=lg?(H-ly)+16:8;
   if(ch.type==='pie'){
@@ -686,6 +689,7 @@ function drawChart(cv,ch){
       a+=s; });
     return;
   }
+  if(ch.type==='scatter'){ drawScatter(g,d,W,H,top,bottom,font); return; }
   var all=[]; d.series.forEach(function(s){ s.vals.forEach(function(x){ if(x!=null) all.push(x); }); });
   if(!all.length){ g.fillStyle='#8a93a6'; g.textAlign='center'; g.fillText(T('숫자 데이터가 없어요'),W/2,H/2); return; }
   var mn=Math.min(0,Math.min.apply(null,all)), mx=Math.max(0,Math.max.apply(null,all)); if(mn===mx) mx=mn+1;
@@ -717,12 +721,28 @@ function drawChart(cv,ch){
     d.series.forEach(function(s,j){ g.fillStyle=PAL[j%PAL.length]; s.vals.forEach(function(x,i){ if(x==null) return; var py=Y1-(x-mn)/(mx-mn)*(Y1-Y0), px=X0+bw*i+bw*.125+w2*j; g.fillRect(px,Math.min(py,zy),w2-1,Math.max(1,Math.abs(py-zy))); }); });
   }
 }
+function drawScatter(g,d,W,H,top,bottom,font){
+  // first numeric column is x, the others are y
+  var xs=d.series.length>1?d.series[0].vals:d.labels.map(function(_,i){ return i+1; }), ys=d.series.length>1?d.series.slice(1):d.series;
+  var px=[], py=[]; ys.forEach(function(s){ s.vals.forEach(function(y,i){ if(y!=null&&xs[i]!=null){ px.push(xs[i]); py.push(y); } }); });
+  if(!px.length){ g.fillStyle='#8a93a6'; g.textAlign='center'; g.fillText(T('숫자 데이터가 없어요'),W/2,H/2); return; }
+  function rng(a){ var lo=Math.min.apply(null,a), hi=Math.max.apply(null,a); if(lo===hi){ lo-=1; hi+=1; } var st=niceStep((hi-lo)/4); return [Math.floor(lo/st)*st,Math.ceil(hi/st)*st,st]; }
+  var rx=rng(px), ry=rng(py), tw=0, t;
+  for(t=ry[0];t<=ry[1]+ry[2]/2;t+=ry[2]) tw=Math.max(tw,g.measureText(E.fmtGeneral(+t.toPrecision(10))).width);
+  var X0=16+tw, X1=W-14, Y0=top+4, Y1=H-bottom-(d.series.length>1?34:20);
+  g.strokeStyle='#1f2533'; g.lineWidth=1; g.fillStyle='#8a93a6';
+  for(t=ry[0];t<=ry[1]+ry[2]/2;t+=ry[2]){ var yy=Y1-(t-ry[0])/(ry[1]-ry[0])*(Y1-Y0); g.beginPath(); g.moveTo(X0,yy); g.lineTo(X1,yy); g.stroke(); g.textAlign='right'; g.fillText(E.fmtGeneral(+t.toPrecision(10)),X0-6,yy); }
+  for(t=rx[0];t<=rx[1]+rx[2]/2;t+=rx[2]){ var xx=X0+(t-rx[0])/(rx[1]-rx[0])*(X1-X0); g.beginPath(); g.moveTo(xx,Y0); g.lineTo(xx,Y1); g.stroke(); g.textAlign='center'; g.fillText(E.fmtGeneral(+t.toPrecision(10)),xx,Y1+11); }
+  if(d.series.length>1){ g.fillStyle='#b8bfcc'; g.textAlign='center'; g.fillText(d.series[0].name,(X0+X1)/2,Y1+27); }
+  ys.forEach(function(s,j){ g.fillStyle=PAL[(j+(d.series.length>1?1:0))%PAL.length]; s.vals.forEach(function(y,i){ if(y==null||xs[i]==null) return;
+    g.beginPath(); g.arc(X0+(xs[i]-rx[0])/(rx[1]-rx[0])*(X1-X0),Y1-(y-ry[0])/(ry[1]-ry[0])*(Y1-Y0),4.5,0,7); g.fill(); }); });
+}
 function renderCharts(){
   var body=$('charts'); body.innerHTML='';
   if(!sh.charts.length){ body.innerHTML='<div class="empty">'+T('숫자가 든 표를 고른 뒤')+'<br>'+T('"+ 선택 범위로"를 누르면 차트가 생겨요.')+'<br>'+T('표를 고치면 차트도 바로 바뀌어요.')+'</div>'; return; }
   sh.charts.forEach(function(ch){
     var d=document.createElement('div'); d.className='chart';
-    d.innerHTML='<div class="row"><input class="ct" placeholder="차트 제목" data-notr><select data-notr><option value="bar">'+T('세로 막대')+'</option><option value="hbar">'+T('가로 막대')+'</option><option value="line">'+T('꺾은선')+'</option><option value="pie">'+T('원형')+'</option></select></div>'+
+    d.innerHTML='<div class="row"><input class="ct" placeholder="차트 제목" data-notr><select data-notr><option value="bar">'+T('세로 막대')+'</option><option value="hbar">'+T('가로 막대')+'</option><option value="line">'+T('꺾은선')+'</option><option value="pie">'+T('원형')+'</option><option value="scatter">'+T('산점도')+'</option></select></div>'+
       '<canvas></canvas><div class="row" style="margin:8px 0 0"><span class="rg" data-notr></span><span style="flex:1"></span><button class="sm" data-a="rg">'+T('범위를 지금 선택으로')+'</button><button class="sm" data-a="png">PNG</button><button class="sm" data-a="del">'+T('지우기')+'</button></div>';
     var ti=d.querySelector('.ct'), sl=d.querySelector('select'), cv=d.querySelector('canvas');
     ti.placeholder=T('차트 제목'); ti.value=ch.title||''; sl.value=ch.type; d.querySelector('.rg').textContent=E.rangeStr(ch);
@@ -842,5 +862,7 @@ function seed(){
   sh.charts.push({id:uid(),r1:0,c1:0,r2:4,c2:2,type:'bar',title:T('학기별 점수')});
   doc.name=T('예시: 성적표'); $('docName').value=doc.name; changed();
 }
+window.FSAPI={get doc(){ return doc; }, get eng(){ return eng; }, get sheet(){ return sh; }, sel:function(){ return sel; }, act:function(){ return act; }, region:region, hasHeader:hasHeader,
+  drawChart:drawChart, chartData:chartData, PAL:PAL, toast:toast, download:download, commitEdit:commitEdit, uid:uid, pushUndo:pushUndo, saveSoon:saveSoon, openDrawer:openDrawer, renderCharts:renderCharts};
 window.__fs={get doc(){ return doc; }, get eng(){ return eng; }, select:select, cmd:cmd, sel:function(){ return sel; }, act:function(){ return act; }, setRaw:setRaw, changed:changed, startEdit:startEdit, commitEdit:commitEdit};
 })();
