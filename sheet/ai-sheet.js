@@ -78,8 +78,7 @@ function go(){
   var q=$('aiQ').value.trim(); if(!q) return $('aiQ').focus();
   A.commitEdit(); busy(true); out(''); $('aiActs').innerHTML='';
   var t=mode==='table'?null:tableText(), a=A.act(), lang=FFT.lang||'ko', p;
-  if(mode==='ask') p=FFAI.ask({onText:liveOut, system:'You help someone with their spreadsheet. Answer the question about the table clearly and briefly in plain text (no markdown tables, no code fences). Use the language the question is written in.',
-      prompt:(t?'Table (first row = column letters, first column = row numbers):\n'+t.text+'\n\n':'(No table selected.)\n\n')+'Question: '+q})
+  if(mode==='ask') p=FFAI.ask({onText:liveOut, facts:true, system:FFP.askSys, prompt:FFP.askPrompt(t&&t.text,q)})
     .then(function(r){ lastAnswer=r.trim(); out('<div class="aiAns">'+esc(lastAnswer).replace(/\n/g,'<br>')+'</div>');
       $('aiActs').innerHTML='<button class="tbtn" id="aiPut">'+T('답을 칸에 넣기')+'</button>';
       $('aiPut').onclick=function(){ var g=t?t.g:null, r0=g?g.r2+2:a.r, c0=g?g.c1:a.c; A.pushUndo(); lastAnswer.split('\n').forEach(function(l,i){ A.setRaw(r0+i,c0,l); }); A.changed(); A.select(r0,c0); close(); }; });
