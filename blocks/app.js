@@ -44,7 +44,8 @@ ws.addChangeListener(function(e){
   if(e.type===Blockly.Events.BLOCK_CREATE){
     (e.ids||[]).forEach(function(id){ var b=ws.getBlockById(id); if(!b||BH.EL.indexOf(b.type)<0) return;
       var n=b.getFieldValue('NAME'), others=ws.getAllBlocks(false).filter(function(x){ return x!==b&&BH.EL.indexOf(x.type)>=0; }).map(function(x){ return x.getFieldValue('NAME'); });
-      if(others.indexOf(n)<0) return; var base=n.replace(/\d+$/,''), k=1; while(others.indexOf(base+k)>=0) k++; b.setFieldValue(base+k,'NAME'); });
+      if(others.indexOf(n)<0) return; var base=n.replace(/\d+$/,''), k=1; while(others.indexOf(base+k)>=0) k++;
+      var og=Blockly.Events.getGroup(); Blockly.Events.setGroup(e.group||og||true); try{ b.setFieldValue(base+k,'NAME'); }finally{ Blockly.Events.setGroup(og||false); } });
   }
   if(e.type===Blockly.Events.BLOCK_CHANGE&&e.element==='field'&&e.name==='NAME'){
     var b=ws.getBlockById(e.blockId); if(!b||BH.EL.indexOf(b.type)<0||!e.oldValue) return;
@@ -225,12 +226,48 @@ ws.registerButtonCallback('imgPhoto',function(){ $('photoIn').click(); });
 ws.registerButtonCallback('imgManage',function(){ renderMgr(); $('mgrDlg').classList.add('open'); });
 $('mgrDraw').onclick=function(){ $('mgrDlg').classList.remove('open'); openPad(null); };
 $('mgrPhoto').onclick=function(){ $('photoIn').click(); };
-/* section headings in the toolbox */
-[['make','화면 만들기'],['move','움직이게 하기'],['calc','계산과 논리']].forEach(function(h){ var el=document.querySelector('.tbHead-'+h[0]); if(el) el.textContent=T(h[1]); });
+/* ---------- edit bar: copy, paste, undo, redo, delete all ---------- */
+var CLIP='ffblocks.clip';
+function copyBlock(b){ b=b||Blockly.getSelected(); if(!b||!b.isDeletable||b.isShadow()){ toast(T('먼저 복사할 블록을 눌러 고르세요')); return; }
+  var st=Blockly.serialization.blocks.save(b,{addCoordinates:true,addNextBlocks:false,saveIds:false}); lsSet(CLIP,JSON.stringify(st)); window.__clip=st; pasteN=0; syncBar(); toast(T('블록을 복사했어요')); }
+var pasteN=0;
+function pasteBlock(){ var st=window.__clip; if(!st){ try{ st=JSON.parse(lsGet(CLIP)||'null'); }catch(e){} } if(!st){ toast(T('복사한 블록이 없어요')); return; }
+  pasteN++; st=JSON.parse(JSON.stringify(st));
+  var m=ws.getMetricsManager().getViewMetrics(true), x=st.x!=null?st.x+30*pasteN:m.left+60, y=st.y!=null?st.y+30*pasteN:m.top+60;
+  if(x<m.left||x>m.left+m.width-80||y<m.top||y>m.top+m.height-60){ x=m.left+60+((pasteN*30)%180); y=m.top+60+((pasteN*30)%180); }
+  st.x=x; st.y=y; Blockly.Events.setGroup(true); var nb; try{ nb=Blockly.serialization.blocks.append(st,ws,{recordUndo:true}); }finally{ Blockly.Events.setGroup(false); } if(nb&&nb.select) nb.select(); }
+function deleteAll(){ var tops=ws.getTopBlocks(false); if(!tops.length) return; if(!confirm(T('블록을 모두 지울까요? 되돌리기로 다시 살릴 수 있어요.'))) return;
+  tops.sort(function(a,b){ return (a.type==='page_root')-(b.type==='page_root'); }); // pages go last so undo brings them back first
+  Blockly.Events.setGroup(true); try{ tops.forEach(function(b){ b.dispose(false); }); }finally{ Blockly.Events.setGroup(false); } toast(T('블록을 모두 지웠어요')); }
+function syncBar(){ var sel=Blockly.getSelected(); $('ebCopy').disabled=!(sel&&!sel.isShadow()); $('ebUndo').disabled=!ws.getUndoStack().length; $('ebRedo').disabled=!ws.getRedoStack().length; }
+$('ebCopy').onclick=function(){ copyBlock(); };
+$('ebPaste').onclick=pasteBlock;
+$('ebUndo').onclick=function(){ ws.undo(false); syncBar(); };
+$('ebRedo').onclick=function(){ ws.undo(true); syncBar(); };
+$('ebDel').onclick=deleteAll;
+ws.addChangeListener(function(e){ if(e.type===Blockly.Events.SELECTED||!e.isUiEvent) setTimeout(syncBar,0); });
+// keep the selection when a bar button is pressed on touch screens
+document.getElementById('editBar').addEventListener('pointerdown',function(e){ e.stopPropagation(); });
+// Ctrl/Cmd+C and V use the same clipboard as the buttons
+document.addEventListener('keydown',function(e){ if(!(e.ctrlKey||e.metaKey)||e.altKey) return; var t=e.target; if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable)) return;
+  if(Blockly.WidgetDiv.isVisible()||Blockly.DropDownDiv.isVisible()) return; var k=e.key.toLowerCase();
+  if(k==='c'&&Blockly.getSelected()){ e.preventDefault(); e.stopImmediatePropagation(); copyBlock(); }
+  else if(k==='v'){ e.preventDefault(); e.stopImmediatePropagation(); pasteBlock(); } },true);
+// long-press / right-click menus
+var REG=Blockly.ContextMenuRegistry.registry;
+['blockCopyToStorage','blockPasteFromStorage'].forEach(function(id){ try{ REG.unregister(id); }catch(e){} });
+REG.register({id:'ffCopy',scopeType:Blockly.ContextMenuRegistry.ScopeType.BLOCK,weight:-1,displayText:function(){ return T('복사'); },
+  preconditionFn:function(sc){ return sc.block&&!sc.block.isShadow()?'enabled':'hidden'; },callback:function(sc){ copyBlock(sc.block); }});
+REG.register({id:'ffPaste',scopeType:Blockly.ContextMenuRegistry.ScopeType.WORKSPACE,weight:-1,displayText:function(){ return T('붙여넣기'); },
+  preconditionFn:function(){ return window.__clip||lsGet(CLIP)?'enabled':'disabled'; },callback:pasteBlock});
+REG.register({id:'ffDelAll',scopeType:Blockly.ContextMenuRegistry.ScopeType.WORKSPACE,weight:20,displayText:function(){ return T('전체 삭제'); },
+  preconditionFn:function(sc){ return sc.workspace.getTopBlocks(false).length?'enabled':'disabled'; },callback:deleteAll});
+try{ REG.unregister('workspaceDelete'); }catch(e){}
 
 /* ---------- start ---------- */
 var saved=null; try{ saved=JSON.parse(lsGet(LS)||'null'); }catch(e){}
 if(saved&&saved.ws){ $('projName').value=saved.name||T('나의 웹페이지'); setImgs(saved.imgs); try{ loadJSON(saved.ws); }catch(e){ console.error(e); blank(); } }
 else { $('projName').value=T(BH_EXAMPLES[0].name); loadXML(BH_EXAMPLES[0].xml()); arrange(); save(); }
-window.__bh={ws:ws,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,examples:BH_EXAMPLES};
+setTimeout(syncBar,50);
+window.__bh={ws:ws,copy:copyBlock,paste:pasteBlock,deleteAll:deleteAll,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,examples:BH_EXAMPLES};
 })();

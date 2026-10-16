@@ -256,15 +256,15 @@ function build(ws,opts){
 function sh(type,val){ return {shadow:{type:type,fields:type==='math_number'?{NUM:val}:{TEXT:val}}}; }
 function shc(c){ return {shadow:{type:'val_color',fields:{COLOR:c}}}; }
 function toolbox(){
-  var n=function(v){ return sh('math_number',v); }, lab=function(t){ return {kind:'label',text:T(t)}; }, head=function(k){ return {kind:'sep',cssconfig:{container:'blocklyTreeSeparator tbHead tbHead-'+k}}; };
+  var n=function(v){ return sh('math_number',v); }, lab=function(t){ return {kind:'label',text:T(t)}; };
   var img={shadow:{type:'val_myimg'}};
   return {kind:'categoryToolbox',contents:[
-    head('make'),
-    {kind:'category',name:T('페이지·배치'),colour:C.page,contents:[
-      {kind:'block',type:'page_root'},lab('묶고 띄우기'),{kind:'block',type:'el_box'},{kind:'block',type:'el_space'},lab('직접 쓰기'),{kind:'block',type:'el_html'}]},
-    {kind:'category',name:T('글·버튼'),colour:C.el,contents:[
-      lab('글'),{kind:'block',type:'el_heading'},{kind:'block',type:'el_text'},{kind:'block',type:'el_list'},{kind:'block',type:'el_link'},
-      lab('누르고 쓰기'),{kind:'block',type:'el_button'},{kind:'block',type:'el_input'}]},
+    {kind:'category',name:T('시작'),colour:C.ev,contents:[
+      {kind:'block',type:'ev_start'},lab('누르거나 쓰면'),{kind:'block',type:'ev_click'},{kind:'block',type:'ev_change'},{kind:'block',type:'ev_key'},lab('시간마다'),{kind:'block',type:'ev_timer'}]},
+    {kind:'category',name:T('화면'),colour:C.page,contents:[
+      {kind:'block',type:'page_root'},lab('글'),{kind:'block',type:'el_heading'},{kind:'block',type:'el_text'},{kind:'block',type:'el_list'},{kind:'block',type:'el_link'},
+      lab('누르고 쓰기'),{kind:'block',type:'el_button'},{kind:'block',type:'el_input'},
+      lab('묶고 띄우기'),{kind:'block',type:'el_box'},{kind:'block',type:'el_space'},{kind:'block',type:'el_html'}]},
     {kind:'category',name:T('그림·사진'),colour:'#e0663d',contents:[
       {kind:'button',text:T('✏️ 그림 그리기'),callbackKey:'imgDraw'},{kind:'button',text:T('📷 사진 넣기'),callbackKey:'imgPhoto'},{kind:'button',text:T('🗂 내 그림 관리'),callbackKey:'imgManage'},
       lab('페이지에 넣기'),{kind:'block',type:'el_picture'},{kind:'block',type:'el_image'},
@@ -277,33 +277,35 @@ function toolbox(){
       {kind:'block',type:'draw_text',inputs:{TEXT:sh('text',T('안녕')),X:n(20),Y:n(40),COLOR:shc('#111111')}},
       {kind:'block',type:'draw_image',inputs:{IMG:img,X:n(20),Y:n(20),W:n(80)}},
       lab('누른 곳'),{kind:'block',type:'val_mouse'}]},
-    head('move'),
-    {kind:'category',name:T('이벤트'),colour:C.ev,contents:[
-      {kind:'block',type:'ev_start'},lab('누르고 쓰면'),{kind:'block',type:'ev_click'},{kind:'block',type:'ev_change'},{kind:'block',type:'ev_key'},lab('시간'),{kind:'block',type:'ev_timer'}]},
-    {kind:'category',name:T('내용 바꾸기'),colour:C.act,contents:[
+    {kind:'category',name:T('바꾸기'),colour:C.act,contents:[
       {kind:'block',type:'act_set',inputs:{VALUE:sh('text',T('안녕!'))}},
       {kind:'block',type:'act_append',inputs:{VALUE:sh('text',T('항목'))}},
       {kind:'block',type:'act_clear'},
       lab('값 가져오기'),{kind:'block',type:'val_get'},{kind:'block',type:'val_prompt',inputs:{VALUE:sh('text',T('이름이 뭐예요?'))}},{kind:'block',type:'val_key'}]},
-    {kind:'category',name:T('모양·움직임'),colour:'#17a589',contents:[
+    {kind:'category',name:T('모양'),colour:'#17a589',contents:[
       {kind:'block',type:'act_style',inputs:{VALUE:shc('#ef4444')}},
       {kind:'block',type:'act_size',inputs:{N:n(32)}},
-      {kind:'block',type:'act_move',inputs:{X:n(100),Y:n(100)}},
       {kind:'block',type:'act_show'},
       lab('색'),{kind:'block',type:'val_color'},{kind:'block',type:'val_rcolor'}]},
-    {kind:'category',name:T('소리·알림·시간'),colour:'#2e9bd6',contents:[
+    {kind:'category',name:T('움직임'),colour:'#0f8f8f',contents:[
+      {kind:'block',type:'act_move',inputs:{X:n(100),Y:n(100)}},
+      {kind:'block',type:'act_size',fields:{PROP:'rotate'},inputs:{N:n(45)}},
+      lab('누른 곳'),{kind:'block',type:'val_mouse'}]},
+    {kind:'category',name:T('소리·알림'),colour:'#2e9bd6',contents:[
       {kind:'block',type:'act_beep',inputs:{SEC:n(0.3)}},
-      {kind:'block',type:'act_alert',inputs:{VALUE:sh('text',T('안녕하세요!'))}},
-      lab('시간'),{kind:'block',type:'act_after',inputs:{SEC:n(1)}},{kind:'block',type:'act_stop'},{kind:'block',type:'val_time'}]},
-    head('calc'),
+      {kind:'block',type:'act_alert',inputs:{VALUE:sh('text',T('안녕하세요!'))}}]},
+    {kind:'category',name:T('시간'),colour:'#3a6fd8',contents:[
+      {kind:'block',type:'act_after',inputs:{SEC:n(1)}},{kind:'block',type:'ev_timer'},{kind:'block',type:'act_stop'},{kind:'block',type:'val_time'}]},
+    {kind:'sep'},
     {kind:'category',name:T('조건'),colour:'#5b80a5',contents:[
       {kind:'block',type:'controls_if'},{kind:'block',type:'controls_if',extraState:{hasElse:true}},
-      {kind:'block',type:'logic_compare'},{kind:'block',type:'logic_operation'},{kind:'block',type:'logic_negate'},{kind:'block',type:'logic_boolean'},
+      lab('비교'),{kind:'block',type:'logic_compare'},{kind:'block',type:'logic_operation'},{kind:'block',type:'logic_negate'},{kind:'block',type:'logic_boolean'},
       {kind:'block',type:'logic_ternary'}]},
     {kind:'category',name:T('반복'),colour:'#5ba55b',contents:[
       {kind:'block',type:'controls_repeat_ext',inputs:{TIMES:n(10)}},{kind:'block',type:'controls_whileUntil'},
-      {kind:'block',type:'controls_for',inputs:{FROM:n(1),TO:n(10),BY:n(1)}},{kind:'block',type:'controls_forEach'},{kind:'block',type:'controls_flow_statements'}]},
-    {kind:'category',name:T('수학'),colour:'#5b67a5',contents:[
+      {kind:'block',type:'controls_for',inputs:{FROM:n(1),TO:n(10),BY:n(1)}},{kind:'block',type:'controls_forEach'},{kind:'block',type:'controls_flow_statements'},
+      lab('시간마다'),{kind:'block',type:'ev_timer'}]},
+    {kind:'category',name:T('계산'),colour:'#5b67a5',contents:[
       {kind:'block',type:'math_number'},{kind:'block',type:'math_arithmetic',inputs:{A:n(1),B:n(1)}},
       {kind:'block',type:'math_random_int',inputs:{FROM:n(1),TO:n(100)}},{kind:'block',type:'math_round',inputs:{NUM:n(3.5)}},
       {kind:'block',type:'math_modulo',inputs:{DIVIDEND:n(10),DIVISOR:n(3)}},{kind:'block',type:'math_single',inputs:{NUM:n(9)}},

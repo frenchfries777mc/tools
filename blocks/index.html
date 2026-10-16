@@ -37,7 +37,8 @@ button,input,select{font:inherit; color:inherit;}
 .seg button{border:0; background:transparent; color:var(--dim); padding:5px 12px; border-radius:99px; cursor:pointer; font-size:13px; white-space:nowrap;}
 .seg button.on{background:linear-gradient(90deg,var(--fry),var(--fry2)); color:#1c1405; font-weight:700;}
 .main{flex:1; display:flex; min-height:0;}
-#ws{flex:1 1 60%; min-width:0; position:relative;}
+.wsWrap{flex:1 1 60%; min-width:0; position:relative; display:flex;}
+#ws{flex:1 1 auto; min-width:0; position:relative;}
 #side{flex:0 0 40%; max-width:560px; min-width:300px; display:flex; flex-direction:column; border-left:1px solid var(--line); background:var(--panel);}
 .stabs{display:flex; align-items:center; gap:4px; padding:6px 8px; border-bottom:1px solid var(--line);}
 .stab{border:0; background:transparent; color:var(--dim); padding:7px 12px; border-radius:8px; cursor:pointer;}
@@ -77,9 +78,6 @@ button,input,select{font:inherit; color:inherit;}
 .blocklyText,.blocklyFlyoutLabelText{font-family:'Noto Sans KR',sans-serif!important;}
 .blocklyMainBackground{stroke:none!important;}
 .blocklyWidgetDiv .blocklyMenu,.blocklyDropDownDiv{font-family:'Noto Sans KR',sans-serif!important;}
-/* toolbox section headings */
-.blocklyTreeSeparator.tbHead{border:0!important; height:auto!important; margin:10px 0 4px!important; padding:4px 10px 2px; font-size:11px; font-weight:700; letter-spacing:.08em; color:var(--fry); white-space:nowrap;}
-.blocklyTreeSeparator.tbHead-make{margin-top:2px!important;}
 .blocklyFlyoutLabelText{fill:#8a93a6!important; font-size:16px!important; font-weight:700;}
 .blocklyFlyoutButton .blocklyFlyoutButtonBackground,.blocklyFlyoutButtonBackground{fill:#2a3142!important; stroke:#3a4256!important;}
 .blocklyFlyoutButton .blocklyText{fill:#eef0f5!important; font-size:19px!important;}
@@ -118,6 +116,15 @@ button,input,select{font:inherit; color:inherit;}
 .pa button{flex:1; height:30px; border-radius:7px; border:1px solid var(--line); background:var(--panel); cursor:pointer; font-size:12.5px; padding:0 4px;}
 .pa button.dang{color:#ff7b7b;}
 .empty{color:var(--dim); text-align:center; padding:30px 10px; grid-column:1/-1;}
+/* edit bar */
+#editBar{position:absolute; top:10px; right:12px; z-index:4; display:flex; gap:4px; padding:4px; border-radius:12px; background:rgba(16,19,27,.92); border:1px solid var(--line); box-shadow:0 8px 24px rgba(0,0,0,.4);}
+#editBar button{display:inline-flex; align-items:center; gap:5px; height:36px; padding:0 10px; border-radius:8px; border:0; background:transparent; color:var(--text); cursor:pointer; white-space:nowrap; font-size:13px;}
+#editBar button:hover:not(:disabled){background:var(--panel2);}
+#editBar button:disabled{opacity:.35; cursor:default;}
+#editBar button.dang{color:#ff8b8b;}
+#editBar svg{width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+#editBar .vs{width:1px; background:var(--line); margin:4px 2px;}
+@media(max-width:700px){ #editBar .lb{display:none;} #editBar button{padding:0 9px;} }
 </style>
 </head>
 <body class="v-blocks">
@@ -133,7 +140,16 @@ button,input,select{font:inherit; color:inherit;}
   <span data-lang-slot></span>
 </header>
 <div class="main">
-  <div id="ws" data-notr></div>
+  <div class="wsWrap"><div id="ws" data-notr></div>
+  <div id="editBar">
+    <button id="ebUndo" title="되돌리기"><svg viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button>
+    <button id="ebRedo" title="다시 하기"><svg viewBox="0 0 24 24"><path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></svg></button>
+    <span class="vs"></span>
+    <button id="ebCopy" title="복사"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span class="lb">복사</span></button>
+    <button id="ebPaste" title="붙여넣기"><svg viewBox="0 0 24 24"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V2.5h6V4"/></svg><span class="lb">붙여넣기</span></button>
+    <span class="vs"></span>
+    <button id="ebDel" class="dang" title="전체 삭제"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg><span class="lb">전체 삭제</span></button>
+  </div></div>
   <aside id="side">
     <div class="stabs">
       <button class="stab on" data-p="prev">미리보기</button><button class="stab" data-p="code">HTML 코드</button>
