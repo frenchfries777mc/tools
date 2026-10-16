@@ -32,6 +32,15 @@ button,input,select{font:inherit; color:inherit;}
 .tbtn{display:inline-flex; align-items:center; gap:6px; height:34px; padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--panel2); cursor:pointer; white-space:nowrap;}
 .tbtn:hover{border-color:#3a4256;} .tbtn.pri{background:linear-gradient(90deg,var(--fry),var(--fry2)); color:#1c1405; border:0; font-weight:700;}
 .tbtn svg{width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round;}
+.runGrp{display:inline-flex; gap:4px; flex:0 0 auto;}
+.tbtn.rb{padding:0 10px;}
+.tbtn.run{color:#3fe08f; border-color:#1f5a3a;} .tbtn.run svg{fill:currentColor;}
+.tbtn.rb.on{background:#16241c; border-color:#3fe08f; color:#3fe08f;}
+#pauseBtn.on{background:#2a2410; border-color:var(--fry); color:var(--fry);}
+#stopBtn.on{background:#2a1416; border-color:#ff7b7b; color:#ff7b7b;}
+#veil{position:absolute; inset:0; display:none; place-items:center; background:rgba(5,6,10,.35); color:#fff; font-weight:700; font-size:15px; z-index:2;}
+#veil span{background:rgba(5,6,10,.8); padding:8px 16px; border-radius:99px;}
+#pPrev.paused #veil{display:grid;}
 .langSel{background:var(--panel2); color:var(--dim); border:1px solid var(--line); border-radius:8px; padding:6px 8px; font-size:13px;}
 .seg{display:none; padding:3px; border-radius:99px; border:1px solid var(--line); background:var(--bg); flex:0 0 auto;}
 .seg button{border:0; background:transparent; color:var(--dim); padding:5px 12px; border-radius:99px; cursor:pointer; font-size:13px; white-space:nowrap;}
@@ -60,6 +69,8 @@ button,input,select{font:inherit; color:inherit;}
   body.v-prev #side, body.v-code #side{display:flex;}
   .stabs .stab{display:none;}
 }
+@media(max-width:1180px){ .tbtn.rb .lb{display:none;} }
+@media(max-width:960px){ .brand{display:none;} #exBtn .lb,#fileBtn .lb,#dlBtn .lb{display:none;} .top{flex-wrap:wrap; gap:6px;} #projName{flex-basis:70px;} .langSel{max-width:96px;} }
 @media(max-width:620px){ .brand{display:none;} .tbtn .lb{display:none;} #projName{max-width:none;} .top{flex-wrap:wrap;} .top .sp{display:none;} .seg{order:9; flex:1 1 auto; justify-content:center;} .seg button{flex:1;} [data-lang-slot]{order:10;} .langSel{max-width:96px;} }
 .menu{position:fixed; z-index:60; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:6px; min-width:230px; box-shadow:0 20px 50px rgba(0,0,0,.55); display:none; max-height:80vh; overflow:auto;}
 .menu.open{display:block;}
@@ -129,9 +140,6 @@ button,input,select{font:inherit; color:inherit;}
 .tbtn.aib{border-color:#5a4a1c; color:var(--fry);}
 #baiDlg .dlg{width:min(620px,100%);}
 .bai{padding:12px 16px; display:flex; flex-direction:column; gap:10px; overflow:auto;}
-.btabs{display:flex; gap:6px;}
-.btab{flex:1; height:38px; border-radius:9px; border:1px solid var(--line); background:var(--panel2); cursor:pointer; font-weight:700;}
-.btab.on{border-color:var(--fry); color:var(--fry); background:#2a2410;}
 #baiQ{width:100%; min-height:120px; resize:vertical; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:10px 12px; font:inherit; line-height:1.5; color:var(--text);}
 #baiUndo[hidden],#baiStop[hidden]{display:none;}
 #baiLive{margin:0; max-height:220px; overflow:auto; background:#05060a; border:1px solid var(--line); border-radius:10px; padding:10px 12px; font:12px/1.5 "JetBrains Mono",ui-monospace,monospace; color:#9fe3b8; white-space:pre-wrap; word-break:break-all;}
@@ -154,6 +162,11 @@ button,input,select{font:inherit; color:inherit;}
   <span class="brand" data-notr>BLOCK <b>HTML</b></span>
   <input id="projName" value="나의 웹페이지" aria-label="프로젝트 이름" spellcheck="false">
   <span class="sp"></span>
+  <span class="runGrp" id="runGrp">
+    <button class="tbtn rb run" id="runBtn" title="실행하기"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z"/></svg><span class="lb">실행하기</span></button>
+    <button class="tbtn rb" id="pauseBtn" title="멈추기"><svg viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></svg><span class="lb">멈추기</span></button>
+    <button class="tbtn rb" id="stopBtn" title="정지하기"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg><span class="lb">정지하기</span></button>
+  </span>
   <span class="seg" id="seg"><button data-v="blocks" class="on">블록</button><button data-v="prev">미리보기</button><button data-v="code">코드</button></span>
   <button class="tbtn aib" id="aiBtn"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/></svg><span class="lb">AI</span></button>
   <button class="tbtn" id="exBtn"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/></svg><span class="lb">예제</span></button>
@@ -176,11 +189,11 @@ button,input,select{font:inherit; color:inherit;}
     <div class="stabs">
       <button class="stab on" data-p="prev">미리보기</button><button class="stab" data-p="code">HTML 코드</button>
       <span class="sp"></span>
-      <button class="ib" id="rerun" title="다시 실행"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v5h-5"/></svg></button>
+      <button class="ib" id="rerun" title="처음부터 다시 실행"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v5h-5"/></svg></button>
       <button class="ib" id="openTab" title="새 탭에서 열기"><svg viewBox="0 0 24 24"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></button>
       <button class="ib" id="copyCode" title="코드 복사"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
     </div>
-    <div class="pane on" id="pPrev"><iframe id="frame" title="미리보기" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe></div>
+    <div class="pane on" id="pPrev"><div id="veil"><span>⏸ 멈춤 · 이어하려면 멈추기를 다시 눌러요</span></div><iframe id="frame" title="미리보기" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe></div>
     <div class="pane" id="pCode"><pre id="code" data-notr></pre></div>
     <div class="hint" id="hint">블록을 바꾸면 미리보기가 바로 바뀌어요.</div>
   </aside>
@@ -210,17 +223,16 @@ button,input,select{font:inherit; color:inherit;}
   <div id="mgrList"></div>
 </div></div>
 <div class="ov" id="baiDlg"><div class="dlg">
-  <div class="dh"><h3>AI로 블록 만들기</h3><button class="tbtn" id="baiSet">AI 설정</button><button class="x" id="baiClose" aria-label="닫기">×</button></div>
+  <div class="dh"><h3>AI로 코드 만들기</h3><button class="tbtn" id="baiSet">AI 설정</button><button class="x" id="baiClose" aria-label="닫기">×</button></div>
   <div class="bai" id="baiBody">
-    <div class="btabs"><button class="btab on" data-m="new">새로 만들기</button><button class="btab" data-m="edit">지금 블록 고치기</button></div>
-    <p class="baiNote">만들고 싶은 페이지를 글로 써 주세요. AI가 짠 블록은 지금 블록 자리에 들어가요.</p>
+    <p class="baiNote">만들거나 고치고 싶은 것을 글로 써 주세요. AI가 지금 블록을 고칠지 새로 짤지 알아서 정해요.</p>
     <textarea id="baiQ" data-notr spellcheck="false"></textarea>
     <div class="exLab">예시 (누르면 입력돼요)</div>
     <div class="baiChips" id="baiChips"></div>
     <div class="baiMsg" id="baiMsg"></div>
     <pre id="baiLive" data-notr hidden></pre>
   </div>
-  <div class="baiFoot"><button class="tbtn" id="baiUndo" hidden>AI 전으로 되돌리기</button><span class="sp"></span><button class="tbtn" id="baiStop" hidden>멈추기</button><button class="tbtn pri" id="baiGo">만들기</button></div>
+  <div class="baiFoot"><button class="tbtn" id="baiUndo" hidden>AI 전으로 되돌리기</button><span class="sp"></span><button class="tbtn" id="baiStop" hidden>멈추기</button><button class="tbtn pri" id="baiGo">코드 만들기</button></div>
 </div></div>
 <input type="file" id="photoIn" accept="image/*" hidden>
 <input type="file" id="fileIn" accept=".json,application/json" hidden>
