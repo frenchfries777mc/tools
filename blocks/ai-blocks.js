@@ -87,26 +87,35 @@ function check(xml){
 
 /* ---------- dialog ---------- */
 var mode='new', before=null, busyNow=false;
-function setMode(m){ mode=m; document.querySelectorAll('.btab').forEach(function(b){ b.classList.toggle('on',b.dataset.m===m); });
+var CHIPS={new:['1부터 100 사이 숫자 맞히기 게임. 크다/작다를 알려 주고 맞히면 축하해 줘요','버튼을 누를 때마다 숫자가 올라가는 클릭 카운터','할 일을 쓰고 추가 버튼을 누르면 목록에 쌓이는 할 일 목록','그림판에 공이 튀어 다니는 애니메이션','화면이 초록색으로 바뀌면 빨리 누르는 반응 속도 게임'],
+  edit:['배경을 밤하늘로 바꿔 줘','버튼을 누르면 소리가 나게 해 줘','점수가 10이 되면 축하 메시지를 띄워 줘','제목 글자를 더 크고 빨갛게 해 줘']};
+function chips(m){ var box=$('baiChips'); box.innerHTML=''; CHIPS[m].forEach(function(t){ var b=document.createElement('button'); b.textContent=T(t); b.onclick=function(){ $('baiQ').value=b.textContent; $('baiQ').focus(); }; box.appendChild(b); }); }
+function setMode(m){ mode=m; chips(m); document.querySelectorAll('.btab').forEach(function(b){ b.classList.toggle('on',b.dataset.m===m); });
   $('baiQ').placeholder=m==='new'?T('예: 1부터 100 사이 숫자 맞히기 게임. 크다/작다를 알려 주고 맞히면 축하해 줘요'):T('예: 버튼을 누를 때마다 배경색이 바뀌게 해 줘'); }
 function msg(t,cls){ var o=$('baiMsg'); o.textContent=t||''; o.className='baiMsg'+(cls?' '+cls:''); }
-function busy(on){ busyNow=on; $('baiGo').disabled=on; $('baiGo').textContent=on?T('만드는 중…'):T('만들기'); }
+var t0=0, tick=null, chars=0, phase='';
+function busy(on){ busyNow=on; $('baiGo').disabled=on; $('baiGo').textContent=on?T('만드는 중…'):T('만들기'); $('baiStop').hidden=!on;
+  clearInterval(tick); if(on){ t0=Date.now(); chars=0; $('baiLive').textContent=''; $('baiLive').hidden=true; tick=setInterval(status,500); } }
+function status(){ var s=Math.round((Date.now()-t0)/1000);
+  msg(phase==='fix'?F('AI 답을 고치는 중… {0}초',s):chars?F('AI가 블록 코드를 쓰는 중… 글자 {0}개 · {1}초',chars,s):F('AI가 생각하는 중… {0}초',s)); }
+function live(t){ chars=t.length; var p=$('baiLive'); p.hidden=false; p.textContent=t.length>6000?'…'+t.slice(-6000):t; p.scrollTop=p.scrollHeight; }
 function run(q,modify,tries,errText,lastOut){
-  return FFAI.ask({system:SYS, prompt:buildPrompt(q,modify,errText,lastOut), maxTokens:12000}).then(function(out){
+  phase=errText?'fix':''; chars=0;
+  return FFAI.ask({system:SYS, prompt:buildPrompt(q,modify,errText,lastOut), maxTokens:12000, onText:live}).then(function(out){
     try{ return check(extract(out)); }
-    catch(e){ if(tries>0){ msg(T('AI 답을 고치는 중…')); return run(q,modify,tries-1,e.message,out); } throw new Error(T('AI가 만든 블록을 읽지 못했어요. 다시 해 보세요')); }
+    catch(e){ if(tries>0){ return run(q,modify,tries-1,e.message,out); } throw new Error(T('AI가 만든 블록을 읽지 못했어요. 다시 해 보세요')); }
   });
 }
 function go(){
   var q=$('baiQ').value.trim(); if(!q) return $('baiQ').focus(); if(busyNow) return;
-  var modify=mode==='edit'; busy(true); msg(T('AI가 블록을 짜고 있어요…'));
+  var modify=mode==='edit'; busy(true); status();
   run(q,modify,1).then(function(xml){
     before={name:$('projName').value, ws:Blockly.serialization.workspaces.save(ws)};
     B.loadXML(xml); B.arrange();
     if(!modify){ var pg=ws.getTopBlocks(false).filter(function(b){ return b.type==='page_root'; })[0], t=pg&&pg.getFieldValue('TITLE'); if(t) $('projName').value=t; }
-    B.save(); $('baiUndo').hidden=false;
+    B.save(); $('baiUndo').hidden=false; busy(false);
     msg(T('다 만들었어요! 미리보기에서 확인해 보세요'),'ok'); close(); B.toast(T('AI가 블록을 만들었어요'));
-  },function(e){ if(e.kind!=='nokey') msg(e.message||T('AI에 연결하지 못했어요'),'bad'); else msg(''); }).then(function(){ busy(false); });
+  },function(e){ busy(false); if(e.kind!=='nokey') msg(e.message||T('AI에 연결하지 못했어요'),'bad'); else msg(''); }).then(function(){ if(busyNow) busy(false); });
 }
 function undoAI(){ if(!before) return; B.loadJSON(before.ws); $('projName').value=before.name; B.save(); before=null; $('baiUndo').hidden=true; msg(''); B.toast(T('AI 전으로 되돌렸어요')); }
 function open(){ setMode(ws.getAllBlocks(false).length>1&&mode==='edit'?'edit':mode); $('baiDlg').classList.add('open'); setTimeout(function(){ $('baiQ').focus(); },60); }
@@ -114,6 +123,7 @@ function close(){ $('baiDlg').classList.remove('open'); }
 document.querySelectorAll('.btab').forEach(function(b){ b.onclick=function(){ setMode(b.dataset.m); }; });
 $('aiBtn').onclick=open;
 $('baiGo').onclick=go;
+$('baiStop').onclick=function(){ FFAI.stop(); };
 $('baiQ').addEventListener('keydown',function(e){ if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){ e.preventDefault(); go(); } });
 $('baiUndo').onclick=undoAI;
 $('baiSet').onclick=function(){ FFAI.settings(); };

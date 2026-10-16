@@ -169,6 +169,12 @@ button,input,select{font:inherit; color:inherit;}
 .aiFnBox{margin-top:14px; border-top:1px solid var(--line); padding-top:10px; font-size:13px;}
 .aiFnBox p{color:var(--dim); margin:4px 0 0; line-height:1.55;}
 .aiFnBox .aiRow{justify-content:flex-start;}
+.aiLive{margin:8px 0 0; max-height:200px; overflow:auto; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:10px 12px; font:12.5px/1.55 'JetBrains Mono',ui-monospace,monospace; white-space:pre-wrap; word-break:break-word;}
+.aiChips{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;}
+.aiChips button{border:1px solid var(--line); background:var(--panel2); color:var(--text); border-radius:99px; padding:6px 12px; font:inherit; font-size:12.5px; cursor:pointer; text-align:left;}
+.aiChips button:hover{border-color:var(--fry); color:var(--fry);}
+.aiTr{margin-top:8px; border:1px solid var(--line); border-radius:10px; padding:10px 12px; background:var(--panel2);}
+.aiTr code{display:inline-block; font-family:'JetBrains Mono',monospace; color:var(--fry); background:var(--bg); border-radius:6px; padding:2px 7px; margin:2px 0;}
 </style>
 </head>
 <body>
@@ -299,10 +305,13 @@ button,input,select{font:inherit; color:inherit;}
   <div class="dbody">
     <div class="aiCtx" id="aiCtx" data-notr></div>
     <textarea id="aiQ" rows="3" data-notr></textarea>
-    <div class="aiRow"><span class="aiNote">키는 각자 넣고, 이 브라우저에만 저장돼요</span><button class="tbtn pri" id="aiGo">보내기</button></div>
+    <div class="aiChips" id="aiChips"></div>
+    <div class="aiRow"><span class="aiNote">예시를 누르면 바로 써져요</span><button class="tbtn pri" id="aiGo">보내기</button></div>
     <div id="aiOut" data-notr></div>
     <div class="aiActs" id="aiActs"></div>
-    <div class="aiFnBox"><b>AI 함수</b><p>칸에 =AI("할 일", A2) 처럼 쓰면 AI가 답을 칸에 채워요. 한 칸에 쓰고 아래로 끌어 채우면 한 열 전체를 한 번에 처리해요.</p><div class="aiRow"><button class="tbtn" id="aiFn">AI 함수 쓰는 법</button><button class="tbtn" id="aiRerun">선택한 AI 칸 다시 묻기</button></div></div>
+    <div class="aiFnBox"><b>AI 함수</b><p>칸에 =AI("할 일", A2) 처럼 쓰면 AI가 답을 칸에 채워요. 한 칸에 쓰고 아래로 끌어 채우면 한 열 전체를 한 번에 처리해요.</p>
+      <div class="aiTr"><b>🌐 영어로 번역하기</b><p>A열에 한국어 문장을 쓰고 B2 칸에 <code data-notr>=AI("영어로 번역", A2)</code> 를 쓴 뒤 아래로 끌어 보세요. 열 전체가 영어로 바뀌어요. "일본어로 번역", "한 줄로 요약", "긍정/부정 분류"처럼 할 일만 바꾸면 돼요.</p><div class="aiRow"><button class="tbtn pri" id="aiTrDemo">번역 예시 넣어 보기</button></div></div>
+      <div class="aiRow"><button class="tbtn" id="aiFn">AI 함수 쓰는 법</button><button class="tbtn" id="aiRerun">선택한 AI 칸 다시 묻기</button></div></div>
   </div>
 </div></div>
 <div class="ov vizDlg" id="vizDlg"><div class="dlg">

@@ -251,3 +251,23 @@ window.FNDOC=[
 ['날짜','TODAY','TODAY()','오늘 날짜','Today’s date'],
 ['날짜','NOW','NOW()','지금 날짜와 시각','Current date and time']
 ];
+FFT.add({
+'예시를 누르면 바로 써져요':['Tap an example to use it','Toca un ejemplo para usarlo','Touche un exemple pour l’utiliser','Tippe auf ein Beispiel','例を押すとすぐ入ります'],
+'이 표를 세 줄로 요약해 줘':['Summarize this table in three lines','Resume esta tabla en tres líneas','Résume ce tableau en trois lignes','Fasse diese Tabelle in drei Zeilen zusammen','この表を3行で要約して'],
+'가장 큰 값과 가장 작은 값은?':['What are the largest and smallest values?','¿Cuáles son el valor mayor y el menor?','Quelles sont la plus grande et la plus petite valeur ?','Was sind der größte und der kleinste Wert?','一番大きい値と小さい値は？'],
+'이 표에서 눈에 띄는 점을 알려 줘':['What stands out in this table?','¿Qué destaca en esta tabla?','Qu’est-ce qui ressort de ce tableau ?','Was fällt in dieser Tabelle auf?','この表で目立つ点を教えて'],
+'B열의 평균':['Average of column B','Media de la columna B','Moyenne de la colonne B','Durchschnitt von Spalte B','B列の平均'],
+'B열에서 80 이상인 칸의 수':['How many cells in column B are 80 or more','Cuántas celdas de B son 80 o más','Nombre de cellules de B à 80 ou plus','Anzahl der Zellen in B ab 80','B列で80以上のセルの数'],
+'A열에서 가장 긴 글자':['Longest text in column A','Texto más largo de la columna A','Texte le plus long de la colonne A','Längster Text in Spalte A','A列で一番長い文字'],
+'우리 반 6명의 이름, 키, 좋아하는 과일 표':['A table of 6 classmates with name, height and favorite fruit','Tabla de 6 compañeros con nombre, altura y fruta favorita','Tableau de 6 élèves : nom, taille, fruit préféré','Tabelle mit 6 Mitschülern: Name, Größe, Lieblingsobst','クラス6人の名前・身長・好きな果物の表'],
+'일주일 시간표':['A weekly timetable','Un horario semanal','Un emploi du temps de la semaine','Ein Wochenstundenplan','1週間の時間割'],
+'한국의 도시 5개와 인구':['5 cities in Korea and their population','5 ciudades de Corea y su población','5 villes de Corée et leur population','5 Städte in Korea und ihre Einwohner','韓国の都市5つと人口'],
+'🌐 영어로 번역하기':['🌐 Translate into English','🌐 Traducir al inglés','🌐 Traduire en anglais','🌐 Ins Englische übersetzen','🌐 英語に翻訳'],
+'A열에 한국어 문장을 쓰고 B2 칸에':['Write sentences in column A, type','Escribe frases en la columna A, escribe','Écris des phrases en colonne A, tape','Schreib Sätze in Spalte A, gib','A列に文を書き、B2に'],
+'를 쓴 뒤 아래로 끌어 보세요. 열 전체가 영어로 바뀌어요. "일본어로 번역", "한 줄로 요약", "긍정/부정 분류"처럼 할 일만 바꾸면 돼요.':['in B2 and drag it down. The whole column turns into English. Change the task to "translate into Japanese", "summarize in one line" or "positive or negative" for other jobs.','en B2 y arrástralo hacia abajo. Toda la columna pasa al inglés. Cambia la tarea a "traducir al japonés", "resumir en una línea" o "positivo o negativo".','en B2 et tire vers le bas. Toute la colonne passe en anglais. Change la tâche : "traduire en japonais", "résumer en une ligne", "positif ou négatif".','in B2 ein und zieh nach unten. Die ganze Spalte wird Englisch. Ändere die Aufgabe zu „ins Japanische übersetzen“, „in einer Zeile zusammenfassen“ oder „positiv oder negativ“.','と書いて下へドラッグ。列全体が英語になります。「日本語に翻訳」「1行で要約」「肯定/否定に分類」のように指示を変えるだけです。'],
+'번역 예시 넣어 보기':['Try a translation example','Probar un ejemplo de traducción','Essayer un exemple de traduction','Übersetzungsbeispiel einfügen','翻訳の例を入れてみる'],
+'한국어':['Korean','Coreano','Coréen','Koreanisch','韓国語'],
+'영어':['English','Inglés','Anglais','Englisch','英語'],
+'영어로 번역':['translate into English','traducir al inglés','traduire en anglais','ins Englische übersetzen','英語に翻訳'],
+'B열이 영어로 채워져요':['Column B fills in English','La columna B se llena en inglés','La colonne B se remplit en anglais','Spalte B wird auf Englisch gefüllt','B列が英語で埋まります']
+});
