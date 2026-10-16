@@ -1,5 +1,25 @@
 /* Block HTML strings: [en, es, fr, de, ja] */
 FFT.add({
+'시작':['Start','Inicio','Début','Start','スタート'],
+'누르거나 쓰면':['When pressed or typed','Al pulsar o escribir','Quand on appuie ou écrit','Beim Drücken oder Tippen','押したり書いたりしたら'],
+'시간마다':['Every few seconds','Cada cierto tiempo','À intervalles','In Abständen','一定時間ごと'],
+'모양':['Looks','Aspecto','Apparence','Aussehen','見た目'],
+'움직임':['Motion','Movimiento','Mouvement','Bewegung','動き'],
+'소리·알림':['Sound & alerts','Sonido y avisos','Son et alertes','Ton & Hinweise','音・通知'],
+'계산':['Math','Cálculo','Calcul','Rechnen','計算'],
+'비교':['Compare','Comparar','Comparer','Vergleichen','比べる'],
+'복사':['Copy','Copiar','Copier','Kopieren','コピー'],
+'붙여넣기':['Paste','Pegar','Coller','Einfügen','貼り付け'],
+'되돌리기':['Undo','Deshacer','Annuler','Rückgängig','元に戻す'],
+'다시 하기':['Redo','Rehacer','Rétablir','Wiederholen','やり直し'],
+'전체 삭제':['Delete all','Borrar todo','Tout supprimer','Alles löschen','全部消す'],
+'먼저 복사할 블록을 눌러 고르세요':['Tap a block to copy first','Toca primero un bloque para copiar','Touchez d’abord un bloc à copier','Tippe zuerst einen Block an','先にコピーするブロックをタップしてください'],
+'블록을 복사했어요':['Block copied','Bloque copiado','Bloc copié','Block kopiert','ブロックをコピーしました'],
+'복사한 블록이 없어요':['Nothing copied yet','Aún no has copiado nada','Rien n’a été copié','Noch nichts kopiert','コピーしたブロックがありません'],
+'블록을 모두 지울까요? 되돌리기로 다시 살릴 수 있어요.':['Delete all blocks? Undo brings them back.','¿Borrar todos los bloques? Deshacer los recupera.','Supprimer tous les blocs ? Annuler les ramène.','Alle Blöcke löschen? Rückgängig holt sie zurück.','ブロックを全部消しますか？元に戻すで復活できます。'],
+'블록을 모두 지웠어요':['All blocks deleted','Bloques borrados','Blocs supprimés','Alle Blöcke gelöscht','ブロックを全部消しました'],
+});
+FFT.add({
 '(그림 없음)':['(no pictures)','(sin imágenes)','(aucune image)','(keine Bilder)','(絵なし)'],
 '내 그림':['My picture','Mi imagen','Mon image','Mein Bild','わたしの絵'],
 '직접 그리거나 올린 그림을 페이지에 넣어요':['Puts a picture you drew or uploaded on the page','Pone en la página una imagen dibujada o subida','Place sur la page une image dessinée ou importée','Setzt ein gemaltes oder hochgeladenes Bild auf die Seite','描いた絵やアップした写真をページに入れます'],
