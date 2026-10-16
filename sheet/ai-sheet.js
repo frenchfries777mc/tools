@@ -1,12 +1,13 @@
 /* Fry Sheet AI: the =AI() cell function (answers cached in doc.ai by prompt) and the "AI" dialog
-   (ask about a table, write a formula, make a table). Uses the shared ../ai.js (FFAI). */
+   (ask about a table, write a formula, make a table, make a chart). Uses the shared ../ai.js (FFAI) and the
+   short prompts in ../ai-prompts.js (FFP), which the Tools-trained built-in AI learned. */
 (function(){
 'use strict';
 var A=window.FSAPI, E=FSE, T=FFT.T, F=FFT.F, $=function(id){ return document.getElementById(id); };
 
 /* ---------- =AI() ---------- */
 var pending={}, errs={}, queue=[], running=0, MAXRUN=3, askedKey=false, paintT=null, force=false;
-var CELL_SYS='You fill exactly one spreadsheet cell. Reply with only the value for the cell: no quotes, no labels, no explanation, no markdown. Keep it to one short line unless the instruction asks for more. Answer in the language of the instruction unless it asks for another language. If the data is empty or the instruction cannot be done, reply with a single dash.';
+var CELL_SYS=FFP.cellSys;
 function hash(s){ var h=5381; for(var i=0;i<s.length;i++) h=((h<<5)+h+s.charCodeAt(i))|0; return (h>>>0).toString(36)+s.length.toString(36); }
 function store(){ var d=A.doc; if(!d.ai||typeof d.ai!=='object') d.ai={}; return d.ai; }
 function repaint(){ clearTimeout(paintT); paintT=setTimeout(function(){ A.changed(); },120); }
@@ -22,7 +23,7 @@ function pump(){
   }
 }
 E.aiHook=function(prompt,parts){
-  var full=prompt+(parts.length?'\n\nData:\n'+parts.join('\n\n'):''), h=hash(full), st=store();
+  var full=FFP.cellPrompt(prompt,parts), h=hash(full), st=store();
   if(force){ delete st[h]; delete errs[h]; }
   if(st[h]!=null) return st[h];
   if(errs[h]) return new E.Err('#AI!');
@@ -42,7 +43,7 @@ function rerunSel(){
 }
 
 /* ---------- dialog ---------- */
-var mode='ask', lastAnswer='', lastFormula='', lastTable=null;
+var mode='ask', lastAnswer='', lastFormula='', lastTable=null, lastChart=null;
 function tableText(){
   var s=A.sel(), a=A.act(), g=(s.r1===s.r2&&s.c1===s.c2)?A.region(a.r,a.c):s;
   if(!g) return null;
@@ -53,7 +54,8 @@ function tableText(){
 }
 var CHIPS={ask:[['📋 세 줄 요약','이 표를 세 줄로 요약해 줘'],['↕ 최대·최소','가장 큰 값과 가장 작은 값은?'],['🔍 눈에 띄는 점','이 표에서 눈에 띄는 점을 알려 줘']],
   formula:[['B열 평균','B열의 평균'],['80 이상 개수','B열에서 80 이상인 칸의 수'],['가장 긴 글자','A열에서 가장 긴 글자']],
-  table:[['🧑‍🎓 우리 반 표','우리 반 6명의 이름, 키, 좋아하는 과일 표'],['🗓 시간표','일주일 시간표'],['🏙 도시 인구','한국의 도시 5개와 인구']]};
+  table:[['🧑‍🎓 우리 반 표','우리 반 6명의 이름, 키, 좋아하는 과일 표'],['🗓 시간표','일주일 시간표'],['🏙 도시 인구','한국의 도시 5개와 인구']],
+  graph:[['📊 막대 그래프','과목별 점수를 막대 그래프로'],['📈 변화 보기','달마다 어떻게 변했는지 꺾은선으로'],['🥧 비율 보기','전체에서 각각 차지하는 비율을 원형으로']]};
 function chips(m){ var box=$('aiChips'); box.innerHTML=''; CHIPS[m].forEach(function(c){ var b=document.createElement('button'), full=T(c[1]); b.textContent=T(c[0]); b.title=full; b.onclick=function(){ $('aiQ').value=full; $('aiQ').focus(); }; box.appendChild(b); }); }
 function trDemo(){
   close(); var a=A.act(), r=a.r, c=a.c, at=function(i){ return E.addr(r+i,c); };
@@ -62,7 +64,7 @@ function trDemo(){
   A.pasteText(rows.map(function(x){ return x.join('\t'); }).join('\n')); A.toast(T('B열이 영어로 채워져요'));
 }
 function setMode(m){ mode=m; chips(m); document.querySelectorAll('.atab').forEach(function(b){ b.classList.toggle('on',b.dataset.m===m); });
-  var ph={ask:T('예: 평균이 가장 높은 과목은? / 이 표를 세 줄로 요약해 줘'),formula:T('예: B열에서 80점 이상인 사람 수'),table:T('예: 우리 반 6명의 이름, 키, 좋아하는 과일 표')}[m];
+  var ph={ask:T('예: 평균이 가장 높은 과목은? / 이 표를 세 줄로 요약해 줘'),formula:T('예: B열에서 80점 이상인 사람 수'),table:T('예: 우리 반 6명의 이름, 키, 좋아하는 과일 표'),graph:T('예: 이름별 수학 점수를 막대 그래프로')}[m];
   $('aiQ').placeholder=ph; $('aiOut').innerHTML=''; $('aiActs').innerHTML='';
   $('aiCtx').textContent=m==='table'?F('{0} 칸부터 표를 넣어요',E.addr(A.act().r,A.act().c)):(function(){ var t=tableText(); return t?F('{0} 표를 AI에게 보여 줘요',E.rangeStr(t.g)):T('표를 고르면 AI가 그 내용을 보고 답해요'); })();
 }
@@ -81,15 +83,22 @@ function go(){
     .then(function(r){ lastAnswer=r.trim(); out('<div class="aiAns">'+esc(lastAnswer).replace(/\n/g,'<br>')+'</div>');
       $('aiActs').innerHTML='<button class="tbtn" id="aiPut">'+T('답을 칸에 넣기')+'</button>';
       $('aiPut').onclick=function(){ var g=t?t.g:null, r0=g?g.r2+2:a.r, c0=g?g.c1:a.c; A.pushUndo(); lastAnswer.split('\n').forEach(function(l,i){ A.setRaw(r0+i,c0,l); }); A.changed(); A.select(r0,c0); close(); }; });
-  else if(mode==='formula') p=FFAI.ask({onText:liveOut, json:true, system:'You write one spreadsheet formula. Reply with JSON only: {"formula":"=...","explain":"one short sentence in the language of the request"}. Use A1 references that match the table addresses given. Use only these functions: '+fnList()+'. Strings use double quotes, arguments are separated by commas.',
-      prompt:(t?'Table (first row = column letters, first column = row numbers):\n'+t.text+'\n\n':'')+'The formula goes in cell '+E.addr(a.r,a.c)+'.\nRequest: '+q})
+  else if(mode==='formula') p=FFAI.ask({onText:liveOut, json:true, system:FFAI.isTuned()?FFP.formulaSys:FFP.formulaSys+' Use only these functions: '+fnList()+'.',
+      prompt:FFP.formulaPrompt(t&&t.text,E.addr(a.r,a.c),q)})
     .then(function(r){ var j=FFAI.parseJSON(r), f=String(j.formula||'').trim(); if(f&&f[0]!=='=') f='='+f; if(!f) throw new Error(T('AI 답을 읽지 못했어요'));
       try{ E.parse(f.slice(1)); }catch(e){ throw new Error(T('AI가 만든 수식에 오류가 있어요')+': '+f); }
       lastFormula=f; out('<code class="aiF">'+esc(f)+'</code><div class="aiEx">'+esc(j.explain||'')+'</div>');
       $('aiActs').innerHTML='<button class="tbtn pri" id="aiPut">'+F('{0}에 넣기',E.addr(a.r,a.c))+'</button>';
       $('aiPut').onclick=function(){ A.pushUndo(); A.setRaw(a.r,a.c,lastFormula); A.changed(); close(); }; });
-  else p=FFAI.ask({onText:liveOut, json:true, system:'You make a small table for a spreadsheet. Reply with JSON only: {"rows":[["header1","header2"],["value","value"]]}. The first row is the header. At most 60 rows and 12 columns. Numbers as plain numbers without units in the cell. Use the language of the request.',
-      prompt:'Request: '+q})
+  else if(mode==='graph'){
+    if(!t){ busy(false); out('<div class="aiErr">'+esc(T('그래프로 만들 표를 먼저 고르세요'))+'</div>'); return; }
+    p=FFAI.ask({onText:liveOut, json:true, system:FFP.graphSys, prompt:FFP.graphPrompt(t.text,q)})
+    .then(function(r){ var ch=chartFrom(FFAI.parseJSON(r),t.g); lastChart=ch;
+      out('<div class="aiChart"><canvas></canvas></div><div class="aiEx">'+esc(chartLabel(ch))+'</div>'); A.drawChart($('aiOut').querySelector('canvas'),ch);
+      $('aiActs').innerHTML='<button class="tbtn pri" id="aiPut">'+T('차트 넣기')+'</button>';
+      $('aiPut').onclick=function(){ A.pushUndo(); A.sheet.charts.push(lastChart); A.saveSoon(); close(); A.openDrawer(); }; });
+  }
+  else p=FFAI.ask({onText:liveOut, json:true, system:FFP.tableSys, prompt:FFP.tablePrompt(q)})
     .then(function(r){ var j=FFAI.parseJSON(r), rows=Array.isArray(j)?j:j.rows; if(!Array.isArray(rows)||!rows.length) throw new Error(T('AI 답을 읽지 못했어요'));
       rows=rows.slice(0,60).map(function(row){ return (Array.isArray(row)?row:[row]).slice(0,12).map(function(v){ return v==null?'':String(v).replace(/[\t\n]/g,' '); }); });
       lastTable=rows; var w=Math.max.apply(null,rows.map(function(x){ return x.length; }));
@@ -98,6 +107,19 @@ function go(){
       $('aiPut').onclick=function(){ A.pasteText(lastTable.map(function(r){ return r.join('\t'); }).join('\n')); A.forSel(function(r,c){ if(r===A.act().r){ var cell=A.sheet.cells[E.K(r,c)]; if(cell) cell.b=1; } }); A.changed(); close(); }; });
   p.then(null,function(e){ if(e.kind!=='nokey') out('<div class="aiErr">'+esc(e.message||T('AI에 연결하지 못했어요'))+'</div>'); }).then(function(){ busy(false); });
 }
+/* {type, range, series:["C"], title} from the AI -> a chart object for the charts drawer (series = column letters inside range) */
+function chartFrom(j,g){
+  var type=String(j&&j.type||'').toLowerCase(), rg=E.parseRange(String(j&&j.range||''));
+  if(FFP.graphTypes.indexOf(type)<0||!rg) throw new Error(T('AI 답을 읽지 못했어요'));
+  if(rg.r2<=rg.r1) rg={r1:g.r1,c1:g.c1,r2:g.r2,c2:g.c2}; // a single row cannot be a chart: use the whole table
+  var ch={id:A.uid(), r1:rg.r1, c1:rg.c1, r2:Math.min(rg.r2,rg.r1+500), c2:Math.min(rg.c2,rg.c1+20), type:type, title:String(j.title||'').slice(0,60)};
+  var cols=(Array.isArray(j.series)?j.series:[]).map(function(s){ return E.colIdx(String(s).replace(/[^A-Za-z]/g,'')||'?'); }).filter(function(c){ return c>=ch.c1&&c<=ch.c2; });
+  if(cols.length) ch.cols=cols;
+  if(!A.chartData(ch).series.length) throw new Error(T('그 범위에는 숫자 데이터가 없어요'));
+  return ch;
+}
+function chartLabel(ch){ var n={bar:T('세로 막대'),hbar:T('가로 막대'),line:T('꺾은선'),pie:T('원형'),scatter:T('산점도')}[ch.type];
+  return n+' · '+E.rangeStr(ch)+(ch.cols?' · '+ch.cols.map(E.colName).join(', '):''); }
 function open(){ A.commitEdit(); setMode(mode); $('aiDlg').classList.add('open'); setTimeout(function(){ $('aiQ').focus(); },60); }
 function close(){ $('aiDlg').classList.remove('open'); }
 document.querySelectorAll('.atab').forEach(function(b){ b.onclick=function(){ setMode(b.dataset.m); }; });

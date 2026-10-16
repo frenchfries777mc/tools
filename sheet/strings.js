@@ -280,5 +280,16 @@ FFT.add({
 '가장 긴 글자':["Longest text", "Texto más largo", "Texte le plus long", "Längster Text", "一番長い文字"],
 '🧑‍🎓 우리 반 표':["🧑‍🎓 Class table", "🧑‍🎓 Tabla de la clase", "🧑‍🎓 Tableau de classe", "🧑‍🎓 Klassentabelle", "🧑‍🎓 クラスの表"],
 '🗓 시간표':["🗓 Timetable", "🗓 Horario", "🗓 Emploi du temps", "🗓 Stundenplan", "🗓 時間割"],
-'🏙 도시 인구':["🏙 City populations", "🏙 Población de ciudades", "🏙 Population des villes", "🏙 Städte und Einwohner", "🏙 都市の人口"]
+'🏙 도시 인구':["🏙 City populations", "🏙 Población de ciudades", "🏙 Population des villes", "🏙 Städte und Einwohner", "🏙 都市の人口"],
+'그래프 만들기':["Make a chart", "Crear gráfico", "Créer un graphique", "Diagramm erstellen", "グラフを作る"],
+'예: 이름별 수학 점수를 막대 그래프로':["e.g. Math scores by name as a bar chart", "p. ej. Notas de matemáticas por nombre en barras", "ex. Notes de maths par nom en barres", "z. B. Mathenoten pro Name als Balken", "例: 名前ごとの数学の点数を棒グラフで"],
+'📊 막대 그래프':["📊 Bar chart", "📊 Barras", "📊 Barres", "📊 Balken", "📊 棒グラフ"],
+'과목별 점수를 막대 그래프로':["Scores by subject as a bar chart", "Notas por asignatura en barras", "Notes par matière en barres", "Noten pro Fach als Balken", "科目別の点数を棒グラフで"],
+'📈 변화 보기':["📈 Change over time", "📈 Cambio", "📈 Évolution", "📈 Verlauf", "📈 変化を見る"],
+'달마다 어떻게 변했는지 꺾은선으로':["How it changed each month, as a line chart", "Cómo cambió cada mes, en líneas", "L’évolution mois par mois en courbe", "Monatlicher Verlauf als Linie", "月ごとの変化を折れ線で"],
+'🥧 비율 보기':["🥧 Shares", "🥧 Proporciones", "🥧 Parts", "🥧 Anteile", "🥧 割合を見る"],
+'전체에서 각각 차지하는 비율을 원형으로':["Each one's share of the total, as a pie chart", "La parte de cada uno en un gráfico circular", "La part de chacun en camembert", "Anteile am Ganzen als Kreis", "全体に占める割合を円グラフで"],
+'그래프로 만들 표를 먼저 고르세요':["Select the table for the chart first", "Selecciona primero la tabla", "Sélectionne d’abord le tableau", "Wähle zuerst die Tabelle", "先にグラフにする表を選んでください"],
+'차트 넣기':["Add chart", "Añadir gráfico", "Ajouter le graphique", "Diagramm einfügen", "グラフを入れる"],
+'그 범위에는 숫자 데이터가 없어요':["There are no numbers in that range", "No hay números en ese rango", "Pas de nombres dans cette plage", "Keine Zahlen in diesem Bereich", "その範囲に数値がありません"]
 });
