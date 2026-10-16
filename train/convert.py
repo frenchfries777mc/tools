@@ -52,3 +52,32 @@ for q in quants:
         api.upload_folder(folder_path=out, repo_id=f"{user}/{repo}", commit_message="Tools fine-tune")
         print("uploaded https://huggingface.co/%s/%s" % (user, repo), flush=True)
 print("done")
+
+# Test run on the base model: compare with MLC's own prebuilt conversion, which the site's
+# WebLLM model code was built for. Same tensor names, shapes and dtypes means it will load.
+if name == "test":
+    for q in quants:
+        ref = snapshot_download(f"mlc-ai/Qwen3-1.7B-{q}-MLC", local_dir=f"/tmp/ref-{q}")
+        out = f"/tmp/mlc/{name}-{q}-MLC"
+        def recs(d):
+            f = next(x for x in ("tensor-cache.json", "ndarray-cache.json") if os.path.exists(os.path.join(d, x)))
+            meta = json.load(open(os.path.join(d, f)))
+            return {r["name"]: (tuple(r["shape"]), r["dtype"]) for rec in meta["records"] for r in rec["records"]}, meta
+        a, ma = recs(out)
+        b, mb = recs(ref)
+        diff = {k: (a.get(k), b.get(k)) for k in set(a) | set(b) if a.get(k) != b.get(k)}
+        print(f"{q}: {len(a)} tensors, prebuilt {len(b)}, differences: {len(diff)}")
+        for k in list(diff)[:10]:
+            print("  ", k, diff[k])
+        # Compare the first shard's bytes to see the numbers themselves agree.
+        sa, sb = ma["records"][0], mb["records"][0]
+        da = open(os.path.join(out, sa["dataPath"]), "rb").read()
+        db = open(os.path.join(ref, sb["dataPath"]), "rb").read()
+        same = sum(x == y for x, y in zip(da[:2_000_000], db[:2_000_000])) / max(1, min(len(da), len(db), 2_000_000))
+        print(f"  first shard {sa['dataPath']}: {len(da)} vs {len(db)} bytes, {same:.1%} identical bytes in first 2 MB")
+        mc = json.load(open(os.path.join(ref, "mlc-chat-config.json")))
+        mo = json.load(open(os.path.join(out, "mlc-chat-config.json")))
+        for k in ("model_type", "quantization", "context_window_size", "prefill_chunk_size", "conv_template"):
+            print(f"  {k}: ours={str(mo.get(k))[:60]} prebuilt={str(mc.get(k))[:60]}")
+        assert not diff, "tensor layout differs from the prebuilt model"
+    print("matches the prebuilt model")
