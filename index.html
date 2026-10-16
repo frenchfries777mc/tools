@@ -20,6 +20,11 @@ FFT.add({
 '공부하고 만들 때 쓰는 도구 모음이에요. 링크를 열면 설치 없이 바로 써요.':['Tools for studying and making things. Open the link and start, no install.','Herramientas para estudiar y crear. Abre el enlace y empieza.','Des outils pour apprendre et créer. Ouvrez le lien, c’est tout.','Werkzeuge zum Lernen und Bauen. Link öffnen, loslegen.','勉強やものづくりに使うツール集。リンクを開けばすぐ使えます。'],
 '스프레드시트':['Spreadsheet','Hoja de cálculo','Tableur','Tabellenkalkulation','表計算'],
 '수식 · 차트 · 엑셀 파일':['Formulas · charts · Excel files','Fórmulas · gráficos · Excel','Formules · graphiques · Excel','Formeln · Diagramme · Excel','数式・グラフ・Excel'],
+'AI 도우미':['AI helper','Asistente IA','Assistant IA','KI-Helfer','AIアシスタント'],
+'=AI("영어로 번역", A2)처럼 쓰면 AI가 칸마다 답을 채워요. 표에 대해 묻기, 수식 만들기, 표 만들기도 돼요':['Write =AI("translate to English", A2) and the AI fills each cell. It can also answer questions about a table, write formulas and make tables','Escribe =AI("traducir al inglés", A2) y la IA rellena cada celda. También responde sobre la tabla, escribe fórmulas y crea tablas','Écris =AI("traduire en anglais", A2) et l’IA remplit chaque cellule. Elle répond aussi sur le tableau, écrit des formules et crée des tableaux','Schreib =AI("ins Englische übersetzen", A2) und die KI füllt jede Zelle. Sie beantwortet auch Fragen zur Tabelle, schreibt Formeln und erstellt Tabellen','=AI("英語に翻訳", A2) と書くとAIがセルごとに答えを入れます。表への質問、数式づくり、表づくりもできます'],
+'만들고 싶은 페이지를 글로 쓰면 AI가 블록을 짜 주고, 지금 블록도 고쳐 줘요':['Describe the page you want and the AI builds the blocks, or changes the ones you have','Describe la página y la IA crea los bloques o cambia los que tienes','Décris la page voulue et l’IA crée les blocs ou modifie les tiens','Beschreibe die Seite und die KI baut die Blöcke oder ändert deine','作りたいページを文章で書くとAIがブロックを組み、今のブロックも直してくれます'],
+'키 없이 쓰는 AI':['AI with no key','IA sin clave','IA sans clé','KI ohne Schlüssel','キーなしで使えるAI'],
+'자체 AI가 기기 안에서 돌아가서 키가 없어도 돼요. 원하면 Claude, Gemini, OpenAI 키를 넣어 더 똑똑하게 쓸 수 있어요.':['The built-in AI runs on your device, so no key is needed. Add a Claude, Gemini or OpenAI key if you want smarter answers.','La IA integrada funciona en tu dispositivo, sin clave. Añade una clave de Claude, Gemini u OpenAI para respuestas más listas.','L’IA intégrée tourne sur ton appareil, sans clé. Ajoute une clé Claude, Gemini ou OpenAI pour des réponses plus fines.','Die eingebaute KI läuft auf deinem Gerät, ohne Schlüssel. Mit einem Claude-, Gemini- oder OpenAI-Schlüssel wird sie klüger.','内蔵AIが端末の中で動くのでキーは不要です。もっと賢く使いたいならClaude、Gemini、OpenAIのキーを入れられます。'],
 '자동 저장':['Autosave','Guardado automático','Sauvegarde auto','Automatisch gespeichert','自動保存'],
 '로그인 없이':['No login','Sin iniciar sesión','Sans connexion','Ohne Anmeldung','ログイン不要'],
 '엑셀처럼 표를 만들고 계산하는 스프레드시트예요. 엑셀 파일을 열고 저장할 수 있고, 몇 가지 기능을 더했어요.':['A spreadsheet for tables and calculations, like Excel. It opens and saves Excel files, with a few extras.','Una hoja de cálculo como Excel. Abre y guarda archivos Excel, con algunos extras.','Un tableur comme Excel. Il ouvre et enregistre des fichiers Excel, avec quelques bonus.','Eine Tabellenkalkulation wie Excel. Öffnet und speichert Excel-Dateien, mit Extras.','Excelのように表を作って計算する表計算ソフト。Excelファイルの読み書きと、少しの追加機能があります。'],
@@ -109,7 +114,7 @@ FFT.add({
   .bh .tags span{background:rgba(79,157,255,.08); color:#cfe2ff; border:1px solid rgba(79,157,255,.28);}
   .bh .desc{color:#a3b0c2;} .bh .desc li::marker{color:var(--fry);}
   .bh .play{background:linear-gradient(90deg,var(--fry),var(--fry2)); color:#1c1405;}
-  .why{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:40px 0 0;}
+  .why{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin:40px 0 0;}
   .why > div{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px 18px 16px;}
   .why .ic{font-size:24px;} .why h3{margin:6px 0 4px; font-size:16.5px;} .why p{margin:0; color:var(--dim); font-size:14.5px;}
   footer{margin:56px 0 40px; padding-top:20px; border-top:1px solid var(--line); color:var(--dim); font-size:14px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;}
@@ -145,12 +150,13 @@ FFT.add({
       <div class="body">
         <h2>FRY <b>SHEET</b></h2>
         <div class="motto"><i></i>SPREADSHEET<i></i></div>
-        <div class="tags"><span>수식 · 차트 · 엑셀 파일</span><span>자동 저장</span><span>로그인 없이</span></div>
+        <div class="tags"><span>수식 · 차트 · 엑셀 파일</span><span>AI 도우미</span><span>자동 저장</span><span>로그인 없이</span></div>
         <div class="desc">
           엑셀처럼 표를 만들고 계산하는 스프레드시트예요. 엑셀 파일을 열고 저장할 수 있고, 몇 가지 기능을 더했어요.
           <ul>
             <li>SUM, IF, VLOOKUP 같은 함수 60여 개</li>
             <li>표를 고치면 바로 바뀌는 차트, 색 단계, 데이터 막대, 체크박스</li>
+            <li>=AI("영어로 번역", A2)처럼 쓰면 AI가 칸마다 답을 채워요. 표에 대해 묻기, 수식 만들기, 표 만들기도 돼요</li>
             <li>아이패드에서도 손가락으로 범위 선택과 채우기</li>
           </ul>
         </div>
@@ -162,13 +168,14 @@ FFT.add({
       <div class="body">
         <h2>BLOCK <b>HTML</b></h2>
         <div class="motto"><i></i>JAVASCRIPT BLOCKS<i></i></div>
-        <div class="tags"><span>블록 → HTML 파일</span><span>예제 5개</span><span>로그인 없이</span></div>
+        <div class="tags"><span>블록 → HTML 파일</span><span>AI 도우미</span><span>예제 5개</span><span>로그인 없이</span></div>
         <div class="desc">
           자바스크립트를 블록으로 조립해 웹페이지를 만들고, 완성되면 HTML 파일로 받아요. 만든 페이지는 어디서든 열려요.
           <ul>
             <li>제목, 버튼, 입력칸, 그림판 같은 화면 블록</li>
             <li>누르면, 키를 누르면, 초마다 같은 이벤트와 조건, 반복, 변수, 함수</li>
             <li>바로 보이는 미리보기와 읽기 쉬운 HTML 코드</li>
+            <li>만들고 싶은 페이지를 글로 쓰면 AI가 블록을 짜 주고, 지금 블록도 고쳐 줘요</li>
           </ul>
         </div>
         <div class="acts"><a class="play" href="blocks/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
@@ -179,6 +186,7 @@ FFT.add({
   <section class="why">
     <div><div class="ic">⚡</div><h3>바로 시작</h3><p>다운로드 없이 브라우저에서 열면 끝. PC와 태블릿, 휴대폰 모두 돼요.</p></div>
     <div><div class="ic">💾</div><h3>내 기기에 저장</h3><p>만든 것은 이 브라우저에 자동으로 저장되고, 파일로도 받을 수 있어요.</p></div>
+    <div><div class="ic">🤖</div><h3>키 없이 쓰는 AI</h3><p>자체 AI가 기기 안에서 돌아가서 키가 없어도 돼요. 원하면 Claude, Gemini, OpenAI 키를 넣어 더 똑똑하게 쓸 수 있어요.</p></div>
     <div><div class="ic">📤</div><h3>파일로 주고받기</h3><p>엑셀 파일과 HTML 파일로 내보내서 다른 프로그램이나 친구에게 그대로 넘겨요.</p></div>
   </section>
 
