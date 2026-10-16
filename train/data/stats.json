@@ -1,0 +1,52 @@
+{
+ "built": "2026-10-16T08:14:11.308Z",
+ "counts": {
+  "full": 2600,
+  "basic": 1000,
+  "test": 160
+ },
+ "tasks": {
+  "code": {
+   "available": 879,
+   "test": 48,
+   "full": 780,
+   "basic": 300,
+   "short": 0
+  },
+  "und": {
+   "available": 600,
+   "test": 32,
+   "full": 520,
+   "basic": 200,
+   "short": 0
+  },
+  "tr": {
+   "available": 450,
+   "test": 24,
+   "full": 390,
+   "basic": 150,
+   "short": 0
+  },
+  "graph": {
+   "available": 450,
+   "test": 24,
+   "full": 390,
+   "basic": 150,
+   "short": 0
+  },
+  "formula": {
+   "available": 300,
+   "test": 16,
+   "full": 260,
+   "basic": 100,
+   "short": 0
+  },
+  "table": {
+   "available": 300,
+   "test": 16,
+   "full": 260,
+   "basic": 100,
+   "short": 0
+  }
+ }
+}
