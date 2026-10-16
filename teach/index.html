@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI 가르치기 · Frenchfries777 Tools</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#08090d">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="../i18n.js"></script>
+<script>
+FFT.add({
+'AI 가르치기':['Teach the AI','Enseñar a la IA','Enseigner à l’IA','KI beibringen','AIに教える'],
+'여기 적은 내용은 사이트의 자체 AI(FF777 tarius, lectus)가 바로 읽고 답할 때 써요. 다음에 Colab으로 이어서 학습할 때 학습 자료에도 들어가요.':['What you write here is read right away by the site’s own AI (FF777 tarius, lectus) when it answers, and it goes into the training data the next time you continue training in Colab.','Lo que escribas aquí lo lee al instante la IA propia del sitio (FF777 tarius, lectus) al responder, y entra en los datos de entrenamiento la próxima vez que sigas entrenando en Colab.','Ce que tu écris ici est lu tout de suite par l’IA du site (FF777 tarius, lectus) quand elle répond, et entre dans les données d’entraînement la prochaine fois que tu continues l’entraînement dans Colab.','Was du hier schreibst, liest die eigene KI der Seite (FF777 tarius, lectus) sofort beim Antworten, und es kommt beim nächsten Weitertrainieren in Colab in die Trainingsdaten.','ここに書いた内容は、サイトの内蔵AI(FF777 tarius、lectus)がすぐに読んで答えに使い、次にColabで追加学習するときの学習データにも入ります。'],
+'개발자만 쓸 수 있어요.':['Only the developer can use this.','Solo el desarrollador puede usar esto.','Seul le développeur peut l’utiliser.','Nur der Entwickler kann das nutzen.','開発者だけが使えます。'],
+'개발자 계정으로 로그인해 주세요.':['Please log in with the developer account.','Inicia sesión con la cuenta de desarrollador.','Connecte-toi avec le compte développeur.','Bitte mit dem Entwicklerkonto anmelden.','開発者アカウントでログインしてください。'],
+'로그인':['Log in','Iniciar sesión','Se connecter','Anmelden','ログイン'],
+'확인 중…':['Checking…','Comprobando…','Vérification…','Prüfe…','確認中…'],
+'누구에게':['For','Para','Pour','Für','対象'],
+'둘 다':['Both','Ambos','Les deux','Beide','両方'],
+'이런 질문을 받으면 (없어도 돼요)':['When asked (optional)','Cuando pregunten (opcional)','Quand on demande (facultatif)','Wenn gefragt wird (optional)','こう聞かれたら(なくても可)'],
+'이렇게 알고 답해요':['It knows and answers','Sabe y responde','Elle sait et répond','Sie weiß und antwortet','こう知っていて答える'],
+'예: 너를 만든 사람은 누구야?':['e.g. Who made you?','p. ej. ¿Quién te creó?','ex. Qui t’a créée ?','z. B. Wer hat dich gemacht?','例: 誰があなたを作ったの?'],
+'예: 나는 개발자 Frenchfries777이 만들었어요.':['e.g. I was made by the developer Frenchfries777.','p. ej. Me creó el desarrollador Frenchfries777.','ex. J’ai été créée par le développeur Frenchfries777.','z. B. Mich hat der Entwickler Frenchfries777 gemacht.','例: 開発者のFrenchfries777が作りました。'],
+'추가':['Add','Añadir','Ajouter','Hinzufügen','追加'],
+'지우기':['Delete','Borrar','Supprimer','Löschen','削除'],
+'가르친 내용':['What it knows','Lo que sabe','Ce qu’elle sait','Was sie weiß','教えた内容'],
+'아직 없어요.':['Nothing yet.','Nada todavía.','Rien pour l’instant.','Noch nichts.','まだありません。'],
+'저장하지 못했어요':['Could not save','No se pudo guardar','Impossible d’enregistrer','Speichern fehlgeschlagen','保存できませんでした'],
+'불러오지 못했어요':['Could not load','No se pudo cargar','Impossible de charger','Laden fehlgeschlagen','読み込めませんでした'],
+'추가했어요. 바로 적용돼요.':['Added. It applies right away.','Añadido. Se aplica al instante.','Ajouté. C’est appliqué tout de suite.','Hinzugefügt. Gilt sofort.','追加しました。すぐに反映されます。'],
+'모델이 작아서 너무 많이 적으면 헷갈려요. 짧고 분명하게 적어 주세요.':['The model is small, so too many entries confuse it. Keep them short and clear.','El modelo es pequeño: demasiadas entradas lo confunden. Escríbelas cortas y claras.','Le modèle est petit : trop d’entrées le perdent. Écris court et clair.','Das Modell ist klein; zu viele Einträge verwirren es. Kurz und klar schreiben.','モデルが小さいので、多すぎると混乱します。短くはっきり書いてください。']
+});
+</script>
+<style>
+:root{ --bg:#08090d; --panel:#10131b; --panel2:#151925; --line:#222837; --text:#eef0f5; --dim:#8a93a6; --fry:#ffc93c; --fry2:#ff8a3d; --bad:#ff6b6b; --ok:#5fd38d; }
+html[data-ff-theme=light]{ --bg:#f6f3ec; --panel:#ffffff; --panel2:#f1ede4; --line:#e2dccf; --text:#1f1b14; --dim:#6d6658; }
+*{box-sizing:border-box;}
+html,body{margin:0; background:var(--bg); color:var(--text);}
+body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif; font-size:15px; min-height:100vh;
+  padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0);}
+button,input,select,textarea{font:inherit; color:inherit;}
+[hidden]{display:none!important;}
+.top{display:flex; align-items:center; gap:8px; padding:8px 12px; border-bottom:1px solid var(--line); background:var(--panel);}
+.home{display:grid; place-items:center; width:34px; height:34px; border-radius:9px; background:linear-gradient(135deg,var(--fry),var(--fry2)); text-decoration:none; font-size:18px; flex:0 0 auto;}
+.brand{font-family:'Oswald',sans-serif; font-weight:700; font-size:18px; letter-spacing:.04em; white-space:nowrap;}
+.brand b{color:var(--fry);}
+.sp{flex:1;}
+main{max-width:760px; margin:0 auto; padding:24px 16px 60px;}
+h1{font-size:22px; margin:0 0 8px;}
+.lead{color:var(--dim); line-height:1.6; margin:0 0 20px;}
+.card{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px;}
+label{display:block; font-size:13px; color:var(--dim); margin:12px 0 6px;}
+label:first-child{margin-top:0;}
+select,input,textarea{width:100%; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:10px 12px;}
+textarea{min-height:76px; resize:vertical;}
+select:focus,input:focus,textarea:focus{outline:2px solid var(--fry); outline-offset:-1px;}
+.row{display:flex; align-items:center; gap:10px; margin-top:14px; flex-wrap:wrap;}
+.btn{border:0; border-radius:10px; padding:10px 18px; font-weight:700; cursor:pointer; background:linear-gradient(135deg,var(--fry),var(--fry2)); color:#1a1205;}
+.btn:disabled{opacity:.5; cursor:default;}
+.ghost{background:transparent; border:1px solid var(--line); color:var(--text); font-weight:500; padding:6px 12px;}
+.msg{font-size:13px; color:var(--dim);}
+.msg.bad{color:var(--bad);} .msg.ok{color:var(--ok);}
+.hint{font-size:13px; color:var(--dim); margin-top:10px;}
+h2{font-size:16px; margin:28px 0 10px;}
+ul{list-style:none; margin:0; padding:0; display:grid; gap:8px;}
+li{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:12px 14px; display:flex; gap:12px; align-items:flex-start;}
+li .tx{flex:1; min-width:0; overflow-wrap:anywhere;}
+li .q{color:var(--dim); font-size:13px; margin-bottom:4px;}
+li .who{display:inline-block; font-size:11px; border:1px solid var(--line); border-radius:999px; padding:1px 8px; margin-right:6px; color:var(--fry);}
+.gate{text-align:center; padding:40px 16px;}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="home" href="../" aria-label="도구 목록">🍟</a>
+  <span class="brand" data-notr>TEACH <b>AI</b></span>
+  <span class="sp"></span>
+  <span data-lang-slot></span>
+  <span data-ff-account></span>
+</header>
+<main>
+  <h1>AI 가르치기</h1>
+  <p class="lead">여기 적은 내용은 사이트의 자체 AI(FF777 tarius, lectus)가 바로 읽고 답할 때 써요. 다음에 Colab으로 이어서 학습할 때 학습 자료에도 들어가요.</p>
+  <div class="card gate" id="gate"><p id="gateMsg">확인 중…</p><button class="btn" id="loginBtn" hidden>로그인</button></div>
+  <div id="admin" hidden>
+    <form class="card" id="form">
+      <label for="who">누구에게</label>
+      <select id="who"><option value="all">둘 다</option><option value="tarius" data-notr>FF777 1.0 tarius</option><option value="lectus" data-notr>FF777 1.0 lectus</option></select>
+      <label for="q">이런 질문을 받으면 (없어도 돼요)</label>
+      <input id="q" maxlength="300" placeholder="예: 너를 만든 사람은 누구야?">
+      <label for="a">이렇게 알고 답해요</label>
+      <textarea id="a" maxlength="500" required placeholder="예: 나는 개발자 Frenchfries777이 만들었어요."></textarea>
+      <div class="row"><button class="btn" id="addBtn" type="submit">추가</button><span class="msg" id="msg"></span></div>
+      <p class="hint">모델이 작아서 너무 많이 적으면 헷갈려요. 짧고 분명하게 적어 주세요.</p>
+    </form>
+    <h2>가르친 내용</h2>
+    <ul id="list"></ul>
+    <p class="msg" id="empty" hidden>아직 없어요.</p>
+  </div>
+</main>
+<script src="https://frenchfries777mc.github.io/games/ff-auth.js"></script>
+<script>
+(function(){
+'use strict';
+var T=FFT.T, $=function(id){ return document.getElementById(id); }, sb=null;
+var NAMES={all:T('둘 다'), tarius:'tarius', lectus:'lectus'};
+function say(t,k){ var m=$('msg'); m.textContent=t||''; m.className='msg'+(k?' '+k:''); }
+function gate(text,login){ $('admin').hidden=true; $('gate').hidden=false; $('gateMsg').textContent=text; $('loginBtn').hidden=!login; }
+function load(){
+  return sb.from('ff_ai_facts').select('id,model,question,fact').order('id',{ascending:false}).then(function(r){
+    if(r.error){ say(T('불러오지 못했어요'),'bad'); return; }
+    var ul=$('list'); ul.innerHTML='';
+    r.data.forEach(function(f){
+      var li=document.createElement('li'), tx=document.createElement('div'); tx.className='tx'; tx.setAttribute('data-notr','');
+      if(f.question){ var q=document.createElement('div'); q.className='q'; q.textContent='Q. '+f.question; tx.appendChild(q); }
+      var a=document.createElement('div'), w=document.createElement('span'); w.className='who'; w.textContent=NAMES[f.model]||f.model; a.appendChild(w); a.appendChild(document.createTextNode(f.fact)); tx.appendChild(a);
+      var del=document.createElement('button'); del.className='btn ghost'; del.type='button'; del.textContent=T('지우기');
+      del.onclick=function(){ del.disabled=true; sb.from('ff_ai_facts').delete().eq('id',f.id).then(function(d){ if(d.error){ del.disabled=false; say(T('저장하지 못했어요'),'bad'); } else load(); }); };
+      li.appendChild(tx); li.appendChild(del); ul.appendChild(li);
+    });
+    $('empty').hidden=r.data.length>0;
+  });
+}
+function check(){
+  var u=window.FFAuth&&FFAuth.user();
+  if(!u){ gate(T('개발자 계정으로 로그인해 주세요.'),true); return; }
+  gate(T('확인 중…'),false);
+  sb.rpc('ff_is_admin').then(function(r){
+    if(r.error||r.data!==true){ gate(T('개발자만 쓸 수 있어요.'),false); return; }
+    $('gate').hidden=true; $('admin').hidden=false; load();
+  });
+}
+$('loginBtn').onclick=function(){ FFAuth.openLogin(); };
+$('form').onsubmit=function(e){
+  e.preventDefault();
+  var a=$('a').value.trim(), q=$('q').value.trim(); if(!a) return;
+  $('addBtn').disabled=true; say('');
+  sb.from('ff_ai_facts').insert({model:$('who').value, question:q, fact:a}).then(function(r){
+    $('addBtn').disabled=false;
+    if(r.error){ say(T('저장하지 못했어요'),'bad'); return; }
+    $('a').value=''; $('q').value=''; say(T('추가했어요. 바로 적용돼요.'),'ok'); load();
+  });
+};
+if(!window.FFAuth){ gate(T('불러오지 못했어요'),false); return; }
+FFAuth.ready.then(function(c){ sb=c; check(); FFAuth.onChange(check); }, function(){ gate(T('불러오지 못했어요'),false); });
+})();
+</script>
+</body>
+</html>
