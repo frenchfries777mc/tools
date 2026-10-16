@@ -125,6 +125,20 @@ button,input,select{font:inherit; color:inherit;}
 #editBar svg{width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
 #editBar .vs{width:1px; background:var(--line); margin:4px 2px;}
 @media(max-width:700px){ #editBar .lb{display:none;} #editBar button{padding:0 9px;} }
+/* AI dialog */
+.tbtn.aib{border-color:#5a4a1c; color:var(--fry);}
+#baiDlg .dlg{width:min(620px,100%);}
+.bai{padding:12px 16px; display:flex; flex-direction:column; gap:10px; overflow:auto;}
+.btabs{display:flex; gap:6px;}
+.btab{flex:1; height:38px; border-radius:9px; border:1px solid var(--line); background:var(--panel2); cursor:pointer; font-weight:700;}
+.btab.on{border-color:var(--fry); color:var(--fry); background:#2a2410;}
+#baiQ{width:100%; min-height:120px; resize:vertical; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:10px 12px; font:inherit; line-height:1.5; color:var(--text);}
+#baiUndo[hidden]{display:none;}
+.baiMsg{min-height:20px; font-size:13.5px; color:var(--dim);}
+.baiMsg.ok{color:#3fe08f;} .baiMsg.bad{color:#ff7b7b;}
+.baiNote{color:var(--dim); font-size:12.5px; margin:0;}
+.baiFoot{display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap; padding:10px 16px; border-top:1px solid var(--line);}
+.baiFoot .sp{flex:1;}
 </style>
 </head>
 <body class="v-blocks">
@@ -134,6 +148,7 @@ button,input,select{font:inherit; color:inherit;}
   <input id="projName" value="나의 웹페이지" aria-label="프로젝트 이름" spellcheck="false">
   <span class="sp"></span>
   <span class="seg" id="seg"><button data-v="blocks" class="on">블록</button><button data-v="prev">미리보기</button><button data-v="code">코드</button></span>
+  <button class="tbtn aib" id="aiBtn"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/></svg><span class="lb">AI</span></button>
   <button class="tbtn" id="exBtn"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/></svg><span class="lb">예제</span></button>
   <button class="tbtn" id="fileBtn"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg><span class="lb">파일</span></button>
   <button class="tbtn pri" id="dlBtn"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg><span class="lb">HTML 받기</span></button>
@@ -187,11 +202,23 @@ button,input,select{font:inherit; color:inherit;}
   <div class="dh"><h3>내 그림</h3><button class="tbtn" id="mgrDraw">✏️ 그림 그리기</button><button class="tbtn" id="mgrPhoto">📷 사진 넣기</button><button class="x" data-close aria-label="닫기">×</button></div>
   <div id="mgrList"></div>
 </div></div>
+<div class="ov" id="baiDlg"><div class="dlg">
+  <div class="dh"><h3>AI로 블록 만들기</h3><button class="tbtn" id="baiSet">AI 설정</button><button class="x" id="baiClose" aria-label="닫기">×</button></div>
+  <div class="bai">
+    <div class="btabs"><button class="btab on" data-m="new">새로 만들기</button><button class="btab" data-m="edit">지금 블록 고치기</button></div>
+    <textarea id="baiQ" data-notr spellcheck="false"></textarea>
+    <p class="baiNote">만들고 싶은 페이지를 글로 써 주세요. AI가 블록을 짜면 지금 블록 자리에 들어가요.</p>
+    <div class="baiMsg" id="baiMsg"></div>
+  </div>
+  <div class="baiFoot"><button class="tbtn" id="baiUndo" hidden>AI 전으로 되돌리기</button><span class="sp"></span><button class="tbtn pri" id="baiGo">만들기</button></div>
+</div></div>
 <input type="file" id="photoIn" accept="image/*" hidden>
 <input type="file" id="fileIn" accept=".json,application/json" hidden>
 <div id="toast"></div>
 <script src="blocks.js"></script>
 <script src="examples.js"></script>
 <script src="app.js"></script>
+<script src="../ai.js"></script>
+<script src="ai-blocks.js"></script>
 </body>
 </html>

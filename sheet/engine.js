@@ -400,6 +400,22 @@ function formatValue(v,nf){
   return String(v);
 }
 
+/* =AI("instruction", cells…): the answer comes from the page's AI hook (api.aiHook), which caches
+   results by prompt so a recalculation never asks twice. Without a hook it is #AI!. */
+def('AI',function(a){
+  if(!a.length) fail('#VALUE!');
+  var self=this, prompt=toStr(this.scal(a[0])), parts=[];
+  a.slice(1).forEach(function(x){
+    if(x instanceof Rng){ var rows=[]; for(var r=x.r1;r<=x.r2&&r<=x.r1+200;r++){ var row=[]; for(var c=x.c1;c<=x.c2&&c<=x.c1+30;c++){ var v=self.value(x.si,r,c); if(isErr(v)) throw v; row.push(v==null?'':toStr(v)); } rows.push(row.join('\t')); } parts.push(rows.join('\n')); }
+    else parts.push(toStr(self.scal(x)));
+  });
+  if(!api.aiHook) fail('#AI!');
+  if(!prompt.trim()) return '';
+  var out=api.aiHook(prompt,parts);
+  if(isErr(out)) throw out;
+  return typeof out==='string'?literal(out):out;
+});
+
 var api={K:K,RC:RC,KC:KC,colName:colName,colIdx:colIdx,addr:addr,parseAddr:parseAddr,parseRange:parseRange,rangeStr:rangeStr,
   tokenize:tokenize,rebuild:rebuild,parse:parse,literal:literal,shiftFormula:shiftFormula,adjustFormula:adjustFormula,renameSheetInFormula:renameSheetInFormula,
   Engine:Engine,Err:Err,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,FN:FN,quoteSheet:quoteSheet};
