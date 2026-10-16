@@ -46,7 +46,7 @@ var mode='ask', lastAnswer='', lastFormula='', lastTable=null;
 function tableText(){
   var s=A.sel(), a=A.act(), g=(s.r1===s.r2&&s.c1===s.c2)?A.region(a.r,a.c):s;
   if(!g) return null;
-  g={r1:g.r1,c1:g.c1,r2:Math.min(g.r2,g.r1+300),c2:Math.min(g.c2,g.c1+30)};
+  var lim=FFAI.isLocal()?60:300; g={r1:g.r1,c1:g.c1,r2:Math.min(g.r2,g.r1+lim),c2:Math.min(g.c2,g.c1+(lim>60?30:15))};
   var lines=['\t'+Array.from({length:g.c2-g.c1+1},function(_,j){ return E.colName(g.c1+j); }).join('\t')];
   for(var r=g.r1;r<=g.r2;r++){ var row=[r+1]; for(var c=g.c1;c<=g.c2;c++){ var v=A.eng.value(A.doc.active,r,c), cell=A.sheet.cells[E.K(r,c)]; row.push(E.isErr(v)?String(v):E.formatValue(v,cell&&cell.nf)); } lines.push(row.join('\t')); }
   return {g:g, text:lines.join('\n')};
