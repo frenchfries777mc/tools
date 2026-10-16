@@ -1,6 +1,6 @@
 /* Block HTML AI: describe a page in words and the AI builds (or changes) the blocks.
    It is given a catalog of every block in the toolbox, one example project and, when changing, the current blocks as XML.
-   Uses the shared ../ai.js (FFAI). */
+   Uses the shared ../ai.js (FFAI); the Tools-trained built-in AI gets the short prompt from ../ai-prompts.js (FFP). */
 (function(){
 'use strict';
 var T=FFT.T, F=FFT.F, $=function(id){ return document.getElementById(id); }, B=window.__bh, ws=B.ws;
@@ -60,8 +60,10 @@ var SYS=['You build web pages for the "Block HTML" editor (Blockly). Reply with 
 '- With PLAN: edit, return the whole changed project (all blocks), keeping what the person did not ask to change. With PLAN: new, return a fresh project.'].join('\n');
 function picList(){ var I=BH.IMGS, ids=Object.keys(I); return ids.length?ids.map(function(id){ return id+' = '+I[id].name; }).join('\n'):''; }
 function currentXML(){ var dom=Blockly.Xml.workspaceToDom(ws,true); return Blockly.Xml.domToText(dom); }
+function shortXML(){ return currentXML().replace(/ (x|y)="-?[\d.]+"/g,''); } // what the Tools-trained AI sees (no positions; blocks are arranged after loading)
 function hasWork(){ return ws.getAllBlocks(false).length>1; } // more than an empty page
 function buildPrompt(q,modify,prevErr,prevOut){
+  if(FFAI.isTuned()) return FFP.blocksPrompt(q,modify?shortXML():null)+(prevErr?'\n\nYour previous answer could not be loaded ('+prevErr+'). Previous answer:\n'+prevOut.slice(0,3000)+'\n\nFix it and reply again.':'');
   var local=FFAI.isLocal(), pics=picList(), p='Block catalog (type {shape} fields [inputs] // meaning):\n'+getCatalog(local)+'\n\n';
   if(!(local&&modify)) p+='Example project:\n'+B.examples[0].xml()+'\n\n';
   if(pics) p+='The person\'s pictures (use these ids in IMG fields):\n'+pics+'\n\n';
@@ -104,7 +106,7 @@ function status(){ var s=Math.round((Date.now()-t0)/1000);
 function live(t){ chars=t.length; if(!plan) plan=planOf(t); var p=$('baiLive'), wasHidden=p.hidden, stick=wasHidden||p.scrollHeight-p.scrollTop-p.clientHeight<24; p.hidden=false; p.textContent=t.length>6000?'…'+t.slice(-6000):t; if(stick) p.scrollTop=p.scrollHeight; } // follows the end only while the reader is at the bottom
 function run(q,modify,tries,errText,lastOut){
   phase=errText?'fix':''; chars=0;
-  return FFAI.ask({system:SYS, prompt:buildPrompt(q,modify,errText,lastOut), maxTokens:12000, onText:live}).then(function(out){
+  return FFAI.ask({system:FFAI.isTuned()?FFP.blocksSys:SYS, prompt:buildPrompt(q,modify,errText,lastOut), maxTokens:12000, onText:live}).then(function(out){
     try{ var x=check(extract(out)); plan=planOf(out)||plan||(modify?'edit':'new'); if(!modify) plan='new'; return x; }
     catch(e){ if(tries>0){ return run(q,modify,tries-1,e.message,out); } throw new Error(T('AI가 만든 블록을 읽지 못했어요. 다시 해 보세요')); }
   });
