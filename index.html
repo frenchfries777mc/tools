@@ -14,6 +14,16 @@
 <script src="i18n.js"></script>
 <script>
 FFT.add({
+'발표 자료':['Presentations','Presentaciones','Présentations','Präsentationen','プレゼン資料'],
+'AI가 슬라이드 작성':['AI writes the slides','La IA escribe las diapositivas','L’IA écrit les diapositives','KI schreibt die Folien','AIがスライドを作成'],
+'PPTX 파일':['PPTX file','Archivo PPTX','Fichier PPTX','PPTX-Datei','PPTXファイル'],
+'발표 모드':['Presenter mode','Modo presentación','Mode présentation','Präsentationsmodus','発表モード'],
+'주제만 쓰면 AI가 발표 자료를 만들어 주고, 직접 고쳐서 바로 발표하거나 파워포인트 파일로 받아요.':['Write a topic and the AI makes the slides. Edit them, present right away, or download a PowerPoint file.','Escribe un tema y la IA crea las diapositivas. Edítalas, preséntalas o descárgalas en PowerPoint.','Écris un sujet et l’IA crée les diapositives. Modifie-les, présente-les ou télécharge-les en PowerPoint.','Schreib ein Thema und die KI erstellt die Folien. Bearbeiten, gleich präsentieren oder als PowerPoint herunterladen.','テーマを書くとAIがスライドを作ります。直してすぐ発表したり、PowerPointファイルで保存したりできます。'],
+'주제와 슬라이드 수만 정하면 AI가 제목, 글머리표, 발표자 메모까지 채워요':['Pick a topic and a slide count; the AI fills in titles, bullets and speaker notes','Elige tema y número de diapositivas; la IA pone títulos, viñetas y notas','Choisis le sujet et le nombre de diapositives ; l’IA remplit titres, puces et notes','Thema und Folienzahl wählen, die KI füllt Titel, Stichpunkte und Notizen','テーマと枚数を決めるだけで、AIがタイトル、箇条書き、発表者メモまで書きます'],
+'글자를 눌러 바로 고치고, 슬라이드마다 다시 쓰기·더 짧게·더 자세히':['Tap text to edit, plus rewrite, shorter and more detail for each slide','Toca el texto para editarlo; reescribir, más corto o más detalle en cada diapositiva','Touche un texte pour le modifier ; réécrire, raccourcir ou détailler chaque diapositive','Text antippen und ändern; jede Folie neu schreiben, kürzen oder ausführlicher machen','文字をタップして直せて、スライドごとに書き直し・短く・詳しく'],
+'테마 6가지, 레이아웃 7가지, 끌어서 순서 바꾸기':['6 themes, 7 layouts, drag to reorder','6 temas, 7 diseños, arrastra para ordenar','6 thèmes, 7 mises en page, glisser pour réordonner','6 Designs, 7 Layouts, Reihenfolge per Ziehen','テーマ6種、レイアウト7種、ドラッグで並べ替え'],
+'전체 화면 발표, 고칠 수 있는 PPTX 파일, PDF 인쇄':['Full-screen presenting, an editable PPTX file, PDF printing','Presentación a pantalla completa, PPTX editable, impresión en PDF','Présentation plein écran, fichier PPTX modifiable, impression PDF','Vollbild-Präsentation, bearbeitbare PPTX-Datei, PDF-Druck','全画面での発表、編集できるPPTXファイル、PDF印刷'],
+'엑셀, 파워포인트, HTML 파일로 내보내서 다른 프로그램이나 친구에게 그대로 넘겨요.':['Export Excel, PowerPoint and HTML files to use elsewhere or send to friends.','Exporta archivos Excel, PowerPoint y HTML para usarlos o compartirlos.','Exportez en Excel, PowerPoint et HTML pour les partager.','Als Excel-, PowerPoint- und HTML-Datei exportieren und weitergeben.','Excel、PowerPoint、HTMLファイルで書き出して、ほかのソフトや友だちに渡せます。'],
 '도구':['Tools','Herramientas','Outils','Werkzeuge','ツール'],
 'Frenchfries777이 만든 브라우저 도구 모음. 설치 없이 바로 써요.':['Browser tools made by Frenchfries777. No install needed.','Herramientas web de Frenchfries777. Sin instalar nada.','Outils web de Frenchfries777. Sans installation.','Browser-Werkzeuge von Frenchfries777. Ohne Installation.','Frenchfries777が作ったブラウザツール集。インストール不要。'],
 '설치 없이 브라우저에서 바로 쓰는 도구들':['Tools that run right in your browser','Herramientas que funcionan en el navegador','Des outils qui tournent dans le navigateur','Werkzeuge direkt im Browser','ブラウザですぐ使えるツール'],
@@ -43,8 +53,8 @@ FFT.add({
 '다운로드 없이 브라우저에서 열면 끝. PC와 태블릿, 휴대폰 모두 돼요.':['Open it in a browser and go. Works on PC, tablet and phone.','Ábrelo en el navegador. Funciona en PC, tableta y móvil.','Ouvrez-le dans le navigateur. PC, tablette et téléphone.','Im Browser öffnen, fertig. PC, Tablet und Handy.','ブラウザで開くだけ。PC、タブレット、スマホで使えます。'],
 '내 기기에 저장':['Saved on your device','Se guarda en tu dispositivo','Enregistré sur votre appareil','Auf deinem Gerät gespeichert','自分の端末に保存'],
 '만든 것은 이 브라우저에 자동으로 저장되고, 파일로도 받을 수 있어요.':['Your work is saved in this browser automatically and can be downloaded as a file.','Tu trabajo se guarda solo en este navegador y puedes descargarlo.','Votre travail est enregistré dans ce navigateur et téléchargeable.','Deine Arbeit wird im Browser gespeichert und lässt sich herunterladen.','作ったものはこのブラウザに自動保存され、ファイルでも保存できます。'],
-'파일로 주고받기':['Share as files','Comparte archivos','Échangez des fichiers','Als Dateien teilen','ファイルでやり取り'],
-'엑셀 파일과 HTML 파일로 내보내서 다른 프로그램이나 친구에게 그대로 넘겨요.':['Export Excel and HTML files to use elsewhere or send to friends.','Exporta archivos Excel y HTML para usarlos o compartirlos.','Exportez en Excel et HTML pour les partager.','Als Excel- und HTML-Datei exportieren und weitergeben.','ExcelやHTMLファイルで書き出して、ほかのソフトや友だちに渡せます。']
+'파일로 주고받기':['Share as files','Comparte archivos','Échangez des fichiers','Als Dateien teilen','ファイルでやり取り']
+
 });
 </script>
 <style>
@@ -114,6 +124,15 @@ FFT.add({
   .bh .tags span{background:rgba(79,157,255,.08); color:#cfe2ff; border:1px solid rgba(79,157,255,.28);}
   .bh .desc{color:#a3b0c2;} .bh .desc li::marker{color:var(--fry);}
   .bh .play{background:linear-gradient(90deg,var(--fry),var(--fry2)); color:#1c1405;}
+  /* Fry Slides: presentation coral */
+  .sl{--card:#150f0d; background:#150f0d; border-color:#3e2620;}
+  .sl:hover{border-color:#ff7a59; box-shadow:0 18px 50px rgba(255,122,89,.16);}
+  .sl .badge{background:rgba(255,122,89,.92); color:#1f0904;}
+  .sl h2 b{color:#ff7a59;}
+  .sl .motto{color:#ff9d84;} .sl .motto i{background:#ff9d84;}
+  .sl .tags span{background:rgba(255,122,89,.08); color:#ffd9cf; border:1px solid rgba(255,122,89,.28);}
+  .sl .desc{color:#b8a7a2;} .sl .desc li::marker{color:#ff7a59;}
+  .sl .play{background:#ff7a59; color:#1f0904;}
   .why{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin:40px 0 0;}
   .why > div{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px 18px 16px;}
   .why .ic{font-size:24px;} .why h3{margin:6px 0 4px; font-size:16.5px;} .why p{margin:0; color:var(--dim); font-size:14.5px;}
@@ -181,13 +200,31 @@ FFT.add({
         <div class="acts"><a class="play" href="blocks/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
       </div>
     </article>
+    <article class="game sl">
+      <a class="shot" href="slides/" target="_blank" rel="noopener" aria-label="Fry Slides 열기"><span class="badge">발표 자료</span><img src="slides.webp" alt="Fry Slides 화면" loading="lazy"></a>
+      <div class="body">
+        <h2>FRY <b>SLIDES</b></h2>
+        <div class="motto"><i></i>AI PRESENTATIONS<i></i></div>
+        <div class="tags"><span>AI가 슬라이드 작성</span><span>PPTX 파일</span><span>발표 모드</span><span>로그인 없이</span></div>
+        <div class="desc">
+          주제만 쓰면 AI가 발표 자료를 만들어 주고, 직접 고쳐서 바로 발표하거나 파워포인트 파일로 받아요.
+          <ul>
+            <li>주제와 슬라이드 수만 정하면 AI가 제목, 글머리표, 발표자 메모까지 채워요</li>
+            <li>글자를 눌러 바로 고치고, 슬라이드마다 다시 쓰기·더 짧게·더 자세히</li>
+            <li>테마 6가지, 레이아웃 7가지, 끌어서 순서 바꾸기</li>
+            <li>전체 화면 발표, 고칠 수 있는 PPTX 파일, PDF 인쇄</li>
+          </ul>
+        </div>
+        <div class="acts"><a class="play" href="slides/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
+      </div>
+    </article>
   </section>
 
   <section class="why">
     <div><div class="ic">⚡</div><h3>바로 시작</h3><p>다운로드 없이 브라우저에서 열면 끝. PC와 태블릿, 휴대폰 모두 돼요.</p></div>
     <div><div class="ic">💾</div><h3>내 기기에 저장</h3><p>만든 것은 이 브라우저에 자동으로 저장되고, 파일로도 받을 수 있어요.</p></div>
     <div><div class="ic">🤖</div><h3>키 없이 쓰는 AI</h3><p>자체 AI가 기기 안에서 돌아가서 키가 없어도 돼요. 원하면 Claude, Gemini, OpenAI 키를 넣어 더 똑똑하게 쓸 수 있어요.</p></div>
-    <div><div class="ic">📤</div><h3>파일로 주고받기</h3><p>엑셀 파일과 HTML 파일로 내보내서 다른 프로그램이나 친구에게 그대로 넘겨요.</p></div>
+    <div><div class="ic">📤</div><h3>파일로 주고받기</h3><p>엑셀, 파워포인트, HTML 파일로 내보내서 다른 프로그램이나 친구에게 그대로 넘겨요.</p></div>
   </section>
 
   <footer><span>Made by Frenchfries777 with Claude AI</span><a href="https://github.com/frenchfries777mc" target="_blank" rel="noopener">github.com/frenchfries777mc</a></footer>
