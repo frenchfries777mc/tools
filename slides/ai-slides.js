@@ -65,16 +65,13 @@ function readAll(t){
 }
 
 /* ---------- prompts ---------- */
-var FIELDS='{"layout":"title|section|bullets|two|stat|quote|closing","title":"...","subtitle":"...","bullets":["..."],"leftTitle":"...","left":["..."],"rightTitle":"...","right":["..."],"stat":"...","caption":"...","quote":"...","by":"...","notes":"..."}';
-var USE='Fields per layout: title and closing = title + subtitle; section = title + subtitle (opens a new part); bullets = title + 3-5 short bullets; two = title + leftTitle/left[] + rightTitle/right[] (compare two things); stat = title + stat (one striking number with its unit, like "71%" or "1.5 million") + caption (what it means); quote = quote + by. Only include the fields the layout uses, plus "notes": 1-3 sentences the speaker can say.';
-var RULES='Bullets are short phrases (at most about 12 words), not full paragraphs. Use real, well-known facts; do not invent precise numbers you are not sure of (round numbers are fine). Write every text in the language of the topic.';
-function sysDeck(n){ return 'You write slide decks. Reply with JSON only, no markdown fences: {"title":"deck title","subtitle":"one line","slides":['+FIELDS+']}. Make exactly '+n+' slides. Slide 1 is layout "title", the last slide is "closing" (thanks, a question or the key takeaway). In between mostly "bullets", with a "two", "stat", "quote" or "section" where it fits the content. '+USE+' '+RULES; }
-function topicText(o){ return 'Topic: '+o.topic+(o.aud?'\nAudience and purpose: '+o.aud:'')+'\nNumber of slides: '+o.n; }
-var SYS_OUTLINE='You plan slide decks. Reply with JSON only: {"title":"deck title","subtitle":"one line","slides":[{"layout":"title|section|bullets|two|stat|quote|closing","title":"slide title"}]}. Slide 1 is "title", the last is "closing", mostly "bullets" in between. Short titles. Write in the language of the topic.';
-var SYS_FILL='You write the content of some slides of a deck. Reply with JSON only: {"slides":['+FIELDS+']} with the slides asked for, in order, same layout and title as planned. '+USE+' Bullets: 3-4, short. Write in the language of the deck.';
-function sysOne(lay){ return 'You write one slide of a deck. Reply with JSON only: one slide object '+FIELDS+(lay?'. Keep the layout "'+lay+'".':'. Pick the layout that fits best.')+' '+USE+' '+RULES.replace('the topic','the slide'); }
-function slideJSON(s){ var o={layout:s.layout}; (A.LAY[s.layout]||[]).forEach(function(b){ var v=s[b.f]; if(Array.isArray(v)?v.length:v) o[b.f]=v; }); if(s.notes) o.notes=s.notes; return JSON.stringify(o); }
-function titles(skip){ return A.deck.slides.map(function(s,i){ return i===skip?null:(i+1)+'. '+(s.title||s.quote||s.stat||'').slice(0,60); }).filter(Boolean).slice(0,FFAI.isLocal()?12:40).join('\n'); }
+/* the prompts live in ../ai-prompts.js (FFP), shared with the training data in train/ */
+function sysDeck(n){ return FFP.slidesDeckSys(n); }
+function topicText(o){ return FFP.slidesTopic(o); }
+var SYS_OUTLINE=FFP.slidesOutlineSys, SYS_FILL=FFP.slidesFillSys;
+function sysOne(lay){ return FFP.slidesOneSys(lay); }
+function slideJSON(s){ return FFP.slidesSlideJSON(s,(A.LAY[s.layout]||[]).map(function(b){ return b.f; })); }
+function titles(skip){ return FFP.slidesTitles(A.deck.slides,skip,FFAI.isLocal()?12:40); }
 
 /* ---------- requests ---------- */
 function ask(o){ return FFAI.ask(o).then(null,function(e){ if(run&&run.stopped) throw stopErr(); throw e; }); }
@@ -111,16 +108,16 @@ function genLocal(o){
       .then(function(t){ if(run.stopped) throw stopErr(); var x=readAll(t); if(x.title&&A.isDefaultName(d.name)) A.setName(x.title.slice(0,120)); o.sub=x.subtitle||o.sub||'';
         for(var i=seen;i<x.slides.length&&i<o.n;i++){ var s=norm(x.slides[i],'bullets'); plan.push(s); A.pushSlide(s); } return plan.length; }); }
   function fillBatch(idx,retry){
-    var want=idx.map(function(i){ return (i+1)+'. ['+d.slides[i].layout+'] '+(d.slides[i].title||''); }).join('\n'), seen=0;
+    var want=FFP.slidesWant(d.slides,idx), seen=0;
     var put=function(raw){ var i=idx[seen]; seen++; var old=d.slides[i]; if(!old) return; var s=norm(raw,old.layout);
       if(!hasText(s)) return; if(!s.title) s.title=old.title; if(s.layout==='title'&&!s.subtitle) s.subtitle=o.sub; A.putSlide(i,s); };
-    return ask({system:SYS_FILL, prompt:'Deck: '+(d.name||o.topic)+(o.aud?'\nAudience: '+o.aud:'')+'\nAll slides:\n'+titles()+'\n\nWrite these slides in full:\n'+want, json:true, maxTokens:1800,
+    return ask({system:SYS_FILL, prompt:FFP.slidesFillPrompt(d.name||o.topic,o.aud,titles(),want), json:true, maxTokens:1800,
       onText:function(t){ if(run.stopped) return; var x=extract(t); while(seen<x.slides.length&&seen<idx.length) put(x.slides[seen]); }})
       .then(function(t){ if(run.stopped) throw stopErr(); var x=readAll(t); while(seen<x.slides.length&&seen<idx.length) put(x.slides[seen]);
         if(seen<idx.length&&!retry) return fillBatch(idx.slice(seen),true); });
   }
   progress(0,o.n,T('목차 만드는 중…'));
-  return outline().then(function(k){ if(!k&&!run.stopped) return outline('\n\nReply with the JSON object only, starting with {.'); return k; }).then(function(){
+  return outline().then(function(k){ if(!k&&!run.stopped) return outline(FFP.slidesRetry); return k; }).then(function(){
     if(!d.slides.length) return;
     var first=d.slides[0]; if(first.layout==='title'&&!first.subtitle&&o.sub){ first.subtitle=o.sub; A.putSlide(0,first); }
     var todo=d.slides.map(function(s,i){ return i; }).filter(function(i){ var s=d.slides[i]; return !(s.layout==='title'&&s.subtitle); });
@@ -146,18 +143,15 @@ function generate(){
 }
 
 /* ---------- one slide ---------- */
-var TASK={rewrite:'Rewrite this slide with clearer, more interesting wording. Keep the meaning.',
-  shorter:'Make this slide shorter: fewer and shorter bullets, the same key points. Shorten the notes too.',
-  longer:'Make this slide more detailed: add useful specifics and examples (up to 6 bullets) and fuller speaker notes.'};
 function slideAct(kind,q){
   if(run||A.busy) return; var i=A.cur, d=A.deck, s=d.slides[i]; if(!s&&kind!=='add') return;
   A.blurEdit(); var before=A.snap(); run={stopped:false}; A.setBusy(true);
   var lay=kind==='add'?null:s.layout, p;
-  if(kind==='add') p='Deck: '+d.name+'\nSlides so far:\n'+titles()+'\n\nWrite one new slide (it goes after slide '+(i+1)+') about: '+q;
-  else p='Deck: '+d.name+'\nSlide '+(i+1)+' of '+d.slides.length+' (JSON): '+slideJSON(s)+'\n\nTask: '+TASK[kind];
+  if(kind==='add') p=FFP.slidesAddPrompt(d.name,titles(),i,q);
+  else p=FFP.slidesActPrompt(d.name,i,d.slides.length,slideJSON(s),kind);
   function once(extra){ return ask({system:sysOne(lay), prompt:p+(extra||''), json:true, maxTokens:FFAI.isLocal()?1200:3000, onText:function(){}}).then(function(t){
     if(run.stopped) throw stopErr(); var x=readAll(t), r=x.slides&&x.slides[0]; if(!r) return null; var n=norm(r,lay||'bullets'); if(lay) n.layout=lay; return hasText(n)?n:null; }); }
-  once().then(function(n){ return n||once('\n\nReply with the JSON object only, starting with {.'); }).then(function(n){
+  once().then(function(n){ return n||once(FFP.slidesRetry); }).then(function(n){
     if(!n) throw new Error(T('AI 답을 읽지 못했어요'));
     A.pushUndo(before);
     if(kind==='add'){ A.insertSlide(i+1,n); A.toast(T('슬라이드를 추가했어요')); }
