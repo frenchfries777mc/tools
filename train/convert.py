@@ -13,8 +13,9 @@ token = os.environ.get("HF_TOKEN") or None
 
 def run(cmd):
     print("+", " ".join(cmd), flush=True)
-    # faulthandler prints the Python stack if the native converter crashes.
-    subprocess.run([sys.executable, "-X", "faulthandler", "-m", "mlc_llm"] + cmd, check=True)
+    # mlc_cli.py = the mlc_llm CLI with quantization done in numpy (its LLVM kernel segfaults on CPU).
+    cli = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mlc_cli.py")
+    subprocess.run([sys.executable, "-X", "faulthandler", cli] + cmd, check=True)
 
 
 # New numpy rejects TVM dtype objects in astype(); pass the dtype name instead.

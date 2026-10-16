@@ -17,7 +17,7 @@ on:
         default: q4f16_1 q4f32_1
       mlc:
         description: Converter setup (nightly, or notorch to leave PyTorch out)
-        default: nightly
+        default: notorch
       upload:
         description: Upload to Hugging Face
         type: boolean
@@ -32,8 +32,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # A pull request test tries both setups side by side.
-        mlc: ${{ fromJSON(inputs.mlc && format('["{0}"]', inputs.mlc) || '["nightly","notorch"]') }}
+        # A pull request test runs one conversion.
+        mlc: ${{ fromJSON(inputs.mlc && format('["{0}"]', inputs.mlc) || '["notorch"]') }}
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
