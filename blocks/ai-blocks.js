@@ -7,19 +7,19 @@ var T=FFT.T, F=FFT.F, $=function(id){ return document.getElementById(id); }, B=w
 
 /* ---------- block catalog, read from the real block definitions ---------- */
 var EXTRA=['variables_get','variables_set','math_change','procedures_defnoreturn','procedures_defreturn','procedures_callnoreturn','procedures_callreturn','procedures_ifreturn'];
-var catalog=null;
+var catalog={};
 function types(){
   var out=[], seen={};
   (function walk(list){ (list||[]).forEach(function(it){ if(it.kind==='block'&&!seen[it.type]){ seen[it.type]=1; out.push(it.type); } if(it.contents) walk(it.contents); }); })(BH.toolbox().contents);
   EXTRA.forEach(function(t){ if(!seen[t]&&Blockly.Blocks[t]){ seen[t]=1; out.push(t); } });
   return out;
 }
-function describe(hw,type){
+function describe(hw,type,compact){
   var b; try{ b=hw.newBlock(type); }catch(e){ return null; }
   var parts=[];
   b.inputList.forEach(function(inp){
     inp.fieldRow.forEach(function(f){
-      if(!f.name){ var t=f.getText&&f.getText(); if(t&&t.trim()) parts.push(t.trim()); return; }
+      if(!f.name){ var t=!compact&&f.getText&&f.getText(); if(t&&t.trim()) parts.push(t.trim()); return; }
       var d;
       if(f.name==='EL') d='EL=<NAME of a page element>';
       else if(f.name==='IMG') d='IMG=<picture id>';
@@ -39,11 +39,11 @@ function describe(hw,type){
   b.dispose(false);
   return type+' {'+shape+'} '+parts.join(' ')+(tip?' // '+tip:'');
 }
-function getCatalog(){
-  if(catalog) return catalog;
+function getCatalog(compact){ // compact (no label words) for the built-in AI, which has a small context
+  var k=compact?'c':'f'; if(catalog[k]) return catalog[k];
   var hw=new Blockly.Workspace(), lines=[];
-  types().forEach(function(t){ var d=describe(hw,t); if(d) lines.push(d); });
-  hw.dispose(); catalog=lines.join('\n'); return catalog;
+  types().forEach(function(t){ var d=describe(hw,t,compact); if(d) lines.push(d); });
+  hw.dispose(); return catalog[k]=lines.join('\n');
 }
 
 /* ---------- prompt ---------- */
@@ -60,11 +60,12 @@ var SYS=['You build web pages for the "Block HTML" editor (Blockly). Reply with 
 function picList(){ var I=BH.IMGS, ids=Object.keys(I); return ids.length?ids.map(function(id){ return id+' = '+I[id].name; }).join('\n'):''; }
 function currentXML(){ var dom=Blockly.Xml.workspaceToDom(ws,true); return Blockly.Xml.domToText(dom); }
 function buildPrompt(q,modify,prevErr,prevOut){
-  var ex=B.examples[0].xml(), pics=picList(), p='Block catalog (type {shape} fields [inputs] // meaning):\n'+getCatalog()+'\n\nExample project:\n'+ex+'\n\n';
+  var local=FFAI.isLocal(), pics=picList(), p='Block catalog (type {shape} fields [inputs] // meaning):\n'+getCatalog(local)+'\n\n';
+  if(!(local&&modify)) p+='Example project:\n'+B.examples[0].xml()+'\n\n';
   if(pics) p+='The person\'s pictures (use these ids in IMG fields):\n'+pics+'\n\n';
   if(modify) p+='Current project:\n'+currentXML()+'\n\nChange it like this: '+q;
   else p+='Make a new project: '+q;
-  if(prevErr) p+='\n\nYour previous answer could not be loaded ('+prevErr+'). Previous answer:\n'+prevOut.slice(0,12000)+'\n\nFix it and reply with the full corrected XML only.';
+  if(prevErr) p+='\n\nYour previous answer could not be loaded ('+prevErr+'). Previous answer:\n'+prevOut.slice(0,local?3000:12000)+'\n\nFix it and reply with the full corrected XML only.';
   return p;
 }
 
