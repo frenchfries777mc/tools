@@ -51,32 +51,43 @@ function tableText(){
   for(var r=g.r1;r<=g.r2;r++){ var row=[r+1]; for(var c=g.c1;c<=g.c2;c++){ var v=A.eng.value(A.doc.active,r,c), cell=A.sheet.cells[E.K(r,c)]; row.push(E.isErr(v)?String(v):E.formatValue(v,cell&&cell.nf)); } lines.push(row.join('\t')); }
   return {g:g, text:lines.join('\n')};
 }
-function setMode(m){ mode=m; document.querySelectorAll('.atab').forEach(function(b){ b.classList.toggle('on',b.dataset.m===m); });
+var CHIPS={ask:['이 표를 세 줄로 요약해 줘','가장 큰 값과 가장 작은 값은?','이 표에서 눈에 띄는 점을 알려 줘'],
+  formula:['B열의 평균','B열에서 80 이상인 칸의 수','A열에서 가장 긴 글자'],
+  table:['우리 반 6명의 이름, 키, 좋아하는 과일 표','일주일 시간표','한국의 도시 5개와 인구'],};
+function chips(m){ var box=$('aiChips'); box.innerHTML=''; CHIPS[m].forEach(function(t){ var b=document.createElement('button'); b.textContent=T(t); b.onclick=function(){ $('aiQ').value=b.textContent; $('aiQ').focus(); }; box.appendChild(b); }); }
+function trDemo(){
+  close(); var a=A.act(), r=a.r, c=a.c, at=function(i){ return E.addr(r+i,c); };
+  var rows=[[T('한국어'),T('영어')],[T('오늘은 날씨가 맑아요'),''],[T('저는 떡볶이를 좋아해요'),''],[T('주말에 친구와 축구를 했어요'),'']];
+  for(var i=1;i<rows.length;i++) rows[i][1]='=AI("'+T('영어로 번역')+'", '+at(i)+')';
+  A.pasteText(rows.map(function(x){ return x.join('\t'); }).join('\n')); A.toast(T('B열이 영어로 채워져요'));
+}
+function setMode(m){ mode=m; chips(m); document.querySelectorAll('.atab').forEach(function(b){ b.classList.toggle('on',b.dataset.m===m); });
   var ph={ask:T('예: 평균이 가장 높은 과목은? / 이 표를 세 줄로 요약해 줘'),formula:T('예: B열에서 80점 이상인 사람 수'),table:T('예: 우리 반 6명의 이름, 키, 좋아하는 과일 표')}[m];
   $('aiQ').placeholder=ph; $('aiOut').innerHTML=''; $('aiActs').innerHTML='';
   $('aiCtx').textContent=m==='table'?F('{0} 칸부터 표를 넣어요',E.addr(A.act().r,A.act().c)):(function(){ var t=tableText(); return t?F('{0} 표를 AI에게 보여 줘요',E.rangeStr(t.g)):T('표를 고르면 AI가 그 내용을 보고 답해요'); })();
 }
 function busy(on){ $('aiGo').disabled=on; $('aiGo').textContent=on?T('생각하는 중…'):T('보내기'); }
 function out(html){ $('aiOut').innerHTML=html; }
+function liveOut(t){ out('<pre class="aiLive">'+esc(t)+'</pre>'); var e=$('aiOut').firstChild; e.scrollTop=e.scrollHeight; }
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function fnList(){ return (window.FNDOC||[]).map(function(f){ return f[1]; }).filter(function(n){ return n!=='AI'; }).join(', '); }
 function go(){
   var q=$('aiQ').value.trim(); if(!q) return $('aiQ').focus();
   A.commitEdit(); busy(true); out(''); $('aiActs').innerHTML='';
   var t=mode==='table'?null:tableText(), a=A.act(), lang=FFT.lang||'ko', p;
-  if(mode==='ask') p=FFAI.ask({system:'You help someone with their spreadsheet. Answer the question about the table clearly and briefly in plain text (no markdown tables, no code fences). Use the language the question is written in.',
+  if(mode==='ask') p=FFAI.ask({onText:liveOut, system:'You help someone with their spreadsheet. Answer the question about the table clearly and briefly in plain text (no markdown tables, no code fences). Use the language the question is written in.',
       prompt:(t?'Table (first row = column letters, first column = row numbers):\n'+t.text+'\n\n':'(No table selected.)\n\n')+'Question: '+q})
     .then(function(r){ lastAnswer=r.trim(); out('<div class="aiAns">'+esc(lastAnswer).replace(/\n/g,'<br>')+'</div>');
       $('aiActs').innerHTML='<button class="tbtn" id="aiPut">'+T('답을 칸에 넣기')+'</button>';
       $('aiPut').onclick=function(){ var g=t?t.g:null, r0=g?g.r2+2:a.r, c0=g?g.c1:a.c; A.pushUndo(); lastAnswer.split('\n').forEach(function(l,i){ A.setRaw(r0+i,c0,l); }); A.changed(); A.select(r0,c0); close(); }; });
-  else if(mode==='formula') p=FFAI.ask({json:true, system:'You write one spreadsheet formula. Reply with JSON only: {"formula":"=...","explain":"one short sentence in the language of the request"}. Use A1 references that match the table addresses given. Use only these functions: '+fnList()+'. Strings use double quotes, arguments are separated by commas.',
+  else if(mode==='formula') p=FFAI.ask({onText:liveOut, json:true, system:'You write one spreadsheet formula. Reply with JSON only: {"formula":"=...","explain":"one short sentence in the language of the request"}. Use A1 references that match the table addresses given. Use only these functions: '+fnList()+'. Strings use double quotes, arguments are separated by commas.',
       prompt:(t?'Table (first row = column letters, first column = row numbers):\n'+t.text+'\n\n':'')+'The formula goes in cell '+E.addr(a.r,a.c)+'.\nRequest: '+q})
     .then(function(r){ var j=FFAI.parseJSON(r), f=String(j.formula||'').trim(); if(f&&f[0]!=='=') f='='+f; if(!f) throw new Error(T('AI 답을 읽지 못했어요'));
       try{ E.parse(f.slice(1)); }catch(e){ throw new Error(T('AI가 만든 수식에 오류가 있어요')+': '+f); }
       lastFormula=f; out('<code class="aiF">'+esc(f)+'</code><div class="aiEx">'+esc(j.explain||'')+'</div>');
       $('aiActs').innerHTML='<button class="tbtn pri" id="aiPut">'+F('{0}에 넣기',E.addr(a.r,a.c))+'</button>';
       $('aiPut').onclick=function(){ A.pushUndo(); A.setRaw(a.r,a.c,lastFormula); A.changed(); close(); }; });
-  else p=FFAI.ask({json:true, system:'You make a small table for a spreadsheet. Reply with JSON only: {"rows":[["header1","header2"],["value","value"]]}. The first row is the header. At most 60 rows and 12 columns. Numbers as plain numbers without units in the cell. Use the language of the request.',
+  else p=FFAI.ask({onText:liveOut, json:true, system:'You make a small table for a spreadsheet. Reply with JSON only: {"rows":[["header1","header2"],["value","value"]]}. The first row is the header. At most 60 rows and 12 columns. Numbers as plain numbers without units in the cell. Use the language of the request.',
       prompt:'Request: '+q})
     .then(function(r){ var j=FFAI.parseJSON(r), rows=Array.isArray(j)?j:j.rows; if(!Array.isArray(rows)||!rows.length) throw new Error(T('AI 답을 읽지 못했어요'));
       rows=rows.slice(0,60).map(function(row){ return (Array.isArray(row)?row:[row]).slice(0,12).map(function(v){ return v==null?'':String(v).replace(/[\t\n]/g,' '); }); });
@@ -95,5 +106,6 @@ $('aiClose').onclick=close; $('aiDlg').addEventListener('click',function(e){ if(
 $('aiSet').onclick=function(){ FFAI.settings(); };
 $('aiFn').onclick=function(){ close(); var a=A.act(); A.select(a.r,a.c); A.toast(T('칸에 =AI("할 일", A2) 처럼 써 보세요')); };
 $('aiRerun').onclick=function(){ close(); rerunSel(); };
+$('aiTrDemo').onclick=trDemo;
 window.FSAI={open:open, rerun:rerunSel};
 })();
