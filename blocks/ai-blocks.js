@@ -47,7 +47,8 @@ function getCatalog(compact){ // compact (no label words) for the built-in AI, w
 }
 
 /* ---------- prompt ---------- */
-var SYS=['You build web pages for the "Block HTML" editor (Blockly). Reply with Blockly XML only: one <xml xmlns="https://developers.google.com/blockly/xml">…</xml> document, nothing before or after it.',
+var SYS=['You build web pages for the "Block HTML" editor (Blockly). Reply with one line "PLAN: edit" or "PLAN: new", then one Blockly XML document <xml xmlns="https://developers.google.com/blockly/xml">…</xml>, nothing else.',
+'PLAN: edit = the request changes, adds to or fixes the current project; PLAN: new = the request asks for a different page, or there is no current project.',
 'Rules:',
 '- Use only the block types in the catalog, with exactly the field, value and statement names shown. {element} blocks go inside the page_root BODY statement (or inside an el_box), chained with <next>.',
 '- Exactly one page_root. Every element needs a short unique NAME; event and action blocks point at elements through their EL field using that NAME.',
@@ -56,20 +57,22 @@ var SYS=['You build web pages for the "Block HTML" editor (Blockly). Reply with 
 '- Variables: declare them in <variables><variable>name</variable></variables> and use <field name="VAR">name</field>.',
 '- Mutations: controls_if <mutation elseif="N" else="1"></mutation> with IF0/DO0, IF1/DO1…, ELSE; text_join and lists_create_with <mutation items="N"></mutation> with ADD0…; procedures_defnoreturn <mutation><arg name="x"></arg></mutation> + field NAME + statement STACK; procedures_callnoreturn <mutation name="f"><arg name="x"></arg></mutation> + values ARG0….',
 '- Prefer the friendly blocks over js_raw. Keep it playable and small enough to read. Write the visible text in the language of the request.',
-'- When changing existing blocks, return the whole new project (all blocks), keeping what the person did not ask to change.'].join('\n');
+'- With PLAN: edit, return the whole changed project (all blocks), keeping what the person did not ask to change. With PLAN: new, return a fresh project.'].join('\n');
 function picList(){ var I=BH.IMGS, ids=Object.keys(I); return ids.length?ids.map(function(id){ return id+' = '+I[id].name; }).join('\n'):''; }
 function currentXML(){ var dom=Blockly.Xml.workspaceToDom(ws,true); return Blockly.Xml.domToText(dom); }
+function hasWork(){ return ws.getAllBlocks(false).length>1; } // more than an empty page
 function buildPrompt(q,modify,prevErr,prevOut){
   var local=FFAI.isLocal(), pics=picList(), p='Block catalog (type {shape} fields [inputs] // meaning):\n'+getCatalog(local)+'\n\n';
   if(!(local&&modify)) p+='Example project:\n'+B.examples[0].xml()+'\n\n';
   if(pics) p+='The person\'s pictures (use these ids in IMG fields):\n'+pics+'\n\n';
-  if(modify) p+='Current project:\n'+currentXML()+'\n\nChange it like this: '+q;
-  else p+='Make a new project: '+q;
+  if(modify) p+='Current project:\n'+currentXML()+'\n\nRequest: '+q+'\n\nDecide whether to edit the current project or make a new one, then answer.';
+  else p+='There is no current project. Request: '+q;
   if(prevErr) p+='\n\nYour previous answer could not be loaded ('+prevErr+'). Previous answer:\n'+prevOut.slice(0,local?3000:12000)+'\n\nFix it and reply with the full corrected XML only.';
   return p;
 }
 
 /* ---------- check an answer before it touches the workspace ---------- */
+function planOf(t){ var m=/PLAN:\s*(edit|new)/i.exec(String(t||'').slice(0,200)); return m?m[1].toLowerCase():null; }
 function extract(t){ t=String(t||''); var a=t.indexOf('<xml'), b=t.lastIndexOf('</xml>'); if(a<0||b<a) throw new Error('no <xml> element'); return t.slice(a,b+6); }
 function check(xml){
   var dom; try{ dom=Blockly.utils.xml.textToDom(xml); }catch(e){ throw new Error('XML does not parse'); }
@@ -86,41 +89,40 @@ function check(xml){
 }
 
 /* ---------- dialog ---------- */
-var mode='new', before=null, busyNow=false;
+var before=null, busyNow=false, plan=null;
 var CHIPS={new:[['🔢 숫자 맞히기','1부터 100 사이 숫자 맞히기 게임. 크다/작다를 알려 주고 맞히면 축하해 줘요'],['👆 클릭 카운터','버튼을 누를 때마다 숫자가 올라가는 클릭 카운터'],['📝 할 일 목록','할 일을 쓰고 추가 버튼을 누르면 목록에 쌓이는 할 일 목록'],['⚽ 튀는 공','그림판에 공이 튀어 다니는 애니메이션'],['⚡ 반응 속도','화면이 초록색으로 바뀌면 빨리 누르는 반응 속도 게임']],
   edit:[['🌙 밤하늘 배경','배경을 밤하늘로 바꿔 줘'],['🔊 버튼 소리','버튼을 누르면 소리가 나게 해 줘'],['🎉 10점 축하','점수가 10이 되면 축하 메시지를 띄워 줘'],['🔠 큰 빨간 제목','제목 글자를 더 크고 빨갛게 해 줘']]};
-function chips(m){ var box=$('baiChips'); box.innerHTML=''; CHIPS[m].forEach(function(c){ var b=document.createElement('button'), full=T(c[1]); b.textContent=T(c[0]); b.title=full; b.onclick=function(){ $('baiQ').value=full; $('baiQ').focus(); }; box.appendChild(b); }); }
-function setMode(m){ mode=m; chips(m); document.querySelectorAll('.btab').forEach(function(b){ b.classList.toggle('on',b.dataset.m===m); });
-  $('baiQ').placeholder=m==='new'?T('예: 1부터 100 사이 숫자 맞히기 게임. 크다/작다를 알려 주고 맞히면 축하해 줘요'):T('예: 버튼을 누를 때마다 배경색이 바뀌게 해 줘'); }
+function chips(){ var box=$('baiChips'), list=hasWork()?CHIPS.edit.concat(CHIPS.new.slice(0,2)):CHIPS.new; box.innerHTML=''; list.forEach(function(c){ var b=document.createElement('button'), full=T(c[1]); b.textContent=T(c[0]); b.title=full; b.onclick=function(){ $('baiQ').value=full; $('baiQ').focus(); }; box.appendChild(b); }); }
+function prep(){ chips(); $('baiQ').placeholder=hasWork()?T('예: 버튼을 누를 때마다 배경색이 바뀌게 해 줘'):T('예: 1부터 100 사이 숫자 맞히기 게임. 크다/작다를 알려 주고 맞히면 축하해 줘요'); }
 function msg(t,cls){ var o=$('baiMsg'); o.textContent=t||''; o.className='baiMsg'+(cls?' '+cls:''); }
 var t0=0, tick=null, chars=0, phase='';
-function busy(on){ busyNow=on; $('baiGo').disabled=on; $('baiGo').textContent=on?T('만드는 중…'):T('만들기'); $('baiStop').hidden=!on; $('baiBody').classList.toggle('busy',on);
+function busy(on){ busyNow=on; $('baiGo').disabled=on; $('baiGo').textContent=on?T('만드는 중…'):T('코드 만들기'); $('baiStop').hidden=!on; $('baiBody').classList.toggle('busy',on);
   clearInterval(tick); if(on){ t0=Date.now(); chars=0; $('baiLive').textContent=''; $('baiLive').hidden=true; tick=setInterval(status,500); } }
 function status(){ var s=Math.round((Date.now()-t0)/1000);
-  msg(phase==='fix'?F('AI 답을 고치는 중… {0}초',s):chars?F('AI가 블록 코드를 쓰는 중… 글자 {0}개 · {1}초',chars,s):F('AI가 생각하는 중… {0}초',s)); }
-function live(t){ chars=t.length; var p=$('baiLive'), wasHidden=p.hidden, stick=wasHidden||p.scrollHeight-p.scrollTop-p.clientHeight<24; p.hidden=false; p.textContent=t.length>6000?'…'+t.slice(-6000):t; if(stick) p.scrollTop=p.scrollHeight; } // follows the end only while the reader is at the bottom
+  var how=plan==='edit'?T('지금 블록을 고치기로 했어요')+' · ':plan==='new'?T('새로 짜기로 했어요')+' · ':'';
+  msg(phase==='fix'?F('AI 답을 고치는 중… {0}초',s):chars?how+F('AI가 블록 코드를 쓰는 중… 글자 {0}개 · {1}초',chars,s):F('AI가 생각하는 중… {0}초',s)); }
+function live(t){ chars=t.length; if(!plan) plan=planOf(t); var p=$('baiLive'), wasHidden=p.hidden, stick=wasHidden||p.scrollHeight-p.scrollTop-p.clientHeight<24; p.hidden=false; p.textContent=t.length>6000?'…'+t.slice(-6000):t; if(stick) p.scrollTop=p.scrollHeight; } // follows the end only while the reader is at the bottom
 function run(q,modify,tries,errText,lastOut){
   phase=errText?'fix':''; chars=0;
   return FFAI.ask({system:SYS, prompt:buildPrompt(q,modify,errText,lastOut), maxTokens:12000, onText:live}).then(function(out){
-    try{ return check(extract(out)); }
+    try{ var x=check(extract(out)); plan=planOf(out)||plan||(modify?'edit':'new'); if(!modify) plan='new'; return x; }
     catch(e){ if(tries>0){ return run(q,modify,tries-1,e.message,out); } throw new Error(T('AI가 만든 블록을 읽지 못했어요. 다시 해 보세요')); }
   });
 }
 function go(){
   var q=$('baiQ').value.trim(); if(!q) return $('baiQ').focus(); if(busyNow) return;
-  var modify=mode==='edit'; busy(true); status();
+  var modify=hasWork(); plan=modify?null:'new'; busy(true); status();
   run(q,modify,1).then(function(xml){
     before={name:$('projName').value, ws:Blockly.serialization.workspaces.save(ws)};
     B.loadXML(xml); B.arrange();
-    if(!modify){ var pg=ws.getTopBlocks(false).filter(function(b){ return b.type==='page_root'; })[0], t=pg&&pg.getFieldValue('TITLE'); if(t) $('projName').value=t; }
+    if(plan==='new'){ var pg=ws.getTopBlocks(false).filter(function(b){ return b.type==='page_root'; })[0], t=pg&&pg.getFieldValue('TITLE'); if(t) $('projName').value=t; }
     B.save(); $('baiUndo').hidden=false; busy(false);
-    msg(T('다 만들었어요! 미리보기에서 확인해 보세요'),'ok'); close(); B.toast(T('AI가 블록을 만들었어요'));
+    msg(T('다 만들었어요! 미리보기에서 확인해 보세요'),'ok'); close(); B.toast(plan==='edit'?T('AI가 지금 블록을 고쳤어요'):T('AI가 블록을 새로 짰어요'));
   },function(e){ busy(false); if(e.kind!=='nokey') msg(e.message||T('AI에 연결하지 못했어요'),'bad'); else msg(''); }).then(function(){ if(busyNow) busy(false); });
 }
 function undoAI(){ if(!before) return; B.loadJSON(before.ws); $('projName').value=before.name; B.save(); before=null; $('baiUndo').hidden=true; msg(''); B.toast(T('AI 전으로 되돌렸어요')); }
-function open(){ setMode(ws.getAllBlocks(false).length>1&&mode==='edit'?'edit':mode); $('baiDlg').classList.add('open'); setTimeout(function(){ $('baiQ').focus(); },60); }
+function open(){ prep(); $('baiDlg').classList.add('open'); setTimeout(function(){ $('baiQ').focus(); },60); }
 function close(){ $('baiDlg').classList.remove('open'); }
-document.querySelectorAll('.btab').forEach(function(b){ b.onclick=function(){ setMode(b.dataset.m); }; });
 $('aiBtn').onclick=open;
 $('baiGo').onclick=go;
 $('baiStop').onclick=function(){ FFAI.stop(); };
@@ -128,6 +130,6 @@ $('baiQ').addEventListener('keydown',function(e){ if(e.key==='Enter'&&(e.ctrlKey
 $('baiUndo').onclick=undoAI;
 $('baiSet').onclick=function(){ FFAI.settings(); };
 $('baiClose').onclick=close; $('baiDlg').addEventListener('click',function(e){ if(e.target.id==='baiDlg') close(); });
-setMode('new');
+prep();
 window.__bhai={catalog:getCatalog, check:check, open:open, undo:undoAI};
 })();

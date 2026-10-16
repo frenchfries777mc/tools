@@ -58,9 +58,15 @@ ws.addChangeListener(function(e){
 /* ---------- preview & code ---------- */
 var refT=null, lastPrev='';
 ws.addChangeListener(function(e){ if(e.isUiEvent||loading) return; clearTimeout(refT); refT=setTimeout(function(){ refresh(false); },450); save(); });
+var runState='run'; // run | pause | stop  (top bar: 실행하기 / 멈추기 / 정지하기)
+function setRun(st){ runState=st; $('runBtn').classList.toggle('on',st==='run'); $('pauseBtn').classList.toggle('on',st==='pause'); $('stopBtn').classList.toggle('on',st==='stop');
+  $('pauseBtn').querySelector('.lb').textContent=st==='pause'?T('이어하기'):T('멈추기'); $('pPrev').classList.toggle('paused',st==='pause'); }
+function stoppedPage(){ return '<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;height:100vh;display:grid;place-items:center;background:#0b0d13;color:#9aa3b5;font:15px sans-serif;text-align:center;padding:20px;box-sizing:border-box}b{color:#3fe08f}</style></head><body><div>⏹ '+T('정지했어요')+'<br><br><b>'+T('▶ 실행하기를 누르면 처음부터 다시 시작해요')+'</b></div></body></html>'; }
+function showPreview(){ if(window.matchMedia('(max-width:900px)').matches&&document.body.className==='v-blocks'){ var b=document.querySelector('#seg button[data-v="prev"]'); if(b) b.click(); } else setPane('prev'); }
 function refresh(force){
+  if(runState==='stop'&&force!=='run'){ if($('pCode').classList.contains('on')) showCode(); return; }
   var prev; try{ prev=BH.build(ws,{trap:true}); }catch(err){ console.error(err); return; }
-  if(force||prev!==lastPrev){ lastPrev=prev; $('frame').srcdoc=prev; }
+  if(force||prev!==lastPrev){ lastPrev=prev; $('frame').srcdoc=prev; if(runState==='pause') setRun('run'); }
   if($('pCode').classList.contains('on')) showCode();
 }
 function hl(src){
@@ -77,7 +83,14 @@ document.querySelectorAll('.stab').forEach(function(b){ b.onclick=function(){ se
 document.querySelectorAll('#seg button').forEach(function(b){ b.onclick=function(){ var v=b.dataset.v;
   document.querySelectorAll('#seg button').forEach(function(x){ x.classList.toggle('on',x===b); });
   document.body.className='v-'+v; if(v!=='blocks') setPane(v); setTimeout(function(){ Blockly.svgResize(ws); },20); }; });
-$('rerun').onclick=function(){ refresh(true); };
+function runNow(){ setRun('run'); refresh('run'); showPreview(); }
+$('rerun').onclick=runNow; $('runBtn').onclick=runNow;
+$('pauseBtn').onclick=function(){ var w=$('frame').contentWindow;
+  if(runState==='stop'){ runNow(); return; }
+  if(runState==='pause'){ setRun('run'); if(w) w.postMessage({ffbh:'resume'},'*'); }
+  else { setRun('pause'); if(w) w.postMessage({ffbh:'pause'},'*'); showPreview(); } };
+$('stopBtn').onclick=function(){ setRun('stop'); lastPrev=''; $('frame').srcdoc=stoppedPage(); };
+setRun('run');
 $('openTab').onclick=function(){ var u=URL.createObjectURL(new Blob([finalHTML()],{type:'text/html'})); var w=window.open(u,'_blank'); if(!w) location.href=u; setTimeout(function(){ URL.revokeObjectURL(u); },60000); };
 $('copyCode').onclick=function(){ var t=finalHTML(); var done=function(){ toast(T('코드를 복사했어요')); };
   try{ navigator.clipboard.writeText(t).then(done,function(){ fallbackCopy(t); done(); }); }catch(e){ fallbackCopy(t); done(); } };
