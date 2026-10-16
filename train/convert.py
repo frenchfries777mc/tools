@@ -43,8 +43,8 @@ for q in quants:
     repo = f"{name}-{q}-MLC"
     out = f"/tmp/mlc/{repo}"
     run(["convert_weight", model, "--quantization", q, "-o", out])
-    run(["gen_config", model, "--quantization", q, "--conv-template", "qwen2",
-         "--context-window-size", "8192", "--prefill-chunk-size", "1024", "-o", out])
+    # Same chat template and sizes as MLC's prebuilt Qwen3, whose WebLLM model code the site reuses.
+    run(["gen_config", model, "--quantization", q, "--conv-template", "qwen3", "-o", out])
     print(sorted(os.listdir(out))[:8], len(os.listdir(out)), "files")
     if upload:
         user = api.whoami()["name"]
@@ -80,4 +80,7 @@ if name == "test":
         for k in ("model_type", "quantization", "context_window_size", "prefill_chunk_size", "conv_template"):
             print(f"  {k}: ours={str(mo.get(k))[:60]} prebuilt={str(mc.get(k))[:60]}")
         assert not diff, "tensor layout differs from the prebuilt model"
+        for k in ("model_type", "quantization", "context_window_size", "prefill_chunk_size"):
+            assert mo.get(k) == mc.get(k), k
+        assert mo["conv_template"]["name"] == mc["conv_template"]["name"], "conv_template"
     print("matches the prebuilt model")
