@@ -339,5 +339,20 @@ FFT.add({
 '🌙 밤하늘 배경':["🌙 Night sky", "🌙 Cielo nocturno", "🌙 Ciel de nuit", "🌙 Nachthimmel", "🌙 夜空の背景"],
 '🔊 버튼 소리':["🔊 Button sound", "🔊 Sonido del botón", "🔊 Son du bouton", "🔊 Knopfton", "🔊 ボタンの音"],
 '🎉 10점 축하':["🎉 Cheer at 10", "🎉 Celebrar a 10", "🎉 Bravo à 10", "🎉 Jubel bei 10", "🎉 10点でお祝い"],
-'🔠 큰 빨간 제목':["🔠 Big red heading", "🔠 Título grande rojo", "🔠 Grand titre rouge", "🔠 Große rote Überschrift", "🔠 大きな赤いタイトル"]
+'🔠 큰 빨간 제목':["🔠 Big red heading", "🔠 Título grande rojo", "🔠 Grand titre rouge", "🔠 Große rote Überschrift", "🔠 大きな赤いタイトル"],
+'AI로 코드 만들기':["Make code with AI", "Crear código con IA", "Créer du code avec l’IA", "Code mit KI erstellen", "AIでコードを作る"],
+'코드 만들기':["Make code", "Crear código", "Créer le code", "Code erstellen", "コードを作る"],
+'만들거나 고치고 싶은 것을 글로 써 주세요. AI가 지금 블록을 고칠지 새로 짤지 알아서 정해요.':["Describe what you want to make or change. The AI decides whether to edit your blocks or start fresh.", "Describe lo que quieres crear o cambiar. La IA decide si edita tus bloques o empieza de nuevo.", "Décris ce que tu veux créer ou changer. L’IA décide de modifier tes blocs ou de repartir de zéro.", "Beschreibe, was du bauen oder ändern willst. Die KI entscheidet, ob sie deine Blöcke ändert oder neu anfängt.", "作りたいもの・直したいものを書いてね。今のブロックを直すか新しく作るかはAIが決めます。"],
+'지금 블록을 고치기로 했어요':["Editing your blocks", "Editando tus bloques", "Modification de tes blocs", "Ändert deine Blöcke", "今のブロックを直します"],
+'새로 짜기로 했어요':["Starting fresh", "Empezando de nuevo", "Nouveau projet", "Fängt neu an", "新しく作ります"],
+'AI가 지금 블록을 고쳤어요':["The AI edited your blocks", "La IA editó tus bloques", "L’IA a modifié tes blocs", "Die KI hat deine Blöcke geändert", "AIが今のブロックを直しました"],
+'AI가 블록을 새로 짰어요':["The AI built new blocks", "La IA creó bloques nuevos", "L’IA a créé de nouveaux blocs", "Die KI hat neue Blöcke gebaut", "AIがブロックを新しく作りました"],
+'실행하기':["Run", "Ejecutar", "Lancer", "Starten", "実行"],
+'멈추기':["Pause", "Pausa", "Pause", "Pause", "一時停止"],
+'이어하기':["Resume", "Reanudar", "Reprendre", "Weiter", "再開"],
+'정지하기':["Stop", "Detener", "Arrêter", "Stopp", "停止"],
+'정지했어요':["Stopped", "Detenido", "Arrêté", "Gestoppt", "停止しました"],
+'▶ 실행하기를 누르면 처음부터 다시 시작해요':["▶ Press Run to start again from the beginning", "▶ Pulsa Ejecutar para empezar de nuevo", "▶ Appuie sur Lancer pour recommencer", "▶ Drücke Starten, um neu zu beginnen", "▶ 実行を押すと最初から始まります"],
+'⏸ 멈춤 · 이어하려면 멈추기를 다시 눌러요':["⏸ Paused · press Pause again to resume", "⏸ En pausa · pulsa Pausa otra vez para seguir", "⏸ En pause · appuie encore sur Pause pour reprendre", "⏸ Pausiert · drücke Pause erneut zum Fortsetzen", "⏸ 一時停止中 · もう一度押すと再開"],
+'처음부터 다시 실행':["Run again from the start", "Ejecutar desde el inicio", "Relancer depuis le début", "Von vorn starten", "最初から実行"]
 });
