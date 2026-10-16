@@ -446,6 +446,7 @@ function cmd(n){
     case 'sortD': return sortSel(false);
     case 'find': return openDlg('findDlg',$('fFind'));
     case 'viz': if(window.FSViz) window.FSViz.open(); return;
+    case 'ai': if(window.FSAI) window.FSAI.open(); return;
     case 'chart': openDrawer(); if(!(sel.r1===sel.r2&&sel.c1===sel.c2)||(!sh.charts.length&&region(act.r,act.c))) addChart(); return;
     case 'scale': case 'bars': return addCf(n==='scale'?'scale':'bar');
     case 'rowmenu': return openMenu($('rowMenu'),document.querySelector('[data-cmd=rowmenu]'));
@@ -852,17 +853,14 @@ window.addEventListener('beforeunload',function(){ if(editing) commitEdit(); sav
 document.addEventListener('visibilitychange',function(){ if(document.hidden) saveNow(); });
 var z0=parseFloat(lsGet('ffsheet.zoom')); if(ZS.indexOf(z0)<0) z0=('ontouchstart' in window)&&innerWidth<700?.9:1;
 var last=lsGet(LSL);
-if(!last||!lsGet(LSD+last)){ loadDoc(null); seed(); saveNow(); } else loadDoc(last);
+// the old first-visit example ("예시: 성적표") is no longer shipped; drop it once if it was never renamed
+if(!lsGet('ffsheet.noex')){ var EXN=['예시: 성적표','Example: report card','Ejemplo: boletín','Exemple : bulletin','Beispiel: Zeugnis','例: 成績表'];
+  docIndex().forEach(function(x){ if(EXN.indexOf(x.name)>=0){ lsDel(LSD+x.id); lsSet(LSI,JSON.stringify(docIndex().filter(function(y){ return y.id!==x.id; }))); if(last===x.id) last=null; } });
+  lsSet('ffsheet.noex','1'); if(!last){ var rest0=docIndex(); last=rest0.length?rest0[0].id:null; } }
+if(!last||!lsGet(LSD+last)){ loadDoc(null); saveNow(); } else loadDoc(last);
 setZoom(z0);
-function seed(){
-  // a small example on first visit so the extra features are easy to find
-  var rows=[[T('과목'),T('1학기'),T('2학기'),T('평균'),T('완료')],[T('국어'),'82','88','=AVERAGE(B2:C2)','TRUE'],[T('수학'),'74','91','=AVERAGE(B3:C3)','TRUE'],[T('영어'),'90','86','=AVERAGE(B4:C4)','FALSE'],[T('과학'),'68','79','=AVERAGE(B5:C5)','FALSE'],[T('합계'),'=SUM(B2:B5)','=SUM(C2:C5)','=AVERAGE(D2:D5)','=COUNTIF(E2:E5,TRUE)&"/4"']];
-  rows.forEach(function(row,r){ row.forEach(function(v,c){ sh.cells[K(r,c)]={v:v}; if(r===0||r===5) sh.cells[K(r,c)].b=1; if(c===4&&r>0&&r<5) sh.cells[K(r,c)].cb=1; if(c===3&&r>0) sh.cells[K(r,c)].nf='n2'; }); });
-  sh.cfs.push({r1:1,c1:3,r2:4,c2:3,t:'scale'}); sh.cfs.push({r1:1,c1:1,r2:4,c2:2,t:'bar'});
-  sh.charts.push({id:uid(),r1:0,c1:0,r2:4,c2:2,type:'bar',title:T('학기별 점수')});
-  doc.name=T('예시: 성적표'); $('docName').value=doc.name; changed();
-}
 window.FSAPI={get doc(){ return doc; }, get eng(){ return eng; }, get sheet(){ return sh; }, sel:function(){ return sel; }, act:function(){ return act; }, region:region, hasHeader:hasHeader,
-  drawChart:drawChart, chartData:chartData, PAL:PAL, toast:toast, download:download, commitEdit:commitEdit, uid:uid, pushUndo:pushUndo, saveSoon:saveSoon, openDrawer:openDrawer, renderCharts:renderCharts};
+  drawChart:drawChart, chartData:chartData, PAL:PAL, toast:toast, download:download, commitEdit:commitEdit, uid:uid, pushUndo:pushUndo, saveSoon:saveSoon, openDrawer:openDrawer, renderCharts:renderCharts,
+  changed:changed, setRaw:setRaw, pasteText:pasteText, selectRange:selectRange, select:select, forSel:forSel};
 window.__fs={get doc(){ return doc; }, get eng(){ return eng; }, select:select, cmd:cmd, sel:function(){ return sel; }, act:function(){ return act; }, setRaw:setRaw, changed:changed, startEdit:startEdit, commitEdit:commitEdit};
 })();

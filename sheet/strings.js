@@ -1,5 +1,33 @@
 /* Fry Sheet strings: UI translations ([en, es, fr, de, ja]) and the function list shown in "함수 넣기". */
 FFT.add({
+'AI 함수':['AI function','Función IA','Fonction IA','KI-Funktion','AI関数'],
+'질문·요약':['Ask & summarize','Preguntar y resumir','Question et résumé','Fragen & zusammenfassen','質問・要約'],
+'수식 만들기':['Write a formula','Crear fórmula','Écrire une formule','Formel schreiben','数式を作る'],
+'표 만들기':['Make a table','Crear tabla','Créer un tableau','Tabelle erstellen','表を作る'],
+'보내기':['Send','Enviar','Envoyer','Senden','送信'],
+'생각하는 중…':['Thinking…','Pensando…','Réflexion…','Denke nach…','考え中…'],
+'AI 설정':['AI settings','Ajustes de IA','Réglages IA','KI-Einstellungen','AI設定'],
+'선택한 AI 칸 다시 묻기':['Re-ask selected AI cells','Volver a preguntar celdas IA','Redemander les cellules IA','KI-Zellen neu fragen','選んだAIセルを再質問'],
+'AI 함수 쓰는 법':['How to use the AI function','Cómo usar la función IA','Utiliser la fonction IA','KI-Funktion nutzen','AI関数の使い方'],
+'칸에 =AI("할 일", A2) 처럼 쓰면 AI가 답을 칸에 채워요. 한 칸에 쓰고 아래로 끌어 채우면 한 열 전체를 한 번에 처리해요.':['Type =AI("task", A2) in a cell and the AI fills in the answer. Drag it down to process a whole column at once.','Escribe =AI("tarea", A2) en una celda y la IA rellena la respuesta. Arrástrala hacia abajo para toda la columna.','Écris =AI("tâche", A2) dans une cellule et l’IA remplit la réponse. Tire vers le bas pour toute la colonne.','Schreibe =AI("Aufgabe", A2) in eine Zelle, die KI füllt die Antwort. Nach unten ziehen für die ganze Spalte.','セルに =AI("やること", A2) と書くとAIが答えを入れます。下に引けば列全体を一度に処理できます。'],
+'예: 평균이 가장 높은 과목은? / 이 표를 세 줄로 요약해 줘':['e.g. Which subject has the highest average? / Summarize this table in three lines','p. ej. ¿Qué materia tiene la media más alta? / Resume esta tabla en tres líneas','ex. Quelle matière a la meilleure moyenne ? / Résume ce tableau en trois lignes','z. B. Welches Fach hat den höchsten Schnitt? / Fasse die Tabelle in drei Zeilen zusammen','例: 平均が一番高い科目は？ / この表を3行で要約して'],
+'예: B열에서 80점 이상인 사람 수':['e.g. how many people scored 80 or more in column B','p. ej. cuántas personas tienen 80 o más en la columna B','ex. nombre de personnes avec 80 ou plus en colonne B','z. B. Anzahl mit 80 oder mehr in Spalte B','例: B列で80点以上の人数'],
+'예: 우리 반 6명의 이름, 키, 좋아하는 과일 표':['e.g. a table of 6 classmates with name, height and favorite fruit','p. ej. una tabla de 6 compañeros con nombre, altura y fruta favorita','ex. un tableau de 6 élèves : nom, taille, fruit préféré','z. B. Tabelle mit 6 Mitschülern: Name, Größe, Lieblingsobst','例: クラスの6人の名前・身長・好きな果物の表'],
+'{0} 칸부터 표를 넣어요':['The table goes in from {0}','La tabla se pone desde {0}','Le tableau commence en {0}','Die Tabelle beginnt bei {0}','{0}から表を入れます'],
+'{0} 표를 AI에게 보여 줘요':['The AI sees the table {0}','La IA ve la tabla {0}','L’IA voit le tableau {0}','Die KI sieht die Tabelle {0}','AIに表 {0} を見せます'],
+'표를 고르면 AI가 그 내용을 보고 답해요':['Select a table and the AI answers from it','Selecciona una tabla y la IA responde con ella','Sélectionne un tableau et l’IA répond à partir de lui','Wähle eine Tabelle, die KI antwortet daraus','表を選ぶとAIがその内容を見て答えます'],
+'답을 칸에 넣기':['Put the answer in cells','Poner la respuesta en celdas','Mettre la réponse dans les cellules','Antwort in Zellen einfügen','答えをセルに入れる'],
+'{0}에 넣기':['Put in {0}','Poner en {0}','Mettre en {0}','In {0} einfügen','{0}に入れる'],
+'{0} 칸부터 넣기':['Insert from {0}','Insertar desde {0}','Insérer depuis {0}','Ab {0} einfügen','{0}から入れる'],
+'외 {0}줄':['+{0} more rows','+{0} filas más','+{0} lignes','+{0} weitere Zeilen','ほか{0}行'],
+'AI 답을 읽지 못했어요':['Could not read the AI reply','No se pudo leer la respuesta','Réponse illisible','KI-Antwort unlesbar','AIの答えを読めませんでした'],
+'AI가 만든 수식에 오류가 있어요':['The AI formula has an error','La fórmula de la IA tiene un error','La formule de l’IA contient une erreur','Die KI-Formel hat einen Fehler','AIの数式にエラーがあります'],
+'AI 칸 {0}개를 다시 물어봐요':['Re-asking {0} AI cells','Volviendo a preguntar {0} celdas','Nouvelle demande pour {0} cellules','{0} KI-Zellen werden neu gefragt','AIセル{0}個を再質問します'],
+'선택한 곳에 AI 함수가 없어요':['No AI function in the selection','No hay función IA en la selección','Aucune fonction IA dans la sélection','Keine KI-Funktion in der Auswahl','選択範囲にAI関数がありません'],
+'칸에 =AI("할 일", A2) 처럼 써 보세요':['Try typing =AI("task", A2) in a cell','Prueba a escribir =AI("tarea", A2) en una celda','Essaie =AI("tâche", A2) dans une cellule','Probiere =AI("Aufgabe", A2) in einer Zelle','セルに =AI("やること", A2) と書いてみましょう'],
+'키는 각자 넣고, 이 브라우저에만 저장돼요':['Everyone uses their own key, saved only in this browser','Cada uno usa su clave, guardada solo en este navegador','Chacun utilise sa clé, gardée dans ce navigateur','Jeder nutzt seinen Schlüssel, nur in diesem Browser gespeichert','キーは各自のもので、このブラウザだけに保存されます'],
+});
+FFT.add({
 '시각화':['Visualize','Visualizar','Visualiser','Visualisieren','可視化'],
 '그래프':['Graph','Gráfico','Graphique','Diagramm','グラフ'],
 '표':['Table','Tabla','Tableau','Tabelle','表'],
@@ -158,6 +186,7 @@ FFT.add({
 });
 /* [category, name, syntax, Korean description, English description] */
 window.FNDOC=[
+['AI','AI','AI("할 일", 칸, …)','AI가 칸 내용을 보고 답을 채워요. 예: =AI("영어로 번역", A2)','AI fills in the answer from the cells. e.g. =AI("translate to English", A2)'],
 ['수학과 통계','SUM','SUM(범위, …)','숫자를 모두 더해요','Adds numbers'],
 ['수학과 통계','AVERAGE','AVERAGE(범위, …)','평균을 구해요','Average of numbers'],
 ['수학과 통계','MIN','MIN(범위, …)','가장 작은 수','Smallest number'],

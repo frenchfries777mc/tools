@@ -294,3 +294,20 @@ FFT.add({
 '할 일 ':['To-dos: ','Tareas: ','Tâches : ','Aufgaben: ','やること '],
 '개':['','','','','個']
 });
+FFT.add({
+'AI로 블록 만들기':['Build blocks with AI','Crear bloques con IA','Créer des blocs avec l’IA','Blöcke mit KI bauen','AIでブロックを作る'],
+'새로 만들기':['New project','Proyecto nuevo','Nouveau projet','Neues Projekt','新しく作る'],
+'지금 블록 고치기':['Change my blocks','Cambiar mis bloques','Modifier mes blocs','Meine Blöcke ändern','今のブロックを直す'],
+'만들고 싶은 페이지를 글로 써 주세요. AI가 블록을 짜면 지금 블록 자리에 들어가요.':['Describe the page you want. The blocks the AI builds replace the current ones.','Describe la página que quieres. Los bloques de la IA reemplazan los actuales.','Décris la page voulue. Les blocs de l’IA remplacent les blocs actuels.','Beschreibe die Seite. Die Blöcke der KI ersetzen die aktuellen.','作りたいページを文章で書いてください。AIが作ったブロックが今のブロックと入れ替わります。'],
+'예: 1부터 100 사이 숫자 맞히기 게임. 크다/작다를 알려 주고 맞히면 축하해 줘요':['e.g. A 1 to 100 number guessing game that says higher or lower and cheers when you win','p. ej. Juego de adivinar un número del 1 al 100 que dice más alto o más bajo','ex. Jeu pour deviner un nombre de 1 à 100 qui dit plus grand ou plus petit','z. B. Zahlenraten von 1 bis 100, das höher/niedriger sagt und am Ende jubelt','例: 1〜100の数当てゲーム。大きい/小さいを教えて、当たったらお祝い'],
+'예: 버튼을 누를 때마다 배경색이 바뀌게 해 줘':['e.g. Change the background color every time the button is pressed','p. ej. Que el fondo cambie de color cada vez que se pulsa el botón','ex. Change la couleur de fond à chaque appui sur le bouton','z. B. Bei jedem Knopfdruck die Hintergrundfarbe ändern','例: ボタンを押すたびに背景色が変わるようにして'],
+'만들기':['Build','Crear','Créer','Bauen','作る'],
+'만드는 중…':['Building…','Creando…','Création…','Baue…','作成中…'],
+'AI가 블록을 짜고 있어요…':['The AI is building the blocks…','La IA está creando los bloques…','L’IA assemble les blocs…','Die KI baut die Blöcke…','AIがブロックを組み立てています…'],
+'AI 답을 고치는 중…':['Fixing the AI answer…','Corrigiendo la respuesta…','Correction de la réponse…','Antwort wird korrigiert…','AIの答えを直しています…'],
+'AI가 만든 블록을 읽지 못했어요. 다시 해 보세요':['Could not read the blocks the AI made. Try again','No se pudieron leer los bloques de la IA. Inténtalo de nuevo','Impossible de lire les blocs de l’IA. Réessaie','Die Blöcke der KI waren nicht lesbar. Nochmal versuchen','AIが作ったブロックを読めませんでした。もう一度試してください'],
+'다 만들었어요! 미리보기에서 확인해 보세요':['Done! Check the preview','¡Listo! Mira la vista previa','Terminé ! Regarde l’aperçu','Fertig! Sieh dir die Vorschau an','できました！プレビューで確認してね'],
+'AI가 블록을 만들었어요':['The AI built the blocks','La IA creó los bloques','L’IA a créé les blocs','Die KI hat die Blöcke gebaut','AIがブロックを作りました'],
+'AI 전으로 되돌리기':['Undo AI change','Deshacer cambio de IA','Annuler le changement IA','KI-Änderung rückgängig','AIの前に戻す'],
+'AI 전으로 되돌렸어요':['Back to before the AI','Volvió a antes de la IA','Retour avant l’IA','Zurück zum Stand vor der KI','AIの前に戻しました']
+});
