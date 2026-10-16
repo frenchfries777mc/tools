@@ -15,6 +15,9 @@ on:
       quants:
         description: Quantizations, separated by spaces
         default: q4f16_1 q4f32_1
+      mlc:
+        description: Converter version (nightly or stable)
+        default: nightly
       upload:
         description: Upload to Hugging Face
         type: boolean
@@ -26,6 +29,11 @@ on:
 jobs:
   convert:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # A pull request test tries both converter versions side by side.
+        mlc: ${{ fromJSON(inputs.mlc && format('["{0}"]', inputs.mlc) || '["nightly","stable"]') }}
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
@@ -38,8 +46,13 @@ jobs:
         run: |
           python -m pip install -q --upgrade pip
           python -m pip install -q torch --index-url https://download.pytorch.org/whl/cpu
-          python -m pip install -q --pre -f https://mlc.ai/wheels mlc-llm-nightly-cpu mlc-ai-nightly-cpu
-          python -m pip install -q safetensors huggingface_hub transformers sentencepiece tiktoken
+          if [ "${{ matrix.mlc }}" = stable ]; then
+            python -m pip install -q -f https://mlc.ai/wheels mlc-llm-cpu==0.20.0.dev0 mlc-ai-cpu==0.20.0
+          else
+            python -m pip install -q --pre -f https://mlc.ai/wheels mlc-llm-nightly-cpu mlc-ai-nightly-cpu
+          fi
+          python -m pip install -q safetensors huggingface_hub transformers sentencepiece tiktoken ml_dtypes \
+            psutil fastapi uvicorn shortuuid requests tqdm pydantic prompt_toolkit openai
           python -m pip list 2>/dev/null | grep -i -E "mlc|numpy|torch|transformers|ml.dtypes"
       - name: Convert and upload
         env:
