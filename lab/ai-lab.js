@@ -50,7 +50,7 @@ function setBusy(on){ busy=on; $('aiGo').disabled=on; $('aiStop').hidden=!on; }
 function ask(q){
   q=String(q||'').trim(); if(!q){ $('aiQ').focus(); return; } if(busy||!window.FFAI||!LAB.cur) return;
   stopped=false; setBusy(true); var out=$('aiOut'); out.hidden=false; out.innerHTML='<span class="wait"><span class="spin"></span></span>'; out.querySelector('.wait').appendChild(document.createTextNode(T('AI가 생각하는 중…')));
-  FFAI.ask({system:system(), prompt:prompt(q), maxTokens:local()?600:1400, onText:function(t){ if(!stopped) render(t); }})
+  FFAI.ask({system:system(), prompt:prompt(q), facts:true, maxTokens:local()?600:1400, onText:function(t){ if(!stopped) render(t); }})
     .then(function(t){ if(!stopped) render(t||''); if(!String(t||'').trim()) out.textContent=T('AI가 답하지 않았어요'); },
       function(e){ if(e&&e.kind==='stop'||stopped){ if(!out.textContent.trim()||out.querySelector('.wait')) out.textContent=T('멈췄어요'); return; }
         if(e&&e.kind==='nokey'){ out.hidden=true; return; } out.textContent=(e&&e.message)||T('AI에 연결하지 못했어요'); })

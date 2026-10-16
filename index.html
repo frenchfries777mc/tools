@@ -14,6 +14,7 @@
 <script src="i18n.js"></script>
 <script>
 FFT.add({
+'AI 가르치기':['Teach the AI','Enseñar a la IA','Enseigner à l’IA','KI beibringen','AIに教える'],
 '실험실':['Lab','Laboratorio','Labo','Labor','実験室'],
 '실험 9가지':['9 experiments','9 experimentos','9 expériences','9 Experimente','実験9種'],
 '기록·그래프·CSV':['Records · graphs · CSV','Registros · gráficas · CSV','Mesures · graphiques · CSV','Messwerte · Graphen · CSV','記録・グラフ・CSV'],
@@ -261,8 +262,13 @@ FFT.add({
     <div><div class="ic">📤</div><h3>파일로 주고받기</h3><p>엑셀, 파워포인트, HTML 파일로 내보내서 다른 프로그램이나 친구에게 그대로 넘겨요.</p></div>
   </section>
 
-  <footer><span>Made by Frenchfries777 with Claude AI</span><a href="https://github.com/frenchfries777mc" target="_blank" rel="noopener">github.com/frenchfries777mc</a></footer>
+  <footer><span>Made by Frenchfries777 with Claude AI</span><a id="teachLink" href="teach/" hidden>AI 가르치기</a><a href="https://github.com/frenchfries777mc" target="_blank" rel="noopener">github.com/frenchfries777mc</a></footer>
 </div>
 <script src="https://frenchfries777mc.github.io/games/ff-auth.js"></script>
+<script>
+/* the developer-only "AI 가르치기" page link shows only for the developer account */
+(function(){ if(!window.FFAuth) return; var a=document.getElementById('teachLink');
+  FFAuth.ready.then(function(sb){ function chk(){ if(!FFAuth.user()){ a.hidden=true; return; } sb.rpc('ff_is_admin').then(function(r){ a.hidden=r.data!==true; }); } chk(); FFAuth.onChange(chk); }); })();
+</script>
 </body>
 </html>

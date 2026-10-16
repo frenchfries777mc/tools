@@ -9,6 +9,7 @@
          FFAI.settings(onSaved)  -> opens the settings dialog
          FFAI.ask({system, prompt, json, maxTokens}) -> Promise<string> (opens settings first when no key)
          FFAI.ask({…, onText}) streams the answer as it is written; FFAI.stop() stops it
+         FFAI.ask({…, facts:true}) for free answers: our own models also get who they are and what the developer taught them (teach/)
          FFAI.parseJSON(text)    -> JSON from a reply, tolerating ``` fences
    Load after i18n.js. New tools should reuse this file instead of adding their own AI code. */
 (function(){
@@ -227,11 +228,28 @@ function askLocal(c,o){
   }); };
   var p=chain.then(run,run); chain=p.then(function(){},function(){}); return p;
 }
+/* ---------- what the developer taught the site's own models (Supabase ff_ai_facts; only the developer can write) ---------- */
+var FACTS_URL='https://kebsbuvuutilitwlvxzv.supabase.co/rest/v1/ff_ai_facts?select=model,question,fact&order=id', FACTS_KEY='sb_publishable_4Egu0zm3p6cxWGvP_-GlIw_mlCpO1Nf';
+var ME={'FF-Tools-1.7B':{name:'tarius', who:'You are FF777 1.0 tarius, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 1.7B. Your name is the end of the Latin word elementarius ("basic").'},
+        'FF-Tools-4B':{name:'lectus', who:'You are FF777 1.0 lectus, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 4B. Your name is the end of the Latin word intellectus ("understanding").'}};
+var factsP=null;
+function facts(){
+  if(!factsP) factsP=fetch(FACTS_URL,{headers:{apikey:FACTS_KEY}}).then(function(r){ return r.ok?r.json():[]; }).then(function(a){ return Array.isArray(a)?a:[]; },function(){ return []; });
+  return factsP;
+}
+function withFacts(c,o){ // only for our own models, and only for free answers that ask for it (o.facts: the sheet's ask tab, the lab helper)
+  var me=c.local&&ME[c.model]; if(!me||!o.facts) return Promise.resolve(o);
+  return facts().then(function(list){
+    var lines=list.filter(function(f){ return f&&(f.model==='all'||f.model===me.name)&&f.fact; }).map(function(f){ return '- '+(f.question?f.question+' -> ':'')+f.fact; });
+    var text=me.who; if(lines.length) text+='\nFacts you know (use them when they are relevant):\n'+lines.slice(-30).join('\n').slice(-2000);
+    var n={}; for(var k in o) n[k]=o[k]; n.system=(o.system?o.system+'\n\n':'')+text; return n;
+  });
+}
 function send(c,o){ return c.local?askLocal(c,o):c.provider==='claude'?askClaude(c,o):c.provider==='openai'?askOpenAI(c,o):askGemini(c,o); }
 function ask(o){
   var c=cfg();
   if(c.local?!c.localOk:!c.key) return new Promise(function(res,rej){ settings(function(){ ask(o).then(res,rej); },function(){ rej(AIError(c.local?T('자체 AI를 쓰려면 AI 설정에서 저장을 눌러 주세요'):T('AI를 쓰려면 먼저 API 키를 넣어 주세요'),'nokey')); }); });
-  return send(c,o);
+  return withFacts(c,o).then(function(o2){ return send(c,o2); });
 }
 function parseJSON(t){
   t=String(t||'').trim(); var m=/```(?:json)?\s*([\s\S]*?)```/.exec(t); if(m) t=m[1].trim();
@@ -314,5 +332,5 @@ function cancel(){ close(); var f=onCancel; onOk=onCancel=null; if(f) f(); }
 function settings(ok,no){ if(!ov) build(); cur=load(); onOk=ok||null; onCancel=no||null; fill(); ov.classList.add('open'); setTimeout(function(){ var k=ov.querySelector('.k'); if(!k.value) k.focus(); },50); }
 
 function stop(){ if(stopNow){ var f=stopNow; stopNow=null; try{ f(); }catch(e){} } }
-window.FFAI={ready:ready, isLocal:isLocal, isTuned:isTuned, stop:stop, settings:settings, ask:ask, parseJSON:parseJSON, config:cfg};
+window.FFAI={facts:facts, ready:ready, isLocal:isLocal, isTuned:isTuned, stop:stop, settings:settings, ask:ask, parseJSON:parseJSON, config:cfg};
 })();
