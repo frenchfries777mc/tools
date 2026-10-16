@@ -328,3 +328,16 @@ FFT.add({
 'AI 답을 고치는 중… {0}초':['Fixing the AI answer… {0}s','Corrigiendo la respuesta… {0} s','Correction de la réponse… {0} s','Antwort wird korrigiert… {0} s','AIの答えを直しています… {0}秒'],
 '멈추기':['Stop','Detener','Arrêter','Stopp','止める']
 });
+FFT.add({
+'예시 (누르면 입력돼요)':["Examples (tap to fill in)", "Ejemplos (toca para escribir)", "Exemples (touche pour remplir)", "Beispiele (antippen zum Einfügen)", "例（押すと入力されます）"],
+'만들고 싶은 페이지를 글로 써 주세요. AI가 짠 블록은 지금 블록 자리에 들어가요.':["Describe the page you want. The blocks the AI builds replace the current ones.", "Describe la página que quieres. Los bloques de la IA reemplazan los actuales.", "Décris la page voulue. Les blocs de l’IA remplacent les blocs actuels.", "Beschreibe die Seite. Die Blöcke der KI ersetzen die aktuellen.", "作りたいページを文章で書いてください。AIが作ったブロックが今のブロックと入れ替わります。"],
+'🔢 숫자 맞히기':["🔢 Guess the number", "🔢 Adivina el número", "🔢 Devine le nombre", "🔢 Zahlenraten", "🔢 数当て"],
+'👆 클릭 카운터':["👆 Click counter", "👆 Contador de clics", "👆 Compteur de clics", "👆 Klickzähler", "👆 クリックカウンター"],
+'📝 할 일 목록':["📝 To-do list", "📝 Lista de tareas", "📝 Liste de tâches", "📝 To-do-Liste", "📝 やることリスト"],
+'⚽ 튀는 공':["⚽ Bouncing ball", "⚽ Pelota que rebota", "⚽ Balle qui rebondit", "⚽ Hüpfender Ball", "⚽ はねるボール"],
+'⚡ 반응 속도':["⚡ Reaction game", "⚡ Reflejos", "⚡ Réflexes", "⚡ Reaktionsspiel", "⚡ 反応速度"],
+'🌙 밤하늘 배경':["🌙 Night sky", "🌙 Cielo nocturno", "🌙 Ciel de nuit", "🌙 Nachthimmel", "🌙 夜空の背景"],
+'🔊 버튼 소리':["🔊 Button sound", "🔊 Sonido del botón", "🔊 Son du bouton", "🔊 Knopfton", "🔊 ボタンの音"],
+'🎉 10점 축하':["🎉 Cheer at 10", "🎉 Celebrar a 10", "🎉 Bravo à 10", "🎉 Jubel bei 10", "🎉 10点でお祝い"],
+'🔠 큰 빨간 제목':["🔠 Big red heading", "🔠 Título grande rojo", "🔠 Grand titre rouge", "🔠 Große rote Überschrift", "🔠 大きな赤いタイトル"]
+});
