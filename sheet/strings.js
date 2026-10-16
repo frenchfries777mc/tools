@@ -271,3 +271,14 @@ FFT.add({
 '영어로 번역':['translate into English','traducir al inglés','traduire en anglais','ins Englische übersetzen','英語に翻訳'],
 'B열이 영어로 채워져요':['Column B fills in English','La columna B se llena en inglés','La colonne B se remplit en anglais','Spalte B wird auf Englisch gefüllt','B列が英語で埋まります']
 });
+FFT.add({
+'예시 (누르면 입력돼요)':["Examples (tap to fill in)", "Ejemplos (toca para escribir)", "Exemples (touche pour remplir)", "Beispiele (antippen zum Einfügen)", "例（押すと入力されます）"],
+'📋 세 줄 요약':["📋 3-line summary", "📋 Resumen en 3 líneas", "📋 Résumé en 3 lignes", "📋 3-Zeilen-Zusammenfassung", "📋 3行要約"],
+'↕ 최대·최소':["↕ Max and min", "↕ Máx. y mín.", "↕ Max et min", "↕ Max und Min", "↕ 最大・最小"],
+'🔍 눈에 띄는 점':["🔍 What stands out", "🔍 Lo que destaca", "🔍 Ce qui ressort", "🔍 Was auffällt", "🔍 目立つ点"],
+'80 이상 개수':["Count of 80+", "Cuántos 80+", "Nombre de 80+", "Anzahl ab 80", "80以上の数"],
+'가장 긴 글자':["Longest text", "Texto más largo", "Texte le plus long", "Längster Text", "一番長い文字"],
+'🧑‍🎓 우리 반 표':["🧑‍🎓 Class table", "🧑‍🎓 Tabla de la clase", "🧑‍🎓 Tableau de classe", "🧑‍🎓 Klassentabelle", "🧑‍🎓 クラスの表"],
+'🗓 시간표':["🗓 Timetable", "🗓 Horario", "🗓 Emploi du temps", "🗓 Stundenplan", "🗓 時間割"],
+'🏙 도시 인구':["🏙 City populations", "🏙 Población de ciudades", "🏙 Population des villes", "🏙 Städte und Einwohner", "🏙 都市の人口"]
+});

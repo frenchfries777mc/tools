@@ -51,10 +51,10 @@ function tableText(){
   for(var r=g.r1;r<=g.r2;r++){ var row=[r+1]; for(var c=g.c1;c<=g.c2;c++){ var v=A.eng.value(A.doc.active,r,c), cell=A.sheet.cells[E.K(r,c)]; row.push(E.isErr(v)?String(v):E.formatValue(v,cell&&cell.nf)); } lines.push(row.join('\t')); }
   return {g:g, text:lines.join('\n')};
 }
-var CHIPS={ask:['이 표를 세 줄로 요약해 줘','가장 큰 값과 가장 작은 값은?','이 표에서 눈에 띄는 점을 알려 줘'],
-  formula:['B열의 평균','B열에서 80 이상인 칸의 수','A열에서 가장 긴 글자'],
-  table:['우리 반 6명의 이름, 키, 좋아하는 과일 표','일주일 시간표','한국의 도시 5개와 인구'],};
-function chips(m){ var box=$('aiChips'); box.innerHTML=''; CHIPS[m].forEach(function(t){ var b=document.createElement('button'); b.textContent=T(t); b.onclick=function(){ $('aiQ').value=b.textContent; $('aiQ').focus(); }; box.appendChild(b); }); }
+var CHIPS={ask:[['📋 세 줄 요약','이 표를 세 줄로 요약해 줘'],['↕ 최대·최소','가장 큰 값과 가장 작은 값은?'],['🔍 눈에 띄는 점','이 표에서 눈에 띄는 점을 알려 줘']],
+  formula:[['B열 평균','B열의 평균'],['80 이상 개수','B열에서 80 이상인 칸의 수'],['가장 긴 글자','A열에서 가장 긴 글자']],
+  table:[['🧑‍🎓 우리 반 표','우리 반 6명의 이름, 키, 좋아하는 과일 표'],['🗓 시간표','일주일 시간표'],['🏙 도시 인구','한국의 도시 5개와 인구']]};
+function chips(m){ var box=$('aiChips'); box.innerHTML=''; CHIPS[m].forEach(function(c){ var b=document.createElement('button'), full=T(c[1]); b.textContent=T(c[0]); b.title=full; b.onclick=function(){ $('aiQ').value=full; $('aiQ').focus(); }; box.appendChild(b); }); }
 function trDemo(){
   close(); var a=A.act(), r=a.r, c=a.c, at=function(i){ return E.addr(r+i,c); };
   var rows=[[T('한국어'),T('영어')],[T('오늘은 날씨가 맑아요'),''],[T('저는 떡볶이를 좋아해요'),''],[T('주말에 친구와 축구를 했어요'),'']];
@@ -68,7 +68,8 @@ function setMode(m){ mode=m; chips(m); document.querySelectorAll('.atab').forEac
 }
 function busy(on){ $('aiGo').disabled=on; $('aiGo').textContent=on?T('생각하는 중…'):T('보내기'); }
 function out(html){ $('aiOut').innerHTML=html; }
-function liveOut(t){ out('<pre class="aiLive">'+esc(t)+'</pre>'); var e=$('aiOut').firstChild; e.scrollTop=e.scrollHeight; }
+function liveOut(t){ var e=$('aiOut').firstChild; if(!e||e.className!=='aiLive'){ out('<pre class="aiLive"></pre>'); e=$('aiOut').firstChild; }
+  var stick=e.scrollHeight-e.scrollTop-e.clientHeight<24; e.textContent=t; if(stick) e.scrollTop=e.scrollHeight; }
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function fnList(){ return (window.FNDOC||[]).map(function(f){ return f[1]; }).filter(function(n){ return n!=='AI'; }).join(', '); }
 function go(){

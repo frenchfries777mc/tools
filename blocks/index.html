@@ -136,9 +136,11 @@ button,input,select{font:inherit; color:inherit;}
 #baiUndo[hidden],#baiStop[hidden]{display:none;}
 #baiLive{margin:0; max-height:220px; overflow:auto; background:#05060a; border:1px solid var(--line); border-radius:10px; padding:10px 12px; font:12px/1.5 "JetBrains Mono",ui-monospace,monospace; color:#9fe3b8; white-space:pre-wrap; word-break:break-all;}
 #baiLive[hidden]{display:none;}
-.baiChips{display:flex; flex-wrap:wrap; gap:6px;}
-.baiChips button{border:1px solid var(--line); background:var(--panel2); color:var(--text); border-radius:99px; padding:7px 12px; font:inherit; font-size:13px; cursor:pointer; text-align:left;}
+.baiChips{display:grid; grid-template-columns:repeat(auto-fill,minmax(128px,1fr)); gap:6px;}
+.baiChips button{border:1px solid var(--line); background:var(--panel2); color:var(--text); border-radius:10px; padding:8px 10px; font:inherit; font-size:13px; cursor:pointer; text-align:left; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .baiChips button:hover{border-color:var(--fry); color:var(--fry);}
+.exLab{font-size:12px; color:var(--dim); margin:2px 0 -4px;}
+.bai.busy .exLab,.bai.busy .baiChips{display:none;}
 .baiMsg{min-height:20px; font-size:13.5px; color:var(--dim);}
 .baiMsg.ok{color:#3fe08f;} .baiMsg.bad{color:#ff7b7b;}
 .baiNote{color:var(--dim); font-size:12.5px; margin:0;}
@@ -209,11 +211,12 @@ button,input,select{font:inherit; color:inherit;}
 </div></div>
 <div class="ov" id="baiDlg"><div class="dlg">
   <div class="dh"><h3>AI로 블록 만들기</h3><button class="tbtn" id="baiSet">AI 설정</button><button class="x" id="baiClose" aria-label="닫기">×</button></div>
-  <div class="bai">
+  <div class="bai" id="baiBody">
     <div class="btabs"><button class="btab on" data-m="new">새로 만들기</button><button class="btab" data-m="edit">지금 블록 고치기</button></div>
+    <p class="baiNote">만들고 싶은 페이지를 글로 써 주세요. AI가 짠 블록은 지금 블록 자리에 들어가요.</p>
     <textarea id="baiQ" data-notr spellcheck="false"></textarea>
+    <div class="exLab">예시 (누르면 입력돼요)</div>
     <div class="baiChips" id="baiChips"></div>
-    <p class="baiNote">만들고 싶은 페이지를 글로 써 주세요. AI가 블록을 짜면 지금 블록 자리에 들어가요. 예시를 누르면 바로 써져요.</p>
     <div class="baiMsg" id="baiMsg"></div>
     <pre id="baiLive" data-notr hidden></pre>
   </div>
