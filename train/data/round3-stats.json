@@ -1,6 +1,7 @@
 {
- "built": "2026-10-17T05:12:45.984Z",
+ "built": "2026-10-17T05:55:56.062Z",
  "pool": {
+  "formula": 129,
   "code": 594,
   "und": 69,
   "ask": 129,
@@ -9,12 +10,13 @@
  },
  "tooLong": 10,
  "repeats": 6,
- "total": 1588,
+ "total": 1717,
  "counts": {
   "code": 594,
   "und": 69,
   "ask": 129,
   "slides": 112,
+  "formula": 129,
   "self": 264,
   "r2-code": 63,
   "r2-first-code": 32,
