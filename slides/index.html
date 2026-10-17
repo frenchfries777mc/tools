@@ -149,6 +149,7 @@ button,input,select,textarea{font:inherit; color:inherit;}
 .sl .shp{position:absolute;} .sl .shp svg{position:absolute; left:0; top:0; overflow:visible; pointer-events:none;}
 .sl .shp.ln{pointer-events:none;} .sl .shp.ln svg .hit{pointer-events:stroke;}
 .sl .stx{position:absolute; display:flex; flex-direction:column; justify-content:center; overflow:hidden; text-align:center;}
+.emg{display:grid; grid-template-columns:repeat(8,1fr); gap:2px; padding:4px;} .emg button{font-size:22px; line-height:1; padding:6px 0; border-radius:8px;} .emg button:hover{background:var(--hov,rgba(255,255,255,.1));}
 .sl .stx .in{line-height:1.25; text-wrap:balance;}
 .sl.edit .stx .in.ph::before{display:none;} .sl.edit .stx .in.ph:focus::before{display:inline;}
 .sl.edit .stx .in[contenteditable=true],.sl.edit .stx .in[contenteditable=plaintext-only]{cursor:text;}
@@ -399,6 +400,7 @@ body.mode-pv .top,body.mode-pv .main,body.mode-view .top,body.mode-view .main{di
         <button class="tbtn" id="sortBtn" title="슬라이드 모아보기"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span class="lb">모아보기</span></button>
         <button class="tbtn" id="picBtn" title="그림 넣기"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 9"/></svg><span class="lb">그림 넣기</span></button>
         <button class="tbtn" id="shapeBtn" title="도형·화살표 넣기"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="10" height="10" rx="1"/><circle cx="16" cy="8" r="5"/></svg><span class="lb">도형</span></button>
+        <button class="tbtn" id="emojiBtn" title="이모지·아이콘 넣기"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5c1 1.6 2.2 2.3 3.5 2.3s2.5-.7 3.5-2.3M9 9.5h.01M15 9.5h.01"/></svg><span class="lb">이모지</span></button>
         <span class="vs"></span>
         <select id="laySel" title="레이아웃" aria-label="레이아웃">
           <option value="title">제목</option><option value="section">구역 제목</option><option value="bullets">글머리표</option><option value="two">두 칸</option><option value="stat">큰 숫자</option><option value="quote">인용</option><option value="closing">마무리</option><option value="image">그림</option><option value="agenda">차례</option><option value="timeline">타임라인</option><option value="table">표</option><option value="chart">그래프</option><option value="quiz">퀴즈</option><option value="timer">타이머</option><option value="live">살아있는 화면</option>
@@ -421,6 +423,8 @@ body.mode-pv .top,body.mode-pv .main,body.mode-view .top,body.mode-view .main{di
   <button data-d="rename">이름 바꾸기</button>
   <hr>
   <button data-d="imp">글에서 슬라이드 만들기</button>
+  <button data-d="toc">차례 슬라이드 만들기</button>
+  <button data-d="find">찾아 바꾸기</button>
   <button data-d="csv">표·그래프 붙여넣기 (엑셀, CSV)</button>
   <button data-d="nums">슬라이드 번호 켜기</button>
   <button data-d="footer">바닥글 쓰기</button>
@@ -446,6 +450,12 @@ body.mode-pv .top,body.mode-pv .main,body.mode-view .top,body.mode-view .main{di
 <div class="ov" id="mgrDlg"><div class="dlg" style="width:min(620px,100%)">
   <div class="dh"><h3>발표 자료 관리</h3><button class="x" data-close aria-label="닫기">×</button></div>
   <div class="dbody" style="overflow:auto"><button class="tbtn pri" id="mgrNew" style="height:42px">＋ 새로 만들기</button><div id="mgrList"></div></div>
+</div></div>
+<div class="ov" id="frDlg"><div class="dlg" style="width:min(460px,100%)">
+  <div class="dh"><h3>찾아 바꾸기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><label class="lab" for="frQ">찾을 글</label><input class="fieldIn" id="frQ" data-notr spellcheck="false" autocomplete="off"><label class="lab" for="frR" style="margin-top:12px">바꿀 글</label><input class="fieldIn" id="frR" data-notr spellcheck="false" autocomplete="off">
+    <label class="csvChk" style="margin-top:12px"><input type="checkbox" id="frCase"> 대문자·소문자 구분</label><p id="frInfo" style="color:var(--fry);min-height:1.4em"></p></div>
+  <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="frOk">모두 바꾸기</button></div>
 </div></div>
 <div class="ov" id="impDlg"><div class="dlg" style="width:min(620px,100%)">
   <div class="dh"><h3>글에서 슬라이드 만들기</h3><button class="x" data-close aria-label="닫기">×</button></div>
