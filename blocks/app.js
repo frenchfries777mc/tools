@@ -118,11 +118,11 @@ var converting=false;
 function toBlocks(html,auto){ html=String(html==null?'':html); if(!html.trim()||!window.BHX||converting) return false;
   var big=html.length>150000;
   if(big){ /* big code: step by step, so the page can draw the progress between the steps */
-    converting=true; var steps=[
+    converting=true; var st={}, k=0, steps=[
       [0.08,'코드를 읽는 중…',function(){}],
       [0.25,'블록으로 나누는 중…',function(){ try{ st.r=BHX.convert(html,{big:true}); st.how=0; }catch(e){ console.error(e); st.r=null; } if(!st.r){ try{ st.r=BHX.fallback(html); st.how=1; }catch(e){ console.error(e); } } }],
       [0.75,'블록을 화면에 놓는 중…',function(){ if(!st.r) return; try{ loadXML(st.r.xml); arrange(); if(ws.getAllBlocks(false).length<2) throw new Error('empty'); st.ok=true; }catch(e){ console.error(e); st.ok=false; } }],
-      [1,'마무리하는 중…',function(){}]], st={}, k=0;
+      [1,'마무리하는 중…',function(){}]];
     (function next(){ var sp=steps[k]; prog(sp[0],T(sp[1])); setTimeout(function(){ sp[2](); k++; if(k<steps.length){ next(); return; }
       prog(null); converting=false; if(st.ok) convDone(html,st.r,st.how); else convFail(html); },60); })();
     return true; }
@@ -130,94 +130,12 @@ function toBlocks(html,auto){ html=String(html==null?'':html); if(!html.trim()||
   for(var i=0;i<tries.length&&!c;i++){ try{ var r=tries[i](); how=i; loadXML(r.xml); arrange(); if(ws.getAllBlocks(false).length<2) throw new Error('empty'); c=r; }catch(e){ console.error(e); } }
   if(!c){ convFail(html); return false; }
   convDone(html,c,how); return true; }
-function loadXML(xml){ loading=true; prescan(xml); ws.clear(); try{ Blockly.Xml.domToWorkspace(Blockly.utils.xml.textToDom(xml),ws); }finally{ BH.KNOWN.clear(); loading=false; } afterLoad(); }
-function arrange(){ // page on the left, scripts in a column to its right
-  var tops=ws.getTopBlocks(false), page=tops.filter(function(b){ return b.type==='page_root'; })[0], x=30, y=30;
-  if(page){ page.moveTo(new Blockly.utils.Coordinate(30,30)); x=30+page.getHeightWidth().width+70; }
-  tops.forEach(function(b){ if(b===page) return; b.moveTo(new Blockly.utils.Coordinate(x,y)); y+=b.getHeightWidth().height+36; });
-}
-function afterLoad(){ dropCustom(false); setTimeout(function(){ ws.scrollCenter(); var tb=ws.getTopBlocks(true)[0]; if(tb) ws.scroll(-tb.getRelativeToSurfaceXY().x*ws.scale+30, -tb.getRelativeToSurfaceXY().y*ws.scale+30); },30); refresh(true); }
-
-/* keep element names unique, and follow renames in the blocks that use them */
-ws.addChangeListener(function(e){
-  if(loading) return;
-  if(e.type===Blockly.Events.BLOCK_CREATE){
-    (e.ids||[]).forEach(function(id){ var b=ws.getBlockById(id); if(!b||BH.EL.indexOf(b.type)<0) return;
-      var n=b.getFieldValue('NAME'), others=ws.getAllBlocks(false).filter(function(x){ return x!==b&&BH.EL.indexOf(x.type)>=0; }).map(function(x){ return x.getFieldValue('NAME'); });
-      if(others.indexOf(n)<0) return; var base=n.replace(/\d+$/,''), k=1; while(others.indexOf(base+k)>=0) k++;
-      var og=Blockly.Events.getGroup(); Blockly.Events.setGroup(e.group||og||true); try{ b.setFieldValue(base+k,'NAME'); }finally{ Blockly.Events.setGroup(og||false); } });
-  }
-  if(e.type===Blockly.Events.BLOCK_CHANGE&&e.element==='field'&&e.name==='NAME'){
-    var b=ws.getBlockById(e.blockId); if(!b||BH.EL.indexOf(b.type)<0||!e.oldValue) return;
-    var still=ws.getAllBlocks(false).some(function(x){ return x!==b&&BH.EL.indexOf(x.type)>=0&&x.getFieldValue('NAME')===e.oldValue; });
-    if(still) return;
-    ws.getAllBlocks(false).forEach(function(x){ x.inputList.forEach(function(inp){ inp.fieldRow.forEach(function(f){ if((f.name==='EL'||(/_hit$/.test(x.type)&&(f.name==='A'||f.name==='B')))&&f.getValue()===e.oldValue){ BH.KNOWN.add(e.newValue); f.setValue(e.newValue); BH.KNOWN.clear(); } }); }); });
-  }
-});
-
-/* ---------- preview & code ---------- */
-var refT=null, lastPrev='';
-ws.addChangeListener(function(e){ if(e.isUiEvent||loading) return; clearTimeout(refT); refT=setTimeout(function(){ refresh(false); },450); save(); });
-var runState='run'; // run | pause | stop  (top bar: 실행하기 / 멈추기 / 정지하기)
-/* ---------- step-by-step run: one block at a time, with variable values ---------- */
-var dbgOn=false, dbgCurId=null, dbgPrev={}, dbgT=null;
-function dbgSay(t){ $('dbgState').textContent=t; }
-function dbgBtns(on){ $('dbgNext').disabled=$('dbgFree').disabled=!on; }
-function dbgUnlight(){ if(dbgCurId){ try{ ws.highlightBlock(dbgCurId,false); }catch(e){} dbgCurId=null; } }
-function dbgReset(){ clearTimeout(dbgT); dbgUnlight(); dbgPrev={}; if(!dbgOn) return; dbgBtns(false); dbgSay(T('이벤트를 기다리는 중 · 버튼을 누르거나 키를 눌러 보세요')); $('dbgCur').textContent='…'; $('dbgCur').style.borderLeftColor='#38bdf8'; $('dbgVars').innerHTML=''; }
-function dbgShow(d){
-  clearTimeout(dbgT); dbgUnlight(); var b=ws.getBlockById(d.id);
-  if(b){ dbgCurId=d.id; try{ ws.highlightBlock(d.id,true); ws.centerOnBlock(d.id); }catch(e){}
-    $('dbgCur').textContent=b.toString(90).replace(/\s+/g,' '); $('dbgCur').style.borderLeftColor=b.getColour(); }
-  var box=$('dbgVars'); box.innerHTML=''; var now={};
-  (d.vars||[]).forEach(function(v){ now[v[0]]=v[1]; var sp=document.createElement('span'); if(dbgPrev[v[0]]!==undefined&&dbgPrev[v[0]]!==v[1]) sp.className='ch'; var nb=document.createElement('b'); nb.textContent=v[0]+' = '; sp.appendChild(nb); sp.appendChild(document.createTextNode(v[1]===''?T('(비어 있음)'):v[1])); box.appendChild(sp); });
-  if(!(d.vars||[]).length){ var n=document.createElement('span'); n.className='none'; n.textContent=T('변수가 없어요'); box.appendChild(n); }
-  dbgPrev=now; dbgBtns(true); dbgSay(T('지금 할 블록 · 다음 블록을 누르면 실행해요')); }
-function dbgSend(mode){ var w=$('frame').contentWindow; if(!w) return; dbgBtns(false); dbgSay(T('실행 중…')); w.postMessage({ffbhDbg:mode},'*');
-  clearTimeout(dbgT); dbgT=setTimeout(function(){ if(dbgOn&&!$('dbgNext').disabled) return; dbgUnlight(); dbgSay(T('끝났어요 · 다음 이벤트(누르기·키·시간)를 기다려요')); },900); }
-function setDbg(on){ dbgOn=on; $('stepBtn').classList.toggle('on',on); $('dbgBar').hidden=!on; dbgUnlight();
-  if(on){ if(runState==='stop'||runState==='pause') setRun('run'); lastPrev=''; refresh('run'); showPreview(); toast(T('한 블록씩 실행을 켰어요')); }
-  else { lastPrev=''; refresh('run'); toast(T('한 블록씩 실행을 껐어요')); } }
-$('stepBtn').onclick=function(){ setDbg(!dbgOn); };
-$('dbgNext').onclick=function(){ dbgSend('next'); };
-$('dbgFree').onclick=function(){ dbgSend('free'); };
-$('dbgOff').onclick=function(){ setDbg(false); };
-window.addEventListener('message',function(e){ var d=e.data; if(!d||e.source!==$('frame').contentWindow||!dbgOn) return;
-  if(d.ffbhStep) dbgShow(d.ffbhStep);
-  else if(d.ffbhStepEnd){ clearTimeout(dbgT); dbgUnlight(); dbgBtns(false); dbgSay(T('끝났어요 · 다음 이벤트(누르기·키·시간)를 기다려요')); } });
-function setRun(st){ runState=st; $('runBtn').classList.toggle('on',st==='run'); $('pauseBtn').classList.toggle('on',st==='pause'); $('stopBtn').classList.toggle('on',st==='stop');
-  $('pauseBtn').querySelector('.lb').textContent=st==='pause'?T('이어하기'):T('멈추기'); $('pPrev').classList.toggle('paused',st==='pause'); }
-function stoppedPage(){ return '<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;height:100vh;display:grid;place-items:center;background:#0b0d13;color:#9aa3b5;font:15px sans-serif;text-align:center;padding:20px;box-sizing:border-box}b{color:#3fe08f}</style></head><body><div>⏹ '+T('정지했어요')+'<br><br><b>'+T('▶ 실행하기를 누르면 처음부터 다시 시작해요')+'</b></div></body></html>'; }
-function showPreview(){ if(window.matchMedia('(max-width:900px)').matches&&document.body.className==='v-blocks'){ var b=document.querySelector('#seg button[data-v="prev"]'); if(b) b.click(); } else setPane('prev'); }
-function refresh(force){
-  if(runState==='stop'&&force!=='run'){ if($('pCode').classList.contains('on')) showCode(); return; }
-  if(custom!==null){ if(force!=='run'){ dropCustom(true); } else { clearLog(); dbgReset(); $('frame').srcdoc=custom; if(runState==='pause') setRun('run'); return; } }
-  checkPics();
-  var prev; try{ prev=BH.build(ws,{trap:true,debug:dbgOn}); }catch(err){ console.error(err); return; }
-  if(force||prev!==lastPrev){ lastPrev=prev; clearLog(); dbgReset(); $('frame').srcdoc=prev; if(runState==='pause') setRun('run'); }
-  if($('pCode').classList.contains('on')) showCode();
-}
-/* "내 그림" blocks without a picture: warning on the block, hint toast, placeholder in the preview */
-var picKey='';
-function checkPics(){ var n=BH.markPics(ws), key=BH.missingPics(ws).map(function(b){ return b.id; }).join(',');
-  if(n&&key!==picKey&&!loading) toast(T('그림을 고르지 않은 "내 그림" 블록이 있어요. 블록의 그림 칸을 눌러 골라 주세요'));
-  picKey=key; }
-/* typed HTML: the HTML code tab is always editable (a text box over the highlighted code); the preview, copy and download then use that text until the blocks change */
-var custom=null, customT=null, prevCustom=null;
-function setCust(on){ $('codeReset').hidden=!on; $('codeBlocks').hidden=!on; if(!on) $('codeUndo').hidden=true; }
-/* typed or pasted HTML -> blocks (friendly blocks where possible, "HTML/JS 직접 쓰기" blocks for the rest) */
-function toBlocks(html,auto){ html=String(html==null?'':html); if(!html.trim()||!window.BHX) return false; var tries=[function(){ return BHX.convert(html); },function(){ return BHX.fallback(html); }], c=null, how=0;
-  for(var i=0;i<tries.length&&!c;i++){ try{ var r=tries[i](); how=i; loadXML(r.xml); arrange(); if(ws.getAllBlocks(false).length<2) throw new Error('empty'); c=r; }catch(e){ console.error(e); } }
-  if(!c){ if(custom===null){ custom=html; $('codeEdit').value=html; setCust(true); } toast(T('블록으로 바꾸지 못했어요. HTML 코드 그대로 두었어요')); return false; }
-  prevCustom=html; $('projName').value=$('projName').value||c.title; $('codeUndo').hidden=false; save();
-  toast(how?T('블록으로 바꾸기 어려운 부분은 직접 쓰기 블록에 넣었어요'):F('블록 {0}개 · 직접 쓰기 {1}개로 바꿨어요',c.stats.blocks,c.stats.raw+c.stats.rawHtml)); return true; }
 function finalHTML(){ return custom!==null?custom:BH.build(ws,{trap:false}); }
 function showCode(){ if(custom!==null) return; var v=finalHTML(), ta=$('codeEdit');
   if(v.length>BIGCODE){ var cut=v.slice(0,40000)+'\n\n'+F('… 큰 코드라 앞부분 {0}글자만 보여 줘요. 미리보기·복사·내려받기는 전체 {1}글자를 써요 …',40000,v.length); if(ta.value!==cut) ta.value=cut; ta.readOnly=true; return; }
   ta.readOnly=false; if(ta.value!==v) ta.value=v; }
 function dropCustom(msg){ if(custom==null) return; custom=null; clearTimeout(customT); $('codeEdit').readOnly=false; setCust(false); $('codeNote').hidden=false; if(msg) toast(T('직접 쓴 HTML은 지웠어요. 블록 코드로 돌아왔어요')); }
 var pasting=false, BIGCODE=500000, MAXCODE=2500*1024;
-/* too big for the text box to show without freezing: keep all of it for the preview, copy and download, and show only the start (read only) */
 function bigView(full){ var ta=$('codeEdit'); custom=full; ta.value=full.slice(0,40000)+'\n\n'+F('… 큰 코드라 앞부분 {0}글자만 보여 줘요. 미리보기·복사·내려받기는 전체 {1}글자를 써요 …',40000,full.length); ta.readOnly=true; ta.style.visibility=''; setCust(true); }
 function ta0Big(t){ return t.readOnly&&custom!==null&&!pasting; }
 $('codeEdit').addEventListener('input',function(){ if(pasting) return; var v=$('codeEdit').value; custom=v; setCust(true); clearTimeout(customT);
