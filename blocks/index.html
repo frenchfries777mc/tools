@@ -122,6 +122,9 @@ button,input,select{font:inherit; color:inherit;}
 .pic .th{height:100px; border-radius:8px; background:#fff; display:grid; place-items:center; overflow:hidden;}
 .pic .th.clear{background:#e5e7eb;}
 .pic .th img{max-width:100%; max-height:100%;}
+.padTr{display:inline-flex; align-items:center; gap:6px; cursor:pointer; padding:4px 8px; border:1px solid var(--line); border-radius:8px;}
+.padTr i{width:16px; height:16px; border-radius:3px; border:1px solid #9ca3af; background-color:#e5e7eb; background-image:linear-gradient(45deg,#9ca3af 25%,transparent 25%,transparent 75%,#9ca3af 75%),linear-gradient(45deg,#9ca3af 25%,transparent 25%,transparent 75%,#9ca3af 75%); background-size:8px 8px; background-position:0 0,4px 4px;}
+.padTr:has(input:checked){border-color:var(--fry); color:var(--fry);}
 .pic input{background:var(--bg); border:1px solid var(--line); border-radius:7px; padding:5px 8px; font-size:13px; width:100%;}
 .pa{display:flex; gap:4px;}
 .pa button{flex:1; height:30px; border-radius:7px; border:1px solid var(--line); background:var(--panel); cursor:pointer; font-size:12.5px; padding:0 4px;}
@@ -159,6 +162,16 @@ button,input,select{font:inherit; color:inherit;}
 .askBody{padding:22px 20px 8px; font-size:15px; line-height:1.6;}
 .askFoot{display:flex; justify-content:flex-end; gap:8px; padding:12px 16px 16px;}
 .askFoot .tbtn{height:40px; min-width:80px; justify-content:center;}
+#stepBtn.on{background:#10202b; border-color:#38bdf8; color:#38bdf8;}
+#dbgBar{flex:0 0 auto; border-top:2px solid #38bdf8; background:var(--panel); padding:8px 10px; display:flex; flex-direction:column; gap:6px; max-height:46%; overflow:auto;}
+#dbgBar[hidden]{display:none;}
+.dbgTop{display:flex; align-items:center; gap:6px; flex-wrap:wrap;} .dbgTop b{font-size:13px; color:#38bdf8;} .dbgTop .tbtn{height:30px; padding:0 10px; font-size:13px;}
+.dbgTop .tbtn:disabled{opacity:.4; cursor:default;}
+#dbgCur{font-size:13px; padding:5px 8px; border-radius:8px; background:var(--bg); border-left:5px solid #38bdf8; word-break:break-all;}
+#dbgVars{display:flex; flex-wrap:wrap; gap:5px;}
+#dbgVars span{font-size:12.5px; padding:3px 8px; border-radius:8px; background:var(--panel2); border:1px solid var(--line);} #dbgVars span b{color:var(--dim); font-weight:500;}
+#dbgVars span.ch{border-color:#ffc93c; background:#2a2410; color:#ffc93c;}
+#dbgVars .none{color:var(--dim); border:0; background:none;}
 #logBar{display:flex; align-items:center; gap:6px; padding:3px 8px; border-top:1px solid var(--line); background:var(--panel); flex:0 0 auto;}
 #logBar button{border:0; background:transparent; color:var(--dim); cursor:pointer; padding:6px 8px; border-radius:8px; font-size:12.5px;}
 #logBar button:hover{background:var(--panel2); color:var(--text);}
@@ -180,7 +193,16 @@ button,input,select{font:inherit; color:inherit;}
 .baiChips button{border:1px solid var(--line); background:var(--panel2); color:var(--text); border-radius:10px; padding:8px 10px; font:inherit; font-size:13px; cursor:pointer; text-align:left; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .baiChips button:hover{border-color:var(--fry); color:var(--fry);}
 .exLab{font-size:12px; color:var(--dim); margin:2px 0 -4px;}
-.bai.busy .exLab,.bai.busy .baiChips{display:none;}
+.bai.busy .exLab,.bai.busy .baiChips,.bai.busy .baiFix,.bai.busy #baiHist,.bai.busy #baiHistClear{display:none;}
+.baiFix{display:flex; flex-direction:column; gap:6px; padding:8px 10px; border:1px solid var(--line); border-radius:10px; background:var(--panel2);}
+.baiFix[hidden],#baiHist[hidden],#baiHistClear[hidden],#baiHistLab[hidden]{display:none;}
+.baiLast{font-size:12.5px; color:var(--dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.baiFixRow{display:flex; gap:6px;} .baiFixRow input{flex:1; min-width:0; background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:7px 10px; font:inherit; color:var(--text);}
+#baiHist{display:flex; flex-direction:column; gap:4px; max-height:150px; overflow:auto;}
+.baiH{display:flex; gap:4px;} .baiH .hq{flex:1; min-width:0; text-align:left; border:1px solid var(--line); background:var(--panel2); color:var(--text); border-radius:8px; padding:6px 9px; font:inherit; font-size:13px; cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.baiH .hq:hover{border-color:var(--fry); color:var(--fry);} .baiH .hq i{font-style:normal; font-size:11px; color:#38bdf8; border:1px solid #38bdf8; border-radius:99px; padding:0 6px; margin-right:7px;}
+.baiH .hx{border:0; background:transparent; color:var(--dim); cursor:pointer; font-size:17px; padding:0 8px; border-radius:8px;} .baiH .hx:hover{background:var(--panel2); color:#ff7b7b;}
+#baiHistClear{align-self:flex-start; height:28px; font-size:12.5px;}
 .baiMsg{min-height:20px; font-size:13.5px; color:var(--dim);}
 .baiMsg.ok{color:#3fe08f;} .baiMsg.bad{color:#ff7b7b;}
 .baiNote{color:var(--dim); font-size:12.5px; margin:0;}
@@ -198,6 +220,7 @@ button,input,select{font:inherit; color:inherit;}
   <span class="runGrp" id="runGrp">
     <button class="tbtn rb run" id="runBtn" title="실행하기"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z"/></svg><span class="lb">실행하기</span></button>
     <button class="tbtn rb" id="pauseBtn" title="멈추기"><svg viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></svg><span class="lb">멈추기</span></button>
+    <button class="tbtn rb" id="stepBtn" title="블록을 한 개씩 실행하며 살펴봐요"><svg viewBox="0 0 24 24"><path d="M5 4.5v15l8-7.5z"/><path d="M17 5v14"/></svg><span class="lb">한 블록씩 실행</span></button>
     <button class="tbtn rb" id="stopBtn" title="정지하기"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg><span class="lb">정지하기</span></button>
   </span>
   <span class="seg" id="seg"><button data-v="blocks" class="on">블록</button><button data-v="prev">미리보기</button><button data-v="code">코드</button></span>
@@ -231,6 +254,11 @@ button,input,select{font:inherit; color:inherit;}
       <button class="ib" id="copyCode" title="코드 복사"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
     </div>
     <div class="pane on" id="pPrev"><div id="veil"><span>⏸ 멈춤 · 이어하려면 멈추기를 다시 눌러요</span></div><iframe id="frame" title="미리보기" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe>
+      <div id="dbgBar" hidden>
+        <div class="dbgTop"><b id="dbgState"></b><span class="sp"></span><button class="tbtn pri" id="dbgNext">다음 블록 ▶</button><button class="tbtn" id="dbgFree">끝까지 실행</button><button class="tbtn" id="dbgOff">그만하기</button></div>
+        <div id="dbgCur" data-notr></div>
+        <div id="dbgVars" data-notr></div>
+      </div>
       <div id="logBar"><button id="logToggle">📋 <span>로그</span> <b id="logN">0</b></button><span class="sp"></span><button id="logClear">로그 비우기</button></div><div id="logBox" data-notr></div></div>
     <div class="pane" id="pCode"><pre id="code" data-notr></pre></div>
     <div class="hint" id="hint">블록을 바꾸면 미리보기가 바로 바뀌어요.</div>
@@ -255,7 +283,7 @@ button,input,select{font:inherit; color:inherit;}
     <span class="grp"><button class="tl" id="padUndo">↶ 되돌리기</button><button class="tl" id="padClear">모두 지우기</button></span>
   </div>
   <div id="padWrap"><canvas id="padCv" width="800" height="600"></canvas></div>
-  <div class="padFoot"><input type="text" id="padName" aria-label="그림 이름" data-notr><label><input type="checkbox" id="padBg"> 투명 배경</label><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="padSave">저장하고 넣기</button></div>
+  <div class="padFoot"><input type="text" id="padName" aria-label="그림 이름" data-notr><label class="padTr" title="체크하면 배경 없이 그린 부분만 저장돼요 (바둑판 무늬 = 투명)"><input type="checkbox" id="padBg"><i></i> 투명 배경</label><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="padSave">저장하고 넣기</button></div>
 </div></div>
 <div class="ov" id="mgrDlg"><div class="dlg">
   <div class="dh"><h3>내 그림</h3><button class="tbtn" id="mgrDraw">✏️ 그림 그리기</button><button class="tbtn" id="mgrPhoto">📷 사진 넣기</button><button class="x" data-close aria-label="닫기">×</button></div>
@@ -266,8 +294,16 @@ button,input,select{font:inherit; color:inherit;}
   <div class="bai" id="baiBody">
     <p class="baiNote">만들거나 고치고 싶은 것을 글로 써 주세요. AI가 지금 블록을 고칠지 새로 짤지 알아서 정해요.</p>
     <textarea id="baiQ" data-notr spellcheck="false"></textarea>
+    <div class="baiFix" id="baiFixBox" hidden>
+      <div class="exLab">틀린 곳을 알려 주세요</div>
+      <div class="baiLast" id="baiLast" data-notr></div>
+      <div class="baiFixRow"><input type="text" id="baiFix" data-notr spellcheck="false" placeholder="예: 버튼을 눌러도 소리가 안 나요"><button class="tbtn pri" id="baiFixGo">이 부분만 고치기</button></div>
+    </div>
     <div class="exLab">예시 (누르면 입력돼요)</div>
     <div class="baiChips" id="baiChips"></div>
+    <div class="exLab" id="baiHistLab" hidden>내 요청 기록 (누르면 다시 쓸 수 있어요)</div>
+    <div id="baiHist" hidden></div>
+    <button class="tbtn" id="baiHistClear" hidden>기록 지우기</button>
     <div class="baiMsg" id="baiMsg"></div>
     <pre id="baiLive" data-notr hidden></pre>
   </div>
