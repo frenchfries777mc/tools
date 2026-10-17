@@ -61,7 +61,8 @@ function onlyAttrs(el,allowed){ for(var i=0;i<el.attributes.length;i++){ if(allo
 function hasKids(el){ return el.children.length>0; }
 function numAttr(el,a,def){ var v=parseInt(el.getAttribute(a),10); return v>0?v:def; }
 
-function convert(html){
+function convert(html,opts){
+  var big=!!(opts&&opts.big)||String(html||'').length>150000;
   var doc=new DOMParser().parseFromString(String(html||''),'text/html');
   var names={}, used={}, seq=0, stats={blocks:0,raw:0,rawHtml:0}, ids={};
   function nameFor(el,base){ var id=el.getAttribute('id'); if(id&&!used[id]){ used[id]=1; return id; } var n; do{ n=base+(++seq); }while(used[n]||doc.getElementById(n)); used[n]=1; return n; }
@@ -92,12 +93,16 @@ function convert(html){
     return rawBlock(el);
   }
   function bodyItems(parent){
-    var items=[];
+    var items=[], restBuf='';
+    function flushRest(){ if(!restBuf.trim()) { restBuf=''; return; } var code=restBuf.replace(/\s*\n\s*/g,' ').trim(); restBuf=''; stats.rawHtml++; items.push({xml:function(next){ return '<block type="el_html">'+fld('CODE',code)+(next?'<next>'+next+'</next>':'')+'</block>'; }}); }
     Array.prototype.forEach.call(parent.childNodes,function(n){
+      /* a very big page: after 300 blocks the rest goes into a few big HTML blocks (a block per element would be far too many) */
+      if(big&&parent===doc.body&&items.length>=300){ restBuf+=(n.nodeType===1?n.outerHTML:n.nodeType===3?n.textContent:'')+'\n'; if(restBuf.length>30000) flushRest(); return; }
       if(n.nodeType===3){ var t=n.textContent.replace(/\s+/g,' ').trim(); if(t){ stats.rawHtml++; items.push({xml:function(next){ return '<block type="el_text">'+fld('TEXT',t)+fld('NAME',nameFor({getAttribute:function(){ return null; }},'글'))+(next?'<next>'+next+'</next>':'')+'</block>'; }}); } return; }
       if(n.nodeType!==1) return;
       var b=elementBlock(n); if(b) items.push(b);
     });
+    flushRest();
     return items;
   }
 
@@ -109,13 +114,15 @@ function convert(html){
 
   /* script */
   var code=''; Array.prototype.forEach.call(doc.querySelectorAll('script'),function(s){ if(!s.src) code+=s.textContent+'\n'; });
-  var tops=[], statements=splitStatements(code), starts=[];
+  var tops=[], statements=splitStatements(code), starts=[], rawBuf='';
   statements.forEach(function(st){
     var h=parseHandler(st);
     if(h&&h.kind==='click'&&names[h.id]){ stats.blocks++; tops.push('<block type="ev_click">'+fld('EL',h.id)+'<statement name="DO"><block type="js_raw">'+fld('CODE',h.body.trim())+'</block></statement></block>'); return; }
     if(h&&h.kind==='timer'&&h.ms>=20){ stats.blocks++; tops.push('<block type="ev_timer">'+fld('SEC',+(h.ms/1000).toFixed(3))+'<statement name="DO"><block type="js_raw">'+fld('CODE',h.body.trim())+'</block></statement></block>'); return; }
+    if(big){ rawBuf+=st+'\n'; if(rawBuf.length>20000){ stats.raw++; starts.push('<block type="js_raw">'+fld('CODE',rawBuf.trim())+'</block>'); rawBuf=''; } return; }
     stats.raw++; starts.push('<block type="js_raw">'+fld('CODE',st)+'</block>');
   });
+  if(rawBuf.trim()){ stats.raw++; starts.push('<block type="js_raw">'+fld('CODE',rawBuf.trim())+'</block>'); }
   if(starts.length){ var s=starts.reduceRight(function(acc,x){ return acc?x.replace(/<\/block>$/,'<next>'+acc+'</next></block>'):x; },''); tops.unshift('<block type="ev_start"><statement name="DO">'+s+'</statement></block>'); }
 
   var x=20, y=20;
