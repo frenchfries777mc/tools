@@ -172,7 +172,7 @@ function slidesSite(){ // the site's own reader (slides/ai-slides.js norm/readAl
   const box=vm.createContext({}); vm.runInContext(app.slice(a,b)+';this.LAY=LAY;this.LAYS=LAYS;',box);
   const aijs=fs.readFileSync(path.join(ROOT,'ai.js'),'utf8'), pj=/function parseJSON\(t\)\{[\s\S]*?\n\}/.exec(aijs)[0];
   const el=()=>new Proxy({},{get:(t,k)=>k==='addEventListener'?()=>{}:t[k],set:(t,k,v)=>{ t[k]=v; return true; }});
-  const ctx=vm.createContext({window:{FSL:{LAYS:box.LAYS,LAY:box.LAY}},FFT:{T:x=>x,F:x=>x},document:{getElementById:el},FFP:P,console});
+  const ctx=vm.createContext({window:{addEventListener(){},FSL:{LAYS:box.LAYS,LAY:box.LAY}},FFT:{T:x=>x,F:x=>x},document:{getElementById:el},FFP:P,console});
   vm.runInContext(pj+';FFAI={parseJSON:parseJSON,isLocal:function(){return true;}};',ctx);
   vm.runInContext(fs.readFileSync(path.join(ROOT,'slides','ai-slides.js'),'utf8'),ctx);
   const LISTS=['bullets','left','right'], TEXTS=['title','subtitle','leftTitle','rightTitle','stat','caption','quote','by','notes'];
