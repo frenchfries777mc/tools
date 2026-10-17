@@ -90,6 +90,12 @@ FFT.add({
   header nav a{color:var(--dim); text-decoration:none; font-size:15px; margin-left:18px;}
   header nav a:hover{color:var(--text);}
   header .right{display:flex; align-items:center;}
+  .tb{display:inline-flex; align-items:center; gap:2px; margin-left:16px; padding:3px; background:var(--panel); border:1px solid var(--line); border-radius:12px; vertical-align:middle;}
+  .tb [data-ff-account] .ffa-wrap{margin-left:0; display:inline-flex; align-items:center; gap:2px;}
+  .tb .ffa-set,.tb .ffa-bell,.tb .ffa-vote,.tb .ffa-chip{background:transparent!important; border:0!important; margin:0!important; border-radius:9px!important; padding:6px 10px!important;}
+  .tb .ffa-set:hover,.tb .ffa-bell:hover,.tb .ffa-vote:hover,.tb .ffa-chip:hover{background:rgba(255,201,60,.12)!important;}
+  .tb .ffa-btn{margin-left:2px; border-radius:9px;}
+  @media(max-width:520px){ .tb{margin-left:8px;} .tb .ffa-set,.tb .ffa-bell,.tb .ffa-vote,.tb .ffa-chip{padding:6px 7px!important;} }
   .langSel{background:var(--panel); color:var(--dim); border:1px solid var(--line); border-radius:8px; padding:6px 9px; font:inherit; font-size:14px; cursor:pointer; margin-left:16px;}
   .langSel:hover{color:var(--text); border-color:var(--fry);}
   .swr{margin:0 auto 0 20px;}
@@ -180,7 +186,7 @@ FFT.add({
   <header>
     <a class="logo" href="./"><img class="lg" src="logo.svg" alt="" width="34" height="34"><span>FRENCHFRIES<b>777</b></span></a>
     <div class="swr"><span class="sw" data-notr><a href="https://frenchfries777mc.github.io/games/">Games</a><a href="https://frenchfries777mc.github.io/educations/">Educations</a><a class="on" href="./" aria-current="page">Tools</a></span></div>
-    <div class="right"><nav><a href="#tools">도구</a><a href="patchnotes/">패치노트</a><a href="https://frenchfries777mc.github.io/games/wiki/#tools">위키</a><a href="https://github.com/frenchfries777mc" target="_blank" rel="noopener">GitHub</a></nav><span data-ff-account data-ff-nohub></span></div>
+    <div class="right"><nav><a href="#tools">도구</a><a href="patchnotes/">패치노트</a><a href="https://frenchfries777mc.github.io/games/wiki/#tools">위키</a><a href="https://github.com/frenchfries777mc" target="_blank" rel="noopener">GitHub</a></nav><div class="tb"><span data-ff-account data-ff-nohub></span></div></div>
   </header>
 
   <section class="hero">
