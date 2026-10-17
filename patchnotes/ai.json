@@ -4,6 +4,15 @@
  "notes": [
   {
    "date": "2026-10-17",
+   "build": "v15",
+   "title": "Kaggle 학습 노트",
+   "items": [
+    "Kaggle에서 학습시키는 노트 추가",
+    "Kaggle 비밀 값으로 토큰 읽기, 끊기면 이어서 학습"
+   ]
+  },
+  {
+   "date": "2026-10-17",
    "build": "v14",
    "title": "3차 학습자료 보강",
    "items": [
