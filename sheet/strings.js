@@ -505,3 +505,35 @@ FFT.add({
 "{0}개 항목으로 피벗을 만들었어요":["Made a pivot with {0} items", "Dinámica creada con {0} elementos", "Croisé créé avec {0} éléments", "Pivot-Tabelle mit {0} Einträgen erstellt", "{0}項目のピボットを作りました"],
 "{0}열":["Column {0}", "Columna {0}", "Colonne {0}", "Spalte {0}", "{0}列"]
 });
+
+/* v12: merged cells, per-side borders */
+FFT.add({
+"테두리 설정 (칸마다 쪽, 색)":["Border settings (per side, color)", "Ajustes de bordes (por lado, color)", "Réglages des bordures (par côté, couleur)", "Rahmen-Einstellungen (pro Seite, Farbe)", "罫線の設定 (辺ごと、色)"],
+"테두리 설정":["Border settings", "Ajustes de bordes", "Réglages des bordures", "Rahmen-Einstellungen", "罫線の設定"],
+"칸 병합 / 병합 풀기":["Merge cells / Unmerge", "Combinar / separar celdas", "Fusionner / séparer les cellules", "Zellen verbinden / trennen", "セルを結合 / 結合を解除"],
+"병합":["Merge", "Combinar", "Fusionner", "Verbinden", "結合"],
+"선택 범위 병합 풀기":["Unmerge selected cells", "Separar celdas seleccionadas", "Séparer les cellules sélectionnées", "Auswahl trennen", "選択範囲の結合を解除"],
+"굵기":["Thickness", "Grosor", "Épaisseur", "Stärke", "太さ"],
+"얇게":["Thin", "Fino", "Fin", "Dünn", "細く"],
+"보통":["Medium", "Medio", "Moyen", "Mittel", "普通"],
+"모두":["All", "Todos", "Tous", "Alle", "すべて"],
+"바깥쪽":["Outside", "Exterior", "Extérieur", "Außen", "外側"],
+"안쪽":["Inside", "Interior", "Intérieur", "Innen", "内側"],
+"위쪽":["Top", "Superior", "Haut", "Oben", "上"],
+"아래쪽":["Bottom", "Inferior", "Bas", "Unten", "下"],
+"왼쪽":["Left", "Izquierda", "Gauche", "Links", "左"],
+"오른쪽":["Right", "Derecha", "Droite", "Rechts", "右"],
+"없음":["None", "Ninguno", "Aucun", "Keine", "なし"],
+"고른 범위에 바로 적용돼요. 색과 굵기를 바꾸고 다른 쪽을 눌러 이어서 꾸밀 수 있어요.":["Applied to the selection right away. Change the color and thickness, then tap another side to keep decorating.", "Se aplica al instante a la selección. Cambia el color y el grosor y pulsa otro lado para seguir.", "S’applique tout de suite à la sélection. Change la couleur et l’épaisseur puis touche un autre côté pour continuer.", "Wird sofort auf die Auswahl angewendet. Farbe und Stärke ändern und eine andere Seite antippen, um weiterzumachen.", "選んだ範囲にすぐ適用されます。色と太さを変えて別の辺を押すと続けて飾れます。"],
+"병합했어요":["Merged", "Combinadas", "Fusionnées", "Verbunden", "結合しました"],
+"병합했어요. 왼쪽 위 칸의 내용만 남아요":["Merged. Only the top-left cell’s content is kept", "Combinadas. Solo se conserva el contenido de la celda superior izquierda", "Fusionnées. Seul le contenu de la cellule en haut à gauche est conservé", "Verbunden. Nur der Inhalt der Zelle oben links bleibt", "結合しました。左上のセルの内容だけが残ります"],
+"병합을 풀었어요":["Unmerged", "Separadas", "Séparées", "Getrennt", "結合を解除しました"],
+"두 칸 이상 고르세요":["Select two or more cells", "Selecciona dos o más celdas", "Sélectionne au moins deux cellules", "Wähle zwei oder mehr Zellen", "2つ以上のセルを選んでください"],
+"테두리를 없앴어요":["Borders removed", "Bordes quitados", "Bordures supprimées", "Rahmen entfernt", "罫線を消しました"],
+"범위가 너무 커요":["The range is too large", "El rango es demasiado grande", "La plage est trop grande", "Der Bereich ist zu groß", "範囲が大きすぎます"]
+});
+
+/* v12 (thickness label) */
+FFT.add({
+"두껍게":["Thick", "Grueso", "Épais", "Dick", "太く"]
+});
