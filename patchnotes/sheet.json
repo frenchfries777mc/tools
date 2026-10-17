@@ -4,6 +4,21 @@
  "notes": [
   {
    "date": "2026-10-17",
+   "build": "v20",
+   "title": "함수 70개 추가",
+   "items": [
+    "삼각함수 SIN·COS·TAN·ATAN2 등과 FACT·COMBIN·PERMUT·GCD·LCM 추가",
+    "통계 함수 추가 (GEOMEAN, PERCENTILE, QUARTILE, RSQ, FORECAST, NORM.DIST, NORM.INV, BINOM.DIST, POISSON.DIST 등)",
+    "SWITCH, ISNA, ISERR, N, T 등 조건·정보 함수 추가",
+    "TEXTBEFORE, TEXTAFTER, TEXTSPLIT, NUMBERVALUE, UNICHAR 등 글자 함수 추가",
+    "EOMONTH, WORKDAY, NETWORKDAYS, WEEKNUM, DATEVALUE 날짜 함수 추가",
+    "재무 함수 PMT, FV, PV, NPER, NPV, IRR, SLN 추가",
+    "LOOKUP, TRANSPOSE, VSTACK, HSTACK 추가 (배열 함수는 넘쳐 채움)",
+    "함수 도움말과 자동 완성에 새 함수 모두 표시"
+   ]
+  },
+  {
+   "date": "2026-10-17",
    "build": "v19",
    "title": "배열 함수와 넘쳐 채우기",
    "items": [
