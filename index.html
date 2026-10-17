@@ -14,6 +14,19 @@
 <script src="i18n.js"></script>
 <script>
 FFT.add({
+"공부하고 만들 때 쓰는 도구 모음이에요. 링크를 열면 설치 없이 바로 써요. AI는 Fry Sheet의 수식·그래프·표 만들기에 가장 잘 맞아요.":["A set of tools for studying and making. Open a link and use it right away, no install. The AI works best for building formulas, charts and tables in Fry Sheet.", "Un conjunto de herramientas para estudiar y crear. Abre el enlace y úsalo sin instalar. La IA funciona mejor para crear fórmulas, gráficos y tablas en Fry Sheet.", "Une boîte à outils pour étudier et créer. Ouvre le lien et utilise-la sans installer. L’IA est surtout utile pour créer des formules, des graphiques et des tableaux dans Fry Sheet.", "Eine Werkzeugsammlung zum Lernen und Gestalten. Link öffnen und sofort loslegen, ohne Installation. Die KI hilft am besten beim Erstellen von Formeln, Diagrammen und Tabellen in Fry Sheet.", "勉強やものづくりに使うツール集です。リンクを開くだけで、インストールなしですぐ使えます。AIはFry Sheetの数式・グラフ・表づくりでいちばん力を発揮します。"],
+"수식·그래프·표 AI":["AI for formulas, charts, tables", "IA para fórmulas, gráficos, tablas", "IA pour formules, graphiques, tableaux", "KI für Formeln, Diagramme, Tabellen", "数式・グラフ・表のAI"],
+"수식·그래프·표를 AI가 만들어 줘요. 짧고 정해진 형식이라 결과를 확인하고 바로 쓸 수 있어요":["The AI makes formulas, charts and tables. The output is short and in a fixed format, so you can check it and use it right away", "La IA crea fórmulas, gráficos y tablas. El resultado es corto y de formato fijo, así que puedes revisarlo y usarlo enseguida", "L’IA crée des formules, des graphiques et des tableaux. Le résultat est court et de format fixe : tu peux le vérifier et l’utiliser tout de suite", "Die KI erstellt Formeln, Diagramme und Tabellen. Das Ergebnis ist kurz und hat ein festes Format, du kannst es prüfen und gleich verwenden", "数式・グラフ・表をAIが作ります。短くて形式が決まっているので、確認してすぐ使えます"],
+"=AI(\"영어로 번역\", A2)처럼 쓰면 칸마다 답을 채워요. 표에 대한 질문·요약도 되지만 답이 틀릴 수 있어요":["Write =AI(\"translate to English\", A2) to fill each cell with an answer. It can also answer questions about a table or summarize it, but answers can be wrong", "Escribe =AI(\"traducir al inglés\", A2) para rellenar cada celda. También responde preguntas sobre la tabla o la resume, pero puede equivocarse", "Écris =AI(\"traduire en anglais\", A2) pour remplir chaque cellule. Elle peut aussi répondre sur le tableau ou le résumer, mais elle peut se tromper", "Mit =AI(\"ins Englische übersetzen\", A2) füllt die KI jede Zelle. Sie kann auch Fragen zur Tabelle beantworten oder sie zusammenfassen, kann sich aber irren", "=AI(\"英語に翻訳\", A2) と書くとセルごとに答えが入ります。表への質問や要約もできますが、答えが間違うことがあります"],
+"한 블록씩 실행":["Step-by-step run", "Ejecución paso a paso", "Exécution pas à pas", "Schrittweise ausführen", "1ブロックずつ実行"],
+"AI 도우미(시험 기능)로 블록 초안을 받을 수도 있어요. 거친 초안이라 직접 확인하고 고쳐야 해요":["There is also an AI helper (experimental) that drafts blocks. It is a rough draft, so check and fix it yourself", "También hay un asistente IA (experimental) que esboza bloques. Es un borrador, así que revísalo y corrígelo tú", "Il y a aussi un assistant IA (expérimental) qui ébauche des blocs. C’est un brouillon : vérifie-le et corrige-le toi-même", "Es gibt auch einen KI-Helfer (experimentell), der Blöcke entwirft. Es ist nur ein grober Entwurf, prüfe und korrigiere ihn selbst", "ブロックの下書きを作るAIアシスタント（試験機能）もあります。粗い下書きなので、自分で確認して直してください"],
+"슬라이드 편집":["Slide editing", "Edición de diapositivas", "Édition de diapositives", "Folien bearbeiten", "スライド編集"],
+"글자를 눌러 바로 고치고, 테마와 레이아웃을 골라 발표 자료를 만들어요. 바로 발표하거나 파워포인트 파일로 받아요.":["Tap text to edit it, pick a theme and layout, and build your presentation. Present right away or download a PowerPoint file.", "Toca el texto para editarlo, elige tema y diseño y crea tu presentación. Preséntala o descárgala en PowerPoint.", "Touche le texte pour le modifier, choisis un thème et une mise en page, puis crée ta présentation. Présente-la ou télécharge-la en PowerPoint.", "Text antippen und ändern, Thema und Layout wählen und die Präsentation bauen. Gleich präsentieren oder als PowerPoint herunterladen.", "文字をタップして直し、テーマとレイアウトを選んで発表資料を作ります。そのまま発表したり、PowerPointファイルで保存したりできます。"],
+"주제를 쓰면 AI가 초안을 써 주는 시험 기능도 있어요. 거친 초안이라 내용과 사실은 직접 확인하고 고쳐야 해요":["There is also an experimental feature where the AI drafts slides from a topic. It is a rough draft, so check the content and facts yourself", "También hay una función experimental en la que la IA redacta un borrador a partir de un tema. Es un borrador: revisa el contenido y los datos tú", "Il existe aussi une fonction expérimentale où l’IA rédige un brouillon à partir d’un sujet. C’est un brouillon : vérifie le contenu et les faits toi-même", "Es gibt auch eine experimentelle Funktion, bei der die KI aus einem Thema einen Entwurf schreibt. Er ist grob, prüfe Inhalt und Fakten selbst", "テーマからAIが下書きを書く試験機能もあります。粗い下書きなので、内容や事実は自分で確認して直してください"],
+"탐구 과제":["Inquiry tasks", "Tareas de investigación", "Défis d’investigation", "Forschungsaufgaben", "探究課題"],
+"AI 도우미(시험 기능)에게 원리를 물어볼 수 있어요. 답이 틀릴 수 있으니 직접 확인해요":["You can ask the AI helper (experimental) about the idea behind an experiment. Answers can be wrong, so check them yourself", "Puedes preguntar al asistente IA (experimental) por el principio de un experimento. Puede equivocarse, así que compruébalo tú", "Tu peux demander le principe d’une expérience à l’assistant IA (expérimental). Il peut se tromper : vérifie toi-même", "Den KI-Helfer (experimentell) kannst du nach dem Prinzip eines Experiments fragen. Antworten können falsch sein, prüfe sie selbst", "AIアシスタント（試験機能）に実験の原理を質問できます。答えが間違うことがあるので、自分で確認してください"],
+"AI는 필요할 때만":["AI only when you need it", "IA solo cuando la necesitas", "L’IA seulement au besoin", "KI nur bei Bedarf", "AIは必要なときだけ"],
+"AI는 선택 기능이에요. 자체 AI가 기기 안에서 돌아가서 키가 없어도 되지만 작은 모델이라 틀릴 수 있어요. 가장 잘 맞는 곳은 Fry Sheet의 수식·그래프·표예요. 원하면 Claude, Gemini, OpenAI 키를 넣어 더 나은 답을 받을 수 있어요.":["AI is optional. The built-in AI runs on your device, so no key is needed, but it is a small model and can be wrong. It fits best with formulas, charts and tables in Fry Sheet. Add a Claude, Gemini or OpenAI key if you want better answers.", "La IA es opcional. La IA integrada funciona en tu dispositivo, sin clave, pero es un modelo pequeño y puede equivocarse. Encaja mejor con fórmulas, gráficos y tablas de Fry Sheet. Añade una clave de Claude, Gemini u OpenAI para mejores respuestas.", "L’IA est facultative. L’IA intégrée tourne sur ton appareil, sans clé, mais c’est un petit modèle qui peut se tromper. Elle convient surtout aux formules, graphiques et tableaux de Fry Sheet. Ajoute une clé Claude, Gemini ou OpenAI pour de meilleures réponses.", "KI ist optional. Die eingebaute KI läuft auf deinem Gerät, ohne Schlüssel, ist aber ein kleines Modell und kann sich irren. Am besten passt sie zu Formeln, Diagrammen und Tabellen in Fry Sheet. Mit einem Claude-, Gemini- oder OpenAI-Schlüssel bekommst du bessere Antworten.", "AIは任意の機能です。内蔵AIは端末の中で動くのでキーは不要ですが、小さなモデルなので間違うことがあります。いちばん合うのはFry Sheetの数式・グラフ・表です。より良い答えが欲しければClaude、Gemini、OpenAIのキーを入れられます。"],
 '패치노트':['Patch notes','Notas de versión','Notes de mise à jour','Patchnotes','パッチノート'],
 '위키':['Wiki','Wiki','Wiki','Wiki','ウィキ'],
 'AI 가르치기':['Teach the AI','Enseñar a la IA','Enseigner à l’IA','KI beibringen','AIに教える'],
@@ -24,13 +37,9 @@ FFT.add({
 '함수 그래프, 확률, 삼각함수, 포물선 운동, 진자, 용수철, 빛의 굴절, 물결파 간섭, 옴의 법칙':['Function graphs, probability, trigonometry, projectile motion, pendulum, spring, refraction, wave interference, Ohm’s law','Gráficas de funciones, probabilidad, trigonometría, tiro parabólico, péndulo, resorte, refracción, interferencia de ondas, ley de Ohm','Graphes de fonctions, probabilités, trigonométrie, tir parabolique, pendule, ressort, réfraction, interférences, loi d’Ohm','Funktionsgraphen, Wahrscheinlichkeit, Trigonometrie, schiefer Wurf, Pendel, Feder, Brechung, Welleninterferenz, ohmsches Gesetz','関数のグラフ、確率、三角関数、放物運動、振り子、ばね、光の屈折、水面波の干渉、オームの法則'],
 '끌어서 바꾸는 시뮬레이션과 실시간 측정값, 해 볼 만한 탐구 과제':['Simulations you can drag, live measurements and things to try','Simulaciones que se arrastran, medidas en vivo y retos para probar','Simulations à manipuler, mesures en direct et défis à essayer','Simulationen zum Ziehen, Live-Messwerte und Ideen zum Ausprobieren','ドラッグで変えられるシミュレーション、リアルタイムの測定値、試してみたい課題'],
 '기록한 표로 그래프와 추세선을 그리고 CSV로 내보내기':['Graph your records with a trend line and export them as CSV','Grafica tus registros con línea de tendencia y expórtalos en CSV','Trace tes mesures avec une droite de tendance et exporte-les en CSV','Messwerte mit Trendlinie zeichnen und als CSV exportieren','記録した表でグラフと近似直線を描き、CSVで書き出し'],
-'AI 도우미가 지금 값과 내 기록으로 원리를 설명':['The AI helper explains the idea using your current values and records','El asistente IA explica la idea con tus valores y registros','L’assistant IA explique le principe avec tes valeurs et tes mesures','Der KI-Helfer erklärt das Prinzip mit deinen Werten und Messungen','AIアシスタントが今の値と記録を使って原理を説明'],
 '발표 자료':['Presentations','Presentaciones','Présentations','Präsentationen','プレゼン資料'],
-'AI가 슬라이드 작성':['AI writes the slides','La IA escribe las diapositivas','L’IA écrit les diapositives','KI schreibt die Folien','AIがスライドを作成'],
 'PPTX 파일':['PPTX file','Archivo PPTX','Fichier PPTX','PPTX-Datei','PPTXファイル'],
 '발표 모드':['Presenter mode','Modo presentación','Mode présentation','Präsentationsmodus','発表モード'],
-'주제만 쓰면 AI가 발표 자료를 만들어 주고, 직접 고쳐서 바로 발표하거나 파워포인트 파일로 받아요.':['Write a topic and the AI makes the slides. Edit them, present right away, or download a PowerPoint file.','Escribe un tema y la IA crea las diapositivas. Edítalas, preséntalas o descárgalas en PowerPoint.','Écris un sujet et l’IA crée les diapositives. Modifie-les, présente-les ou télécharge-les en PowerPoint.','Schreib ein Thema und die KI erstellt die Folien. Bearbeiten, gleich präsentieren oder als PowerPoint herunterladen.','テーマを書くとAIがスライドを作ります。直してすぐ発表したり、PowerPointファイルで保存したりできます。'],
-'주제와 슬라이드 수만 정하면 AI가 제목, 글머리표, 발표자 메모까지 채워요':['Pick a topic and a slide count; the AI fills in titles, bullets and speaker notes','Elige tema y número de diapositivas; la IA pone títulos, viñetas y notas','Choisis le sujet et le nombre de diapositives ; l’IA remplit titres, puces et notes','Thema und Folienzahl wählen, die KI füllt Titel, Stichpunkte und Notizen','テーマと枚数を決めるだけで、AIがタイトル、箇条書き、発表者メモまで書きます'],
 '글자를 눌러 바로 고치고, 슬라이드마다 다시 쓰기·더 짧게·더 자세히':['Tap text to edit, plus rewrite, shorter and more detail for each slide','Toca el texto para editarlo; reescribir, más corto o más detalle en cada diapositiva','Touche un texte pour le modifier ; réécrire, raccourcir ou détailler chaque diapositive','Text antippen und ändern; jede Folie neu schreiben, kürzen oder ausführlicher machen','文字をタップして直せて、スライドごとに書き直し・短く・詳しく'],
 '테마 6가지, 레이아웃 7가지, 끌어서 순서 바꾸기':['6 themes, 7 layouts, drag to reorder','6 temas, 7 diseños, arrastra para ordenar','6 thèmes, 7 mises en page, glisser pour réordonner','6 Designs, 7 Layouts, Reihenfolge per Ziehen','テーマ6種、レイアウト7種、ドラッグで並べ替え'],
 '전체 화면 발표, 고칠 수 있는 PPTX 파일, PDF 인쇄':['Full-screen presenting, an editable PPTX file, PDF printing','Presentación a pantalla completa, PPTX editable, impresión en PDF','Présentation plein écran, fichier PPTX modifiable, impression PDF','Vollbild-Präsentation, bearbeitbare PPTX-Datei, PDF-Druck','全画面での発表、編集できるPPTXファイル、PDF印刷'],
@@ -38,14 +47,9 @@ FFT.add({
 '도구':['Tools','Herramientas','Outils','Werkzeuge','ツール'],
 'Frenchfries777이 만든 브라우저 도구 모음. 설치 없이 바로 써요.':['Browser tools made by Frenchfries777. No install needed.','Herramientas web de Frenchfries777. Sin instalar nada.','Outils web de Frenchfries777. Sans installation.','Browser-Werkzeuge von Frenchfries777. Ohne Installation.','Frenchfries777が作ったブラウザツール集。インストール不要。'],
 '설치 없이 브라우저에서 바로 쓰는 도구들':['Tools that run right in your browser','Herramientas que funcionan en el navegador','Des outils qui tournent dans le navigateur','Werkzeuge direkt im Browser','ブラウザですぐ使えるツール'],
-'공부하고 만들 때 쓰는 도구 모음이에요. 링크를 열면 설치 없이 바로 써요.':['Tools for studying and making things. Open the link and start, no install.','Herramientas para estudiar y crear. Abre el enlace y empieza.','Des outils pour apprendre et créer. Ouvrez le lien, c’est tout.','Werkzeuge zum Lernen und Bauen. Link öffnen, loslegen.','勉強やものづくりに使うツール集。リンクを開けばすぐ使えます。'],
 '스프레드시트':['Spreadsheet','Hoja de cálculo','Tableur','Tabellenkalkulation','表計算'],
 '수식 · 차트 · 엑셀 파일':['Formulas · charts · Excel files','Fórmulas · gráficos · Excel','Formules · graphiques · Excel','Formeln · Diagramme · Excel','数式・グラフ・Excel'],
 'AI 도우미':['AI helper','Asistente IA','Assistant IA','KI-Helfer','AIアシスタント'],
-'=AI("영어로 번역", A2)처럼 쓰면 AI가 칸마다 답을 채워요. 표에 대해 묻기, 수식 만들기, 표 만들기도 돼요':['Write =AI("translate to English", A2) and the AI fills each cell. It can also answer questions about a table, write formulas and make tables','Escribe =AI("traducir al inglés", A2) y la IA rellena cada celda. También responde sobre la tabla, escribe fórmulas y crea tablas','Écris =AI("traduire en anglais", A2) et l’IA remplit chaque cellule. Elle répond aussi sur le tableau, écrit des formules et crée des tableaux','Schreib =AI("ins Englische übersetzen", A2) und die KI füllt jede Zelle. Sie beantwortet auch Fragen zur Tabelle, schreibt Formeln und erstellt Tabellen','=AI("英語に翻訳", A2) と書くとAIがセルごとに答えを入れます。表への質問、数式づくり、表づくりもできます'],
-'만들고 싶은 페이지를 글로 쓰면 AI가 블록을 짜 주고, 지금 블록도 고쳐 줘요':['Describe the page you want and the AI builds the blocks, or changes the ones you have','Describe la página y la IA crea los bloques o cambia los que tienes','Décris la page voulue et l’IA crée les blocs ou modifie les tiens','Beschreibe die Seite und die KI baut die Blöcke oder ändert deine','作りたいページを文章で書くとAIがブロックを組み、今のブロックも直してくれます'],
-'키 없이 쓰는 AI':['AI with no key','IA sin clave','IA sans clé','KI ohne Schlüssel','キーなしで使えるAI'],
-'자체 AI가 기기 안에서 돌아가서 키가 없어도 돼요. 원하면 Claude, Gemini, OpenAI 키를 넣어 더 똑똑하게 쓸 수 있어요.':['The built-in AI runs on your device, so no key is needed. Add a Claude, Gemini or OpenAI key if you want smarter answers.','La IA integrada funciona en tu dispositivo, sin clave. Añade una clave de Claude, Gemini u OpenAI para respuestas más listas.','L’IA intégrée tourne sur ton appareil, sans clé. Ajoute une clé Claude, Gemini ou OpenAI pour des réponses plus fines.','Die eingebaute KI läuft auf deinem Gerät, ohne Schlüssel. Mit einem Claude-, Gemini- oder OpenAI-Schlüssel wird sie klüger.','内蔵AIが端末の中で動くのでキーは不要です。もっと賢く使いたいならClaude、Gemini、OpenAIのキーを入れられます。'],
 '자동 저장':['Autosave','Guardado automático','Sauvegarde auto','Automatisch gespeichert','自動保存'],
 '로그인 없이':['No login','Sin iniciar sesión','Sans connexion','Ohne Anmeldung','ログイン不要'],
 '엑셀처럼 표를 만들고 계산하는 스프레드시트예요. 엑셀 파일을 열고 저장할 수 있고, 몇 가지 기능을 더했어요.':['A spreadsheet for tables and calculations, like Excel. It opens and saves Excel files, with a few extras.','Una hoja de cálculo como Excel. Abre y guarda archivos Excel, con algunos extras.','Un tableur comme Excel. Il ouvre et enregistre des fichiers Excel, avec quelques bonus.','Eine Tabellenkalkulation wie Excel. Öffnet und speichert Excel-Dateien, mit Extras.','Excelのように表を作って計算する表計算ソフト。Excelファイルの読み書きと、少しの追加機能があります。'],
@@ -152,6 +156,7 @@ FFT.add({
   .fl .tags span{background:rgba(167,139,250,.08); color:#e4dcff; border:1px solid rgba(167,139,250,.28);}
   .fl .desc{color:#aba5bd;} .fl .desc li::marker{color:#a78bfa;}
   .fl .play{background:#a78bfa; color:#140a2b;}
+  .tags span.ai{border-color:var(--fry); color:var(--fry); font-weight:600;}
   .why{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin:40px 0 0;}
   .why > div{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px 18px 16px;}
   .why .ic{font-size:24px;} .why h3{margin:6px 0 4px; font-size:16.5px;} .why p{margin:0; color:var(--dim); font-size:14.5px;}
@@ -179,7 +184,7 @@ FFT.add({
   <section class="hero">
     <span class="eyebrow">Handy Tools</span>
     <h1>Frenchfries777<br><span>Tools</span></h1>
-    <p>공부하고 만들 때 쓰는 도구 모음이에요. 링크를 열면 설치 없이 바로 써요.</p>
+    <p>공부하고 만들 때 쓰는 도구 모음이에요. 링크를 열면 설치 없이 바로 써요. AI는 Fry Sheet의 수식·그래프·표 만들기에 가장 잘 맞아요.</p>
   </section>
 
   <section class="games" id="tools">
@@ -188,13 +193,14 @@ FFT.add({
       <div class="body">
         <h2>FRY <b>SHEET</b></h2>
         <div class="motto"><i></i>SPREADSHEET<i></i></div>
-        <div class="tags"><span>수식 · 차트 · 엑셀 파일</span><span>AI 도우미</span><span>자동 저장</span><span>로그인 없이</span></div>
+        <div class="tags"><span>수식 · 차트 · 엑셀 파일</span><span class="ai">수식·그래프·표 AI</span><span>자동 저장</span><span>로그인 없이</span></div>
         <div class="desc">
           엑셀처럼 표를 만들고 계산하는 스프레드시트예요. 엑셀 파일을 열고 저장할 수 있고, 몇 가지 기능을 더했어요.
           <ul>
             <li>SUM, IF, VLOOKUP 같은 함수 60여 개</li>
             <li>표를 고치면 바로 바뀌는 차트, 색 단계, 데이터 막대, 체크박스</li>
-            <li>=AI("영어로 번역", A2)처럼 쓰면 AI가 칸마다 답을 채워요. 표에 대해 묻기, 수식 만들기, 표 만들기도 돼요</li>
+            <li>수식·그래프·표를 AI가 만들어 줘요. 짧고 정해진 형식이라 결과를 확인하고 바로 쓸 수 있어요</li>
+            <li>=AI("영어로 번역", A2)처럼 쓰면 칸마다 답을 채워요. 표에 대한 질문·요약도 되지만 답이 틀릴 수 있어요</li>
             <li>아이패드에서도 손가락으로 범위 선택과 채우기</li>
           </ul>
         </div>
@@ -206,14 +212,14 @@ FFT.add({
       <div class="body">
         <h2>BLOCK <b>HTML</b></h2>
         <div class="motto"><i></i>JAVASCRIPT BLOCKS<i></i></div>
-        <div class="tags"><span>블록 → HTML 파일</span><span>AI 도우미</span><span>예제 5개</span><span>로그인 없이</span></div>
+        <div class="tags"><span>블록 → HTML 파일</span><span>한 블록씩 실행</span><span>예제 5개</span><span>로그인 없이</span></div>
         <div class="desc">
           자바스크립트를 블록으로 조립해 웹페이지를 만들고, 완성되면 HTML 파일로 받아요. 만든 페이지는 어디서든 열려요.
           <ul>
             <li>제목, 버튼, 입력칸, 그림판 같은 화면 블록</li>
             <li>누르면, 키를 누르면, 초마다 같은 이벤트와 조건, 반복, 변수, 함수</li>
             <li>바로 보이는 미리보기와 읽기 쉬운 HTML 코드</li>
-            <li>만들고 싶은 페이지를 글로 쓰면 AI가 블록을 짜 주고, 지금 블록도 고쳐 줘요</li>
+            <li>AI 도우미(시험 기능)로 블록 초안을 받을 수도 있어요. 거친 초안이라 직접 확인하고 고쳐야 해요</li>
           </ul>
         </div>
         <div class="acts"><a class="play" href="blocks/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
@@ -223,12 +229,12 @@ FFT.add({
       <a class="shot" href="slides/" aria-label="Fry Slides 열기"><span class="badge">발표 자료</span><img src="slides.webp" alt="Fry Slides 화면" loading="lazy"></a>
       <div class="body">
         <h2>FRY <b>SLIDES</b></h2>
-        <div class="motto"><i></i>AI PRESENTATIONS<i></i></div>
-        <div class="tags"><span>AI가 슬라이드 작성</span><span>PPTX 파일</span><span>발표 모드</span><span>로그인 없이</span></div>
+        <div class="motto"><i></i>PRESENTATIONS<i></i></div>
+        <div class="tags"><span>슬라이드 편집</span><span>PPTX 파일</span><span>발표 모드</span><span>로그인 없이</span></div>
         <div class="desc">
-          주제만 쓰면 AI가 발표 자료를 만들어 주고, 직접 고쳐서 바로 발표하거나 파워포인트 파일로 받아요.
+          글자를 눌러 바로 고치고, 테마와 레이아웃을 골라 발표 자료를 만들어요. 바로 발표하거나 파워포인트 파일로 받아요.
           <ul>
-            <li>주제와 슬라이드 수만 정하면 AI가 제목, 글머리표, 발표자 메모까지 채워요</li>
+            <li>주제를 쓰면 AI가 초안을 써 주는 시험 기능도 있어요. 거친 초안이라 내용과 사실은 직접 확인하고 고쳐야 해요</li>
             <li>글자를 눌러 바로 고치고, 슬라이드마다 다시 쓰기·더 짧게·더 자세히</li>
             <li>테마 6가지, 레이아웃 7가지, 끌어서 순서 바꾸기</li>
             <li>전체 화면 발표, 고칠 수 있는 PPTX 파일, PDF 인쇄</li>
@@ -242,14 +248,14 @@ FFT.add({
       <div class="body">
         <h2>FRY <b>LAB</b></h2>
         <div class="motto"><i></i>SCIENCE &amp; MATH LAB<i></i></div>
-        <div class="tags"><span>실험 9가지</span><span>기록·그래프·CSV</span><span>AI 도우미</span><span>로그인 없이</span></div>
+        <div class="tags"><span>실험 9가지</span><span>기록·그래프·CSV</span><span>탐구 과제</span><span>로그인 없이</span></div>
         <div class="desc">
           슬라이더를 움직이면 바로 바뀌는 중고등 과학·수학 실험실이에요. 값을 재서 표에 기록하고, 그래프로 규칙을 찾아요.
           <ul>
             <li>함수 그래프, 확률, 삼각함수, 포물선 운동, 진자, 용수철, 빛의 굴절, 물결파 간섭, 옴의 법칙</li>
             <li>끌어서 바꾸는 시뮬레이션과 실시간 측정값, 해 볼 만한 탐구 과제</li>
             <li>기록한 표로 그래프와 추세선을 그리고 CSV로 내보내기</li>
-            <li>AI 도우미가 지금 값과 내 기록으로 원리를 설명</li>
+            <li>AI 도우미(시험 기능)에게 원리를 물어볼 수 있어요. 답이 틀릴 수 있으니 직접 확인해요</li>
           </ul>
         </div>
         <div class="acts"><a class="play" href="lab/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
@@ -260,7 +266,7 @@ FFT.add({
   <section class="why">
     <div><div class="ic">⚡</div><h3>바로 시작</h3><p>다운로드 없이 브라우저에서 열면 끝. PC와 태블릿, 휴대폰 모두 돼요.</p></div>
     <div><div class="ic">💾</div><h3>내 기기에 저장</h3><p>만든 것은 이 브라우저에 자동으로 저장되고, 파일로도 받을 수 있어요.</p></div>
-    <div><div class="ic">🤖</div><h3>키 없이 쓰는 AI</h3><p>자체 AI가 기기 안에서 돌아가서 키가 없어도 돼요. 원하면 Claude, Gemini, OpenAI 키를 넣어 더 똑똑하게 쓸 수 있어요.</p></div>
+    <div><div class="ic">🤖</div><h3>AI는 필요할 때만</h3><p>AI는 선택 기능이에요. 자체 AI가 기기 안에서 돌아가서 키가 없어도 되지만 작은 모델이라 틀릴 수 있어요. 가장 잘 맞는 곳은 Fry Sheet의 수식·그래프·표예요. 원하면 Claude, Gemini, OpenAI 키를 넣어 더 나은 답을 받을 수 있어요.</p></div>
     <div><div class="ic">📤</div><h3>파일로 주고받기</h3><p>엑셀, 파워포인트, HTML 파일로 내보내서 다른 프로그램이나 친구에게 그대로 넘겨요.</p></div>
   </section>
 

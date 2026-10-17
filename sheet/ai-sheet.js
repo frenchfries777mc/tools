@@ -43,7 +43,7 @@ function rerunSel(){
 }
 
 /* ---------- dialog ---------- */
-var mode='ask', lastAnswer='', lastFormula='', lastTable=null, lastChart=null;
+var mode='formula', lastAnswer='', lastFormula='', lastTable=null, lastChart=null;
 function tableText(){
   var s=A.sel(), a=A.act(), g=(s.r1===s.r2&&s.c1===s.c2)?A.region(a.r,a.c):s;
   if(!g) return null;
