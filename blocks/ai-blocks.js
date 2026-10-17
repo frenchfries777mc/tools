@@ -120,9 +120,10 @@ function check(xml){
 
 /* ---------- dialog ---------- */
 var before=null, busyNow=false, plan=null;
-var CHIPS={new:[['🔢 숫자 맞히기','1부터 100 사이 숫자 맞히기 게임. 크다/작다를 알려 주고 맞히면 축하해 줘요'],['👆 클릭 카운터','버튼을 누를 때마다 숫자가 올라가는 클릭 카운터'],['📝 할 일 목록','할 일을 쓰고 추가 버튼을 누르면 목록에 쌓이는 할 일 목록'],['⚽ 튀는 공','그림판에 공이 튀어 다니는 애니메이션'],['⚡ 반응 속도','화면이 초록색으로 바뀌면 빨리 누르는 반응 속도 게임']],
+var readyEx=''; // set when a chip with a ready-made example was tapped, until the text is edited
+var CHIPS={new:[['🔢 숫자 맞히기','1부터 100 사이 숫자 맞히기 게임. 크다/작다를 알려 주고 맞히면 축하해 줘요','숫자 맞히기'],['👆 클릭 카운터','버튼을 누를 때마다 숫자가 올라가는 클릭 카운터','클릭 카운터'],['📝 할 일 목록','할 일을 쓰고 추가 버튼을 누르면 목록에 쌓이는 할 일 목록','할 일 목록'],['⚽ 튀는 공','그림판에 공이 튀어 다니는 애니메이션','통통 튀는 공'],['⚡ 반응 속도','화면이 초록색으로 바뀌면 빨리 누르는 반응 속도 게임','반응 속도']],
   edit:[['🌙 밤하늘 배경','배경을 밤하늘로 바꿔 줘'],['🔊 버튼 소리','버튼을 누르면 소리가 나게 해 줘'],['🎉 10점 축하','점수가 10이 되면 축하 메시지를 띄워 줘'],['🔠 큰 빨간 제목','제목 글자를 더 크고 빨갛게 해 줘']]};
-function chips(){ var box=$('baiChips'), list=hasWork()?CHIPS.edit.concat(CHIPS.new.slice(0,2)):CHIPS.new; box.innerHTML=''; list.forEach(function(c){ var b=document.createElement('button'), full=T(c[1]); b.textContent=T(c[0]); b.title=full; b.onclick=function(){ $('baiQ').value=full; $('baiQ').focus(); }; box.appendChild(b); }); }
+function chips(){ var box=$('baiChips'), list=hasWork()?CHIPS.edit.concat(CHIPS.new.slice(0,2)):CHIPS.new; box.innerHTML=''; list.forEach(function(c){ var b=document.createElement('button'), full=T(c[1]); b.textContent=T(c[0]); b.title=full; b.onclick=function(){ $('baiQ').value=full; $('baiQ').focus(); if(c[2]) readyEx=c[2]; }; box.appendChild(b); }); }
 function prep(){ chips(); renderFix(); renderHist(); $('baiQ').placeholder=hasWork()?T('예: 버튼을 누를 때마다 배경색이 바뀌게 해 줘'):T('예: 1부터 100 사이 숫자 맞히기 게임. 크다/작다를 알려 주고 맞히면 축하해 줘요'); }
 function msg(t,cls){ var o=$('baiMsg'); o.textContent=t||''; o.className='baiMsg'+(cls?' '+cls:''); }
 var t0=0, tick=null, chars=0, phase='';
@@ -146,7 +147,10 @@ function run(q,modify,tries,errText,lastOut,fix,calm){
     catch(e){ throw new Error(T('AI가 만든 블록을 읽지 못했어요. 다시 해 보세요')); } // no silent second pass: it used to rewrite everything from scratch
   });
 }
-function go(){ var q=$('baiQ').value.trim(); if(!q) return $('baiQ').focus(); if(busyNow) return; exec(q,q,false); }
+function readyGo(q){ var ex=BH_EXAMPLES.filter(function(e){ return e.name===readyEx; })[0]; if(!ex) return false;
+  before={name:$('projName').value, ws:Blockly.serialization.workspaces.save(ws)};
+  B.loadXML(ex.xml()); B.arrange(); $('projName').value=T(ex.name); B.save(); addHist(q,false,'new'); $('baiUndo').hidden=false; msg(T('다 만들었어요! 미리보기에서 확인해 보세요'),'ok'); close(); B.toast(T('검증된 예시를 넣었어요')); readyEx=''; return true; }
+function go(){ var q=$('baiQ').value.trim(); if(!q) return $('baiQ').focus(); if(busyNow) return; if(readyEx&&readyGo(q)) return; exec(q,q,false); }
 /* "틀린 곳을 알려 주세요": the AI changes only the part the person says is wrong (PLAN: edit), the whole project goes along */
 function fixGo(){
   var c=$('baiFix').value.trim(); if(!c) return $('baiFix').focus(); if(busyNow||!hasWork()) return;
@@ -185,6 +189,7 @@ function open(){ prep(); $('baiDlg').classList.add('open'); setTimeout(function(
 function close(){ $('baiDlg').classList.remove('open'); }
 $('aiBtn').onclick=open;
 $('baiGo').onclick=go;
+$('baiQ').addEventListener('input',function(){ readyEx=''; });
 $('baiFixGo').onclick=fixGo;
 $('baiFix').addEventListener('keydown',function(e){ if(e.key==='Enter'&&!e.isComposing){ e.preventDefault(); fixGo(); } });
 $('baiHistClear').onclick=function(){ setHist([]); renderHist(); };
