@@ -280,5 +280,6 @@ FFT.add({
 (function(){ if(!window.FFAuth) return; var a=document.getElementById('teachLink');
   FFAuth.ready.then(function(sb){ function chk(){ if(!FFAuth.user()){ a.hidden=true; return; } sb.rpc('ff_is_admin').then(function(r){ a.hidden=r.data!==true; }); } chk(); FFAuth.onChange(chk); }); })();
 </script>
+<script src="https://frenchfries777mc.github.io/games/ff-splash.js" defer></script>
 </body>
 </html>
