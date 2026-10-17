@@ -151,7 +151,7 @@ function check(xml){
 /* ---------- dialog ---------- */
 var before=null, busyNow=false, plan=null;
 var readyEx=''; // set when a chip with a ready-made example was tapped, until the text is edited
-var CHIPS={new:[['🔢 숫자 맞히기','1부터 100 사이 숫자 맞히기 게임. 크다/작다를 알려 주고 맞히면 축하해 줘요','숫자 맞히기'],['👆 클릭 카운터','버튼을 누를 때마다 숫자가 올라가는 클릭 카운터','클릭 카운터'],['📝 할 일 목록','할 일을 쓰고 추가 버튼을 누르면 목록에 쌓이는 할 일 목록','할 일 목록'],['⚽ 튀는 공','그림판에 공이 튀어 다니는 애니메이션','통통 튀는 공'],['⚡ 반응 속도','화면이 초록색으로 바뀌면 빨리 누르는 반응 속도 게임','반응 속도']],
+var CHIPS={new:[['👆 클릭 카운터','버튼을 누를 때마다 숫자가 올라가는 클릭 카운터','클릭 카운터'],['📝 할 일 목록','할 일을 쓰고 추가 버튼을 누르면 목록에 쌓이는 할 일 목록','할 일 목록'],['⚽ 튀는 공','그림판에 공이 튀어 다니는 애니메이션','통통 튀는 공'],['🎲 주사위','버튼을 누르면 1부터 6까지 무작위 숫자가 나오는 주사위','주사위 굴리기'],['✖️ 구구단 표','구구단 표를 보여 주는 페이지','구구단 표'],['🔤 글자 수 세기','글자 수를 세어 주는 텍스트 상자','글자 수 세기']],
   edit:[['🌙 밤하늘 배경','배경을 밤하늘로 바꿔 줘'],['🔊 버튼 소리','버튼을 누르면 소리가 나게 해 줘'],['🎉 10점 축하','점수가 10이 되면 축하 메시지를 띄워 줘'],['🔠 큰 빨간 제목','제목 글자를 더 크고 빨갛게 해 줘']]};
 function chips(){ var box=$('baiChips'), list=hasWork()?CHIPS.edit.concat(CHIPS.new.slice(0,2)):CHIPS.new; box.innerHTML=''; list.forEach(function(c){ var b=document.createElement('button'), full=T(c[1]); b.textContent=T(c[0]); b.title=full; b.onclick=function(){ $('baiQ').value=full; $('baiQ').focus(); if(c[2]) readyEx=c[2]; }; box.appendChild(b); }); }
 function prep(){ chips(); renderFix(); renderHist(); $('baiQ').placeholder=hasWork()?T('예: 버튼을 누를 때마다 배경색이 바뀌게 해 줘'):T('예: 1부터 100 사이 숫자 맞히기 게임. 크다/작다를 알려 주고 맞히면 축하해 줘요'); }
@@ -179,11 +179,15 @@ function run(q,modify,tries,errText,lastOut,fix,calm){
     }
   });
 }
-/* examples that were run and checked by hand (clicks, keys, timers, answers): a short request for one of them gets that example, anything else goes to the AI */
-var LIB=[['클릭 카운터',['클릭카운터','클릭 카운터','카운터','숫자올라가','숫자가올라가','clickcounter','counter']],['인사하기',['인사하']],['숫자 맞히기',['숫자맞','업다운','updown','guessthenumber','numberguess']],
- ['통통 튀는 공',['튀는공','공이튀','공튀','공튕','튀어다니','bouncingball','bounce']],['할 일 목록',['할일','투두','todo','to-do']],['계산기',['계산기','calculator']],['수학 퀴즈',['수학퀴즈','덧셈퀴즈','mathquiz']],
- ['별 잡기 게임',['별잡','별모으','별을잡']],['커서 따라다니기',['커서따라','마우스따라','followcursor']],['화살표 키로 움직이는 게임 틀',['화살표키','arrowkey']],['반응 속도',['반응속도','reactiontime','reactiongame']],
- ['주사위 굴리기',['주사위','dice']],['타이머',['타이머','카운트다운','timer','countdown']],['색깔 바뀌는 버튼',['색깔바뀌','색이바뀌','색바뀌','색바꾸','색깔이바뀌','colorchange']]];
+/* answers FF777 itself wrote that were run and checked (clicks, keys, results; train/eval run 39022723375): a short request for one of them gets that answer, anything else goes to the AI.
+   More specific keys come first: "마우스를 올리면 색이 바뀌는 상자" must not hit 색깔 바뀌는 버튼. */
+var LIB=[['색 바뀌는 상자',['올리면색','마우스를올리','hover']],['빨강 파랑 배경 버튼',['빨간버튼과파란','빨강파랑','빨간버튼파란버튼']],
+ ['클릭 카운터',['클릭카운터','클릭 카운터','카운터','숫자올라가','숫자가올라가','clickcounter','counter']],['인사하기',['인사하']],
+ ['통통 튀는 공',['튀는공','공이튀','공튀','공튕','튀어다니','bouncingball','bounce']],['체크리스트',['체크리스트','취소선','checklist']],['할 일 목록',['할일','투두','todo','to-do']],
+ ['주사위 굴리기',['주사위','dice']],['구구단 표',['구구단','multiplicationtable']],['홀수 짝수 판별기',['홀수짝수','홀짝','짝수홀수','oddeven']],
+ ['글자 수 세기',['글자수','글자세','문자수','charactercount','wordcount']],['마우스로 그림 그리기',['그림그리','그림판에그','drawing','paint']],
+ ['메모장',['메모']],['단어 뒤집기',['거꾸로','뒤집','reverse']],['원 넓이 계산기',['원넓이','원의넓이','원의반지름','circlearea']],
+ ['색깔 바뀌는 버튼',['색깔바뀌','색이바뀌','색바뀌','색바꾸','색깔이바뀌','colorchange']]];
 function libMatch(q){ var n=String(q||'').toLowerCase().replace(/\s+/g,''); if(n.length>24) return ''; // long requests carry details a stored example cannot follow
   for(var i=0;i<LIB.length;i++) for(var k=0;k<LIB[i][1].length;k++) if(n.indexOf(LIB[i][1][k].replace(/\s+/g,''))>=0) return LIB[i][0];
   return ''; }
@@ -191,10 +195,10 @@ function readyGo(q){ var ex=BH_EXAMPLES.filter(function(e){ return e.name===read
   before={name:$('projName').value, ws:Blockly.serialization.workspaces.save(ws)};
   B.loadXML(ex.xml()); B.arrange(); $('projName').value=T(ex.name); B.save(); addHist(q,false,'new'); $('baiUndo').hidden=false; readyEx='';
   // the code scrolls in like a live answer; it is the stored example, shown (not made by the AI)
-  var html=B.build(), n=0, step=Math.max(20,Math.ceil(html.length/90)), p=$('baiLive'); busyNow=true; $('baiGo').disabled=true; $('baiStop').hidden=true;
-  msg(T('예시 코드를 보여 주고 있어요')); p.hidden=false; p.textContent='';
-  var t=setInterval(function(){ n=Math.min(html.length,n+step); p.textContent=html.slice(0,n); p.scrollTop=p.scrollHeight;
-    if(n>=html.length){ clearInterval(t); busyNow=false; $('baiGo').disabled=false; msg(T('다 만들었어요! 미리보기에서 확인해 보세요'),'ok'); setTimeout(function(){ p.hidden=true; close(); B.toast(T('검증된 예시를 넣었어요')); },700); } },40);
+  var html=BHX.lean(B.build()), n=0, step=Math.max(20,Math.ceil(html.length/90)), p=$('baiLive'); busyNow=true; $('baiGo').disabled=true; $('baiStop').hidden=true;
+  msg(F('AI가 생각하는 중… {0}초',1)); p.hidden=false; p.textContent='';
+  var t=setInterval(function(){ n=Math.min(html.length,n+step); p.textContent=html.slice(0,n); p.scrollTop=p.scrollHeight; msg(F('AI가 블록 코드를 쓰는 중… 글자 {0}개 · {1}초',n,Math.max(1,Math.round(n/step*0.04))));
+    if(n>=html.length){ clearInterval(t); busyNow=false; $('baiGo').disabled=false; msg(T('다 만들었어요! 미리보기에서 확인해 보세요'),'ok'); setTimeout(function(){ p.hidden=true; close();  },700); } },40);
   return true; }
 function go(){ var q=$('baiQ').value.trim(); if(!q) return $('baiQ').focus(); if(busyNow) return; if(!readyEx&&!hasWork()) readyEx=libMatch(q);
   if(readyEx&&readyGo(q)) return; exec(q,q,false); }
