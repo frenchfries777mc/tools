@@ -10,3 +10,7 @@ Browser tools, served at https://frenchfries777mc.github.io/tools/ (GitHub Pages
 - `i18n.js`: shared page translation (ko, en, es, fr, de, ja), same saved language as the games (`arenaClashLang`).
 
 Everything a person makes is saved in their own browser (localStorage) and can be downloaded as a file. No login.
+
+## Patch notes
+
+Every update to a program adds a note at the top of `patchnotes/<id>.json` (ids: `site`, `sheet`, `blocks`, `slides`, `lab`, `ai`), in the same shape the games use: `notes[].date / build / title / items`. Short noun-ending items, bump the build (`v1`, `v2`, ...) for each new code change. The page `patchnotes/` shows them with one tab per program. After merging, tell the hub thread so the wiki gets the change.
