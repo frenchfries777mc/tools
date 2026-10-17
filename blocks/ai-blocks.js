@@ -52,7 +52,7 @@ var SYS=['You build web pages for the "Block HTML" editor (Blockly). Reply with 
 'Rules:',
 '- Use only the block types in the catalog, with exactly the field, value and statement names shown. {element} blocks go inside the page_root BODY statement (or inside an el_box), chained with <next>.',
 '- Exactly one page_root. Every element needs a short unique NAME; event and action blocks point at elements through their EL field using that NAME.',
-'- Event blocks (ev_start, ev_click, ev_change, ev_key, ev_timer) are separate top-level blocks next to the page. Give every top-level block x and y attributes so they do not overlap (page at x="20" y="20", scripts from x="440").',
+'- Event blocks (ev_start, ev_click, ev_change, ev_key, ev_keyup, ev_timer) are separate top-level blocks next to the page. Give every top-level block x and y attributes so they do not overlap (page at x="20" y="20", scripts from x="440").',
 '- Number inputs take <shadow type="math_number"><field name="NUM">…</field></shadow>, text inputs <shadow type="text"><field name="TEXT">…</field></shadow>, colors <shadow type="val_color"><field name="COLOR">#rrggbb</field></shadow>.',
 '- Variables: declare them in <variables><variable>name</variable></variables> and use <field name="VAR">name</field>.',
 '- Mutations: controls_if <mutation elseif="N" else="1"></mutation> with IF0/DO0, IF1/DO1…, ELSE; text_join and lists_create_with <mutation items="N"></mutation> with ADD0…; procedures_defnoreturn <mutation><arg name="x"></arg></mutation> + field NAME + statement STACK; procedures_callnoreturn <mutation name="f"><arg name="x"></arg></mutation> + values ARG0….',
