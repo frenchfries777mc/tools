@@ -153,12 +153,22 @@ function buildCtl(){
     row.querySelector('.u').textContent=q.u||'';
     var r=row.querySelector('input[type=range]'), nb=row.querySelector('.num'); r.id=id; r.min=q.min; r.max=q.max; r.step=q.step; nb.min=q.min; nb.max=q.max; nb.step=q.step; nb.setAttribute('aria-label',T(q.l));
     r.addEventListener('input',function(){ setP(q.id,+r.value,'r'); });
+    var pv=row.querySelector('.pv'); [['−',-1,'값 줄이기'],['+',1,'값 늘리기']].forEach(function(o){ var b=document.createElement('button'); b.type='button'; b.className='stp'; b.textContent=o[0]; b.setAttribute('aria-label',T(o[2])+' · '+T(q.l)); b.title=T(o[2]);
+      pv.insertBefore(b,o[1]<0?nb:row.querySelector('.u')); stepper(b,q,o[1]); });
     nb.addEventListener('change',function(){ var v=parseFloat(String(nb.value).replace(',','.')); if(!isFinite(v)){ syncCtl(); return; } setP(q.id,clamp(v,q.min,q.max)); });
     nb.addEventListener('keydown',function(e){ if(e.key==='Enter') nb.blur(); });
     if(q.pre){ var pr=document.createElement('div'); pr.className='pre'; q.pre.forEach(function(o){ var b=document.createElement('button'); b.textContent=T(o[1]); b.dataset.v=o[0]; b.title=o[0]+(q.u?' '+q.u:''); b.onclick=function(){ setP(q.id,o[0]); }; pr.appendChild(b); }); row.appendChild(pr); }
   });
   syncCtl();
 }
+/* − / + buttons: one step per tap, repeating while held (pointer events, so mouse, pen and touch all work) */
+function stepP(q,dir){ if(!cur) return; var st0=q.step||1, dd=Math.max(decimals(st0),pdef(q)), v=+cur.p[q.id]+dir*st0;
+  v=clamp(+v.toFixed(dd+2),q.min,q.max); setP(q.id,+v.toFixed(dd+2)); }
+function stepper(b,q,dir){ var t1=null,t2=null,held=false; function stop(){ clearTimeout(t1); clearInterval(t2); t1=t2=null; }
+  b.addEventListener('pointerdown',function(e){ if(e.button>0) return; e.preventDefault(); held=true; stop(); stepP(q,dir); t1=setTimeout(function(){ t2=setInterval(function(){ stepP(q,dir); },70); },420); try{ b.setPointerCapture(e.pointerId); }catch(er){} });
+  ['pointerup','pointercancel','lostpointercapture'].forEach(function(n){ b.addEventListener(n,stop); });
+  b.addEventListener('click',function(e){ if(held){ held=false; return; } stepP(q,dir); }); /* keyboard (Enter / Space) has no pointerdown */
+  b.addEventListener('contextmenu',function(e){ e.preventDefault(); }); }
 function syncCtl(from){
   cur.params.forEach(function(q){ var row=$('ctl').querySelector('.prm[data-k="'+q.id+'"]'); if(!row) return; var v=cur.p[q.id];
     row.hidden=q.show?!q.show(cur.p):false;

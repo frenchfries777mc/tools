@@ -318,5 +318,7 @@ FFT.add({
 '기기 안에서 도는 자체 AI는 작아서 짧게 답해요. 더 자세한 설명이 필요하면 AI 설정에서 Claude, Gemini, OpenAI 키를 넣어 보세요.':['The built-in AI runs on your device and is small, so it answers briefly. For fuller explanations, add a Claude, Gemini or OpenAI key in AI settings.','La IA integrada funciona en tu dispositivo y es pequeña, así que responde brevemente. Para explicaciones más completas, añade una clave de Claude, Gemini u OpenAI en Ajustes de IA.','L’IA intégrée tourne sur ton appareil et elle est petite : elle répond brièvement. Pour des explications plus complètes, ajoute une clé Claude, Gemini ou OpenAI dans les réglages IA.','Die eingebaute KI läuft auf deinem Gerät und ist klein, daher antwortet sie kurz. Für ausführlichere Erklärungen trag in den KI-Einstellungen einen Claude-, Gemini- oder OpenAI-Schlüssel ein.','端末の中で動く内蔵AIは小さいので短く答えます。くわしい説明がほしいときは、AI設定で Claude、Gemini、OpenAI のキーを入れてみてください。'],
 '이 실험에서 궁금한 것을 물어보세요':['Ask anything about this experiment','Pregunta lo que quieras sobre este experimento','Pose une question sur cette expérience','Frag etwas zu diesem Experiment','この実験で気になることを聞いてみよう'],
 '물어보기':['Ask','Preguntar','Demander','Fragen','聞く'],
-'멈추기':['Stop','Detener','Arrêter','Stopp','止める']
+'멈추기':['Stop','Detener','Arrêter','Stopp','止める'],
+'값 줄이기':['Decrease','Disminuir','Diminuer','Verringern','減らす'],
+'값 늘리기':['Increase','Aumentar','Augmenter','Erhöhen','増やす']
 });
