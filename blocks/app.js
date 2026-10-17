@@ -60,6 +60,32 @@ ws.addChangeListener(function(e){
 var refT=null, lastPrev='';
 ws.addChangeListener(function(e){ if(e.isUiEvent||loading) return; clearTimeout(refT); refT=setTimeout(function(){ refresh(false); },450); save(); });
 var runState='run'; // run | pause | stop  (top bar: 실행하기 / 멈추기 / 정지하기)
+/* ---------- step-by-step run: one block at a time, with variable values ---------- */
+var dbgOn=false, dbgCurId=null, dbgPrev={}, dbgT=null;
+function dbgSay(t){ $('dbgState').textContent=t; }
+function dbgBtns(on){ $('dbgNext').disabled=$('dbgFree').disabled=!on; }
+function dbgUnlight(){ if(dbgCurId){ try{ ws.highlightBlock(dbgCurId,false); }catch(e){} dbgCurId=null; } }
+function dbgReset(){ clearTimeout(dbgT); dbgUnlight(); dbgPrev={}; if(!dbgOn) return; dbgBtns(false); dbgSay(T('이벤트를 기다리는 중 · 버튼을 누르거나 키를 눌러 보세요')); $('dbgCur').textContent='…'; $('dbgCur').style.borderLeftColor='#38bdf8'; $('dbgVars').innerHTML=''; }
+function dbgShow(d){
+  clearTimeout(dbgT); dbgUnlight(); var b=ws.getBlockById(d.id);
+  if(b){ dbgCurId=d.id; try{ ws.highlightBlock(d.id,true); ws.centerOnBlock(d.id); }catch(e){}
+    $('dbgCur').textContent=b.toString(90).replace(/\s+/g,' '); $('dbgCur').style.borderLeftColor=b.getColour(); }
+  var box=$('dbgVars'); box.innerHTML=''; var now={};
+  (d.vars||[]).forEach(function(v){ now[v[0]]=v[1]; var sp=document.createElement('span'); if(dbgPrev[v[0]]!==undefined&&dbgPrev[v[0]]!==v[1]) sp.className='ch'; var nb=document.createElement('b'); nb.textContent=v[0]+' = '; sp.appendChild(nb); sp.appendChild(document.createTextNode(v[1]===''?T('(비어 있음)'):v[1])); box.appendChild(sp); });
+  if(!(d.vars||[]).length){ var n=document.createElement('span'); n.className='none'; n.textContent=T('변수가 없어요'); box.appendChild(n); }
+  dbgPrev=now; dbgBtns(true); dbgSay(T('지금 할 블록 · 다음 블록을 누르면 실행해요')); }
+function dbgSend(mode){ var w=$('frame').contentWindow; if(!w) return; dbgBtns(false); dbgSay(T('실행 중…')); w.postMessage({ffbhDbg:mode},'*');
+  clearTimeout(dbgT); dbgT=setTimeout(function(){ if(dbgOn&&!$('dbgNext').disabled) return; dbgUnlight(); dbgSay(T('끝났어요 · 다음 이벤트(누르기·키·시간)를 기다려요')); },900); }
+function setDbg(on){ dbgOn=on; $('stepBtn').classList.toggle('on',on); $('dbgBar').hidden=!on; dbgUnlight();
+  if(on){ if(runState==='stop'||runState==='pause') setRun('run'); lastPrev=''; refresh('run'); showPreview(); toast(T('한 블록씩 실행을 켰어요')); }
+  else { lastPrev=''; refresh('run'); toast(T('한 블록씩 실행을 껐어요')); } }
+$('stepBtn').onclick=function(){ setDbg(!dbgOn); };
+$('dbgNext').onclick=function(){ dbgSend('next'); };
+$('dbgFree').onclick=function(){ dbgSend('free'); };
+$('dbgOff').onclick=function(){ setDbg(false); };
+window.addEventListener('message',function(e){ var d=e.data; if(!d||e.source!==$('frame').contentWindow||!dbgOn) return;
+  if(d.ffbhStep) dbgShow(d.ffbhStep);
+  else if(d.ffbhStepEnd){ clearTimeout(dbgT); dbgUnlight(); dbgBtns(false); dbgSay(T('끝났어요 · 다음 이벤트(누르기·키·시간)를 기다려요')); } });
 function setRun(st){ runState=st; $('runBtn').classList.toggle('on',st==='run'); $('pauseBtn').classList.toggle('on',st==='pause'); $('stopBtn').classList.toggle('on',st==='stop');
   $('pauseBtn').querySelector('.lb').textContent=st==='pause'?T('이어하기'):T('멈추기'); $('pPrev').classList.toggle('paused',st==='pause'); }
 function stoppedPage(){ return '<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;height:100vh;display:grid;place-items:center;background:#0b0d13;color:#9aa3b5;font:15px sans-serif;text-align:center;padding:20px;box-sizing:border-box}b{color:#3fe08f}</style></head><body><div>⏹ '+T('정지했어요')+'<br><br><b>'+T('▶ 실행하기를 누르면 처음부터 다시 시작해요')+'</b></div></body></html>'; }
@@ -67,8 +93,8 @@ function showPreview(){ if(window.matchMedia('(max-width:900px)').matches&&docum
 function refresh(force){
   if(runState==='stop'&&force!=='run'){ if($('pCode').classList.contains('on')) showCode(); return; }
   checkPics();
-  var prev; try{ prev=BH.build(ws,{trap:true}); }catch(err){ console.error(err); return; }
-  if(force||prev!==lastPrev){ lastPrev=prev; clearLog(); $('frame').srcdoc=prev; if(runState==='pause') setRun('run'); }
+  var prev; try{ prev=BH.build(ws,{trap:true,debug:dbgOn}); }catch(err){ console.error(err); return; }
+  if(force||prev!==lastPrev){ lastPrev=prev; clearLog(); dbgReset(); $('frame').srcdoc=prev; if(runState==='pause') setRun('run'); }
   if($('pCode').classList.contains('on')) showCode();
 }
 /* "내 그림" blocks without a picture: warning on the block, hint toast, placeholder in the preview */

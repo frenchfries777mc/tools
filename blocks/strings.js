@@ -1,5 +1,18 @@
 /* Block HTML strings: [en, es, fr, de, ja] */
 FFT.add({
+'한 블록씩 실행':["Run one block at a time", "Ejecutar bloque a bloque", "Exécuter bloc par bloc", "Block für Block ausführen", "1ブロックずつ実行"],
+'블록을 한 개씩 실행하며 살펴봐요':["Run the blocks one by one and watch what happens", "Ejecuta los bloques uno a uno y mira qué pasa", "Exécutez les blocs un par un et observez", "Führe die Blöcke einzeln aus und beobachte", "ブロックを1つずつ実行して様子を見ます"],
+'다음 블록 ▶':["Next block ▶", "Siguiente bloque ▶", "Bloc suivant ▶", "Nächster Block ▶", "次のブロック ▶"],
+'끝까지 실행':["Run to the end", "Ejecutar hasta el final", "Exécuter jusqu’à la fin", "Bis zum Ende ausführen", "最後まで実行"],
+'그만하기':["Stop stepping", "Dejar de ir paso a paso", "Arrêter le pas à pas", "Einzelschritt beenden", "やめる"],
+'이벤트를 기다리는 중 · 버튼을 누르거나 키를 눌러 보세요':["Waiting for an event · press a button or a key", "Esperando un evento · pulsa un botón o una tecla", "En attente d’un événement · appuyez sur un bouton ou une touche", "Warte auf ein Ereignis · drücke eine Taste oder einen Button", "イベント待ち · ボタンやキーを押してみて"],
+'(비어 있음)':["(empty)", "(vacío)", "(vide)", "(leer)", "(空)"],
+'변수가 없어요':["No variables", "No hay variables", "Aucune variable", "Keine Variablen", "変数はありません"],
+'지금 할 블록 · 다음 블록을 누르면 실행해요':["Block to run now · press Next block to run it", "Bloque actual · pulsa Siguiente bloque para ejecutarlo", "Bloc à exécuter · appuyez sur Bloc suivant", "Aktueller Block · mit Nächster Block ausführen", "次に実行するブロック · 「次のブロック」で実行します"],
+'실행 중…':["Running…", "Ejecutando…", "Exécution…", "Läuft…", "実行中…"],
+'끝났어요 · 다음 이벤트(누르기·키·시간)를 기다려요':["Done · waiting for the next event (press, key, time)", "Terminado · esperando el siguiente evento (clic, tecla, tiempo)", "Terminé · en attente du prochain événement (clic, touche, temps)", "Fertig · warte auf das nächste Ereignis (Klick, Taste, Zeit)", "終わりました · 次のイベント（押す・キー・時間）を待っています"],
+'한 블록씩 실행을 켰어요':["Step-by-step run is on", "Ejecución paso a paso activada", "Exécution pas à pas activée", "Einzelschrittmodus an", "1ブロックずつ実行をオンにしました"],
+'한 블록씩 실행을 껐어요':["Step-by-step run is off", "Ejecución paso a paso desactivada", "Exécution pas à pas désactivée", "Einzelschrittmodus aus", "1ブロックずつ実行をオフにしました"],
 '체크하면 배경 없이 그린 부분만 저장돼요 (바둑판 무늬 = 투명)':["When checked, only what you draw is saved, with no background (checkerboard = transparent)", "Si lo marcas, solo se guarda lo dibujado, sin fondo (cuadros = transparente)", "Cochée, seul le dessin est enregistré, sans fond (damier = transparent)", "Angehakt wird nur das Gezeichnete ohne Hintergrund gespeichert (Karomuster = transparent)", "チェックすると背景なしで描いた部分だけ保存されます（市松模様＝透明）"],
 '그림을 골라 주세요':["Choose a picture", "Elige una imagen", "Choisissez une image", "Bild auswählen", "絵を選んでください"],
 '그림을 골라 주세요. 그림판으로 그리거나 사진을 넣어요':["Choose a picture. Draw one in the painter or add a photo", "Elige una imagen. Dibuja una o añade una foto", "Choisissez une image. Dessinez-en une ou ajoutez une photo", "Bild auswählen. Zeichne eines oder füge ein Foto hinzu", "絵を選んでください。お絵かきで描くか写真を入れます"],
