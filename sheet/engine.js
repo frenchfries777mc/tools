@@ -395,10 +395,14 @@ function formatValue(v,nf){
     if(nf==='n2') return v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
     if(nf==='p0') return (v*100).toLocaleString('en-US',{maximumFractionDigits:0})+'%';
     if(nf==='p1') return (v*100).toLocaleString('en-US',{minimumFractionDigits:1,maximumFractionDigits:1})+'%';
+    if(nf==='w0') return (v<0?'-':'')+'₩'+Math.abs(v).toLocaleString('en-US',{maximumFractionDigits:0});
+    if(nf==='u2') return (v<0?'-':'')+'$'+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
     return fmtGeneral(v);
   }
   return String(v);
 }
+var ERRH={'#DIV/0!':'0으로 나눌 수 없어요. 나누는 칸이 0이거나 비어 있는지 확인하세요','#REF!':'없어진 칸이나 시트를 가리키고 있어요. 지운 행·열이 있는지 확인하세요','#NAME?':'함수 이름이나 이름표를 알 수 없어요. 철자를 확인하세요','#VALUE!':'숫자가 아닌 글자로 계산하려고 해요. 계산에 쓰는 칸을 확인하세요','#N/A':'찾는 값이 표에 없어요','#NUM!':'계산할 수 없는 숫자예요. 범위나 순서 값을 확인하세요','#ERROR!':'수식 모양이 맞지 않아요. 괄호와 쉼표를 확인하세요','#AI!':'AI 함수를 쓸 수 없어요. AI 설정을 확인하세요'};
+function errHint(v){ return isErr(v)?(ERRH[v.e]||''):''; }
 
 /* =AI("instruction", cells…): the answer comes from the page's AI hook (api.aiHook), which caches
    results by prompt so a recalculation never asks twice. Without a hook it is #AI!. */
@@ -418,6 +422,6 @@ def('AI',function(a){
 
 var api={K:K,RC:RC,KC:KC,colName:colName,colIdx:colIdx,addr:addr,parseAddr:parseAddr,parseRange:parseRange,rangeStr:rangeStr,
   tokenize:tokenize,rebuild:rebuild,parse:parse,literal:literal,shiftFormula:shiftFormula,adjustFormula:adjustFormula,renameSheetInFormula:renameSheetInFormula,
-  Engine:Engine,Err:Err,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,FN:FN,quoteSheet:quoteSheet};
+  Engine:Engine,Err:Err,errHint:errHint,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,FN:FN,quoteSheet:quoteSheet};
 if(typeof module!=='undefined'&&module.exports) module.exports=api; else root.FSE=api;
 })(this);
