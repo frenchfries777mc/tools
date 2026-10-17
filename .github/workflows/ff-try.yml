@@ -48,3 +48,22 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: python -u train/ff_try.py "${{ inputs.model }}" ${{ matrix.shard }} "${{ inputs.shards }}" "${{ inputs.max_new_tokens }}" "${{ inputs.requests }}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: answers-${{ matrix.shard }}
+          path: out
+  check:
+    needs: try
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: answers
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install --no-save jsdom
+      - run: node train/ff_check.js answers
