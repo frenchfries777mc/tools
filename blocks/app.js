@@ -425,5 +425,5 @@ P.list=P.list.filter(function(e){ return e&&e.id; });
   if(!ok){ P.cur=null; createProject(T(BH_EXAMPLES[0].name),function(){ loadXML(BH_EXAMPLES[0].xml()); arrange(); }); } })();
 setTimeout(syncBar,50);
 if(EMB){ var embTry=0, embSend=function(){ var html=''; try{ if(P.cur===EMB) html=finalHTML(); }catch(e){ console.error(e); } if(!html&&++embTry<10) return setTimeout(embSend,300); try{ parent.postMessage({ffbhBuilt:1,id:EMB,html:html},'*'); }catch(e){} }; setTimeout(embSend,350); }
-window.__bh={ws:ws,copy:copyBlock,paste:pasteBlock,deleteAll:deleteAll,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,loadJSON:loadJSON,save:saveNow,toast:toast,projects:function(){ return P; },examples:BH_EXAMPLES};
+window.__bh={showPreview:showPreview,showHTML:function(h){ custom=String(h); $('codeEdit').value=custom; $('codeReset').hidden=$('codeNote').hidden=false; clearTimeout(customT); if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=custom; setPane('code'); },clearHTML:function(){ dropCustom(false); },ws:ws,copy:copyBlock,paste:pasteBlock,deleteAll:deleteAll,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,loadJSON:loadJSON,save:saveNow,toast:toast,projects:function(){ return P; },examples:BH_EXAMPLES};
 })();

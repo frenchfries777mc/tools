@@ -294,7 +294,7 @@ button,input,select{font:inherit; color:inherit;}
 <div class="ov" id="baiDlg"><div class="dlg">
   <div class="dh"><h3>AI 도우미 (시험 기능)</h3><button class="tbtn" id="baiSet">AI 설정</button><button class="x" id="baiClose" aria-label="닫기">×</button></div>
   <div class="bai" id="baiBody">
-    <p class="baiNote">만들거나 고치고 싶은 것을 글로 써 주세요. AI가 지금 블록을 고칠지 새로 짤지는 알아서 정해요. 결과는 거친 초안이에요. 안 돌아가거나 틀릴 수 있으니 미리보기로 확인하고 직접 고쳐 주세요. 작고 단순한 페이지에 더 잘 맞아요.</p>
+    <p class="baiNote">만들거나 고치고 싶은 것을 글로 써 주세요. AI가 HTML로 페이지를 쓰고, 그걸 블록으로 바꿔 줘요. 블록으로 못 바꾸는 부분은 'HTML·JS 직접 쓰기' 블록에 들어가요. 결과는 거친 초안이에요. 안 돌아가거나 틀릴 수 있으니 미리보기로 확인하고 직접 고쳐 주세요. 작고 단순한 페이지에 더 잘 맞아요.</p>
     <textarea id="baiQ" data-notr spellcheck="false"></textarea>
     <div class="baiFix" id="baiFixBox" hidden>
       <div class="exLab">틀린 곳을 알려 주세요</div>
@@ -334,6 +334,7 @@ button,input,select{font:inherit; color:inherit;}
 <script src="app.js"></script>
 <script src="../ai.js"></script>
 <script src="../ai-prompts.js"></script>
+<script src="html2blocks.js"></script>
 <script src="ai-blocks.js"></script>
 </body>
 </html>

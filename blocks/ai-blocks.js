@@ -73,8 +73,37 @@ function buildPrompt(q,modify,prevErr,prevOut){
   return p;
 }
 
+/* ---------- the AI writes a normal HTML page, which is then turned into blocks (html2blocks.js) ----------
+   The XML path below (check, repair) stays for train/check.js, which validates the training data with it. */
+var SYS_HTML=['You write one complete web page for a child who is learning to code. Reply with ONLY the HTML document inside one ```html code block, nothing else.',
+'Rules:',
+'- One file: <!DOCTYPE html>, <html>, <head> with <meta charset="UTF-8"> and a <title>, then <body>. No libraries, no external files, no images from the internet, no import.',
+'- Put an id on every element that the script reads or changes. Use plain tags: h1 h2 h3, p, button, input (type text or number), canvas (width and height attributes), ul (empty list filled by script), div to group things. Avoid class and style attributes; if you need CSS, write it once in a single <style> in <head>.',
+'- All JavaScript goes in one <script> at the end of <body>: plain JavaScript, document.getElementById, element.addEventListener("click", function () { ... }), setInterval(function () { ... }, milliseconds) for animation, canvas getContext("2d") for drawing. Declare variables with let or const at the top of the script.',
+'- The page must work by itself the moment it opens, be small enough to read, and have no bugs: check that every id used in the script exists.',
+'- Write the visible text in the language of the request.',
+'- When a current page is given: if the request changes, adds to or fixes it, return the WHOLE changed page and keep everything the person did not ask to change; if the request asks for a different page, write a new one.'].join('\n');
+function currentHTML(){ return B.build(); }
+function buildHTMLPrompt(q,modify,errText,lastOut){
+  var p=modify?'Current page:\n```html\n'+currentHTML().slice(0,FFAI.isLocal()?6000:30000)+'\n```\n\nRequest: '+q:'Request: '+q;
+  if(errText) p+='\n\nYour previous answer had a problem ('+errText+'). Previous answer:\n'+String(lastOut||'').slice(0,FFAI.isLocal()?3000:12000)+'\n\nReply with the whole corrected page in one ```html block.';
+  return p;
+}
+function extractHTML(t){ t=String(t||'');
+  var m=/```(?:html)?\s*\n([\s\S]*?)(?:```|$)/i.exec(t); if(m&&/<\w/.test(m[1])) t=m[1];
+  var a=t.search(/<!doctype|<html|<head|<body/i); if(a<0) throw new Error('no html'); t=t.slice(a);
+  var b=t.search(/<\/html>/i); if(b>=0) t=t.slice(0,b+7);
+  return t.trim(); }
+function checkHTML(html){
+  var doc=new DOMParser().parseFromString(html,'text/html');
+  if(!doc.body||!doc.body.children.length) throw new Error('the page has no content');
+  if(doc.querySelector('script[src]')) throw new Error('external scripts are not allowed, write the code inline');
+  var code=''; Array.prototype.forEach.call(doc.querySelectorAll('script'),function(sc){ code+=sc.textContent+'\n'; });
+  try{ new Function(code); }catch(e){ throw new Error('JavaScript syntax error: '+e.message); }
+  if(!/<\/body>/i.test(html)||!/<\/html>/i.test(html)) throw new Error('the page was cut off, it must end with </body></html>');
+  return html; }
+
 /* ---------- check an answer before it touches the workspace ---------- */
-function planOf(t){ var m=/PLAN:\s*(edit|new)/i.exec(String(t||'').slice(0,200)); return m?m[1].toLowerCase():null; }
 function extract(t){ t=String(t||''); var a=t.indexOf('<xml'), b=t.lastIndexOf('</xml>'); if(a<0||b<a) throw new Error('no <xml> element'); return t.slice(a,b+6); }
 var dropped=0; // blocks taken out of the last answer instead of asking the AI to write everything again
 function elKids(n,tag){ var o=[]; for(var c=n.firstElementChild;c;c=c.nextElementSibling) if(c.tagName.toLowerCase()===tag) o.push(c); return o; }
@@ -132,19 +161,21 @@ function busy(on){ busyNow=on; $('baiGo').disabled=$('baiFixGo').disabled=on; $(
 function status(){ var s=Math.round((Date.now()-t0)/1000);
   var how=plan==='edit'?T('지금 블록을 고치기로 했어요')+' · ':plan==='new'?T('새로 짜기로 했어요')+' · ':'';
   msg(phase==='fix'?F('AI에게 틀린 곳을 알려 다시 받는 중… {0}초',s):chars?how+F('AI가 블록 코드를 쓰는 중… 글자 {0}개 · {1}초',chars,s):F('AI가 생각하는 중… {0}초',s)); }
-function live(t){ chars=t.length; if(!plan) plan=planOf(t); var p=$('baiLive'), wasHidden=p.hidden, stick=wasHidden||p.scrollHeight-p.scrollTop-p.clientHeight<24; p.hidden=false; p.textContent=t.length>6000?'…'+t.slice(-6000):t; if(stick) p.scrollTop=p.scrollHeight; } // follows the end only while the reader is at the bottom
+function live(t){ chars=t.length; var p=$('baiLive'), wasHidden=p.hidden, stick=wasHidden||p.scrollHeight-p.scrollTop-p.clientHeight<24; p.hidden=false; p.textContent=t.length>6000?'…'+t.slice(-6000):t; if(stick) p.scrollTop=p.scrollHeight; } // follows the end only while the reader is at the bottom
 function run(q,modify,tries,errText,lastOut,fix,calm){
   phase=errText?'fix':''; chars=0;
-  var ask=calm?q+'\n(Keep it short and flat: write every block once, never put text_join inside text_join, and finish the XML.)':q;
-  return FFAI.ask({system:FFAI.isTuned()?FFP.blocksSys:SYS, prompt:buildPrompt(ask,modify,errText,lastOut), maxTokens:12000, onText:live, temperature:calm?0.7:0, freqPenalty:calm?0.5:0}).then(null,function(e){
+  var ask=calm?q+'\n(Keep it short and simple, and finish the page.)':q;
+  return FFAI.ask({system:SYS_HTML, prompt:buildHTMLPrompt(ask,modify,errText,lastOut), maxTokens:12000, onText:live, temperature:calm?0.7:0, freqPenalty:calm?0.5:0}).then(null,function(e){
     // the model got stuck repeating itself: ask again once, calmer, instead of giving up
     if(tries>0&&e&&/반복|repeat/i.test(String(e.message||''))&&!(window.baiStopped)) return run(q,modify,tries-1,'',lastOut,fix,true).then(function(x){ return {retried:x}; });
     throw e;
   }).then(function(out){
     if(out&&out.retried) return out.retried;
-    try{ if(fix&&planOf(out)==='new') throw new Error('this must be PLAN: edit - keep the current project and change only the part the person says is wrong');
-      var x=check(extract(out)); plan=planOf(out)||plan||(modify?'edit':'new'); if(!modify) plan='new'; if(fix) plan='edit'; return x; }
-    catch(e){ throw new Error(T('AI가 만든 블록을 읽지 못했어요. 다시 해 보세요')); } // no silent second pass: it used to rewrite everything from scratch
+    try{ return checkHTML(extractHTML(out)); }
+    catch(e){
+      if(tries>0&&!(window.baiStopped)) return run(q,modify,tries-1,e.message||String(e),out,fix,false); // one more try, telling the AI what was wrong
+      throw new Error(T('AI가 만든 HTML을 읽지 못했어요. 다시 해 보세요'));
+    }
   });
 }
 function readyGo(q){ var ex=BH_EXAMPLES.filter(function(e){ return e.name===readyEx; })[0]; if(!ex) return false;
@@ -158,14 +189,27 @@ function fixGo(){
   exec(q,c,true);
 }
 function exec(q,shown,fix){
-  var modify=fix||hasWork(); plan=fix?'edit':modify?null:'new'; busy(true); status();
-  run(q,modify,1,undefined,undefined,fix).then(function(xml){
+  var modify=fix||hasWork(); plan=modify?'edit':'new'; busy(true); status();
+  run(q,modify,1,undefined,undefined,fix).then(function(html){
     before={name:$('projName').value, ws:Blockly.serialization.workspaces.save(ws)};
-    B.loadXML(xml); B.arrange();
-    if(plan==='new'){ var pg=ws.getTopBlocks(false).filter(function(b){ return b.type==='page_root'; })[0], t=pg&&pg.getFieldValue('TITLE'); if(t) $('projName').value=t; }
+    B.showHTML(html); // the page first appears in the HTML code tab and the preview, as the AI wrote it
+    var how=toBlocks(html); if(how.blocks) B.showPreview();
+    if(!modify&&how.title) $('projName').value=how.title;
     B.save(); addHist(shown,fix,plan); if(fix) $('baiFix').value=''; $('baiUndo').hidden=false; busy(false);
-    msg(T('다 만들었어요! 미리보기에서 확인해 보세요'),'ok'); close(); B.toast((fix?T('AI가 틀린 곳만 고쳤어요'):plan==='edit'?T('AI가 지금 블록을 고쳤어요'):T('AI가 블록을 새로 짰어요'))+(dropped?' · '+F('잘못된 블록 {0}개는 뺐어요',dropped):''));
+    msg(T('다 만들었어요! 미리보기에서 확인해 보세요'),'ok'); close();
+    B.toast((fix?T('AI가 틀린 곳만 고쳤어요'):plan==='edit'?T('AI가 지금 페이지를 고쳤어요'):T('AI가 페이지를 새로 짰어요'))+' · '+how.note);
   },function(e){ busy(false); if(e.kind!=='nokey') msg(e.message||T('AI에 연결하지 못했어요'),'bad'); else msg(''); }).then(function(){ if(busyNow) busy(false); });
+}
+/* HTML -> blocks: friendly blocks where possible, "HTML/JS 직접 쓰기" blocks for the rest; if even that fails the HTML stays as typed code */
+function toBlocks(html){
+  var tries=[function(){ return BHX.convert(html); }, function(){ return BHX.fallback(html); }], last='';
+  for(var i=0;i<tries.length;i++){
+    try{ var c=tries[i](); B.clearHTML(); B.loadXML(c.xml); B.arrange();
+      if(ws.getAllBlocks(false).length<2) throw new Error('empty');
+      var st=c.stats; return {blocks:true, title:c.title, note:i?T('블록으로 바꾸기 어려운 부분은 직접 쓰기 블록에 넣었어요'):F('블록 {0}개 · 직접 쓰기 {1}개',st.blocks,st.raw+st.rawHtml)}; }
+    catch(e){ last=e.message||String(e); console.error(e); }
+  }
+  B.showHTML(html); return {title:'', note:T('블록으로 바꾸지 못해서 HTML 코드로 넣었어요')};
 }
 /* ---------- history of requests, kept per project in this browser ---------- */
 var HK='ffblocks.ai.', HMAX=30;
