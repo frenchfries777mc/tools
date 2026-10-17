@@ -215,6 +215,7 @@ button,input,select{font:inherit; color:inherit;}
 .aiCtx{color:var(--dim); font-size:12.5px; margin-bottom:6px; font-family:'JetBrains Mono',monospace;}
 #aiQ{width:100%; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:10px 12px; resize:vertical; min-height:70px; font:inherit; color:inherit;}
 .aiRow{display:flex; gap:8px; align-items:center; justify-content:flex-end; margin-top:8px; flex-wrap:wrap;}
+.aiIntro{margin:0; padding:8px 14px 0; color:var(--dim); font-size:12.5px; line-height:1.5;}
 .aiNote{flex:1; color:var(--dim); font-size:12px; min-width:140px;}
 #aiOut{margin-top:10px; overflow:auto; max-height:38vh;}
 .aiChart canvas{width:100%; height:220px; display:block; border-radius:10px; border:1px solid var(--line);}
@@ -285,7 +286,7 @@ button,input,select{font:inherit; color:inherit;}
   <button class="rb" data-cmd="filter" id="bFilter" title="필터"><svg viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg><span class="lb">필터</span></button>
   <button class="rb" data-cmd="find" title="찾기와 바꾸기"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></button>
   <span class="sepv"></span>
-  <button class="rb aib" data-cmd="ai" title="AI"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg><span class="lb">AI</span></button>
+  <button class="rb aib" data-cmd="ai" title="AI로 수식·그래프·표 만들기"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg><span class="lb">AI</span></button>
   <button class="rb" data-cmd="viz" title="시각화"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="4.5" cy="5" r="2"/><circle cx="19.5" cy="5" r="2"/><circle cx="4.5" cy="19" r="2"/><circle cx="19.5" cy="19" r="2"/><path d="M6 6.5l3.8 3.8M18 6.5l-3.8 3.8M6 17.5l3.8-3.8M18 17.5l-3.8-3.8"/></svg><span class="lb">시각화</span></button>
   <button class="rb" data-cmd="chart" title="차트 만들기"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span class="lb">차트</span></button>
   <button class="rb" data-cmd="scale" title="색 단계"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1" fill="#ff6b6b" stroke="none"/><rect x="9.5" y="4" width="5" height="16" rx="1" fill="#ffc93c" stroke="none"/><rect x="16" y="4" width="5" height="16" rx="1" fill="#3fe08f" stroke="none"/></svg><span class="lb">색 단계</span></button>
@@ -567,8 +568,9 @@ button,input,select{font:inherit; color:inherit;}
   <div class="acts"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="askOk">확인</button></div>
 </div></div>
 <div class="ov" id="aiDlg"><div class="dlg">
-  <div class="dh"><h3>✨ AI</h3><button class="tbtn" id="aiSet">AI 설정</button><button class="x" id="aiClose" aria-label="닫기">×</button></div>
-  <div class="vtabs"><button class="atab vtab on" data-m="ask">질문·요약</button><button class="atab vtab" data-m="formula">수식 만들기</button><button class="atab vtab" data-m="table">표 만들기</button><button class="atab vtab" data-m="graph">그래프 만들기</button></div>
+  <div class="dh"><h3>✨ AI 수식·그래프·표</h3><button class="tbtn" id="aiSet">AI 설정</button><button class="x" id="aiClose" aria-label="닫기">×</button></div>
+  <div class="vtabs"><button class="atab vtab on" data-m="formula">수식 만들기</button><button class="atab vtab" data-m="graph">그래프 만들기</button><button class="atab vtab" data-m="table">표 만들기</button><button class="atab vtab" data-m="ask">질문·요약</button></div>
+  <p class="aiIntro">수식, 그래프, 표 만들기에 가장 잘 맞아요. 짧고 정해진 형식이라 넣기 전에 결과를 확인할 수 있어요. 질문·요약과 긴 답은 틀릴 수 있으니 참고만 하세요.</p>
   <div class="dbody">
     <div class="aiCtx" id="aiCtx" data-notr></div>
     <textarea id="aiQ" rows="3" data-notr></textarea>
