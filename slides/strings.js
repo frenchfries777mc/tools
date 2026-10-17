@@ -330,4 +330,12 @@ FFT.add({
 '{0}장을 지웠어요':['Deleted {0} slides','Se eliminaron {0} diapositivas','{0} diapositives supprimées','{0} Folien gelöscht','{0}枚を削除しました'],
 '모든 슬라이드를 지울 수는 없어요':['You can’t delete every slide','No se pueden eliminar todas las diapositivas','Impossible de supprimer toutes les diapositives','Es können nicht alle Folien gelöscht werden','すべてのスライドは削除できません'],
 '선택한 슬라이드 {0}장을 지울까요? 되돌리기로 살릴 수 있어요.':['Delete the {0} selected slides? Undo can bring them back.','¿Eliminar las {0} diapositivas seleccionadas? Puedes recuperarlas con Deshacer.','Supprimer les {0} diapositives sélectionnées ? Annuler peut les récupérer.','Die {0} gewählten Folien löschen? Mit Rückgängig kommen sie zurück.','選択した{0}枚のスライドを削除しますか？元に戻すで復活できます。'],
+'펜':['Pen','Bolígrafo','Stylo','Stift','ペン'],
+'펜 (D)':['Pen (D)','Bolígrafo (D)','Stylo (D)','Stift (D)','ペン (D)'],
+'형광펜':['Highlighter','Resaltador','Surligneur','Textmarker','蛍光ペン'],
+'형광펜 (M)':['Highlighter (M)','Resaltador (M)','Surligneur (M)','Textmarker (M)','蛍光ペン (M)'],
+'색':['Color','Color','Couleur','Farbe','色'],
+'낙서 지우기':['Clear drawing','Borrar dibujo','Effacer le dessin','Zeichnung löschen','書き込みを消す'],
+'낙서 지우기 (E)':['Clear drawing (E)','Borrar dibujo (E)','Effacer le dessin (E)','Zeichnung löschen (E)','書き込みを消す (E)'],
+'(발표) 펜 · 형광펜 · 낙서 지우기':['(Presenting) Pen · highlighter · clear drawing','(Presentando) Bolígrafo · resaltador · borrar dibujo','(Présentation) Stylo · surligneur · effacer','(Präsentation) Stift · Textmarker · Zeichnung löschen','（発表中）ペン・蛍光ペン・書き込みを消す'],
 });
