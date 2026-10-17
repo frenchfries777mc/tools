@@ -84,7 +84,8 @@ var SYS_HTML=['You write one complete web page for a child who is learning to co
 '- The page must work by itself the moment it opens, be small enough to read, and have no bugs: check that every id used in the script exists.',
 '- Write the visible text in the language of the request.',
 '- When a current page is given: if the request changes, adds to or fixes it, return the WHOLE changed page and keep everything the person did not ask to change; if the request asks for a different page, write a new one.'].join('\n');
-function currentHTML(){ return B.build(); }
+/* lectus 1.3 learned pages in the lean form (no helper block); the other models keep the full page */
+function currentHTML(){ var h=B.build(); return FFAI.isTuned()&&FFAI.model&&FFAI.model()==='FF-Tools-4B'&&window.BHX&&BHX.lean?BHX.lean(h):h; }
 function buildHTMLPrompt(q,modify,errText,lastOut){
   var p=modify?'Current page:\n```html\n'+currentHTML().slice(0,FFAI.isLocal()?6000:30000)+'\n```\n\nRequest: '+q:'Request: '+q;
   if(errText) p+='\n\nYour previous answer had a problem ('+errText+'). Previous answer:\n'+String(lastOut||'').slice(0,FFAI.isLocal()?3000:12000)+'\n\nReply with the whole corrected page in one ```html block.';
