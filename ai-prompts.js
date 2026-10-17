@@ -55,5 +55,23 @@ P.slidesActPrompt=function(deck,i,n,json,kind){ return 'Deck: '+deck+'\nSlide '+
 P.slidesAddPrompt=function(deck,titles,i,q){ return 'Deck: '+deck+'\nSlides so far:\n'+titles+'\n\nWrite one new slide (it goes after slide '+(i+1)+') about: '+q; };
 P.slidesRetry='\n\nReply with the JSON object only, starting with {.';
 
+/* Fry Sheet AI dialog, "AI 계산" tab (sheet/ai-sheet.js, sheet/calc.js): only what the fast path cannot read comes here.
+   The model writes one short formula (or reads one unit conversion); the engine computes it and checks it. */
+P.calcSys='You turn a calculation written in words into one spreadsheet formula. Reply with JSON only: {"formula":"=..."}. Numbers without units; use + - * / ^ %, and functions like SUM, AVERAGE, MAX, MIN, COUNT, ROUND. "A열" or "column A" means A:A. If no formula can do it, reply {"formula":""}.';
+P.calcPrompt=function(cols,q){ return (cols?'Columns: '+cols+'\n':'')+'Request: '+q; };
+P.unitCodes='length m cm mm km in ft yd mi Nmi; mass g kg mg lbm ozm t 근 돈 냥 관; temperature C F K; volume l ml m3 gal qt pt cup oz tbs tsp; area m2 cm2 km2 ft2 ha uk_acre 평; speed m/s km/h mph kn; time sec mn hr day wk yr; data bit byte kibyte Mibyte Gibyte Tibyte';
+P.unitSys='You read one unit conversion written in words. Reply with JSON only: {"value":number,"from":"unit","to":"unit"} with these unit codes: '+P.unitCodes+'. If it is not a unit conversion, reply {"value":null}.';
+P.unitPrompt=function(q){ return 'Request: '+q; };
+P.calcRetry='\n\nReply with the JSON object only, starting with {.';
+
+/* Fry Slides "맞춤법 고치기" (slides/ai-slides.js): same keys back, only the mistakes changed; the site shows a word diff */
+P.spellSys='You fix spelling, spacing and typing mistakes in slide text. Reply with JSON only, with the same keys and the same number of list items as given. Change only the mistakes; keep the words, meaning, language and tone. If nothing is wrong, return the text unchanged.';
+P.spellPrompt=function(json){ return 'Slide text (JSON): '+json; };
+
+/* Block HTML "이 블록 설명해 줘" (blocks/ai-blocks.js): a compact outline of the blocks -> one or two plain sentences */
+P.langName={ko:'Korean',en:'English',es:'Spanish',fr:'French',de:'German',ja:'Japanese'};
+P.explainSys=function(lang){ return 'You explain Block HTML blocks to a beginner. Reply with one or two short sentences of plain text (no lists, no code, no markdown) saying what these blocks do when the page runs. Write in '+(P.langName[lang]||'Korean')+'.'; };
+P.explainPrompt=function(outline){ return 'Blocks (indented lines are inside the block above):\n'+outline; };
+
 if(typeof module!=='undefined'&&module.exports) module.exports=P; else root.FFP=P;
 })(this);

@@ -1,5 +1,14 @@
 /* Block HTML strings: [en, es, fr, de, ja] */
 FFT.add({
+'생각하는 중…':['Thinking…','Pensando…','Réflexion…','Denke nach…','考え中…'],
+'이 블록 설명해 줘':['Explain this block','Explica este bloque','Explique ce bloc','Diesen Block erklären','このブロックを説明して'],
+'이 블록 설명':['About this block','Sobre este bloque','À propos de ce bloc','Über diesen Block','このブロックの説明'],
+'안에서 하는 일: {0}':['Inside it: {0}','Dentro: {0}','À l’intérieur : {0}','Darin: {0}','中でやること: {0}'],
+'그다음: {0}':['Then: {0}','Después: {0}','Ensuite : {0}','Danach: {0}','そのあと: {0}'],
+'(블록 {0}개)':['({0} blocks)','({0} bloques)','({0} blocs)','({0} Blöcke)','(ブロック{0}個)'],
+'블록 이름으로 만든 설명이에요. AI를 켜면 더 자연스럽게 설명해요':['Made from the block names. Turn on an AI for a more natural explanation','Hecho con los nombres de los bloques. Activa una IA para una explicación más natural','Fait à partir des noms des blocs. Active une IA pour une explication plus naturelle','Aus den Blocknamen gemacht. Schalte eine KI ein für eine natürlichere Erklärung','ブロックの名前から作った説明です。AIをオンにするともっと自然に説明します'],
+'AI 설명이에요. 틀릴 수 있어요':['Explained by the AI. It can be wrong','Explicado por la IA. Puede equivocarse','Expliqué par l’IA. Elle peut se tromper','Von der KI erklärt. Sie kann sich irren','AIの説明です。間違うこともあります'],
+'AI 답이 알맞지 않아 블록 이름으로 설명했어요':['The AI answer did not fit, so this is made from the block names','La respuesta de la IA no servía, así que se usaron los nombres de los bloques','La réponse de l’IA ne convenait pas, donc l’explication vient des noms des blocs','Die KI-Antwort passte nicht, daher aus den Blocknamen erklärt','AIの答えが合わなかったので、ブロックの名前から説明しました'],
 '틀린 곳을 알려 주세요':["Tell me what is wrong", "Dinos qué está mal", "Dites-nous ce qui ne va pas", "Sag, was nicht stimmt", "間違っているところを教えてください"],
 '예: 버튼을 눌러도 소리가 안 나요':["e.g. The button makes no sound when pressed", "p. ej.: El botón no suena al pulsarlo", "ex. : Le bouton ne fait pas de son", "z. B. Der Button macht keinen Ton", "例: ボタンを押しても音が鳴りません"],
 '이 부분만 고치기':["Fix only this", "Corregir solo esto", "Corriger seulement ça", "Nur das korrigieren", "ここだけ直す"],

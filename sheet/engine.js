@@ -804,8 +804,50 @@ function stack(self,a,h){ var gs=a.map(function(x){ return grid(self,x); }), out
 def('VSTACK',function(a){ return stack(this,a,false); });
 def('HSTACK',function(a){ return stack(this,a,true); });
 
+/* v22: CONVERT(number, "from", "to"), with Excel's unit names (case matters, SI prefixes like "cm", "km", "mg", "ml";
+   binary prefixes "ki" "Mi" "Gi" "Ti" for bit and byte) plus a few extras: "t" (tonne), "wk" and the Korean units
+   평 (area), 근, 돈, 냥, 관 (weight). Units of different kinds, or unknown units, give #N/A. */
+var UNIT={ // code: [kind, size in the kind's base unit, prefixes: 1 SI, 2 SI squared, 3 SI cubed, 4 SI or binary]
+  m:['len',1,1], 'in':['len',0.0254], ft:['len',0.3048], yd:['len',0.9144], mi:['len',1609.344], Nmi:['len',1852], ang:['len',1e-10,1], ell:['len',1.143],
+  g:['mass',1,1], lbm:['mass',453.59237], ozm:['mass',28.349523125], stone:['mass',6350.29318], ton:['mass',907184.74], uk_ton:['mass',1016046.9088], t:['mass',1e6],
+  '근':['mass',600], '돈':['mass',3.75], '냥':['mass',37.5], '관':['mass',3750],
+  C:['tmp'], cel:['tmp'], F:['tmp'], fah:['tmp'], K:['tmp',1,1], kel:['tmp'],
+  l:['vol',1,1], L:['vol',1,1], lt:['vol',1,1], m3:['vol',1000,3], gal:['vol',3.785411784], qt:['vol',0.946352946], pt:['vol',0.473176473], us_pt:['vol',0.473176473],
+  uk_pt:['vol',0.56826125], uk_qt:['vol',1.1365225], uk_gal:['vol',4.54609], cup:['vol',0.2365882365], oz:['vol',0.0295735295625], tbs:['vol',0.01478676478125],
+  tsp:['vol',0.00492892159375], ft3:['vol',28.316846592], in3:['vol',0.016387064],
+  m2:['area',1,2], ha:['area',1e4], ft2:['area',0.09290304], in2:['area',0.00064516], yd2:['area',0.83612736], mi2:['area',2589988.110336],
+  uk_acre:['area',4046.8564224], us_acre:['area',4046.8726098743], '평':['area',400/121],
+  'm/s':['spd',1,1], 'm/sec':['spd',1,1], 'm/h':['spd',1/3600,1], 'm/hr':['spd',1/3600,1], mph:['spd',0.44704], kn:['spd',1852/3600], admkn:['spd',1853.184/3600],
+  sec:['time',1], s:['time',1,1], mn:['time',60], min:['time',60], hr:['time',3600], day:['time',86400], d:['time',86400], wk:['time',604800], yr:['time',31557600],
+  bit:['data',1,4], byte:['data',8,4]
+};
+var UPRE=[['da',10],['Y',1e24],['Z',1e21],['E',1e18],['P',1e15],['T',1e12],['G',1e9],['M',1e6],['k',1e3],['h',100],['d',0.1],['c',0.01],['m',1e-3],['u',1e-6],['n',1e-9],['p',1e-12],['f',1e-15]],
+    BPRE=[['ki',1024],['Mi',1048576],['Gi',1073741824],['Ti',1099511627776],['Pi',1125899906842624]];
+/* {k: kind, f: size, t: temperature code} for a unit name, or null */
+function unitOf(code){
+  code=String(code==null?'':code); var u=UNIT[code];
+  if(u) return {k:u[0], f:u[1]||1, t:u[0]==='tmp'?code.charAt(0).toUpperCase():null};
+  var tryPre=function(list,bin){ for(var i=0;i<list.length;i++){ var p=list[i][0]; if(code.length>p.length&&code.indexOf(p)===0){ var b=UNIT[code.slice(p.length)];
+    if(b&&b[2]&&(bin?b[2]===4:true)){ return {k:b[0], f:(b[1]||1)*Math.pow(list[i][1],b[2]===2?2:b[2]===3?3:1), t:b[0]==='tmp'?'K':null}; } } } return null; };
+  return tryPre(BPRE,true)||tryPre(UPRE,false);
+}
+function convertUnit(v,from,to){
+  var a=unitOf(from), b=unitOf(to); if(!a||!b||a.k!==b.k) return null;
+  var r;
+  if(a.k==='tmp'){ var k=a.t==='C'?v+273.15:a.t==='F'?(v-32)*5/9+273.15:v*a.f; r=b.t==='C'?k-273.15:b.t==='F'?(k-273.15)*9/5+32:k/b.f; }
+  else r=v*a.f/b.f;
+  return isFinite(r)?+r.toPrecision(14):null;
+}
+def('CONVERT',function(a){ if(a.length<3) fail('#N/A'); var v=toNum(this.scal(a[0])), r=convertUnit(v,this.scal(a[1]),this.scal(a[2])); if(r==null) fail('#N/A'); return r; });
+/* a formula's value at sheet si without putting it in a cell (the sheet's "AI 계산" box): a single value or an Err */
+Engine.prototype.calc=function(si,raw){
+  try{ var v=this.ev(this.ast(raw[0]==='='?raw:'='+raw),si); if(v instanceof Rng) v=isMulti(v)?new Err('#VALUE!'):this.first(v); if(v instanceof Arr) v=v.rows.length===1&&v.rows[0].length===1?v.rows[0][0]:new Err('#VALUE!');
+    if(v==null) v=0; if(typeof v==='number'&&!isFinite(v)) v=new Err('#NUM!'); return v; }
+  catch(e){ return isErr(e)?e:new Err('#ERROR!'); }
+};
+
 var api={K:K,RC:RC,KC:KC,colName:colName,colIdx:colIdx,addr:addr,parseAddr:parseAddr,parseRange:parseRange,rangeStr:rangeStr,
   tokenize:tokenize,rebuild:rebuild,parse:parse,literal:literal,shiftFormula:shiftFormula,adjustFormula:adjustFormula,renameSheetInFormula:renameSheetInFormula,
-  Engine:Engine,Err:Err,errHint:errHint,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,pivot:pivot,lockHit:lockHit,lockAny:lockAny,lockCut:lockCut,renameNameInFormula:renameNameInFormula,iconFor:iconFor,sparkSvg:sparkSvg,ICOL:ICOL,Arr:Arr,toXl:toXl,fromXl:fromXl,trimText:trimText,splitText:splitText,dedupeRows:dedupeRows,parseNameRef:parseNameRef,nameRef:nameRef,validName:validName,refText:refText,asDate:asDate,dateStr:dateStr,FN:FN,quoteSheet:quoteSheet};
+  Engine:Engine,Err:Err,errHint:errHint,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,pivot:pivot,lockHit:lockHit,lockAny:lockAny,lockCut:lockCut,renameNameInFormula:renameNameInFormula,iconFor:iconFor,sparkSvg:sparkSvg,ICOL:ICOL,Arr:Arr,toXl:toXl,fromXl:fromXl,trimText:trimText,splitText:splitText,dedupeRows:dedupeRows,parseNameRef:parseNameRef,nameRef:nameRef,validName:validName,refText:refText,asDate:asDate,dateStr:dateStr,FN:FN,quoteSheet:quoteSheet,unitOf:unitOf,convertUnit:convertUnit};
 if(typeof module!=='undefined'&&module.exports) module.exports=api; else root.FSE=api;
 })(this);

@@ -263,5 +263,72 @@ $('baiUndo').onclick=undoAI;
 $('baiSet').onclick=function(){ FFAI.settings(); };
 $('baiClose').onclick=close; // closes only with the X button, so a text drag that ends outside the window does not close it
 prep();
-window.__bhai={hist:hist, fix:fixGo, catalog:getCatalog, check:check, open:open, undo:undoAI};
+
+/* ---------- "이 블록 설명해 줘": a compact outline of a block (and the blocks under it) -> one or two sentences.
+   Without an AI, or when its answer is junk, the explanation is put together from the blocks' own tooltips and labels. ---------- */
+function ownText(b){ var parts=[];
+  b.inputList.forEach(function(inp){ inp.fieldRow.forEach(function(f){ var t=f.getText&&f.getText(); if(t&&String(t).trim()) parts.push(String(t).trim()); });
+    var c=inp.connection&&inp.type===Blockly.inputs.inputTypes.VALUE&&inp.connection.targetBlock(); if(c) parts.push('('+c.toString(60).replace(/\s+/g,' ')+')'); });
+  return parts.join(' ').replace(/\s+/g,' ').slice(0,140); }
+function tipOf(b){ var t=b.getTooltip&&b.getTooltip(); return typeof t==='string'?t.replace(/\s+/g,' ').trim():''; }
+function stackOf(b){ var out=[]; for(var x=b;x;x=x.getNextBlock()) out.push(x); return out; }
+function outlineOf(b,depth,lines){
+  stackOf(b).forEach(function(x){ if(lines.length>=40) return; lines.push(new Array(depth+1).join('  ')+ownText(x));
+    x.inputList.forEach(function(inp){ var c=inp.type===Blockly.inputs.inputTypes.STATEMENT&&inp.connection&&inp.connection.targetBlock(); if(c) outlineOf(c,depth+1,lines); }); });
+  return lines; }
+function countOf(b){ var n=0; stackOf(b).forEach(function(x){ n+=x.getDescendants(false).filter(function(d){ return !d.isShadow(); }).length; }); return n; }
+function inner(b){ var out=[]; stackOf(b).forEach(function(x){ x.inputList.forEach(function(inp){ var c=inp.type===Blockly.inputs.inputTypes.STATEMENT&&inp.connection&&inp.connection.targetBlock();
+    if(c) stackOf(c).forEach(function(y){ var t=ownText(y); if(t&&out.indexOf(t)<0) out.push(t); }); }); }); return out; }
+function plainExplain(b){
+  var tip=tipOf(b)||ownText(b), list=inner(b).slice(0,3), rest=stackOf(b).slice(1).map(ownText).filter(Boolean).slice(0,3), s=tip.replace(/[.。]?$/,'.');
+  if(list.length) s+=' '+F('안에서 하는 일: {0}',list.join(' · '))+'.';
+  if(rest.length) s+=' '+F('그다음: {0}',rest.join(' · '))+'.';
+  var n=countOf(b); if(n>1) s+=' '+F('(블록 {0}개)',n);
+  return s;
+}
+/* the AI's answer, or '' when it is not one or two plain sentences in the page's language */
+function cleanExplain(t,lang){
+  t=String(t||'').replace(/<think>[\s\S]*?(<\/think>|$)/g,'').replace(/```[\s\S]*?(```|$)/g,'').replace(/^\s*(?:설명|Explanation|答え|説明)\s*[:：]\s*/i,'').replace(/\s+/g,' ').trim();
+  if(t.length<8||t.length>600||/[<>{}]|PLAN:|^\s*[-*•\d]+[.)]?\s/.test(t)) return '';
+  var hang=/[가-힣]/.test(t), kana=/[ぁ-んァ-ン]/.test(t), lat=(t.match(/[A-Za-zÀ-ÿ]/g)||[]).length/t.length;
+  if(lang==='ko'?!hang:lang==='ja'?!kana:(hang||kana||lat<0.4)) return '';
+  var parts=t.match(/[^.!?。！？]+[.!?。！？]+["')\]]*|[^.!?。！？]+$/g)||[t]; t=parts.slice(0,2).join(' ').trim();
+  return t.length>320?t.slice(0,320).replace(/\s+\S*$/,'')+'…':t;
+}
+var exPop=null;
+function exUI(){
+  if(exPop) return exPop;
+  var st=document.createElement('style'); st.textContent='#exPop{position:fixed;z-index:75;width:min(340px,calc(100vw - 24px));background:var(--panel);border:1px solid #5a4a1c;border-radius:12px;padding:10px 12px;box-shadow:0 20px 50px rgba(0,0,0,.55);display:none;font-size:14px;line-height:1.55}'+
+    '#exPop.open{display:block} #exPop .eh{display:flex;align-items:center;gap:6px;margin-bottom:4px;color:var(--fry);font-weight:700;font-size:13px} #exPop .eh span{flex:1} #exPop .ex{border:0;background:transparent;color:var(--dim);font-size:20px;cursor:pointer;width:28px;height:28px;border-radius:6px}'+
+    '#exPop .en{color:var(--dim);font-size:12px;margin-top:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap} #exPop .en button{height:28px;font-size:12px}';
+  document.head.appendChild(st);
+  exPop=document.createElement('div'); exPop.id='exPop'; exPop.setAttribute('role','dialog'); exPop.setAttribute('data-notr','');
+  exPop.innerHTML='<div class="eh"><span></span><button class="ex" aria-label="">×</button></div><div class="et"></div><div class="en"><i></i><button class="tbtn aib es" style="display:none"></button></div>';
+  document.body.appendChild(exPop);
+  exPop.querySelector('.eh span').textContent='✨ '+T('이 블록 설명'); exPop.querySelector('.ex').setAttribute('aria-label',T('닫기')); exPop.querySelector('.es').textContent=T('AI 설정');
+  exPop.querySelector('.ex').onclick=function(){ exPop.classList.remove('open'); };
+  return exPop;
+}
+function exShow(b,text,note,setBtn){
+  var p=exUI(); p.querySelector('.et').textContent=text; p.querySelector('.en i').textContent=note||''; var sb=p.querySelector('.es'); sb.style.display=setBtn?'':'none'; sb.onclick=setBtn||null;
+  var r=null; try{ r=b.getSvgRoot().getBoundingClientRect(); }catch(e){}
+  p.classList.add('open'); var w=p.offsetWidth, h=p.offsetHeight, x=r?r.left:innerWidth/2-w/2, y=r?r.bottom+8:innerHeight/2-h/2;
+  if(y+h>innerHeight-8) y=Math.max(8,(r?r.top-h-8:8)); x=Math.max(8,Math.min(x,innerWidth-w-8)); p.style.left=x+'px'; p.style.top=Math.max(8,y)+'px';
+}
+var exRun=0;
+function explainBlock(b){
+  if(!b) return; var id=++exRun, lang=FFT.lang||'ko', plain=plainExplain(b);
+  if(!window.FFAI||!FFAI.ready()){ exShow(b,plain,T('블록 이름으로 만든 설명이에요. AI를 켜면 더 자연스럽게 설명해요'),function(){ FFAI.settings(function(){ if(FFAI.ready()) explainBlock(b); }); }); return; }
+  exShow(b,T('생각하는 중…'),'');
+  var lines=outlineOf(b,0,[]).join('\n').slice(0,2400);
+  function once(extra){ return FFAI.ask({system:FFP.explainSys(lang), prompt:FFP.explainPrompt(lines)+(extra||''), maxTokens:200, temperature:0.2}).then(function(t){ return cleanExplain(t,lang); }); }
+  once().then(function(t){ return t||once('\n\nReply with one or two short plain sentences only.'); }).then(function(t){
+    if(id!==exRun) return;
+    if(t) exShow(b,t,T('AI 설명이에요. 틀릴 수 있어요'));
+    else exShow(b,plain,T('AI 답이 알맞지 않아 블록 이름으로 설명했어요'));
+  },function(e){ if(id!==exRun) return; exShow(b,plain,e&&e.kind==='nokey'?T('블록 이름으로 만든 설명이에요. AI를 켜면 더 자연스럽게 설명해요'):(e&&e.message||T('AI에 연결하지 못했어요'))); });
+}
+Blockly.ContextMenuRegistry.registry.register({id:'ffExplain',scopeType:Blockly.ContextMenuRegistry.ScopeType.BLOCK,weight:6,displayText:function(){ return T('이 블록 설명해 줘'); },
+  preconditionFn:function(sc){ return sc.block&&!sc.block.isShadow()?'enabled':'hidden'; },callback:function(sc){ explainBlock(sc.block); }});
+window.__bhai={explain:explainBlock, plainExplain:plainExplain, cleanExplain:cleanExplain, outline:function(b){ return outlineOf(b,0,[]).join('\n'); }, hist:hist, fix:fixGo, catalog:getCatalog, check:check, open:open, undo:undoAI};
 })();

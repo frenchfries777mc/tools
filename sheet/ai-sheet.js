@@ -53,6 +53,7 @@ function tableText(){
   return {g:g, text:lines.join('\n')};
 }
 var CHIPS={ask:[['📋 세 줄 요약','이 표를 세 줄로 요약해 줘'],['↕ 최대·최소','가장 큰 값과 가장 작은 값은?'],['🔍 눈에 띄는 점','이 표에서 눈에 띄는 점을 알려 줘']],
+  calc:[['🧮 할인 계산','3500원짜리 7개에 10% 할인'],['📏 cm → 인치','170cm는 몇 인치'],['🌡 섭씨 → 화씨','섭씨 30도는 화씨'],['➖ A열 평균 − 5','A열 평균에서 5 빼기']],
   formula:[['B열 평균','B열의 평균'],['80 이상 개수','B열에서 80 이상인 칸의 수'],['가장 긴 글자','A열에서 가장 긴 글자']],
   table:[['🧑‍🎓 우리 반 표','우리 반 6명의 이름, 키, 좋아하는 과일 표'],['🗓 시간표','일주일 시간표'],['🏙 도시 인구','한국의 도시 5개와 인구']],
   graph:[['📊 막대 그래프','과목별 점수를 막대 그래프로'],['📈 변화 보기','달마다 어떻게 변했는지 꺾은선으로'],['🥧 비율 보기','전체에서 각각 차지하는 비율을 원형으로']]};
@@ -64,9 +65,9 @@ function trDemo(){
   A.pasteText(rows.map(function(x){ return x.join('\t'); }).join('\n')); A.toast(T('B열이 영어로 채워져요'));
 }
 function setMode(m){ mode=m; chips(m); document.querySelectorAll('.atab').forEach(function(b){ b.classList.toggle('on',b.dataset.m===m); });
-  var ph={ask:T('예: 평균이 가장 높은 과목은? / 이 표를 세 줄로 요약해 줘'),formula:T('예: B열에서 80점 이상인 사람 수'),table:T('예: 우리 반 6명의 이름, 키, 좋아하는 과일 표'),graph:T('예: 이름별 수학 점수를 막대 그래프로')}[m];
+  var ph={ask:T('예: 평균이 가장 높은 과목은? / 이 표를 세 줄로 요약해 줘'),formula:T('예: B열에서 80점 이상인 사람 수'),table:T('예: 우리 반 6명의 이름, 키, 좋아하는 과일 표'),graph:T('예: 이름별 수학 점수를 막대 그래프로'),calc:T('예: 3500원짜리 7개에 10% 할인 / 170cm는 몇 인치')}[m];
   $('aiQ').placeholder=ph; $('aiOut').innerHTML=''; $('aiActs').innerHTML='';
-  $('aiCtx').textContent=m==='table'?F('{0} 칸부터 표를 넣어요',E.addr(A.act().r,A.act().c)):(function(){ var t=tableText(); return t?F('{0} 표를 AI에게 보여 줘요',E.rangeStr(t.g)):T('표를 고르면 AI가 그 내용을 보고 답해요'); })();
+  $('aiCtx').textContent=m==='calc'?T('숫자 계산과 단위 변환은 AI 없이 바로 해요. 칸이 들어간 계산은 AI가 수식으로 바꿔요'):m==='table'?F('{0} 칸부터 표를 넣어요',E.addr(A.act().r,A.act().c)):(function(){ var t=tableText(); return t?F('{0} 표를 AI에게 보여 줘요',E.rangeStr(t.g)):T('표를 고르면 AI가 그 내용을 보고 답해요'); })();
 }
 var running=false;
 function busy(on){ running=on; $('aiGo').textContent=on?T('멈추기'):T('보내기'); $('aiGo').classList.toggle('stopBtn',on); }
@@ -87,7 +88,9 @@ function translateFormula(q,a){ // a request to translate a cell is =AI("<langua
 function fnList(){ return (window.FNDOC||[]).map(function(f){ return f[1]; }).filter(function(n){ return n!=='AI'; }).join(', '); }
 function go(){
   var q=$('aiQ').value.trim(); if(!q) return $('aiQ').focus();
-  A.commitEdit(); busy(true); out(''); $('aiActs').innerHTML='';
+  A.commitEdit();
+  if(mode==='calc') return calcGo(q,A.act());
+  busy(true); out(''); $('aiActs').innerHTML='';
   var t=mode==='table'?null:tableText(), a=A.act(), lang=FFT.lang||'ko', p;
   if(mode==='ask') p=FFAI.ask({onText:liveOut, facts:true, system:FFP.askSys, prompt:FFP.askPrompt(t&&t.text,q)})
     .then(function(r){ lastAnswer=r.trim(); out('<div class="aiAns">'+esc(lastAnswer).replace(/\n/g,'<br>')+'</div>');
@@ -123,6 +126,51 @@ function go(){
       $('aiActs').innerHTML='<button class="tbtn pri" id="aiPut">'+F('{0} 칸부터 넣기',E.addr(a.r,a.c))+'</button>';
       $('aiPut').onclick=function(){ A.pasteText(lastTable.map(function(r){ return r.join('\t'); }).join('\n')); A.forSel(function(r,c){ if(r===A.act().r){ var cell=A.sheet.cells[E.K(r,c)]; if(cell) cell.b=1; } }); A.changed(); close(); }; });
   p.then(null,function(e){ if(e.kind!=='nokey') out('<div class="aiErr">'+esc(e.message||T('AI에 연결하지 못했어요'))+'</div>'); }).then(function(){ busy(false); });
+}
+/* ---------- "AI 계산": words -> one formula. calc.js reads most phrases without AI; the engine computes and checks. ---------- */
+function calcVal(f){ if(/\bAI\s*\(/i.test(f)) return null; try{ E.parse(f.slice(1)); }catch(e){ return null; } var v=A.eng.calc(A.doc.active,f); return E.isErr(v)?null:v; }
+function calcShow(f,v,a,note){
+  lastFormula=f;
+  out('<code class="aiF">'+esc(f)+'</code><div class="aiCalc">= <b>'+esc(E.formatValue(v))+'</b></div><div class="aiEx">'+esc(note)+'</div>');
+  $('aiActs').innerHTML='<button class="tbtn pri" id="aiPut">'+F('{0} 칸에 넣기',E.addr(a.r,a.c))+'</button>';
+  $('aiPut').onclick=function(){ A.pushUndo(); A.setRaw(a.r,a.c,lastFormula); A.changed(); close(); };
+}
+function colsText(){ // "A=이름, B=점수": the header row, so the AI can match column words
+  var out=[]; for(var c=0;c<26&&out.length<12;c++){ var v=A.eng.value(A.doc.active,0,c); if(typeof v==='string'&&v.trim()) out.push(E.colName(c)+'='+v.trim().slice(0,20)); } return out.join(', '); }
+/* the AI's answer -> a checked formula, or null (junk, an unknown unit, a formula with an error) */
+function calcRead(r,unit){
+  var j=null; try{ j=FFAI.parseJSON(r); }catch(e){}
+  if(j&&typeof j==='object'&&!Array.isArray(j)){
+    if(j.value!=null||j.from||j.to){ var v=typeof j.value==='number'?j.value:parseFloat(String(j.value).replace(/,/g,'')), fr=FSCalc.unitCode(j.from), to=FSCalc.unitCode(j.to);
+      if(isFinite(v)&&fr&&to&&E.convertUnit(v,fr,to)!=null) return FSCalc.convFormula({value:v,from:fr,to:to}); }
+    if(typeof j.formula==='string'&&j.formula.trim()){ var f=j.formula.trim(); if(f[0]!=='=') f='='+f; return calcVal(f)!=null?f:null; }
+    return null;
+  }
+  var m=/^\s*(=[^\n`]+)/.exec(String(r||'')); if(!unit&&m) return calcVal(m[1].trim())!=null?m[1].trim():null;
+  return null;
+}
+function calcGo(q,a){
+  $('aiActs').innerHTML='';
+  var fx=FSCalc.fast(q), v=fx&&calcVal(fx.formula);
+  if(fx&&v!=null) return calcShow(fx.formula,v,a,fx.kind==='unit'?T('단위 변환이에요. AI 없이 바로 계산했어요'):T('AI 없이 바로 계산했어요'));
+  if(!window.FFAI||!FFAI.ready()){
+    out('<div class="aiEx">'+esc(T('이 계산은 AI가 수식으로 바꿔야 해요. AI 설정에서 AI를 켜 주세요. 숫자 계산과 단위 변환은 AI 없이도 돼요.'))+'</div>');
+    $('aiActs').innerHTML='<button class="tbtn" id="aiCalcSet">'+T('AI 설정')+'</button>';
+    $('aiCalcSet').onclick=function(){ if(window.FFAI) FFAI.settings(function(){ if(FFAI.ready()) calcGo(q,a); }); };
+    return;
+  }
+  var unit=FSCalc.hasUnit(q);
+  function once(retry){
+    return FFAI.ask(unit?{json:true, maxTokens:200, system:FFP.unitSys, prompt:FFP.unitPrompt(q)+(retry?FFP.calcRetry:'')}
+                       :{json:true, maxTokens:300, system:FFP.calcSys, prompt:FFP.calcPrompt(colsText(),q)+(retry?FFP.calcRetry:'')})
+      .then(function(r){ var f=calcRead(r,unit); return f||retry?f:once(true); });
+  }
+  busy(true); out('<div class="aiEx">'+esc(T('생각하는 중…'))+'</div>');
+  once(false).then(function(f){
+    var v=f&&calcVal(f);
+    if(f&&v!=null) calcShow(f,v,a,T('AI가 만든 수식이에요. 결과를 확인하고 넣으세요'));
+    else out('<div class="aiErr">'+esc(T('AI가 알맞은 수식을 만들지 못했어요. 숫자와 칸 이름(A열, B2)을 넣어 더 짧게 써 보세요'))+'</div>');
+  },function(e){ out(e&&e.kind==='nokey'?'':'<div class="aiErr">'+esc(e&&e.message||T('AI에 연결하지 못했어요'))+'</div>'); }).then(function(){ busy(false); });
 }
 /* {type, range, series:["C"], title} from the AI -> a chart object for the charts drawer (series = column letters inside range) */
 function chartFrom(j,g){

@@ -1,5 +1,18 @@
 /* Fry Slides strings: UI translations ([en, es, fr, de, ja]). */
 FFT.add({
+'맞춤법 고치기':['Fix spelling','Corregir ortografía','Corriger l’orthographe','Rechtschreibung korrigieren','スペル修正'],
+'바뀐 곳을 누르면 받기와 버리기가 바뀌어요':['Tap a change to accept or reject it','Toca un cambio para aceptarlo o rechazarlo','Touche une modification pour l’accepter ou la refuser','Tippe auf eine Änderung, um sie anzunehmen oder abzulehnen','変更をタップすると採用・不採用が切り替わります'],
+'모두 받기':['Accept all','Aceptar todo','Tout accepter','Alle annehmen','すべて採用'],
+'모두 버리기':['Reject all','Rechazar todo','Tout refuser','Alle ablehnen','すべて不採用'],
+'적용':['Apply','Aplicar','Appliquer','Übernehmen','適用'],
+'설명':['Caption','Leyenda','Légende','Beschriftung','説明'],
+'누르면 받기·버리기':['Tap to accept or reject','Toca para aceptar o rechazar','Touche pour accepter ou refuser','Tippen zum Annehmen oder Ablehnen','タップで採用・不採用'],
+'{0}: AI가 뜻까지 너무 많이 바꿔서 뺐어요':['{0}: left out because the AI changed the meaning too much','{0}: se omitió porque la IA cambió demasiado el sentido','{0} : ignoré, car l’IA a trop changé le sens','{0}: weggelassen, weil die KI den Sinn zu stark verändert hat','{0}: AIが意味まで変えすぎたので外しました'],
+'바꾼 곳이 없어요':['Nothing was changed','No se cambió nada','Rien n’a été modifié','Nichts geändert','変更はありません'],
+'{0}곳을 고쳤어요 · 되돌리기 가능':['Fixed {0} places · you can undo','Se corrigieron {0} lugares · puedes deshacer','{0} corrections · tu peux annuler','{0} Stellen korrigiert · rückgängig möglich','{0}か所を直しました · 元に戻せます'],
+'고칠 슬라이드가 없어요':['There is no slide to fix','No hay ninguna diapositiva que corregir','Aucune diapositive à corriger','Keine Folie zum Korrigieren','直すスライドがありません'],
+'이 슬라이드에는 고칠 글이 없어요':['This slide has no text to fix','Esta diapositiva no tiene texto que corregir','Cette diapositive n’a pas de texte à corriger','Diese Folie hat keinen Text zum Korrigieren','このスライドには直す文字がありません'],
+'고칠 맞춤법이 없어요':['No spelling mistakes found','No se encontraron errores','Aucune faute trouvée','Keine Fehler gefunden','直すところはありません'],
 '주제만 쓰면 AI가 만들어 주는 발표 자료. 바로 고치고, 발표하고, 파워포인트 파일로 받아요.':['Slides the AI makes from a topic. Edit them, present them, download them as a PowerPoint file.','Diapositivas que la IA crea a partir de un tema. Edítalas, preséntalas y descárgalas como PowerPoint.','Des diapositives que l’IA crée à partir d’un sujet. Modifiez, présentez, téléchargez en PowerPoint.','Folien, die die KI aus einem Thema erstellt. Bearbeiten, präsentieren, als PowerPoint herunterladen.','テーマを書くとAIが作るスライド。そのまま直して発表し、PowerPointファイルで保存できます。'],
 '도구 목록':['All tools','Todas las herramientas','Tous les outils','Alle Werkzeuge','ツール一覧'],
 '발표 자료':['Decks','Presentaciones','Présentations','Präsentationen','スライド'],
