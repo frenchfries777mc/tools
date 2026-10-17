@@ -804,7 +804,7 @@ function stack(self,a,h){ var gs=a.map(function(x){ return grid(self,x); }), out
 def('VSTACK',function(a){ return stack(this,a,false); });
 def('HSTACK',function(a){ return stack(this,a,true); });
 
-/* v22: CONVERT(number, "from", "to"), with Excel's unit names (case matters, SI prefixes like "cm", "km", "mg", "ml";
+/* v23: CONVERT(number, "from", "to"), with Excel's unit names (case matters, SI prefixes like "cm", "km", "mg", "ml";
    binary prefixes "ki" "Mi" "Gi" "Ti" for bit and byte) plus a few extras: "t" (tonne), "wk" and the Korean units
    평 (area), 근, 돈, 냥, 관 (weight). Units of different kinds, or unknown units, give #N/A. */
 var UNIT={ // code: [kind, size in the kind's base unit, prefixes: 1 SI, 2 SI squared, 3 SI cubed, 4 SI or binary]
