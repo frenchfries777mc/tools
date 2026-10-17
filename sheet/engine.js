@@ -113,6 +113,29 @@ function renameSheetInFormula(raw,from,to){
   return ch?'='+rebuild(toks):raw;
 }
 
+/* ---------- named ranges ---------- */
+var REFC=new Map();
+function parseNameRef(text){
+  if(REFC.has(text)) return REFC.get(text);
+  var toks=tokenize(String(text||'')).filter(function(t){ return t.t!=='ws'; }), out=null;
+  if(toks.length===1&&(toks[0].t==='ref'||toks[0].t==='rng')&&!toks[0].dead&&toks[0].sh!=null) out={sh:toks[0].sh,a:toks[0].a,b:toks[0].b||toks[0].a,t:toks[0].t,col:!!toks[0].col};
+  if(REFC.size>500) REFC.clear(); REFC.set(text,out); return out;
+}
+/* "A2:A10" or "Sheet2!A2:A10" -> absolute reference text with its sheet ("Sheet2!$A$2:$A$10"), or null */
+function nameRef(text,own){
+  var toks=tokenize(String(text||'').trim()).filter(function(t){ return t.t!=='ws'; });
+  if(toks.length!==1||(toks[0].t!=='ref'&&toks[0].t!=='rng')||toks[0].dead) return null;
+  var t=toks[0]; if(t.sh==null) t.sh=own; if(t.sh==null||t.sh==='') return null;
+  [t.a,t.b].forEach(function(p){ if(!p) return; p.ac=true; p.ar=p.r!=null; });
+  return tokText(t);
+}
+function validName(n){
+  n=String(n||''); if(!n||n.length>64||!/^[A-Za-z_가-힣][A-Za-z0-9_.가-힣]*$/.test(n)) return 'format';
+  if(/^[A-Za-z]{1,3}\d+$/.test(n)||/^[Rr]\d*[Cc]\d*$/.test(n)) return 'cell';
+  var u=n.toUpperCase(); if(u==='TRUE'||u==='FALSE'||FN[u]) return 'function';
+  return '';
+}
+
 /* ---------- parser ---------- */
 function parse(src){
   var toks=tokenize(src).filter(function(t){ return t.t!=='ws'; }), p=0;
@@ -136,7 +159,7 @@ function parse(src){
     if(t.t==='id'){
       if(isOp('(')){ p++; var args=[]; if(!isOp(')')){ for(;;){ if(isOp(',')||isOp(')')) args.push({k:'v',v:null}); else args.push(expr()); if(isOp(',')){ p++; continue; } break; } } eat(')'); return {k:'fn',n:t.v,args:args}; }
       if(t.v==='TRUE') return {k:'v',v:true}; if(t.v==='FALSE') return {k:'v',v:false};
-      return {k:'err',e:'#NAME?'};
+      return {k:'name',n:t.v};
     }
     if(t.t==='op'&&t.v==='('){ var e=expr(); eat(')'); return e; }
     if(t.t==='op'&&t.v==='{'){ var items=[]; for(;;){ items.push(expr()); if(isOp(',')){ p++; continue; } break; } eat('}'); return {k:'arr',items:items}; }
@@ -179,6 +202,8 @@ function toBool(v){ if(v==null) return false; if(typeof v==='boolean') return v;
 /* ---------- engine ---------- */
 function Engine(doc){ this.doc=doc; this.cache=[]; this.busy={}; this.parsed=new Map(); }
 Engine.prototype.reset=function(){ this.cache=[]; };
+/* named ranges: doc.names = [{name, ref:"Sheet1!$A$2:$A$10"}] */
+Engine.prototype.nameDef=function(up){ var l=this.doc.names; if(!l) return null; for(var i=0;i<l.length;i++) if(l[i].name.toUpperCase()===up) return l[i]; return null; };
 Engine.prototype.sheetIndex=function(name,own){
   if(name==null) return own; var sh=this.doc.sheets;
   for(var i=0;i<sh.length;i++) if(sh[i].name===name) return i;
@@ -215,6 +240,8 @@ Engine.prototype.ev=function(n,si){
     case 'rng': { var s2=this.sheetIndex(n.sh,si); if(s2<0) fail('#REF!');
       var r1=n.r1, r2=n.r2; if(n.col){ r1=0; r2=Math.max(0,this.maxRow(s2)); }
       return new Rng(s2,Math.min(r1,r2),Math.min(n.c1,n.c2),Math.max(r1,r2),Math.max(n.c1,n.c2)); }
+    case 'name': { var nd=this.nameDef(n.n); if(!nd) fail('#NAME?'); var pr=parseNameRef(nd.ref); if(!pr) fail('#REF!');
+      return this.ev(pr.t==='ref'?{k:'ref',sh:pr.sh,r:pr.a.r,c:pr.a.c}:{k:'rng',sh:pr.sh,r1:pr.a.r,c1:pr.a.c,r2:pr.b.r,c2:pr.b.c,col:!!pr.col},si); }
     case 'arr': return {arr:n.items.map(function(x){ return self.scal(self.ev(x,si)); })};
     case 'neg': return -toNum(this.scal(this.ev(n.a,si)));
     case 'pct': return toNum(this.scal(this.ev(n.a,si)))/100;
@@ -427,6 +454,62 @@ def('SLOPE',function(a){ var s=sxy(pairs(this,[a[1],a[0]])); if(!s[1]) fail('#DI
 def('INTERCEPT',function(a){ var p=pairs(this,[a[1],a[0]]), s=sxy(p); if(!s[1]) fail('#DIV/0!'); return mean(p[1])-s[0]/s[1]*mean(p[0]); });
 def('COUNTUNIQUE',function(a){ var seen={}, n=0; this.each(a,function(v){ if(v==null||v==='') return; var k=typeof v+':'+String(v).toLowerCase(); if(!seen[k]){ seen[k]=1; n++; } }); return n; });
 
+/* v11: pivot table. rows = evaluated values (no header row); groups by column kc and sums / counts / averages column vc.
+   agg 'sum'|'count'|'avg'; sort 'first' (order of appearance) | 'key' | 'val' (largest first). Returns {rows:[[key,value]], total}. */
+function pivot(rows,kc,vc,agg,sort){
+  var map=Object.create(null), list=[], T={n:0,s:0,m:0};
+  rows.forEach(function(row){
+    var kv=row[kc]; if(kv==null) kv=''; var disp=isErr(kv)?kv.e:formatValue(kv), id=disp.toLowerCase();
+    var g=map[id]; if(!g){ g=map[id]={key:kv,n:0,s:0,m:0}; list.push(g); }
+    var v=row[vc]; if(v==null||v===''||isErr(v)) return;
+    g.n++; T.n++; if(typeof v==='number'){ g.s+=v; g.m++; T.s+=v; T.m++; }
+  });
+  function val(g){ return agg==='count'?g.n:agg==='avg'?(g.m?g.s/g.m:null):g.s; }
+  var out=list.map(function(g){ return [g.key,val(g)]; });
+  if(sort==='key') out.sort(function(a,b){ var ea=a[0]==='', eb=b[0]==='';  if(ea||eb) return ea===eb?0:ea?1:-1; return cmpVals(a[0],b[0]); });
+  else if(sort==='val') out.sort(function(a,b){ if(a[1]==null||b[1]==null) return a[1]==null&&b[1]==null?0:a[1]==null?1:-1; return b[1]-a[1]; });
+  return {rows:out,total:val(T)};
+}
+
+/* v14: data cleaning. trimText works like TRIM (also non-breaking and full-width spaces); splitText splits on any of the delimiters;
+   dedupeRows returns keep[] flags: a row is dropped when an earlier row has the same values (case-insensitive) in the key columns. Rows whose key cells are all empty are kept. */
+var SPACES=/[\u00a0\u2000-\u200b\u3000\ufeff]/g;
+function trimText(s){ return String(s).replace(SPACES,' ').replace(/\s+/g,' ').trim(); }
+function splitText(s,delims,merge,trim){
+  s=String(s); var ds=(delims||[]).filter(function(d){ return d!=null&&d!==''; }).sort(function(a,b){ return b.length-a.length; });
+  var out=[s]; if(ds.length) out=s.split(new RegExp('(?:'+ds.map(function(d){ return d.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }).join('|')+')'+(merge?'+':'')));
+  return trim?out.map(function(x){ return x.replace(SPACES,' ').trim(); }):out;
+}
+function dedupeRows(rows,cols){
+  var seen=Object.create(null);
+  return rows.map(function(row){ var empty=true, key=cols.map(function(c){ var v=row[c]; if(v==null||v==='') return ''; empty=false; return isErr(v)?'e:'+v.e:typeof v+':'+String(v).toLowerCase(); }).join('\u0001');
+    if(empty) return true; if(seen[key]) return false; seen[key]=1; return true; });
+}
+
+/* v15: icon sets (arrows, traffic lights) for conditional formats. t = position of the value between the range's min (0) and max (1);
+   f.p1/f.p2 are the percent cut-offs (default 33/67) and f.rev swaps the colors (low is good) but keeps the arrow direction. Returns [glyph, color]. */
+var ICONS={arrows:['▼','▶','▲'],lights:['●','●','●']}, ICOL=['#ff5d5d','#ffc93c','#3fe08f'];
+function iconFor(f,t){
+  var p1=(f.p1==null?33:f.p1)/100, p2=(f.p2==null?67:f.p2)/100, lv=t>=p2?2:t>=p1?1:0;
+  return [(ICONS[f.set]||ICONS.arrows)[lv],ICOL[f.rev?2-lv:lv]];
+}
+/* sparkline as an SVG string (viewBox 100x24, stretched to the cell). vals: numbers or null; kind 'line' | 'col' */
+function sparkSvg(vals,kind,col){
+  var nums=vals.filter(function(x){ return x!=null; }); if(!nums.length) return null;
+  var lo=Math.min.apply(null,nums), hi=Math.max.apply(null,nums), W=100, H=24, pad=3, n=vals.length, o='';
+  function xs(i){ return n>1?4+i*(W-8)/(n-1):W/2; }
+  if(kind==='col'){
+    var b0=Math.min(0,lo), b1=Math.max(0,hi); if(b1===b0) b1=b0+1; var ys=function(v){ return H-pad-(v-b0)/(b1-b0)*(H-2*pad); }, bw=Math.max(2,(W-8)/n*.7), zy=ys(0);
+    vals.forEach(function(v,i){ if(v==null) return; var y=ys(v), x=n>1?4+(i+.5)*(W-8)/n-bw/2:W/2-bw/2; o+='<rect x="'+x.toFixed(2)+'" y="'+Math.min(y,zy).toFixed(2)+'" width="'+bw.toFixed(2)+'" height="'+Math.max(1,Math.abs(zy-y)).toFixed(2)+'" fill="'+col+'"/>'; });
+  } else {
+    var yl=function(v){ return hi===lo?H/2:H-pad-(v-lo)/(hi-lo)*(H-2*pad); }, segs=[], cur=[];
+    vals.forEach(function(v,i){ if(v==null){ if(cur.length) segs.push(cur); cur=[]; return; } cur.push(xs(i).toFixed(2)+','+yl(v).toFixed(2)); }); if(cur.length) segs.push(cur);
+    segs.forEach(function(sg){ if(sg.length>1) o+='<polyline points="'+sg.join(' ')+'" fill="none" stroke="'+col+'" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>'; });
+    var li=vals.length-1; while(li>=0&&vals[li]==null) li--; if(li>=0){ var lx=xs(li); o+='<polyline points="'+lx.toFixed(2)+','+yl(vals[li]).toFixed(2)+' '+(lx+.01).toFixed(2)+','+yl(vals[li]).toFixed(2)+'" fill="none" stroke="'+col+'" stroke-width="5" stroke-linecap="round" vector-effect="non-scaling-stroke"/>'; }
+  }
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none">'+o+'</svg>';
+}
+
 /* ---------- display ---------- */
 function formatValue(v,nf){
   if(v==null) return '';
@@ -463,6 +546,6 @@ def('AI',function(a){
 
 var api={K:K,RC:RC,KC:KC,colName:colName,colIdx:colIdx,addr:addr,parseAddr:parseAddr,parseRange:parseRange,rangeStr:rangeStr,
   tokenize:tokenize,rebuild:rebuild,parse:parse,literal:literal,shiftFormula:shiftFormula,adjustFormula:adjustFormula,renameSheetInFormula:renameSheetInFormula,
-  Engine:Engine,Err:Err,errHint:errHint,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,asDate:asDate,dateStr:dateStr,FN:FN,quoteSheet:quoteSheet};
+  Engine:Engine,Err:Err,errHint:errHint,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,pivot:pivot,iconFor:iconFor,sparkSvg:sparkSvg,ICOL:ICOL,trimText:trimText,splitText:splitText,dedupeRows:dedupeRows,parseNameRef:parseNameRef,nameRef:nameRef,validName:validName,refText:refText,asDate:asDate,dateStr:dateStr,FN:FN,quoteSheet:quoteSheet};
 if(typeof module!=='undefined'&&module.exports) module.exports=api; else root.FSE=api;
 })(this);

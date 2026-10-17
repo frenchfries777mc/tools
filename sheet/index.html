@@ -156,7 +156,23 @@ button,input,select{font:inherit; color:inherit;}
   #grid thead th,#grid tbody th{background:#eee!important; color:#333!important;}
   #grid tr.npr,#grid td.npr,#grid th.npr,#grid col.npr{display:none!important;}
 }
+/* v15: icon sets */
+#grid td.ic{padding-left:24px;} #grid td .ico{position:absolute; left:6px; top:0; font-size:12px; line-height:25px; pointer-events:none;}
+/* v14: data cleaning */
+.chkGrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:0 12px;}
+.spPrev{border:1px solid var(--line); background:var(--bg); border-radius:9px; padding:10px; font-family:'JetBrains Mono','Noto Sans KR',monospace; font-size:13px; min-height:42px; word-break:break-all; color:var(--fry);}
+.dpCol{display:flex; align-items:center; gap:10px; padding:8px 10px; border:1px solid var(--line); border-radius:9px; background:var(--bg); margin-bottom:5px; cursor:pointer; min-height:40px; color:var(--text)!important; margin-top:0!important;} .dpCol input{width:20px; height:20px; accent-color:#ffc93c; flex:0 0 auto;}
+/* v13: named ranges */
+.cfItem .nmN{font-family:'JetBrains Mono',monospace; color:var(--fry); font-size:13px; cursor:pointer; flex:0 1 auto; max-width:45%; overflow:hidden; text-overflow:ellipsis;} .cfItem .nmR{flex:1; min-width:0; color:var(--dim); font-family:'JetBrains Mono',monospace; font-size:12.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; cursor:pointer;}
+/* v12: merged cells, border dialog */
+.bdGrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:8px; margin-top:12px;} .bdGrid .tbtn{justify-content:flex-start; height:42px;} .bdGrid .dang{color:#ff7b7b;}
+.bi{display:inline-block; width:18px; height:18px; border:1px dashed #4a5268; box-sizing:border-box; flex:0 0 auto;}
+.bi.all{border:2px solid var(--fry);} .bi.outer{border:2px solid var(--fry); background:linear-gradient(#4a5268,#4a5268) center/1px 100% no-repeat,linear-gradient(#4a5268,#4a5268) center/100% 1px no-repeat;}
+.bi.inner{background:linear-gradient(var(--fry),var(--fry)) center/2px 100% no-repeat,linear-gradient(var(--fry),var(--fry)) center/100% 2px no-repeat;}
+.bi.top{border-top:2px solid var(--fry);} .bi.bottom{border-bottom:2px solid var(--fry);} .bi.left{border-left:2px solid var(--fry);} .bi.right{border-right:2px solid var(--fry);}
+@media print{ #bdDlg{display:none!important;} }
 /* v10 */
+.chkRow{display:flex!important; align-items:center; gap:8px; cursor:pointer; color:var(--text)!important; margin:4px 0 8px!important;} .chkRow input{width:18px; height:18px; accent-color:#ffc93c;}
 #grid td.nt::after{content:''; position:absolute; top:0; right:0; border-style:solid; border-width:0 8px 8px 0; border-color:transparent #ff5d5d transparent transparent;}
 #grid td.flt{padding-right:22px;} #grid td.flt::before{content:'▾'; position:absolute; right:0; top:0; width:22px; height:100%; text-align:center; color:var(--fry); background:rgba(255,201,60,.14); font-size:13px; cursor:pointer;}
 #grid td.flton::before{background:rgba(255,201,60,.5); color:#1c1405;}
@@ -258,6 +274,8 @@ button,input,select{font:inherit; color:inherit;}
   <button class="rb" data-cmd="decDn" title="소수점 줄이기"><b style="font-size:12px;font-family:'JetBrains Mono',monospace">.0←</b></button>
   <button class="rb" data-cmd="decUp" title="소수점 늘리기"><b style="font-size:12px;font-family:'JetBrains Mono',monospace">.00</b></button>
   <button class="rb" data-cmd="border" title="테두리"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M12 4v16M4 12h16"/></svg></button>
+  <button class="rb" data-cmd="borderdlg" title="테두리 설정 (칸마다 쪽, 색)"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1" stroke-dasharray="2 2.5"/><path d="M4 20h16" stroke="#ffc93c" stroke-width="3"/></svg></button>
+  <button class="rb" data-cmd="merge" id="bMerge" title="칸 병합 / 병합 풀기"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="1.5"/><path d="M8 12h8M8 12l2.5-2.5M8 12l2.5 2.5M16 12l-2.5-2.5M16 12l-2.5 2.5"/></svg><span class="lb">병합</span></button>
   <button class="rb" data-cmd="clearfmt" title="서식 지우기"><svg viewBox="0 0 24 24"><path d="M4 20h16"/><path d="M14 4l6 6-8 8H8l-4-4z"/></svg></button>
   <span class="sepv"></span>
   <button class="rb" data-cmd="sum" title="자동 합계"><b style="font-size:17px">Σ</b></button>
@@ -273,9 +291,11 @@ button,input,select{font:inherit; color:inherit;}
   <button class="rb" data-cmd="scale" title="색 단계"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1" fill="#ff6b6b" stroke="none"/><rect x="9.5" y="4" width="5" height="16" rx="1" fill="#ffc93c" stroke="none"/><rect x="16" y="4" width="5" height="16" rx="1" fill="#3fe08f" stroke="none"/></svg><span class="lb">색 단계</span></button>
   <button class="rb" data-cmd="bars" title="데이터 막대"><svg viewBox="0 0 24 24"><path d="M3 6h12M3 12h17M3 18h7" stroke-width="3"/></svg><span class="lb">막대</span></button>
   <button class="rb" data-cmd="cfrule" title="조건부 서식"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18"/><rect x="4" y="11" width="16" height="3.5" fill="#ff6b6b" stroke="none"/></svg><span class="lb">조건 서식</span></button>
+  <button class="rb" data-cmd="cfviz" title="미니 막대, 스파크라인, 아이콘"><svg viewBox="0 0 24 24"><path d="M3 18l4-6 4 3 5-9 5 5"/><path d="M4 21h5M12 21h8" stroke-width="3"/></svg><span class="lb">아이콘</span></button>
   <button class="rb" data-cmd="dv" title="드롭다운 목록"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M9 11l3 3 3-3"/></svg><span class="lb">목록</span></button>
   <button class="rb" data-cmd="note" id="bNote" title="메모"><svg viewBox="0 0 24 24"><path d="M4 4h16v12h-7l-5 4v-4H4z"/></svg><span class="lb">메모</span></button>
   <button class="rb" data-cmd="check" title="체크박스"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/></svg><span class="lb">체크박스</span></button>
+  <button class="rb" data-cmd="datamenu" id="bData" title="데이터 도구"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M10 10v10"/><path d="M14 14.5h4M14 17h2"/></svg><span class="lb">데이터</span></button>
   <span class="sepv"></span>
   <button class="rb" data-cmd="print" title="인쇄 (PDF 저장)"><svg viewBox="0 0 24 24"><path d="M7 9V3h10v6"/><rect x="4" y="9" width="16" height="8" rx="2"/><path d="M7 14h10v7H7z"/></svg></button>
   <button class="rb" data-cmd="keys" title="단축키 보기"><svg viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/></svg></button>
@@ -339,6 +359,7 @@ button,input,select{font:inherit; color:inherit;}
   <button data-r="fzRow">여기까지 행 고정</button>
   <button data-r="fzCol">여기까지 열 고정</button>
   <button data-r="fzOff">고정 풀기</button>
+  <button data-r="unmerge">선택 범위 병합 풀기</button>
   <hr>
   <button data-r="clearCf">선택 범위의 조건 서식 모두 없애기</button>
   <hr>
@@ -348,6 +369,14 @@ button,input,select{font:inherit; color:inherit;}
   <button data-r="clr" class="dang">선택한 내용 지우기</button>
 </div>
 <div class="menu" id="dvMenu"></div>
+<div class="menu" id="dataMenu">
+  <button data-d="pivot">피벗 테이블 만들기…</button>
+  <button data-d="names">이름 범위 관리…</button>
+  <hr>
+  <button data-d="dedupe">중복 항목 제거…</button>
+  <button data-d="split">텍스트를 여러 열로 나누기…</button>
+  <button data-d="trim">공백 정리 (앞뒤·겹친 공백)</button>
+</div>
 <div class="menu" id="tabMenu">
   <button data-t="rename">이름 바꾸기</button>
   <button data-t="dup">복제</button>
@@ -417,7 +446,7 @@ button,input,select{font:inherit; color:inherit;}
     <div class="dmH">이 시트의 규칙</div>
     <div id="cfList"></div>
   </div>
-  <div class="acts"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="cfAdd">규칙 추가</button></div>
+  <div class="acts"><button class="tbtn" id="cfViz" style="margin-right:auto">미니 막대·스파크라인·아이콘…</button><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="cfAdd">규칙 추가</button></div>
 </div></div>
 <div class="ov" id="dvDlg"><div class="dlg">
   <div class="dh"><h3>드롭다운 목록</h3><button class="x" data-close aria-label="닫기">×</button></div>
@@ -428,6 +457,104 @@ button,input,select{font:inherit; color:inherit;}
     <p class="vhint" style="margin:10px 0 0">이 칸을 누르면 ▾ 버튼이 나와요. 목록에 없는 값은 입력할 수 없어요.</p>
   </div>
   <div class="acts"><button class="tbtn" id="dvOff">목록 없애기</button><button class="tbtn pri" id="dvOk">적용</button></div>
+</div></div>
+<div class="ov" id="pvDlg"><div class="dlg">
+  <div class="dh"><h3>피벗 테이블</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody">
+    <div class="aiCtx" id="pvRg" data-notr></div>
+    <label class="chkRow"><input type="checkbox" id="pvHdr"><span>첫 줄은 제목</span></label>
+    <label>묶을 열</label><select id="pvKey" class="dsel" data-notr></select>
+    <label>계산할 열</label><select id="pvVal" class="dsel" data-notr></select>
+    <label>계산 방법</label>
+    <select id="pvAgg" class="dsel"><option value="sum">합계</option><option value="count">개수</option><option value="avg">평균</option></select>
+    <label>순서</label>
+    <select id="pvSort" class="dsel"><option value="first">처음 나온 순서</option><option value="key">이름순</option><option value="val">값이 큰 순서</option></select>
+    <p class="vhint" style="margin:10px 0 0">결과는 새 시트에 값으로 만들어져요. 원래 표를 고쳤다면 피벗을 다시 만드세요.</p>
+  </div>
+  <div class="acts"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="pvOk">피벗 만들기</button></div>
+</div></div>
+<div class="ov" id="bdDlg"><div class="dlg">
+  <div class="dh"><h3>테두리 설정</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody">
+    <div class="aiCtx" id="bdRg" data-notr></div>
+    <div class="dRow"><label style="margin:0">색</label><input type="color" id="bdColor" value="#ffc93c" style="flex:0 0 52px;height:38px;padding:2px;background:var(--bg);border:1px solid var(--line);border-radius:8px">
+      <label style="margin:0 0 0 10px">굵기</label><select id="bdW" class="dsel" style="flex:1"><option value="1">얇게</option><option value="2">보통</option><option value="3">두껍게</option></select></div>
+    <div class="swRow" id="bdSw" style="margin-top:10px"></div>
+    <div class="bdGrid">
+      <button class="tbtn" data-b="all"><i class="bi all"></i>모두</button>
+      <button class="tbtn" data-b="outer"><i class="bi outer"></i>바깥쪽</button>
+      <button class="tbtn" data-b="inner"><i class="bi inner"></i>안쪽</button>
+      <button class="tbtn" data-b="top"><i class="bi top"></i>위쪽</button>
+      <button class="tbtn" data-b="bottom"><i class="bi bottom"></i>아래쪽</button>
+      <button class="tbtn" data-b="left"><i class="bi left"></i>왼쪽</button>
+      <button class="tbtn" data-b="right"><i class="bi right"></i>오른쪽</button>
+      <button class="tbtn dang" data-b="none"><i class="bi none"></i>없음</button>
+    </div>
+    <p class="vhint" style="margin:10px 0 0">고른 범위에 바로 적용돼요. 색과 굵기를 바꾸고 다른 쪽을 눌러 이어서 꾸밀 수 있어요.</p>
+  </div>
+  <div class="acts"><button class="tbtn pri" data-close>닫기</button></div>
+</div></div>
+<div class="ov" id="nmDlg"><div class="dlg">
+  <div class="dh"><h3>이름 범위</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody">
+    <p class="vhint" style="margin:0 0 10px">범위에 이름을 붙이면 =SUM(sales) 처럼 수식에서 이름으로 쓸 수 있어요. 이름 칸에 이름을 치고 Enter를 누르면 그 범위로 이동해요.</p>
+    <div id="nmList"></div>
+    <div class="dmH">이름 만들기 · 고치기</div>
+    <label>이름</label><input type="text" id="nmName" placeholder="예: sales" spellcheck="false" autocomplete="off" autocapitalize="off">
+    <label>범위</label>
+    <div class="dRow" style="margin-top:0"><input type="text" id="nmRef" placeholder="예: A2:A10 또는 시트2!A2:A10" spellcheck="false" autocomplete="off" autocapitalize="characters"><button class="tbtn" id="nmUse">지금 선택</button></div>
+  </div>
+  <div class="acts"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="nmSave">저장</button></div>
+</div></div>
+<div class="ov" id="dpDlg"><div class="dlg">
+  <div class="dh"><h3>중복 항목 제거</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody">
+    <div class="aiCtx" id="dpRg" data-notr></div>
+    <label class="chkRow"><input type="checkbox" id="dpHdr"><span>첫 줄은 제목</span></label>
+    <label>같은 값을 찾을 열 (고른 열이 모두 같으면 중복)</label>
+    <div class="fltRow"><button class="tbtn" id="dpAll">모두 선택</button><button class="tbtn" id="dpNone">모두 해제</button></div>
+    <div id="dpCols"></div>
+    <p class="vhint" style="margin:10px 0 0">처음 나온 줄만 남기고 나머지는 지워서 위로 당겨요. 대소문자는 구분하지 않아요.</p>
+  </div>
+  <div class="acts"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="dpOk">중복 제거</button></div>
+</div></div>
+<div class="ov" id="spDlg"><div class="dlg">
+  <div class="dh"><h3>텍스트 나누기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody">
+    <div class="aiCtx" id="spRg" data-notr></div>
+    <label>나눌 기준</label>
+    <div class="chkGrid">
+      <label class="chkRow"><input type="checkbox" id="spComma" checked><span>쉼표 ( , )</span></label>
+      <label class="chkRow"><input type="checkbox" id="spSemi"><span>세미콜론 ( ; )</span></label>
+      <label class="chkRow"><input type="checkbox" id="spTab"><span>탭</span></label>
+      <label class="chkRow"><input type="checkbox" id="spSpace"><span>공백</span></label>
+      <label class="chkRow"><input type="checkbox" id="spOther"><span>직접 입력</span></label>
+    </div>
+    <input type="text" id="spCustom" placeholder="예: / 또는 -" maxlength="8" style="margin-bottom:8px">
+    <label class="chkRow"><input type="checkbox" id="spMerge"><span>겹친 기준은 하나로 보기</span></label>
+    <label class="chkRow"><input type="checkbox" id="spTrim" checked><span>나뉜 칸의 앞뒤 공백 지우기</span></label>
+    <div class="dmH">미리보기 (첫 줄)</div>
+    <div class="spPrev" id="spPrev" data-notr></div>
+  </div>
+  <div class="acts"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="spOk">나누기</button></div>
+</div></div>
+<div class="ov" id="cfxDlg"><div class="dlg">
+  <div class="dh"><h3>미니 막대·스파크라인·아이콘</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody">
+    <div class="aiCtx" id="cfxRg" data-notr></div>
+    <label>종류</label>
+    <select id="cfxType" class="dsel"><option value="mbar">미니 막대</option><option value="spark">스파크라인 · 꺾은선</option><option value="sparkc">스파크라인 · 막대</option><option value="arrows">화살표 아이콘</option><option value="lights">신호등 아이콘</option></select>
+    <div id="cfxSparkOpt"><label>스파크라인을 그릴 열</label><input type="text" id="cfxDc" placeholder="예: F" maxlength="3"><p class="vhint" style="margin:6px 0 0">고른 범위의 줄마다 값들을 이 열의 같은 줄 칸에 작은 그래프로 그려요.</p></div>
+    <div id="cfxColOpt"><label>색</label><div class="swRow" id="cfxSw"></div></div>
+    <div id="cfxIcoOpt" style="display:none">
+      <label>구분 기준 (가장 작은 값 0%, 가장 큰 값 100%)</label>
+      <div class="dRow"><span>노랑부터</span><input type="text" id="cfxP1" value="33" inputmode="numeric" style="max-width:70px"><span>% · 초록부터</span><input type="text" id="cfxP2" value="67" inputmode="numeric" style="max-width:70px"><span>%</span></div>
+      <label class="chkRow" style="margin-top:10px!important"><input type="checkbox" id="cfxRev"><span>낮을수록 좋아요 (초록과 빨강을 바꿔요)</span></label>
+    </div>
+    <div class="dmH">이 시트에 넣은 것</div>
+    <div id="cfxList"></div>
+  </div>
+  <div class="acts"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="cfxAdd">넣기</button></div>
 </div></div>
 <div class="ov" id="tplDlg"><div class="dlg">
   <div class="dh"><h3>템플릿</h3><button class="x" data-close aria-label="닫기">×</button></div>

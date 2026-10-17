@@ -482,3 +482,147 @@ FFT.add({
 '목록 없애기':["Remove list","Quitar lista","Supprimer la liste","Liste entfernen","リストを削除"],
 '템플릿':["Templates","Plantillas","Modèles","Vorlagen","テンプレート"]
 });
+
+/* v11: pivot table, data menu */
+FFT.add({
+"데이터 도구":["Data tools", "Herramientas de datos", "Outils de données", "Datenwerkzeuge", "データツール"],
+"데이터":["Data", "Datos", "Données", "Daten", "データ"],
+"피벗 테이블 만들기…":["Make pivot table…", "Crear tabla dinámica…", "Créer un tableau croisé…", "Pivot-Tabelle erstellen…", "ピボットテーブルを作る…"],
+"피벗 테이블":["Pivot table", "Tabla dinámica", "Tableau croisé dynamique", "Pivot-Tabelle", "ピボットテーブル"],
+"피벗":["Pivot", "Dinámica", "Croisé", "Pivot", "ピボット"],
+"첫 줄은 제목":["First row is a header", "La primera fila es el encabezado", "La première ligne est un titre", "Erste Zeile ist Überschrift", "1行目は見出し"],
+"묶을 열":["Group by column", "Agrupar por columna", "Regrouper par colonne", "Gruppieren nach Spalte", "グループ化する列"],
+"계산할 열":["Column to calculate", "Columna a calcular", "Colonne à calculer", "Spalte berechnen", "計算する列"],
+"계산 방법":["Calculation", "Cálculo", "Calcul", "Berechnung", "計算方法"],
+"순서":["Order", "Orden", "Ordre", "Reihenfolge", "順序"],
+"처음 나온 순서":["Order of appearance", "Orden de aparición", "Ordre d’apparition", "Reihenfolge des Auftretens", "出てきた順"],
+"이름순":["By name", "Por nombre", "Par nom", "Nach Name", "名前順"],
+"값이 큰 순서":["Largest value first", "Mayor valor primero", "Plus grande valeur d’abord", "Größter Wert zuerst", "値が大きい順"],
+"결과는 새 시트에 값으로 만들어져요. 원래 표를 고쳤다면 피벗을 다시 만드세요.":["The result is written to a new sheet as values. If you change the original table, make the pivot again.", "El resultado se escribe en una hoja nueva como valores. Si cambias la tabla original, vuelve a crear la dinámica.", "Le résultat est écrit dans une nouvelle feuille sous forme de valeurs. Si tu modifies le tableau d’origine, refais le croisé.", "Das Ergebnis steht als Werte in einem neuen Blatt. Wenn du die Tabelle änderst, erstelle die Pivot-Tabelle neu.", "結果は値として新しいシートに作られます。元の表を直したらピボットを作り直してください。"],
+"피벗 만들기":["Make pivot", "Crear dinámica", "Créer le croisé", "Pivot erstellen", "ピボットを作る"],
+"총합계":["Grand total", "Total general", "Total général", "Gesamtsumme", "総合計"],
+"피벗으로 만들 표를 먼저 고르세요":["Select a table for the pivot first", "Selecciona primero una tabla para la dinámica", "Sélectionne d’abord un tableau pour le croisé", "Wähle zuerst eine Tabelle für die Pivot-Tabelle", "先にピボットにする表を選んでください"],
+"{0}개 항목으로 피벗을 만들었어요":["Made a pivot with {0} items", "Dinámica creada con {0} elementos", "Croisé créé avec {0} éléments", "Pivot-Tabelle mit {0} Einträgen erstellt", "{0}項目のピボットを作りました"],
+"{0}열":["Column {0}", "Columna {0}", "Colonne {0}", "Spalte {0}", "{0}列"]
+});
+
+/* v12: merged cells, per-side borders */
+FFT.add({
+"테두리 설정 (칸마다 쪽, 색)":["Border settings (per side, color)", "Ajustes de bordes (por lado, color)", "Réglages des bordures (par côté, couleur)", "Rahmen-Einstellungen (pro Seite, Farbe)", "罫線の設定 (辺ごと、色)"],
+"테두리 설정":["Border settings", "Ajustes de bordes", "Réglages des bordures", "Rahmen-Einstellungen", "罫線の設定"],
+"칸 병합 / 병합 풀기":["Merge cells / Unmerge", "Combinar / separar celdas", "Fusionner / séparer les cellules", "Zellen verbinden / trennen", "セルを結合 / 結合を解除"],
+"병합":["Merge", "Combinar", "Fusionner", "Verbinden", "結合"],
+"선택 범위 병합 풀기":["Unmerge selected cells", "Separar celdas seleccionadas", "Séparer les cellules sélectionnées", "Auswahl trennen", "選択範囲の結合を解除"],
+"굵기":["Thickness", "Grosor", "Épaisseur", "Stärke", "太さ"],
+"얇게":["Thin", "Fino", "Fin", "Dünn", "細く"],
+"보통":["Medium", "Medio", "Moyen", "Mittel", "普通"],
+"모두":["All", "Todos", "Tous", "Alle", "すべて"],
+"바깥쪽":["Outside", "Exterior", "Extérieur", "Außen", "外側"],
+"안쪽":["Inside", "Interior", "Intérieur", "Innen", "内側"],
+"위쪽":["Top", "Superior", "Haut", "Oben", "上"],
+"아래쪽":["Bottom", "Inferior", "Bas", "Unten", "下"],
+"왼쪽":["Left", "Izquierda", "Gauche", "Links", "左"],
+"오른쪽":["Right", "Derecha", "Droite", "Rechts", "右"],
+"없음":["None", "Ninguno", "Aucun", "Keine", "なし"],
+"고른 범위에 바로 적용돼요. 색과 굵기를 바꾸고 다른 쪽을 눌러 이어서 꾸밀 수 있어요.":["Applied to the selection right away. Change the color and thickness, then tap another side to keep decorating.", "Se aplica al instante a la selección. Cambia el color y el grosor y pulsa otro lado para seguir.", "S’applique tout de suite à la sélection. Change la couleur et l’épaisseur puis touche un autre côté pour continuer.", "Wird sofort auf die Auswahl angewendet. Farbe und Stärke ändern und eine andere Seite antippen, um weiterzumachen.", "選んだ範囲にすぐ適用されます。色と太さを変えて別の辺を押すと続けて飾れます。"],
+"병합했어요":["Merged", "Combinadas", "Fusionnées", "Verbunden", "結合しました"],
+"병합했어요. 왼쪽 위 칸의 내용만 남아요":["Merged. Only the top-left cell’s content is kept", "Combinadas. Solo se conserva el contenido de la celda superior izquierda", "Fusionnées. Seul le contenu de la cellule en haut à gauche est conservé", "Verbunden. Nur der Inhalt der Zelle oben links bleibt", "結合しました。左上のセルの内容だけが残ります"],
+"병합을 풀었어요":["Unmerged", "Separadas", "Séparées", "Getrennt", "結合を解除しました"],
+"두 칸 이상 고르세요":["Select two or more cells", "Selecciona dos o más celdas", "Sélectionne au moins deux cellules", "Wähle zwei oder mehr Zellen", "2つ以上のセルを選んでください"],
+"테두리를 없앴어요":["Borders removed", "Bordes quitados", "Bordures supprimées", "Rahmen entfernt", "罫線を消しました"],
+"범위가 너무 커요":["The range is too large", "El rango es demasiado grande", "La plage est trop grande", "Der Bereich ist zu groß", "範囲が大きすぎます"]
+});
+
+/* v12 (thickness label) */
+FFT.add({
+"두껍게":["Thick", "Grueso", "Épais", "Dick", "太く"]
+});
+
+/* v13: named ranges */
+FFT.add({
+"이름 범위 관리…":["Manage named ranges…", "Administrar rangos con nombre…", "Gérer les plages nommées…", "Benannte Bereiche verwalten…", "名前付き範囲の管理…"],
+"이름 범위":["Named ranges", "Rangos con nombre", "Plages nommées", "Benannte Bereiche", "名前付き範囲"],
+"범위에 이름을 붙이면 =SUM(sales) 처럼 수식에서 이름으로 쓸 수 있어요. 이름 칸에 이름을 치고 Enter를 누르면 그 범위로 이동해요.":["Give a range a name and use it in formulas like =SUM(sales). Type the name in the name box and press Enter to jump to that range.", "Ponle nombre a un rango y úsalo en fórmulas como =SUM(sales). Escribe el nombre en el cuadro de nombres y pulsa Enter para ir a ese rango.", "Donne un nom à une plage et utilise-le dans les formules comme =SUM(sales). Saisis le nom dans la zone de nom et appuie sur Entrée pour y aller.", "Gib einem Bereich einen Namen und nutze ihn in Formeln wie =SUM(sales). Name ins Namenfeld tippen und Enter drücken, um dorthin zu springen.", "範囲に名前を付けると =SUM(sales) のように数式で使えます。名前ボックスに名前を入れてEnterを押すとその範囲に移動します。"],
+"이름 만들기 · 고치기":["Create · edit a name", "Crear · editar nombre", "Créer · modifier un nom", "Name erstellen · ändern", "名前の作成・変更"],
+"범위":["Range", "Rango", "Plage", "Bereich", "範囲"],
+"예: sales":["e.g. sales", "p. ej. ventas", "ex. ventes", "z. B. umsatz", "例: sales"],
+"예: A2:A10 또는 시트2!A2:A10":["e.g. A2:A10 or Sheet2!A2:A10", "p. ej. A2:A10 o Hoja2!A2:A10", "ex. A2:A10 ou Feuille2!A2:A10", "z. B. A2:A10 oder Blatt2!A2:A10", "例: A2:A10 または シート2!A2:A10"],
+"지금 선택":["Use selection", "Usar selección", "Utiliser la sélection", "Auswahl verwenden", "現在の選択"],
+"저장":["Save", "Guardar", "Enregistrer", "Speichern", "保存"],
+"이동":["Go to", "Ir a", "Aller à", "Gehe zu", "移動"],
+"아직 이름이 없어요":["No names yet", "Aún no hay nombres", "Aucun nom pour l’instant", "Noch keine Namen", "まだ名前がありません"],
+"이 이름이 가리키는 범위가 없어요":["This name points to a range that no longer exists", "Este nombre apunta a un rango que ya no existe", "Ce nom pointe vers une plage qui n’existe plus", "Dieser Name zeigt auf einen nicht mehr vorhandenen Bereich", "この名前が指す範囲がありません"],
+"칸 주소처럼 보이는 이름은 쓸 수 없어요":["A name that looks like a cell address can’t be used", "No se puede usar un nombre que parezca una dirección de celda", "Un nom qui ressemble à une adresse de cellule est interdit", "Ein Name, der wie eine Zelladresse aussieht, ist nicht erlaubt", "セル番地のような名前は使えません"],
+"함수 이름과 같은 이름은 쓸 수 없어요":["A name equal to a function name can’t be used", "No se puede usar el nombre de una función", "Le nom d’une fonction est interdit", "Ein Funktionsname ist nicht erlaubt", "関数名と同じ名前は使えません"],
+"이름은 글자로 시작하고 글자·숫자·_ 만 쓸 수 있어요":["A name starts with a letter and can use only letters, digits and _", "El nombre empieza con una letra y solo admite letras, números y _", "Un nom commence par une lettre et n’accepte que lettres, chiffres et _", "Ein Name beginnt mit einem Buchstaben und darf nur Buchstaben, Ziffern und _ enthalten", "名前は文字で始まり、文字・数字・_ だけ使えます"],
+"범위를 알 수 없어요. 예: A2:A10":["Can’t read that range. Example: A2:A10", "No se entiende el rango. Ejemplo: A2:A10", "Plage illisible. Exemple : A2:A10", "Bereich nicht lesbar. Beispiel: A2:A10", "範囲が読み取れません。例: A2:A10"],
+"이름은 200개까지 만들 수 있어요":["You can create up to 200 names", "Puedes crear hasta 200 nombres", "Tu peux créer jusqu’à 200 noms", "Du kannst bis zu 200 Namen anlegen", "名前は200個まで作れます"],
+"\"{0}\" 이름을 바꿨어요":["Updated the name \"{0}\"", "Nombre \"{0}\" actualizado", "Nom « {0} » modifié", "Name „{0}“ geändert", "名前「{0}」を変更しました"],
+"\"{0}\" 이름을 만들었어요":["Created the name \"{0}\"", "Nombre \"{0}\" creado", "Nom « {0} » créé", "Name „{0}“ erstellt", "名前「{0}」を作りました"],
+"\"{0}\" 이름을 붙였어요":["Named the selection \"{0}\"", "Selección nombrada \"{0}\"", "Sélection nommée « {0} »", "Auswahl „{0}“ benannt", "選択範囲に「{0}」と名前を付けました"]
+});
+
+/* v14: data cleaning */
+FFT.add({
+"중복 항목 제거…":["Remove duplicates…", "Quitar duplicados…", "Supprimer les doublons…", "Duplikate entfernen…", "重複を削除…"],
+"텍스트를 여러 열로 나누기…":["Split text into columns…", "Dividir texto en columnas…", "Fractionner le texte en colonnes…", "Text in Spalten teilen…", "テキストを列に分割…"],
+"공백 정리 (앞뒤·겹친 공백)":["Trim spaces (leading, trailing, repeated)", "Recortar espacios (inicio, final, repetidos)", "Nettoyer les espaces (début, fin, répétés)", "Leerzeichen bereinigen (Anfang, Ende, doppelt)", "空白を整理 (前後・連続)"],
+"중복 항목 제거":["Remove duplicates", "Quitar duplicados", "Supprimer les doublons", "Duplikate entfernen", "重複を削除"],
+"같은 값을 찾을 열 (고른 열이 모두 같으면 중복)":["Columns to compare (a row is a duplicate when all chosen columns match)", "Columnas a comparar (una fila es duplicada si coinciden todas las elegidas)", "Colonnes à comparer (une ligne est un doublon si toutes les colonnes choisies sont identiques)", "Zu vergleichende Spalten (doppelt, wenn alle gewählten Spalten gleich sind)", "比べる列 (選んだ列がすべて同じなら重複)"],
+"처음 나온 줄만 남기고 나머지는 지워서 위로 당겨요. 대소문자는 구분하지 않아요.":["Only the first occurrence is kept; the rest are deleted and the rows below move up. Upper/lower case is ignored.", "Solo se conserva la primera aparición; el resto se borra y las filas suben. No distingue mayúsculas.", "Seule la première occurrence est conservée ; les autres sont supprimées et les lignes remontent. La casse est ignorée.", "Nur das erste Vorkommen bleibt, der Rest wird gelöscht und die Zeilen rücken nach oben. Groß-/Kleinschreibung wird ignoriert.", "最初の行だけを残して残りを削除し、上に詰めます。大文字・小文字は区別しません。"],
+"중복 제거":["Remove", "Quitar", "Supprimer", "Entfernen", "削除"],
+"텍스트 나누기":["Split text", "Dividir texto", "Fractionner le texte", "Text teilen", "テキスト分割"],
+"나눌 기준":["Split by", "Dividir por", "Fractionner selon", "Trennen nach", "区切り文字"],
+"쉼표 ( , )":["Comma ( , )", "Coma ( , )", "Virgule ( , )", "Komma ( , )", "カンマ ( , )"],
+"세미콜론 ( ; )":["Semicolon ( ; )", "Punto y coma ( ; )", "Point-virgule ( ; )", "Semikolon ( ; )", "セミコロン ( ; )"],
+"탭":["Tab", "Tabulador", "Tabulation", "Tabulator", "タブ"],
+"공백":["Space", "Espacio", "Espace", "Leerzeichen", "スペース"],
+"직접 입력":["Custom", "Personalizado", "Personnalisé", "Eigene", "自分で入力"],
+"예: / 또는 -":["e.g. / or -", "p. ej. / o -", "ex. / ou -", "z. B. / oder -", "例: / や -"],
+"겹친 기준은 하나로 보기":["Treat repeated separators as one", "Tratar separadores repetidos como uno", "Considérer les séparateurs répétés comme un seul", "Mehrfache Trennzeichen als eins behandeln", "連続した区切りは1つとして扱う"],
+"나뉜 칸의 앞뒤 공백 지우기":["Trim spaces around each part", "Quitar espacios alrededor de cada parte", "Supprimer les espaces autour de chaque partie", "Leerzeichen um jeden Teil entfernen", "分けた各セルの前後の空白を消す"],
+"미리보기 (첫 줄)":["Preview (first row)", "Vista previa (primera fila)", "Aperçu (première ligne)", "Vorschau (erste Zeile)", "プレビュー (1行目)"],
+"나누기":["Split", "Dividir", "Fractionner", "Teilen", "分割"],
+"첫 번째 열만 나눠요":["Only the first column is split", "Solo se divide la primera columna", "Seule la première colonne est fractionnée", "Nur die erste Spalte wird geteilt", "最初の列だけ分割します"],
+"중복을 지울 표를 먼저 고르세요":["Select a table to clean first", "Selecciona primero una tabla", "Sélectionne d’abord un tableau", "Wähle zuerst eine Tabelle", "先に表を選んでください"],
+"열을 하나 이상 고르세요":["Choose at least one column", "Elige al menos una columna", "Choisis au moins une colonne", "Wähle mindestens eine Spalte", "列を1つ以上選んでください"],
+"중복된 줄이 없어요":["No duplicate rows", "No hay filas duplicadas", "Aucune ligne en double", "Keine doppelten Zeilen", "重複した行はありません"],
+"중복 {0}줄을 지웠어요 ({1}줄 남음)":["Removed {0} duplicate rows ({1} left)", "{0} filas duplicadas quitadas (quedan {1})", "{0} lignes en double supprimées ({1} restantes)", "{0} doppelte Zeilen entfernt ({1} übrig)", "重複{0}行を削除しました (残り{1}行)"],
+"나눌 글자가 든 칸을 먼저 고르세요":["Select cells that contain text to split", "Selecciona celdas con texto para dividir", "Sélectionne des cellules contenant du texte", "Wähle Zellen mit Text zum Teilen", "分割する文字が入ったセルを選んでください"],
+"나눌 기준을 하나 이상 고르세요":["Choose at least one separator", "Elige al menos un separador", "Choisis au moins un séparateur", "Wähle mindestens ein Trennzeichen", "区切りを1つ以上選んでください"],
+"나눌 곳이 없어요. 기준을 확인하세요":["Nothing to split. Check the separators", "Nada que dividir. Revisa los separadores", "Rien à fractionner. Vérifie les séparateurs", "Nichts zu teilen. Prüfe die Trennzeichen", "分割する箇所がありません。区切りを確認してください"],
+"열이 너무 많아져요":["That would create too many columns", "Se crearían demasiadas columnas", "Cela créerait trop de colonnes", "Das würde zu viele Spalten ergeben", "列が多くなりすぎます"],
+"오른쪽 칸 {0}개의 내용을 덮어써요. 계속할까요?":["This overwrites {0} cells to the right. Continue?", "Se sobrescribirán {0} celdas a la derecha. ¿Continuar?", "Cela écrase {0} cellules à droite. Continuer ?", "Dadurch werden {0} Zellen rechts überschrieben. Fortfahren?", "右の{0}セルの内容を上書きします。続けますか？"],
+"{0}줄을 {1}개 열로 나눴어요":["Split {0} rows into {1} columns", "{0} filas divididas en {1} columnas", "{0} lignes fractionnées en {1} colonnes", "{0} Zeilen in {1} Spalten geteilt", "{0}行を{1}列に分割しました"],
+"정리할 데이터가 없어요":["Nothing to clean", "Nada que limpiar", "Rien à nettoyer", "Nichts zu bereinigen", "整理するデータがありません"],
+"정리할 공백이 없어요":["No extra spaces found", "No hay espacios sobrantes", "Aucun espace superflu", "Keine überflüssigen Leerzeichen", "整理する空白はありません"],
+"{0}칸의 공백을 정리했어요":["Trimmed spaces in {0} cells", "Espacios recortados en {0} celdas", "Espaces nettoyés dans {0} cellules", "Leerzeichen in {0} Zellen bereinigt", "{0}セルの空白を整理しました"]
+});
+
+/* v15: mini bars, sparklines, icon sets */
+FFT.add({
+"미니 막대, 스파크라인, 아이콘":["Mini bars, sparklines, icons", "Minibarras, minigráficos, iconos", "Mini-barres, graphiques sparkline, icônes", "Minibalken, Sparklines, Symbole", "ミニバー、スパークライン、アイコン"],
+"아이콘":["Icons", "Iconos", "Icônes", "Symbole", "アイコン"],
+"미니 막대·스파크라인·아이콘…":["Mini bars, sparklines, icons…", "Minibarras, minigráficos, iconos…", "Mini-barres, sparklines, icônes…", "Minibalken, Sparklines, Symbole…", "ミニバー・スパークライン・アイコン…"],
+"미니 막대·스파크라인·아이콘":["Mini bars, sparklines, icons", "Minibarras, minigráficos, iconos", "Mini-barres, sparklines, icônes", "Minibalken, Sparklines, Symbole", "ミニバー・スパークライン・アイコン"],
+"종류":["Type", "Tipo", "Type", "Typ", "種類"],
+"미니 막대":["Mini bar", "Minibarra", "Mini-barre", "Minibalken", "ミニバー"],
+"스파크라인 · 꺾은선":["Sparkline · line", "Minigráfico · línea", "Sparkline · courbe", "Sparkline · Linie", "スパークライン・折れ線"],
+"스파크라인 · 막대":["Sparkline · columns", "Minigráfico · columnas", "Sparkline · colonnes", "Sparkline · Säulen", "スパークライン・棒"],
+"화살표 아이콘":["Arrow icons", "Iconos de flechas", "Icônes de flèches", "Pfeilsymbole", "矢印アイコン"],
+"신호등 아이콘":["Traffic light icons", "Iconos de semáforo", "Icônes de feux tricolores", "Ampelsymbole", "信号アイコン"],
+"스파크라인을 그릴 열":["Column to draw the sparklines in", "Columna donde dibujar los minigráficos", "Colonne où dessiner les sparklines", "Spalte für die Sparklines", "スパークラインを描く列"],
+"예: F":["e.g. F", "p. ej. F", "ex. F", "z. B. F", "例: F"],
+"고른 범위의 줄마다 값들을 이 열의 같은 줄 칸에 작은 그래프로 그려요.":["The values of each row in the selected range are drawn as a small graph in the same row of this column.", "Los valores de cada fila del rango se dibujan como un gráfico pequeño en la misma fila de esta columna.", "Les valeurs de chaque ligne de la plage sont tracées en petit graphique dans la même ligne de cette colonne.", "Die Werte jeder Zeile des Bereichs werden als kleines Diagramm in derselben Zeile dieser Spalte gezeichnet.", "選んだ範囲の行ごとの値を、この列の同じ行のセルに小さなグラフで描きます。"],
+"구분 기준 (가장 작은 값 0%, 가장 큰 값 100%)":["Cut-offs (smallest value 0%, largest 100%)", "Umbrales (valor menor 0%, mayor 100%)", "Seuils (plus petite valeur 0 %, plus grande 100 %)", "Schwellen (kleinster Wert 0 %, größter 100 %)", "区切り (最小値0%、最大値100%)"],
+"노랑부터":["Yellow from", "Amarillo desde", "Jaune à partir de", "Gelb ab", "黄色から"],
+"% · 초록부터":["% · green from", "% · verde desde", "% · vert à partir de", "% · Grün ab", "% ・緑から"],
+"낮을수록 좋아요 (초록과 빨강을 바꿔요)":["Lower is better (swap green and red)", "Menor es mejor (intercambia verde y rojo)", "Plus bas = mieux (inverse vert et rouge)", "Niedriger ist besser (Grün und Rot tauschen)", "低いほど良い (緑と赤を入れ替え)"],
+"이 시트에 넣은 것":["Added to this sheet", "Añadido a esta hoja", "Ajouté à cette feuille", "In diesem Blatt hinzugefügt", "このシートに入れたもの"],
+"넣기":["Add", "Añadir", "Ajouter", "Hinzufügen", "入れる"],
+"아직 없어요":["None yet", "Aún no hay", "Rien pour l’instant", "Noch nichts", "まだありません"],
+"넣었어요":["Added", "Añadido", "Ajouté", "Hinzugefügt", "入れました"],
+"표시할 열을 알 수 없어요. 예: F":["Can’t read that column. Example: F", "No se entiende la columna. Ejemplo: F", "Colonne illisible. Exemple : F", "Spalte nicht lesbar. Beispiel: F", "列が読み取れません。例: F"],
+"고른 범위 밖의 열을 고르세요":["Choose a column outside the selected range", "Elige una columna fuera del rango", "Choisis une colonne hors de la plage", "Wähle eine Spalte außerhalb des Bereichs", "選んだ範囲の外の列を選んでください"],
+"기준은 0~100 사이, 노랑이 초록보다 작아야 해요":["Cut-offs must be 0 to 100, with yellow lower than green", "Los umbrales van de 0 a 100 y el amarillo debe ser menor que el verde", "Les seuils vont de 0 à 100, le jaune doit être inférieur au vert", "Schwellen liegen zwischen 0 und 100, Gelb muss kleiner als Grün sein", "区切りは0〜100で、黄色は緑より小さくしてください"]
+});
