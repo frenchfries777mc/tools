@@ -21,7 +21,7 @@ function describe(hw,type,compact){
     inp.fieldRow.forEach(function(f){
       if(!f.name){ var t=!compact&&f.getText&&f.getText(); if(t&&t.trim()) parts.push(t.trim()); return; }
       var d;
-      if(f.name==='EL'||(type==='val_hit'&&(f.name==='A'||f.name==='B'))) d=f.name+'=<NAME of a page element>';
+      if(f.name==='EL'||((type==='val_hit'||type==='ev_hit')&&(f.name==='A'||f.name==='B'))) d=f.name+'=<NAME of a page element>';
       else if(f.name==='IMG') d='IMG=<picture id>';
       else if(f.name==='VAR') d='VAR=<variable name>';
       else if(f instanceof Blockly.FieldDropdown){ var o=[]; try{ o=f.getOptions(false); }catch(e){} d=f.name+'('+o.map(function(x){ return x[1]; }).join('|')+')'; }
@@ -52,10 +52,11 @@ var SYS=['You build web pages for the "Block HTML" editor (Blockly). Reply with 
 'Rules:',
 '- Use only the block types in the catalog, with exactly the field, value and statement names shown. {element} blocks go inside the page_root BODY statement (or inside an el_box), chained with <next>.',
 '- Exactly one page_root. Every element needs a short unique NAME; event and action blocks point at elements through their EL field using that NAME.',
-'- Event blocks (ev_start, ev_click, ev_change, ev_key, ev_keyup, ev_timer) are separate top-level blocks next to the page. Give every top-level block x and y attributes so they do not overlap (page at x="20" y="20", scripts from x="440").',
+'- Event blocks (ev_start, ev_click, ev_change, ev_key, ev_keyup, ev_hit, ev_timer) are separate top-level blocks next to the page. Give every top-level block x and y attributes so they do not overlap (page at x="20" y="20", scripts from x="440").',
 '- Number inputs take <shadow type="math_number"><field name="NUM">…</field></shadow>, text inputs <shadow type="text"><field name="TEXT">…</field></shadow>, colors <shadow type="val_color"><field name="COLOR">#rrggbb</field></shadow>.',
 '- Variables: declare them in <variables><variable>name</variable></variables> and use <field name="VAR">name</field>.',
 '- Mutations: controls_if <mutation elseif="N" else="1"></mutation> with IF0/DO0, IF1/DO1…, ELSE; text_join and lists_create_with <mutation items="N"></mutation> with ADD0…; procedures_defnoreturn <mutation><arg name="x"></arg></mutation> + field NAME + statement STACK; procedures_callnoreturn <mutation name="f"><arg name="x"></arg></mutation> + values ARG0….',
+'- Games: ev_hit runs once each time two elements start touching; act_score / val_score keep a score that shows by itself in a corner score board; act_rpos puts an element somewhere random on screen. Sounds: act_sfx for effects, act_note blocks chained one after another play as a melody (act_tempo sets the speed).',
 '- Prefer the friendly blocks over js_raw. Keep it playable and small enough to read. Write the visible text in the language of the request.',
 '- With PLAN: edit, return the whole changed project (all blocks), keeping what the person did not ask to change. With PLAN: new, return a fresh project.'].join('\n');
 function picList(){ var I=BH.IMGS, ids=Object.keys(I); return ids.length?ids.map(function(id){ return id+' = '+I[id].name; }).join('\n'):''; }
