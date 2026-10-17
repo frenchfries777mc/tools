@@ -801,8 +801,8 @@ function addChart(){
   pushUndo(); sh.charts.push({id:uid(),r1:g.r1,c1:g.c1,r2:Math.min(g.r2,g.r1+500),c2:Math.min(g.c2,g.c1+20),type:'bar',title:''}); saveSoon(); renderCharts();
   var body=$('charts'); body.scrollTop=body.scrollHeight;
 }
-function chartData(ch){
-  var si=doc.active, v=function(r,c){ return eng.value(si,r,c); };
+function chartData(ch,si0){
+  var si=si0==null?doc.active:si0, v=function(r,c){ return eng.value(si,r,c); };
   var hdr=false, lab=false, r, c;
   if(ch.r2>ch.r1) for(c=ch.c1+(ch.c2>ch.c1?1:0);c<=ch.c2;c++){ var x=v(ch.r1,c); if(typeof x==='string'&&x!=='') hdr=true; }
   var lc=ch.c1, r0=ch.r1+(hdr?1:0);
@@ -811,8 +811,8 @@ function chartData(ch){
   var c0=lab?lc+1:ch.c1, labels=[], series=[];
   for(r=r0;r<=ch.r2;r++) labels.push(lab?E.formatValue(v(r,lc)):String(r-r0+1));
   for(c=c0;c<=ch.c2;c++){ if(ch.cols&&ch.cols.indexOf(c)<0) continue; var vals=[]; for(r=r0;r<=ch.r2;r++){ var z=v(r,c); vals.push(typeof z==='number'?z:(typeof z==='boolean'?(z?1:0):null)); }
-    if(vals.some(function(x){ return x!=null; })) series.push({name:hdr?E.formatValue(v(ch.r1,c)):F('계열 {0}',c-c0+1),vals:vals}); }
-  return {labels:labels,series:series};
+    if(vals.some(function(x){ return x!=null; })) series.push({name:hdr?E.formatValue(v(ch.r1,c)):F('계열 {0}',c-c0+1),vals:vals,col:c}); }
+  return {labels:labels,series:series,hdr:hdr,r0:r0,lc:lab?lc:-1};
 }
 function niceStep(range){ var e=Math.pow(10,Math.floor(Math.log10(range||1))), f=range/e; return (f<=1?1:f<=2?2:f<=5?5:10)*e; }
 function drawChart(cv,ch){
@@ -911,29 +911,30 @@ function download(blob,name){ var a=document.createElement('a'); a.href=URL.crea
 var xlsxP=null;
 function needXLSX(){ if(window.XLSX) return Promise.resolve(window.XLSX); if(xlsxP) return xlsxP;
   xlsxP=new Promise(function(res,rej){ var s=document.createElement('script'); s.src='xlsx.full.min.js'; s.onload=function(){ res(window.XLSX); }; s.onerror=function(){ xlsxP=null; rej(); }; document.head.appendChild(s); }); return xlsxP; }
+var fsxP=null;
+function needFSX(){ if(window.FSX) return Promise.resolve(window.FSX); if(fsxP) return fsxP;
+  fsxP=new Promise(function(res,rej){ var s=document.createElement('script'); s.src='xlsxio.js'; s.onload=function(){ res(window.FSX); }; s.onerror=function(){ fsxP=null; rej(); }; document.head.appendChild(s); }); return fsxP; }
 function exportXLSX(){
   commitEdit(); toast(T('엑셀 파일을 만드는 중…'));
-  needXLSX().then(function(X){
-    var wb=X.utils.book_new(); eng.reset();
-    doc.sheets.forEach(function(s,si){
-      var ws={}, mr=0, mc=0;
-      for(var k in s.cells){ var rc=E.RC(k), c=s.cells[k]; if(c.v==null||c.v==='') continue; var a=E.addr(rc[0],rc[1]), raw=String(c.v), o;
-        if(raw[0]==='='&&c.nf!=='t'){ var v=eng.value(si,rc[0],rc[1]); o=E.isErr(v)?{t:'e',v:0,w:v.e}:typeof v==='number'?{t:'n',v:v}:typeof v==='boolean'?{t:'b',v:v}:{t:'s',v:v==null?'':String(v)}; o.f=raw.slice(1); }
-        else { var l=c.nf==='t'?raw:E.literal(raw); o=typeof l==='number'?{t:'n',v:l}:typeof l==='boolean'?{t:'b',v:l}:{t:'s',v:String(l)}; }
-        if(o.t==='n'&&c.nf){ o.z=zFmt(c.nf); }
-        ws[a]=o; if(rc[0]>mr) mr=rc[0]; if(rc[1]>mc) mc=rc[1]; }
-      ws['!ref']='A1:'+E.addr(mr,mc); var cols=[]; for(var c2=0;c2<=mc;c2++) cols.push({wpx:s.cw[c2]||DEF_W}); ws['!cols']=cols;
-      var nm=s.name.replace(/[\[\]:*?\/\\]/g,'').slice(0,31)||('Sheet'+(si+1));
-      X.utils.book_append_sheet(wb,ws,nm);
-    });
+  needFSX().then(function(X){
+    eng.reset(); var used={}, nms=doc.sheets.map(function(s,si){ var b=s.name.replace(/[\[\]:*?\/\\]/g,'').slice(0,31)||('Sheet'+(si+1)), n=b, i=1; while(used[n.toLowerCase()]){ i++; n=b.slice(0,31-String(i).length-1)+'_'+i; } used[n.toLowerCase()]=1; return n; });
     var exn=[]; doc.names.forEach(function(n){ var p=E.parseNameRef(n.ref), si=p?eng.sheetIndex(p.sh,0):-1; if(si<0) return;
-      var en=doc.sheets[si].name.replace(/[\[\]:*?\/\\]/g,'').slice(0,31)||('Sheet'+(si+1)); exn.push({Name:n.name,Ref:"'"+en.replace(/'/g,"''")+"'!"+E.refText(p.a)+(p.t==='rng'?':'+E.refText(p.b):'')}); });
-    if(exn.length) wb.Workbook={Names:exn};
-    var out=X.write(wb,{bookType:'xlsx',type:'array'});
-    download(new Blob([out],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),(doc.name||'sheet')+'.xlsx');
-  },function(){ toast(T('엑셀 기능을 불러오지 못했어요')); });
+      exn.push({name:n.name,ref:"'"+nms[si].replace(/'/g,"''")+"'!"+E.refText(p.a)+(p.t==='rng'?':'+E.refText(p.b):'')}); });
+    return X.write(doc,{E:E,val:function(si,r,c){ return eng.value(si,r,c); },sheetName:function(si){ return nms[si]; },names:exn,charts:function(si){ return xlsxCharts(si,nms[si]); }});
+  }).then(function(res){
+    download(new Blob([res.bytes],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),(doc.name||'sheet')+'.xlsx');
+  },function(err){ console.error(err); toast(T('엑셀 기능을 불러오지 못했어요')); });
 }
-function zFmt(nf){ var m=/^([npd])(\d)$/.exec(nf||''); if(m){ var z=m[2]>0?'.'+'0'.repeat(+m[2]):''; return m[1]==='n'?'#,##0'+z:m[1]==='p'?'0'+z+'%':'0'+z; } return {w0:'"₩"#,##0',u2:'"$"#,##0.00'}[nf]; }
+/* charts as Excel sees them: ranges plus cached values (same reading rules as chartData) */
+function xlsxCharts(si,nm){
+  var out=[]; doc.sheets[si].charts.forEach(function(ch){
+    var d=chartData(ch,si); if(!d.series.length) return;
+    var ref=function(r1,c1,r2,c2){ return "'"+nm.replace(/'/g,"''")+"'!$"+E.colName(c1)+'$'+(r1+1)+(r1===r2&&c1===c2?'':':$'+E.colName(c2)+'$'+(r2+1)); };
+    var ser=d.series.map(function(s){ return {name:s.name,nameRef:d.hdr?ref(ch.r1,s.col,ch.r1,s.col):null,ref:ref(d.r0,s.col,ch.r2,s.col),vals:s.vals}; }), xy=null;
+    if(ch.type==='scatter'){ if(ser.length>1){ xy={ref:ser[0].ref,vals:ser[0].vals}; ser=ser.slice(1); } else xy={ref:null,vals:d.labels.map(function(_,i){ return i+1; })}; }
+    out.push({type:ch.type,title:ch.title||'',c1:ch.c1,c2:ch.c2,r1:ch.r1,r2:ch.r2,cat:d.lc>=0&&ch.type!=='scatter'?{ref:ref(d.r0,d.lc,ch.r2,d.lc),vals:d.labels}:null,ser:ser,xy:xy}); });
+  return out;
+}
 function csvCell(s){ s=String(s); return /[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s; }
 function exportCSV(){
   commitEdit(); var mr=-1, mc=-1; for(var k in sh.cells){ var rc=E.RC(k); var c=sh.cells[k]; if(c.v==null||c.v==='') continue; if(rc[0]>mr) mr=rc[0]; if(rc[1]>mc) mc=rc[1]; }
@@ -942,34 +943,83 @@ function exportCSV(){
 }
 function importFile(file){
   toast(T('파일을 여는 중…'));
-  needXLSX().then(function(X){
-    var rd=new FileReader();
+  Promise.all([needXLSX(),needFSX().catch(function(){ return null; })]).then(function(libs){
+    var X=libs[0], FX=libs[1], rd=new FileReader();
     rd.onload=function(){
+      var bytes=new Uint8Array(rd.result);
+      (FX?FX.read(bytes).catch(function(e){ console.warn('xlsx styles skipped',e); return null; }):Promise.resolve(null)).then(function(extras){
       try{
-        var wb=X.read(new Uint8Array(rd.result),{type:'array',cellFormula:true,cellNF:true,cellDates:false});
+        var wb=X.read(bytes,{type:'array',cellFormula:true,cellNF:true,cellDates:false});
         saveNow(); var d=newDoc(); d.name=file.name.replace(/\.[^.]+$/,''); d.sheets=[];
-        wb.SheetNames.forEach(function(n){
-          var ws=wb.Sheets[n], s=newSheet(n), ref=ws['!ref']; if(ref){ var g=X.utils.decode_range(ref);
+        wb.SheetNames.forEach(function(n,idx){
+          var ws=wb.Sheets[n], s=newSheet(n), ref=ws['!ref'], ex=extras&&extras.names[idx]===n?extras.sheets[idx]:null, dateAt={}; if(ref){ var g=X.utils.decode_range(ref);
             for(var R=g.s.r;R<=Math.min(g.e.r,MAXR-1);R++) for(var C=g.s.c;C<=Math.min(g.e.c,MAXC-1);C++){
               var c=ws[X.utils.encode_cell({r:R,c:C})]; if(!c) continue; var raw;
               if(c.f) raw='='+c.f;
-              else if(c.t==='n'){ var z=String(c.z||''); if(/[ymdhs]/i.test(z.replace(/"[^"]*"/g,''))&&!/^General$/i.test(z)) raw=c.w!=null?String(c.w):String(c.v); else { raw=String(c.v); if(/%/.test(z)) s.cells[K(R,C)]={v:raw,nf:/\.0/.test(z)?'p1':'p0'}; else if(/\$/.test(z)&&/0/.test(z)) s.cells[K(R,C)]={v:raw,nf:'u2'}; else if(/[₩￦]/.test(z)) s.cells[K(R,C)]={v:raw,nf:'w0'}; else if(/#,##0\.00/.test(z)) s.cells[K(R,C)]={v:raw,nf:'n2'}; else if(/#,##0/.test(z)) s.cells[K(R,C)]={v:raw,nf:'n0'}; } }
+              else if(c.t==='n'){ var z=String(c.z||''); if(/[ymdhs]/i.test(z.replace(/"[^"]*"/g,''))&&!/^General$/i.test(z)){ raw=c.w!=null?String(c.w):String(c.v); dateAt[K(R,C)]=1; } else { raw=String(c.v); if(!ex) importNf(s,R,C,raw,z); } }
               else if(c.t==='b') raw=c.v?'TRUE':'FALSE';
               else if(c.t==='e') raw=c.w||'#ERROR!';
               else { raw=c.v==null?'':String(c.v); var l=E.literal(raw); if(typeof l!=='string'||raw[0]==='=') raw="'"+raw; }
               if(raw===''||raw==null) continue;
               var cell=s.cells[K(R,C)]||(s.cells[K(R,C)]={}); cell.v=raw; }
             s.rows=Math.max(ROWS,Math.min(MAXR,g.e.r+21)); s.cols=Math.max(COLS,Math.min(MAXC,g.e.c+3)); }
-          (ws['!cols']||[]).forEach(function(ci,i){ if(ci&&(ci.wpx||ci.wch)) s.cw[i]=Math.round(ci.wpx||ci.wch*7.5); });
+          if(ex) applyXlsxExtras(X,wb,s,ex,dateAt);
+          else (ws['!cols']||[]).forEach(function(ci,i){ if(ci&&(ci.wpx||ci.wch)) s.cw[i]=Math.round(ci.wpx||ci.wch*7.5); });
           d.sheets.push(s);
         });
+        if(extras) extras.sheets.forEach(function(ex){ (ex.charts||[]).forEach(function(ch){ var s=d.sheets.filter(function(x){ return x.name===ch.sheet; })[0]; if(!s||d.sheets.reduce(function(n,x){ return n+x.charts.length; },0)>=30) return;
+          var b=ch.box; s.charts.push({id:uid(),r1:b.r1,c1:b.c1,r2:Math.min(b.r2,b.r1+500,MAXR-1),c2:Math.min(b.c2,b.c1+20,MAXC-1),type:ch.type,title:ch.title||''}); }); });
         if(!d.sheets.length) d.sheets.push(newSheet(T('시트')+'1'));
         d.names=[]; ((wb.Workbook&&wb.Workbook.Names)||[]).forEach(function(n){ if(n.Sheet!=null||!n.Name||/^_xlnm/i.test(n.Name)||E.validName(n.Name)||d.names.length>=200) return; var rf=E.nameRef(String(n.Ref||'').replace(/^=/,''),null); if(rf) d.names.push({name:n.Name,ref:rf}); });
         docId=uid(); doc=fixDoc(d); eng=new E.Engine(doc); undoS=[]; redoS=[]; $('docName').value=doc.name; switchSheet(0); saveNow(); toast(T('파일을 열었어요'));
       }catch(err){ console.error(err); toast(T('이 파일은 열 수 없어요')); }
+      });
     };
     rd.readAsArrayBuffer(file);
   },function(){ toast(T('엑셀 기능을 불러오지 못했어요')); });
+}
+/* fallback number format guess from SheetJS's format string (used only when the style reader is unavailable) */
+function importNf(s,R,C,raw,z){ var o=null; if(/%/.test(z)) o=/\.0/.test(z)?'p1':'p0'; else if(/\$/.test(z)&&/0/.test(z)) o='u2'; else if(/[₩￦]/.test(z)) o='w0'; else if(/#,##0\.00/.test(z)) o='n2'; else if(/#,##0/.test(z)) o='n0'; if(o) s.cells[K(R,C)]={v:raw,nf:o}; }
+/* styles, merges, freeze panes, widths, conditional formats, drop-downs and notes read from the .xlsx XML (see xlsxio.js) */
+function applyXlsxExtras(X,wb,s,ex,dateAt){
+  var maxR=0, maxC=0, ws=wb.Sheets[s.name];
+  function inMerge(r,c){ return ex.merges.some(function(g){ return r>=g.r1&&r<=g.r2&&c>=g.c1&&c<=g.c2; }); }
+  var FACE={t:[-1,0,'b'],b:[1,0,'t'],l:[0,-1,'r'],r:[0,1,'l']};
+  Object.keys(ex.cells).forEach(function(key){
+    var p=key.split(','), R=+p[0], C=+p[1]; if(R>=MAXR||C>=MAXC) return;
+    var xf=ex.cells[key], k=K(R,C), cell=s.cells[k], pr={};
+    if(xf.b) pr.b=1; if(xf.i) pr.i=1; if(xf.al) pr.al=xf.al; if(xf.bg) pr.bg=xf.bg;
+    if(xf.fc&&!(xf.fc==='#000000'&&!xf.bg)) pr.fc=xf.fc;
+    if(xf.bg&&!pr.fc&&window.FSX.lum(xf.bg.slice(1))>0.6) pr.fc='#000000'; // Excel's black text: keep it readable on a light fill
+    if(xf.bx){ pr.bx={}; for(var sd in xf.bx) pr.bx[sd]={c:xf.bx[sd].c,w:xf.bx[sd].w}; }
+    if(xf.nf&&xf.nf!=='date'&&cell&&!dateAt[k]){ var raw=String(cell.v==null?'':cell.v); if(raw[0]==='='||typeof E.literal(raw)==='number') pr.nf=xf.nf; }
+    if(!Object.keys(pr).length) return;
+    if(!cell) cell=s.cells[k]={}; Object.assign(cell,pr); if(R>maxR) maxR=R; if(C>maxC) maxC=C; });
+  // merged blocks: the top-left cell owns the outer edges, the covered cells are emptied
+  ex.merges.forEach(function(g){ if(g.r1>=MAXR||g.c1>=MAXC) return; g={r1:g.r1,c1:g.c1,r2:Math.min(g.r2,MAXR-1),c2:Math.min(g.c2,MAXC-1)};
+    var side=function(r,c,sd){ var x=ex.cells[r+','+c]; return x&&x.bx&&x.bx[sd]?{c:x.bx[sd].c,w:x.bx[sd].w}:null; };
+    var bx={t:side(g.r1,g.c1,'t'),l:side(g.r1,g.c1,'l'),b:side(g.r2,g.c1,'b'),r:side(g.r1,g.c2,'r')}, k0=K(g.r1,g.c1), tl=s.cells[k0];
+    for(var r=g.r1;r<=g.r2;r++) for(var c=g.c1;c<=g.c2;c++) if(r!==g.r1||c!==g.c1) delete s.cells[K(r,c)];
+    var any=false; for(var sd in bx){ if(!bx[sd]) delete bx[sd]; else any=true; }
+    if(any){ if(!tl) tl=s.cells[k0]={}; tl.bx=bx; } else if(tl) delete tl.bx;
+    s.merges.push(g); if(g.r2>maxR) maxR=g.r2; if(g.c2>maxC) maxC=g.c2; });
+  // an edge is written on both cells that share it
+  Object.keys(s.cells).forEach(function(key){ var x=s.cells[key]; if(!x.bx) return; var rc=E.RC(key);
+    if(s.merges.length&&inMerge(rc[0],rc[1])) return;
+    for(var sd in x.bx){ var f=FACE[sd], nr=rc[0]+f[0], nc=rc[1]+f[1]; if(nr<0||nc<0||nr>=MAXR||nc>=MAXC||(s.merges.length&&inMerge(nr,nc))) continue;
+      var nk=K(nr,nc), nx=s.cells[nk]||(s.cells[nk]={}); nx.bx=nx.bx||{}; if(!nx.bx[f[2]]) nx.bx[f[2]]={c:x.bx[sd].c,w:x.bx[sd].w}; } });
+  Object.keys(ex.cw).forEach(function(c){ if(+c<MAXC) s.cw[c]=ex.cw[c]; });
+  s.fr=Math.min(ex.fr,500); s.fc=Math.min(ex.fc,50);
+  ex.cfs.slice(0,200).forEach(function(f){ if(f.r1>=MAXR||f.c1>=MAXC) return; f.r2=Math.min(f.r2,f.r1+2000,MAXR-1); f.c2=Math.min(f.c2,MAXC-1); s.cfs.push(f); });
+  ex.dv.slice(0,200).forEach(function(v){ var list=v.items;
+    if(!Array.isArray(list)){ list=[]; var m=/^(?:'((?:[^']|'')+)'|([^!']+))!(.+)$/.exec(list0(v.items.ref)), rs=m?(m[1]!=null?m[1].replace(/''/g,"'"):m[2]):s.name, g2=parseRef(m?m[3]:v.items.ref), w2=wb.Sheets[rs];
+      if(g2&&w2) for(var r=g2.s.r;r<=g2.e.r&&list.length<100;r++) for(var c=g2.s.c;c<=g2.e.c&&list.length<100;c++){ var cc=w2[X.utils.encode_cell({r:r,c:c})]; if(cc&&cc.v!=null&&cc.v!=='') list.push(String(cc.w!=null?cc.w:cc.v)); } }
+    var seen={}, out=[]; list.forEach(function(t){ t=String(t).trim().slice(0,60); if(t&&!seen[t.toLowerCase()]){ seen[t.toLowerCase()]=1; out.push(t); } });
+    if(out.length&&v.g.r1<MAXR&&v.g.c1<MAXC) s.dv.push({r1:v.g.r1,c1:v.g.c1,r2:Math.min(v.g.r2,MAXR-1),c2:Math.min(v.g.c2,MAXC-1),list:out.slice(0,100)}); });
+  Object.keys(ex.notes).forEach(function(key){ var p=key.split(','), R=+p[0], C=+p[1]; if(R>=MAXR||C>=MAXC) return; var cell=s.cells[K(R,C)]||(s.cells[K(R,C)]={}); cell.nt=ex.notes[key].slice(0,1000); if(R>maxR) maxR=R; if(C>maxC) maxC=C; });
+  s.rows=Math.max(s.rows,Math.min(MAXR,maxR+21)); s.cols=Math.max(s.cols,Math.min(MAXC,maxC+3));
+  function list0(t){ return String(t||'').replace(/^=/,''); }
+  function parseRef(t){ try{ return X.utils.decode_range(list0(t).replace(/^.*!/,'').replace(/\$/g,'')); }catch(e){ return null; } }
 }
 $('fileIn').addEventListener('change',function(){ var f=this.files&&this.files[0]; if(f) importFile(f); this.value=''; });
 $('saveBtn').onclick=exportXLSX;
