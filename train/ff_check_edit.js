@@ -6,7 +6,7 @@
 const fs = require('fs'), path = require('path');
 let pw; try { pw = require('playwright'); } catch (e) { pw = require('/opt/node22/lib/node_modules/playwright'); }
 const args = process.argv.slice(2), jsonOut = args.includes('--json') ? args[args.indexOf('--json') + 1] : null;
-const inputs = args.filter((a, i) => !a.startsWith('--') && args[i - 1] !== '--json');
+const inputs = args.filter((a, i) => !a.startsWith('--') && args[i - 1] !== '--json'), showDiff = args.includes('--diff');
 const reqs = JSON.parse(fs.readFileSync(path.join(__dirname, 'eval/edit-requests.json'), 'utf8'));
 let answers = [];
 function fromLog(txt) { // =====BEGIN i name | q | tokens N | Ts ... =====END i
@@ -134,6 +134,12 @@ function readable(a) { const c = rgb(a.bg.color) || [0, 0, 0, 1]; const bad = [.
     const { page } = h;
     if (base === '클릭 카운터') await page.click('#버튼1'); else { await page.fill('#할일칸', '우유9'); await page.click('#추가버튼'); }
     await page.waitForTimeout(200);
+  }
+  if (showDiff) { // what the model changed against the base page, for reading by hand
+    const cp = require('child_process'), os = require('os');
+    for (const an of answers) { const r = reqs[an.i]; if (!r) continue; const a = path.join(os.tmpdir(), 'ffa.html'), b = path.join(os.tmpdir(), 'ffb.html'); fs.writeFileSync(a, r.cur + '\n'); fs.writeFileSync(b, (an.html || '') + '\n');
+      let d = ''; try { d = cp.execSync(`diff -U1 ${a} ${b} || true`, { encoding: 'utf8' }); } catch (e) { d = String(e.stdout || ''); }
+      console.log(`----- DIFF #${an.i} ${r.id} / ${r.base}\n` + d.split('\n').slice(2).join('\n').slice(0, 3000)); }
   }
   const byId = {}; rows.forEach(r => (byId[r.id] = byId[r.id] || []).push(r));
   for (const r of rows) console.log(`#${r.i} ${r.id} / ${r.base} | ${r.pass ? 'PASS' + (r.weak ? ' (' + r.weak + ')' : '') : 'FAIL ' + r.why.join('; ')}`);
