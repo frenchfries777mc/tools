@@ -330,6 +330,27 @@ body.mode-pv .top,body.mode-pv .main,body.mode-view .top,body.mode-view .main{di
 #pAuto{position:absolute; left:0; right:0; top:0; height:6px; background:rgba(255,255,255,.14); z-index:2; pointer-events:none;} #pAuto i{display:block; height:100%; width:0; background:#4fd1c5; transition:width .1s linear;} #pAuto.paused i{background:#9aa3b5;}
 #pDot{position:fixed; width:26px; height:26px; margin:-13px 0 0 -13px; border-radius:50%; background:radial-gradient(circle,#ff3b3b 0 35%,rgba(255,59,59,.45) 60%,rgba(255,59,59,0) 72%); pointer-events:none; z-index:3;}
 #present.laser{cursor:none;}
+/* live quiz panel (presenting) */
+.pbar #pLqB{width:auto; min-width:40px; padding:0 8px; font-size:17px; gap:3px; white-space:nowrap;}
+#lq{position:absolute; top:14px; right:14px; z-index:4; width:min(440px,44vw); max-height:calc(100% - 80px); overflow:auto; background:rgba(16,19,27,.94); color:#eef0f5; border:1px solid rgba(255,255,255,.14); border-radius:16px; padding:12px 14px; box-shadow:0 20px 60px rgba(0,0,0,.5); cursor:default; font-size:14px;}
+#lq button{height:30px; border-radius:8px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.08); color:#eef0f5; padding:0 10px; cursor:pointer; font-size:13px;} #lq button.dang{color:#ff9b9b;}
+#lq .sp{flex:1;} .lqHd{display:flex; align-items:center; gap:8px;} .lqHd b{font-size:15px;} #lqPpl{color:#ffc93c; font-weight:700; font-variant-numeric:tabular-nums;}
+#lqJoin{display:flex; gap:12px; align-items:center; margin-top:10px;} #lqQr{width:132px; height:132px; border-radius:8px; flex:0 0 auto; image-rendering:pixelated;}
+.lqJi{min-width:0;} .lqCode{font:700 34px/1.1 'Oswald',ui-monospace,monospace; letter-spacing:.12em; color:#ffc93c;} .lqUrl{font-size:12px; color:#aab2c4; word-break:break-all; margin-top:4px;}
+#lqMsg{margin:6px 0 0; font-size:12.5px; color:#aab2c4; line-height:1.45;} #lqMsg.bad{color:#ff9b9b;}
+#lqBars{margin-top:12px; display:flex; flex-direction:column; gap:7px;} .lqTip{margin:0; color:#aab2c4; font-size:13px; line-height:1.5;}
+.lqBar{display:grid; grid-template-columns:minmax(0,1fr) 40px; gap:2px 10px; align-items:center;} .lqBar .lb{grid-column:1/3; font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.lqBar .tr{grid-column:1/2; height:16px; background:rgba(255,255,255,.08); border-radius:6px; overflow:hidden; grid-row:2;} .lqBar .tr i{display:block; height:100%; width:0; background:#3d8bff; border-radius:6px; transition:width .3s;}
+.lqBar b{grid-row:2; grid-column:2/3; font-variant-numeric:tabular-nums;}
+.lqBar.ok .tr i{background:#2fb27a;} .lqBar.ok .lb{color:#7ee2b0; font-weight:700;} .lqBar.ok .lb::after{content:'  ✓';} .lqBar.dim{opacity:.5;}
+.lqFt{display:flex; align-items:center; gap:8px; margin-top:10px; font-size:13px; color:#cfd5e2;} #lq #lqRev{background:#ffc93c; color:#1c1405; border:0; font-weight:700; height:34px; padding:0 14px;}
+@media(max-width:700px){ #lq{width:calc(100% - 28px); max-height:60%;} #lqQr{width:96px; height:96px;} .lqCode{font-size:26px;} }
+/* sheet link */
+.sl .lnkB{position:absolute; right:8px; top:8px; font-size:20px; padding:6px 12px; border-radius:8px; border:0; background:rgba(16,19,27,.72); color:#fff; cursor:pointer; max-width:70%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; z-index:2;}
+.sl .lnkB.miss{background:rgba(120,90,20,.78);}
+.lnkRow{display:flex; flex-wrap:wrap; align-items:center; gap:8px;} #dataLinkTxt{flex:1 1 100%; color:var(--fry); font-size:13px; overflow-wrap:anywhere;} .lnkMiss{color:#e6b45a!important;}
+#dataIn.ro{opacity:.75;} .lkRg{height:34px; width:110px; border-radius:8px; border:1px solid var(--line); background:var(--bg); padding:0 8px; margin-left:4px; font-family:ui-monospace,Consolas,monospace; text-transform:uppercase;}
+.lkPrev td.use{background:rgba(255,201,60,.14);} .lkPrev th:first-child{width:34px; text-align:center;}
 .sl .ft.logo{opacity:1; object-fit:contain; display:block;}
 .sl .mq{position:absolute; z-index:28; pointer-events:none; border:calc(1.5px * var(--hk,1)) dashed #3d8bff; background:rgba(61,139,255,.12);}
 .sl .selFr.grp{outline-style:dashed;}
@@ -554,7 +575,9 @@ body.mode-pv .top,body.mode-pv .main,body.mode-view .top,body.mode-view .main{di
   <div class="dh"><h3 id="dataTitle"></h3><button class="x" data-close aria-label="닫기">×</button></div>
   <div class="dbody"><p id="dataNote"></p>
     <label id="dataTypeRow" class="lab" style="margin:0">그래프 모양 <select id="dataType" style="height:34px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);padding:0 8px;margin-left:6px"><option value="bar">막대</option><option value="line">꺾은선</option><option value="pie">원</option></select></label>
-    <textarea id="dataIn" data-notr spellcheck="false" style="min-height:170px;width:100%;resize:vertical;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px;line-height:1.5"></textarea></div>
+    <textarea id="dataIn" data-notr spellcheck="false" style="min-height:170px;width:100%;resize:vertical;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px;line-height:1.5"></textarea>
+    <div class="lnkRow"><span id="dataLinkTxt" data-notr hidden></span><button class="tbtn" id="dataLinkBtn">프라이 시트에서 가져오기 (연결)</button><button class="tbtn" id="dataRefresh" hidden>지금 새로 고침</button><button class="tbtn" id="dataUnlink" hidden>연결 끊기</button></div>
+    <p id="dataLinkMiss" class="lnkMiss" hidden></p></div>
   <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="dataOk">확인</button></div>
 </div></div>
 <div class="ov" id="liveDlg"><div class="dlg" style="width:min(560px,100%)">
@@ -569,6 +592,26 @@ body.mode-pv .top,body.mode-pv .main,body.mode-view .top,body.mode-view .main{di
     <p id="liveBlkMsg" class="liveMsg"></p>
     <p class="note" style="margin:0">알아 두세요: 링크·QR 공유에서는 이 슬라이드를 건너뛰어요. PPTX에는 자리표시 상자만 들어가요.</p></div>
   <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="liveOk">확인</button></div>
+</div></div>
+<div class="ov" id="linkDlg"><div class="dlg" style="width:min(680px,100%)">
+  <div class="dh"><h3>프라이 시트에서 가져오기 (연결)</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody" style="overflow:auto">
+    <p>Fry Sheet 문서의 칸을 골라 이 슬라이드와 연결해요. 시트에서 숫자를 바꾸면 슬라이드도 따라 바뀌어요. 수식은 계산한 값으로 들어가요.</p>
+    <p id="lkNone" hidden>이 브라우저의 Fry Sheet에 저장된 문서가 없어요. 먼저 <a href="../sheet/" target="_blank" rel="noopener" style="color:var(--fry)">Fry Sheet</a>에서 표를 만들어 주세요.</p>
+    <div id="lkForm"><div class="csvRow"><label>문서 <select id="lkDoc" data-notr></select></label><label>시트 <select id="lkSh" data-notr></select></label>
+      <label>범위 <input id="lkRg" class="lkRg" data-notr autocomplete="off" spellcheck="false" placeholder="A1:C6"></label><button class="tbtn" id="lkAllB">쓴 칸 모두</button></div></div>
+    <div class="csvPrev lkPrev" id="lkPrev" data-notr></div>
+    <p id="lkNote" style="color:var(--fry)"></p>
+    <p class="note" style="margin:0">알아 두세요: 같은 브라우저에 저장된 Fry Sheet 문서만 연결돼요. 문서를 지우면 마지막으로 가져온 값이 그대로 남아요. 링크 공유·PDF·PPTX에는 그때의 값이 들어가요.</p>
+  </div>
+  <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="lkOk">연결하기</button></div>
+</div></div>
+<div class="ov" id="qzDlg"><div class="dlg" style="width:min(520px,100%)">
+  <div class="dh"><h3>실시간 퀴즈 보기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><p>발표 중 실시간 퀴즈를 열면 휴대폰에 이 보기가 나와요. 한 줄에 하나씩, 6개까지 써요. 비워 두면 문제 안의 "1) …", "① …" 줄을 보기로 써요.</p>
+    <textarea id="qzIn" data-notr spellcheck="false" style="min-height:140px;width:100%;resize:vertical;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px;line-height:1.5" placeholder="서울&#10;부산&#10;대구&#10;인천"></textarea>
+    <label class="csvRow">정답 <select id="qzOkSel" data-notr></select></label></div>
+  <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="qzOk">확인</button></div>
 </div></div>
 <div class="ov" id="aiDlg" data-xonly><div class="dlg">
   <div class="dh"><h3>AI 도우미 (시험 기능)</h3><button class="x" data-close aria-label="닫기">×</button></div>
@@ -588,7 +631,10 @@ body.mode-pv .top,body.mode-pv .main,body.mode-view .top,body.mode-view .main{di
 <div id="present" aria-label="발표 화면">
   <div id="pStage"></div><div id="pEnd" hidden>발표가 끝났어요. 나가려면 Esc를 누르거나 ×를 눌러요.</div>
   <div id="pBoard"></div><canvas id="pInk" aria-hidden="true"></canvas><div id="pAuto" hidden><i></i></div><div id="pNotes" data-notr hidden></div><div id="pProg"><i></i></div><div id="pDot" hidden></div>
-  <div class="pbar"><span id="pClock"></span><button id="pNotesB" aria-label="발표자 메모" title="발표자 메모 (S)">📝</button><button id="pLaserB" aria-label="레이저 포인터" title="레이저 포인터 (L)">🔴</button><button id="pPvB" aria-label="발표자 화면" title="발표자 화면 열기 (V)">🖥️</button><button id="pPenB" aria-label="펜" title="펜 (D)">✏️</button><button id="pHiB" aria-label="형광펜" title="형광펜 (M)">🖍️</button><button id="pErB" aria-label="지우개" title="지우개 (X)">🧽</button><button id="pBbB" aria-label="칠판" title="칠판 (W)">🟩</button><span id="pInkCols" role="group" aria-label="색"></span><button id="pClrB" aria-label="낙서 지우기" title="낙서 지우기 (E)" hidden>🧹</button><button id="pAutoB" aria-label="자동 넘기기" title="자동 넘기기 (K)" hidden>⏸</button><button id="pPrev" aria-label="이전 슬라이드">‹</button><span id="pNum"></span><button id="pNext" aria-label="다음 슬라이드">›</button><button id="pExit" aria-label="발표 끝내기">×</button></div>
+  <div id="lq" hidden><div class="lqHd"><b>📲 실시간 퀴즈</b><span id="lqPpl"></span><span class="sp"></span><button id="lqQrB">QR 접기</button><button id="lqHide" aria-label="숨기기" title="숨기기 (Q)">–</button><button id="lqEnd" class="dang">끝내기</button></div>
+    <div id="lqJoin"><canvas id="lqQr" aria-label="QR 코드"></canvas><div class="lqJi"><div class="lqCode" id="lqCode" data-notr></div><div class="lqUrl" id="lqUrl" data-notr></div><p id="lqMsg"></p></div></div>
+    <div id="lqBars"></div><div class="lqFt"><span id="lqStat"></span><span class="sp"></span><button id="lqRev" hidden>정답 공개</button></div></div>
+  <div class="pbar"><span id="pClock"></span><button id="pNotesB" aria-label="발표자 메모" title="발표자 메모 (S)">📝</button><button id="pLaserB" aria-label="레이저 포인터" title="레이저 포인터 (L)">🔴</button><button id="pPvB" aria-label="발표자 화면" title="발표자 화면 열기 (V)">🖥️</button><button id="pLqB" aria-label="실시간 퀴즈" title="실시간 퀴즈 (Q)" hidden>📲</button><button id="pPenB" aria-label="펜" title="펜 (D)">✏️</button><button id="pHiB" aria-label="형광펜" title="형광펜 (M)">🖍️</button><button id="pErB" aria-label="지우개" title="지우개 (X)">🧽</button><button id="pBbB" aria-label="칠판" title="칠판 (W)">🟩</button><span id="pInkCols" role="group" aria-label="색"></span><button id="pClrB" aria-label="낙서 지우기" title="낙서 지우기 (E)" hidden>🧹</button><button id="pAutoB" aria-label="자동 넘기기" title="자동 넘기기 (K)" hidden>⏸</button><button id="pPrev" aria-label="이전 슬라이드">‹</button><span id="pNum"></span><button id="pNext" aria-label="다음 슬라이드">›</button><button id="pExit" aria-label="발표 끝내기">×</button></div>
 </div>
 <div id="pv" hidden>
   <div class="pvTop"><b id="pvName" data-notr></b><span class="pvSt" id="pvStatus"></span><span class="sp"></span><span class="pvClock" id="pvWall" data-notr></span>
@@ -616,6 +662,7 @@ body.mode-pv .top,body.mode-pv .main,body.mode-view .top,body.mode-view .main{di
 <script src="../ai.js"></script>
 <script src="../ai-prompts.js"></script>
 <script src="qr.js"></script>
+<script src="lq-net.js"></script>
 <script src="app.js"></script>
 <script src="ai-slides.js"></script>
 </body>
