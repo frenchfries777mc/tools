@@ -87,3 +87,16 @@ procedures_defreturn {top-level} to NAME="unnamed" PARAMS="" [statement STACK] r
 procedures_callnoreturn {statement} NAME=""
 procedures_callreturn {value} NAME=""
 procedures_ifreturn {statement} if [value CONDITION:Boolean] return [value VALUE] // If a value is true, then return a second value.
+ev_drag {top-level} EL=<NAME of a page element> is pressed and moved [statement DO] // Runs while the mouse is held down or a finger is dragging. Use it with "pressed position"
+val_dist {value:Number} distance x1 [value X1:Number] y1 [value Y1:Number] x2 [value X2:Number] y2 [value Y2:Number] // Distance between two points. If it is less than the sum of two radii, they collide
+act_nudge {statement} EL=<NAME of a page element> ’s AXIS(x|y) [value N:Number] units // Moves it from where it is, across (x) or down (y). A negative number goes the other way
+act_nudge2 {statement} EL=<NAME of a page element> move across [value DX:Number] down [value DY:Number] units // Moves it across and down at once
+act_stay {statement} EL=<NAME of a page element> keep on screen // Keeps the element from leaving the page. Put it after a move block
+act_follow {statement} EL=<NAME of a page element> follows the cursor MODE(fast|soft|stop) // The element moves after the mouse or your finger. Place it once and it keeps following
+val_cursor {value:Number} cursor AXIS(x|y) // Where the mouse (finger) is, measured from the top-left of the page
+val_where {value:Number} EL=<NAME of a page element> ’s AXIS(x|y) // Tells how far the element is from the top-left of the page
+val_hit {value:Boolean} A=<NAME of a page element> and B=<NAME of a page element> touching? // True when the two elements overlap. Use it with "if"
+val_today {value} today U(date|time|year|month) // Today's date or the current time
+act_store {statement} save name [value NAME] value [value VALUE] // Saves a value under a name. In the downloaded HTML file it stays after reopening (the prev
+val_load {value} load name [value NAME] if none [value DEF] // Gets a saved value. If nothing was saved, uses the "if none" value
+act_log {statement} write to log [value VALUE] // Writes a value to the log under the preview. Handy for finding mistakes
