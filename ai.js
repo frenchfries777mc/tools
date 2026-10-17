@@ -221,15 +221,19 @@ function askLocal(c,o){
       return clean((r.choices&&r.choices[0]&&r.choices[0].message&&r.choices[0].message.content)||'').trim(); },fail);
     var looped=false;
     // a small model can get stuck writing the same thing forever: stop it when the tail is one short piece repeated
-    var loops=function(t){ if(t.length<600) return false; var w=t.slice(-480); // XML blocks repeat in pieces of up to ~160 characters
-      for(var p=1;p<=200;p++) if(w.slice(p)===w.slice(0,480-p)) return true; return false; };
+    var loops=function(t){ var n=t.length; if(n<600) return false; var w=t.slice(-480); // XML blocks repeat in pieces of up to ~160 characters
+      for(var p=1;p<=200;p++) if(w.slice(p)===w.slice(0,480-p)) return true;
+      // longer pieces (a few whole blocks written again and again): the last three pieces are identical
+      for(p=201;p*3<=n&&p<=1200;p++) if(t.charCodeAt(n-1)===t.charCodeAt(n-1-p)&&t.slice(n-p)===t.slice(n-2*p,n-p)&&t.slice(n-2*p,n-p)===t.slice(n-3*p,n-2*p)) return true;
+      return false; };
+    var checkedAt=0;
     req.stream=true; stopNow=function(){ stopped=true; e.interruptGenerate(); };
     return e.chat.completions.create(req).then(function(it){
       var out='', ai=it[Symbol.asyncIterator]();
       function next(){ return ai.next().then(function(r){
         if(r.done){ if(stopped) throw AIError(looped?T('같은 말을 반복해서 멈췄어요. 다시 보내 보세요'):T('멈췄어요'),'stop'); return clean(out).trim(); }
         var d=r.value.choices&&r.value.choices[0]&&r.value.choices[0].delta; if(d&&d.content){ out+=d.content; o.onText(clean(out));
-          if(!stopped&&loops(out)){ looped=true; stopped=true; e.interruptGenerate(); } }
+          if(!stopped&&out.length-checkedAt>=60&&(checkedAt=out.length,loops(out))){ looped=true; stopped=true; e.interruptGenerate(); } }
         return next(); }); }
       return next();
     }).then(null,fail);
