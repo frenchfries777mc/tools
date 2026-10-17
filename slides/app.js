@@ -6,8 +6,8 @@
 'use strict';
 var T=FFT.T, F=FFT.F, $=function(id){ return document.getElementById(id); };
 var W=1280, H=720, LS='ffslides.v1';
-/* MODE: '' = the editor, 'pv' = presenter view window (#presenter), which gets the deck from the presenting window and never saves */
-var MODE=/^#presenter/.test(location.hash)?'pv':'';
+/* MODE: '' = the editor, 'pv' = presenter view window (#presenter), which gets the deck from the presenting window, 'view' = read-only viewer for a shared link (#v=...); neither of them saves */
+var MODE=/^#presenter/.test(location.hash)?'pv':/^#v=/.test(location.hash)?'view':'';
 
 /* ---------- themes ---------- */
 var SANS="'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif", SERIF="'Noto Serif KR','Apple SD Gothic Neo',Georgia,'Batang',serif";
@@ -791,9 +791,73 @@ function startPV(){
   window.addEventListener('resize',pvScale); if(window.ResizeObserver){ var ro=new ResizeObserver(pvScale); ro.observe($('pvCur')); ro.observe($('pvNextFr')); }
 }
 
+/* ---------- share: read-only link and QR. Everything is client side: the slides are packed into the address after the # (deflate + base64url), which browsers never send to a server.
+   The viewer (#v=...) unpacks them. It is not live: viewers page through on their own, and pictures are left out to keep the link short. ---------- */
+function b64u(u){ var s='', i; for(i=0;i<u.length;i+=8192) s+=String.fromCharCode.apply(null,u.subarray(i,i+8192)); return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
+function unb64u(t){ t=String(t).replace(/-/g,'+').replace(/_/g,'/'); while(t.length%4) t+='='; var b=atob(t), u=new Uint8Array(b.length), i; for(i=0;i<b.length;i++) u[i]=b.charCodeAt(i); return u; }
+function pipeBytes(kind,bytes,cap){ var S=new window[kind]('deflate-raw'), w=S.writable.getWriter(), rd=S.readable.getReader(), got=[], n=0; w.write(bytes).catch(function(){}); w.close().catch(function(){});
+  return (function pump(){ return rd.read().then(function(r){ if(r.done){ var o=new Uint8Array(n), k=0; got.forEach(function(c){ o.set(c,k); k+=c.length; }); return o; } n+=r.value.length; if(cap&&n>cap){ rd.cancel(); throw new Error('size'); } got.push(r.value); return pump(); }); })(); }
+var SH_TEXT=['title','subtitle','leftTitle','rightTitle','stat','caption','quote','by','data'];
+function shareJSON(o){ var vis=deck.slides.filter(function(s){ return !s.hide; }), pics=0, start=0, d={v:1, n:deck.name, t:deck.theme};
+  if(deck.font) d.f=deck.font; if(deck.nums) d.m=1; if(deck.footer) d.o=deck.footer;
+  vis.forEach(function(s,i){ if(s.img) pics++; if(deck.slides[cur]&&deck.slides.indexOf(s)<=cur) start=i; });
+  d.s=vis.map(function(s){ var x={l:s.layout}; SH_TEXT.forEach(function(k){ if(s[k]&&!(k==='caption'&&s.layout==='quiz'&&!o.ans)) x[k]=s[k]; }); LISTS.forEach(function(k){ if(s[k].length) x[k]=s[k]; });
+    if(s.layout==='chart'&&s.ctype!=='bar') x.c=s.ctype; if(s.bg) x.bg=s.bg; if(o.notes&&s.notes&&s.notes.trim()) x.notes=s.notes; return x; });
+  return {json:JSON.stringify(d), n:vis.length, hidden:deck.slides.length-vis.length, pics:pics, start:start}; }
+function shareEncode(json){ var bytes=new TextEncoder().encode(json), plain='j'+b64u(bytes);
+  if(!window.CompressionStream) return Promise.resolve(plain); return pipeBytes('CompressionStream',bytes).then(function(z){ var c='z'+b64u(z); return c.length<plain.length?c:plain; },function(){ return plain; }); }
+function shareDecode(pl){ pl=String(pl||''); var kind=pl[0], raw; try{ raw=unb64u(pl.slice(1)); }catch(e){ return Promise.reject(e); }
+  var p; if(kind==='j') p=Promise.resolve(raw); else if(kind==='z'&&window.DecompressionStream) p=pipeBytes('DecompressionStream',raw,4e6); else return Promise.reject(new Error('format'));
+  return p.then(function(u){ var d=JSON.parse(new TextDecoder().decode(u)); if(!d||!Array.isArray(d.s)) throw new Error('data');
+    var o={id:uid(), name:String(d.n||'').slice(0,120)||T('발표 자료'), theme:d.t, font:d.f, nums:!!d.m, footer:String(d.o||'').slice(0,200), t:Date.now(), slides:d.s.slice(0,200).map(function(x){
+      x=x&&typeof x==='object'?x:{}; var s={layout:x.l}; SH_TEXT.concat(['notes','bg']).forEach(function(k){ if(typeof x[k]==='string') s[k]=x[k].slice(0,20000); }); LISTS.forEach(function(k){ if(Array.isArray(x[k])) s[k]=x[k].slice(0,40).map(function(v){ return String(v).slice(0,2000); }); }); if(x.c) s.ctype=x.c; return s; })};
+    return fixDeck(o); }); }
+function shareBase(){ return location.href.split('#')[0]; }
+var shTok=0;
+function shOpts(){ return {notes:$('shNotes').checked, ans:$('shAns').checked, cur:$('shCur').checked}; }
+function shBuild(){ var tok=++shTok, o=shOpts(), j=shareJSON(o), qb=$('shQrBox'); $('shLink').value=''; $('shInfo').textContent=T('링크를 만드는 중…'); qb.hidden=true; $('shWarn').hidden=true; ['shCopy','shOpen','shShare'].forEach(function(id){ $(id).disabled=true; });
+  shareEncode(j.json).then(function(pl){ if(tok!==shTok) return; var url=shareBase()+'#v='+pl+(o.cur&&j.start>0?'&p='+(j.start+1):''); $('shLink').value=url; ['shCopy','shOpen','shShare'].forEach(function(id){ $(id).disabled=false; });
+    var info=F('{0}장 · 링크 길이 {1}자',j.n,url.length), warn=[];
+    if(j.hidden) warn.push(F('건너뛰기로 숨긴 슬라이드 {0}장은 빠졌어요',j.hidden)); if(j.pics) warn.push(F('그림 {0}장은 링크에 담기지 않아요',j.pics));
+    if(/^(localhost|127\.\d+\.\d+\.\d+|\[::1\]|)$/.test(location.hostname)||location.protocol==='file:') warn.push(T('지금 주소는 이 기기 안에서만 열려요. 다른 사람의 휴대폰에서 열려면 웹사이트로 올린 주소에서 공유하세요.'));
+    if(url.length>8000) warn.push(T('링크가 아주 길어서 메신저에서 잘릴 수 있어요. 슬라이드를 줄이거나 메모를 빼 보세요.'));
+    $('shInfo').textContent=info; var q=null; try{ q=window.FFQR&&FFQR.make(url); }catch(e){}
+    if(q){ FFQR.draw($('shQr'),q,Math.max(2,Math.floor(340/(q.size+8)))); $('shQrMsg').textContent=url.length>1100?T('QR이 아주 빽빽해요. 화면을 크게 띄우고 가까이서 찍어야 읽힐 수 있어요.'):T('휴대폰 카메라로 찍으면 바로 열려요.'); qb.hidden=false; }
+    else warn.push(T('슬라이드 내용이 많아서 QR에는 담을 수 없어요 (약 2,900자까지). 링크로 보내 주세요.'));
+    $('shWarn').textContent=warn.join(' '); $('shWarn').hidden=!warn.length; });
+}
+function openShare(){ if(!deck.slides.length||gen||busyOn) return; if(!deck.slides.some(function(s){ return !s.hide; })) return toast(T('모든 슬라이드를 숨겨서 공유할 수 없어요')); blurEdit(); closeMenus(); $('shNotes').checked=$('shAns').checked=$('shCur').checked=false; $('shShare').hidden=!navigator.share; openDlg('shareDlg'); shBuild(); }
+$('shareBtn').onclick=openShare; ['shNotes','shAns','shCur'].forEach(function(id){ $(id).onchange=shBuild; });
+$('shCopy').onclick=function(){ var t=$('shLink').value, ok=function(){ toast(T('링크를 복사했어요')); }, fb=function(){ $('shLink').select(); try{ if(document.execCommand('copy')) return ok(); }catch(e){} toast(T('링크를 길게 눌러 복사해 주세요')); };
+  if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(ok,fb); else fb(); };
+$('shLink').addEventListener('focus',function(){ this.select(); });
+$('shOpen').onclick=function(){ window.open($('shLink').value,'_blank','noopener'); };
+$('shShare').onclick=function(){ try{ navigator.share({title:deck.name,url:$('shLink').value}).catch(function(){}); }catch(e){} };
+$('shQrSave').onclick=function(){ $('shQr').toBlob(function(b){ if(b) download(b,fileName(deck.name)+' QR.png'); }); };
+/* the viewer */
+var vw={i:0, x:null};
+function startView(){
+  document.body.classList.add('mode-view'); $('viewer').hidden=false; deck=newDeck(); $('vMsg').textContent=T('슬라이드를 불러오는 중…'); ['vPrev','vNext','vImport'].forEach(function(id){ $(id).disabled=true; });
+  var m=/^#v=([^&]*)(?:&p=(\d+))?/.exec(location.hash)||[];
+  shareDecode(m[1]).then(function(d){ if(!d.slides.length) throw new Error('empty'); deck=d; fitCache.clear(); vw.i=Math.max(0,Math.min((+m[2]||1)-1,d.slides.length-1)); $('vName').textContent=d.name; document.title=d.name+' · Fry Slides'; $('vMsg').textContent=''; ['vPrev','vNext','vImport'].forEach(function(id){ $(id).disabled=false; }); vDraw(); },
+    function(){ $('vMsg').textContent=T('링크를 읽지 못했어요. 링크가 중간에 잘렸거나 이 브라우저에서 열 수 없는 형식이에요.'); });
+  $('vPrev').onclick=function(){ vGo(vw.i-1); }; $('vNext').onclick=function(){ vGo(vw.i+1); };
+  $('vImport').onclick=function(){ var d=JSON.parse(JSON.stringify(deck)); d.id=uid(); d.t=Date.now(); d.slides.forEach(function(s){ s.id=uid(); }); var st=loadStore(); st.decks.unshift(fixDeck(d)); st.last=d.id;
+    try{ localStorage.setItem(LS,JSON.stringify(st)); }catch(e){ return toast(T('저장 공간이 부족해서 저장하지 못했어요')); } location.replace(shareBase()); };
+  var w=$('vWrap'); w.addEventListener('pointerdown',function(e){ vw.x=e.clientX; vw.y=e.clientY; }); w.addEventListener('pointerup',function(e){ if(vw.x==null) return; var dx=e.clientX-vw.x, dy=e.clientY-vw.y; vw.x=null; if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)) vGo(vw.i+(dx<0?1:-1)); });
+  if(window.ResizeObserver) new ResizeObserver(vScale).observe(w); else window.addEventListener('resize',vScale);
+}
+function vGo(i){ if(i<0||i>=deck.slides.length) return; vw.i=i; vDraw(); }
+function vScale(){ var w=$('vWrap'), st=$('vStage'), k=Math.min((w.clientWidth-20)/W,(w.clientHeight-20)/H); if(!(k>0)) return; st.style.width=W*k+'px'; st.style.height=H*k+'px'; var el=st.firstChild; if(el) el.style.transform='scale('+k+')'; }
+function vDraw(){ var st=$('vStage'), s=deck.slides[vw.i], t=th(), n=deck.slides.length; st.innerHTML=''; if(!s) return; var el=slideEl(s,t,false,{hideAns:s.layout==='quiz'}); st.appendChild(el); fitAll(el,s,t); vScale();
+  $('vNum').textContent=(vw.i+1)+' / '+n; $('vProg').firstChild.style.width=Math.round((vw.i+1)/n*100)+'%'; $('vPrev').disabled=vw.i===0; $('vNext').disabled=vw.i===n-1; }
+function viewKey(e){ if(e.ctrlKey||e.metaKey||e.altKey||!deck.slides.length) return; var k=e.key;
+  if(k==='ArrowRight'||k==='ArrowDown'||k==='PageDown'||k===' '||k==='Enter'){ e.preventDefault(); vGo(vw.i+1); } else if(k==='ArrowLeft'||k==='ArrowUp'||k==='PageUp'||k==='Backspace'){ e.preventDefault(); vGo(vw.i-1); } else if(k==='Home'){ e.preventDefault(); vGo(0); } else if(k==='End'){ e.preventDefault(); vGo(deck.slides.length-1); } }
+window.addEventListener('hashchange',function(){ var m=/^#presenter/.test(location.hash)?'pv':/^#v=/.test(location.hash)?'view':''; if(m!==MODE||m==='view') location.reload(); });
+
 /* ---------- keyboard ---------- */
 document.addEventListener('keydown',function(e){
-  if(MODE){ if(MODE==='pv') pvKey(e); return; }
+  if(MODE){ if(MODE==='pv') pvKey(e); else viewKey(e); return; }
   if(pr.on){ var k=e.key;
     if(/^\d$/.test(k)&&!e.ctrlKey&&!e.metaKey){ e.preventDefault(); pr.go=(pr.go+k).slice(0,3); $('pNum').textContent='→ '+pr.go; clearTimeout(pr.goT); pr.goT=setTimeout(function(){ pr.go=''; drawPresent(); },2500); return; }
     if(pr.go&&k==='Enter'){ e.preventDefault(); pGo(); return; }
@@ -957,7 +1021,7 @@ document.addEventListener('visibilitychange',function(){ if(document.hidden) sav
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){ fitCache.clear(); if(MODE) return; if(deck&&deck.slides.length){ drawList(); drawMain(); } else if(deck) drawStart(); });
 var first=null; store.decks.forEach(function(d){ if(d.id===store.last) first=d; });
 if(!first&&store.decks.length) first=store.decks.slice().sort(function(a,b){ return b.t-a.t; })[0];
-if(MODE==='pv') startPV(); else openDeck(first||newDeck());
+if(MODE==='pv') startPV(); else if(MODE==='view') startView(); else openDeck(first||newDeck());
 
 /* used by ai-slides.js */
 window.FSL={
@@ -971,5 +1035,5 @@ window.FSL={
   putSlide:function(i,s){ var o=deck.slides[i]; if(!o) return; s=fixSlide(s); s.id=o.id; s.img=o.img; s.iw=o.iw; s.ih=o.ih; s.hide=o.hide; s.bg=o.bg; s.data=o.data; s.ctype=o.ctype; deck.slides[i]=s; if(i===cur) drawMain(); updateThumb(i); saveSoon(); },
   insertSlide:function(i,s){ deck.slides.splice(i,0,fixSlide(s)); cur=i; refresh(); saveSoon(); }
 };
-window.__fsl={get deck(){ return deck; }, get store(){ return store; }, get cur(){ return cur; }, select:select, present:present, exitPresent:exitPresent, get pr(){ return pr; }, buildPPTX:buildPPTX, needPPTX:needPPTX, measure:measure, undo:doUndo, redo:doRedo, moveSlide:moveSlide};
+window.__fsl={shareEncode:shareEncode, shareDecode:shareDecode, shareJSON:shareJSON, get deck(){ return deck; }, get store(){ return store; }, get cur(){ return cur; }, select:select, present:present, exitPresent:exitPresent, get pr(){ return pr; }, buildPPTX:buildPPTX, needPPTX:needPPTX, measure:measure, undo:doUndo, redo:doRedo, moveSlide:moveSlide};
 })();
