@@ -1,5 +1,12 @@
 /* Block HTML strings: [en, es, fr, de, ja] */
 FFT.add({
+'화살표 키로 움직이는 게임 틀':["Arrow-key game starter", "Plantilla de juego con flechas", "Modèle de jeu aux flèches", "Pfeiltasten-Spielvorlage", "矢印キーで動くゲームの土台"],
+'화살표 키로 🚀를 움직여 ⭐ 5개를 모으는 게임. 목표와 점수가 있어요':["Move the 🚀 with the arrow keys and collect 5 ⭐. It has a goal and a score", "Mueve el 🚀 con las flechas y reúne 5 ⭐. Tiene meta y puntuación", "Déplacez la 🚀 avec les flèches et ramassez 5 ⭐. Il y a un but et un score", "Bewege die 🚀 mit den Pfeiltasten und sammle 5 ⭐. Mit Ziel und Punktestand", "矢印キーで🚀を動かして⭐を5個集めます。目標とスコア付き"],
+'화살표 키 게임 틀':["Arrow-key game", "Juego con flechas", "Jeu aux flèches", "Pfeiltasten-Spiel", "矢印キーゲーム"],
+'화살표 키 게임':["Arrow-key game", "Juego con flechas", "Jeu aux flèches", "Pfeiltasten-Spiel", "矢印キーゲーム"],
+'화살표 키로 🚀를 움직여 ⭐ 5개를 모아요':["Move the 🚀 with the arrow keys and collect 5 ⭐", "Mueve el 🚀 con las flechas y reúne 5 ⭐", "Déplacez la 🚀 avec les flèches et ramassez 5 ⭐", "Bewege die 🚀 mit den Pfeiltasten und sammle 5 ⭐", "矢印キーで🚀を動かして⭐を5個集めよう"],
+'점수: 0 / 5':["Score: 0 / 5", "Puntos: 0 / 5", "Score : 0 / 5", "Punkte: 0 / 5", "点数: 0 / 5"],
+'성공! ⭐ 5개를 모았어요 🎉':["You did it! 5 ⭐ collected 🎉", "¡Lo lograste! 5 ⭐ reunidas 🎉", "Bravo ! 5 ⭐ ramassées 🎉", "Geschafft! 5 ⭐ gesammelt 🎉", "成功！⭐を5個集めました 🎉"],
 '한 블록씩 실행':["Run one block at a time", "Ejecutar bloque a bloque", "Exécuter bloc par bloc", "Block für Block ausführen", "1ブロックずつ実行"],
 '블록을 한 개씩 실행하며 살펴봐요':["Run the blocks one by one and watch what happens", "Ejecuta los bloques uno a uno y mira qué pasa", "Exécutez les blocs un par un et observez", "Führe die Blöcke einzeln aus und beobachte", "ブロックを1つずつ実行して様子を見ます"],
 '다음 블록 ▶':["Next block ▶", "Siguiente bloque ▶", "Bloc suivant ▶", "Nächster Block ▶", "次のブロック ▶"],

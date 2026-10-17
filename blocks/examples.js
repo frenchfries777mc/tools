@@ -131,6 +131,20 @@ var EX=[
     B('ev_start',{x:440,y:20,s:{DO:[B('act_move',{f:{EL:rk},v:{X:N(60),Y:N(160)}}),B('act_follow',{f:{EL:st,MODE:'soft'}})]}}),
     key('ArrowLeft',130,'x',-15),key('ArrowRight',240,'x',15),key('ArrowUp',350,'y',-15),key('ArrowDown',460,'y',15)
   ]); }}
+,{name:'화살표 키로 움직이는 게임 틀',desc:'화살표 키로 🚀를 움직여 ⭐ 5개를 모으는 게임. 목표와 점수가 있어요',xml:function(){
+  var st=T('별'), rk=T('로켓'), sc=T('점수판'), score='score';
+  function key(k,y,ax,d){ return B('ev_key',{x:440,y:y,f:{KEY:k},s:{DO:[B('act_nudge',{f:{EL:rk,AXIS:ax},v:{N:N(d)}}),B('act_stay',{f:{EL:rk}})]}}); }
+  function rnd(a,b){ return X(B('math_random_int',{v:{FROM:N(a),TO:N(b)}})); }
+  function place(){ return B('act_move',{f:{EL:st},v:{X:rnd(20,240),Y:rnd(150,300)}}); }
+  return wrap([
+    page(T('화살표 키 게임 틀'),'#0f172a',[B('el_heading',{f:{SIZE:'h2',TEXT:T('화살표 키 게임'),NAME:T('제목')+'1'}}),B('el_text',{f:{TEXT:T('화살표 키로 🚀를 움직여 ⭐ 5개를 모아요'),NAME:T('안내')}}),
+      B('el_text',{f:{TEXT:T('점수: 0 / 5'),NAME:sc}}),B('el_heading',{f:{SIZE:'h1',TEXT:'⭐',NAME:st}}),B('el_heading',{f:{SIZE:'h1',TEXT:'🚀',NAME:rk}})]),
+    B('ev_start',{x:440,y:20,s:{DO:[SET(score,NUMB(0)),B('act_move',{f:{EL:rk},v:{X:N(40),Y:N(300)}}),B('act_move',{f:{EL:st},v:{X:N(200),Y:N(200)}})]}}),
+    key('ArrowLeft',150,'x',-18),key('ArrowRight',260,'x',18),key('ArrowUp',370,'y',-18),key('ArrowDown',480,'y',18),
+    B('ev_timer',{x:760,y:20,f:{SEC:0.05},s:{DO:[B('controls_if',{v:{IF0:X(B('val_hit',{f:{A:rk,B:st}}))},s:{DO0:[CHG(score,1),
+      B('act_set',{f:{EL:sc},v:{VALUE:JOIN([TX(T('점수: ')),G(score),TX(' / 5')])}}),B('act_beep',{f:{NOTE:'659.25'},v:{SEC:N(0.1)}}),place(),
+      B('controls_if',{v:{IF0:CMP('GTE',G(score),NUMB(5))},s:{DO0:[B('act_stop'),B('act_show',{f:{EL:st,MODE:'hide'}}),B('act_alert',{v:{VALUE:S(T('성공! ⭐ 5개를 모았어요 🎉'))}})]}})]}})]}})
+  ]); }}
 ];
 window.BH_EXAMPLES=EX;
 })();
