@@ -636,4 +636,8 @@ FFT.add({
 "블록으로 바꾸지 못했어요. HTML 코드 그대로 두었어요":["Could not turn it into blocks. Kept as HTML code", "No se pudo convertir en bloques. Se mantiene como código HTML", "Impossible de convertir en blocs. Conservé en code HTML", "Konnte nicht in Blöcke umgewandelt werden. Bleibt als HTML-Code", "ブロックに変えられませんでした。HTMLコードのままにしました"],
 "블록 {0}개 · 직접 쓰기 {1}개로 바꿨어요":["Turned into {0} blocks · {1} direct-write blocks", "Convertido en {0} bloques · {1} de escritura directa", "Converti en {0} blocs · {1} d'écriture directe", "In {0} Blöcke umgewandelt · {1} Direkt-Blöcke", "ブロック{0}個・直接書き{1}個に変えました"],
 "바꾸기를 취소하고 HTML 코드로 돌려놓았어요":["Conversion undone, back to HTML code", "Conversión deshecha, de vuelta al código HTML", "Conversion annulée, retour au code HTML", "Umwandlung rückgängig, zurück zum HTML-Code", "変換を取り消してHTMLコードに戻しました"],
+"코드를 읽는 중…":["Reading the code…", "Leyendo el código…", "Lecture du code…", "Code wird gelesen…", "コードを読み込み中…"],
+"블록으로 나누는 중…":["Splitting into blocks…", "Dividiendo en bloques…", "Découpage en blocs…", "In Blöcke aufteilen…", "ブロックに分けています…"],
+"블록을 화면에 놓는 중…":["Placing the blocks…", "Colocando los bloques…", "Placement des blocs…", "Blöcke werden platziert…", "ブロックを配置しています…"],
+"마무리하는 중…":["Finishing…", "Terminando…", "Finalisation…", "Abschließen…", "仕上げています…"],
 });
