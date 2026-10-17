@@ -124,6 +124,13 @@ input[type=range]{width:100%; height:28px; margin:0; accent-color:var(--lab); ba
 .dacts{display:flex; flex-wrap:wrap; gap:6px; margin:0 0 10px;}
 .dacts .tbtn{height:32px; padding:0 10px; font-size:13px;}
 .dacts .dang{color:#ff8b8b;}
+.dacts.auto{align-items:center;}
+.dacts.auto select{height:32px; border-radius:8px; border:1px solid var(--line); background:var(--panel2); padding:0 6px; font-size:13px; color:var(--text);}
+.dacts.auto #toSheet{margin-left:auto;}
+.adot{width:9px; height:9px; border-radius:50%; border:1.5px solid currentColor; flex:0 0 auto;}
+#autoBtn.on{border-color:var(--lab); color:var(--lab);} #autoBtn.on .adot{background:#ff5d6c; border-color:#ff5d6c; animation:blink 1s infinite;}
+#recBtn.auto{box-shadow:inset 0 0 0 1px #ff5d6c;} #recBtn.auto::after{content:''; width:7px; height:7px; border-radius:50%; background:#ff5d6c; animation:blink 1s infinite;}
+@keyframes blink{50%{opacity:.25;}}
 .tblWrap{max-height:260px; overflow:auto; border:1px solid var(--line); border-radius:10px; -webkit-overflow-scrolling:touch;}
 table{border-collapse:collapse; width:100%; font-size:12.5px; font-variant-numeric:tabular-nums;}
 th,td{padding:6px 8px; text-align:right; white-space:nowrap; border-bottom:1px solid var(--line);}
@@ -332,6 +339,10 @@ td .del:hover{color:#ff8b8b; background:var(--panel2);}
         <button class="tbtn" id="csvCopy"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>CSV 복사</button>
         <button class="tbtn" id="csvSave"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg>CSV 받기</button>
         <button class="tbtn dang" id="recClear">모두 지우기</button>
+      </div>
+      <div class="dacts auto"><button class="tbtn" id="autoBtn" aria-pressed="false" title="정해 둔 간격마다 지금 값을 기록해요"><span class="adot"></span>자동 기록</button>
+        <select id="autoSec" aria-label="자동 기록 간격" title="자동 기록 간격"></select>
+        <button class="tbtn pri" id="toSheet" title="기록을 표와 그래프로 프라이 시트에서 열어요"><svg viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M9.5 9.5V20"/></svg>프라이 시트로 보내기</button>
       </div>
       <div class="tblWrap" id="tblWrap"></div>
       <div class="h2">그래프</div>
