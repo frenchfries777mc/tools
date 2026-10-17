@@ -84,6 +84,11 @@ button,input,select,textarea{font:inherit; color:inherit;}
 .num{width:74px; height:30px; background:var(--bg); border:1px solid var(--line); border-radius:7px; padding:0 6px; text-align:right; font-variant-numeric:tabular-nums; -moz-appearance:textfield;}
 .num::-webkit-inner-spin-button,.num::-webkit-outer-spin-button{-webkit-appearance:none; margin:0;}
 .num:focus{outline:none; border-color:var(--lab);}
+.stp{width:34px; height:34px; flex:none; border:1px solid var(--line); background:var(--panel2); color:var(--text); border-radius:9px; font-size:20px; line-height:1; font-weight:600; cursor:pointer; padding:0; display:inline-flex; align-items:center; justify-content:center; touch-action:manipulation; user-select:none; -webkit-user-select:none; -webkit-touch-callout:none; -webkit-tap-highlight-color:transparent;}
+.stp:hover{border-color:var(--lab); color:var(--lab);}
+.stp:active{background:rgba(167,139,250,.22); border-color:var(--lab);}
+.stp:focus-visible{outline:2px solid var(--lab); outline-offset:1px;}
+@media(pointer:coarse){ .stp{width:44px; height:44px; font-size:24px;} .num{height:40px; width:80px; font-size:16px;} .pv{gap:6px;} }
 input[type=range]{width:100%; height:28px; margin:0; accent-color:var(--lab); background:transparent; touch-action:pan-y;}
 .pre{display:flex; flex-wrap:wrap; gap:5px; margin-top:4px;}
 .pre button,.seg button{border:1px solid var(--line); background:var(--panel2); border-radius:99px; padding:4px 10px; cursor:pointer; font-size:12.5px; color:var(--dim);}
