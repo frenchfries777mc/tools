@@ -229,6 +229,12 @@ button,input,select,textarea{font:inherit; color:inherit;}
 .sl .liveHint{position:absolute; left:90px; top:630px; width:1100px; height:30px; text-align:center; font-size:20px; color:var(--s-sub); line-height:30px;}
 .sl .liveHint .h2{display:none;} #present.inLive .liveHint .h1{display:none;} #present.inLive .liveHint .h2{display:inline; color:var(--s-ac); font-weight:700;}
 .liveSrcRow{display:flex; flex-wrap:wrap; gap:6px 16px; margin:0 0 4px;} .liveSrcRow label{display:flex; gap:6px; align-items:center; cursor:pointer;} .liveSrcRow input{accent-color:var(--fry);}
+.liveLs{margin-top:8px; max-height:min(46vh,380px); overflow-y:auto; -webkit-overflow-scrolling:touch; border:1px solid var(--line); border-radius:10px; background:var(--bg); padding:2px 6px 6px;}
+.liveLs .lvg{position:sticky; top:0; background:var(--bg); color:var(--dim); font-size:12px; font-weight:700; padding:8px 4px 4px; z-index:1;}
+.liveLs .lvu{color:var(--dim); font-size:11.5px; padding:4px 6px 0;}
+.liveLs .lvi{display:flex; align-items:center; gap:8px; width:100%; min-height:40px; text-align:left; padding:6px 8px; margin:1px 0; border-radius:8px; border:1px solid transparent; background:transparent; cursor:pointer; font-size:13.5px;}
+.liveLs .lvi:hover{background:var(--panel2);} .liveLs .lvi.on{background:var(--panel2); border-color:var(--fry); font-weight:700;}
+.liveLs .lvi .ic{flex:0 0 24px; text-align:center;} .liveLs .empty{padding:14px 6px; color:var(--dim);}
 .liveSel{height:38px; width:100%; border-radius:8px; border:1px solid var(--line); background:var(--panel2); padding:0 8px;}
 .liveMsg{color:var(--fry); min-height:1.4em; margin:0;}
 .thumb.hid .tv{opacity:.45;} .thumb .hb{position:absolute; right:3px; top:2px; z-index:2; font-style:normal; font-size:34px; line-height:1; color:#ff7b7b; text-shadow:0 0 4px #000; pointer-events:none;}
@@ -505,7 +511,7 @@ body.mode-pv .top,body.mode-pv .main,body.mode-view .top,body.mode-view .main{di
     <div class="liveSrcRow"><label><input type="radio" name="liveK" value="block"> Block HTML 프로젝트</label><label><input type="radio" name="liveK" value="lab"> Fry Lab 실험</label><label><input type="radio" name="liveK" value="html"> HTML 붙여넣기 (고급)</label></div>
     <div id="livePan_block"><p>프로젝트를 고르면 지금 모습을 복사해서 슬라이드에 담아요. 나중에 Block HTML에서 고쳐도 슬라이드는 바뀌지 않아요. 다시 고르면 새로 가져와요.</p>
       <select id="liveBlk" class="liveSel" aria-label="Block HTML 프로젝트"></select><p id="liveBlkNone" hidden>Block HTML에 저장된 프로젝트가 없어요</p></div>
-    <div id="livePan_lab" hidden><p>Fry Lab 화면을 그대로 열어요. 발표 중에 값을 직접 움직일 수 있어요.</p><select id="liveLab" class="liveSel" aria-label="Fry Lab 실험"></select></div>
+    <div id="livePan_lab" hidden><p>Fry Lab 화면을 그대로 열어요. 발표 중에 값을 직접 움직일 수 있어요.</p><input id="liveFind" class="liveSel" type="search" autocomplete="off" aria-label="실험·템플릿 검색" placeholder="실험·템플릿·단원 검색"><div id="liveLs" class="liveLs" role="listbox" aria-label="Fry Lab 실험"></div><p id="liveCnt" class="liveMsg"></p></div>
     <div id="livePan_html" hidden><p>HTML 전체를 붙여 넣어요. 믿을 수 있는 코드만 쓰세요. 슬라이드 안의 격리된 칸에서 실행되고, 이 사이트의 저장 정보에는 닿지 못해요.</p>
       <textarea id="liveHtml" data-notr spellcheck="false" style="min-height:170px;width:100%;resize:vertical;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.45;font-family:ui-monospace,Consolas,monospace"></textarea></div>
     <p id="liveBlkMsg" class="liveMsg"></p>
