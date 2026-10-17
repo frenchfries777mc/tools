@@ -1,6 +1,6 @@
 /* Fry Lab: science and math experiments that run in the browser (canvas, no server).
    app.js is the shell: experiment list, controls, readouts, play/pause loop, records table, graph with a
-   least-squares line, CSV copy/download and saving (localStorage 'fflab.v1').
+   least-squares line, CSV copy/download, auto record, sending the records to Fry Sheet and saving (localStorage 'fflab.v1').
    The experiments are in experiments.js (LAB.add), the AI helper in ai-lab.js (uses ../ai.js).
    An experiment is an object:
      id, cat ('math'|'sci'), icon, name, desc, info, tries[], hint,
@@ -203,14 +203,54 @@ function drawTries(){ var u=$('try'); u.innerHTML=''; var done=st.tries[cur.id]|
 
 /* ---------- records ---------- */
 function rows(){ var r=st.rec[cur.id]; if(!Array.isArray(r)) r=st.rec[cur.id]=[]; return r; }
-function record(){
-  if(!cur||!cur.record) return; var r; try{ r=cur.record(); }catch(e){ console.error(e); return; }
-  if(typeof r==='string'){ toast(T(r)); return; } if(!r) return;
-  var R=rows(); R.push(cur.cols.map(function(c){ var v=r[c.k]; return typeof v==='number'&&isFinite(v)?v:null; })); if(R.length>500) R.shift();
+/* quiet: called by auto record (no toast per row, a "not yet" message only once, an unchanged row is skipped) */
+function record(quiet){
+  quiet=quiet===true; if(!cur||!cur.record) return; var r; try{ r=cur.record(); }catch(e){ console.error(e); return; }
+  if(typeof r==='string'){ if(!quiet||autoMsg!==r){ autoMsg=quiet?r:''; toast(T(r)); } return; } if(!r) return; autoMsg='';
+  var R=rows(), row=cur.cols.map(function(c){ var v=r[c.k]; return typeof v==='number'&&isFinite(v)?v:null; });
+  if(quiet&&R.length&&JSON.stringify(R[R.length-1])===JSON.stringify(row)) return;
+  R.push(row); if(R.length>500) R.shift();
   saveSoon(); drawData(); var n=$('recN'); n.classList.remove('bump'); void n.offsetWidth; n.classList.add('bump');
-  toast(F('{0}번째 기록을 남겼어요',R.length));
+  if(!quiet) toast(F('{0}번째 기록을 남겼어요',R.length));
 }
-$('recBtn').onclick=record; $('recBtn2').onclick=record;
+$('recBtn').onclick=function(){ record(); }; $('recBtn2').onclick=function(){ record(); };
+
+/* ---------- auto record: one row every N seconds while the toggle is on ---------- */
+var autoT=null, autoMsg='', AUTOS=[0.5,1,2,5,10];
+function setAuto(on,silent){ clearInterval(autoT); autoT=null; autoMsg='';
+  if(on&&cur&&cur.record){ var n=autoSec(); autoT=setInterval(function(){ if(cur&&curView==='lab'&&!document.hidden) record(true); },n*1000); record(true); }
+  var b=$('autoBtn'); b.classList.toggle('on',!!autoT); b.setAttribute('aria-pressed',String(!!autoT)); $('recBtn').classList.toggle('auto',!!autoT);
+  if(!silent) toast(autoT?F('자동 기록을 켰어요 ({0}초마다)',autoSec()):T('자동 기록을 껐어요')); }
+function autoSec(){ return AUTOS.indexOf(st.autoSec)>=0?st.autoSec:1; }
+(function(){ var s=$('autoSec'); AUTOS.forEach(function(n){ var o=document.createElement('option'); o.value=String(n); o.textContent=F('{0}초마다',n); s.appendChild(o); }); })();
+$('autoBtn').onclick=function(){ setAuto(!autoT); };
+$('autoSec').onchange=function(){ st.autoSec=+this.value; saveSoon(); if(autoT) setAuto(true,true); };
+
+/* ---------- send to Fry Sheet: a new doc in Fry Sheet's own storage (see sheet/app.js: ffsheet.docs index,
+   ffsheet.doc.<id> = {v, name, active, sheets:[{name, cells:{r*16384+c:{v}}, cw, rows, cols, fr, charts:[{id,r1,c1,r2,c2,type,title,cols}]}]})
+   with a header row, the rows, and a scatter chart of the graph's x / y; then open it there (../sheet/#open=<id>) ---------- */
+function sheetDoc(){
+  var R=rows(), o=graphCfg(), ks=cur.cols.map(function(c){ return c.k; }), xi=ks.indexOf(o.x), yi=ks.indexOf(o.y), order=[xi];
+  if(yi!==xi) order.push(yi); ks.forEach(function(k,i){ if(order.indexOf(i)<0) order.push(i); });
+  order=order.filter(function(j,n){ return n<2||R.some(function(r){ return r[j]!=null; }); }); // drop a column that never got a number
+  var KC=16384, cells={}, cw={}, ms=document.createElement('canvas').getContext('2d'); ms.font="700 13.5px 'Noto Sans KR',sans-serif";
+  order.forEach(function(j,c){ var h=colTitle(cur.cols[j]); cells[c]={v:(/^[=+\-'\d.]/.test(h)?"'":'')+h, b:1, al:'c'}; cw[c]=Math.round(clamp(ms.measureText(h).width+26,96,260)); });
+  R.forEach(function(r,i){ order.forEach(function(j,c){ var v=r[j]; if(v==null) return; var d=cur.cols[j].d; cells[(i+1)*KC+c]={v:String(+v.toPrecision(12)), nf:'d'+clamp(d==null?2:d|0,0,9)}; }); });
+  var nm=(st.ttl[cur.id]||T(cur.name)), now=new Date(), p2=function(n){ return (n<10?'0':'')+n; };
+  var date=now.getFullYear()+'-'+p2(now.getMonth()+1)+'-'+p2(now.getDate())+' '+p2(now.getHours())+':'+p2(now.getMinutes());
+  var id=Date.now().toString(36)+Math.random().toString(36).slice(2,6), ch=[];
+  if(order.length) ch.push({id:id+'c', r1:0, c1:0, r2:R.length, c2:order.length-1, type:'scatter', title:order.length>1?colTitle(cur.cols[order[1]])+' · '+colTitle(cur.cols[order[0]]):colTitle(cur.cols[order[0]]), cols:order.length>1?[0,1]:[0]});
+  return {id:id, doc:{v:1, name:(nm+' '+date).slice(0,80), active:0, sheets:[{name:T('실험 기록'), cells:cells, cw:cw, rows:Math.max(100,R.length+21), cols:Math.max(26,order.length+3), fr:1, fc:0, cfs:[], dv:[], charts:ch, merges:[]}]}};
+}
+function toSheet(){
+  if(!cur) return; if(!rows().length){ toast(T('먼저 값을 기록해 주세요')); return; }
+  var o=sheetDoc(), idx=[]; try{ idx=JSON.parse(localStorage.getItem('ffsheet.docs')||'[]'); }catch(e){} if(!Array.isArray(idx)) idx=[];
+  try{ localStorage.setItem('ffsheet.doc.'+o.id,JSON.stringify(o.doc)); idx=idx.filter(function(x){ return x&&x.id!==o.id; }); idx.unshift({id:o.id,name:o.doc.name,t:Date.now()});
+    localStorage.setItem('ffsheet.docs',JSON.stringify(idx.slice(0,50))); localStorage.setItem('ffsheet.last',o.id); }
+  catch(e){ try{ localStorage.removeItem('ffsheet.doc.'+o.id); }catch(er){} toast(T('저장 공간이 가득 차서 보내지 못했어요')); return; }
+  setAuto(false,true); setRunning(false); saveNow(); location.href='../sheet/#open='+o.id;
+}
+$('toSheet').onclick=toSheet;
 function colTitle(c){ return T(c.l)+(c.u?' ('+c.u+')':''); }
 function drawData(){
   var R=rows(), cols=cur.cols; $('recN').textContent=R.length;
@@ -224,7 +264,7 @@ function drawData(){
       var dl=document.createElement('td'), b=document.createElement('button'); b.className='del'; b.textContent='×'; b.setAttribute('aria-label',T('이 줄 지우기')); b.title=T('이 줄 지우기');
       b.onclick=function(){ R.splice(i,1); saveSoon(); drawData(); }; dl.appendChild(b); tr.appendChild(dl); tb.appendChild(tr); });
     t.appendChild(tb); w.appendChild(t); w.scrollTop=w.scrollHeight; }
-  ['csvCopy','csvSave','recClear'].forEach(function(id){ $(id).disabled=!R.length; });
+  ['csvCopy','csvSave','recClear','toSheet'].forEach(function(id){ $(id).disabled=!R.length; });
   drawGraph();
 }
 function graphCfg(){ var o=st.g[cur.id]&&typeof st.g[cur.id]==='object'?st.g[cur.id]:{}; var ks=cur.cols.map(function(c){ return c.k; });
@@ -300,7 +340,7 @@ cv.addEventListener('wheel',function(e){ if(cur&&cur.wheel){ var p=pos(e); if(cu
 /* ---------- open an experiment ---------- */
 function open(id){
   var e=byId[id]||EXPS[0]; show('lab'); if(cur===e){ resize(); if(e.autoRun&&!running) setRunning(true); return; }
-  if(cur){ saveNow(); if(cur.leave) cur.leave(); }
+  if(cur){ saveNow(); if(cur.leave) cur.leave(); } if(autoT) setAuto(false,true);
   cur=e; cur.p=cleanP(e); if(e.restore){ try{ e.restore(st.x[e.id]||null); }catch(er){ console.error(er); } }
   document.querySelectorAll('#nav .ex').forEach(function(b){ b.classList.toggle('on',b.dataset.id===e.id); });
   var on=document.querySelector('#nav .ex.on'); if(on&&on.scrollIntoView&&$('nav').scrollWidth>$('nav').clientWidth) on.scrollIntoView({block:'nearest',inline:'center'});
@@ -322,7 +362,7 @@ function open(id){
 var curView='lab';
 function show(v){ if(v===curView&&!(v==='lab'&&$('labMain').hidden)&&!(v==='gallery'&&$('gallery').hidden)) return; curView=v; var gal=v==='gallery';
   $('gallery').hidden=!gal; $('labMain').hidden=gal; $('galBtn').hidden=gal; $('aiBtn').hidden=gal; $('subTxt').textContent=T(gal?'교과 단원별 템플릿':'과학·수학 실험실');
-  if(gal){ if(running) setRunning(false); saveNow(); if(window.LABAI&&LABAI.close) LABAI.close(); document.title=T('템플릿 갤러리')+' · Fry Lab'; try{ history.replaceState(null,'',location.pathname+location.search); }catch(er){} if(window.LABGAL) LABGAL.refresh(); }
+  if(gal){ if(running) setRunning(false); if(autoT) setAuto(false,true); saveNow(); if(window.LABAI&&LABAI.close) LABAI.close(); document.title=T('템플릿 갤러리')+' · Fry Lab'; try{ history.replaceState(null,'',location.pathname+location.search); }catch(er){} if(window.LABGAL) LABGAL.refresh(); }
   else { if(cur) document.title=T(cur.name)+' · Fry Lab'; setTimeout(function(){ resize(); dirty=true; },0); } }
 $('galBtn').onclick=function(){ show('gallery'); };
 
@@ -372,7 +412,7 @@ document.addEventListener('keydown',function(e){
 /* ---------- start ---------- */
 function start(){
   readTheme(); drawNav();
-  speed=[0.25,0.5,1,2,4].indexOf(st.speed)>=0?st.speed:1; $('speedSel').value=String(speed);
+  speed=[0.25,0.5,1,2,4].indexOf(st.speed)>=0?st.speed:1; $('speedSel').value=String(speed); $('autoSec').value=String(autoSec());
   if(window.ResizeObserver) new ResizeObserver(function(){ resize(); if(!$('paneData').hidden) drawGraph(); }).observe($('cvWrap'));
   window.addEventListener('resize',function(){ resize(); drawGraph(); });
   new MutationObserver(function(){ readTheme(); dirty=true; drawGraph(); }).observe(document.documentElement,{attributes:true,attributeFilter:['data-ff-theme']});
@@ -386,5 +426,5 @@ document.addEventListener('DOMContentLoaded',start);
 
 window.LAB={add:add, show:show, vcount:vcount, get view(){ return curView; }, versions:function(){ return cur?vlist():[]; }, loadVersion:loadVer, saveVersion:saveVer, get last(){ return st.last; }, H:H, open:open, record:record, toast:toast,
   get cur(){ return cur; }, get list(){ return EXPS; }, get rows(){ return cur?rows():[]; }, get running(){ return running; }, get speed(){ return speed; },
-  colTitle:colTitle, csv:csv, linfit:linfit, get fit(){ return lastFit; }, setP:setP, tab:tab, saveNow:saveNow};
+  colTitle:colTitle, csv:csv, setAuto:setAuto, get auto(){ return !!autoT; }, sheetDoc:function(){ return cur?sheetDoc():null; }, toSheet:toSheet, linfit:linfit, get fit(){ return lastFit; }, setP:setP, tab:tab, saveNow:saveNow};
 })();
