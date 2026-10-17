@@ -96,6 +96,14 @@ function loads(el){ var hw=new Blockly.Workspace(); try{ Blockly.Events.disable(
 function check(xml){
   var dom; try{ dom=Blockly.utils.xml.textToDom(xml); }catch(e){ throw new Error('XML does not parse'); }
   dropped=0; repair(dom);
+  // variables need real, different names (a small model sometimes names them all "0")
+  var vn=[]; Array.prototype.forEach.call(dom.querySelectorAll('variables > variable'),function(v){ vn.push((v.textContent||'').trim()); });
+  if(vn.some(function(n,i){ return !n||/^[\d.\-]+$/.test(n)||vn.indexOf(n)!==i; })) throw new Error('variable names must be real words such as score or count, each different');
+  // a join with more (or fewer) inputs than its mutation says
+  Array.prototype.forEach.call(dom.querySelectorAll('block[type="text_join"],block[type="lists_create_with"]'),function(b){
+    var mu=elKids(b,'mutation')[0], top=-1; elKids(b,'value').forEach(function(v){ var m=/^ADD(\d+)$/.exec(v.getAttribute('name')||''); if(m) top=Math.max(top,+m[1]); });
+    if(mu&&top>=0&&+mu.getAttribute('items')!==top+1){ mu.setAttribute('items',String(top+1)); dropped++; }
+  });
   // element names known so the name dropdowns accept them during the dry run
   var m, rx=/<field name="NAME">([^<]*)<\/field>/g;
   while((m=rx.exec(xml))) BH.KNOWN.add(m[1].replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&amp;/g,'&'));
@@ -103,6 +111,9 @@ function check(xml){
     elKids(dom,'block').forEach(function(b){ if(!loads(b)){ dom.removeChild(b); dropped++; } }); // a top-level script that cannot load is dropped, the rest stays
     var pages=elKids(dom,'block').filter(function(b){ return b.getAttribute('type')==='page_root'; }).length;
     if(pages!==1) throw new Error('needs exactly one top-level page_root, found '+pages);
+    var hw=new Blockly.Workspace(); // the whole project must load, variables included
+    try{ Blockly.Events.disable(); Blockly.Xml.domToWorkspace(dom,hw); }catch(e){ throw new Error('Blockly could not load it: '+(e.message||e)); }
+    finally{ Blockly.Events.enable(); hw.dispose(); }
   } finally{ BH.KNOWN.clear(); }
   return Blockly.utils.xml.domToText(dom);
 }
