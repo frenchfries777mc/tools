@@ -4,6 +4,15 @@
  "notes": [
   {
    "date": "2026-10-17",
+   "build": "v19",
+   "title": "자체 AI는 FF777만",
+   "items": [
+    "자체 AI 모델 목록에서 기본 Qwen3 제거, FF777 tarius와 lectus만 표시",
+    "예전에 고른 Qwen3 선택은 tarius로 자동 전환"
+   ]
+  },
+  {
+   "date": "2026-10-17",
    "build": "v18",
    "title": "렉투스는 1.0 유지",
    "items": [
