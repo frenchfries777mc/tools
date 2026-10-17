@@ -1293,6 +1293,75 @@ $('bdColor').addEventListener('input',function(){ Array.prototype.forEach.call($
 function openBorder(){ commitEdit(); $('bdRg').textContent=E.rangeStr(growMerges(Object.assign({},sel))); openDlg('bdDlg'); }
 $('bdDlg').querySelector('.bdGrid').addEventListener('click',function(e){ var b=e.target.closest('[data-b]'); if(b) applyBorder(b.dataset.b); });
 
+/* ---------- v14: data cleaning (remove duplicates, split text, trim) ---------- */
+function cleanRange(){ return (sel.r1===sel.r2&&sel.c1===sel.c2)?region(act.r,act.c):Object.assign({},sel); }
+function rawText(r,c){ var x=sh.cells[K(r,c)]; if(!x||x.v==null) return ''; var raw=String(x.v); if(raw[0]==='=') return E.formatValue(eng.value(doc.active,r,c),x.nf); return raw[0]==="'"?raw.slice(1):raw; }
+var dpG=null;
+function dpFillCols(){
+  var hdr=$('dpHdr').checked, g=dpG, si=doc.active, keep={}, l=$('dpCols');
+  Array.prototype.forEach.call(l.querySelectorAll('input'),function(i){ keep[i.value]=i.checked; }); l.innerHTML='';
+  for(var c=g.c1;c<=g.c2;c++){ var lb=document.createElement('label'), t=hdr?E.formatValue(eng.value(si,g.r1,c)):''; lb.className='dpCol'; lb.setAttribute('data-notr','');
+    lb.innerHTML='<input type="checkbox"><span></span>'; lb.firstChild.value=c; lb.firstChild.checked=keep[c]!==false; lb.lastChild.textContent=E.colName(c)+(t?' · '+t:''); l.appendChild(lb); }
+}
+function openDedupe(){
+  commitEdit(); var g=cleanRange(); if(!g||g.r2<=g.r1) return toast(T('중복을 지울 표를 먼저 고르세요'));
+  if(g.r2-g.r1>20000) g.r2=g.r1+20000; dpG=g; $('dpRg').textContent=sh.name+'!'+E.rangeStr(g); $('dpHdr').checked=hasHeader(g);
+  $('dpCols').innerHTML=''; dpFillCols(); openDlg('dpDlg');
+}
+$('dpHdr').addEventListener('change',dpFillCols);
+$('dpAll').onclick=function(){ Array.prototype.forEach.call($('dpCols').querySelectorAll('input'),function(i){ i.checked=true; }); };
+$('dpNone').onclick=function(){ Array.prototype.forEach.call($('dpCols').querySelectorAll('input'),function(i){ i.checked=false; }); };
+$('dpOk').onclick=function(){
+  var g=dpG; if(!g) return; var hdr=$('dpHdr').checked, si=doc.active, r0=g.r1+(hdr?1:0), cols=[];
+  Array.prototype.forEach.call($('dpCols').querySelectorAll('input'),function(i){ if(i.checked) cols.push(+i.value); });
+  if(!cols.length) return toast(T('열을 하나 이상 고르세요'));
+  var rows=[]; for(var r=r0;r<=g.r2;r++){ var row=[]; cols.forEach(function(c){ row[c]=eng.value(si,r,c); }); rows.push(row); }
+  var keep=E.dedupeRows(rows,cols), gone=keep.filter(function(k){ return !k; }).length;
+  if(!gone){ closeDlgs(); return toast(T('중복된 줄이 없어요')); }
+  pushUndo(); closeDlgs();
+  var kept=[]; keep.forEach(function(k,i){ if(!k) return; var r=r0+i, cs=[]; for(var c=g.c1;c<=g.c2;c++){ var x=sh.cells[K(r,c)]; cs.push(x?JSON.parse(JSON.stringify(x)):null); } kept.push({r:r,cs:cs}); });
+  for(r=r0;r<=g.r2;r++) for(var c2=g.c1;c2<=g.c2;c2++) delete sh.cells[K(r,c2)];
+  kept.forEach(function(o,i){ o.cs.forEach(function(x,j){ if(!x) return; if(x.v!=null&&String(x.v)[0]==='='&&o.r!==r0+i) x.v=E.shiftFormula(x.v,r0+i-o.r,0); sh.cells[K(r0+i,g.c1+j)]=x; }); });
+  sel={r1:g.r1,c1:g.c1,r2:g.r1+(hdr?1:0)+kept.length-1,c2:g.c2}; act={r:g.r1,c:g.c1}; anchor={r:g.r1,c:g.c1};
+  changed(); applyFilter(); toast(F('중복 {0}줄을 지웠어요 ({1}줄 남음)',gone,kept.length));
+};
+var spG=null;
+function spDelims(){ var d=[]; if($('spComma').checked) d.push(','); if($('spSemi').checked) d.push(';'); if($('spTab').checked) d.push('\t'); if($('spSpace').checked) d.push(' '); if($('spOther').checked&&$('spCustom').value) d.push($('spCustom').value); return d; }
+function spParts(txt){ return E.splitText(txt,spDelims(),$('spMerge').checked,$('spTrim').checked); }
+function spPreview(){
+  var g=spG; if(!g) return; var t=null; for(var r=g.r1;r<=g.r2;r++){ var x=rawText(r,g.c1); if(x!==''){ t=x; break; } }
+  var el=$('spPrev'); el.textContent=t==null?'':spParts(t).map(function(p){ return p===''?'·':p; }).join('  |  ');
+}
+function openSplit(){
+  commitEdit(); var g;
+  if(sel.r1===sel.r2&&sel.c1===sel.c2){ g={r1:act.r,c1:act.c,r2:act.r,c2:act.c}; while(g.r2+1<sh.rows&&rawText(g.r2+1,act.c)!=='') g.r2++; }
+  else g={r1:sel.r1,c1:sel.c1,r2:sel.r2,c2:sel.c1};
+  if(rawText(g.r1,g.c1)===''&&g.r1===g.r2) return toast(T('나눌 글자가 든 칸을 먼저 고르세요'));
+  spG=g; $('spRg').textContent=sh.name+'!'+E.rangeStr(g)+(sel.c2>sel.c1?'  ('+T('첫 번째 열만 나눠요')+')':''); spPreview(); openDlg('spDlg');
+}
+['spComma','spSemi','spTab','spSpace','spOther','spMerge','spTrim'].forEach(function(id){ $(id).addEventListener('change',spPreview); });
+$('spCustom').addEventListener('input',function(){ if(this.value) $('spOther').checked=true; spPreview(); });
+$('spOk').onclick=function(){
+  var g=spG; if(!g) return; if(!spDelims().length) return toast(T('나눌 기준을 하나 이상 고르세요'));
+  var rows=[], maxN=1, over=0; for(var r=g.r1;r<=g.r2;r++){ var t=rawText(r,g.c1), p=t===''?[]:spParts(t); rows.push(p); if(p.length>maxN) maxN=p.length; }
+  if(maxN<2){ closeDlgs(); return toast(T('나눌 곳이 없어요. 기준을 확인하세요')); }
+  if(g.c1+maxN>MAXC) return toast(T('열이 너무 많아져요'));
+  rows.forEach(function(p,i){ for(var j=1;j<p.length;j++){ var x=sh.cells[K(g.r1+i,g.c1+j)]; if(x&&x.v!=null&&x.v!=='') over++; } });
+  function go(){
+    pushUndo(); closeDlgs();
+    rows.forEach(function(p,i){ p.forEach(function(v,j){ var raw=v!==''&&/^[=']/.test(v)?"'"+v:v; setRaw(g.r1+i,g.c1+j,raw); }); });
+    growTo(g.r2,g.c1+maxN-1); sel={r1:g.r1,c1:g.c1,r2:g.r2,c2:g.c1+maxN-1}; act={r:g.r1,c:g.c1}; anchor={r:g.r1,c:g.c1}; changed(); toast(F('{0}줄을 {1}개 열로 나눴어요',g.r2-g.r1+1,maxN));
+  }
+  if(over){ closeDlgs(); confirmDlg(F('오른쪽 칸 {0}개의 내용을 덮어써요. 계속할까요?',over)).then(function(ok){ if(ok) go(); }); } else go();
+};
+function trimCells(){
+  commitEdit(); var g=cleanRange(); if(!g) return toast(T('정리할 데이터가 없어요'));
+  var n=0, todo=[]; for(var k in sh.cells){ var rc=E.RC(k); if(rc[0]<g.r1||rc[0]>g.r2||rc[1]<g.c1||rc[1]>g.c2) continue; var x=sh.cells[k]; if(x.v==null||typeof x.v!=='string') continue;
+    var raw=x.v; if(raw[0]==='=') continue; var pre=raw[0]==="'"?"'":'', body=pre?raw.slice(1):raw, nb=E.trimText(body); if(nb!==body) todo.push([x,pre+nb]); }
+  if(!todo.length) return toast(T('정리할 공백이 없어요'));
+  pushUndo(); todo.forEach(function(o){ o[0].v=o[1]; n++; }); changed(); toast(F('{0}칸의 공백을 정리했어요',n)+' ('+E.rangeStr(g)+')');
+}
+
 /* ---------- v13: named ranges ---------- */
 function findName(n){ var u=String(n||'').toUpperCase(); return doc.names.filter(function(x){ return x.name.toUpperCase()===u; })[0]||null; }
 function setName(name,ref){
@@ -1333,6 +1402,9 @@ $('dataMenu').addEventListener('click',function(e){ var b=e.target.closest('[dat
 function dataCmd(d){
   if(d==='pivot') return openPivot();
   if(d==='names') return openNames();
+  if(d==='dedupe') return openDedupe();
+  if(d==='split') return openSplit();
+  if(d==='trim') return trimCells();
 }
 var pvG=null;
 function pvFillCols(){

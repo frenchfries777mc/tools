@@ -156,6 +156,10 @@ button,input,select{font:inherit; color:inherit;}
   #grid thead th,#grid tbody th{background:#eee!important; color:#333!important;}
   #grid tr.npr,#grid td.npr,#grid th.npr,#grid col.npr{display:none!important;}
 }
+/* v14: data cleaning */
+.chkGrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:0 12px;}
+.spPrev{border:1px solid var(--line); background:var(--bg); border-radius:9px; padding:10px; font-family:'JetBrains Mono','Noto Sans KR',monospace; font-size:13px; min-height:42px; word-break:break-all; color:var(--fry);}
+.dpCol{display:flex; align-items:center; gap:10px; padding:8px 10px; border:1px solid var(--line); border-radius:9px; background:var(--bg); margin-bottom:5px; cursor:pointer; min-height:40px; color:var(--text)!important; margin-top:0!important;} .dpCol input{width:20px; height:20px; accent-color:#ffc93c; flex:0 0 auto;}
 /* v13: named ranges */
 .cfItem .nmN{font-family:'JetBrains Mono',monospace; color:var(--fry); font-size:13px; cursor:pointer; flex:0 1 auto; max-width:45%; overflow:hidden; text-overflow:ellipsis;} .cfItem .nmR{flex:1; min-width:0; color:var(--dim); font-family:'JetBrains Mono',monospace; font-size:12.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; cursor:pointer;}
 /* v12: merged cells, border dialog */
@@ -365,6 +369,10 @@ button,input,select{font:inherit; color:inherit;}
 <div class="menu" id="dataMenu">
   <button data-d="pivot">피벗 테이블 만들기…</button>
   <button data-d="names">이름 범위 관리…</button>
+  <hr>
+  <button data-d="dedupe">중복 항목 제거…</button>
+  <button data-d="split">텍스트를 여러 열로 나누기…</button>
+  <button data-d="trim">공백 정리 (앞뒤·겹친 공백)</button>
 </div>
 <div class="menu" id="tabMenu">
   <button data-t="rename">이름 바꾸기</button>
@@ -494,6 +502,38 @@ button,input,select{font:inherit; color:inherit;}
     <div class="dRow" style="margin-top:0"><input type="text" id="nmRef" placeholder="예: A2:A10 또는 시트2!A2:A10" spellcheck="false" autocomplete="off" autocapitalize="characters"><button class="tbtn" id="nmUse">지금 선택</button></div>
   </div>
   <div class="acts"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="nmSave">저장</button></div>
+</div></div>
+<div class="ov" id="dpDlg"><div class="dlg">
+  <div class="dh"><h3>중복 항목 제거</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody">
+    <div class="aiCtx" id="dpRg" data-notr></div>
+    <label class="chkRow"><input type="checkbox" id="dpHdr"><span>첫 줄은 제목</span></label>
+    <label>같은 값을 찾을 열 (고른 열이 모두 같으면 중복)</label>
+    <div class="fltRow"><button class="tbtn" id="dpAll">모두 선택</button><button class="tbtn" id="dpNone">모두 해제</button></div>
+    <div id="dpCols"></div>
+    <p class="vhint" style="margin:10px 0 0">처음 나온 줄만 남기고 나머지는 지워서 위로 당겨요. 대소문자는 구분하지 않아요.</p>
+  </div>
+  <div class="acts"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="dpOk">중복 제거</button></div>
+</div></div>
+<div class="ov" id="spDlg"><div class="dlg">
+  <div class="dh"><h3>텍스트 나누기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody">
+    <div class="aiCtx" id="spRg" data-notr></div>
+    <label>나눌 기준</label>
+    <div class="chkGrid">
+      <label class="chkRow"><input type="checkbox" id="spComma" checked><span>쉼표 ( , )</span></label>
+      <label class="chkRow"><input type="checkbox" id="spSemi"><span>세미콜론 ( ; )</span></label>
+      <label class="chkRow"><input type="checkbox" id="spTab"><span>탭</span></label>
+      <label class="chkRow"><input type="checkbox" id="spSpace"><span>공백</span></label>
+      <label class="chkRow"><input type="checkbox" id="spOther"><span>직접 입력</span></label>
+    </div>
+    <input type="text" id="spCustom" placeholder="예: / 또는 -" maxlength="8" data-notr style="margin-bottom:8px">
+    <label class="chkRow"><input type="checkbox" id="spMerge"><span>겹친 기준은 하나로 보기</span></label>
+    <label class="chkRow"><input type="checkbox" id="spTrim" checked><span>나뉜 칸의 앞뒤 공백 지우기</span></label>
+    <div class="dmH">미리보기 (첫 줄)</div>
+    <div class="spPrev" id="spPrev" data-notr></div>
+  </div>
+  <div class="acts"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="spOk">나누기</button></div>
 </div></div>
 <div class="ov" id="tplDlg"><div class="dlg">
   <div class="dh"><h3>템플릿</h3><button class="x" data-close aria-label="닫기">×</button></div>
