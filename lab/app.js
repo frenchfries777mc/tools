@@ -8,6 +8,7 @@
        (show(p) hides a control when it returns false),
      cols:[{k, l, u, d}], gx, gy, fit, fitHint(slope, intercept, xk, yk),
      reset(), step(dt) -> 'done' stops the clock, draw(g, W, H), read() -> [[label, value, unit, cls]], record() -> {k:v} or a message,
+     (a param {id, l, type:'text', val, max} is a one-line text box; the value is a string)
      change(id), onPlay(), down/move/up(x, y, e), actions:[[id, label]], act(id), ai() -> English summary for the AI,
      save()/restore(o) for extra state, playLabel, noPlay, live (always animated), speed (shows the speed menu), autoRun. */
 (function(){
@@ -18,7 +19,7 @@ var COL={fry:'#ffc93c', or:'#ff8a3d', grn:'#3fe08f', blu:'#4f9dff', red:'#ff6b6b
 
 /* ---------- saved state ---------- */
 var st=(function(){ var o=null; try{ o=JSON.parse(localStorage.getItem(LS)||'null'); }catch(e){} if(!o||typeof o!=='object'||Array.isArray(o)) o={};
-  ['p','rec','g','x','tries'].forEach(function(k){ if(!o[k]||typeof o[k]!=='object'||Array.isArray(o[k])) o[k]={}; }); return o; })();
+  ['p','rec','g','x','tries','v','ttl','gf'].forEach(function(k){ if(!o[k]||typeof o[k]!=='object'||Array.isArray(o[k])) o[k]={}; }); return o; })();
 var saveT=null;
 function saveSoon(){ clearTimeout(saveT); saveT=setTimeout(saveNow,500); }
 function saveNow(){ clearTimeout(saveT); if(cur){ st.last=cur.id; st.p[cur.id]=cur.p; if(cur.save){ try{ st.x[cur.id]=cur.save(); }catch(e){} } } st.speed=speed;
@@ -91,13 +92,15 @@ function resize(){ var r=$('cvWrap').getBoundingClientRect(); DPR=Math.min(windo
   var w=Math.max(1,Math.floor(r.width)), h=Math.max(1,Math.floor(r.height)); if(w===W&&h===Hh&&cv.width===Math.round(w*DPR)) return;
   W=w; Hh=h; cv.width=Math.round(W*DPR); cv.height=Math.round(Hh*DPR); cv.style.width=W+'px'; cv.style.height=Hh+'px'; if(cur&&cur.resize) cur.resize(W,Hh); dirty=true; }
 function draw(){ g.setTransform(DPR,0,0,DPR,0,0); g.clearRect(0,0,W,Hh); g.fillStyle=TH.stage||'#0b0d13'; g.fillRect(0,0,W,Hh);
-  if(cur&&cur.draw){ g.save(); try{ cur.draw(g,W,Hh); }catch(e){ console.error(e); } g.restore(); } }
+  if(cur&&cur.draw){ g.save(); try{ cur.draw(g,W,Hh); }catch(e){ console.error(e); } g.restore(); }
+  var tt=cur&&st.ttl[cur.id]; if(tt){ g.save(); g.font=font(13,700); var tw=Math.min(g.measureText(tt).width,W-32); g.textAlign='right'; g.textBaseline='middle';
+    g.fillStyle=TH.light?'rgba(255,255,255,.82)':'rgba(8,9,13,.78)'; rrect(g,W-tw-26,6,tw+20,24,7); g.fill(); g.fillStyle=TH.lab; g.fillText(tt,W-16,18,W-32); g.restore(); } }
 
 /* ---------- loop ---------- */
 var last=0, readT=0;
 function frame(t){
   requestAnimationFrame(frame);
-  var dt=last?Math.min(0.05,(t-last)/1000):0; last=t; if(!cur) return;
+  var dt=last?Math.min(0.05,(t-last)/1000):0; last=t; if(!cur||curView==='gallery') return;
   if((running||cur.live)&&cur.step&&dt>0){ var r; try{ r=cur.step(dt*(cur.speed?speed:1)); }catch(e){ console.error(e); r='done'; } if(r==='done') setRunning(false); dirty=true; }
   if(dirty){ dirty=false; draw(); if(t-readT>90){ readT=t; drawReads(); } else readLater=true; }
   else if(readLater&&t-readT>90){ readLater=false; readT=t; drawReads(); }
@@ -127,6 +130,7 @@ function pdef(p){ return p.d!=null?p.d:decimals(p.step||1); }
 function cleanP(e){ var o=st.p[e.id]&&typeof st.p[e.id]==='object'?st.p[e.id]:{}, p={};
   e.params.forEach(function(q){ var v=o[q.id];
     if(q.type==='check') p[q.id]=typeof v==='boolean'?v:!!q.val;
+    else if(q.type==='text') p[q.id]=typeof v==='string'?v.slice(0,q.max||40):q.val;
     else if(q.type==='seg') p[q.id]=q.opts.some(function(x){ return x[0]===v; })?v:q.val;
     else p[q.id]=typeof v==='number'&&isFinite(v)?clamp(v,q.min,q.max):q.val; });
   return p; }
@@ -137,6 +141,9 @@ function buildCtl(){
     var row=document.createElement('div'); row.className='prm'; row.dataset.k=q.id; box.appendChild(row);
     if(q.type==='check'){ row.innerHTML='<label class="chk"><input type="checkbox"><span></span></label>'; row.querySelector('span').textContent=T(q.l);
       var cb=row.querySelector('input'); cb.checked=!!cur.p[q.id]; cb.onchange=function(){ setP(q.id,cb.checked); }; return; }
+    if(q.type==='text'){ row.innerHTML='<div class="ph"><label></label></div><input class="txin" type="text" data-notr autocomplete="off" spellcheck="false">';
+      var tl=row.querySelector('label'), ti=row.querySelector('input'); tl.textContent=T(q.l); ti.id='p_'+cur.id+'_'+q.id; tl.htmlFor=ti.id; ti.maxLength=q.max||40; ti.value=cur.p[q.id];
+      ti.addEventListener('input',function(){ setP(q.id,ti.value,'t'); }); ti.addEventListener('keydown',function(e){ if(e.key==='Enter') ti.blur(); }); return; }
     if(q.type==='seg'){ row.innerHTML='<div class="ph"><span class="lbl"></span></div><div class="seg"></div>'; row.querySelector('.lbl').textContent=T(q.l);
       q.opts.forEach(function(o){ var b=document.createElement('button'); b.textContent=T(o[1]); b.dataset.v=String(o[0]); b.onclick=function(){ setP(q.id,o[0]); }; row.querySelector('.seg').appendChild(b); });
       return; }
@@ -156,13 +163,14 @@ function syncCtl(from){
   cur.params.forEach(function(q){ var row=$('ctl').querySelector('.prm[data-k="'+q.id+'"]'); if(!row) return; var v=cur.p[q.id];
     row.hidden=q.show?!q.show(cur.p):false;
     if(q.type==='check'){ row.querySelector('input').checked=!!v; return; }
+    if(q.type==='text'){ var ti=row.querySelector('input'); if(document.activeElement!==ti) ti.value=v; return; }
     if(q.type==='seg'){ row.querySelectorAll('.seg button').forEach(function(b){ b.classList.toggle('on',b.dataset.v===String(v)); }); return; }
     var r=row.querySelector('input[type=range]'), nb=row.querySelector('.num');
     if(from!==q.id+'r') r.value=v; if(document.activeElement!==nb) nb.value=fmt(v,pdef(q));
     row.querySelectorAll('.pre button').forEach(function(b){ b.classList.toggle('on',Math.abs(+b.dataset.v-v)<1e-9); });
   });
 }
-function setP(k,v,from){ if(!cur) return; var q=cur.params.filter(function(x){ return x.id===k; })[0]; if(q&&q.type!=='check'&&q.type!=='seg') v=clamp(+v,q.min,q.max);
+function setP(k,v,from){ if(!cur) return; var q=cur.params.filter(function(x){ return x.id===k; })[0]; if(q&&q.type!=='check'&&q.type!=='seg'&&q.type!=='text') v=clamp(+v,q.min,q.max); if(q&&q.type==='text') v=String(v).slice(0,q.max||40);
   if(cur.p[k]===v&&!from) { syncCtl(); return; } cur.p[k]=v; syncCtl(from?k+from:null); if(cur.change) cur.change(k); dirty=true; drawReads(); saveSoon(); }
 
 /* ---------- readouts ---------- */
@@ -281,12 +289,13 @@ cv.addEventListener('wheel',function(e){ if(cur&&cur.wheel){ var p=pos(e); if(cu
 
 /* ---------- open an experiment ---------- */
 function open(id){
-  var e=byId[id]||EXPS[0]; if(cur===e) return;
+  var e=byId[id]||EXPS[0]; show('lab'); if(cur===e){ resize(); if(e.autoRun&&!running) setRunning(true); return; }
   if(cur){ saveNow(); if(cur.leave) cur.leave(); }
   cur=e; cur.p=cleanP(e); if(e.restore){ try{ e.restore(st.x[e.id]||null); }catch(er){ console.error(er); } }
   document.querySelectorAll('#nav .ex').forEach(function(b){ b.classList.toggle('on',b.dataset.id===e.id); });
   var on=document.querySelector('#nav .ex.on'); if(on&&on.scrollIntoView&&$('nav').scrollWidth>$('nav').clientWidth) on.scrollIntoView({block:'nearest',inline:'center'});
-  $('expName').textContent=T(e.name); $('expDesc').textContent=T(e.desc); $('info').textContent=T(e.info); $('hint').textContent=e.hint?T(e.hint):''; $('hint').hidden=!e.hint; showHint();
+  curVer=null; $('vTitle').value=st.ttl[e.id]||''; $('vName').value=''; drawVers();
+  $('expName').textContent=st.ttl[e.id]||T(e.name); $('expDesc').textContent=T(e.desc); $('info').textContent=T(e.info); $('hint').textContent=e.hint?T(e.hint):''; $('hint').hidden=!e.hint; showHint();
   document.title=T(e.name)+' · Fry Lab';
   $('playBtn').hidden=!!e.noPlay; $('speedSel').hidden=!e.speed;
   var xa=$('xActs'); xa.innerHTML=''; (e.actions||[]).forEach(function(a){ var b=document.createElement('button'); b.className='tbtn'; b.textContent=T(a[1]); b.dataset.a=a[0]; b.onclick=function(){ e.act(a[0]); dirty=true; drawReads(); }; xa.appendChild(b); });
@@ -295,9 +304,48 @@ function open(id){
   resize(); if(e.resize) e.resize(W,Hh);
   e.reset(); setRunning(!!e.autoRun); dirty=true; drawReads();
   try{ history.replaceState(null,'','#'+e.id); }catch(er){}
-  saveNow();
+  saveNow(); if(window.LABGAL) LABGAL.refresh();
   if(window.LABAI&&LABAI.onOpen) LABAI.onOpen();
 }
+
+/* ---------- views: gallery (template picker) and lab (one experiment) ---------- */
+var curView='lab';
+function show(v){ if(v===curView&&!(v==='lab'&&$('labMain').hidden)&&!(v==='gallery'&&$('gallery').hidden)) return; curView=v; var gal=v==='gallery';
+  $('gallery').hidden=!gal; $('labMain').hidden=gal; $('galBtn').hidden=gal; $('aiBtn').hidden=gal; $('subTxt').textContent=T(gal?'교과 단원별 템플릿':'과학·수학 실험실');
+  if(gal){ if(running) setRunning(false); saveNow(); if(window.LABAI&&LABAI.close) LABAI.close(); document.title=T('템플릿 갤러리')+' · Fry Lab'; try{ history.replaceState(null,'',location.pathname+location.search); }catch(er){} if(window.LABGAL) LABGAL.refresh(); }
+  else { if(cur) document.title=T(cur.name)+' · Fry Lab'; setTimeout(function(){ resize(); dirty=true; },0); } }
+$('galBtn').onclick=function(){ show('gallery'); };
+
+/* ---------- my versions: save the values (and any extra state) of the open template under a name ---------- */
+var curVer=null;
+function vlist(){ var a=st.v[cur.id]; if(!Array.isArray(a)) a=st.v[cur.id]=[]; return a; }
+function vcount(id){ var a=st.v[id]; return Array.isArray(a)?a.length:0; }
+function clone(o){ try{ return JSON.parse(JSON.stringify(o)); }catch(e){ return null; } }
+function drawVers(){ var ul=$('vList'); ul.innerHTML=''; if(!cur) return; var a=vlist();
+  if(!a.length){ var li=document.createElement('li'); li.className='vempty'; li.textContent=T('아직 저장한 버전이 없어요. 값을 바꾸고 이름을 붙여 저장해 보세요.'); ul.appendChild(li); return; }
+  a.forEach(function(v){ var li=document.createElement('li'); li.dataset.id=v.id; li.classList.toggle('on',v.id===curVer);
+    var nm=document.createElement('button'); nm.className='vn'; nm.textContent=v.name; nm.title=T('불러오기'); nm.onclick=function(){ loadVer(v.id); };
+    var ed=document.createElement('button'); ed.className='vi ren'; ed.textContent='✎'; ed.title=T('이름 바꾸기'); ed.setAttribute('aria-label',T('이름 바꾸기'));
+    var dl=document.createElement('button'); dl.className='vi del'; dl.textContent='×'; dl.title=T('지우기'); dl.setAttribute('aria-label',T('지우기'));
+    ed.onclick=function(){ var inp=document.createElement('input'); inp.className='vedit'; inp.type='text'; inp.maxLength=30; inp.value=v.name; inp.setAttribute('data-notr','');
+      li.replaceChild(inp,nm); inp.focus(); inp.select(); var done=false;
+      function fin(ok){ if(done) return; done=true; var n=inp.value.trim(); if(ok&&n&&n!==v.name){ v.name=n.slice(0,30); saveNow(); toast(T('이름을 바꿨어요')); } drawVers(); }
+      inp.onkeydown=function(e){ if(e.key==='Enter') fin(true); else if(e.key==='Escape') fin(false); }; inp.onblur=function(){ fin(true); }; };
+    var armed=0; dl.onclick=function(){ if(Date.now()-armed>2500){ armed=Date.now(); dl.textContent='?'; dl.classList.add('arm'); toast(T('한 번 더 누르면 이 버전을 지워요')); setTimeout(function(){ dl.textContent='×'; dl.classList.remove('arm'); },2500); return; }
+      var i=a.indexOf(v); if(i>=0) a.splice(i,1); if(curVer===v.id) curVer=null; saveNow(); drawVers(); if(window.LABGAL) LABGAL.refresh(); toast(T('버전을 지웠어요')); };
+    li.appendChild(nm); li.appendChild(ed); li.appendChild(dl); ul.appendChild(li); }); }
+function saveVer(){ if(!cur) return; var n=$('vName').value.trim().slice(0,30); if(!n){ n=F('내 버전 {0}',vlist().length+1); }
+  var a=vlist(), x=null; if(cur.save){ try{ x=clone(cur.save()); }catch(e){} }
+  var ex=a.filter(function(v){ return v.name===n; })[0], rec={id:ex?ex.id:'v'+Date.now().toString(36)+Math.random().toString(36).slice(2,5), name:n, p:clone(cur.p), x:x, ttl:st.ttl[cur.id]||'', t:Date.now()};
+  if(ex) a[a.indexOf(ex)]=rec; else { a.push(rec); if(a.length>20) a.shift(); }
+  curVer=rec.id; $('vName').value=''; saveNow(); drawVers(); if(window.LABGAL) LABGAL.refresh(); toast(F(ex?'"{0}" 버전을 덮어썼어요':'"{0}" 버전으로 저장했어요',n)); }
+function applyState(p,x,ttl){ st.p[cur.id]=clone(p)||{}; cur.p=cleanP(cur); if(ttl!=null){ if(ttl) st.ttl[cur.id]=ttl; else delete st.ttl[cur.id]; }
+  if(cur.restore){ try{ cur.restore(x||null); }catch(er){ console.error(er); } }
+  $('vTitle').value=st.ttl[cur.id]||''; $('expName').textContent=st.ttl[cur.id]||T(cur.name); buildCtl(); cur.reset(); setRunning(!!cur.autoRun); readKey=''; dirty=true; drawReads(); saveSoon(); }
+function loadVer(id){ var v=vlist().filter(function(q){ return q.id===id; })[0]; if(!v) return; applyState(v.p,v.x,v.ttl||''); curVer=id; drawVers(); toast(F('"{0}" 버전을 불러왔어요',v.name)); }
+function defaults(){ var p={}; cur.params.forEach(function(q){ p[q.id]=q.val; }); applyState(p,null,''); curVer=null; drawVers(); toast(T('처음 값으로 되돌렸어요')); }
+$('vSave').onclick=saveVer; $('vName').addEventListener('keydown',function(e){ if(e.key==='Enter') saveVer(); }); $('vDefault').onclick=defaults;
+$('vTitle').addEventListener('input',function(){ if(!cur) return; var t=this.value.slice(0,40); if(t.trim()) st.ttl[cur.id]=t; else delete st.ttl[cur.id]; $('expName').textContent=st.ttl[cur.id]||T(cur.name); dirty=true; saveSoon(); });
 
 /* ---------- toast ---------- */
 var toastT=null; function toast(t){ var e=$('toast'); e.textContent=t; e.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(function(){ e.classList.remove('on'); },2600); }
@@ -318,15 +366,15 @@ function start(){
   if(window.ResizeObserver) new ResizeObserver(function(){ resize(); if(!$('paneData').hidden) drawGraph(); }).observe($('cvWrap'));
   window.addEventListener('resize',function(){ resize(); drawGraph(); });
   new MutationObserver(function(){ readTheme(); dirty=true; drawGraph(); }).observe(document.documentElement,{attributes:true,attributeFilter:['data-ff-theme']});
-  var h=(location.hash||'').slice(1); open(byId[h]?h:byId[st.last]?st.last:EXPS[0].id);
+  var h=(location.hash||'').slice(1); if(byId[h]) open(h); else show('gallery');
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){ dirty=true; drawGraph(); });
-  window.addEventListener('hashchange',function(){ var k=(location.hash||'').slice(1); if(byId[k]) open(k); });
+  window.addEventListener('hashchange',function(){ var k=(location.hash||'').slice(1); if(byId[k]) open(k); else if(!k) show('gallery'); });
   window.addEventListener('beforeunload',saveNow); document.addEventListener('visibilitychange',function(){ if(document.hidden) saveNow(); });
   requestAnimationFrame(frame);
 }
 document.addEventListener('DOMContentLoaded',start);
 
-window.LAB={add:add, H:H, open:open, record:record, toast:toast,
+window.LAB={add:add, show:show, vcount:vcount, get view(){ return curView; }, versions:function(){ return cur?vlist():[]; }, loadVersion:loadVer, saveVersion:saveVer, get last(){ return st.last; }, H:H, open:open, record:record, toast:toast,
   get cur(){ return cur; }, get list(){ return EXPS; }, get rows(){ return cur?rows():[]; }, get running(){ return running; }, get speed(){ return speed; },
   colTitle:colTitle, csv:csv, linfit:linfit, get fit(){ return lastFit; }, setP:setP, tab:tab, saveNow:saveNow};
 })();
