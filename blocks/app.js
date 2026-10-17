@@ -54,11 +54,18 @@ ws.addChangeListener(function(e){
     var b=ws.getBlockById(e.blockId); if(!b||BH.EL.indexOf(b.type)<0||!e.oldValue) return;
     var still=ws.getAllBlocks(false).some(function(x){ return x!==b&&BH.EL.indexOf(x.type)>=0&&x.getFieldValue('NAME')===e.oldValue; });
     if(still) return;
-    ws.getAllBlocks(false).forEach(function(x){ x.inputList.forEach(function(inp){ inp.fieldRow.forEach(function(f){ if((f.name==='EL'||(/_hit$/.test(x.type)&&(f.name==='A'||f.name==='B')))&&f.getValue()===e.oldValue){ BH.KNOWN.add(e.newValue); f.setValue(e.newValue); BH.KNOWN.clear(); } }); }); });
+    ws.getAllBlocks(false).forEach(function(x){ x.inputList.forEach(function(inp){ inp.fieldRow.forEach(function(f){ var isRef=f.name==='EL'||((/_hit$/.test(x.type))&&(f.name==='A'||f.name==='B')), cur=f.getValue(); if(isRef&&(cur===e.oldValue||cur===e.oldValue+'*')){ BH.KNOWN.add(e.newValue); f.setValue(cur===e.oldValue?e.newValue:e.newValue+'*'); BH.KNOWN.clear(); } }); }); });
   }
 });
 
 /* ---------- preview & code ---------- */
+/* saved values ("최고 점수", 저장하기): the preview page cannot use its own storage, so the editor keeps them for each project */
+var STK='ffblocks.store.', PLAY=null;
+function readStore(id){ try{ var o=JSON.parse(lsGet(STK+id)||'{}'); return o&&typeof o==='object'?o:{}; }catch(e){ return {}; } }
+function curPid(){ return PLAY?PLAY.pid:(P&&P.cur)||''; }
+window.addEventListener('message',function(e){ var d=e.data; if(!d||!Array.isArray(d.ffbhStore)) return;
+  var pf=$('playFrame'), pid=pf&&e.source===pf.contentWindow?(PLAY&&PLAY.pid):e.source===$('frame').contentWindow?(P&&P.cur):null; if(!pid||typeof d.ffbhStore[0]!=='string') return;
+  var o=readStore(pid); o[d.ffbhStore[0]]=d.ffbhStore[1]; lsSet(STK+pid,JSON.stringify(o)); });
 var refT=null, lastPrev='';
 ws.addChangeListener(function(e){ if(e.isUiEvent||loading) return; clearTimeout(refT); refT=setTimeout(function(){ refresh(false); },450); save(); });
 var runState='run'; // run | pause | stop  (top bar: 실행하기 / 멈추기 / 정지하기)
@@ -96,7 +103,7 @@ function refresh(force){
   if(runState==='stop'&&force!=='run'){ if($('pCode').classList.contains('on')) showCode(); return; }
   if(custom!==null){ if(force!=='run'){ dropCustom(true); } else { clearLog(); dbgReset(); $('frame').srcdoc=custom; if(runState==='pause') setRun('run'); return; } }
   checkPics();
-  var prev; try{ prev=BH.build(ws,{trap:true,debug:dbgOn}); }catch(err){ console.error(err); return; }
+  var prev; try{ prev=BH.build(ws,{trap:true,debug:dbgOn,pid:curPid(),saved:readStore(curPid())}); }catch(err){ console.error(err); return; }
   if(force||prev!==lastPrev){ lastPrev=prev; clearLog(); dbgReset(); $('frame').srcdoc=prev; if(runState==='pause') setRun('run'); }
   if($('pCode').classList.contains('on')) showCode();
 }
@@ -130,7 +137,7 @@ function toBlocks(html,auto){ html=String(html==null?'':html); if(!html.trim()||
   for(var i=0;i<tries.length&&!c;i++){ try{ var r=tries[i](); how=i; loadXML(r.xml); arrange(); if(ws.getAllBlocks(false).length<2) throw new Error('empty'); c=r; }catch(e){ console.error(e); } }
   if(!c){ convFail(html); return false; }
   convDone(html,c,how); return true; }
-function finalHTML(){ return custom!==null?custom:BH.build(ws,{trap:false}); }
+function finalHTML(){ return custom!==null?custom:BH.build(ws,{trap:false,pid:curPid()}); }
 function showCode(){ if(custom!==null) return; var v=finalHTML(), ta=$('codeEdit');
   if(v.length>BIGCODE){ var cut=v.slice(0,40000)+'\n\n'+F('… 큰 코드라 앞부분 {0}글자만 보여 줘요. 미리보기·복사·내려받기는 전체 {1}글자를 써요 …',40000,v.length); if(ta.value!==cut) ta.value=cut; ta.readOnly=true; return; }
   ta.readOnly=false; if(ta.value!==v) ta.value=v; }
@@ -224,7 +231,7 @@ function switchTo(id){ if(id===P.cur) return; saveNow(); var d=readProj(id), e=e
   P.cur=id; $('projName').value=d.name||(e&&e.name)||T('나의 웹페이지'); setImgs(d.imgs); setSnds(d.snds); try{ loadJSON(d.ws); }catch(err){ console.error(err); blank(); } ws.clearUndo(); writeIdx(); syncBar(); renderProjs(); }
 function deleteProject(id){ var e=entry(id); if(!e) return;
   ask(F('"{0}" 프로젝트를 삭제할까요? 되돌릴 수 없어요.',e.name),T('삭제'),true).then(function(ok){ if(!ok) return;
-    try{ localStorage.removeItem(PK+id); localStorage.removeItem('ffblocks.ai.'+id); }catch(err){} P.list=P.list.filter(function(x){ return x.id!==id; });
+    try{ localStorage.removeItem(PK+id); localStorage.removeItem(STK+id); localStorage.removeItem('ffblocks.ai.'+id); }catch(err){} P.list=P.list.filter(function(x){ return x.id!==id; });
     if(id===P.cur){ P.cur=null; var nx=P.list.slice().sort(function(a,b){ return b.t-a.t; })[0];
       if(nx){ writeIdx(); switchTo(nx.id); } else createProject(T('나의 웹페이지'),blank); }
     writeIdx(); renderProjs(); toast(T('프로젝트를 삭제했어요')); }); }
@@ -250,6 +257,7 @@ $('fileMenu').addEventListener('click',function(e){
   else if(f==='save'){ download(new Blob([JSON.stringify({app:'block-html',v:1,name:$('projName').value,ws:Blockly.serialization.workspaces.save(ws),imgs:BH.IMGS,snds:BH.SNDS},null,1)],{type:'application/json'}),fname('.json')); }
   else if(f==='open') $('fileIn').click();
   else if(f==='html') downloadHTML();
+  else if(f==='share') openShare();
 });
 $('fileIn').addEventListener('change',function(){
   var file=this.files&&this.files[0]; this.value=''; if(!file) return;
@@ -469,6 +477,67 @@ document.addEventListener('keydown',function(e){
   if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){ e.preventDefault(); saveNow(); toast(T('저장했어요')); return; }
   if(e.key==='/'&&!typing&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&!document.querySelector('.ov.open')){ e.preventDefault(); openSearch(); } });
 
+/* ---------- share: the whole project in one link (#share=...) ---------- */
+/* blocks + the pictures and sounds the blocks use, packed as JSON, deflated when the browser can, then base64url in the address after the #.
+   Browsers keep very long addresses (about 2MB in Chrome), but chat apps and some sites cut them much earlier, so there are two limits:
+   over SHARE_SOFT the link works but is shown with a warning, over SHARE_MAX the pictures, then the sounds, are left out, and if the blocks alone are too big there is no link. */
+var SHARE_SOFT=30000, SHARE_MAX=1500000;
+function b64u(bytes){ var s='', i; for(i=0;i<bytes.length;i+=0x8000) s+=String.fromCharCode.apply(null,bytes.subarray(i,i+0x8000)); return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
+function unb64u(t){ t=t.replace(/-/g,'+').replace(/_/g,'/'); while(t.length%4) t+='='; var bin=atob(t), a=new Uint8Array(bin.length), i; for(i=0;i<bin.length;i++) a[i]=bin.charCodeAt(i); return a; }
+function streamBytes(bytes,tf){ return new Response(new Blob([bytes]).stream().pipeThrough(tf)).arrayBuffer().then(function(b){ return new Uint8Array(b); }); }
+function packShare(obj){ var bytes=new TextEncoder().encode(JSON.stringify(obj));
+  if(window.CompressionStream) return streamBytes(bytes,new CompressionStream('deflate-raw')).then(function(z){ return 'z'+b64u(z); },function(){ return 'p'+b64u(bytes); });
+  return Promise.resolve('p'+b64u(bytes)); }
+function unpackShare(t){ var kind=t.charAt(0), bytes; try{ bytes=unb64u(t.slice(1)); }catch(e){ return Promise.reject(e); }
+  var go=function(b){ return JSON.parse(new TextDecoder().decode(b)); };
+  if(kind==='z'){ if(!window.DecompressionStream) return Promise.reject(new Error('no DecompressionStream')); return streamBytes(bytes,new DecompressionStream('deflate-raw')).then(go); }
+  if(kind==='p') return Promise.resolve().then(function(){ return go(bytes); });
+  return Promise.reject(new Error('bad link')); }
+function usedAssets(wsx){ var im={}, sn={};
+  wsx.getAllBlocks(false).forEach(function(b){ var f=b.getField&&b.getField('IMG'); if(f){ var id=f.getValue(); if(BH.IMGS[id]) im[id]={name:BH.IMGS[id].name,data:BH.IMGS[id].data,w:BH.IMGS[id].w,h:BH.IMGS[id].h,clear:!!BH.IMGS[id].clear}; }
+    var g=b.getField&&b.getField('SND'); if(g){ var n=g.getValue(); if(BH.SNDS[n]) sn[n]={name:n,data:BH.SNDS[n].data}; } });
+  return {imgs:im,snds:sn}; }
+/* -> promise of {code, dropped:[...], big:bool} or {fail:true} */
+function makeShare(){
+  var a=usedAssets(ws), base={app:'block-html',v:1,name:$('projName').value,ws:Blockly.serialization.workspaces.save(ws)};
+  var hasI=Object.keys(a.imgs).length>0, hasS=Object.keys(a.snds).length>0, tiers=[{i:a.imgs,s:a.snds,drop:[]}];
+  if(hasI&&hasS) tiers.push({i:a.imgs,s:{},drop:['sounds']});
+  if(hasI||hasS) tiers.push({i:{},s:{},drop:(hasI?['pictures']:[]).concat(hasS?['sounds']:[])});
+  var k=0;
+  function next(){ var t=tiers[k++], o={app:base.app,v:1,name:base.name,ws:base.ws}; if(Object.keys(t.i).length) o.imgs=t.i; if(Object.keys(t.s).length) o.snds=t.s;
+    return packShare(o).then(function(code){ if(code.length<=SHARE_MAX) return {code:code,dropped:t.drop,big:code.length>SHARE_SOFT}; return k<tiers.length?next():{fail:true,size:code.length}; }); }
+  return next(); }
+function shareURL(code){ return location.origin+location.pathname+'#share='+code; }
+var shareLink='';
+function openShare(){ var dlg=$('shareDlg'), box=$('shareLink'), info=$('shareInfo'), cp=$('shareCopy'); box.value=''; shareLink=''; cp.disabled=true; info.textContent=T('링크를 만드는 중…'); info.className=''; dlg.classList.add('open');
+  makeShare().then(function(r){
+    if(r.fail){ info.textContent=F('블록만으로도 링크가 너무 길어요 ({0}KB). 프로젝트 파일(.json)로 보내 주세요',Math.round(r.size/1024)); info.className='warn'; return; }
+    shareLink=shareURL(r.code); box.value=shareLink; cp.disabled=false;
+    var msg=F('링크 길이 {0}KB',Math.max(1,Math.round(shareLink.length/1024))), warn=[];
+    if(r.dropped.length) warn.push(F('링크가 너무 길어서 {0}은(는) 빼고 만들었어요. 받는 사람에게는 보이지 않거나 들리지 않아요',r.dropped.map(function(x){ return x==='pictures'?T('그림'):T('소리'); }).join(', ')));
+    if(r.big) warn.push(T('링크가 길어요. 메신저에서 잘릴 수 있으니 받는 사람이 열리는지 꼭 확인하거나 프로젝트 파일(.json)로 보내 주세요'));
+    info.textContent=msg+(warn.length?' · '+warn.join(' · '):' · '+T('누구나 열어서 바로 할 수 있어요')); info.className=warn.length?'warn':''; },
+  function(err){ console.error(err); info.textContent=T('링크를 만들지 못했어요'); info.className='warn'; }); }
+$('shareCopy').onclick=function(){ if(!shareLink) return; var done=function(){ toast(T('링크를 복사했어요')); };
+  try{ navigator.clipboard.writeText(shareLink).then(done,function(){ $('shareLink').select(); fallbackCopy(shareLink); done(); }); }catch(e){ fallbackCopy(shareLink); done(); } };
+$('shareLink').addEventListener('focus',function(){ this.select(); });
+/* opening a link: play-only first (nothing is saved), "편집하기" copies it into a new project */
+function hash32(t){ var h=2166136261; for(var i=0;i<t.length;i++){ h^=t.charCodeAt(i); h=Math.imul(h,16777619); } return (h>>>0).toString(36); }
+function closePlay(keepHash){ var pv=$('playView'); pv.classList.remove('open'); $('playFrame').srcdoc=''; PLAY=null; if(!keepHash){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} } }
+function openShared(code){
+  unpackShare(code).then(function(d){
+    if(!d||!d.ws||!d.ws.blocks) throw new Error('bad project');
+    var pid='share-'+hash32(code), hw=new Blockly.Workspace(), html;
+    html=BH.withAssets(d.imgs,d.snds,function(){ prescan(d.ws); try{ Blockly.serialization.workspaces.load(d.ws,hw); }finally{ BH.KNOWN.clear(); }
+      try{ return BH.build(hw,{trap:true,pid:pid,saved:readStore(pid)}); } finally{ hw.dispose(); } });
+    PLAY={pid:pid,data:d}; $('playName').textContent=d.name||T('나의 웹페이지'); $('playFrame').srcdoc=html; $('playView').classList.add('open');
+    $('frame').srcdoc=''; // the editor's own preview stays quiet behind it
+  }).catch(function(err){ console.error(err); toast(T('이 공유 링크는 열 수 없어요. 링크가 잘렸을 수 있어요')); try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} }); }
+$('playClose').onclick=function(){ closePlay(); lastPrev=''; refresh('run'); };
+$('playEdit').onclick=function(){ var d=PLAY&&PLAY.data; if(!d) return; closePlay();
+  createProject(d.name||T('나의 웹페이지'),function(){ setImgs(d.imgs); setSnds(d.snds); loadJSON(d.ws); }); showPreview(); toast(T('내 프로젝트로 가져왔어요. 마음껏 고쳐 보세요')); };
+$('playRerun').onclick=function(){ var d=PLAY&&PLAY.data; if(!d) return; var h=location.hash.slice(7); closePlay(true); openShared(h); };
+
 /* ---------- start ---------- */
 /* old single autosave (ffblocks.v1) becomes the first entry of the project list; the old key is left untouched as a backup */
 P=readIdx(); if(!P){ P={cur:null,list:[]}; var old=null; try{ old=JSON.parse(lsGet(LS)||'null'); }catch(e){}
@@ -478,6 +547,8 @@ P.list=P.list.filter(function(e){ return e&&e.id; });
   for(var k=0;k<cand.length&&!ok;k++){ var id=cand[k], d=id&&entry(id)&&readProj(id); if(d&&d.ws){ P.cur=id; $('projName').value=d.name||T('나의 웹페이지'); setImgs(d.imgs); setSnds(d.snds); try{ loadJSON(d.ws); ok=true; }catch(e){ console.error(e); } } }
   if(!ok){ P.cur=null; createProject(T(BH_EXAMPLES[0].name),function(){ loadXML(BH_EXAMPLES[0].xml()); arrange(); }); } })();
 setTimeout(syncBar,50);
+if(/^#share=/.test(location.hash)) openShared(location.hash.slice(7));
+window.addEventListener('hashchange',function(){ if(/^#share=/.test(location.hash)) openShared(location.hash.slice(7)); });
 if(EMB){ var embTry=0, embSend=function(){ var html=''; try{ if(P.cur===EMB) html=finalHTML(); }catch(e){ console.error(e); } if(!html&&++embTry<10) return setTimeout(embSend,300); try{ parent.postMessage({ffbhBuilt:1,id:EMB,html:html},'*'); }catch(e){} }; setTimeout(embSend,350); }
-window.__bh={showPreview:showPreview,showHTML:function(h){ custom=String(h); $('codeEdit').readOnly=false; if(custom.length>BIGCODE) bigView(custom); else $('codeEdit').value=custom; setCust(true); clearTimeout(customT); if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=custom; setPane('code'); },clearHTML:function(){ dropCustom(false); },ws:ws,copy:copyBlock,paste:pasteBlock,deleteAll:deleteAll,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,loadJSON:loadJSON,save:saveNow,toast:toast,projects:function(){ return P; },examples:BH_EXAMPLES};
+window.__bh={makeShare:makeShare,openShared:openShared,showPreview:showPreview,showHTML:function(h){ custom=String(h); $('codeEdit').readOnly=false; if(custom.length>BIGCODE) bigView(custom); else $('codeEdit').value=custom; setCust(true); clearTimeout(customT); if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=custom; setPane('code'); },clearHTML:function(){ dropCustom(false); },ws:ws,copy:copyBlock,paste:pasteBlock,deleteAll:deleteAll,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,loadJSON:loadJSON,save:saveNow,toast:toast,projects:function(){ return P; },examples:BH_EXAMPLES};
 })();

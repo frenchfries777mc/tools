@@ -17,14 +17,33 @@ function elNames(kinds){
   KNOWN.forEach(function(n){ if(out.indexOf(n)<0) out.push(n); });
   return out;
 }
-function elField(kinds){
+/* element dropdown. The extras are only offered where they make sense:
+   "나(이 복제본)" / "닿은 상대" inside clone and touch scripts, "이름 복제본 아무거나" in touch blocks.
+   flag: 'hat' = names only, 'hit' = touch condition (clone groups too), 'evhit' = touch event (clone groups, no "me"), 'del' = only me / other */
+var ME='@me', OTHER='@other', CLONE_T=['ev_clone','clone_make','clone_make_at'];
+function hasBlock(types){ var ws=Blockly.getMainWorkspace&&Blockly.getMainWorkspace(); return !!ws&&ws.getAllBlocks(false).some(function(b){ return types.indexOf(b.type)>=0; }); }
+function cloneBases(){ var ws=Blockly.getMainWorkspace&&Blockly.getMainWorkspace(), out=[]; if(ws) ws.getAllBlocks(false).forEach(function(b){ if(CLONE_T.indexOf(b.type)>=0){ var n=b.getFieldValue('EL'); if(n&&n!=='?'&&out.indexOf(n)<0) out.push(n); } }); return out; }
+function refLabel(v){ return v===ME?T('나(이 복제본)'):v===OTHER?T('닿은 상대'):/\*$/.test(v)?v.slice(0,-1)+' '+T('복제본 아무거나'):v; }
+function elField(kinds,flag){
   return new Blockly.FieldDropdown(function(){
-    var names=elNames(kinds), v=this.getValue&&this.getValue();
-    if(v&&v!=='?'&&names.indexOf(v)<0) names.push(v);
-    if(!names.length) return [[T('(요소 없음)'),'?']];
-    return names.map(function(n){ return [n,n]; });
+    var v=this.getValue&&this.getValue(), loadingNames=KNOWN.size>0, out=[];
+    if(flag!=='del') out=elNames(kinds).map(function(n){ return [n,n]; });
+    if(!kinds&&flag!=='hat'){
+      var extra=function(x){ if(!out.some(function(o){ return o[1]===x; })) out.push([refLabel(x),x]); };
+      if(flag==='del'){ extra(ME); extra(OTHER); }
+      else {
+        if(flag!=='evhit'&&(loadingNames||hasBlock(['ev_clone','ev_hit'])||v===ME)) extra(ME);
+        if(flag!=='evhit'&&(loadingNames||hasBlock(['ev_hit'])||v===OTHER)) extra(OTHER);
+        if(flag==='hit'||flag==='evhit'){ cloneBases().forEach(function(n){ extra(n+'*'); }); if(loadingNames) KNOWN.forEach(function(n){ extra(n+'*'); }); }
+      }
+    }
+    if(v&&v!=='?'&&!out.some(function(o){ return o[1]===v; })) out.push([refLabel(v),v]);
+    if(!out.length) return [[T('(요소 없음)'),'?']];
+    return out;
   });
 }
+/* the JavaScript for an element reference: a name, or the clone a script is running for */
+function er(b,f){ var v=b.getFieldValue(f||'EL'); if(v===ME){ need('me'); return '__me'; } if(v===OTHER){ need('other'); return '__other'; } return lit(v); }
 /* "내 그림": pictures drawn or uploaded by the user. id -> {name, data (data URL), w, h, thumb} */
 var IMGS={}, USED={}, USEDS={};
 function imgField(){
@@ -96,7 +115,7 @@ function hatBody(b,guard){ var body=G.statementToCode(b,'DO'); if(!DBG) return b
 function hat(b,tip){ b.appendStatementInput('DO'); b.setColour(C.ev); b.setTooltip(T(tip)); b.hat='cap'; }
 def('ev_start',function(){ this.appendDummyInput().appendField(T('페이지가 열리면')); hat(this,'페이지가 처음 열릴 때 한 번 해요'); },
   function(b){ if(DBG) return '(async function () {\n'+hatBody(b)+'})();\n'; return G.statementToCode(b,'DO').replace(/^  /gm,''); });
-def('ev_click',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('을(를) 누르면')); hat(this,'버튼이나 그림, 그림판을 눌렀을 때 해요'); },
+def('ev_click',function(){ this.appendDummyInput().appendField(elField(null,'hat'),'EL').appendField(T('을(를) 누르면')); hat(this,'버튼이나 그림, 그림판을 눌렀을 때 해요'); },
   function(b){ var n=b.getFieldValue('EL'), mouse=b.getDescendants(false).some(function(d){ return d.type==='val_mouse'; }); need('$'); if(mouse) need('pos');
     return '$('+lit(n)+').addEventListener(\'click\', '+AF()+(mouse?'e':'')+') {\n'+(mouse?'  __pos(e, this);\n':'')+hatBody(b)+'});\n'; });
 def('ev_change',function(){ this.appendDummyInput().appendField(elField(['el_input']),'EL').appendField(T('에 글을 쓰면')); hat(this,'입력칸의 내용이 바뀔 때마다 해요'); },
@@ -121,27 +140,27 @@ def('ev_timer',function(){ this.appendDummyInput().appendField(new Blockly.Field
 
 /* ---------- actions ---------- */
 def('act_set',function(){ this.appendValueInput('VALUE').appendField(elField(),'EL').appendField(T('의 내용을')); this.appendDummyInput().appendField(T('(으)로 바꾸기')); this.setInputsInline(true); act(this,'글자, 입력칸의 값, 그림 주소를 바꿔요'); },
-  function(b){ need('set'); return '__set('+lit(b.getFieldValue('EL'))+', '+(G.valueToCode(b,'VALUE',O.COMMA)||"''")+');\n'; });
+  function(b){ need('set'); return '__set('+er(b)+', '+(G.valueToCode(b,'VALUE',O.COMMA)||"''")+');\n'; });
 def('act_append',function(){ this.appendValueInput('VALUE').appendField(elField(),'EL').appendField(T('에')); this.appendDummyInput().appendField(T('덧붙이기')); this.setInputsInline(true); act(this,'글 뒤에 이어 붙여요. 목록이면 항목이 하나 늘어요'); },
-  function(b){ need('add'); return '__add('+lit(b.getFieldValue('EL'))+', '+(G.valueToCode(b,'VALUE',O.COMMA)||"''")+');\n'; });
+  function(b){ need('add'); return '__add('+er(b)+', '+(G.valueToCode(b,'VALUE',O.COMMA)||"''")+');\n'; });
 def('act_clear',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('비우기')); act(this,'내용을 모두 지워요'); },
-  function(b){ need('set'); var n=lit(b.getFieldValue('EL')); return '__set('+n+', \'\');\n'; });
+  function(b){ need('set'); var n=er(b); return '__set('+n+', \'\');\n'; });
 def('act_style',function(){ this.appendValueInput('VALUE').appendField(elField(),'EL').appendField(T('의')).appendField(new Blockly.FieldDropdown(function(){ return [[T('글자색'),'color'],[T('배경색'),'background']]; }),'PROP').appendField(T('을(를)'));
   this.appendDummyInput().appendField(T('(으)로')); this.setInputsInline(true); act(this,'색을 바꿔요'); },
-  function(b){ need('$'); return '$('+lit(b.getFieldValue('EL'))+').style.'+(b.getFieldValue('PROP')==='color'?'color':'background')+' = '+(G.valueToCode(b,'VALUE',O.ASSIGNMENT)||"''")+';\n'; });
+  function(b){ need('$'); return '$('+er(b)+').style.'+(b.getFieldValue('PROP')==='color'?'color':'background')+' = '+(G.valueToCode(b,'VALUE',O.ASSIGNMENT)||"''")+';\n'; });
 def('act_size',function(){ this.appendValueInput('N').setCheck('Number').appendField(elField(),'EL').appendField(T('의')).appendField(new Blockly.FieldDropdown(function(){ return [[T('글자 크기'),'fontSize'],[T('너비'),'width'],[T('높이'),'height'],[T('투명도 %'),'opacity'],[T('회전 각도'),'rotate']]; }),'PROP').appendField(T('을(를)'));
   this.appendDummyInput().appendField(T('(으)로')); this.setInputsInline(true); act(this,'크기, 투명도, 회전을 바꿔요'); },
-  function(b){ need('size'); return '__size('+lit(b.getFieldValue('EL'))+', '+lit(b.getFieldValue('PROP'))+', '+(G.valueToCode(b,'N',O.COMMA)||'0')+');\n'; });
+  function(b){ need('size'); return '__size('+er(b)+', '+lit(b.getFieldValue('PROP'))+', '+(G.valueToCode(b,'N',O.COMMA)||'0')+');\n'; });
 def('act_move',function(){ this.appendValueInput('X').setCheck('Number').appendField(elField(),'EL').appendField(T('을(를) 위치')).appendField('x'); this.appendValueInput('Y').setCheck('Number').appendField('y'); this.appendDummyInput().appendField(T('(으)로 옮기기')); this.setInputsInline(true); act(this,'페이지 왼쪽 위에서부터의 위치로 옮겨요'); },
-  function(b){ need('move'); return '__move('+lit(b.getFieldValue('EL'))+', '+(G.valueToCode(b,'X',O.COMMA)||'0')+', '+(G.valueToCode(b,'Y',O.COMMA)||'0')+');\n'; });
+  function(b){ need('move'); return '__move('+er(b)+', '+(G.valueToCode(b,'X',O.COMMA)||'0')+', '+(G.valueToCode(b,'Y',O.COMMA)||'0')+');\n'; });
 def('act_show',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(new Blockly.FieldDropdown(function(){ return [[T('보이기'),'show'],[T('숨기기'),'hide'],[T('보이기/숨기기 바꾸기'),'toggle']]; }),'MODE'); act(this,'보이거나 숨겨요'); },
-  function(b){ need('show'); return '__show('+lit(b.getFieldValue('EL'))+', '+lit(b.getFieldValue('MODE'))+');\n'; });
+  function(b){ need('show'); return '__show('+er(b)+', '+lit(b.getFieldValue('MODE'))+');\n'; });
 def('act_alert',function(){ this.appendValueInput('VALUE').appendField(T('알림창 띄우기')); act(this,'작은 알림창으로 보여줘요'); },
   function(b){ return 'alert('+(G.valueToCode(b,'VALUE',O.NONE)||"''")+');\n'; });
 def('act_after',function(){ this.appendValueInput('SEC').setCheck('Number'); this.appendDummyInput().appendField(T('초 뒤에')); this.appendStatementInput('DO'); this.setInputsInline(true); act(this,'정한 시간이 지난 뒤에 한 번 해요'); },
   function(b){ return 'setTimeout('+AF()+') {\n'+G.statementToCode(b,'DO')+'}, ('+(G.valueToCode(b,'SEC',O.MULTIPLICATION)||'1')+') * 1000);\n'; });
-def('act_stop',function(){ this.appendDummyInput().appendField(T('모든 "초마다" 멈추기')); act(this,'초마다 반복을 모두 멈춰요'); },
-  function(){ need('timers'); return '__timers.forEach(clearInterval);\n'; });
+def('act_stop',function(){ this.appendDummyInput().appendField(T('모든 "초마다" 멈추기')); act(this,'초마다 반복을 모두 멈춰요. 이름 붙은 시간 블록도 함께 멈춰요'); },
+  function(){ need('timers'); return '__timers.forEach(clearInterval);\nif (typeof __stopAll === \'function\') __stopAll();\n'; });
 def('act_restart',function(){ this.appendDummyInput().appendField(T('다시 시작하기')); act(this,'페이지를 처음 상태로 되돌려 처음부터 다시 해요'); },
   function(){ return 'location.reload();\n'; });
 def('act_beep',function(){ this.appendValueInput('SEC').setCheck('Number').appendField(T('소리 내기')).appendField(new Blockly.FieldDropdown(function(){ return NOTES.map(function(n){ return [T(n[0]),n[1]]; }); }),'NOTE'); this.appendDummyInput().appendField(T('초')); this.setInputsInline(true); act(this,'삐 소리를 내요'); },
@@ -184,25 +203,26 @@ def('act_sound_stop',function(){ this.appendDummyInput().appendField(T('모든 �
 /* ---------- moving around: nudge, follow the cursor, hit test ---------- */
 def('act_nudge',function(){ this.appendValueInput('N').setCheck('Number').appendField(elField(),'EL').appendField(T('의')).appendField(new Blockly.FieldDropdown(function(){ return [[T('x좌표(가로)를'),'x'],[T('y좌표(세로)를'),'y']]; }),'AXIS'); this.appendDummyInput().appendField(T('만큼 움직이기')); this.setInputsInline(true); act(this,'지금 있는 곳에서 가로(x)나 세로(y)로 얼마만큼 옮겨요. 마이너스 값이면 반대쪽으로 가요'); },
   function(b){ need('nudge'); var ax=b.getFieldValue('AXIS'), d=G.valueToCode(b,'N',O.COMMA)||'0';
-    return '__nudge('+lit(b.getFieldValue('EL'))+', '+(ax==='x'?d+', 0':'0, '+d)+');\n'; });
+    return '__nudge('+er(b)+', '+(ax==='x'?d+', 0':'0, '+d)+');\n'; });
 def('act_nudge2',function(){ this.appendValueInput('DX').setCheck('Number').appendField(elField(),'EL').appendField(T('을(를) 가로')); this.appendValueInput('DY').setCheck('Number').appendField(T('세로')); this.appendDummyInput().appendField(T('만큼 움직이기')); this.setInputsInline(true); act(this,'가로와 세로로 한꺼번에 옮겨요'); },
-  function(b){ need('nudge'); return '__nudge('+lit(b.getFieldValue('EL'))+', '+(G.valueToCode(b,'DX',O.COMMA)||'0')+', '+(G.valueToCode(b,'DY',O.COMMA)||'0')+');\n'; });
+  function(b){ need('nudge'); return '__nudge('+er(b)+', '+(G.valueToCode(b,'DX',O.COMMA)||'0')+', '+(G.valueToCode(b,'DY',O.COMMA)||'0')+');\n'; });
 def('val_where',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('의')).appendField(new Blockly.FieldDropdown(function(){ return [[T('x좌표'),'x'],[T('y좌표'),'y']]; }),'AXIS'); val(this,'Number','페이지 왼쪽 위에서 요소가 얼마나 떨어져 있는지 알려줘요'); },
-  function(b){ need('where'); return ['__where('+lit(b.getFieldValue('EL'))+', '+lit(b.getFieldValue('AXIS'))+')',O.FUNCTION_CALL]; });
-def('act_follow',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('이(가) 커서 따라다니기')).appendField(new Blockly.FieldDropdown(function(){ return [[T('바로'),'fast'],[T('부드럽게'),'soft'],[T('멈추기'),'stop']]; }),'MODE'); act(this,'마우스나 손가락을 따라 요소가 움직여요. 한 번만 놓으면 계속 따라다녀요'); },
+  function(b){ need('where'); return ['__where('+er(b)+', '+lit(b.getFieldValue('AXIS'))+')',O.FUNCTION_CALL]; });
+def('act_follow',function(){ this.appendDummyInput().appendField(elField(null,'hat'),'EL').appendField(T('이(가) 커서 따라다니기')).appendField(new Blockly.FieldDropdown(function(){ return [[T('바로'),'fast'],[T('부드럽게'),'soft'],[T('멈추기'),'stop']]; }),'MODE'); act(this,'마우스나 손가락을 따라 요소가 움직여요. 한 번만 놓으면 계속 따라다녀요'); },
   function(b){ need('follow'); return '__follow('+lit(b.getFieldValue('EL'))+', '+lit(b.getFieldValue('MODE'))+');\n'; });
 def('val_cursor',function(){ this.appendDummyInput().appendField(T('커서 위치')).appendField(new Blockly.FieldDropdown([['x','x'],['y','y']]),'AXIS'); val(this,'Number','마우스(손가락)가 있는 곳. 페이지 왼쪽 위에서 얼마나 떨어졌는지 알려줘요'); },
   function(b){ need('cursor'); return [b.getFieldValue('AXIS')==='x'?'__cx':'__cy',O.ATOMIC]; });
-def('val_hit',function(){ this.appendDummyInput().appendField(elField(),'A').appendField(T('와(과)')).appendField(elField(),'B').appendField(T('이(가) 닿았나?')); val(this,'Boolean','두 요소가 겹쳐 있으면 참이에요. "만약"과 함께 써요'); },
-  function(b){ need('hit'); return ['__hit('+lit(b.getFieldValue('A'))+', '+lit(b.getFieldValue('B'))+')',O.FUNCTION_CALL]; });
+function shapeDrop(){ return new Blockly.FieldDropdown(function(){ return [[T('네모로'),'box'],[T('원으로'),'circle']]; }); }
+def('val_hit',function(){ this.appendDummyInput().appendField(elField(null,'hit'),'A').appendField(T('와(과)')).appendField(elField(null,'hit'),'B').appendField(T('이(가) 닿았나?')).appendField(shapeDrop(),'MODE'); val(this,'Boolean','두 요소가 겹쳐 있으면 참이에요. "만약"과 함께 써요. 네모는 모서리 상자끼리, 원은 둥글게 재요. "복제본 아무거나"를 고르면 복제본 중 하나라도 닿았을 때 참이에요'); },
+  function(b){ need('touch'); return ['__touch('+er(b,'A')+', '+er(b,'B')+', '+lit(b.getFieldValue('MODE')||'box')+')',O.FUNCTION_CALL]; });
 def('act_stay',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('화면 안에 가두기')); act(this,'요소가 페이지 밖으로 나가지 않게 해요. 움직이기 블록 뒤에 붙여 써요'); },
-  function(b){ need('stay'); return '__stay('+lit(b.getFieldValue('EL'))+');\n'; });
+  function(b){ need('stay'); return '__stay('+er(b)+');\n'; });
 
 /* ---------- games: touching event, score board, random spot ---------- */
-def('ev_hit',function(){ this.appendDummyInput().appendField(elField(),'A').appendField(T('와(과)')).appendField(elField(),'B').appendField(T('이(가) 닿으면')); hat(this,'두 요소가 닿는 순간 한 번 해요. 떨어졌다가 다시 닿으면 또 해요'); },
-  function(b){ need('hitev'); return '__onHit('+lit(b.getFieldValue('A'))+', '+lit(b.getFieldValue('B'))+', '+AF()+') {\n'+hatBody(b,true)+'});\n'; });
+def('ev_hit',function(){ this.appendDummyInput().appendField(elField(null,'evhit'),'A').appendField(T('와(과)')).appendField(elField(null,'evhit'),'B').appendField(T('이(가) 닿으면')).appendField(shapeDrop(),'MODE'); hat(this,'두 요소가 닿는 순간 한 번 해요. 떨어졌다가 다시 닿으면 또 해요. "복제본 아무거나"를 고르면 복제본마다 닿을 때 해요. 안에서 "나(이 복제본)"은 닿은 복제본, "닿은 상대"는 부딪힌 쪽이에요'); },
+  function(b){ need('hitev'); return '__onHit('+lit(b.getFieldValue('A'))+', '+lit(b.getFieldValue('B'))+', '+AF()+'__me, __other) {\n'+hatBody(b,true)+'}, '+lit(b.getFieldValue('MODE')||'box')+');\n'; });
 def('act_rpos',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('을(를) 화면 아무 곳으로 옮기기')); act(this,'화면 안의 아무 곳으로 옮겨요. 먹이나 별을 새로 놓을 때 좋아요'); },
-  function(b){ need('rpos'); return '__rpos('+lit(b.getFieldValue('EL'))+');\n'; });
+  function(b){ need('rpos'); return '__rpos('+er(b)+');\n'; });
 def('act_score',function(){ this.appendValueInput('N').setCheck('Number').appendField(T('점수를')); this.appendDummyInput().appendField(new Blockly.FieldDropdown(function(){ return [[T('만큼 바꾸기'),'add'],[T('(으)로 정하기'),'set']]; }),'MODE');
   this.setInputsInline(true); act(this,'점수를 더하거나(마이너스면 빼요) 정해요. 화면 오른쪽 위 점수판에 바로 보여요'); },
   function(b){ need('score'); return '__setScore('+(G.valueToCode(b,'N',O.COMMA)||'0')+', '+(b.getFieldValue('MODE')==='add')+');\n'; });
@@ -214,7 +234,7 @@ def('val_score',function(){ this.appendDummyInput().appendField(T('점수')); va
 /* ---------- values ---------- */
 function val(b,check,tip){ b.setOutput(true,check||null); b.setColour(C.val); if(tip) b.setTooltip(T(tip)); }
 def('val_get',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('의')).appendField(new Blockly.FieldDropdown(function(){ return [[T('내용'),'text'],[T('숫자'),'num'],[T('너비'),'width'],[T('높이'),'height']]; }),'PROP'); val(this,null,'글자나 입력칸에 쓴 값을 가져와요. 숫자로 계산하려면 "숫자"를 골라요'); },
-  function(b){ var n=lit(b.getFieldValue('EL')), p=b.getFieldValue('PROP');
+  function(b){ var n=er(b), p=b.getFieldValue('PROP');
     if(p==='text'){ need('get'); return ['__get('+n+')',O.FUNCTION_CALL]; }
     if(p==='num'){ need('get'); return ['__num(__get('+n+'))',O.FUNCTION_CALL]; }
     need('$'); return ['$('+n+').'+(p==='width'?'offsetWidth':'offsetHeight'),O.MEMBER]; });
@@ -266,9 +286,103 @@ def('val_dist',function(){ this.appendValueInput('X1').setCheck('Number').append
   function(b){ need('dist'); return ['__dist('+[v(b,'X1','0'),v(b,'Y1','0'),v(b,'X2','0'),v(b,'Y2','0')].join(', ')+')',O.FUNCTION_CALL]; });
 def('val_today',function(){ this.appendDummyInput().appendField(T('오늘')).appendField(new Blockly.FieldDropdown(function(){ return [[T('날짜 글자'),'date'],[T('시각 글자'),'time'],[T('년'),'year'],[T('월 (1~12)'),'month']]; }),'U'); val(this,null,'오늘 날짜나 지금 시각'); },
   function(b){ var u=b.getFieldValue('U'), m={date:'new Date().toLocaleDateString()',time:'new Date().toLocaleTimeString()',year:'new Date().getFullYear()',month:'(new Date().getMonth() + 1)'}; return [m[u]||m.date,u==='month'?O.ATOMIC:O.FUNCTION_CALL]; });
-def('ev_drag',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('을(를) 누른 채 움직이면')); hat(this,'마우스를 누른 채, 또는 손가락으로 짚고 움직이는 동안 계속 해요. "누른 위치"를 함께 써요'); },
+def('ev_drag',function(){ this.appendDummyInput().appendField(elField(null,'hat'),'EL').appendField(T('을(를) 누른 채 움직이면')); hat(this,'마우스를 누른 채, 또는 손가락으로 짚고 움직이는 동안 계속 해요. "누른 위치"를 함께 써요'); },
   function(b){ var n=lit(b.getFieldValue('EL')); need('$'); need('pos');
     return '$('+n+').style.touchAction = \'none\';\n$('+n+').addEventListener(\'pointermove\', '+AF()+'e) {\n  if (!e.buttons) return;\n  __pos(e, this);\n'+hatBody(b,true)+'});\n'; });
+
+/* ---------- clones: copies of an element that each run their own script ---------- */
+C.clone='#7c5cd6'; C.tile='#a16207';
+function cl(b,tip){ act(b,tip); b.setColour(C.clone); }
+def('ev_clone',function(){ this.appendDummyInput().appendField(elField(null,'hat'),'EL').appendField(T('의 복제본으로 시작하면')); hat(this,'복제본이 만들어질 때마다, 그 복제본이 따로 이 안의 블록을 한 번 해요. 안에서 "나(이 복제본)"을 고르면 그 복제본만 움직여요'); },
+  function(b){ need('clones'); return '__onClone('+lit(b.getFieldValue('EL'))+', '+AF()+'__me) {\n'+hatBody(b)+'});\n'; });
+def('clone_make',function(){ this.appendDummyInput().appendField(elField(null,'hat'),'EL').appendField(T('의 복제본 만들기')); cl(this,'요소를 똑같이 복사해 새로 만들어요. 처음엔 원래 요소 자리에 겹쳐 있어요. 원본을 숨겨 두고 복제본만 보여 줄 수도 있어요 (복제본은 500개까지)'); },
+  function(b){ need('clones'); return '__clone('+lit(b.getFieldValue('EL'))+');\n'; });
+def('clone_make_at',function(){ this.appendValueInput('X').setCheck('Number').appendField(elField(null,'hat'),'EL').appendField(T('의 복제본을 위치')).appendField('x'); this.appendValueInput('Y').setCheck('Number').appendField('y'); this.appendDummyInput().appendField(T('에 만들기')); this.setInputsInline(true); cl(this,'복제본을 정한 위치에 바로 만들어요 (페이지 왼쪽 위에서부터의 위치)'); },
+  function(b){ need('clones'); return '__clone('+lit(b.getFieldValue('EL'))+', '+v(b,'X','0')+', '+v(b,'Y','0')+');\n'; });
+def('clone_del',function(){ this.appendDummyInput().appendField(elField(null,'del'),'EL').appendField(T('지우기')); cl(this,'복제본을 지워요. 복제본이 아닌 원래 요소는 지워지지 않아요. 지운 복제본의 "초마다" 블록도 함께 멈춰요'); },
+  function(b){ need('clones'); return '__unclone('+er(b)+');\n'; });
+def('clone_delall',function(){ this.appendDummyInput().appendField(elField(null,'hat'),'EL').appendField(T('의 복제본 모두 지우기')); cl(this,'만들어 둔 복제본을 한꺼번에 지워요'); },
+  function(b){ need('clones'); return '__uncloneAll('+lit(b.getFieldValue('EL'))+');\n'; });
+def('clone_fwd',function(){ this.appendValueInput('N').setCheck('Number').appendField(elField(),'EL').appendField(T('을(를) 보는 방향으로')); this.appendDummyInput().appendField(T('만큼 가기')); this.setInputsInline(true); cl(this,'방향(도) 쪽으로 정한 만큼 나아가요. 방향은 0이 오른쪽, 90이 아래, 180이 왼쪽, 270이 위예요'); },
+  function(b){ need('clones'); return '__fwd('+er(b)+', '+v(b,'N','0')+');\n'; });
+def('clone_dir',function(){ this.appendValueInput('N').setCheck('Number').appendField(elField(),'EL').appendField(T('의 방향을')); this.appendDummyInput().appendField(T('도')).appendField(new Blockly.FieldDropdown(function(){ return [[T('로 정하기'),'set'],[T('만큼 돌리기'),'turn']]; }),'MODE'); this.setInputsInline(true); cl(this,'가는 방향을 정해요. 0이 오른쪽, 90이 아래, 180이 왼쪽, 270이 위예요 (눈에 보이는 모양은 그대로예요)'); },
+  function(b){ need('clones'); return '__dir('+er(b)+', '+v(b,'N','0')+', '+(b.getFieldValue('MODE')==='turn')+');\n'; });
+def('clone_face',function(){ this.appendValueInput('X').setCheck('Number').appendField(elField(),'EL').appendField(T('이(가) 위치')).appendField('x'); this.appendValueInput('Y').setCheck('Number').appendField('y'); this.appendDummyInput().appendField(T('쪽으로 방향 맞추기')); this.setInputsInline(true); cl(this,'그 위치를 향하도록 방향을 정해요. 커서 위치를 넣으면 커서 쪽으로 가요'); },
+  function(b){ need('clones'); return '__face('+er(b)+', '+v(b,'X','0')+', '+v(b,'Y','0')+');\n'; });
+def('clone_setv',function(){ this.appendValueInput('V').appendField(elField(),'EL').appendField(T('의 값')).appendField(new Blockly.FieldTextInput(T('체력')),'K').appendField(T('을(를)')); this.appendDummyInput().appendField(T('(으)로 정하기')); this.setInputsInline(true); cl(this,'요소마다 따로 가지는 값이에요. 복제본마다 값이 달라서 체력이나 속도를 따로 둘 수 있어요'); },
+  function(b){ need('clones'); return '__vset('+er(b)+', '+lit(b.getFieldValue('K'))+', '+v(b,'V','0')+');\n'; });
+def('clone_getv',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('의 값')).appendField(new Blockly.FieldTextInput(T('체력')),'K'); val(this,null,'요소마다 따로 가진 값이에요. 정한 적이 없으면 0이에요'); this.setColour(C.clone); },
+  function(b){ need('clones'); return ['__vget('+er(b)+', '+lit(b.getFieldValue('K'))+')',O.FUNCTION_CALL]; });
+def('clone_getdir',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('의 방향(도)')); val(this,'Number','가는 방향이에요. 0이 오른쪽, 90이 아래'); this.setColour(C.clone); },
+  function(b){ need('clones'); return ['__getdir('+er(b)+')',O.FUNCTION_CALL]; });
+def('clone_count',function(){ this.appendDummyInput().appendField(elField(null,'hat'),'EL').appendField(T('의 복제본 수')); val(this,'Number','지금 있는 복제본이 몇 개인지 알려줘요'); this.setColour(C.clone); },
+  function(b){ need('clones'); return ['__ccountOf('+lit(b.getFieldValue('EL'))+')',O.FUNCTION_CALL]; });
+def('clone_out',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('이(가) 화면 밖에 나갔나?')); val(this,'Boolean','요소가 화면 밖으로 나가 보이지 않으면 참이에요. 총알을 지울 때 써요'); this.setColour(C.clone); },
+  function(b){ need('clones'); return ['__out('+er(b)+')',O.FUNCTION_CALL]; });
+
+/* ---------- time: do something later or again and again, with a name so it can be stopped ---------- */
+function tm(b,tip){ act(b,tip); b.setColour('#3a6fd8'); }
+/* a time block inside a "복제본으로 시작하면" script belongs to that clone and stops when the clone is deleted; anywhere else it belongs to the page */
+function owner(b){ var r=b.getRootBlock(); if(r&&r.type==='ev_clone'){ need('me'); return '__me'; } return 'null'; }
+function nameIn(def){ return new Blockly.FieldTextInput(def); }
+def('time_after',function(){ this.appendValueInput('SEC').setCheck('Number'); this.appendDummyInput().appendField(T('초 뒤에 한 번 하기')).appendField(T('이름')).appendField(nameIn(T('알람')),'NAME'); this.appendStatementInput('DO'); this.setInputsInline(true); tm(this,'정한 시간이 지난 뒤에 한 번 해요. 같은 이름으로 다시 시작하면 처음부터 다시 세요. "멈추기"로 취소할 수 있어요'); },
+  function(b){ need('sched'); return '__sched('+lit(b.getFieldValue('NAME'))+', '+v(b,'SEC','1')+', '+AF()+') {\n'+G.statementToCode(b,'DO')+'}, false, '+owner(b)+');\n'; });
+def('time_every',function(){ this.appendValueInput('SEC').setCheck('Number'); this.appendDummyInput().appendField(T('초마다 계속 하기')).appendField(T('이름')).appendField(nameIn(T('반복')),'NAME'); this.appendStatementInput('DO'); this.setInputsInline(true); tm(this,'정한 시간마다 계속 해요. 같은 이름으로 다시 시작하면 처음부터 다시 세요. "멈추기"로 그만둘 수 있어요. 복제본 안에서 쓰면 복제본을 지울 때 함께 멈춰요'); },
+  function(b){ need('sched'); return '__sched('+lit(b.getFieldValue('NAME'))+', '+v(b,'SEC','1')+', '+AF()+') {\n'+G.statementToCode(b,'DO')+'}, true, '+owner(b)+');\n'; });
+def('time_stop',function(){ this.appendDummyInput().appendField(nameIn(T('반복')),'NAME').appendField(T('이름의 시간 블록 멈추기')); tm(this,'이름이 같은 "뒤에 한 번"이나 "마다 계속" 블록을 멈춰요'); },
+  function(b){ need('sched'); return '__unsched('+lit(b.getFieldValue('NAME'))+', '+owner(b)+');\n'; });
+def('time_stopall',function(){ this.appendDummyInput().appendField(T('시간 블록 모두 멈추기')); tm(this,'"뒤에 한 번"과 "마다 계속"으로 시작한 것을 모두 멈춰요'); },
+  function(){ need('sched'); return '__stopAll();\n'; });
+
+/* ---------- tile map: a grid of cells on a canvas, walls and blocked movement ---------- */
+function tl(b,tip){ act(b,tip); b.setColour(C.tile); }
+function mapIn(){ return new Blockly.FieldTextInput(T('지도')+'1'); }
+def('tile_make',function(){ this.appendDummyInput().appendField(elField(CV),'EL').appendField(T('에 타일맵')).appendField(mapIn(),'M').appendField(T('만들기')); this.appendValueInput('C').setCheck('Number').appendField(T('가로 칸')); this.appendValueInput('R').setCheck('Number').appendField(T('세로 칸')); this.appendValueInput('S').setCheck('Number').appendField(T('칸 크기')); this.setInputsInline(true); tl(this,'그림판 위에 칸(타일)으로 된 지도를 만들어요. 처음엔 모든 칸이 0(빈칸)이고, 1번 칸은 벽이에요'); },
+  function(b){ need('tile'); return '__tmake('+lit(b.getFieldValue('EL'))+', '+lit(b.getFieldValue('M'))+', '+v(b,'C','10')+', '+v(b,'R','8')+', '+v(b,'S','32')+');\n'; });
+def('tile_set',function(){ this.appendValueInput('C').setCheck('Number').appendField(mapIn(),'M').appendField(T('의 칸')).appendField(T('가로')); this.appendValueInput('R').setCheck('Number').appendField(T('세로')); this.appendValueInput('V').setCheck('Number').appendField(T('을(를)')); this.appendDummyInput().appendField(T('번 타일로 바꾸기')); this.setInputsInline(true); tl(this,'칸 하나를 바꿔요. 칸 번호는 0부터 세요. 0은 빈칸, 1은 벽, 2부터는 색깔 칸이에요'); },
+  function(b){ need('tile'); return '__tset('+lit(b.getFieldValue('M'))+', '+v(b,'C','0')+', '+v(b,'R','0')+', '+v(b,'V','1')+');\n'; });
+def('tile_fill',function(){ this.appendValueInput('V').setCheck('Number').appendField(mapIn(),'M').appendField(new Blockly.FieldDropdown(function(){ return [[T('전체를'),'all'],[T('가장자리 테두리를'),'border']]; }),'MODE'); this.appendDummyInput().appendField(T('번 타일로 채우기')); this.setInputsInline(true); tl(this,'지도 전체나 가장자리 한 줄을 한꺼번에 채워요. 가장자리를 1(벽)로 하면 상자 모양 방이 돼요'); },
+  function(b){ need('tile'); return '__tfill('+lit(b.getFieldValue('M'))+', '+lit(b.getFieldValue('MODE'))+', '+v(b,'V','1')+');\n'; });
+def('tile_color',function(){ this.appendValueInput('V').setCheck('Number').appendField(mapIn(),'M').appendField(T('의')); this.appendValueInput('COLOR').appendField(T('번 타일 색을')); this.appendDummyInput().appendField(T('(으)로')); this.setInputsInline(true); tl(this,'번호마다 칠할 색을 정해요. 정하지 않으면 1번은 회색, 2번 초록, 3번 노랑처럼 정해진 색이에요'); },
+  function(b){ need('tile'); return '__tcolor('+lit(b.getFieldValue('M'))+', '+v(b,'V','1')+', '+v(b,'COLOR',"'#475569'")+');\n'; });
+def('tile_solid',function(){ this.appendValueInput('V').setCheck('Number').appendField(mapIn(),'M').appendField(T('의')); this.appendDummyInput().appendField(T('번 타일을')).appendField(new Blockly.FieldDropdown(function(){ return [[T('벽으로 하기'),'1'],[T('벽이 아니게 하기'),'0']]; }),'ON'); this.setInputsInline(true); tl(this,'어떤 번호의 칸을 벽으로 칠지 정해요. 처음엔 1번만 벽이에요'); },
+  function(b){ need('tile'); return '__tsolidSet('+lit(b.getFieldValue('M'))+', '+v(b,'V','1')+', '+(b.getFieldValue('ON')==='1')+');\n'; });
+def('tile_draw',function(){ this.appendDummyInput().appendField(mapIn(),'M').appendField(T('그리기')); tl(this,'지도를 그림판에 그려요. 먼저 그림판을 지운 뒤 지도를 그리고, 그 위에 다른 것을 그려요'); },
+  function(b){ need('tile'); return '__tdraw('+lit(b.getFieldValue('M'))+');\n'; });
+def('tile_move',function(){ this.appendValueInput('DX').setCheck('Number').appendField(elField(null,'hat'),'EL').appendField(T('을(를)')).appendField(mapIn(),'M').appendField(T('의 벽에 막히며 가로')); this.appendValueInput('DY').setCheck('Number').appendField(T('세로')); this.appendDummyInput().appendField(T('만큼 움직이기')); this.setInputsInline(true); tl(this,'벽이 있으면 그 앞에서 멈추며 움직여요. 움직일 요소는 그림판 위에 놓여 있어야 해요. 거리는 그림판 기준 점(픽셀)이에요'); },
+  function(b){ need('tile'); need('nudge'); return '__tmove('+lit(b.getFieldValue('EL'))+', '+lit(b.getFieldValue('M'))+', '+v(b,'DX','0')+', '+v(b,'DY','0')+');\n'; });
+function tv(type,build,tip,out,gen){ def(type,function(){ build.call(this); val(this,out,tip); this.setColour(C.tile); },gen); }
+tv('tile_get',function(){ this.appendValueInput('C').setCheck('Number').appendField(mapIn(),'M').appendField(T('의 칸')).appendField(T('가로')); this.appendValueInput('R').setCheck('Number').appendField(T('세로')); this.appendDummyInput().appendField(T('의 타일 번호')); this.setInputsInline(true); },'칸의 번호예요. 지도 밖은 0이에요','Number',
+  function(b){ need('tile'); return ['__tget('+lit(b.getFieldValue('M'))+', '+v(b,'C','0')+', '+v(b,'R','0')+')',O.FUNCTION_CALL]; });
+tv('tile_wall',function(){ this.appendValueInput('X').setCheck('Number').appendField(mapIn(),'M').appendField(T('에서 위치')).appendField('x'); this.appendValueInput('Y').setCheck('Number').appendField('y'); this.appendDummyInput().appendField(T('에 벽이 있나?')); this.setInputsInline(true); },'그림판 위의 한 점이 벽 칸 안에 있으면 참이에요. 지도 밖도 벽으로 쳐요','Boolean',
+  function(b){ need('tile'); return ['__twall('+lit(b.getFieldValue('M'))+', '+v(b,'X','0')+', '+v(b,'Y','0')+')',O.FUNCTION_CALL]; });
+tv('tile_cell',function(){ this.appendValueInput('N').setCheck('Number').appendField(mapIn(),'M').appendField(T('에서 위치')); this.appendDummyInput().appendField(T('이 몇 번째 칸인가')); this.setInputsInline(true); },'그림판 위의 위치(점)를 칸 번호로 바꿔요. 가로(x)도 세로(y)도 같은 식이에요. 0부터 세요','Number',
+  function(b){ need('tile'); return ['__tcell('+lit(b.getFieldValue('M'))+', '+v(b,'N','0')+')',O.FUNCTION_CALL]; });
+tv('tile_touch',function(){ this.appendDummyInput().appendField(elField(null,'hat'),'EL').appendField(T('이(가)')).appendField(mapIn(),'M').appendField(T('의 벽에 닿았나?')); },'요소가 벽 칸과 겹쳐 있으면 참이에요','Boolean',
+  function(b){ need('tile'); return ['__ttouch('+lit(b.getFieldValue('EL'))+', '+lit(b.getFieldValue('M'))+')',O.FUNCTION_CALL]; });
+tv('tile_blocked',function(){ this.appendDummyInput().appendField(T('방금 움직임이 벽에 막혔나?')); },'바로 앞의 "벽에 막히며 움직이기"가 벽 때문에 멈췄으면 참이에요','Boolean',
+  function(){ need('tile'); return ['__tbl',O.ATOMIC]; });
+
+/* ---------- best score: kept in the browser, one set per project ---------- */
+function bs(b,tip){ act(b,tip); b.setColour('#8e6bbf'); }
+function bestIn(){ return new Blockly.FieldTextInput(T('최고 점수')); }
+def('act_best',function(){ this.appendValueInput('N').setCheck('Number').appendField(bestIn(),'NAME').appendField(T('기록하기 (더 높을 때만 저장) 점수')); this.setInputsInline(true); bs(this,'저장해 둔 값보다 높을 때만 새로 저장해요. 점수판이 보이고 있으면 바로 바뀌어요'); },
+  function(b){ need('best'); return '__best('+lit(b.getFieldValue('NAME'))+', '+v(b,'N','0')+');\n'; });
+def('val_best',function(){ this.appendDummyInput().appendField(T('저장된')).appendField(bestIn(),'NAME'); val(this,'Number','저장해 둔 최고 점수예요. 아직 없으면 0이에요'); this.setColour('#8e6bbf'); },
+  function(b){ need('best'); return ['__bestOf('+lit(b.getFieldValue('NAME'))+')',O.FUNCTION_CALL]; });
+def('act_bestboard',function(){ this.appendDummyInput().appendField(bestIn(),'NAME').appendField(T('점수판')).appendField(new Blockly.FieldDropdown(function(){ return [[T('보이기'),'show'],[T('숨기기'),'hide']]; }),'MODE'); bs(this,'화면 오른쪽 위 점수판 아래에 저장된 최고 점수를 보여 줘요'); },
+  function(b){ need('best'); return '__bestBoardSet('+lit(b.getFieldValue('NAME'))+', '+(b.getFieldValue('MODE')==='show')+');\n'; });
+def('act_bestreset',function(){ this.appendDummyInput().appendField(bestIn(),'NAME').appendField(T('지우기 (0으로)')); bs(this,'저장해 둔 최고 점수를 0으로 되돌려요'); },
+  function(b){ need('best'); return '__bestReset('+lit(b.getFieldValue('NAME'))+');\n'; });
+
+/* ---------- more canvas drawing ---------- */
+drawB('draw_fill','전체를 칠하기',[['COLOR','색']],'그림판 전체를 한 가지 색으로 칠해요 (배경 만들기)',function(b){ need('draw'); return '__fill('+lit(b.getFieldValue('EL'))+', '+v(b,'COLOR',"'#ffffff'")+');\n'; });
+drawB('draw_width','의 선 굵기를 정하기',[['N','굵기','Number']],'선과 빈 도형의 굵기를 정해요 (처음엔 3)',function(b){ need('draw'); return '__width('+lit(b.getFieldValue('EL'))+', '+v(b,'N','3')+');\n'; });
+drawB('draw_fsize','의 글자 크기를 정하기',[['N','크기','Number']],'그림판에 쓰는 글자 크기를 정해요 (처음엔 20)',function(b){ need('draw'); return '__fsize('+lit(b.getFieldValue('EL'))+', '+v(b,'N','20')+');\n'; });
+drawB('draw_orect','에 빈 네모',[['X','x','Number'],['Y','y','Number'],['W','너비','Number'],['H','높이','Number'],['COLOR','색']],'속이 빈 네모 테두리를 그려요. 굵기는 "선 굵기 정하기"로 바꿔요',
+  function(b){ need('draw'); return '__orect('+[lit(b.getFieldValue('EL')),v(b,'X','0'),v(b,'Y','0'),v(b,'W','10'),v(b,'H','10'),v(b,'COLOR',"'#000'")].join(', ')+');\n'; });
+drawB('draw_ocircle','에 빈 원',[['X','x','Number'],['Y','y','Number'],['R','반지름','Number'],['COLOR','색']],'속이 빈 원 테두리를 그려요 (x, y는 가운데)',
+  function(b){ need('draw'); return '__ocircle('+[lit(b.getFieldValue('EL')),v(b,'X','0'),v(b,'Y','0'),v(b,'R','10'),v(b,'COLOR',"'#000'")].join(', ')+');\n'; });
 
 /* ---------- raw JavaScript ---------- */
 def('js_raw',function(){ this.appendDummyInput().appendField('JS').appendField(new Blockly.FieldTextInput('console.log("hi");'),'CODE'); this.setPreviousStatement(true); this.setNextStatement(true); this.setColour(C.js); this.setTooltip(T('자바스크립트 한 줄을 직접 써요')); },
@@ -278,7 +392,7 @@ def('js_val',function(){ this.appendDummyInput().appendField('JS').appendField(n
 
 /* ---------- helpers that go into the page, only the ones used ---------- */
 var HELP={
-  '$':"function $(name) {\n  var el = document.getElementById(name);\n  if (!el) throw new Error('\"' + name + '\" "+T('요소가 없어요').replace(/'/g,"\\'")+"');\n  return el;\n}",
+  '$':"function $(name) {\n  if (name && name.nodeType) return name;\n  var el = document.getElementById(name);\n  if (!el) throw new Error('\"' + name + '\" "+T('요소가 없어요').replace(/'/g,"\\'")+"');\n  return el;\n}",
   get:"function __get(name) {\n  var el = $(name);\n  return el.tagName === 'INPUT' ? el.value : el.textContent;\n}\nfunction __num(x) {\n  var n = parseFloat(x);\n  return isNaN(n) ? 0 : n;\n}",
   set:"function __set(name, value) {\n  var el = $(name);\n  if (el.tagName === 'INPUT') el.value = value;\n  else if (el.tagName === 'IMG') el.src = value;\n  else if (el.tagName === 'CANVAS') el.getContext('2d').clearRect(0, 0, el.width, el.height);\n  else el.textContent = value;\n}",
   add:"function __add(name, value) {\n  var el = $(name);\n  if (el.tagName === 'UL') {\n    var li = document.createElement('li');\n    li.textContent = value;\n    el.appendChild(li);\n  } else if (el.tagName === 'INPUT') el.value += value;\n  else el.textContent += value;\n}",
@@ -286,7 +400,6 @@ var HELP={
   move:"function __move(name, x, y) {\n  var s = $(name).style;\n  s.position = 'absolute';\n  s.left = x + 'px';\n  s.top = y + 'px';\n}",
   show:"function __show(name, mode) {\n  var el = $(name);\n  if (mode === 'toggle') mode = el.style.display === 'none' ? 'show' : 'hide';\n  el.style.display = mode === 'hide' ? 'none' : '';\n}",
   pos:"var __mx = 0, __my = 0;\nfunction __pos(e, el) {\n  var r = el.getBoundingClientRect();\n  __mx = Math.round((e.clientX - r.left) * (el.width ? el.width / r.width : 1));\n  __my = Math.round((e.clientY - r.top) * (el.height ? el.height / r.height : 1));\n}",
-  store:"var __mem = {};\nfunction __save(k, v) {\n  k = 'ffb:' + k;\n  __mem[k] = v;\n  try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {}\n}\nfunction __load(k, d) {\n  k = 'ffb:' + k;\n  try {\n    var s = localStorage.getItem(k);\n    if (s !== null) return JSON.parse(s);\n  } catch (e) {}\n  return k in __mem ? __mem[k] : d;\n}",
   dist:"function __dist(x1, y1, x2, y2) { return Math.hypot(x2 - x1, y2 - y1); }",
   nudge:"function __nudge(name, dx, dy) {\n  var el = $(name), s = el.style;\n  if (s.position !== 'absolute') {\n    var r = el.getBoundingClientRect();\n    s.position = 'absolute';\n    s.left = (r.left + window.pageXOffset) + 'px';\n    s.top = (r.top + window.pageYOffset) + 'px';\n  }\n  s.left = ((parseFloat(s.left) || 0) + dx) + 'px';\n  s.top = ((parseFloat(s.top) || 0) + dy) + 'px';\n}",
   where:"function __where(name, axis) {\n  var r = $(name).getBoundingClientRect();\n  return Math.round(axis === 'x' ? r.left + window.pageXOffset : r.top + window.pageYOffset);\n}",
@@ -302,19 +415,315 @@ var HELP={
   snd:"var __audio, __sndBus = null;\nfunction __snd() {\n  if (!__audio) {\n    __audio = new (window.AudioContext || window.webkitAudioContext)();\n    ['pointerdown', 'keydown'].forEach(function (k) { document.addEventListener(k, function () { if (__audio.state === 'suspended') __audio.resume(); }); });\n  }\n  if (__audio.state === 'suspended') __audio.resume();\n  if (!__sndBus) { __sndBus = __audio.createGain(); __sndBus.connect(__audio.destination); }\n  return __sndBus;\n}\nfunction __tone(freq, t, sec, type, vol, to, hold) {\n  var o = __audio.createOscillator(), g = __audio.createGain();\n  o.type = type;\n  o.frequency.setValueAtTime(freq, t);\n  if (to) o.frequency.exponentialRampToValueAtTime(to, t + sec);\n  g.gain.setValueAtTime(vol, t);\n  if (hold) g.gain.setValueAtTime(vol, t + sec * hold);\n  g.gain.exponentialRampToValueAtTime(0.001, t + sec);\n  o.connect(g); g.connect(__snd());\n  o.start(t); o.stop(t + sec + 0.02);\n}\nfunction __soundStop() {\n  if (typeof __auds !== 'undefined') __auds.splice(0).forEach(function (a) { a.pause(); });\n  if (__sndBus) { __sndBus.disconnect(); __sndBus = null; }\n  __noteT = 0;\n}\nvar __noteT = 0, __bpm = 120;",
   sfx:"function __sfx(k) {\n  __snd();\n  var t = __audio.currentTime;\n  if (k === 'coin') { __tone(988, t, 0.08, 'square', 0.1); __tone(1319, t + 0.08, 0.3, 'square', 0.1); }\n  else if (k === 'jump') __tone(260, t, 0.25, 'square', 0.1, 820);\n  else if (k === 'laser') __tone(1500, t, 0.22, 'sawtooth', 0.08, 120);\n  else if (k === 'pop') __tone(500, t, 0.09, 'sine', 0.3, 1100);\n  else if (k === 'win') [523.25, 659.25, 783.99, 1046.5].forEach(function (f, i) { __tone(f, t + i * 0.1, 0.3, 'triangle', 0.22); });\n  else if (k === 'lose') [392, 349.23, 311.13, 261.63].forEach(function (f, i) { __tone(f, t + i * 0.18, 0.3, 'sawtooth', 0.08, 0, 0.6); });\n  else if (k === 'boom') {\n    var n = __audio.createBuffer(1, Math.round(__audio.sampleRate * 0.6), __audio.sampleRate), d = n.getChannelData(0);\n    for (var i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2);\n    var s = __audio.createBufferSource(), f = __audio.createBiquadFilter();\n    s.buffer = n; f.type = 'lowpass'; f.frequency.value = 900;\n    s.connect(f); f.connect(__snd());\n    s.start(t);\n  }\n}",
   note:"function __note(n, beats) {\n  __snd();\n  var m = /^([A-G])(#?)(\\d)$/.exec(n), t = Math.max(__audio.currentTime, __noteT), sec = beats * 60 / __bpm;\n  if (m) __tone(440 * Math.pow(2, ('C D EF G A B'.indexOf(m[1]) + (m[2] ? 1 : 0) - 9) / 12 + (m[3] - 4)), t, sec * 0.95, 'triangle', 0.25, 0, 0.6);\n  __noteT = t + sec;\n}",
-  hitev:"var __hits = [];\nfunction __onHit(a, b, f) {\n  __hits.push({ a: a, b: b, f: f, on: false });\n  if (__hits.length === 1) requestAnimationFrame(__hitLoop);\n}\nfunction __hitLoop() {\n  requestAnimationFrame(__hitLoop);\n  __hits.forEach(function (h) {\n    var now = !!(document.getElementById(h.a) && document.getElementById(h.b) && __hit(h.a, h.b));\n    if (now && !h.on) { h.on = true; h.f(); }\n    h.on = now;\n  });\n}",
   rpos:"function __rpos(name) {\n  var el = $(name), s = el.style, d = document.documentElement;\n  s.position = 'absolute';\n  var c = getComputedStyle(el), w = el.offsetWidth + parseFloat(c.marginLeft) + parseFloat(c.marginRight), h = el.offsetHeight + parseFloat(c.marginTop) + parseFloat(c.marginBottom);\n  s.left = Math.round(window.pageXOffset + Math.random() * Math.max(0, d.clientWidth - w)) + 'px';\n  s.top = Math.round(window.pageYOffset + Math.random() * Math.max(0, d.clientHeight - h)) + 'px';\n}",
   score:"var __score = 0, __board = null;\nfunction __scoreBoard() {\n  if (!__board) {\n    __board = document.createElement('div');\n    __board.style.cssText = 'position: fixed; top: 10px; right: 10px; padding: 6px 14px; border-radius: 12px; background: rgba(17, 17, 17, .75); color: #fff; font: 700 20px system-ui, sans-serif; z-index: 9999; pointer-events: none';\n    document.body.appendChild(__board);\n  }\n  __board.textContent = '"+T('점수').replace(/'/g,"\\'")+": ' + __score;\n  return __board;\n}\nfunction __setScore(v, add) {\n  v = parseFloat(v) || 0;\n  __score = add ? __score + v : v;\n  __scoreBoard();\n}\n__scoreBoard();",
-  image:"var __imgCache = {};\nfunction __image(name, src, x, y, w) {\n  if (!src) return;\n  var g = __pen(name), im = __imgCache[src];\n  if (!im) { im = new Image(); im.src = src; __imgCache[src] = im; }\n  var go = function () { g.drawImage(im, x, y, w, w * im.naturalHeight / im.naturalWidth); };\n  if (im.complete && im.naturalWidth) go(); else im.addEventListener('load', go, { once: true });\n}",
-  draw:"function __pen(name) { return $(name).getContext('2d'); }\nfunction __clear(name) { var c = $(name); __pen(name).clearRect(0, 0, c.width, c.height); }\nfunction __rect(name, x, y, w, h, color) { var g = __pen(name); g.fillStyle = color; g.fillRect(x, y, w, h); }\nfunction __circle(name, x, y, r, color) { var g = __pen(name); g.fillStyle = color; g.beginPath(); g.arc(x, y, Math.max(0, r), 0, Math.PI * 2); g.fill(); }\nfunction __line(name, x1, y1, x2, y2, color) { var g = __pen(name); g.strokeStyle = color; g.lineWidth = 3; g.lineCap = 'round'; g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); g.stroke(); }\nfunction __text(name, text, x, y, color) { var g = __pen(name); g.fillStyle = color; g.font = '20px sans-serif'; g.fillText(text, x, y); }"
+  image:"var __imgCache = {};\nfunction __image(name, src, x, y, w) {\n  if (!src) return;\n  var g = __pen(name), im = __imgCache[src];\n  if (!im) { im = new Image(); im.src = src; __imgCache[src] = im; }\n  var go = function () { g.drawImage(im, x, y, w, w * im.naturalHeight / im.naturalWidth); };\n  if (im.complete && im.naturalWidth) go(); else im.addEventListener('load', go, { once: true });\n}"
 };
-var HELP_DEPS={beep:['snd'],sfx:['snd'],note:['snd'],hitev:['$','hit'],rpos:['$'],nudge:['$'],where:['$'],hit:['$'],stay:['$'],follow:['$','cursor'],image:['$','draw'],get:['$'],set:['$'],add:['$'],size:['$'],move:['$'],show:['$'],draw:['$']};
+/* helpers written as real functions (so they are syntax checked here); the body text is what goes into the page.
+   @@NAME@@ marks a translated message that is filled in */
+function src(fn,rep){
+  var t=fn.toString(); t=t.slice(t.indexOf('{')+1,t.lastIndexOf('}'));
+  var lines=t.split('\n'); while(lines.length&&!lines[0].trim()) lines.shift(); while(lines.length&&!lines[lines.length-1].trim()) lines.pop();
+  var ind=Math.min.apply(null,lines.filter(function(l){ return l.trim(); }).map(function(l){ return l.match(/^ */)[0].length; }));
+  t=lines.map(function(l){ return l.slice(ind); }).join('\n');
+  if(rep) Object.keys(rep).forEach(function(k){ t=t.split('@@'+k+'@@').join(String(rep[k]).replace(/\\/g,'\\\\').replace(/'/g,"\\'")); });
+  return t; }
+HELP.me='var __me = null;';
+HELP.other='var __other = null;';
+HELP.sched=src(function(){
+  var __tasks = [], __tid = 0, __tlast = 0;
+  function __sched(name, sec, fn, repeat, owner) {
+    sec = Math.max(0.02, parseFloat(sec) || 0);
+    if (name) __unsched(name, owner);
+    __tasks.push({ n: name || '', o: owner || null, ms: sec * 1000, left: sec * 1000, r: repeat, f: fn, busy: false, dead: false });
+    if (!__tid) { __tlast = performance.now(); __tid = setInterval(__tick, 16); }
+  }
+  function __unsched(name, owner) {
+    __tasks.forEach(function (t) { if (t.n === name && t.o === (owner || null)) t.dead = true; });
+  }
+  function __dropOwner(owner) { __tasks.forEach(function (t) { if (t.o === owner) t.dead = true; }); }
+  function __stopAll() { __tasks.forEach(function (t) { t.dead = true; }); }
+  function __run(t) {
+    var r;
+    try { r = t.f(); } catch (e) { setTimeout(function () { throw e; }, 0); return; }
+    if (r && r.then) {
+      t.busy = true;
+      r.then(function () { t.busy = false; }, function (e) { t.busy = false; throw e; });
+    }
+  }
+  function __tick() {
+    var now = performance.now(), dt = Math.min(now - __tlast, 100), n = __tasks.length;
+    __tlast = now;
+    for (var i = 0; i < n; i++) {
+      var t = __tasks[i];
+      if (t.dead || t.busy) continue;
+      t.left -= dt;
+      if (t.left > 0) continue;
+      if (t.r) t.left = Math.max(t.left + t.ms, 0); else t.dead = true;
+      __run(t);
+    }
+    __tasks = __tasks.filter(function (t) { return !t.dead; });
+    if (!__tasks.length) { clearInterval(__tid); __tid = 0; }
+  }
+});
+HELP.clones=src(function(){
+  var __clones = {}, __ccount = 0, __cseq = 0, __cscripts = {}, __cwarn = false;
+  function __onClone(base, fn) { (__cscripts[base] = __cscripts[base] || []).push(fn); }
+  function __clone(name, x, y) {
+    var s = $(name), base = s.__base || s.id;
+    if (__ccount >= 500) {
+      if (!__cwarn) { __cwarn = true; console.warn('@@LIMIT@@'); }
+      return null;
+    }
+    if (x === undefined) {
+      if (s.style.position === 'absolute') { x = parseFloat(s.style.left) || 0; y = parseFloat(s.style.top) || 0; }
+      else { var r = s.getBoundingClientRect(); x = r.left + window.pageXOffset; y = r.top + window.pageYOffset; }
+    }
+    var c = s.cloneNode(true), st = c.style;
+    c.id = base + '~' + (++__cseq);
+    c.__base = base; c.__dir = s.__dir || 0; c.__v = Object.assign({}, s.__v);
+    [].forEach.call(c.querySelectorAll('[id]'), function (e) { e.removeAttribute('id'); });
+    st.position = 'absolute'; st.margin = '0'; st.left = x + 'px'; st.top = y + 'px';
+    if (st.display === 'none') st.display = '';
+    document.body.appendChild(c);
+    (__clones[base] = __clones[base] || []).push(c);
+    __ccount++;
+    (__cscripts[base] || []).forEach(function (f) { f(c); });
+    return c;
+  }
+  function __unclone(c) {
+    if (!c || !c.__base || c.__dead) return;
+    c.__dead = true;
+    if (typeof __dropOwner === 'function') __dropOwner(c);
+    var a = __clones[c.__base], i = a ? a.indexOf(c) : -1;
+    if (i >= 0) { a.splice(i, 1); __ccount--; }
+    if (c.parentNode) c.parentNode.removeChild(c);
+  }
+  function __uncloneAll(name) { (__clones[name] || []).slice().forEach(__unclone); }
+  function __ccountOf(name) { return (__clones[name] || []).length; }
+  function __fwd(r, n) {
+    var a = ($(r).__dir || 0) * Math.PI / 180;
+    __nudge(r, Math.round(Math.cos(a) * n * 1000) / 1000, Math.round(Math.sin(a) * n * 1000) / 1000);
+  }
+  function __dir(r, d, turn) {
+    var e = $(r);
+    d = parseFloat(d) || 0;
+    e.__dir = ((turn ? (e.__dir || 0) + d : d) % 360 + 360) % 360;
+  }
+  function __getdir(r) { return Math.round(($(r).__dir || 0) * 100) / 100; }
+  function __face(r, x, y) {
+    var e = $(r), q = e.getBoundingClientRect();
+    e.__dir = (Math.atan2(y - (q.top + window.pageYOffset + q.height / 2), x - (q.left + window.pageXOffset + q.width / 2)) * 180 / Math.PI + 360) % 360;
+  }
+  function __vset(r, k, v) { var e = $(r); (e.__v || (e.__v = {}))[k] = v; }
+  function __vget(r, k) { var v = ($(r).__v || {})[k]; return v === undefined ? 0 : v; }
+  var __vp = { x: 0, y: 0, w: window.innerWidth, h: window.innerHeight };
+  function __vpSet() { __vp.x = window.pageXOffset; __vp.y = window.pageYOffset; __vp.w = window.innerWidth; __vp.h = window.innerHeight; }
+  window.addEventListener('scroll', __vpSet, { passive: true });
+  window.addEventListener('resize', __vpSet);
+  function __out(r) {
+    var e = $(r), s = e.style, x = parseFloat(s.left), y = parseFloat(s.top);
+    if (isNaN(x) || isNaN(y)) { var q = e.getBoundingClientRect(); x = q.left + window.pageXOffset; y = q.top + window.pageYOffset; }
+    var w = e.__w || (e.__w = e.offsetWidth), h = e.__h || (e.__h = e.offsetHeight);
+    return x + w < __vp.x || y + h < __vp.y || x > __vp.x + __vp.w || y > __vp.y + __vp.h;
+  }
+},{LIMIT:T('복제본은 500개까지 만들 수 있어요')});
+HELP.touch=src(function(){
+  function __refs(x, quiet) {
+    if (x && x.nodeType) return x.isConnected ? [x] : [];
+    if (typeof x === 'string' && x.charAt(x.length - 1) === '*') return (__clones[x.slice(0, -1)] || []).slice();
+    var e = x ? document.getElementById(x) : null;
+    if (!e && !quiet) $(x);
+    return e ? [e] : [];
+  }
+  function __ov(p, q, mode) {
+    if (mode === 'circle') {
+      var pr = Math.min(p.width, p.height) / 2, qr = Math.min(q.width, q.height) / 2;
+      var dx = (p.left + p.width / 2) - (q.left + q.width / 2), dy = (p.top + p.height / 2) - (q.top + q.height / 2);
+      return dx * dx + dy * dy < (pr + qr) * (pr + qr);
+    }
+    return p.left < q.right && p.right > q.left && p.top < q.bottom && p.bottom > q.top;
+  }
+  function __touch(a, b, mode) {
+    var A = __refs(a), B = __refs(b), Q = B.map(function (e) { return e.getBoundingClientRect(); });
+    for (var i = 0; i < A.length; i++) {
+      var p = A[i].getBoundingClientRect();
+      if (!p.width) continue;
+      for (var j = 0; j < B.length; j++) {
+        if (A[i] !== B[j] && Q[j].width && __ov(p, Q[j], mode)) return true;
+      }
+    }
+    return false;
+  }
+});
+HELP.hitev=src(function(){
+  var __hits = [], __useq = 0;
+  function __uid(e) { return e.__u || (e.__u = ++__useq); }
+  function __isGroup(x) { return typeof x === 'string' && x.charAt(x.length - 1) === '*'; }
+  function __onHit(a, b, f, mode) {
+    __hits.push({ a: a, b: b, f: f, mode: mode, on: {} });
+    if (__hits.length === 1) requestAnimationFrame(__hitLoop);
+  }
+  function __hitLoop() {
+    requestAnimationFrame(__hitLoop);
+    __hits.forEach(function (h) {
+      var A = __refs(h.a, true), B = __refs(h.b, true), now = {}, fire = [];
+      var Q = B.map(function (e) { return e.getBoundingClientRect(); });
+      A.forEach(function (x) {
+        var p = x.getBoundingClientRect();
+        if (!p.width) return;
+        B.forEach(function (y, j) {
+          if (x === y || !Q[j].width || !__ov(p, Q[j], h.mode)) return;
+          var k = __uid(x) + '|' + __uid(y);
+          now[k] = 1;
+          if (!h.on[k]) fire.push([x, y]);
+        });
+      });
+      h.on = now;
+      var meB = __isGroup(h.b) && !__isGroup(h.a);
+      fire.forEach(function (xy) { if (meB) h.f(xy[1], xy[0]); else h.f(xy[0], xy[1]); });
+    });
+  }
+});
+HELP.tile=src(function(){
+  var __maps = {}, __tbl = false;
+  function __map(n) {
+    var m = __maps[n];
+    if (!m) throw new Error('"' + n + '" @@NOMAP@@');
+    return m;
+  }
+  function __tmake(cv, n, c, r, s) {
+    c = Math.max(1, Math.min(300, Math.floor(c) || 1)); r = Math.max(1, Math.min(300, Math.floor(r) || 1)); s = Math.max(2, Math.floor(s) || 2);
+    var d = [];
+    for (var i = 0; i < c * r; i++) d.push(0);
+    __maps[n] = { cv: cv, c: c, r: r, s: s, d: d, solid: { 1: true },
+      col: { 1: '#475569', 2: '#22c55e', 3: '#facc15', 4: '#ef4444', 5: '#38bdf8', 6: '#a855f7', 7: '#f97316', 8: '#92400e', 9: '#ec4899' } };
+  }
+  function __tget(n, c, r) {
+    var m = __map(n);
+    c = Math.floor(c); r = Math.floor(r);
+    return c < 0 || r < 0 || c >= m.c || r >= m.r ? 0 : m.d[r * m.c + c];
+  }
+  function __tset(n, c, r, v) {
+    var m = __map(n);
+    c = Math.floor(c); r = Math.floor(r);
+    if (c >= 0 && r >= 0 && c < m.c && r < m.r) m.d[r * m.c + c] = Math.floor(v) || 0;
+  }
+  function __tfill(n, mode, v) {
+    var m = __map(n);
+    v = Math.floor(v) || 0;
+    for (var r = 0; r < m.r; r++) for (var c = 0; c < m.c; c++) {
+      if (mode === 'all' || r === 0 || c === 0 || r === m.r - 1 || c === m.c - 1) m.d[r * m.c + c] = v;
+    }
+  }
+  function __tcolor(n, v, color) { __map(n).col[Math.floor(v)] = color; }
+  function __tsolidSet(n, v, on) { __map(n).solid[Math.floor(v)] = on; }
+  function __tsolid(m, c, r) {
+    if (c < 0 || r < 0 || c >= m.c || r >= m.r) return true;
+    return !!m.solid[m.d[r * m.c + c]];
+  }
+  function __tdraw(n) {
+    var m = __map(n), g = $(m.cv).getContext('2d');
+    for (var r = 0; r < m.r; r++) for (var c = 0; c < m.c; c++) {
+      var v = m.d[r * m.c + c], x = c * m.s, y = r * m.s;
+      g.clearRect(x, y, m.s, m.s);
+      if (!v) continue;
+      g.fillStyle = m.col[v] || 'hsl(' + (v * 47 % 360) + ', 60%, 55%)';
+      g.fillRect(x, y, m.s, m.s);
+      g.strokeStyle = 'rgba(0, 0, 0, .18)'; g.lineWidth = 1;
+      g.strokeRect(x + 0.5, y + 0.5, m.s - 1, m.s - 1);
+    }
+  }
+  function __twall(n, x, y) {
+    var m = __map(n);
+    return __tsolid(m, Math.floor(x / m.s), Math.floor(y / m.s));
+  }
+  function __tcell(n, p) { return Math.floor(p / __map(n).s); }
+  function __tbox(m, el) {
+    var c = $(m.cv), o = c.getBoundingClientRect(), q = el.getBoundingClientRect(), k = c.width ? o.width / c.width : 1;
+    return { x: (q.left - o.left) / k, y: (q.top - o.top) / k, w: q.width / k, h: q.height / k, k: k };
+  }
+  function __tblock(m, x, y, w, h) {
+    var c0 = Math.floor(x / m.s), c1 = Math.floor((x + w - 0.01) / m.s), r0 = Math.floor(y / m.s), r1 = Math.floor((y + h - 0.01) / m.s);
+    for (var r = r0; r <= r1; r++) for (var c = c0; c <= c1; c++) if (__tsolid(m, c, r)) return true;
+    return false;
+  }
+  function __ttouch(name, n) {
+    var m = __map(n), b = __tbox(m, $(name));
+    return __tblock(m, b.x, b.y, b.w, b.h);
+  }
+  function __tmove(name, n, dx, dy) {
+    var el = $(name), m = __map(n), b = __tbox(m, el), x = b.x, y = b.y, i, st;
+    dx = parseFloat(dx) || 0; dy = parseFloat(dy) || 0;
+    __tbl = false;
+    st = Math.max(1, Math.ceil(Math.abs(dx)));
+    for (i = 0; i < st; i++) { if (__tblock(m, x + dx / st, y, b.w, b.h)) { __tbl = true; break; } x += dx / st; }
+    st = Math.max(1, Math.ceil(Math.abs(dy)));
+    for (i = 0; i < st; i++) { if (__tblock(m, x, y + dy / st, b.w, b.h)) { __tbl = true; break; } y += dy / st; }
+    __nudge(name, (x - b.x) * b.k, (y - b.y) * b.k);
+  }
+},{NOMAP:T('타일맵이 없어요')});
+HELP.best=src(function(){
+  var __bb = null, __bn = '';
+  function __bestOf(n) { var v = parseFloat(__load(n, 0)); return isNaN(v) ? 0 : v; }
+  function __bestShow() {
+    if (!__bb || __bb.style.display === 'none') return;
+    __bb.textContent = __bn + ': ' + __bestOf(__bn);
+  }
+  function __best(n, v) {
+    v = parseFloat(v) || 0;
+    if (v > __bestOf(n)) __save(n, v);
+    if (n === __bn) __bestShow();
+  }
+  function __bestReset(n) { __save(n, 0); if (n === __bn) __bestShow(); }
+  function __bestBoardSet(n, show) {
+    if (!__bb) {
+      __bb = document.createElement('div');
+      __bb.style.cssText = 'position: fixed; top: 56px; right: 10px; padding: 6px 14px; border-radius: 12px; background: rgba(76, 29, 149, .8); color: #fff; font: 700 18px system-ui, sans-serif; z-index: 9999; pointer-events: none';
+      document.body.appendChild(__bb);
+    }
+    __bn = n;
+    __bb.style.display = show ? '' : 'none';
+    __bestShow();
+  }
+});
+HELP.draw=src(function(){
+  var __lw = {}, __fs = {};
+  function __pen(name) { return $(name).getContext('2d'); }
+  function __clear(name) { var c = $(name); __pen(name).clearRect(0, 0, c.width, c.height); }
+  function __fill(name, color) { var c = $(name), g = __pen(name); g.fillStyle = color; g.fillRect(0, 0, c.width, c.height); }
+  function __width(name, n) { __lw[name] = Math.max(0.5, parseFloat(n) || 3); }
+  function __fsize(name, n) { __fs[name] = Math.max(4, parseFloat(n) || 20); }
+  function __rect(name, x, y, w, h, color) { var g = __pen(name); g.fillStyle = color; g.fillRect(x, y, w, h); }
+  function __orect(name, x, y, w, h, color) { var g = __pen(name); g.strokeStyle = color; g.lineWidth = __lw[name] || 3; g.lineJoin = 'round'; g.strokeRect(x, y, w, h); }
+  function __circle(name, x, y, r, color) { var g = __pen(name); g.fillStyle = color; g.beginPath(); g.arc(x, y, Math.max(0, r), 0, Math.PI * 2); g.fill(); }
+  function __ocircle(name, x, y, r, color) { var g = __pen(name); g.strokeStyle = color; g.lineWidth = __lw[name] || 3; g.beginPath(); g.arc(x, y, Math.max(0, r), 0, Math.PI * 2); g.stroke(); }
+  function __line(name, x1, y1, x2, y2, color) { var g = __pen(name); g.strokeStyle = color; g.lineWidth = __lw[name] || 3; g.lineCap = 'round'; g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); g.stroke(); }
+  function __text(name, text, x, y, color) { var g = __pen(name); g.fillStyle = color; g.font = (__fs[name] || 20) + 'px sans-serif'; g.fillText(text, x, y); }
+});
+HELP.store=src(function(){
+  function __save(k, v) {
+    k = 'ffb:' + __pid + ':' + k;
+    __mem[k] = v;
+    try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {}
+    __sync(k, v);
+  }
+  function __load(k, d) {
+    k = 'ffb:' + __pid + ':' + k;
+    try {
+      var s = localStorage.getItem(k);
+      if (s !== null) return JSON.parse(s);
+    } catch (e) {}
+    return k in __mem ? __mem[k] : d;
+  }
+});
+var HELP_DEPS={beep:['snd'],sfx:['snd'],note:['snd'],hit:['$'],touch:['$','clones'],hitev:['$','touch'],rpos:['$'],nudge:['$'],where:['$'],stay:['$'],follow:['$','cursor'],image:['$','draw'],get:['$'],set:['$'],add:['$'],size:['$'],move:['$'],show:['$'],draw:['$'],clones:['$','me','sched','nudge'],sched:['me'],tile:['$','nudge'],best:['store']};
 
 function dbgHelper(vars){
   return 'var __dq = Promise.resolve(), __dgo = null, __dfree = 0, __drun = 0, __dbusy = {};\n'+
   'function __dvars() {\n  var o = [];\n'+vars.map(function(v){ return '  try { o.push([ '+lit(v[0])+', typeof '+v[1]+" === 'undefined' ? '' : __dshow("+v[1]+') ]); } catch (e) {}\n'; }).join('')+'  return o;\n}\n'+
   "function __dshow(v) { if (typeof v === 'function') return 'ƒ'; try { var t = typeof v === 'string' ? JSON.stringify(v) : (typeof v === 'object' ? JSON.stringify(v) : String(v)); return t.length > 70 ? t.slice(0, 70) + '…' : t; } catch (e) { return String(v); } }\n"+
-  "function __step(id) {\n  return new Promise(function (done) {\n    __dq = __dq.then(function () {\n      if (__dfree) return;\n      return new Promise(function (go) { __dgo = go; parent.postMessage({ ffbhStep: { id: id, vars: __dvars() } }, '*'); });\n    }).then(done);\n  });\n}\n"+
+  "function __step(id) {\n  return new Promise(function (done) {\n    __dq = __dq.then(function () {\n      if (__dfree || (typeof __ccount !== 'undefined' && __ccount > 8)) return;\n      return new Promise(function (go) { __dgo = go; parent.postMessage({ ffbhStep: { id: id, vars: __dvars() } }, '*'); });\n    }).then(done);\n  });\n}\n"+
   "function __dbegin() { __drun++; }\nfunction __dend() { if (--__drun <= 0) { __drun = 0; __dfree = 0; parent.postMessage({ ffbhStepEnd: 1 }, '*'); } }\n"+
   "addEventListener('message', function (e) {\n  var d = e.data;\n  if (!d || !d.ffbhDbg) return;\n  if (d.ffbhDbg === 'free') __dfree = 1;\n  if (__dgo) { var g = __dgo; __dgo = null; g(); }\n});"; }
 
@@ -379,9 +788,14 @@ function build(ws,opts){
   });
   js=G.finish(handlers+(starts?(handlers?'\n':'')+starts:''));
   } finally{ G.STATEMENT_PREFIX=null; DBG=false; }
+  if(NEED.clones) dbgVars.push([T('복제본 수'),'__ccount']);
   if(opts.debug) js='// '+T('한 블록씩 실행')+'\n'+dbgHelper(dbgVars)+'\n\n'+js;
   Object.keys(HELP_DEPS).forEach(function(k){ if(NEED[k]) HELP_DEPS[k].forEach(need); });
   var helpers=Object.keys(HELP).filter(function(k){ return NEED[k]; }).map(function(k){ return HELP[k]; }).join('\n');
+  if(NEED.store){ // saved values belong to this project: the preview keeps them in the editor (it cannot use its own storage), a downloaded page uses the browser storage
+    var saved={}; if(opts.saved) Object.keys(opts.saved).forEach(function(k){ saved[k]=opts.saved[k]; });
+    var pidv=String(opts.pid||title||'page');
+    helpers='var __pid = '+lit(pidv).replace(/</g,'\\u003c')+';\nvar __mem = '+JSON.stringify(saved).replace(/</g,'\\u003c')+';\n'+(opts.trap?'function __sync(k, v) { try { parent.postMessage({ ffbhStore: [k, v] }, \'*\'); } catch (e) {} }':'function __sync() {}')+'\n'+helpers; }
   if(NEED.imgs){ var used=Object.keys(USED).filter(function(id){ return IMGS[id]; }); helpers='// '+T('내 그림')+'\nvar __imgs = {\n'+used.map(function(id){ return '  '+lit(IMGS[id].name)+': '+lit(IMGS[id].data); }).join(',\n')+'\n};\n'+(NEED.image?'for (var __k in __imgs) { var __im = new Image(); __im.src = __imgs[__k]; }\n':'')+helpers; }
   if(NEED.mp3){ helpers='var __mp3s = {\n'+Object.keys(USEDS).filter(function(n){ return SNDS[n]; }).map(function(n){ return '  '+lit(n)+': '+lit(SNDS[n].data); }).join(',\n')+'\n};\n'+helpers; }
   if(helpers) js='// '+T('도우미 함수')+'\n'+helpers+'\n\n'+js;
@@ -414,7 +828,7 @@ function toolbox(){
   var img={shadow:{type:'val_myimg'}};
   return {kind:'categoryToolbox',contents:[
     {kind:'category',name:T('시작'),colour:C.ev,contents:[
-      {kind:'block',type:'ev_start'},lab('누르거나 쓰면'),{kind:'block',type:'ev_click'},{kind:'block',type:'ev_drag'},{kind:'block',type:'ev_change'},{kind:'block',type:'ev_key'},{kind:'block',type:'ev_keyhold'},{kind:'block',type:'ev_keyup'},lab('닿으면'),{kind:'block',type:'ev_hit'},lab('시간마다'),{kind:'block',type:'ev_timer'}]},
+      {kind:'block',type:'ev_start'},lab('누르거나 쓰면'),{kind:'block',type:'ev_click'},{kind:'block',type:'ev_drag'},{kind:'block',type:'ev_change'},{kind:'block',type:'ev_key'},{kind:'block',type:'ev_keyhold'},{kind:'block',type:'ev_keyup'},lab('닿으면'),{kind:'block',type:'ev_hit'},lab('복제본'),{kind:'block',type:'ev_clone'},lab('시간마다'),{kind:'block',type:'ev_timer'}]},
     {kind:'category',name:T('화면'),colour:C.page,contents:[
       {kind:'block',type:'page_root'},lab('글'),{kind:'block',type:'el_heading'},{kind:'block',type:'el_text'},{kind:'block',type:'el_list'},{kind:'block',type:'el_link'},
       lab('누르고 쓰기'),{kind:'block',type:'el_button'},{kind:'block',type:'el_input'},
@@ -430,6 +844,8 @@ function toolbox(){
       {kind:'block',type:'draw_line',inputs:{X1:n(10),Y1:n(10),X2:n(200),Y2:n(150),COLOR:shc('#111111')}},
       {kind:'block',type:'draw_text',inputs:{TEXT:sh('text',T('안녕')),X:n(20),Y:n(40),COLOR:shc('#111111')}},
       {kind:'block',type:'draw_image',inputs:{IMG:img,X:n(20),Y:n(20),W:n(80)}},
+      lab('칠하기와 굵기'),{kind:'block',type:'draw_fill',inputs:{COLOR:shc('#e0f2fe')}},{kind:'block',type:'draw_width',inputs:{N:n(6)}},{kind:'block',type:'draw_fsize',inputs:{N:n(28)}},
+      {kind:'block',type:'draw_orect',inputs:{X:n(30),Y:n(30),W:n(100),H:n(60),COLOR:shc('#ef4444')}},{kind:'block',type:'draw_ocircle',inputs:{X:n(160),Y:n(110),R:n(40),COLOR:shc('#22c55e')}},
       lab('누른 곳'),{kind:'block',type:'ev_drag'},{kind:'block',type:'val_mouse'},lab('부딪힘'),{kind:'block',type:'val_dist',inputs:{X1:n(0),Y1:n(0),X2:n(50),Y2:n(50)}}]},
     {kind:'category',name:T('바꾸기'),colour:C.act,contents:[
       {kind:'block',type:'act_set',inputs:{VALUE:sh('text',T('안녕!'))}},
@@ -451,17 +867,31 @@ function toolbox(){
     {kind:'category',name:T('게임'),colour:'#e8590c',contents:[
       lab('닿으면'),{kind:'block',type:'ev_hit'},{kind:'block',type:'val_hit'},
       lab('점수'),{kind:'block',type:'act_score',inputs:{N:n(1)}},{kind:'block',type:'act_score',fields:{MODE:'set'},inputs:{N:n(0)}},{kind:'block',type:'val_score'},{kind:'block',type:'act_scoreboard'},
-      lab('위치'),{kind:'block',type:'act_rpos'},{kind:'block',type:'act_stay'},{kind:'block',type:'act_nudge2',inputs:{DX:n(10),DY:n(0)}},
+      lab('최고 점수'),{kind:'block',type:'act_best',inputs:{N:{block:{type:'val_score'}}}},{kind:'block',type:'act_bestboard'},lab('위치'),{kind:'block',type:'act_rpos'},{kind:'block',type:'act_stay'},{kind:'block',type:'act_nudge2',inputs:{DX:n(10),DY:n(0)}},
       lab('소리'),{kind:'block',type:'act_sfx'},{kind:'block',type:'act_restart'}]},
+    {kind:'category',name:T('복제'),colour:C.clone,contents:[
+      lab('만들고 지우기'),{kind:'block',type:'clone_make'},{kind:'block',type:'clone_make_at',inputs:{X:n(100),Y:n(300)}},{kind:'block',type:'clone_del'},{kind:'block',type:'clone_delall'},
+      lab('복제본마다 따로'),{kind:'block',type:'ev_clone'},{kind:'block',type:'clone_setv',inputs:{V:n(3)}},{kind:'block',type:'clone_getv'},
+      lab('움직이기'),{kind:'block',type:'clone_fwd',inputs:{N:n(6)}},{kind:'block',type:'clone_dir',inputs:{N:n(270)}},{kind:'block',type:'clone_face',inputs:{X:n(200),Y:n(200)}},{kind:'block',type:'clone_getdir'},
+      {kind:'block',type:'act_nudge2',inputs:{DX:n(0),DY:n(-6)}},{kind:'block',type:'act_move',inputs:{X:n(100),Y:n(100)}},{kind:'block',type:'val_where'},
+      lab('살펴보기'),{kind:'block',type:'clone_count'},{kind:'block',type:'clone_out'},{kind:'block',type:'val_hit'},{kind:'block',type:'ev_hit'},
+      lab('시간'),{kind:'block',type:'time_every',inputs:{SEC:n(0.03)}},{kind:'block',type:'time_after',inputs:{SEC:n(1)}}]},
+    {kind:'category',name:T('타일맵'),colour:C.tile,contents:[
+      lab('만들기'),{kind:'block',type:'el_canvas'},{kind:'block',type:'tile_make',inputs:{C:n(10),R:n(7),S:n(32)}},{kind:'block',type:'tile_fill',inputs:{V:n(1)}},{kind:'block',type:'tile_set',inputs:{C:n(3),R:n(2),V:n(1)}},
+      {kind:'block',type:'tile_color',inputs:{V:n(1),COLOR:shc('#9ca3af')}},{kind:'block',type:'tile_solid',inputs:{V:n(1)}},{kind:'block',type:'tile_draw'},
+      lab('벽 살펴보기'),{kind:'block',type:'tile_get',inputs:{C:n(0),R:n(0)}},{kind:'block',type:'tile_wall',inputs:{X:n(40),Y:n(40)}},{kind:'block',type:'tile_cell',inputs:{N:n(100)}},{kind:'block',type:'tile_touch'},
+      lab('벽에 막히며 움직이기'),{kind:'block',type:'tile_move',inputs:{DX:n(4),DY:n(0)}},{kind:'block',type:'tile_blocked'}]},
     {kind:'category',name:T('소리·알림'),colour:'#2e9bd6',contents:[
       lab('효과음'),{kind:'block',type:'act_sfx'},{kind:'block',type:'act_sfx',fields:{SFX:'win'}},
       lab('음악'),{kind:'block',type:'act_note'},{kind:'block',type:'act_note',fields:{NOTE:'E4',BEAT:'0.5'}},{kind:'block',type:'act_tempo',inputs:{N:n(120)}},{kind:'block',type:'act_mp3'},{kind:'block',type:'act_sound_stop'},
       lab('삐 소리'),{kind:'block',type:'act_beep',inputs:{SEC:n(0.3)}},
       lab('알림'),{kind:'block',type:'act_alert',inputs:{VALUE:sh('text',T('안녕하세요!'))}}]},
     {kind:'category',name:T('시간'),colour:'#3a6fd8',contents:[
-      {kind:'block',type:'act_after',inputs:{SEC:n(1)}},{kind:'block',type:'ev_timer'},{kind:'block',type:'act_stop'},{kind:'block',type:'act_restart'},{kind:'block',type:'val_time'},{kind:'block',type:'val_today'}]},
+      {kind:'block',type:'act_after',inputs:{SEC:n(1)}},{kind:'block',type:'ev_timer'},{kind:'block',type:'act_stop'},
+      lab('이름 붙여 멈출 수 있는'),{kind:'block',type:'time_after',inputs:{SEC:n(2)}},{kind:'block',type:'time_every',inputs:{SEC:n(1)}},{kind:'block',type:'time_stop'},{kind:'block',type:'time_stopall'},lab('그 밖에'),{kind:'block',type:'act_restart'},{kind:'block',type:'val_time'},{kind:'block',type:'val_today'}]},
     {kind:'category',name:T('저장·로그'),colour:'#8e6bbf',contents:[
       {kind:'block',type:'act_store',inputs:{NAME:sh('text',T('최고점')),VALUE:n(0)}},{kind:'block',type:'val_load',inputs:{NAME:sh('text',T('최고점')),DEF:n(0)}},
+      lab('최고 점수 (프로젝트마다 따로 저장)'),{kind:'block',type:'act_best',inputs:{N:{block:{type:'val_score'}}}},{kind:'block',type:'val_best'},{kind:'block',type:'act_bestboard'},{kind:'block',type:'act_bestreset'},
       lab('기록'),{kind:'block',type:'act_log',inputs:{VALUE:sh('text',T('안녕!'))}}]},
     {kind:'sep'},
     {kind:'category',name:T('조건'),colour:'#5b80a5',contents:[
@@ -493,5 +923,12 @@ function toolbox(){
   ]};
 }
 
-window.BH={SNDS:SNDS, missingPics:missingPics, markPics:markPics, IMGS:IMGS, build:build, toolbox:toolbox, EL:EL, KNOWN:KNOWN, elNames:elNames, C:C};
+/* run fn with another project's pictures and sounds in place (a shared project opened play-only), then put ours back */
+function withAssets(imgs,snds,fn){
+  var oi={}, os={}; Object.keys(IMGS).forEach(function(k){ oi[k]=IMGS[k]; delete IMGS[k]; }); Object.keys(SNDS).forEach(function(k){ os[k]=SNDS[k]; delete SNDS[k]; });
+  Object.keys(imgs||{}).forEach(function(k){ IMGS[k]=imgs[k]; }); Object.keys(snds||{}).forEach(function(k){ SNDS[k]=snds[k]; });
+  try{ return fn(); }
+  finally{ Object.keys(IMGS).forEach(function(k){ delete IMGS[k]; }); Object.keys(SNDS).forEach(function(k){ delete SNDS[k]; }); Object.keys(oi).forEach(function(k){ IMGS[k]=oi[k]; }); Object.keys(os).forEach(function(k){ SNDS[k]=os[k]; }); }
+}
+window.BH={withAssets:withAssets, SNDS:SNDS, missingPics:missingPics, markPics:markPics, IMGS:IMGS, build:build, toolbox:toolbox, EL:EL, KNOWN:KNOWN, elNames:elNames, C:C};
 })();
