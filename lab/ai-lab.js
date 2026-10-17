@@ -14,7 +14,7 @@ var CHIPS=[['🔍 지금 무슨 일이 일어나요?','지금 이 실험에서 �
 function local(){ try{ return FFAI.isLocal(); }catch(e){ return false; } }
 function ctxLine(){ var e=LAB.cur; if(!e) return ''; var p=e.p, parts=[];
   e.params.forEach(function(q){ if(q.show&&!q.show(p)) return; var v=p[q.id];
-    if(q.type==='check') return; if(q.type==='seg'){ var o=q.opts.filter(function(x){ return x[0]===v; })[0]; parts.push(T(q.l)+': '+(o?T(o[1]):v)); return; }
+    if(q.type==='check') return; if(q.type==='text'){ parts.push(T(q.l)+': '+String(v).slice(0,60)); return; } if(q.type==='seg'){ var o=q.opts.filter(function(x){ return x[0]===v; })[0]; parts.push(T(q.l)+': '+(o?T(o[1]):v)); return; }
     parts.push(T(q.l)+' '+LAB.H.fmt(v,q.d!=null?q.d:(String(q.step).split('.')[1]||'').length)+(q.u?' '+q.u:'')); });
   return parts.join(' · '); }
 function drawCtx(){ var e=LAB.cur; if(!e) return; var c=$('aiCtx'); c.innerHTML=''; var b=document.createElement('b'); b.textContent=e.icon+' '+T(e.name); c.appendChild(b);
