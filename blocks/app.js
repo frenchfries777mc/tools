@@ -66,10 +66,16 @@ function stoppedPage(){ return '<!DOCTYPE html><html><head><meta charset="UTF-8"
 function showPreview(){ if(window.matchMedia('(max-width:900px)').matches&&document.body.className==='v-blocks'){ var b=document.querySelector('#seg button[data-v="prev"]'); if(b) b.click(); } else setPane('prev'); }
 function refresh(force){
   if(runState==='stop'&&force!=='run'){ if($('pCode').classList.contains('on')) showCode(); return; }
+  checkPics();
   var prev; try{ prev=BH.build(ws,{trap:true}); }catch(err){ console.error(err); return; }
   if(force||prev!==lastPrev){ lastPrev=prev; clearLog(); $('frame').srcdoc=prev; if(runState==='pause') setRun('run'); }
   if($('pCode').classList.contains('on')) showCode();
 }
+/* "내 그림" blocks without a picture: warning on the block, hint toast, placeholder in the preview */
+var picKey='';
+function checkPics(){ var n=BH.markPics(ws), key=BH.missingPics(ws).map(function(b){ return b.id; }).join(',');
+  if(n&&key!==picKey&&!loading) toast(T('그림을 고르지 않은 "내 그림" 블록이 있어요. 블록의 그림 칸을 눌러 골라 주세요'));
+  picKey=key; }
 function hl(src){
   var e=function(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); };
   return src.split(/(<script>[\s\S]*?<\/script>)/).map(function(part,i){
@@ -115,7 +121,7 @@ function saveNow(){ clearTimeout(saveT); if(!P.cur) return; var d=snapshot(), ok
 function save(){ clearTimeout(saveT); saveT=setTimeout(saveNow,300); }
 window.addEventListener('pagehide',function(){ saveNow(); });
 document.addEventListener('visibilitychange',function(){ if(document.hidden) saveNow(); });
-function setImgs(o){ var I=BH.IMGS; Object.keys(I).forEach(function(k){ delete I[k]; }); if(o&&typeof o==='object') Object.keys(o).forEach(function(k){ var m=o[k]; if(m&&typeof m.data==='string'&&/^data:image\//.test(m.data)) I[k]=m; }); }
+function setImgs(o){ var I=BH.IMGS; Object.keys(I).forEach(function(k){ delete I[k]; }); if(o&&typeof o==='object') Object.keys(o).forEach(function(k){ var m=o[k]; if(m&&typeof m.data==='string'&&/^data:image\//.test(m.data)) I[k]=m; }); setTimeout(regenThumbs,0); }
 $('projName').addEventListener('input',save);
 $('projName').addEventListener('keydown',function(e){ if(e.key==='Enter') this.blur(); });
 function blank(){ loadJSON({blocks:{languageVersion:0,blocks:[{type:'page_root',x:30,y:30,fields:{TITLE:T('나의 웹페이지'),BG:'#ffffff',CENTER:true},inputs:{BODY:{block:{type:'el_heading',fields:{SIZE:'h1',TEXT:T('안녕하세요'),NAME:T('제목')+'1'}}}}}]}}); }
@@ -179,8 +185,10 @@ window.addEventListener('resize',function(){ Blockly.svgResize(ws); });
 /* ---------- 내 그림: drawing pad, photos, manager ---------- */
 var I=BH.IMGS;
 function uniqName(base,skip){ base=(base||T('그림')).trim().slice(0,30)||T('그림'); var names=Object.keys(I).filter(function(k){ return k!==skip; }).map(function(k){ return I[k].name; }); if(names.indexOf(base)<0) return base; var b=base.replace(/\d+$/,''), k=2; while(names.indexOf(b+k)>=0) k++; return b+k; }
-function thumbOf(img,w,h){ var k=Math.min(1,88/Math.max(w,h)), c=document.createElement('canvas'); c.width=Math.max(1,Math.round(w*k)); c.height=Math.max(1,Math.round(h*k)); c.getContext('2d').drawImage(img,0,0,c.width,c.height); return c.toDataURL('image/png'); }
-function putImage(id,name,data,w,h,src){ I[id]={name:name,data:data,w:w,h:h,thumb:thumbOf(src,w,h)}; }
+function thumbOf(img,w,h){ var k=Math.min(1,88/Math.max(w,h)), c=document.createElement('canvas'); c.width=Math.max(1,Math.round(w*k)); c.height=Math.max(1,Math.round(h*k)); var g=c.getContext('2d'); g.drawImage(img,0,0,c.width,c.height); g.strokeStyle='rgba(120,130,150,.9)'; g.lineWidth=1; g.strokeRect(.5,.5,c.width-1,c.height-1); return c.toDataURL('image/png'); }
+function putImage(id,name,data,w,h,src){ I[id]={name:name,data:data,w:w,h:h,thumb:thumbOf(src,w,h),ol:1}; }
+function regenThumbs(){ var todo=Object.keys(I).filter(function(k){ return !I[k].ol; }), left=todo.length; if(!left) return; // older saved pictures get the thin outline too
+  todo.forEach(function(k){ var m=I[k], im=new Image(); im.onload=function(){ try{ m.thumb=thumbOf(im,m.w||im.width,m.h||im.height); m.ol=1; }catch(e){} if(!--left) afterImgChange(); }; im.onerror=function(){ m.ol=1; if(!--left) afterImgChange(); }; im.src=m.data; }); }
 function usedBy(id){ return ws.getAllBlocks(false).filter(function(b){ return b.getField&&b.getField('IMG')&&b.getFieldValue('IMG')===id; }); }
 function afterImgChange(){ ws.getAllBlocks(false).forEach(function(b){ var f=b.getField&&b.getField('IMG'); if(f){ var v=f.getValue(); if(f.getOptions) f.getOptions(false); f.setValue(v); if(f.forceRerender) f.forceRerender(); } }); var tb=ws.getToolbox(); if(tb&&tb.refreshSelection) tb.refreshSelection(); refresh(true); save(); }
 function addToPage(id){
@@ -209,7 +217,7 @@ $('padSize').addEventListener('input',function(){ size=+this.value; $('padDot').
 function snap(){ hist.push(pg.getImageData(0,0,PW,PH)); if(hist.length>25) hist.shift(); }
 $('padUndo').onclick=function(){ if(hist.length) pg.putImageData(hist.pop(),0,0); };
 $('padClear').onclick=function(){ snap(); pg.clearRect(0,0,PW,PH); };
-$('padBg').addEventListener('change',function(){ $('padWrap').classList.toggle('clear',this.checked); });
+$('padBg').addEventListener('change',function(){ $('padWrap').classList.toggle('clear',this.checked); lsSet('ffblocks.padclear',this.checked?'1':'0'); });
 function pt(e){ var r=pad.getBoundingClientRect(); return {x:(e.clientX-r.left)*PW/r.width, y:(e.clientY-r.top)*PH/r.height, p:e.pointerType==='pen'&&e.pressure?Math.max(.25,e.pressure*1.6):1}; }
 function stroke(a,b){ pg.save(); pg.globalCompositeOperation=tool==='eraser'?'destination-out':'source-over'; pg.strokeStyle=col; pg.fillStyle=col; pg.lineCap='round'; pg.lineJoin='round';
   pg.lineWidth=size*(tool==='eraser'?2:1)*b.p; pg.beginPath(); pg.moveTo(a.x,a.y); pg.lineTo(b.x,b.y); pg.stroke(); pg.restore(); }
@@ -229,7 +237,7 @@ function flood(x,y){
   pg.putImageData(d,0,0);
 }
 function openPad(id){
-  padId=id||null; hist=[]; pg.clearRect(0,0,PW,PH); $('padName').value=id?I[id].name:uniqName(T('내 그림')); $('padBg').checked=false; $('padWrap').classList.remove('clear');
+  padId=id||null; hist=[]; pg.clearRect(0,0,PW,PH); $('padName').value=id?I[id].name:uniqName(T('내 그림')); var wantClear=!id&&lsGet('ffblocks.padclear')==='1'; $('padBg').checked=wantClear; $('padWrap').classList.toggle('clear',wantClear);
   tool='pen'; syncTools(); setCol(col);
   if(id){ var im=new Image(); im.onload=function(){ var k=Math.min(PW/im.width,PH/im.height,1), w=im.width*k, h=im.height*k; pg.drawImage(im,(PW-w)/2,(PH-h)/2,w,h); }; im.src=I[id].data; $('padBg').checked=!!I[id].clear; $('padWrap').classList.toggle('clear',!!I[id].clear); }
   $('padDlg').classList.add('open');

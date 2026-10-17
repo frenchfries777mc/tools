@@ -36,6 +36,12 @@ function imgField(){
   });
 }
 function imgName(id){ return IMGS[id]?IMGS[id].name:''; }
+/* a picture block with no picture chosen shows a dashed placeholder with a hint instead of a broken image */
+function placeholderSrc(w){ w=Math.max(120,Math.min(+w||240,2000)); var h=Math.round(w*0.55), fs=Math.max(13,Math.min(28,Math.round(w/14))), msg=T('그림을 골라 주세요');
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'"><rect x="2" y="2" width="'+(w-4)+'" height="'+(h-4)+'" rx="10" fill="#fffbeb" stroke="#f59e0b" stroke-width="3" stroke-dasharray="10 7"/><text x="'+(w/2)+'" y="'+(h/2-fs*0.2)+'" font-size="'+fs*1.8+'" text-anchor="middle" dominant-baseline="middle">🖼</text><text x="'+(w/2)+'" y="'+(h/2+fs*1.5)+'" font-size="'+fs+'" font-family="sans-serif" font-weight="700" fill="#92400e" text-anchor="middle">'+esc(msg)+'</text></svg>';
+  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg); }
+function missingPics(ws){ return ws.getAllBlocks(false).filter(function(b){ return b.type==='el_picture'&&b.isEnabled()&&!IMGS[b.getFieldValue('IMG')]; }); }
+function markPics(ws){ var n=0; ws.getAllBlocks(false).forEach(function(b){ if(b.type!=='el_picture'||!b.setWarningText) return; var miss=!IMGS[b.getFieldValue('IMG')]; if(miss) n++; var ic=b.getIcon&&b.getIcon('warning'), cur=ic&&ic.getText?ic.getText():null, msg=T('그림을 골라 주세요. 그림판으로 그리거나 사진을 넣어요'); if(miss){ if(cur!==msg) b.setWarningText(msg); } else if(cur) b.setWarningText(null); }); return n; }
 function lit(s){ return JSON.stringify(String(s==null?'':s)); }
 var NEED={};
 function need(n){ NEED[n]=1; }
@@ -243,7 +249,7 @@ function bodyHTML(first,ind,one){
     else if(t==='el_text') out+=i+'<p'+idAttr(b)+'>'+esc(b.getFieldValue('TEXT'))+'</p>\n';
     else if(t==='el_button') out+=i+'<button'+idAttr(b)+'>'+esc(b.getFieldValue('TEXT'))+'</button>\n';
     else if(t==='el_input') out+=i+'<input'+idAttr(b)+' type="'+b.getFieldValue('KIND')+'" placeholder="'+esc(b.getFieldValue('TEXT'))+'">\n';
-    else if(t==='el_picture'){ var im=IMGS[b.getFieldValue('IMG')]; out+=i+'<img'+idAttr(b)+' src="'+(im?im.data:'')+'" width="'+b.getFieldValue('W')+'" alt="'+esc(im?im.name:'')+'">\n'; }
+    else if(t==='el_picture'){ var im=IMGS[b.getFieldValue('IMG')]; out+=i+'<img'+idAttr(b)+' src="'+(im?im.data:placeholderSrc(b.getFieldValue('W')))+'" width="'+b.getFieldValue('W')+'" alt="'+esc(im?im.name:T('그림을 골라 주세요'))+'">\n'; }
     else if(t==='el_image') out+=i+'<img'+idAttr(b)+' src="'+esc(b.getFieldValue('SRC'))+'" width="'+b.getFieldValue('W')+'" alt="">\n';
     else if(t==='el_link') out+=i+'<a'+idAttr(b)+' href="'+esc(b.getFieldValue('HREF'))+'" target="_blank">'+esc(b.getFieldValue('TEXT'))+'</a>\n';
     else if(t==='el_canvas') out+=i+'<canvas'+idAttr(b)+' width="'+b.getFieldValue('W')+'" height="'+b.getFieldValue('H')+'"></canvas>\n';
@@ -379,5 +385,5 @@ function toolbox(){
   ]};
 }
 
-window.BH={IMGS:IMGS, build:build, toolbox:toolbox, EL:EL, KNOWN:KNOWN, elNames:elNames, C:C};
+window.BH={missingPics:missingPics, markPics:markPics, IMGS:IMGS, build:build, toolbox:toolbox, EL:EL, KNOWN:KNOWN, elNames:elNames, C:C};
 })();
