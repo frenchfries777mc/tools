@@ -500,5 +500,12 @@ FFT.add({
 "(고른 상자) 조금씩 옮기기 · Shift는 크게":["(picked box) Nudge · Shift: bigger steps","(cuadro elegido) Mover un poco · Shift: más","(élément choisi) Déplacer un peu · Maj : plus","(gewähltes Feld) Leicht verschieben · Umschalt: mehr","（選んだ枠）少しずつ移動・Shiftで大きく"],
 "(고른 도형·그림) 지우기":["(picked shape or picture) Delete","(forma o imagen elegida) Eliminar","(forme ou image choisie) Supprimer","(gewählte Form oder Bild) Löschen","（選んだ図形・画像）消す"],
 "Shift + 끌기":["Shift + drag","Shift + arrastrar","Maj + glisser","Umschalt + ziehen","Shift + ドラッグ"],
-"(도형) 비율 지키기 · 선은 45도씩":["(shapes) Keep proportions · lines snap to 45°","(formas) Mantener proporción · líneas cada 45°","(formes) Garder les proportions · lignes par 45°","(Formen) Seitenverhältnis halten · Linien in 45°-Schritten","（図形）比率を保つ・線は45度ずつ"]
+"(도형) 비율 지키기 · 선은 45도씩":["(shapes) Keep proportions · lines snap to 45°","(formas) Mantener proporción · líneas cada 45°","(formes) Garder les proportions · lignes par 45°","(Formen) Seitenverhältnis halten · Linien in 45°-Schritten","（図形）比率を保つ・線は45度ずつ"],
+"실험·템플릿·단원 검색":["Search experiments, templates, units", "Buscar experimentos, plantillas, unidades", "Chercher expériences, modèles, unités", "Experimente, Vorlagen, Einheiten suchen", "実験・テンプレート・単元を検索"],
+"실험 목록을 불러오는 중…":["Loading experiments…", "Cargando experimentos…", "Chargement des expériences…", "Experimente werden geladen…", "実験を読み込み中…"],
+"실험 목록을 불러오지 못했어요":["Could not load the experiment list", "No se pudo cargar la lista", "Impossible de charger la liste", "Liste konnte nicht geladen werden", "実験一覧を読み込めませんでした"],
+"그 밖의 실험":["Other experiments", "Otros experimentos", "Autres expériences", "Weitere Experimente", "その他の実験"],
+"검색 결과가 없어요":["No results", "Sin resultados", "Aucun résultat", "Keine Ergebnisse", "結果がありません"],
+"개 실험·템플릿":[" experiments and templates", " experimentos y plantillas", " expériences et modèles", " Experimente und Vorlagen", "件の実験・テンプレート"],
+"실험을 골라 주세요":["Pick an experiment", "Elige un experimento", "Choisissez une expérience", "Experiment wählen", "実験を選んでください"]
 });

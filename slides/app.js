@@ -204,7 +204,7 @@ function clip(t,wpx,fs){ var w=0, o=''; for(var i=0;i<t.length;i++){ var c=t.cha
    Only the editor's main view and presenting run it; thumbnails, the sorter, print and the presenter view show a placeholder card. */
 function liveCfg(s){ try{ var c=JSON.parse(s.live||'null'); if(c&&(c.k==='lab'&&typeof c.e==='string'||(c.k==='block'||c.k==='html')&&typeof c.h==='string')) return c; }catch(e){} return null; }
 var ESC_JS='<scr'+'ipt>addEventListener("keydown",function(e){if(e.key==="Escape")parent.postMessage({ffslLive:"esc"},"*")},true)</scr'+'ipt>';
-function liveName(c){ return c.k==='lab'?T(c.n||''):c.n||''; }
+function liveName(c){ if(c.k!=='lab') return c.n||''; var x=labCat&&labCat.by[c.e]; return x?x.tn:T(c.n||''); }
 function liveView(s,b,th,edit,opt){
   var d=document.createElement('div'), c=liveCfg(s); d.className='dv live'+(c?'':' empty'); d.dataset.f='live';
   d.style.cssText='left:'+b.x+'px;top:'+b.y+'px;width:'+b.w+'px;height:'+b.h+'px;color:'+th.fg+';';
@@ -602,6 +602,7 @@ function openData(){ var s=deck.slides[cur]; if(!s||(s.layout!=='table'&&s.layou
 $('dataOk').onclick=function(){ var s=deck.slides[cur]; if(!s) return closeDlg('dataDlg',null); pushUndo(); s.data=$('dataIn').value.replace(/\r/g,'').trim(); s.ctype=$('dataType').value; closeDlg('dataDlg',null); changed(); };
 $('dataIn').addEventListener('keydown',function(e){ e.stopPropagation(); if(e.key==='Escape') closeDlg('dataDlg',null); });
 /* live screen dialog */
+/* LABX: only the fallback names of the first 9 experiments (old decks, and if the Lab page cannot be read); the real list comes from Lab itself (loadLabCat) */
 var LABX=[['func','함수 그래프'],['prob','확률 실험'],['trig','단위원과 삼각함수'],['proj','포물선 운동'],['pend','진자'],['spring','용수철과 훅의 법칙'],['refr','빛의 굴절'],['wave','파동의 간섭'],['ohm','전기 회로와 옴의 법칙']], LIVE_MAX=1500000;
 function bhProjects(){ try{ var o=JSON.parse(localStorage.getItem('ffblocks.projects')||'null'); return o&&Array.isArray(o.list)?o.list.filter(function(e){ return e&&e.id&&localStorage.getItem('ffblocks.p.'+e.id); }):[]; }catch(e){ return []; } }
 /* builds the final HTML of a saved Block HTML project in a hidden same-origin Block HTML page (#embed=<id>: read only, nothing is saved there) */
@@ -612,18 +613,46 @@ function buildBlock(id){ return new Promise(function(res,rej){ var fr=document.c
   fr.style.cssText='position:fixed;left:-9999px;top:0;width:900px;height:700px;border:0;visibility:hidden'; fr.setAttribute('aria-hidden','true'); fr.src='../blocks/index.html#embed='+encodeURIComponent(id); document.body.appendChild(fr); }); }
 function liveSrc(){ var r=document.querySelector('input[name="liveK"]:checked'); return r?r.value:'block'; }
 function livePanels(){ var k=liveSrc(); ['block','lab','html'].forEach(function(p){ $('livePan_'+p).hidden=p!==k; }); }
+/* Fry Lab catalog: read at runtime from a hidden same-origin Lab page (LAB.list = every experiment, LABCUR = curriculum units), so new Lab experiments show up here by themselves */
+var labCat=null, labCatP=null, labPick='';
+function loadLabCat(){ if(labCat) return Promise.resolve(labCat); if(labCatP) return labCatP;
+  labCatP=new Promise(function(res,rej){ var fr=document.createElement('iframe'), done=false, tm;
+    function fin(v,err){ if(done) return; done=true; clearTimeout(tm); try{ fr.remove(); }catch(e){} if(err){ labCatP=null; rej(err); } else res(labCat=v); }
+    function read(){ try{ var w=fr.contentWindow, L=w.LAB, C=w.LABCUR, TT=w.FFT.T; if(!L||!C||!L.list||!L.list.length) return false;
+      var by={}, ex=L.list.map(function(e){ var o={id:e.id,cat:e.cat,icon:e.icon||'🔬',name:e.name,tn:TT(e.name),desc:TT(e.desc||'')}; by[e.id]=o; return o; });
+      var used={}, units=C.units.map(function(r){ var ids=C.ids(r).filter(function(i){ return by[i]; }); ids.forEach(function(i){ used[i]=1; }); return {g:r[0],s:r[1],u:r[2],tu:TT(r[2]),ids:ids}; }).filter(function(u){ return u.ids.length; });
+      fin({ex:ex,by:by,units:units,grades:C.grades.slice(),rest:ex.filter(function(e){ return !used[e.id]; })}); return true; }catch(e){ return false; } }
+    fr.addEventListener('load',function(){ var n=0; (function t(){ if(done) return; if(!read()&&n++<100) setTimeout(t,100); else if(!done) fin(null,new Error('empty')); })(); });
+    tm=setTimeout(function(){ fin(null,new Error('timeout')); },20000);
+    fr.style.cssText='position:fixed;left:-9999px;top:0;width:900px;height:700px;border:0;visibility:hidden'; fr.setAttribute('aria-hidden','true'); fr.src='../lab/index.html#catalog'; document.body.appendChild(fr); });
+  return labCatP; }
+function drawLabLs(){ var box=$('liveLs'), q=$('liveFind').value.trim().toLowerCase(), C=labCat; box.innerHTML=''; var shown=0;
+  if(!C){ var m=document.createElement('div'); m.className='empty'; m.textContent=T(labCatP?'실험 목록을 불러오는 중…':'실험 목록을 불러오지 못했어요'); box.appendChild(m); $('liveCnt').textContent=''; return; }
+  function row(e){ var b=document.createElement('button'); b.type='button'; b.className='lvi'+(e.id===labPick?' on':''); b.dataset.id=e.id; b.setAttribute('role','option'); b.setAttribute('aria-selected',String(e.id===labPick));
+    b.innerHTML='<span class="ic"></span><span class="nm"></span>'; b.firstChild.textContent=e.icon; b.lastChild.textContent=e.tn; b.onclick=function(){ labPick=e.id; $('liveOk').disabled=false; box.querySelectorAll('.lvi').forEach(function(x){ var on=x.dataset.id===labPick; x.classList.toggle('on',on); x.setAttribute('aria-selected',String(on)); }); }; return b; }
+  function hit(e,u){ return !q||(e.name+' '+e.tn+' '+e.desc+' '+e.id+' '+(u?u.u+' '+u.tu+' '+u.g:'')).toLowerCase().indexOf(q)>=0; }
+  C.grades.forEach(function(g){ var us=C.units.filter(function(u){ return u.g===g; }), g0=null;
+    us.forEach(function(u){ var es=u.ids.map(function(i){ return C.by[i]; }).filter(function(e){ return hit(e,u); }); if(!es.length) return;
+      if(!g0){ g0=document.createElement('div'); g0.className='lvg'; g0.textContent=T(g); box.appendChild(g0); }
+      var h=document.createElement('div'); h.className='lvu'; h.textContent=(u.s==='math'?'📐 ':'🔬 ')+u.tu; box.appendChild(h); es.forEach(function(e){ box.appendChild(row(e)); shown++; }); }); });
+  var rs=C.rest.filter(function(e){ return hit(e,null); }); if(rs.length){ var h2=document.createElement('div'); h2.className='lvg'; h2.textContent=T('그 밖의 실험'); box.appendChild(h2); rs.forEach(function(e){ box.appendChild(row(e)); shown++; }); }
+  if(!shown){ var m2=document.createElement('div'); m2.className='empty'; m2.textContent=T('검색 결과가 없어요'); box.appendChild(m2); }
+  $('liveCnt').textContent=C.ex.length+T('개 실험·템플릿');
+  var on=box.querySelector('.lvi.on'); if(on&&!q) box.scrollTop=Math.max(0,on.offsetTop-box.offsetTop-60); }
+$('liveFind').addEventListener('input',drawLabLs);
+$('liveFind').addEventListener('keydown',function(e){ e.stopPropagation(); if(e.key==='Escape') closeDlg('liveDlg',null); else if(e.key==='Enter'){ e.preventDefault(); var f=$('liveLs').querySelector('.lvi'); if(f) f.click(); } });
 function openLive(){ var s=deck.slides[cur]; if(!s||s.layout!=='live'||gen||busyOn) return; blurEdit(); var c=liveCfg(s);
   var pl=bhProjects(), sel=$('liveBlk'); sel.innerHTML=''; pl.forEach(function(e){ var o=document.createElement('option'); o.value=e.id; o.textContent=e.name||e.id; sel.appendChild(o); });
   $('liveBlkNone').hidden=!!pl.length; sel.hidden=!pl.length; $('liveBlkMsg').textContent='';
-  var ls=$('liveLab'); ls.innerHTML=''; LABX.forEach(function(x){ var o=document.createElement('option'); o.value=x[0]; o.textContent=T(x[1]); ls.appendChild(o); });
+  labPick=c&&c.k==='lab'?c.e:'func'; $('liveFind').value=''; drawLabLs(); loadLabCat().then(function(){ drawLabLs(); },function(err){ console.warn(err); drawLabLs(); });
   var k=c?c.k:(pl.length?'block':'lab'); document.querySelector('input[name="liveK"][value="'+k+'"]').checked=true;
-  if(c&&c.k==='lab') ls.value=c.e; if(c&&c.k==='block'&&pl.some(function(e){ return e.name===c.n; })) sel.value=pl.filter(function(e){ return e.name===c.n; })[0].id;
+  if(c&&c.k==='block'&&pl.some(function(e){ return e.name===c.n; })) sel.value=pl.filter(function(e){ return e.name===c.n; })[0].id;
   $('liveHtml').value=c&&c.k==='html'?c.h:''; $('liveOk').disabled=false; livePanels(); openDlg('liveDlg'); }
 document.querySelectorAll('input[name="liveK"]').forEach(function(r){ r.onchange=livePanels; });
 $('liveHtml').addEventListener('keydown',function(e){ e.stopPropagation(); if(e.key==='Escape') closeDlg('liveDlg',null); });
 $('liveOk').onclick=function(){ var s=deck.slides[cur]; if(!s) return closeDlg('liveDlg',null); var k=liveSrc(), msg=$('liveBlkMsg');
   function put(c){ var j=JSON.stringify(c); if(j.length>LIVE_MAX){ msg.textContent=T('너무 커서 담을 수 없어요 (1.5MB까지)'); return false; } pushUndo(); s.live=j; closeDlg('liveDlg',null); changed(true); return true; }
-  if(k==='lab'){ var x=LABX.filter(function(q){ return q[0]===$('liveLab').value; })[0]; put({k:'lab',e:x[0],n:x[1]}); }
+  if(k==='lab'){ var x=labCat&&labCat.by[labPick], o=!x&&LABX.filter(function(q){ return q[0]===labPick; })[0]; if(!x&&!o){ msg.textContent=T('실험을 골라 주세요'); return; } put({k:'lab',e:labPick,n:x?x.name:o[1]}); }
   else if(k==='html'){ var h=$('liveHtml').value.trim(); if(!h){ msg.textContent=T('HTML을 붙여 넣어 주세요'); return; } put({k:'html',n:'HTML',h:h}); }
   else { var id=$('liveBlk').value; if(!id){ msg.textContent=T('Block HTML에 저장된 프로젝트가 없어요'); return; } var nm=($('liveBlk').selectedOptions[0]||{}).textContent||'';
     msg.textContent=T('프로젝트를 불러오는 중…'); $('liveOk').disabled=true;
