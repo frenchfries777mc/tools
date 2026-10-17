@@ -13,6 +13,9 @@ Tools 사이트의 자체 AI(Qwen3)를 블록 HTML과 Fry Sheet에 맞게 학습
 새 블록(움직이기, 커서 따라다니기, 닿았나, 저장·불러오기 등) 코딩, 고칠 때 바꾼 곳만 바꾸기, 요청을 빠짐없이 이해하기를 더했어요 (`raw/code-12~14`, `raw/und-10`). `node train/build3.js` 가 `data/round3-basic.jsonl`(tarius 이어 학습, 이름은 1.1)과 `data/round3-smart.jsonl`(lectus 처음 학습에 더함)을 만들어요. 노트의 `CONTINUE`를 켜고 `ROUND`를 3으로 두면 tarius에 3차 자료만 한 바퀴 더 해요.
 - 노트는 100단계마다 구글 드라이브에 저장하고, 끊기면 같은 셀을 다시 돌려 이어서 해요.
 
+## 다음 학습용 자료 (2026-10-17)
+Fry Sheet AI 계산(`raw/calc-1`: 말로 쓴 계산 → 수식, 단위 문장 → `{value, from, to}`), Fry Slides 맞춤법 고치기(`raw/spell-1`), 블록 설명(`raw/explain-1`) 예시를 모아 뒀어요. 질문 글은 `ai-prompts.js`의 `calcSys`·`unitSys`·`spellSys`·`explainSys`예요. 아직 `build*.js`에 넣지 않았어요.
+
 ## 학습시키기 (주인이 하는 일)
 1. [Colab에서 노트 열기](https://colab.research.google.com/github/frenchfries777mc/tools/blob/main/train/colab.ipynb)
 2. 런타임 유형을 **T4 GPU**로 바꾸고, 설정 칸에서 `basic`(기본) 또는 `smart`(똑똑함)을 고르고 Hugging Face 토큰을 넣어요.
