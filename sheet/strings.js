@@ -626,3 +626,7 @@ FFT.add({
 "고른 범위 밖의 열을 고르세요":["Choose a column outside the selected range", "Elige una columna fuera del rango", "Choisis une colonne hors de la plage", "Wähle eine Spalte außerhalb des Bereichs", "選んだ範囲の外の列を選んでください"],
 "기준은 0~100 사이, 노랑이 초록보다 작아야 해요":["Cut-offs must be 0 to 100, with yellow lower than green", "Los umbrales van de 0 a 100 y el amarillo debe ser menor que el verde", "Les seuils vont de 0 à 100, le jaune doit être inférieur au vert", "Schwellen liegen zwischen 0 und 100, Gelb muss kleiner als Grün sein", "区切りは0〜100で、黄色は緑より小さくしてください"]
 });
+FFT.add({
+'번역은 수식 함수가 없어서 AI() 함수로 해요. 칸마다 AI가 번역해서 채워요.':["Translation has no formula function, so it uses the AI() function. The AI translates each cell.", "No hay función de fórmula para traducir, así que se usa AI(). La IA traduce cada celda.", "Il n’y a pas de fonction de formule pour traduire, on utilise donc AI(). L’IA traduit chaque cellule.", "Für Übersetzungen gibt es keine Formel, daher wird AI() genutzt. Die KI übersetzt jede Zelle.", "翻訳できる数式の関数はないので、AI()関数を使います。AIがセルごとに翻訳します。"],
+'수식으로는 만들 수 없는 요청이에요.':["A formula can't do this request.", "Una fórmula no puede hacer esta petición.", "Une formule ne peut pas faire cette demande.", "Diese Anfrage geht mit einer Formel nicht.", "数式ではできない依頼です。"]
+});
