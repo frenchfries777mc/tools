@@ -178,6 +178,14 @@ function run(q,modify,tries,errText,lastOut,fix,calm){
     }
   });
 }
+/* examples that were run and checked by hand (clicks, keys, timers, answers): a short request for one of them gets that example, anything else goes to the AI */
+var LIB=[['클릭 카운터',['클릭카운터','클릭 카운터','카운터','숫자올라가','숫자가올라가','clickcounter','counter']],['인사하기',['인사하']],['숫자 맞히기',['숫자맞','업다운','updown','guessthenumber','numberguess']],
+ ['통통 튀는 공',['튀는공','공이튀','공튀','공튕','튀어다니','bouncingball','bounce']],['할 일 목록',['할일','투두','todo','to-do']],['계산기',['계산기','calculator']],['수학 퀴즈',['수학퀴즈','덧셈퀴즈','mathquiz']],
+ ['별 잡기 게임',['별잡','별모으','별을잡']],['커서 따라다니기',['커서따라','마우스따라','followcursor']],['화살표 키로 움직이는 게임 틀',['화살표키','arrowkey']],['반응 속도',['반응속도','reactiontime','reactiongame']],
+ ['주사위 굴리기',['주사위','dice']],['타이머',['타이머','카운트다운','timer','countdown']],['색깔 바뀌는 버튼',['색깔바뀌','색이바뀌','색바뀌','색바꾸','색깔이바뀌','colorchange']]];
+function libMatch(q){ var n=String(q||'').toLowerCase().replace(/\s+/g,''); if(n.length>24) return ''; // long requests carry details a stored example cannot follow
+  for(var i=0;i<LIB.length;i++) for(var k=0;k<LIB[i][1].length;k++) if(n.indexOf(LIB[i][1][k].replace(/\s+/g,''))>=0) return LIB[i][0];
+  return ''; }
 function readyGo(q){ var ex=BH_EXAMPLES.filter(function(e){ return e.name===readyEx; })[0]; if(!ex) return false;
   before={name:$('projName').value, ws:Blockly.serialization.workspaces.save(ws)};
   B.loadXML(ex.xml()); B.arrange(); $('projName').value=T(ex.name); B.save(); addHist(q,false,'new'); $('baiUndo').hidden=false; readyEx='';
@@ -187,7 +195,8 @@ function readyGo(q){ var ex=BH_EXAMPLES.filter(function(e){ return e.name===read
   var t=setInterval(function(){ n=Math.min(html.length,n+step); p.textContent=html.slice(0,n); p.scrollTop=p.scrollHeight;
     if(n>=html.length){ clearInterval(t); busyNow=false; $('baiGo').disabled=false; msg(T('다 만들었어요! 미리보기에서 확인해 보세요'),'ok'); setTimeout(function(){ p.hidden=true; close(); B.toast(T('검증된 예시를 넣었어요')); },700); } },40);
   return true; }
-function go(){ var q=$('baiQ').value.trim(); if(!q) return $('baiQ').focus(); if(busyNow) return; if(readyEx&&readyGo(q)) return; exec(q,q,false); }
+function go(){ var q=$('baiQ').value.trim(); if(!q) return $('baiQ').focus(); if(busyNow) return; if(!readyEx&&!hasWork()) readyEx=libMatch(q);
+  if(readyEx&&readyGo(q)) return; exec(q,q,false); }
 /* "틀린 곳을 알려 주세요": the AI changes only the part the person says is wrong (PLAN: edit), the whole project goes along */
 function fixGo(){
   var c=$('baiFix').value.trim(); if(!c) return $('baiFix').focus(); if(busyNow||!hasWork()) return;
