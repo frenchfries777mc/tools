@@ -132,12 +132,18 @@ function status(){ var s=Math.round((Date.now()-t0)/1000);
   var how=plan==='edit'?T('지금 블록을 고치기로 했어요')+' · ':plan==='new'?T('새로 짜기로 했어요')+' · ':'';
   msg(phase==='fix'?F('AI에게 틀린 곳을 알려 다시 받는 중… {0}초',s):chars?how+F('AI가 블록 코드를 쓰는 중… 글자 {0}개 · {1}초',chars,s):F('AI가 생각하는 중… {0}초',s)); }
 function live(t){ chars=t.length; if(!plan) plan=planOf(t); var p=$('baiLive'), wasHidden=p.hidden, stick=wasHidden||p.scrollHeight-p.scrollTop-p.clientHeight<24; p.hidden=false; p.textContent=t.length>6000?'…'+t.slice(-6000):t; if(stick) p.scrollTop=p.scrollHeight; } // follows the end only while the reader is at the bottom
-function run(q,modify,tries,errText,lastOut,fix){
+function run(q,modify,tries,errText,lastOut,fix,calm){
   phase=errText?'fix':''; chars=0;
-  return FFAI.ask({system:FFAI.isTuned()?FFP.blocksSys:SYS, prompt:buildPrompt(q,modify,errText,lastOut), maxTokens:12000, onText:live}).then(function(out){
+  var ask=calm?q+'\n(Keep it short and flat: write every block once, never put text_join inside text_join, and finish the XML.)':q;
+  return FFAI.ask({system:FFAI.isTuned()?FFP.blocksSys:SYS, prompt:buildPrompt(ask,modify,errText,lastOut), maxTokens:12000, onText:live, temperature:calm?0.7:0, freqPenalty:calm?0.5:0}).then(null,function(e){
+    // the model got stuck repeating itself: ask again once, calmer, instead of giving up
+    if(tries>0&&e&&/반복|repeat/i.test(String(e.message||''))&&!(window.baiStopped)) return run(q,modify,tries-1,'',lastOut,fix,true).then(function(x){ return {retried:x}; });
+    throw e;
+  }).then(function(out){
+    if(out&&out.retried) return out.retried;
     try{ if(fix&&planOf(out)==='new') throw new Error('this must be PLAN: edit - keep the current project and change only the part the person says is wrong');
       var x=check(extract(out)); plan=planOf(out)||plan||(modify?'edit':'new'); if(!modify) plan='new'; if(fix) plan='edit'; return x; }
-    catch(e){ if(tries>0){ return run(q,modify,tries-1,e.message,out,fix); } throw new Error(T('AI가 만든 블록을 읽지 못했어요. 다시 해 보세요')); }
+    catch(e){ throw new Error(T('AI가 만든 블록을 읽지 못했어요. 다시 해 보세요')); } // no silent second pass: it used to rewrite everything from scratch
   });
 }
 function go(){ var q=$('baiQ').value.trim(); if(!q) return $('baiQ').focus(); if(busyNow) return; exec(q,q,false); }

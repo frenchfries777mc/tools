@@ -32,7 +32,7 @@ button,input,select,textarea{font:inherit; color:inherit;}
 .tbtn{display:inline-flex; align-items:center; justify-content:center; gap:6px; height:34px; padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--panel2); cursor:pointer; white-space:nowrap;}
 .tbtn:hover:not(:disabled){border-color:#3a4256;} .tbtn:disabled{opacity:.4; cursor:default;}
 .tbtn.pri{background:linear-gradient(90deg,var(--fry),var(--fry2)); color:#1c1405; border:0; font-weight:700;}
-.tbtn.aib{color:var(--dim); font-size:13px; height:30px; padding:0 10px;} .tbtn.aib:hover{color:var(--fry); border-color:#5a4a1c;}
+.tbtn.aib{border-color:#5a4a1c; color:var(--fry);}
 .aiWarn{margin:8px 0 0; color:var(--dim); font-size:12.5px; line-height:1.5;}
 .tbtn svg{width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; flex:0 0 auto;}
 .tbtn.play svg{fill:currentColor; stroke:none;}
@@ -94,7 +94,7 @@ button,input,select,textarea{font:inherit; color:inherit;}
 .ib svg{width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
 .ib.dang{color:#ff8b8b;}
 #laySel{height:34px; border-radius:8px; border:1px solid var(--line); background:var(--panel2); padding:0 8px; max-width:150px;}
-@media(max-width:900px){ .tools .tbtn .lb{display:none;} .tools .tbtn{padding:0 9px;} }
+@media(max-width:900px){ .tools .tbtn:not(#aiBtn) .lb{display:none;} .tools .tbtn{padding:0 9px;} }
 #genBar{display:flex; align-items:center; gap:10px; padding:8px 14px; background:#2a2410; color:var(--fry); border-bottom:1px solid #5a4a1c; font-size:13.5px;}
 #genBar .gb{flex:1; height:6px; border-radius:9px; background:rgba(255,201,60,.18); overflow:hidden; min-width:60px;}
 #genBar .gb i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--fry),var(--fry2)); transition:width .3s;}
