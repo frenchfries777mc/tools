@@ -54,7 +54,7 @@ ws.addChangeListener(function(e){
     var b=ws.getBlockById(e.blockId); if(!b||BH.EL.indexOf(b.type)<0||!e.oldValue) return;
     var still=ws.getAllBlocks(false).some(function(x){ return x!==b&&BH.EL.indexOf(x.type)>=0&&x.getFieldValue('NAME')===e.oldValue; });
     if(still) return;
-    ws.getAllBlocks(false).forEach(function(x){ x.inputList.forEach(function(inp){ inp.fieldRow.forEach(function(f){ if(f.name==='EL'&&f.getValue()===e.oldValue){ BH.KNOWN.add(e.newValue); f.setValue(e.newValue); BH.KNOWN.clear(); } }); }); });
+    ws.getAllBlocks(false).forEach(function(x){ x.inputList.forEach(function(inp){ inp.fieldRow.forEach(function(f){ if((f.name==='EL'||(/_hit$/.test(x.type)&&(f.name==='A'||f.name==='B')))&&f.getValue()===e.oldValue){ BH.KNOWN.add(e.newValue); f.setValue(e.newValue); BH.KNOWN.clear(); } }); }); });
   }
 });
 
@@ -126,6 +126,21 @@ $('pauseBtn').onclick=function(){ var w=$('frame').contentWindow;
   else { setRun('pause'); if(w) w.postMessage({ffbh:'pause'},'*'); showPreview(); } };
 $('stopBtn').onclick=function(){ setRun('stop'); lastPrev=''; clearLog(); $('frame').srcdoc=stoppedPage(); };
 setRun('run');
+/* ---------- 변수 보기: the variables' values while the preview runs (the preview build sends them, see BH.build) ---------- */
+var varOn=lsGet('ffblocks.vars')==='1', varPrev={}, varT=null;
+function varMsg(t){ var box=$('varList'), n=document.createElement('span'); box.innerHTML=''; n.className='none'; n.textContent=t; box.appendChild(n); }
+function varShow(list){ var box=$('varList'), now={}; box.innerHTML='';
+  list.forEach(function(v){ now[v[0]]=v[1]; var sp=document.createElement('span'); if(varPrev[v[0]]!==undefined&&varPrev[v[0]]!==v[1]) sp.className='ch';
+    var nb=document.createElement('b'); nb.textContent=v[0]+' = '; sp.appendChild(nb); sp.appendChild(document.createTextNode(v[1]===''?T('(비어 있음)'):v[1])); box.appendChild(sp); });
+  if(!list.length) varMsg(T('변수가 없어요'));
+  varPrev=now; clearTimeout(varT); varT=setTimeout(function(){ box.querySelectorAll('.ch').forEach(function(x){ x.classList.remove('ch'); }); },450); }
+function varAsk(){ var w=$('frame').contentWindow; if(w) try{ w.postMessage({ffbhVarsAsk:1},'*'); }catch(e){} }
+function varReset(){ varPrev={}; varMsg(runState==='stop'?T('정지했어요'):custom!==null?T('직접 고친 HTML에서는 변수를 볼 수 없어요'):T('변수가 없어요')); }
+function setVar(on){ varOn=on; $('varBtn').classList.toggle('on',on); $('varBar').hidden=!on; lsSet('ffblocks.vars',on?'1':'0'); if(on){ varReset(); varAsk(); } }
+$('varBtn').onclick=function(){ setVar(!varOn); if(varOn) showPreview(); };
+$('frame').addEventListener('load',function(){ varReset(); varAsk(); });
+window.addEventListener('message',function(e){ var d=e.data; if(!d||!d.ffbhVars||e.source!==$('frame').contentWindow) return; varShow(d.ffbhVars); });
+setVar(varOn);
 $('openTab').onclick=function(){ var u=URL.createObjectURL(new Blob([finalHTML()],{type:'text/html'})); var w=window.open(u,'_blank'); if(!w) location.href=u; setTimeout(function(){ URL.revokeObjectURL(u); },60000); };
 $('copyCode').onclick=function(){ var t=finalHTML(); var done=function(){ toast(T('코드를 복사했어요')); };
   try{ navigator.clipboard.writeText(t).then(done,function(){ fallbackCopy(t); done(); }); }catch(e){ fallbackCopy(t); done(); } };
