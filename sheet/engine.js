@@ -537,18 +537,41 @@ def('COUNTUNIQUE',function(a){ var seen={}, n=0; this.each(a,function(v){ if(v==
 /* v11: pivot table. rows = evaluated values (no header row); groups by column kc and sums / counts / averages column vc.
    agg 'sum'|'count'|'avg'; sort 'first' (order of appearance) | 'key' | 'val' (largest first). Returns {rows:[[key,value]], total}. */
 function pivot(rows,kc,vc,agg,sort){
-  var map=Object.create(null), list=[], T={n:0,s:0,m:0};
+  var kcs=[].concat(kc), map=Object.create(null), list=[], T={n:0,s:0,m:0,lo:null,hi:null};
+  function add(g,v){ g.n++; if(typeof v==='number'){ g.s+=v; g.m++; if(g.lo==null||v<g.lo) g.lo=v; if(g.hi==null||v>g.hi) g.hi=v; } }
   rows.forEach(function(row){
-    var kv=row[kc]; if(kv==null) kv=''; var disp=isErr(kv)?kv.e:formatValue(kv), id=disp.toLowerCase();
-    var g=map[id]; if(!g){ g=map[id]={key:kv,n:0,s:0,m:0}; list.push(g); }
+    var keys=kcs.map(function(c){ var k=row[c]; return k==null?'':k; }), id=keys.map(function(k){ return (isErr(k)?k.e:formatValue(k)).toLowerCase(); }).join('\u0001');
+    var g=map[id]; if(!g){ g=map[id]={keys:keys,n:0,s:0,m:0,lo:null,hi:null}; list.push(g); }
     var v=row[vc]; if(v==null||v===''||isErr(v)) return;
-    g.n++; T.n++; if(typeof v==='number'){ g.s+=v; g.m++; T.s+=v; T.m++; }
+    add(g,v); add(T,v);
   });
-  function val(g){ return agg==='count'?g.n:agg==='avg'?(g.m?g.s/g.m:null):g.s; }
-  var out=list.map(function(g){ return [g.key,val(g)]; });
-  if(sort==='key') out.sort(function(a,b){ var ea=a[0]==='', eb=b[0]==='';  if(ea||eb) return ea===eb?0:ea?1:-1; return cmpVals(a[0],b[0]); });
-  else if(sort==='val') out.sort(function(a,b){ if(a[1]==null||b[1]==null) return a[1]==null&&b[1]==null?0:a[1]==null?1:-1; return b[1]-a[1]; });
+  function val(g){ return agg==='count'?g.n:agg==='avg'?(g.m?g.s/g.m:null):agg==='max'?g.hi:agg==='min'?g.lo:g.s; }
+  var out=list.map(function(g){ return g.keys.concat([val(g)]); }), nk=kcs.length;
+  if(sort==='key') out.sort(function(a,b){ for(var i=0;i<nk;i++){ var ea=a[i]==='', eb=b[i]==='';  if(ea||eb){ if(ea!==eb) return ea?1:-1; continue; } var x=cmpVals(a[i],b[i]); if(x) return x; } return 0; });
+  else if(sort==='val') out.sort(function(a,b){ var x=a[nk], y=b[nk]; if(x==null||y==null) return x==null&&y==null?0:x==null?1:-1; return y-x; });
   return {rows:out,total:val(T)};
+}
+
+/* v21: protection and names. A sheet's lock is {all:1} (whole sheet) and/or {rg:[{r1,c1,r2,c2}]}.
+   lockHit: is the cell locked; lockAny: does the box touch a locked cell; lockCut: ranges left after unlocking box g. */
+function lockHit(lk,r,c){ if(!lk) return false; if(lk.all) return true; var l=lk.rg||[]; for(var i=0;i<l.length;i++){ var g=l[i]; if(r>=g.r1&&r<=g.r2&&c>=g.c1&&c<=g.c2) return true; } return false; }
+function lockAny(lk,g){ if(!lk) return false; if(lk.all) return true; var l=lk.rg||[]; for(var i=0;i<l.length;i++){ var x=l[i]; if(!(x.r2<g.r1||x.r1>g.r2||x.c2<g.c1||x.c1>g.c2)) return true; } return false; }
+function lockCut(list,g){
+  var out=[]; list.forEach(function(x){
+    if(x.r2<g.r1||x.r1>g.r2||x.c2<g.c1||x.c1>g.c2){ out.push(x); return; }
+    if(x.r1<g.r1) out.push({r1:x.r1,c1:x.c1,r2:g.r1-1,c2:x.c2});
+    if(x.r2>g.r2) out.push({r1:g.r2+1,c1:x.c1,r2:x.r2,c2:x.c2});
+    var a=Math.max(x.r1,g.r1), b=Math.min(x.r2,g.r2);
+    if(x.c1<g.c1) out.push({r1:a,c1:x.c1,r2:b,c2:g.c1-1});
+    if(x.c2>g.c2) out.push({r1:a,c1:g.c2+1,r2:b,c2:x.c2});
+  }); return out;
+}
+/* rename a defined name inside a formula (not when it is called like a function) */
+function renameNameInFormula(raw,from,to){
+  if(typeof raw!=='string'||raw[0]!=='=') return raw;
+  var toks=tokenize(raw.slice(1)), ch=false, u=String(from).toUpperCase();
+  toks.forEach(function(t,i){ if(t.t!=='id'||t.v!==u) return; var j=i+1; while(toks[j]&&toks[j].t==='ws') j++; if(toks[j]&&toks[j].s==='(') return; t.s=to; t.v=String(to).toUpperCase(); ch=true; });
+  return ch?'='+rebuild(toks):raw;
 }
 
 /* v14: data cleaning. trimText works like TRIM (also non-breaking and full-width spaces); splitText splits on any of the delimiters;
@@ -783,6 +806,6 @@ def('HSTACK',function(a){ return stack(this,a,true); });
 
 var api={K:K,RC:RC,KC:KC,colName:colName,colIdx:colIdx,addr:addr,parseAddr:parseAddr,parseRange:parseRange,rangeStr:rangeStr,
   tokenize:tokenize,rebuild:rebuild,parse:parse,literal:literal,shiftFormula:shiftFormula,adjustFormula:adjustFormula,renameSheetInFormula:renameSheetInFormula,
-  Engine:Engine,Err:Err,errHint:errHint,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,pivot:pivot,iconFor:iconFor,sparkSvg:sparkSvg,ICOL:ICOL,Arr:Arr,toXl:toXl,fromXl:fromXl,trimText:trimText,splitText:splitText,dedupeRows:dedupeRows,parseNameRef:parseNameRef,nameRef:nameRef,validName:validName,refText:refText,asDate:asDate,dateStr:dateStr,FN:FN,quoteSheet:quoteSheet};
+  Engine:Engine,Err:Err,errHint:errHint,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,pivot:pivot,lockHit:lockHit,lockAny:lockAny,lockCut:lockCut,renameNameInFormula:renameNameInFormula,iconFor:iconFor,sparkSvg:sparkSvg,ICOL:ICOL,Arr:Arr,toXl:toXl,fromXl:fromXl,trimText:trimText,splitText:splitText,dedupeRows:dedupeRows,parseNameRef:parseNameRef,nameRef:nameRef,validName:validName,refText:refText,asDate:asDate,dateStr:dateStr,FN:FN,quoteSheet:quoteSheet};
 if(typeof module!=='undefined'&&module.exports) module.exports=api; else root.FSE=api;
 })(this);
