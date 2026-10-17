@@ -106,16 +106,23 @@ function checkPics(){ var n=BH.markPics(ws), key=BH.missingPics(ws).map(function
   if(n&&key!==picKey&&!loading) toast(T('그림을 고르지 않은 "내 그림" 블록이 있어요. 블록의 그림 칸을 눌러 골라 주세요'));
   picKey=key; }
 /* typed HTML: the HTML code tab is always editable (a text box over the highlighted code); the preview, copy and download then use that text until the blocks change */
-var custom=null, customT=null;
+var custom=null, customT=null, prevCustom=null;
+function setCust(on){ $('codeReset').hidden=!on; $('codeBlocks').hidden=!on; if(!on) $('codeUndo').hidden=true; }
+/* typed or pasted HTML -> blocks (friendly blocks where possible, "HTML/JS 직접 쓰기" blocks for the rest) */
+function toBlocks(html,auto){ html=String(html==null?'':html); if(!html.trim()||!window.BHX) return false; var tries=[function(){ return BHX.convert(html); },function(){ return BHX.fallback(html); }], c=null, how=0;
+  for(var i=0;i<tries.length&&!c;i++){ try{ var r=tries[i](); how=i; loadXML(r.xml); arrange(); if(ws.getAllBlocks(false).length<2) throw new Error('empty'); c=r; }catch(e){ console.error(e); } }
+  if(!c){ if(custom===null){ custom=html; $('codeEdit').value=html; setCust(true); } toast(T('블록으로 바꾸지 못했어요. HTML 코드 그대로 두었어요')); return false; }
+  prevCustom=html; $('projName').value=$('projName').value||c.title; $('codeUndo').hidden=false; save();
+  toast(how?T('블록으로 바꾸기 어려운 부분은 직접 쓰기 블록에 넣었어요'):F('블록 {0}개 · 직접 쓰기 {1}개로 바꿨어요',c.stats.blocks,c.stats.raw+c.stats.rawHtml)); return true; }
 function finalHTML(){ return custom!==null?custom:BH.build(ws,{trap:false}); }
 function showCode(){ if(custom!==null) return; var v=finalHTML(); if($('codeEdit').value!==v) $('codeEdit').value=v; }
-function dropCustom(msg){ if(custom==null) return; custom=null; clearTimeout(customT); $('codeEdit').readOnly=false; $('codeReset').hidden=true; $('codeNote').hidden=false; if(msg) toast(T('직접 쓴 HTML은 지웠어요. 블록 코드로 돌아왔어요')); }
-var pasting=false, BIGCODE=500000, MAXCODE=2500*1024;
+function dropCustom(msg){ if(custom==null) return; custom=null; clearTimeout(customT); $('codeEdit').readOnly=false; setCust(false); $('codeNote').hidden=false; if(msg) toast(T('직접 쓴 HTML은 지웠어요. 블록 코드로 돌아왔어요')); }
+var pasting=false, BIGCODE=500000, AUTOCONV=200000, MAXCODE=2500*1024;
 function ta0Big(t){ return t.readOnly&&custom!==null&&!pasting; }
-$('codeEdit').addEventListener('input',function(){ if(pasting) return; var v=$('codeEdit').value; custom=v; $('codeReset').hidden=false; clearTimeout(customT);
+$('codeEdit').addEventListener('input',function(){ if(pasting) return; var v=$('codeEdit').value; custom=v; setCust(true); clearTimeout(customT);
   customT=setTimeout(function(){ var t=$('codeEdit').value; if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=t; },Math.min(3000,500+Math.round(v.length/400))); });
 /* a big paste freezes the page when the text box lays out all of it at once: while it is put in piece by piece (one piece per frame, box hidden so nothing is laid out) the page keeps answering, then the preview refreshes once */
-$('codeEdit').addEventListener('paste',function(e){ var cd=e.clipboardData, text=cd&&cd.getData('text'); if(!text||text.length<60000) return; if(text.length>MAXCODE){ e.preventDefault(); toast(T('코드가 너무 커요. 2,500KB까지 붙여넣을 수 있어요')); return; } if(ta0Big(this)){ e.preventDefault(); toast(T('큰 코드는 여기서 고칠 수 없어요. 아래 되돌리기를 누른 뒤 새로 붙여 넣어 주세요')); return; }
+$('codeEdit').addEventListener('paste',function(e){ var cd=e.clipboardData, text=cd&&cd.getData('text'); if(text&&text.length<60000){ var self=this; setTimeout(function(){ if(!self.readOnly&&/<\s*(html|body|div|script|p|h1|button)\b/i.test(text)&&text.length>=40) { $('codeEdit').dispatchEvent(new Event('input')); toBlocks($('codeEdit').value,true); } },60); return; } if(!text) return; if(text.length>MAXCODE){ e.preventDefault(); toast(T('코드가 너무 커요. 2,500KB까지 붙여넣을 수 있어요')); return; } if(ta0Big(this)){ e.preventDefault(); toast(T('큰 코드는 여기서 고칠 수 없어요. 아래 되돌리기를 누른 뒤 새로 붙여 넣어 주세요')); return; }
   e.preventDefault(); var ta=this, pos=0, CH=200000, n=text.length, v=ta.value, s0=ta.selectionStart, e0=ta.selectionEnd, parts=[v.slice(0,s0)];
   pasting=true; clearTimeout(customT); ta.readOnly=true; ta.style.visibility='hidden';
   (function step(){ parts.push(text.slice(pos,pos+CH)); pos+=CH;
@@ -123,9 +130,11 @@ $('codeEdit').addEventListener('paste',function(e){ var cd=e.clipboardData, text
     parts.push(v.slice(e0)); toast(F('큰 코드를 불러오는 중… {0}%',100));
     setTimeout(function(){ var full=parts.join('');
       if(full.length>BIGCODE){ /* too big for the text box to show without freezing: keep all of it for the preview, copy and download, and show only the start (read only) */
-        custom=full; ta.value=full.slice(0,40000)+'\n\n'+F('… 큰 코드라 앞부분 {0}글자만 보여 줘요. 미리보기·복사·내려받기는 전체 {1}글자를 써요 …',40000,full.length); ta.readOnly=true; ta.style.visibility=''; pasting=false; $('codeReset').hidden=false;
+        custom=full; ta.value=full.slice(0,40000)+'\n\n'+F('… 큰 코드라 앞부분 {0}글자만 보여 줘요. 미리보기·복사·내려받기는 전체 {1}글자를 써요 …',40000,full.length); ta.readOnly=true; ta.style.visibility=''; pasting=false; setCust(true);
         if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=full; toast(F('큰 코드 {0}KB를 불러왔어요',Math.round(full.length/1024))); return; }
-      ta.value=full; var at=s0+n; try{ ta.setSelectionRange(at,at); }catch(x){} ta.style.visibility=''; ta.readOnly=false; pasting=false; toast(T('큰 코드를 모두 불러왔어요')); ta.dispatchEvent(new Event('input')); },30); })(); });
+      ta.value=full; var at=s0+n; try{ ta.setSelectionRange(at,at); }catch(x){} ta.style.visibility=''; ta.readOnly=false; pasting=false; toast(T('큰 코드를 모두 불러왔어요')); ta.dispatchEvent(new Event('input')); if(full.length<=AUTOCONV) toBlocks(full,true); },30); })(); });
+$('codeBlocks').onclick=function(){ toBlocks(custom!==null?custom:$('codeEdit').value,false); };
+$('codeUndo').onclick=function(){ if(prevCustom==null) return; var h=prevCustom; window.__bh.showHTML(h); toast(T('바꾸기를 취소하고 HTML 코드로 돌려놓았어요')); };
 $('codeReset').onclick=function(){ dropCustom(false); lastPrev=''; refresh('run'); showCode(); toast(T('블록 코드로 되돌렸어요')); };
 function setPane(p){ document.querySelectorAll('.stab').forEach(function(b){ b.classList.toggle('on',b.dataset.p===p); }); $('pPrev').classList.toggle('on',p==='prev'); $('pCode').classList.toggle('on',p==='code'); if(p==='code') showCode(); }
 document.querySelectorAll('.stab').forEach(function(b){ b.onclick=function(){ setPane(b.dataset.p); }; });
@@ -453,5 +462,5 @@ P.list=P.list.filter(function(e){ return e&&e.id; });
   if(!ok){ P.cur=null; createProject(T(BH_EXAMPLES[0].name),function(){ loadXML(BH_EXAMPLES[0].xml()); arrange(); }); } })();
 setTimeout(syncBar,50);
 if(EMB){ var embTry=0, embSend=function(){ var html=''; try{ if(P.cur===EMB) html=finalHTML(); }catch(e){ console.error(e); } if(!html&&++embTry<10) return setTimeout(embSend,300); try{ parent.postMessage({ffbhBuilt:1,id:EMB,html:html},'*'); }catch(e){} }; setTimeout(embSend,350); }
-window.__bh={showPreview:showPreview,showHTML:function(h){ custom=String(h); $('codeEdit').readOnly=false; $('codeEdit').value=custom; $('codeReset').hidden=false; clearTimeout(customT); if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=custom; setPane('code'); },clearHTML:function(){ dropCustom(false); },ws:ws,copy:copyBlock,paste:pasteBlock,deleteAll:deleteAll,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,loadJSON:loadJSON,save:saveNow,toast:toast,projects:function(){ return P; },examples:BH_EXAMPLES};
+window.__bh={showPreview:showPreview,showHTML:function(h){ custom=String(h); $('codeEdit').readOnly=false; $('codeEdit').value=custom; setCust(true); clearTimeout(customT); if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=custom; setPane('code'); },clearHTML:function(){ dropCustom(false); },ws:ws,copy:copyBlock,paste:pasteBlock,deleteAll:deleteAll,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,loadJSON:loadJSON,save:saveNow,toast:toast,projects:function(){ return P; },examples:BH_EXAMPLES};
 })();
