@@ -14,8 +14,8 @@ const REPLAY=420; // rows of round2-basic.jsonl (no self rows)
 const NAME_OLD='FF777 1.0 tarius', NAME_NEW='FF777 1.2 tarius';
 const WHO='You are FF777 1.2 tarius, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 1.7B. Your name is the end of the Latin word elementarius ("basic").';
 const FILL={NAME:NAME_NEW, BASE:'Qwen3 1.7B', LATIN:'elementarius', MEANING_KO:'기본', MEANING_EN:'basic'};
-const WHO_L='You are FF777 1.0 lectus, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 4B. Your name is the end of the Latin word intellectus ("understanding").';
-const FILL_L={NAME:'FF777 1.0 lectus', BASE:'Qwen3 4B', LATIN:'intellectus', MEANING_KO:'이해력', MEANING_EN:'understanding'};
+const WHO_L='You are FF777 1.2 lectus, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 4B. Your name is the end of the Latin word intellectus ("understanding").';
+const FILL_L={NAME:'FF777 1.2 lectus', BASE:'Qwen3 4B', LATIN:'intellectus', MEANING_KO:'이해력', MEANING_EN:'understanding'};
 
 let seed=20261017; const rnd=()=>{ seed=(seed*1103515245+12345)&0x7fffffff; return seed/0x7fffffff; };
 const shuffle=a=>{ for(let i=a.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
