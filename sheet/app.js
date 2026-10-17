@@ -1714,8 +1714,11 @@ var last=lsGet(LSL);
 if(!lsGet('ffsheet.noex')){ var EXN=['예시: 성적표','Example: report card','Ejemplo: boletín','Exemple : bulletin','Beispiel: Zeugnis','例: 成績表'];
   docIndex().forEach(function(x){ if(EXN.indexOf(x.name)>=0){ lsDel(LSD+x.id); lsSet(LSI,JSON.stringify(docIndex().filter(function(y){ return y.id!==x.id; }))); if(last===x.id) last=null; } });
   lsSet('ffsheet.noex','1'); if(!last){ var rest0=docIndex(); last=rest0.length?rest0[0].id:null; } }
+var opn=/^#open=([a-z0-9]{4,40})$/.exec(location.hash||''); // ../sheet/#open=<id>: a doc another tool (Fry Lab) wrote; show it with its charts
+if(opn){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} if(lsGet(LSD+opn[1])) last=opn[1]; else opn=null; }
 if(!last||!lsGet(LSD+last)){ loadDoc(null); saveNow(); } else loadDoc(last);
 setZoom(z0);
+if(opn&&sh.charts.length) setTimeout(openDrawer,0);
 window.FSAPI={get doc(){ return doc; }, get eng(){ return eng; }, get sheet(){ return sh; }, sel:function(){ return sel; }, act:function(){ return act; }, region:region, hasHeader:hasHeader,
   drawChart:drawChart, chartData:chartData, PAL:PAL, toast:toast, download:download, commitEdit:commitEdit, uid:uid, pushUndo:pushUndo, saveSoon:saveSoon, openDrawer:openDrawer, renderCharts:renderCharts,
   changed:changed, setRaw:function(r,c,v){ if(locked(r,c)) return toast(T('잠긴 칸이라 고칠 수 없어요. 데이터 메뉴에서 잠금을 풀 수 있어요')); return setRaw(r,c,v); }, pasteText:pasteText, selectRange:selectRange, select:select, forSel:forSel};
