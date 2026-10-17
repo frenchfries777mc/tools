@@ -113,5 +113,21 @@ test('v21 cross-sheet references, quoted and plain names',()=>{ const d={sheets:
   set(1,'A1','5'); set(1,'A2','6'); set(2,'B1','10'); set(0,'A1','=SUM(시트2!A1:A2)'); set(0,'A2',"='My Data'!B1*2"); set(0,'A3','=시트2!A1+시트2!A2'); set(0,'A4','=없는시트!A1');
   const e=new E.Engine(d); eq([0,1,2,3].map(r=>E.formatValue(e.value(0,r,0))),['11','20','11','#REF!']); eq(E.quoteSheet('시트2'),'시트2'); eq(E.quoteSheet('My Data'),"'My Data'"); });
 
+/* v23: CONVERT and the "AI 계산" fast path (calc.js) */
+const C=require('./calc.js');
+test('v23 CONVERT length, mass, temperature, prefixes',()=>eq(vals(sheet({A1:'=CONVERT(1,"in","cm")',A2:'=CONVERT(3,"mi","km")',A3:'=CONVERT(30,"C","F")',A4:'=CONVERT(212,"F","C")',A5:'=CONVERT(0,"C","K")',A6:'=CONVERT(1,"lbm","g")',A7:'=CONVERT(1500,"mg","g")'}),col('A1',7)),['2.54','4.828032','86','100','273.15','453.59237','1.5']));
+test('v23 CONVERT area, volume, speed, time, data, Korean units',()=>eq(vals(sheet({A1:'=CONVERT(1,"평","m2")',A2:'=CONVERT(1,"km2","m2")',A3:'=CONVERT(1,"l","ml")',A4:'=CONVERT(100,"km/h","m/s")',A5:'=CONVERT(90,"mn","hr")',A6:'=CONVERT(1,"Gibyte","Mibyte")',A7:'=CONVERT(1,"근","g")',A8:'=CONVERT(1,"kbyte","bit")'}),col('A1',8)),['3.30578512397','1000000','1000','27.7777777778','1.5','1024','600','8000']));
+test('v23 CONVERT unknown or mixed units is #N/A',()=>eq(vals(sheet({A1:'=CONVERT(1,"m","kg")',A2:'=CONVERT(1,"xx","m")',A3:'=CONVERT(1,"M","m")',A4:'=CONVERT(A5,"m","cm")'}),col('A1',4)),['#N/A','#N/A','#N/A','0']));
+test('v23 Engine.calc evaluates a formula without a cell',()=>{ const e=new E.Engine(withT({})); eq([e.calc(0,'=AVERAGE(B2:B7)-5'),e.calc(0,'SUM(B:B)'),E.formatValue(e.calc(0,'=1/0')),E.formatValue(e.calc(0,'=NOPE(1)'))],[67.5,435,'#DIV/0!','#NAME?']); });
+const fastF=q=>{ const r=C.fast(q); return r&&r.formula; };
+test('v23 fast path: plain arithmetic and words',()=>eq(['12*7+3','123 곱하기 4','15% of 80','삼백 더하기 이십','3500원짜리 7개에 10% 할인','80의 15%','2의 10제곱','루트 16','2만5천 빼기 3천','12 x 3은 얼마야?','100에 10% 인상'].map(fastF),
+  ['=12*7+3','=123*4','=80*15%','=300+20','=3500*7*(1-10%)','=80*15%','=2^10','=SQRT(16)','=25000-3000','=12*3','=100*(1+10%)']));
+test('v23 fast path: results through the engine',()=>{ const e=new E.Engine(sheet({})); eq(['3500원짜리 7개에 10% 할인','15% of 80','십이 나누기 삼'].map(q=>e.calc(0,fastF(q))),[22050,12,4]); });
+test('v23 fast path: unit phrases',()=>eq(['170cm는 몇 인치','섭씨 30도는 화씨','3마일 km','5 kg to lb','90분은 몇 시간','100제곱미터는 몇 평','2GB는 몇 MB','시속 100km는 몇 마일','72°F는 섭씨로','30도는 화씨로','170 cm in inches'].map(fastF),
+  ['=CONVERT(170,"cm","in")','=CONVERT(30,"C","F")','=CONVERT(3,"mi","km")','=CONVERT(5,"kg","lbm")','=CONVERT(90,"mn","hr")','=CONVERT(100,"m2","평")','=CONVERT(2,"Gibyte","Mibyte")','=CONVERT(100,"km/h","mph")','=CONVERT(72,"F","C")','=CONVERT(30,"C","F")','=CONVERT(170,"cm","in")']));
+test('v23 fast path leaves the rest to the AI',()=>eq(['A열 평균에서 5 빼기','평균 구해줘','B열 합계','3분의 1','안녕','5'].map(fastF),[null,null,null,null,null,null]));
+test('v23 typed formulas pass through, unit words map to codes',()=>eq([fastF('SUM(B2:B5)*2'),fastF('=A1/3'),C.unitCode('inch'),C.unitCode('킬로그램'),C.unitCode('°F'),C.unitCode('Gibyte'),C.unitCode('banana')],['=SUM(B2:B5)*2','=A1/3','in','kg','F','Gibyte',null]));
+test('v23 Korean number words',()=>eq(['삼백오십','2만5천','3.5만','십이','일억'].map(C.koNum),[350,25000,35000,12,1e8]));
+
 console.log(pass+' passed, '+failed+' failed');
 process.exit(failed?1:0);

@@ -1,5 +1,22 @@
 /* Fry Sheet strings: UI translations ([en, es, fr, de, ja]) and the function list shown in "함수 넣기". */
 FFT.add({
+'AI 계산':['AI calculate','Calcular con IA','Calcul IA','KI-Rechnen','AI計算'],
+'🧮 할인 계산':['🧮 Discount','🧮 Descuento','🧮 Remise','🧮 Rabatt','🧮 割引計算'],
+'3500원짜리 7개에 10% 할인':['3500 × 7 with 10% off','3500 × 7 con 10% de descuento','3500 × 7 avec 10 % de remise','3500 × 7 mit 10 % Rabatt','3500 × 7 から10%引き'],
+'📏 cm → 인치':['📏 cm → inches','📏 cm → pulgadas','📏 cm → pouces','📏 cm → Zoll','📏 cm → インチ'],
+'170cm는 몇 인치':['170 cm to inches','170 cm a pulgadas','170 cm en pouces','170 cm in Zoll','170cmは何インチ'],
+'🌡 섭씨 → 화씨':['🌡 °C → °F','🌡 °C → °F','🌡 °C → °F','🌡 °C → °F','🌡 摂氏 → 華氏'],
+'섭씨 30도는 화씨':['30 °C to °F','30 °C a °F','30 °C en °F','30 °C in °F','摂氏30度は華氏'],
+'➖ A열 평균 − 5':['➖ Avg of A − 5','➖ Media de A − 5','➖ Moyenne A − 5','➖ Mittel A − 5','➖ A列平均 − 5'],
+'A열 평균에서 5 빼기':['Average of column A minus 5','Media de la columna A menos 5','Moyenne de la colonne A moins 5','Durchschnitt von Spalte A minus 5','A列の平均から5を引く'],
+'예: 3500원짜리 7개에 10% 할인 / 170cm는 몇 인치':['e.g. 3500 × 7 with 10% off / 170 cm to inches','p. ej. 3500 × 7 con 10% de descuento / 170 cm a pulgadas','ex. 3500 × 7 avec 10 % de remise / 170 cm en pouces','z. B. 3500 × 7 mit 10 % Rabatt / 170 cm in Zoll','例: 3500 × 7 から10%引き / 170cmは何インチ'],
+'숫자 계산과 단위 변환은 AI 없이 바로 해요. 칸이 들어간 계산은 AI가 수식으로 바꿔요':['Plain math and unit conversions work right away without AI. Calculations about cells are turned into a formula by the AI','Las cuentas y conversiones de unidades funcionan al instante sin IA. Los cálculos con celdas los convierte la IA en una fórmula','Les calculs simples et les conversions d’unités marchent tout de suite sans IA. Les calculs sur des cellules sont transformés en formule par l’IA','Einfache Rechnungen und Einheiten gehen sofort ohne KI. Rechnungen mit Zellen macht die KI zu einer Formel','数の計算と単位変換はAIなしですぐできます。セルを使う計算はAIが数式にします'],
+'{0} 칸에 넣기':['Put in {0}','Poner en {0}','Mettre dans {0}','In {0} einfügen','{0}に入れる'],
+'단위 변환이에요. AI 없이 바로 계산했어요':['A unit conversion, worked out without AI','Conversión de unidades, calculada sin IA','Conversion d’unités, calculée sans IA','Einheitenumrechnung, ohne KI gerechnet','単位変換です。AIなしで計算しました'],
+'AI 없이 바로 계산했어요':['Worked out without AI','Calculado sin IA','Calculé sans IA','Ohne KI gerechnet','AIなしで計算しました'],
+'이 계산은 AI가 수식으로 바꿔야 해요. AI 설정에서 AI를 켜 주세요. 숫자 계산과 단위 변환은 AI 없이도 돼요.':['This one needs the AI to turn it into a formula. Turn on an AI in AI settings. Plain math and unit conversions work without AI.','Esto necesita que la IA lo convierta en fórmula. Activa una IA en Ajustes de IA. Las cuentas y conversiones de unidades funcionan sin IA.','Ce calcul doit être transformé en formule par l’IA. Active une IA dans les réglages IA. Les calculs simples et les conversions d’unités marchent sans IA.','Dafür muss die KI eine Formel machen. Schalte in den KI-Einstellungen eine KI ein. Einfache Rechnungen und Einheiten gehen ohne KI.','この計算はAIが数式にする必要があります。AI設定でAIをオンにしてください。数の計算と単位変換はAIなしでもできます。'],
+'AI가 만든 수식이에요. 결과를 확인하고 넣으세요':['The AI wrote this formula. Check the result before you put it in','La IA escribió esta fórmula. Comprueba el resultado antes de ponerla','L’IA a écrit cette formule. Vérifie le résultat avant de l’insérer','Die KI hat diese Formel geschrieben. Prüfe das Ergebnis vor dem Einfügen','AIが作った数式です。結果を確かめてから入れてください'],
+'AI가 알맞은 수식을 만들지 못했어요. 숫자와 칸 이름(A열, B2)을 넣어 더 짧게 써 보세요':['The AI could not make a working formula. Try a shorter request with numbers and cell names (column A, B2)','La IA no pudo crear una fórmula válida. Prueba algo más corto con números y nombres de celdas (columna A, B2)','L’IA n’a pas pu faire une formule valable. Essaie plus court, avec des nombres et des noms de cellules (colonne A, B2)','Die KI konnte keine gültige Formel machen. Versuche es kürzer, mit Zahlen und Zellnamen (Spalte A, B2)','AIが正しい数式を作れませんでした。数字とセル名（A列、B2）を入れて短く書いてみてください'],
 'AI 함수':['AI function','Función IA','Fonction IA','KI-Funktion','AI関数'],
 '질문·요약':['Ask & summarize','Preguntar y resumir','Question et résumé','Fragen & zusammenfassen','質問・要約'],
 '수식 만들기':['Write a formula','Crear fórmula','Écrire une formule','Formel schreiben','数式を作る'],
@@ -347,7 +364,8 @@ window.FNDOC=[
 ['찾기와 참조','LOOKUP','LOOKUP(값, 찾는 범위, 결과 범위)','정렬된 범위에서 가까운 값을 찾아요','Approximate lookup'],
 ['배열','TRANSPOSE','TRANSPOSE(범위)','행과 열을 바꿔 넘쳐 채워요','Swap rows and columns'],
 ['배열','VSTACK','VSTACK(범위1, 범위2, …)','범위를 위아래로 이어 붙여요','Stack ranges vertically'],
-['배열','HSTACK','HSTACK(범위1, 범위2, …)','범위를 옆으로 이어 붙여요','Stack ranges horizontally']
+['배열','HSTACK','HSTACK(범위1, 범위2, …)','범위를 옆으로 이어 붙여요','Stack ranges horizontally'],
+['수학과 통계','CONVERT','CONVERT(수, "단위", "단위")','단위를 바꿔요 (cm, in, kg, C, F, 평…)','Converts between units']
 ];
 (function(){ var o=[],g={}; window.FNDOC.forEach(function(f){ if(!g[f[0]]){ g[f[0]]=[]; o.push(g[f[0]]); } g[f[0]].push(f); }); window.FNDOC=[].concat.apply([],o); })();
 FFT.add({
