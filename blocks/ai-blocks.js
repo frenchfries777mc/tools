@@ -152,7 +152,7 @@ function check(xml){
 var before=null, busyNow=false, plan=null;
 var readyEx=''; // set when a chip with a ready-made example was tapped, until the text is edited
 var CHIPS={new:[['👆 클릭 카운터','버튼을 누를 때마다 숫자가 올라가는 클릭 카운터','클릭 카운터'],['📝 할 일 목록','할 일을 쓰고 추가 버튼을 누르면 목록에 쌓이는 할 일 목록','할 일 목록'],['⚽ 튀는 공','그림판에 공이 튀어 다니는 애니메이션','통통 튀는 공'],['🎲 주사위','버튼을 누르면 1부터 6까지 무작위 숫자가 나오는 주사위','주사위 굴리기'],['✖️ 구구단 표','구구단 표를 보여 주는 페이지','구구단 표'],['🔤 글자 수 세기','글자 수를 세어 주는 텍스트 상자','글자 수 세기']],
-  edit:[['🌙 밤하늘 배경','배경을 밤하늘로 바꿔 줘'],['🔊 버튼 소리','버튼을 누르면 소리가 나게 해 줘'],['🎉 10점 축하','점수가 10이 되면 축하 메시지를 띄워 줘'],['🔠 큰 빨간 제목','제목 글자를 더 크고 빨갛게 해 줘']]};
+  edit:[['🌑 어두운 모드','어두운 모드로 바꿔 줘'],['🌈 그라데이션 배경','배경을 그라데이션으로 바꿔 줘'],['📌 만든 사람 글','맨 아래에 "만든 사람: 나" 글을 넣어 줘']]};
 function chips(){ var box=$('baiChips'), list=hasWork()?CHIPS.edit.concat(CHIPS.new.slice(0,2)):CHIPS.new; box.innerHTML=''; list.forEach(function(c){ var b=document.createElement('button'), full=T(c[1]); b.textContent=T(c[0]); b.title=full; b.onclick=function(){ $('baiQ').value=full; $('baiQ').focus(); if(c[2]) readyEx=c[2]; }; box.appendChild(b); }); }
 function prep(){ chips(); renderFix(); renderHist(); $('baiQ').placeholder=hasWork()?T('예: 버튼을 누를 때마다 배경색이 바뀌게 해 줘'):T('예: 1부터 100 사이 숫자 맞히기 게임. 크다/작다를 알려 주고 맞히면 축하해 줘요'); }
 function msg(t,cls){ var o=$('baiMsg'); o.textContent=t||''; o.className='baiMsg'+(cls?' '+cls:''); }
