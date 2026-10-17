@@ -106,6 +106,10 @@ def('ev_key',function(){ this.appendDummyInput().appendField(new Blockly.FieldDr
   function(b){ var k=b.getFieldValue('KEY'); need('key');
     var cond=k==='any'?'true':(k.length===1&&/[a-z]/.test(k)?'e.key.toLowerCase() === '+lit(k):'e.key === '+lit(k));
     return 'document.addEventListener(\'keydown\', '+AF()+'e) {\n  __key = e.key;\n  if ('+cond+') {\n'+(k!=='any'&&k.length>1||k===' '?'    e.preventDefault();\n':'')+G.prefixLines(hatBody(b),'  ')+'  }\n});\n'; });
+def('ev_keyup',function(){ this.appendDummyInput().appendField(new Blockly.FieldDropdown(function(){ return KEYS.map(function(k){ return [T(k[0]),k[1]]; }); }),'KEY').appendField(T('키를 눌렀다 떼면')); hat(this,'키보드 키에서 손을 뗐을 때 해요'); },
+  function(b){ var k=b.getFieldValue('KEY'); need('key');
+    var cond=k==='any'?'true':(k.length===1&&/[a-z]/.test(k)?'e.key.toLowerCase() === '+lit(k):'e.key === '+lit(k));
+    return 'document.addEventListener(\'keyup\', '+AF()+'e) {\n  __key = e.key;\n  if ('+cond+') {\n'+G.prefixLines(hatBody(b),'  ')+'  }\n});\n'; });
 def('ev_timer',function(){ this.appendDummyInput().appendField(new Blockly.FieldNumber(1,0.02,3600,0.01),'SEC').appendField(T('초마다')); hat(this,'정한 시간마다 계속 해요'); },
   function(b){ need('timers'); var ms=Math.max(20,Math.round(b.getFieldValue('SEC')*1000)); return '__timers.push(setInterval('+AF()+') {\n'+hatBody(b,true)+'}, '+ms+'));\n'; });
 
@@ -132,6 +136,8 @@ def('act_after',function(){ this.appendValueInput('SEC').setCheck('Number'); thi
   function(b){ return 'setTimeout('+AF()+') {\n'+G.statementToCode(b,'DO')+'}, ('+(G.valueToCode(b,'SEC',O.MULTIPLICATION)||'1')+') * 1000);\n'; });
 def('act_stop',function(){ this.appendDummyInput().appendField(T('모든 "초마다" 멈추기')); act(this,'초마다 반복을 모두 멈춰요'); },
   function(){ need('timers'); return '__timers.forEach(clearInterval);\n'; });
+def('act_restart',function(){ this.appendDummyInput().appendField(T('다시 시작하기')); act(this,'페이지를 처음 상태로 되돌려 처음부터 다시 해요'); },
+  function(){ return 'location.reload();\n'; });
 def('act_beep',function(){ this.appendValueInput('SEC').setCheck('Number').appendField(T('소리 내기')).appendField(new Blockly.FieldDropdown(function(){ return NOTES.map(function(n){ return [T(n[0]),n[1]]; }); }),'NOTE'); this.appendDummyInput().appendField(T('초')); this.setInputsInline(true); act(this,'삐 소리를 내요'); },
   function(b){ need('beep'); return '__beep('+b.getFieldValue('NOTE')+', '+(G.valueToCode(b,'SEC',O.COMMA)||'0.3')+');\n'; });
 
@@ -338,7 +344,7 @@ function toolbox(){
   var img={shadow:{type:'val_myimg'}};
   return {kind:'categoryToolbox',contents:[
     {kind:'category',name:T('시작'),colour:C.ev,contents:[
-      {kind:'block',type:'ev_start'},lab('누르거나 쓰면'),{kind:'block',type:'ev_click'},{kind:'block',type:'ev_drag'},{kind:'block',type:'ev_change'},{kind:'block',type:'ev_key'},lab('시간마다'),{kind:'block',type:'ev_timer'}]},
+      {kind:'block',type:'ev_start'},lab('누르거나 쓰면'),{kind:'block',type:'ev_click'},{kind:'block',type:'ev_drag'},{kind:'block',type:'ev_change'},{kind:'block',type:'ev_key'},{kind:'block',type:'ev_keyup'},lab('시간마다'),{kind:'block',type:'ev_timer'}]},
     {kind:'category',name:T('화면'),colour:C.page,contents:[
       {kind:'block',type:'page_root'},lab('글'),{kind:'block',type:'el_heading'},{kind:'block',type:'el_text'},{kind:'block',type:'el_list'},{kind:'block',type:'el_link'},
       lab('누르고 쓰기'),{kind:'block',type:'el_button'},{kind:'block',type:'el_input'},
@@ -376,7 +382,7 @@ function toolbox(){
       {kind:'block',type:'act_beep',inputs:{SEC:n(0.3)}},
       {kind:'block',type:'act_alert',inputs:{VALUE:sh('text',T('안녕하세요!'))}}]},
     {kind:'category',name:T('시간'),colour:'#3a6fd8',contents:[
-      {kind:'block',type:'act_after',inputs:{SEC:n(1)}},{kind:'block',type:'ev_timer'},{kind:'block',type:'act_stop'},{kind:'block',type:'val_time'},{kind:'block',type:'val_today'}]},
+      {kind:'block',type:'act_after',inputs:{SEC:n(1)}},{kind:'block',type:'ev_timer'},{kind:'block',type:'act_stop'},{kind:'block',type:'act_restart'},{kind:'block',type:'val_time'},{kind:'block',type:'val_today'}]},
     {kind:'category',name:T('저장·로그'),colour:'#8e6bbf',contents:[
       {kind:'block',type:'act_store',inputs:{NAME:sh('text',T('최고점')),VALUE:n(0)}},{kind:'block',type:'val_load',inputs:{NAME:sh('text',T('최고점')),DEF:n(0)}},
       lab('기록'),{kind:'block',type:'act_log',inputs:{VALUE:sh('text',T('안녕!'))}}]},
