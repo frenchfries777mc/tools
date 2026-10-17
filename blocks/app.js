@@ -109,15 +109,34 @@ function checkPics(){ var n=BH.markPics(ws), key=BH.missingPics(ws).map(function
 var custom=null, customT=null, prevCustom=null;
 function setCust(on){ $('codeReset').hidden=!on; $('codeBlocks').hidden=!on; if(!on) $('codeUndo').hidden=true; }
 /* typed or pasted HTML -> blocks (friendly blocks where possible, "HTML/JS 직접 쓰기" blocks for the rest) */
-function toBlocks(html,auto){ html=String(html==null?'':html); if(!html.trim()||!window.BHX) return false; var tries=[function(){ return BHX.convert(html); },function(){ return BHX.fallback(html); }], c=null, how=0;
+function convDone(html,c,how){ prevCustom=html; $('projName').value=$('projName').value||c.title; $('codeUndo').hidden=false; save();
+  toast(how?T('블록으로 바꾸기 어려운 부분은 직접 쓰기 블록에 넣었어요'):F('블록 {0}개 · 직접 쓰기 {1}개로 바꿨어요',c.stats.blocks,c.stats.raw+c.stats.rawHtml)); }
+function convFail(html){ if(custom===null){ custom=html; $('codeEdit').value=html.length>BIGCODE?html.slice(0,40000):html; setCust(true); } toast(T('블록으로 바꾸지 못했어요. HTML 코드 그대로 두었어요')); }
+/* a progress bar for the steps of a big conversion */
+function prog(p,txt){ var el=$('prog'); if(p==null){ el.hidden=true; return; } el.hidden=false; $('progTxt').textContent=txt+' '+Math.round(p*100)+'%'; $('progBar').style.width=Math.round(p*100)+'%'; }
+var converting=false;
+function toBlocks(html,auto){ html=String(html==null?'':html); if(!html.trim()||!window.BHX||converting) return false;
+  var big=html.length>150000;
+  if(big){ /* big code: step by step, so the page can draw the progress between the steps */
+    converting=true; var st={}, k=0, steps=[
+      [0.08,'코드를 읽는 중…',function(){}],
+      [0.25,'블록으로 나누는 중…',function(){ try{ st.r=BHX.convert(html,{big:true}); st.how=0; }catch(e){ console.error(e); st.r=null; } if(!st.r){ try{ st.r=BHX.fallback(html); st.how=1; }catch(e){ console.error(e); } } }],
+      [0.75,'블록을 화면에 놓는 중…',function(){ if(!st.r) return; try{ loadXML(st.r.xml); arrange(); if(ws.getAllBlocks(false).length<2) throw new Error('empty'); st.ok=true; }catch(e){ console.error(e); st.ok=false; } }],
+      [1,'마무리하는 중…',function(){}]];
+    (function next(){ var sp=steps[k]; prog(sp[0],T(sp[1])); setTimeout(function(){ sp[2](); k++; if(k<steps.length){ next(); return; }
+      prog(null); converting=false; if(st.ok) convDone(html,st.r,st.how); else convFail(html); },60); })();
+    return true; }
+  var tries=[function(){ return BHX.convert(html); },function(){ return BHX.fallback(html); }], c=null, how=0;
   for(var i=0;i<tries.length&&!c;i++){ try{ var r=tries[i](); how=i; loadXML(r.xml); arrange(); if(ws.getAllBlocks(false).length<2) throw new Error('empty'); c=r; }catch(e){ console.error(e); } }
-  if(!c){ if(custom===null){ custom=html; $('codeEdit').value=html; setCust(true); } toast(T('블록으로 바꾸지 못했어요. HTML 코드 그대로 두었어요')); return false; }
-  prevCustom=html; $('projName').value=$('projName').value||c.title; $('codeUndo').hidden=false; save();
-  toast(how?T('블록으로 바꾸기 어려운 부분은 직접 쓰기 블록에 넣었어요'):F('블록 {0}개 · 직접 쓰기 {1}개로 바꿨어요',c.stats.blocks,c.stats.raw+c.stats.rawHtml)); return true; }
+  if(!c){ convFail(html); return false; }
+  convDone(html,c,how); return true; }
 function finalHTML(){ return custom!==null?custom:BH.build(ws,{trap:false}); }
-function showCode(){ if(custom!==null) return; var v=finalHTML(); if($('codeEdit').value!==v) $('codeEdit').value=v; }
+function showCode(){ if(custom!==null) return; var v=finalHTML(), ta=$('codeEdit');
+  if(v.length>BIGCODE){ var cut=v.slice(0,40000)+'\n\n'+F('… 큰 코드라 앞부분 {0}글자만 보여 줘요. 미리보기·복사·내려받기는 전체 {1}글자를 써요 …',40000,v.length); if(ta.value!==cut) ta.value=cut; ta.readOnly=true; return; }
+  ta.readOnly=false; if(ta.value!==v) ta.value=v; }
 function dropCustom(msg){ if(custom==null) return; custom=null; clearTimeout(customT); $('codeEdit').readOnly=false; setCust(false); $('codeNote').hidden=false; if(msg) toast(T('직접 쓴 HTML은 지웠어요. 블록 코드로 돌아왔어요')); }
-var pasting=false, BIGCODE=500000, AUTOCONV=200000, MAXCODE=2500*1024;
+var pasting=false, BIGCODE=500000, MAXCODE=2500*1024;
+function bigView(full){ var ta=$('codeEdit'); custom=full; ta.value=full.slice(0,40000)+'\n\n'+F('… 큰 코드라 앞부분 {0}글자만 보여 줘요. 미리보기·복사·내려받기는 전체 {1}글자를 써요 …',40000,full.length); ta.readOnly=true; ta.style.visibility=''; setCust(true); }
 function ta0Big(t){ return t.readOnly&&custom!==null&&!pasting; }
 $('codeEdit').addEventListener('input',function(){ if(pasting) return; var v=$('codeEdit').value; custom=v; setCust(true); clearTimeout(customT);
   customT=setTimeout(function(){ var t=$('codeEdit').value; if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=t; },Math.min(3000,500+Math.round(v.length/400))); });
@@ -129,10 +148,8 @@ $('codeEdit').addEventListener('paste',function(e){ var cd=e.clipboardData, text
     if(pos<n){ toast(F('큰 코드를 불러오는 중… {0}%',Math.round(pos/n*100))); requestAnimationFrame(step); return; }
     parts.push(v.slice(e0)); toast(F('큰 코드를 불러오는 중… {0}%',100));
     setTimeout(function(){ var full=parts.join('');
-      if(full.length>BIGCODE){ /* too big for the text box to show without freezing: keep all of it for the preview, copy and download, and show only the start (read only) */
-        custom=full; ta.value=full.slice(0,40000)+'\n\n'+F('… 큰 코드라 앞부분 {0}글자만 보여 줘요. 미리보기·복사·내려받기는 전체 {1}글자를 써요 …',40000,full.length); ta.readOnly=true; ta.style.visibility=''; pasting=false; setCust(true);
-        if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=full; toast(F('큰 코드 {0}KB를 불러왔어요',Math.round(full.length/1024))); return; }
-      ta.value=full; var at=s0+n; try{ ta.setSelectionRange(at,at); }catch(x){} ta.style.visibility=''; ta.readOnly=false; pasting=false; toast(T('큰 코드를 모두 불러왔어요')); ta.dispatchEvent(new Event('input')); if(full.length<=AUTOCONV) toBlocks(full,true); },30); })(); });
+      if(full.length>BIGCODE){ pasting=false; bigView(full); if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=full; toast(F('큰 코드 {0}KB를 불러왔어요',Math.round(full.length/1024))); setTimeout(function(){ toBlocks(full,true); },400); return; }
+      ta.value=full; var at=s0+n; try{ ta.setSelectionRange(at,at); }catch(x){} ta.style.visibility=''; ta.readOnly=false; pasting=false; toast(T('큰 코드를 모두 불러왔어요')); ta.dispatchEvent(new Event('input')); toBlocks(full,true); },30); })(); });
 $('codeBlocks').onclick=function(){ toBlocks(custom!==null?custom:$('codeEdit').value,false); };
 $('codeUndo').onclick=function(){ if(prevCustom==null) return; var h=prevCustom; window.__bh.showHTML(h); toast(T('바꾸기를 취소하고 HTML 코드로 돌려놓았어요')); };
 $('codeReset').onclick=function(){ dropCustom(false); lastPrev=''; refresh('run'); showCode(); toast(T('블록 코드로 되돌렸어요')); };
@@ -462,5 +479,5 @@ P.list=P.list.filter(function(e){ return e&&e.id; });
   if(!ok){ P.cur=null; createProject(T(BH_EXAMPLES[0].name),function(){ loadXML(BH_EXAMPLES[0].xml()); arrange(); }); } })();
 setTimeout(syncBar,50);
 if(EMB){ var embTry=0, embSend=function(){ var html=''; try{ if(P.cur===EMB) html=finalHTML(); }catch(e){ console.error(e); } if(!html&&++embTry<10) return setTimeout(embSend,300); try{ parent.postMessage({ffbhBuilt:1,id:EMB,html:html},'*'); }catch(e){} }; setTimeout(embSend,350); }
-window.__bh={showPreview:showPreview,showHTML:function(h){ custom=String(h); $('codeEdit').readOnly=false; $('codeEdit').value=custom; setCust(true); clearTimeout(customT); if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=custom; setPane('code'); },clearHTML:function(){ dropCustom(false); },ws:ws,copy:copyBlock,paste:pasteBlock,deleteAll:deleteAll,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,loadJSON:loadJSON,save:saveNow,toast:toast,projects:function(){ return P; },examples:BH_EXAMPLES};
+window.__bh={showPreview:showPreview,showHTML:function(h){ custom=String(h); $('codeEdit').readOnly=false; if(custom.length>BIGCODE) bigView(custom); else $('codeEdit').value=custom; setCust(true); clearTimeout(customT); if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=custom; setPane('code'); },clearHTML:function(){ dropCustom(false); },ws:ws,copy:copyBlock,paste:pasteBlock,deleteAll:deleteAll,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,loadJSON:loadJSON,save:saveNow,toast:toast,projects:function(){ return P; },examples:BH_EXAMPLES};
 })();
