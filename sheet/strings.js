@@ -6,6 +6,7 @@ FFT.add({
 '표 만들기':['Make a table','Crear tabla','Créer un tableau','Tabelle erstellen','表を作る'],
 '보내기':['Send','Enviar','Envoyer','Senden','送信'],
 '생각하는 중…':['Thinking…','Pensando…','Réflexion…','Denke nach…','考え中…'],
+'멈추기':['Stop','Detener','Arrêter','Stopp','止める'],
 'AI 설정':['AI settings','Ajustes de IA','Réglages IA','KI-Einstellungen','AI設定'],
 '선택한 AI 칸 다시 묻기':['Re-ask selected AI cells','Volver a preguntar celdas IA','Redemander les cellules IA','KI-Zellen neu fragen','選んだAIセルを再質問'],
 'AI 함수 쓰는 법':['How to use the AI function','Cómo usar la función IA','Utiliser la fonction IA','KI-Funktion nutzen','AI関数の使い方'],

@@ -68,7 +68,8 @@ function setMode(m){ mode=m; chips(m); document.querySelectorAll('.atab').forEac
   $('aiQ').placeholder=ph; $('aiOut').innerHTML=''; $('aiActs').innerHTML='';
   $('aiCtx').textContent=m==='table'?F('{0} 칸부터 표를 넣어요',E.addr(A.act().r,A.act().c)):(function(){ var t=tableText(); return t?F('{0} 표를 AI에게 보여 줘요',E.rangeStr(t.g)):T('표를 고르면 AI가 그 내용을 보고 답해요'); })();
 }
-function busy(on){ $('aiGo').disabled=on; $('aiGo').textContent=on?T('생각하는 중…'):T('보내기'); }
+var running=false;
+function busy(on){ running=on; $('aiGo').textContent=on?T('멈추기'):T('보내기'); $('aiGo').classList.toggle('stopBtn',on); }
 function out(html){ $('aiOut').innerHTML=html; }
 function liveOut(t){ var e=$('aiOut').firstChild; if(!e||e.className!=='aiLive'){ out('<pre class="aiLive"></pre>'); e=$('aiOut').firstChild; }
   var stick=e.scrollHeight-e.scrollTop-e.clientHeight<24; e.textContent=t; if(stick) e.scrollTop=e.scrollHeight; }
@@ -122,7 +123,7 @@ function chartLabel(ch){ var n={bar:T('세로 막대'),hbar:T('가로 막대'),l
 function open(){ A.commitEdit(); setMode(mode); $('aiDlg').classList.add('open'); setTimeout(function(){ $('aiQ').focus(); },60); }
 function close(){ $('aiDlg').classList.remove('open'); }
 document.querySelectorAll('.atab').forEach(function(b){ b.onclick=function(){ setMode(b.dataset.m); }; });
-$('aiGo').onclick=go;
+$('aiGo').onclick=function(){ if(running){ try{ FFAI.stop(); }catch(e){} } else go(); };
 $('aiQ').addEventListener('keydown',function(e){ if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){ e.preventDefault(); go(); } e.stopPropagation(); });
 $('aiClose').onclick=close; $('aiDlg').addEventListener('click',function(e){ if(e.target.id==='aiDlg') close(); });
 $('aiSet').onclick=function(){ FFAI.settings(); };
