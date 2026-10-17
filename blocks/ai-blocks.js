@@ -21,7 +21,7 @@ function describe(hw,type,compact){
     inp.fieldRow.forEach(function(f){
       if(!f.name){ var t=!compact&&f.getText&&f.getText(); if(t&&t.trim()) parts.push(t.trim()); return; }
       var d;
-      if(f.name==='EL') d='EL=<NAME of a page element>';
+      if(f.name==='EL'||(type==='val_hit'&&(f.name==='A'||f.name==='B'))) d=f.name+'=<NAME of a page element>';
       else if(f.name==='IMG') d='IMG=<picture id>';
       else if(f.name==='VAR') d='VAR=<variable name>';
       else if(f instanceof Blockly.FieldDropdown){ var o=[]; try{ o=f.getOptions(false); }catch(e){} d=f.name+'('+o.map(function(x){ return x[1]; }).join('|')+')'; }
