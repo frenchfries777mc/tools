@@ -113,6 +113,29 @@ function renameSheetInFormula(raw,from,to){
   return ch?'='+rebuild(toks):raw;
 }
 
+/* ---------- named ranges ---------- */
+var REFC=new Map();
+function parseNameRef(text){
+  if(REFC.has(text)) return REFC.get(text);
+  var toks=tokenize(String(text||'')).filter(function(t){ return t.t!=='ws'; }), out=null;
+  if(toks.length===1&&(toks[0].t==='ref'||toks[0].t==='rng')&&!toks[0].dead&&toks[0].sh!=null) out={sh:toks[0].sh,a:toks[0].a,b:toks[0].b||toks[0].a,t:toks[0].t,col:!!toks[0].col};
+  if(REFC.size>500) REFC.clear(); REFC.set(text,out); return out;
+}
+/* "A2:A10" or "Sheet2!A2:A10" -> absolute reference text with its sheet ("Sheet2!$A$2:$A$10"), or null */
+function nameRef(text,own){
+  var toks=tokenize(String(text||'').trim()).filter(function(t){ return t.t!=='ws'; });
+  if(toks.length!==1||(toks[0].t!=='ref'&&toks[0].t!=='rng')||toks[0].dead) return null;
+  var t=toks[0]; if(t.sh==null) t.sh=own; if(t.sh==null||t.sh==='') return null;
+  [t.a,t.b].forEach(function(p){ if(!p) return; p.ac=true; p.ar=p.r!=null; });
+  return tokText(t);
+}
+function validName(n){
+  n=String(n||''); if(!n||n.length>64||!/^[A-Za-z_가-힣][A-Za-z0-9_.가-힣]*$/.test(n)) return 'format';
+  if(/^[A-Za-z]{1,3}\d+$/.test(n)||/^[Rr]\d*[Cc]\d*$/.test(n)) return 'cell';
+  var u=n.toUpperCase(); if(u==='TRUE'||u==='FALSE'||FN[u]) return 'function';
+  return '';
+}
+
 /* ---------- parser ---------- */
 function parse(src){
   var toks=tokenize(src).filter(function(t){ return t.t!=='ws'; }), p=0;
@@ -136,7 +159,7 @@ function parse(src){
     if(t.t==='id'){
       if(isOp('(')){ p++; var args=[]; if(!isOp(')')){ for(;;){ if(isOp(',')||isOp(')')) args.push({k:'v',v:null}); else args.push(expr()); if(isOp(',')){ p++; continue; } break; } } eat(')'); return {k:'fn',n:t.v,args:args}; }
       if(t.v==='TRUE') return {k:'v',v:true}; if(t.v==='FALSE') return {k:'v',v:false};
-      return {k:'err',e:'#NAME?'};
+      return {k:'name',n:t.v};
     }
     if(t.t==='op'&&t.v==='('){ var e=expr(); eat(')'); return e; }
     if(t.t==='op'&&t.v==='{'){ var items=[]; for(;;){ items.push(expr()); if(isOp(',')){ p++; continue; } break; } eat('}'); return {k:'arr',items:items}; }
@@ -179,6 +202,8 @@ function toBool(v){ if(v==null) return false; if(typeof v==='boolean') return v;
 /* ---------- engine ---------- */
 function Engine(doc){ this.doc=doc; this.cache=[]; this.busy={}; this.parsed=new Map(); }
 Engine.prototype.reset=function(){ this.cache=[]; };
+/* named ranges: doc.names = [{name, ref:"Sheet1!$A$2:$A$10"}] */
+Engine.prototype.nameDef=function(up){ var l=this.doc.names; if(!l) return null; for(var i=0;i<l.length;i++) if(l[i].name.toUpperCase()===up) return l[i]; return null; };
 Engine.prototype.sheetIndex=function(name,own){
   if(name==null) return own; var sh=this.doc.sheets;
   for(var i=0;i<sh.length;i++) if(sh[i].name===name) return i;
@@ -215,6 +240,8 @@ Engine.prototype.ev=function(n,si){
     case 'rng': { var s2=this.sheetIndex(n.sh,si); if(s2<0) fail('#REF!');
       var r1=n.r1, r2=n.r2; if(n.col){ r1=0; r2=Math.max(0,this.maxRow(s2)); }
       return new Rng(s2,Math.min(r1,r2),Math.min(n.c1,n.c2),Math.max(r1,r2),Math.max(n.c1,n.c2)); }
+    case 'name': { var nd=this.nameDef(n.n); if(!nd) fail('#NAME?'); var pr=parseNameRef(nd.ref); if(!pr) fail('#REF!');
+      return this.ev(pr.t==='ref'?{k:'ref',sh:pr.sh,r:pr.a.r,c:pr.a.c}:{k:'rng',sh:pr.sh,r1:pr.a.r,c1:pr.a.c,r2:pr.b.r,c2:pr.b.c,col:!!pr.col},si); }
     case 'arr': return {arr:n.items.map(function(x){ return self.scal(self.ev(x,si)); })};
     case 'neg': return -toNum(this.scal(this.ev(n.a,si)));
     case 'pct': return toNum(this.scal(this.ev(n.a,si)))/100;
@@ -480,6 +507,6 @@ def('AI',function(a){
 
 var api={K:K,RC:RC,KC:KC,colName:colName,colIdx:colIdx,addr:addr,parseAddr:parseAddr,parseRange:parseRange,rangeStr:rangeStr,
   tokenize:tokenize,rebuild:rebuild,parse:parse,literal:literal,shiftFormula:shiftFormula,adjustFormula:adjustFormula,renameSheetInFormula:renameSheetInFormula,
-  Engine:Engine,Err:Err,errHint:errHint,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,pivot:pivot,asDate:asDate,dateStr:dateStr,FN:FN,quoteSheet:quoteSheet};
+  Engine:Engine,Err:Err,errHint:errHint,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,pivot:pivot,parseNameRef:parseNameRef,nameRef:nameRef,validName:validName,refText:refText,asDate:asDate,dateStr:dateStr,FN:FN,quoteSheet:quoteSheet};
 if(typeof module!=='undefined'&&module.exports) module.exports=api; else root.FSE=api;
 })(this);

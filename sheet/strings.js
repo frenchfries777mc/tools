@@ -537,3 +537,27 @@ FFT.add({
 FFT.add({
 "두껍게":["Thick", "Grueso", "Épais", "Dick", "太く"]
 });
+
+/* v13: named ranges */
+FFT.add({
+"이름 범위 관리…":["Manage named ranges…", "Administrar rangos con nombre…", "Gérer les plages nommées…", "Benannte Bereiche verwalten…", "名前付き範囲の管理…"],
+"이름 범위":["Named ranges", "Rangos con nombre", "Plages nommées", "Benannte Bereiche", "名前付き範囲"],
+"범위에 이름을 붙이면 =SUM(sales) 처럼 수식에서 이름으로 쓸 수 있어요. 이름 칸에 이름을 치고 Enter를 누르면 그 범위로 이동해요.":["Give a range a name and use it in formulas like =SUM(sales). Type the name in the name box and press Enter to jump to that range.", "Ponle nombre a un rango y úsalo en fórmulas como =SUM(sales). Escribe el nombre en el cuadro de nombres y pulsa Enter para ir a ese rango.", "Donne un nom à une plage et utilise-le dans les formules comme =SUM(sales). Saisis le nom dans la zone de nom et appuie sur Entrée pour y aller.", "Gib einem Bereich einen Namen und nutze ihn in Formeln wie =SUM(sales). Name ins Namenfeld tippen und Enter drücken, um dorthin zu springen.", "範囲に名前を付けると =SUM(sales) のように数式で使えます。名前ボックスに名前を入れてEnterを押すとその範囲に移動します。"],
+"이름 만들기 · 고치기":["Create · edit a name", "Crear · editar nombre", "Créer · modifier un nom", "Name erstellen · ändern", "名前の作成・変更"],
+"범위":["Range", "Rango", "Plage", "Bereich", "範囲"],
+"예: sales":["e.g. sales", "p. ej. ventas", "ex. ventes", "z. B. umsatz", "例: sales"],
+"예: A2:A10 또는 시트2!A2:A10":["e.g. A2:A10 or Sheet2!A2:A10", "p. ej. A2:A10 o Hoja2!A2:A10", "ex. A2:A10 ou Feuille2!A2:A10", "z. B. A2:A10 oder Blatt2!A2:A10", "例: A2:A10 または シート2!A2:A10"],
+"지금 선택":["Use selection", "Usar selección", "Utiliser la sélection", "Auswahl verwenden", "現在の選択"],
+"저장":["Save", "Guardar", "Enregistrer", "Speichern", "保存"],
+"이동":["Go to", "Ir a", "Aller à", "Gehe zu", "移動"],
+"아직 이름이 없어요":["No names yet", "Aún no hay nombres", "Aucun nom pour l’instant", "Noch keine Namen", "まだ名前がありません"],
+"이 이름이 가리키는 범위가 없어요":["This name points to a range that no longer exists", "Este nombre apunta a un rango que ya no existe", "Ce nom pointe vers une plage qui n’existe plus", "Dieser Name zeigt auf einen nicht mehr vorhandenen Bereich", "この名前が指す範囲がありません"],
+"칸 주소처럼 보이는 이름은 쓸 수 없어요":["A name that looks like a cell address can’t be used", "No se puede usar un nombre que parezca una dirección de celda", "Un nom qui ressemble à une adresse de cellule est interdit", "Ein Name, der wie eine Zelladresse aussieht, ist nicht erlaubt", "セル番地のような名前は使えません"],
+"함수 이름과 같은 이름은 쓸 수 없어요":["A name equal to a function name can’t be used", "No se puede usar el nombre de una función", "Le nom d’une fonction est interdit", "Ein Funktionsname ist nicht erlaubt", "関数名と同じ名前は使えません"],
+"이름은 글자로 시작하고 글자·숫자·_ 만 쓸 수 있어요":["A name starts with a letter and can use only letters, digits and _", "El nombre empieza con una letra y solo admite letras, números y _", "Un nom commence par une lettre et n’accepte que lettres, chiffres et _", "Ein Name beginnt mit einem Buchstaben und darf nur Buchstaben, Ziffern und _ enthalten", "名前は文字で始まり、文字・数字・_ だけ使えます"],
+"범위를 알 수 없어요. 예: A2:A10":["Can’t read that range. Example: A2:A10", "No se entiende el rango. Ejemplo: A2:A10", "Plage illisible. Exemple : A2:A10", "Bereich nicht lesbar. Beispiel: A2:A10", "範囲が読み取れません。例: A2:A10"],
+"이름은 200개까지 만들 수 있어요":["You can create up to 200 names", "Puedes crear hasta 200 nombres", "Tu peux créer jusqu’à 200 noms", "Du kannst bis zu 200 Namen anlegen", "名前は200個まで作れます"],
+"\"{0}\" 이름을 바꿨어요":["Updated the name \"{0}\"", "Nombre \"{0}\" actualizado", "Nom « {0} » modifié", "Name „{0}“ geändert", "名前「{0}」を変更しました"],
+"\"{0}\" 이름을 만들었어요":["Created the name \"{0}\"", "Nombre \"{0}\" creado", "Nom « {0} » créé", "Name „{0}“ erstellt", "名前「{0}」を作りました"],
+"\"{0}\" 이름을 붙였어요":["Named the selection \"{0}\"", "Selección nombrada \"{0}\"", "Sélection nommée « {0} »", "Auswahl „{0}“ benannt", "選択範囲に「{0}」と名前を付けました"]
+});

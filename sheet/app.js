@@ -18,6 +18,7 @@ function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(
 function fixDoc(d){
   if(!d||!d.sheets||!d.sheets.length) return newDoc();
   d.sheets.forEach(function(s){ s.cells=s.cells||{}; s.cw=s.cw||{}; s.cfs=s.cfs||[]; s.dv=s.dv||[]; s.charts=s.charts||[]; s.merges=s.merges||[]; s.fr=Math.max(0,s.fr|0); s.fc=Math.max(0,s.fc|0); s.rows=Math.max(s.rows||ROWS,10); s.cols=Math.max(s.cols||COLS,5); });
+  d.names=Array.isArray(d.names)?d.names.filter(function(n){ return n&&typeof n.name==='string'&&typeof n.ref==='string'; }):[];
   if(!(d.active>=0&&d.active<d.sheets.length)) d.active=0; return d;
 }
 
@@ -43,9 +44,9 @@ function saveNow(){
 }
 
 /* ---------- undo ---------- */
-function snap(){ return JSON.stringify({a:doc.active,s:doc.sheets}); }
+function snap(){ return JSON.stringify({a:doc.active,s:doc.sheets,n:doc.names}); }
 function pushUndo(){ undoS.push(snap()); if(undoS.length>80) undoS.shift(); redoS=[]; }
-function restore(s){ var o=JSON.parse(s); doc.sheets=o.s; doc.active=Math.min(o.a,o.s.length-1); fixDoc(doc); eng=new E.Engine(doc); switchSheet(doc.active,true); saveSoon(); }
+function restore(s){ var o=JSON.parse(s); doc.sheets=o.s; doc.names=o.n||[]; doc.active=Math.min(o.a,o.s.length-1); fixDoc(doc); eng=new E.Engine(doc); switchSheet(doc.active,true); saveSoon(); }
 function undo(){ commitEdit(); if(!undoS.length) return toast(T('되돌릴 작업이 없어요')); redoS.push(snap()); restore(undoS.pop()); }
 function redo(){ commitEdit(); if(!redoS.length) return; undoS.push(snap()); restore(redoS.pop()); }
 
@@ -200,7 +201,10 @@ function scrollTo(r,c){
   if(x-hw<wrap.scrollLeft) wrap.scrollLeft=x-hw; else if(x+w>wrap.scrollLeft+wrap.clientWidth) wrap.scrollLeft=x+w-wrap.clientWidth;
   if(y-hh<wrap.scrollTop) wrap.scrollTop=y-hh; else if(y+h>wrap.scrollTop+wrap.clientHeight) wrap.scrollTop=y+h-wrap.clientHeight;
 }
-function selName(){ return E.rangeStr(sel); }
+function selName(){
+  var nm=doc.names.filter(function(n){ var p=E.parseNameRef(n.ref); return p&&p.sh===sh.name&&p.t==='rng'&&!p.col&&p.a.r===sel.r1&&p.a.c===sel.c1&&p.b.r===sel.r2&&p.b.c===sel.c2||p&&p.sh===sh.name&&p.t==='ref'&&p.a.r===sel.r1&&p.a.c===sel.c1&&sel.r1===sel.r2&&sel.c1===sel.c2; })[0];
+  return nm?nm.name:E.rangeStr(sel);
+}
 function updateBar(){
   nameBox.value=selName();
   if(!editing||editing.src!=='bar'){ var c=sh.cells[K(act.r,act.c)]; fin.value=c&&c.v!=null?c.v:''; }
@@ -293,8 +297,11 @@ ed.addEventListener('compositionstart',function(){ if(!editing){ startEdit('',tr
 fin.addEventListener('focus',function(){ if(editing&&editing.src==='cell'){ var v=ed.value; editing.src='bar'; ed.className='ghost'; fin.value=v; } else if(!editing){ startEdit(null,false,'bar'); fin.value=(sh.cells[K(act.r,act.c)]||{}).v||''; } });
 fin.addEventListener('input',function(){ refDrag=null; syncFromBar(); refMode(); acUpdate(); });
 nameBox.addEventListener('keydown',function(e){
-  if(e.key!=='Enter') return; e.preventDefault(); var g=E.parseRange(nameBox.value.trim());
-  if(g){ selectRange(g); nameBox.blur(); } else { toast(T('주소를 알 수 없어요')); nameBox.value=selName(); }
+  if(e.key!=='Enter') return; e.preventDefault(); var txt=nameBox.value.trim(), g=E.parseRange(txt), nd=findName(txt);
+  if(g){ selectRange(g); nameBox.blur(); }
+  else if(nd){ goName(nd); nameBox.blur(); }
+  else if(txt&&!E.validName(txt)){ setName(txt,E.nameRef(E.rangeStr(sel),sh.name)); toast(F('"{0}" 이름을 붙였어요',txt)); nameBox.blur(); }
+  else { toast(T('주소를 알 수 없어요')); nameBox.value=selName(); }
 });
 nameBox.addEventListener('focus',function(){ commitEdit(); setTimeout(function(){ nameBox.select(); },0); });
 
@@ -623,6 +630,7 @@ function structural(isRow,at,count){
     if(count>0){ if(x>=at) x+=count; } else { if(x>=at&&x<at-count) continue; if(x>=at-count) x+=count; }
     cells[isRow?K(x,c):K(r,x)]=sh.cells[k]; }
   sh.cells=cells;
+  doc.names.forEach(function(n){ n.ref=E.adjustFormula('='+n.ref,'',name,isRow,at,count).slice(1); });
   doc.sheets.forEach(function(s){ for(var k in s.cells){ var cl=s.cells[k]; if(cl.v&&String(cl.v)[0]==='=') cl.v=E.adjustFormula(cl.v,s.name,name,isRow,at,count); } });
   if(!isRow){ var cwn={}; for(var c in sh.cw){ var x=+c; if(count>0){ if(x>=at) x+=count; } else { if(x>=at&&x<at-count) continue; if(x>=at-count) x+=count; } cwn[x]=sh.cw[c]; } sh.cw=cwn; }
   function adj(o){ var a=isRow?'r1':'c1', b=isRow?'r2':'c2';
@@ -690,6 +698,7 @@ $('tabMenu').addEventListener('click',function(e){
   if(b.dataset.t==='rename') ask(T('시트 이름 바꾸기'),'',sh.name).then(function(v){ v=(v||'').trim().replace(/[\[\]:*?\/\\]/g,'').slice(0,31); if(!v||v===sh.name) return;
       if(doc.sheets.some(function(s){ return s.name===v; })) return toast(T('같은 이름의 시트가 있어요'));
       pushUndo(); var old=sh.name; doc.sheets.forEach(function(s){ for(var k in s.cells){ var c=s.cells[k]; if(c.v&&String(c.v)[0]==='=') c.v=E.renameSheetInFormula(c.v,old,v); } });
+      doc.names.forEach(function(n){ n.ref=E.renameSheetInFormula('='+n.ref,old,v).slice(1); });
       sh.name=v; renderTabs(); changed(); });
   else if(b.dataset.t==='dup'){ pushUndo(); var c=JSON.parse(JSON.stringify(sh)); c.name=uniqueName(sh.name+' '); doc.sheets.splice(i+1,0,c); switchSheet(i+1); saveSoon(); }
   else if(b.dataset.t==='left'&&i>0){ pushUndo(); doc.sheets.splice(i-1,0,doc.sheets.splice(i,1)[0]); doc.active=i-1; renderTabs(); changed(); }
@@ -898,6 +907,9 @@ function exportXLSX(){
       var nm=s.name.replace(/[\[\]:*?\/\\]/g,'').slice(0,31)||('Sheet'+(si+1));
       X.utils.book_append_sheet(wb,ws,nm);
     });
+    var exn=[]; doc.names.forEach(function(n){ var p=E.parseNameRef(n.ref), si=p?eng.sheetIndex(p.sh,0):-1; if(si<0) return;
+      var en=doc.sheets[si].name.replace(/[\[\]:*?\/\\]/g,'').slice(0,31)||('Sheet'+(si+1)); exn.push({Name:n.name,Ref:"'"+en.replace(/'/g,"''")+"'!"+E.refText(p.a)+(p.t==='rng'?':'+E.refText(p.b):'')}); });
+    if(exn.length) wb.Workbook={Names:exn};
     var out=X.write(wb,{bookType:'xlsx',type:'array'});
     download(new Blob([out],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),(doc.name||'sheet')+'.xlsx');
   },function(){ toast(T('엑셀 기능을 불러오지 못했어요')); });
@@ -933,6 +945,7 @@ function importFile(file){
           d.sheets.push(s);
         });
         if(!d.sheets.length) d.sheets.push(newSheet(T('시트')+'1'));
+        d.names=[]; ((wb.Workbook&&wb.Workbook.Names)||[]).forEach(function(n){ if(n.Sheet!=null||!n.Name||/^_xlnm/i.test(n.Name)||E.validName(n.Name)||d.names.length>=200) return; var rf=E.nameRef(String(n.Ref||'').replace(/^=/,''),null); if(rf) d.names.push({name:n.Name,ref:rf}); });
         docId=uid(); doc=fixDoc(d); eng=new E.Engine(doc); undoS=[]; redoS=[]; $('docName').value=doc.name; switchSheet(0); saveNow(); toast(T('파일을 열었어요'));
       }catch(err){ console.error(err); toast(T('이 파일은 열 수 없어요')); }
     };
@@ -968,13 +981,15 @@ var acItems=[], acIdx=0;
 function acOpen(){ return $('acBox').classList.contains('open'); }
 function acHide(){ $('acBox').classList.remove('open'); acItems=[]; }
 function acToken(inp){
-  var v=inp.value; if(v[0]!=='=') return null; var p=inp.selectionStart==null?v.length:inp.selectionStart, m=/[A-Za-z][A-Za-z0-9._]*$/.exec(v.slice(0,p));
+  var v=inp.value; if(v[0]!=='=') return null; var p=inp.selectionStart==null?v.length:inp.selectionStart, m=/[A-Za-z_가-힣][A-Za-z0-9._가-힣]*$/.exec(v.slice(0,p));
   if(!m) return null; var before=v.slice(0,p-m[0].length); if(!/(^=|[(+\-*\/^,;&<>=:])\s*$/.test(before)) return null;
   if(/^[A-Za-z]{1,3}\d+$/.test(m[0])) return null; return {t:m[0],at:p-m[0].length,end:p};
 }
 function acUpdate(){
   if(!editing){ acHide(); return; } var inp=edInput(), tk=acToken(inp); if(!tk){ acHide(); return; }
-  var q=tk.t.toUpperCase(); acItems=FNDOC.filter(function(f){ return f[1].indexOf(q)===0&&f[1]!==q; }).slice(0,6);
+  var q=tk.t.toUpperCase();
+  var nms=doc.names.filter(function(n){ var u=n.name.toUpperCase(); return u.indexOf(q)===0&&u!==q; }).map(function(n){ var rt=n.ref.replace(/\$/g,''); return ['이름 범위',n.name,n.name,T('이름 범위')+' · '+rt,T('이름 범위')+' · '+rt,true]; });
+  acItems=nms.concat(FNDOC.filter(function(f){ return f[1].indexOf(q)===0&&f[1]!==q; })).slice(0,6);
   if(!acItems.length){ acHide(); return; } acIdx=0; var box=$('acBox');
   box.innerHTML=acItems.map(function(f,i){ var d=FFT.lang==='ko'?f[3]:f[4]; return '<button data-i="'+i+'"'+(i?'':' class="on"')+' data-notr><code>'+f[2].replace(/</g,'&lt;')+'</code><span>'+String(d).replace(/</g,'&lt;')+'</span></button>'; }).join('');
   box.classList.add('open'); var r=inp.getBoundingClientRect(), w=box.offsetWidth, h=box.offsetHeight;
@@ -984,7 +999,7 @@ function acUpdate(){
 function acMove(d){ acIdx=(acIdx+d+acItems.length)%acItems.length; Array.prototype.forEach.call($('acBox').children,function(b,i){ b.classList.toggle('on',i===acIdx); }); }
 function acPick(i){
   var f=acItems[i]; if(!f||!editing) return; var inp=edInput(), tk=acToken(inp); if(!tk) return acHide();
-  inp.value=inp.value.slice(0,tk.at)+f[1]+'('+inp.value.slice(tk.end); var L=tk.at+f[1].length+1;
+  inp.value=inp.value.slice(0,tk.at)+f[1]+(f[5]?'':'(')+inp.value.slice(tk.end); var L=tk.at+f[1].length+(f[5]?0:1);
   try{ inp.focus({preventScroll:true}); inp.setSelectionRange(L,L); }catch(e){}
   if(inp===ed){ fit(); fin.value=ed.value; } else syncFromBar(); refMode(); acHide();
 }
@@ -1278,10 +1293,46 @@ $('bdColor').addEventListener('input',function(){ Array.prototype.forEach.call($
 function openBorder(){ commitEdit(); $('bdRg').textContent=E.rangeStr(growMerges(Object.assign({},sel))); openDlg('bdDlg'); }
 $('bdDlg').querySelector('.bdGrid').addEventListener('click',function(e){ var b=e.target.closest('[data-b]'); if(b) applyBorder(b.dataset.b); });
 
+/* ---------- v13: named ranges ---------- */
+function findName(n){ var u=String(n||'').toUpperCase(); return doc.names.filter(function(x){ return x.name.toUpperCase()===u; })[0]||null; }
+function setName(name,ref){
+  pushUndo(); var u=name.toUpperCase(), i=-1; doc.names.forEach(function(n,j){ if(n.name.toUpperCase()===u) i=j; });
+  if(i>=0) doc.names[i]={name:name,ref:ref}; else doc.names.push({name:name,ref:ref});
+  changed(); return i>=0;
+}
+function goName(nd){
+  var p=E.parseNameRef(nd.ref), si=p?eng.sheetIndex(p.sh,doc.active):-1; if(!p||si<0) return toast(T('이 이름이 가리키는 범위가 없어요'));
+  if(si!==doc.active) switchSheet(si);
+  selectRange({r1:p.col?0:p.a.r,c1:p.a.c,r2:p.col?sh.rows-1:p.b.r,c2:p.b.c});
+}
+function drawNames(){
+  var l=$('nmList'); l.innerHTML='';
+  doc.names.forEach(function(n){ var d=document.createElement('div'); d.className='cfItem'; d.setAttribute('data-notr','');
+    d.innerHTML='<span class="nmN"></span><span class="nmR"></span><button class="ib tbtn nmGo" style="height:32px" aria-label="이동">→</button><button class="ib tbtn" style="height:32px" aria-label="지우기">×</button>';
+    d.children[0].textContent=n.name; d.children[1].textContent=n.ref.replace(/\$/g,''); d.children[2].title=T('이동'); d.children[3].title=T('지우기');
+    d.children[0].onclick=d.children[1].onclick=function(){ $('nmName').value=n.name; $('nmRef').value=n.ref.replace(/\$/g,''); };
+    d.children[2].onclick=function(){ closeDlgs(); goName(n); };
+    d.children[3].onclick=function(){ pushUndo(); doc.names=doc.names.filter(function(x){ return x!==n; }); changed(); drawNames(); };
+    l.appendChild(d); });
+  if(!doc.names.length) l.innerHTML='<div class="empty" style="padding:12px">'+T('아직 이름이 없어요')+'</div>';
+}
+function openNames(){ commitEdit(); $('nmName').value=''; $('nmRef').value=E.rangeStr(sel); drawNames(); openDlg('nmDlg',$('nmName')); }
+$('nmUse').onclick=function(){ $('nmRef').value=E.rangeStr(sel); };
+$('nmSave').onclick=function(){
+  var name=$('nmName').value.trim(), bad=E.validName(name);
+  if(bad) return toast(T(bad==='cell'?'칸 주소처럼 보이는 이름은 쓸 수 없어요':bad==='function'?'함수 이름과 같은 이름은 쓸 수 없어요':'이름은 글자로 시작하고 글자·숫자·_ 만 쓸 수 있어요'));
+  var ref=E.nameRef($('nmRef').value,sh.name); if(!ref) return toast(T('범위를 알 수 없어요. 예: A2:A10'));
+  if(!findName(name)&&doc.names.length>=200) return toast(T('이름은 200개까지 만들 수 있어요'));
+  var upd=setName(name,ref); drawNames(); $('nmName').value=''; toast(F(upd?'"{0}" 이름을 바꿨어요':'"{0}" 이름을 만들었어요',name));
+};
+$('nmName').addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); $('nmSave').click(); } });
+$('nmRef').addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); $('nmSave').click(); } });
+
 /* ---------- v11: data menu, pivot table ---------- */
 $('dataMenu').addEventListener('click',function(e){ var b=e.target.closest('[data-d]'); if(!b) return; closeMenus(); dataCmd(b.dataset.d); });
 function dataCmd(d){
   if(d==='pivot') return openPivot();
+  if(d==='names') return openNames();
 }
 var pvG=null;
 function pvFillCols(){
