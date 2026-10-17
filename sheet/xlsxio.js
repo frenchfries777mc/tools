@@ -237,25 +237,30 @@ function cfLit(E,a){ var l=E.literal(a); if(typeof l==='number') return String(l
 
 /* chart: {type,title,c1..r2 (data box, for placing),cat:{ref,vals}|null, ser:[{nameRef,name,ref,vals}], xy:{ref,vals}|null} */
 function chartXml(ch){
+  if(ch.type==='dual'&&ch.ser.length<2) ch=Object.assign({},ch,{type:'bar'}); // two axes need two series
   function strCache(vals){ return '<c:strCache><c:ptCount val="'+vals.length+'"/>'+vals.map(function(v,i){ return '<c:pt idx="'+i+'"><c:v>'+esc(v)+'</c:v></c:pt>'; }).join('')+'</c:strCache>'; }
   function numCache(vals){ return '<c:numCache><c:formatCode>General</c:formatCode><c:ptCount val="'+vals.length+'"/>'+vals.map(function(v,i){ return v==null?'':'<c:pt idx="'+i+'"><c:v>'+v+'</c:v></c:pt>'; }).join('')+'</c:numCache>'; }
   function col(i){ return PAL[i%PAL.length].slice(1).toUpperCase(); }
   var sers=ch.ser.map(function(s,i){
+    var ty=ch.type==='dual'?(i===0?'bar':'line'):ch.type;
     var tx=s.nameRef?'<c:tx><c:strRef><c:f>'+esc(s.nameRef)+'</c:f>'+strCache([s.name])+'</c:strRef></c:tx>':'<c:tx><c:v>'+esc(s.name)+'</c:v></c:tx>';
-    var sp=ch.type==='line'||ch.type==='scatter'?'<c:spPr><a:ln w="28575"><a:solidFill><a:srgbClr val="'+col(i)+'"/></a:solidFill></a:ln></c:spPr>':'<c:spPr><a:solidFill><a:srgbClr val="'+col(i)+'"/></a:solidFill></c:spPr>';
-    var dpt=''; if(ch.type==='pie') dpt=s.vals.map(function(_,j){ return '<c:dPt><c:idx val="'+j+'"/><c:bubble3D val="0"/><c:spPr><a:solidFill><a:srgbClr val="'+col(j)+'"/></a:solidFill></c:spPr></c:dPt>'; }).join('');
-    var mk=ch.type==='line'?'<c:marker><c:symbol val="circle"/><c:size val="5"/></c:marker>':ch.type==='scatter'?'<c:marker><c:symbol val="circle"/><c:size val="7"/></c:marker>':'';
+    var sp=ty==='line'||ty==='scatter'?'<c:spPr><a:ln w="28575"><a:solidFill><a:srgbClr val="'+col(i)+'"/></a:solidFill></a:ln></c:spPr>':'<c:spPr><a:solidFill><a:srgbClr val="'+col(i)+'"/></a:solidFill></c:spPr>';
+    var dpt=''; if(ty==='pie') dpt=s.vals.map(function(_,j){ return '<c:dPt><c:idx val="'+j+'"/><c:bubble3D val="0"/><c:spPr><a:solidFill><a:srgbClr val="'+col(j)+'"/></a:solidFill></c:spPr></c:dPt>'; }).join('');
+    var mk=ty==='line'?'<c:marker><c:symbol val="circle"/><c:size val="5"/></c:marker>':ty==='scatter'?'<c:marker><c:symbol val="circle"/><c:size val="7"/></c:marker>':'';
     var vref='<c:f>'+esc(s.ref)+'</c:f>'+numCache(s.vals);
-    if(ch.type==='scatter') return '<c:ser><c:idx val="'+i+'"/><c:order val="'+i+'"/>'+tx+'<c:spPr><a:ln w="19050"><a:noFill/></a:ln></c:spPr>'+mk+'<c:xVal>'+(ch.xy.ref?'<c:numRef><c:f>'+esc(ch.xy.ref)+'</c:f>'+numCache(ch.xy.vals)+'</c:numRef>':'<c:numLit>'+numCache(ch.xy.vals).replace(/^<c:numCache>/,'').replace(/<\/c:numCache>$/,'')+'</c:numLit>')+'</c:xVal><c:yVal><c:numRef>'+vref+'</c:numRef></c:yVal><c:smooth val="0"/></c:ser>';
+    if(ty==='scatter') return '<c:ser><c:idx val="'+i+'"/><c:order val="'+i+'"/>'+tx+'<c:spPr><a:ln w="19050"><a:noFill/></a:ln></c:spPr>'+mk+'<c:xVal>'+(ch.xy.ref?'<c:numRef><c:f>'+esc(ch.xy.ref)+'</c:f>'+numCache(ch.xy.vals)+'</c:numRef>':'<c:numLit>'+numCache(ch.xy.vals).replace(/^<c:numCache>/,'').replace(/<\/c:numCache>$/,'')+'</c:numLit>')+'</c:xVal><c:yVal><c:numRef>'+vref+'</c:numRef></c:yVal><c:smooth val="0"/></c:ser>';
     var cat=ch.cat?'<c:cat><c:strRef><c:f>'+esc(ch.cat.ref)+'</c:f>'+strCache(ch.cat.vals)+'</c:strRef></c:cat>':'';
-    return '<c:ser><c:idx val="'+i+'"/><c:order val="'+i+'"/>'+tx+sp+(ch.type==='bar'||ch.type==='hbar'?'<c:invertIfNegative val="0"/>':'')+mk+dpt+cat+'<c:val><c:numRef>'+vref+'</c:numRef></c:val>'+(ch.type==='line'?'<c:smooth val="0"/>':'')+'</c:ser>'; }).join('');
-  var plot, axes='';
+    return '<c:ser><c:idx val="'+i+'"/><c:order val="'+i+'"/>'+tx+sp+(ty==='bar'||ty==='hbar'?'<c:invertIfNegative val="0"/>':'')+mk+dpt+cat+'<c:val><c:numRef>'+vref+'</c:numRef></c:val>'+(ty==='line'?'<c:smooth val="0"/>':'')+'</c:ser>'; });
+  var plot, axes='', sersS=sers.join('');
   var catAx='<c:catAx><c:axId val="111"/><c:scaling><c:orientation val="'+(ch.type==='hbar'?'maxMin':'minMax')+'"/></c:scaling><c:delete val="0"/><c:axPos val="'+(ch.type==='hbar'?'l':'b')+'"/><c:numFmt formatCode="General" sourceLinked="0"/><c:majorTickMark val="out"/><c:minorTickMark val="none"/><c:tickLblPos val="nextTo"/><c:crossAx val="222"/><c:crosses val="autoZero"/><c:auto val="1"/><c:lblAlgn val="ctr"/><c:lblOffset val="100"/><c:noMultiLvlLbl val="0"/></c:catAx>';
   var valAx=function(id,cross,pos){ return '<c:valAx><c:axId val="'+id+'"/><c:scaling><c:orientation val="minMax"/></c:scaling><c:delete val="0"/><c:axPos val="'+pos+'"/><c:majorGridlines/><c:numFmt formatCode="General" sourceLinked="1"/><c:majorTickMark val="out"/><c:minorTickMark val="none"/><c:tickLblPos val="nextTo"/><c:crossAx val="'+cross+'"/><c:crosses val="autoZero"/><c:crossBetween val="'+(ch.type==='scatter'?'midCat':'between')+'"/></c:valAx>'; };
-  if(ch.type==='pie') plot='<c:pieChart><c:varyColors val="1"/>'+sers+'<c:firstSliceAng val="0"/></c:pieChart>';
-  else if(ch.type==='line') { plot='<c:lineChart><c:grouping val="standard"/><c:varyColors val="0"/>'+sers+'<c:marker val="1"/><c:axId val="111"/><c:axId val="222"/></c:lineChart>'; axes=catAx+valAx(222,111,'l'); }
-  else if(ch.type==='scatter') { plot='<c:scatterChart><c:scatterStyle val="lineMarker"/><c:varyColors val="0"/>'+sers+'<c:axId val="111"/><c:axId val="222"/></c:scatterChart>'; axes=valAx(111,222,'b')+valAx(222,111,'l'); }
-  else { plot='<c:barChart><c:barDir val="'+(ch.type==='hbar'?'bar':'col')+'"/><c:grouping val="clustered"/><c:varyColors val="0"/>'+sers+'<c:gapWidth val="150"/><c:axId val="111"/><c:axId val="222"/></c:barChart>'; axes=catAx+valAx(222,111,ch.type==='hbar'?'b':'l'); }
+  if(ch.type==='pie') plot='<c:pieChart><c:varyColors val="1"/>'+sersS+'<c:firstSliceAng val="0"/></c:pieChart>';
+  else if(ch.type==='dual') { /* first series: columns on the left axis; the rest: lines on a secondary axis on the right */
+    plot='<c:barChart><c:barDir val="col"/><c:grouping val="clustered"/><c:varyColors val="0"/>'+sers[0]+'<c:gapWidth val="150"/><c:axId val="111"/><c:axId val="222"/></c:barChart><c:lineChart><c:grouping val="standard"/><c:varyColors val="0"/>'+sers.slice(1).join('')+'<c:marker val="1"/><c:axId val="333"/><c:axId val="444"/></c:lineChart>';
+    axes=catAx+valAx(222,111,'l')+catAx.replace('<c:axId val="111"/>','<c:axId val="333"/>').replace('<c:crossAx val="222"/>','<c:crossAx val="444"/>').replace('<c:delete val="0"/>','<c:delete val="1"/>')+valAx(444,333,'r').replace('<c:majorGridlines/>','').replace('<c:crosses val="autoZero"/>','<c:crosses val="max"/>'); }
+  else if(ch.type==='line') { plot='<c:lineChart><c:grouping val="standard"/><c:varyColors val="0"/>'+sersS+'<c:marker val="1"/><c:axId val="111"/><c:axId val="222"/></c:lineChart>'; axes=catAx+valAx(222,111,'l'); }
+  else if(ch.type==='scatter') { plot='<c:scatterChart><c:scatterStyle val="lineMarker"/><c:varyColors val="0"/>'+sersS+'<c:axId val="111"/><c:axId val="222"/></c:scatterChart>'; axes=valAx(111,222,'b')+valAx(222,111,'l'); }
+  else { plot='<c:barChart><c:barDir val="'+(ch.type==='hbar'?'bar':'col')+'"/><c:grouping val="clustered"/><c:varyColors val="0"/>'+sersS+'<c:gapWidth val="150"/><c:axId val="111"/><c:axId val="222"/></c:barChart>'; axes=catAx+valAx(222,111,ch.type==='hbar'?'b':'l'); }
   var title=ch.title?'<c:title><c:tx><c:rich><a:bodyPr/><a:p><a:r><a:rPr lang="ko-KR" sz="1400" b="1"/><a:t>'+esc(ch.title)+'</a:t></a:r></a:p></c:rich></c:tx><c:overlay val="0"/></c:title><c:autoTitleDeleted val="0"/>':'<c:autoTitleDeleted val="1"/>';
   return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><c:chartSpace xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="'+NS_R+'"><c:roundedCorners val="0"/><c:chart>'+title+'<c:plotArea><c:layout/>'+plot+axes+'</c:plotArea>'+(ch.ser.length>1||ch.type==='pie'?'<c:legend><c:legendPos val="b"/><c:overlay val="0"/></c:legend>':'')+'<c:plotVisOnly val="1"/><c:dispBlanksAs val="gap"/></c:chart></c:chartSpace>';
 }
@@ -377,7 +382,7 @@ function convertRule(r,g,styles){
 }
 function readChart(txt){
   var d=parseXml(txt); if(!d) return null; var pa=q1(d,'plotArea'); if(!pa) return null;
-  var type=null; ['barChart','lineChart','pieChart','scatterChart'].forEach(function(n){ var e=q1(pa,n); if(e&&!type){ type=n==='barChart'?((q1(e,'barDir')||{getAttribute:function(){ return 'col'; }}).getAttribute('val')==='bar'?'hbar':'bar'):n==='lineChart'?'line':n==='pieChart'?'pie':'scatter'; } });
+  var type=null; if(q1(pa,'barChart')&&q1(pa,'lineChart')&&(q1(q1(pa,'barChart'),'barDir')||{getAttribute:function(){ return 'col'; }}).getAttribute('val')!=='bar') type='dual'; ['barChart','lineChart','pieChart','scatterChart'].forEach(function(n){ var e=q1(pa,n); if(e&&!type){ type=n==='barChart'?((q1(e,'barDir')||{getAttribute:function(){ return 'col'; }}).getAttribute('val')==='bar'?'hbar':'bar'):n==='lineChart'?'line':n==='pieChart'?'pie':'scatter'; } });
   if(!type) return null;
   var title=''; var ti=kids(q1(d,'chart'),'title')[0]; if(ti) title=Array.prototype.map.call(q(ti,'t'),function(x){ return x.textContent; }).join('');
   var sheet=null, box=null;

@@ -97,5 +97,21 @@ test('v20 dates',()=>{ eq(f('=EOMONTH(DATE(2024,1,15),1)').length>0,true); eq(f(
 test('v20 finance',()=>{ near('=PMT(0.05/12,360,-200000)',1073.64,0.01); near('=FV(0.05,10,-100)',1257.79,0.01); near('=PV(0.05,10,-100)',772.17,0.01); near('=NPV(0.1,100,100)',173.55,0.01); near('=SLN(1000,100,9)',100); near('=IRR(B1:B3)',0.1,1e-4,{B1:'-100',B2:'55',B3:'60.5'}); });
 test('v20 LOOKUP',()=>eq(f('=LOOKUP(2,B1:B3,C1:C3)',{B1:'1',B2:'2',B3:'3',C1:'a',C2:'b',C3:'c'}),'b'));
 
+/* v21: pivot with several row fields, max/min; locks; name rename; checkboxes and cross-sheet refs in formulas */
+const PV=[['A',1,10],['A',2,20],['B',1,5],['A',1,30],['B',2,'']];
+test('v21 pivot two keys sum',()=>{ const r=E.pivot(PV,[0,1],2,'sum','first'); eq(r.rows,[['A',1,40],['A',2,20],['B',1,5],['B',2,0]]); eq(r.total,65); });
+test('v21 pivot max/min/avg/count',()=>{ eq(E.pivot(PV,[0],2,'max','first').rows,[['A',30],['B',5]]); eq(E.pivot(PV,[0],2,'min','first').rows,[['A',10],['B',5]]); eq(E.pivot(PV,[0],2,'avg','first').rows,[['A',20],['B',5]]); eq(E.pivot(PV,[0],2,'count','first').rows,[['A',3],['B',1]]); });
+test('v21 pivot single key keeps old shape and sorts',()=>{ eq(E.pivot(PV,0,2,'sum','val').rows,[['A',60],['B',5]]); eq(E.pivot(PV,[0,1],2,'sum','key').rows[0],['A',1,40]); });
+test('v21 pivot max of nothing is empty',()=>eq(E.pivot([['x','']],[0],1,'max','first').rows,[['x',null]]));
+test('v21 lockHit/lockAny',()=>{ const lk={rg:[{r1:1,c1:1,r2:3,c2:2}]}; eq(E.lockHit(lk,2,2),true); eq(E.lockHit(lk,0,0),false); eq(E.lockAny(lk,{r1:3,c1:2,r2:9,c2:9}),true); eq(E.lockAny(lk,{r1:4,c1:0,r2:9,c2:9}),false); eq(E.lockHit({all:1},50,50),true); eq(E.lockHit(null,0,0),false); });
+test('v21 lockCut leaves the rest of a range',()=>{ const l=E.lockCut([{r1:0,c1:0,r2:4,c2:4}],{r1:1,c1:1,r2:2,c2:2}); let n=0; for(let r=0;r<5;r++) for(let c=0;c<5;c++){ const hit=E.lockHit({rg:l},r,c); eq(hit,!(r>=1&&r<=2&&c>=1&&c<=2)); if(hit) n++; } eq(n,21); eq(E.lockCut([{r1:0,c1:0,r2:1,c2:1}],{r1:5,c1:5,r2:6,c2:6}).length,1); eq(E.lockCut([{r1:1,c1:1,r2:2,c2:2}],{r1:0,c1:0,r2:9,c2:9}).length,0); });
+test('v21 renameNameInFormula',()=>{ eq(E.renameNameInFormula('=SUM(sales)+sales2','sales','합계'),'=SUM(합계)+sales2'); eq(E.renameNameInFormula('=SUM(A1)','sales','x'),'=SUM(A1)'); eq(E.renameNameInFormula('=sales*2','SALES','b'),'=b*2'); });
+test('v21 named range in SUM, rename keeps working',()=>{ const d={names:[{name:'성적합계',ref:"S!$B$1:$B$3"}],sheets:[{name:'S',cells:{}}]}; ['1','2','3'].forEach((v,i)=>d.sheets[0].cells[E.K(i,1)]={v}); d.sheets[0].cells[E.K(0,3)]={v:'=SUM(성적합계)'};
+  eq(E.formatValue(new E.Engine(d).value(0,0,3)),'6'); d.names[0].name='점수'; d.sheets[0].cells[E.K(0,3)].v=E.renameNameInFormula('=SUM(성적합계)','성적합계','점수'); eq(E.formatValue(new E.Engine(d).value(0,0,3)),'6'); });
+test('v21 checkbox values count in COUNTIF/SUMIF',()=>{ const a={A1:'TRUE',A2:'FALSE',A3:'TRUE',B1:'5',B2:'6',B3:'7',D1:'=COUNTIF(A1:A3,TRUE)',D2:'=SUMIF(A1:A3,TRUE,B1:B3)',D3:'=IF(A1,"v","x")',D4:'=COUNTIF(A1:A3,FALSE)'}; eq(vals(sheet(a),['D1','D2','D3','D4']),['2','12','v','1']); });
+test('v21 cross-sheet references, quoted and plain names',()=>{ const d={sheets:[{name:'S',cells:{}},{name:'시트2',cells:{}},{name:'My Data',cells:{}}]}; const set=(si,a,v)=>{ const p=E.parseAddr(a); d.sheets[si].cells[E.K(p.r,p.c)]={v}; };
+  set(1,'A1','5'); set(1,'A2','6'); set(2,'B1','10'); set(0,'A1','=SUM(시트2!A1:A2)'); set(0,'A2',"='My Data'!B1*2"); set(0,'A3','=시트2!A1+시트2!A2'); set(0,'A4','=없는시트!A1');
+  const e=new E.Engine(d); eq([0,1,2,3].map(r=>E.formatValue(e.value(0,r,0))),['11','20','11','#REF!']); eq(E.quoteSheet('시트2'),'시트2'); eq(E.quoteSheet('My Data'),"'My Data'"); });
+
 console.log(pass+' passed, '+failed+' failed');
 process.exit(failed?1:0);
