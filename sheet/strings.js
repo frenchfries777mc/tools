@@ -482,3 +482,26 @@ FFT.add({
 '목록 없애기':["Remove list","Quitar lista","Supprimer la liste","Liste entfernen","リストを削除"],
 '템플릿':["Templates","Plantillas","Modèles","Vorlagen","テンプレート"]
 });
+
+/* v11: pivot table, data menu */
+FFT.add({
+"데이터 도구":["Data tools", "Herramientas de datos", "Outils de données", "Datenwerkzeuge", "データツール"],
+"데이터":["Data", "Datos", "Données", "Daten", "データ"],
+"피벗 테이블 만들기…":["Make pivot table…", "Crear tabla dinámica…", "Créer un tableau croisé…", "Pivot-Tabelle erstellen…", "ピボットテーブルを作る…"],
+"피벗 테이블":["Pivot table", "Tabla dinámica", "Tableau croisé dynamique", "Pivot-Tabelle", "ピボットテーブル"],
+"피벗":["Pivot", "Dinámica", "Croisé", "Pivot", "ピボット"],
+"첫 줄은 제목":["First row is a header", "La primera fila es el encabezado", "La première ligne est un titre", "Erste Zeile ist Überschrift", "1行目は見出し"],
+"묶을 열":["Group by column", "Agrupar por columna", "Regrouper par colonne", "Gruppieren nach Spalte", "グループ化する列"],
+"계산할 열":["Column to calculate", "Columna a calcular", "Colonne à calculer", "Spalte berechnen", "計算する列"],
+"계산 방법":["Calculation", "Cálculo", "Calcul", "Berechnung", "計算方法"],
+"순서":["Order", "Orden", "Ordre", "Reihenfolge", "順序"],
+"처음 나온 순서":["Order of appearance", "Orden de aparición", "Ordre d’apparition", "Reihenfolge des Auftretens", "出てきた順"],
+"이름순":["By name", "Por nombre", "Par nom", "Nach Name", "名前順"],
+"값이 큰 순서":["Largest value first", "Mayor valor primero", "Plus grande valeur d’abord", "Größter Wert zuerst", "値が大きい順"],
+"결과는 새 시트에 값으로 만들어져요. 원래 표를 고쳤다면 피벗을 다시 만드세요.":["The result is written to a new sheet as values. If you change the original table, make the pivot again.", "El resultado se escribe en una hoja nueva como valores. Si cambias la tabla original, vuelve a crear la dinámica.", "Le résultat est écrit dans une nouvelle feuille sous forme de valeurs. Si tu modifies le tableau d’origine, refais le croisé.", "Das Ergebnis steht als Werte in einem neuen Blatt. Wenn du die Tabelle änderst, erstelle die Pivot-Tabelle neu.", "結果は値として新しいシートに作られます。元の表を直したらピボットを作り直してください。"],
+"피벗 만들기":["Make pivot", "Crear dinámica", "Créer le croisé", "Pivot erstellen", "ピボットを作る"],
+"총합계":["Grand total", "Total general", "Total général", "Gesamtsumme", "総合計"],
+"피벗으로 만들 표를 먼저 고르세요":["Select a table for the pivot first", "Selecciona primero una tabla para la dinámica", "Sélectionne d’abord un tableau pour le croisé", "Wähle zuerst eine Tabelle für die Pivot-Tabelle", "先にピボットにする表を選んでください"],
+"{0}개 항목으로 피벗을 만들었어요":["Made a pivot with {0} items", "Dinámica creada con {0} elementos", "Croisé créé avec {0} éléments", "Pivot-Tabelle mit {0} Einträgen erstellt", "{0}項目のピボットを作りました"],
+"{0}열":["Column {0}", "Columna {0}", "Colonne {0}", "Spalte {0}", "{0}列"]
+});
