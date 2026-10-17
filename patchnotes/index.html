@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tools 패치노트</title>
+<link rel="icon" href="../logo.svg">
 <meta name="description" content="Frenchfries777 Tools 프로그램별 업데이트 기록">
 <meta name="theme-color" content="#08090d">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,6 +34,7 @@ FFT.add({
   header{display:flex; align-items:center; justify-content:space-between; padding:26px 0 0;}
   .logo{display:flex; align-items:center; gap:10px; font-family:'Oswald',sans-serif; font-weight:600; font-size:20px; letter-spacing:.04em; color:var(--text); text-decoration:none;}
   .logo .fry{width:34px; height:34px; border-radius:9px; display:grid; place-items:center; font-size:20px; background:linear-gradient(135deg,var(--fry),var(--fry2)); box-shadow:0 6px 18px rgba(255,160,60,.25);}
+  .logo img.lg{width:34px; height:34px; display:block; flex:0 0 auto; border-radius:9px; filter:drop-shadow(0 6px 14px rgba(255,160,60,.25));}
   .logo b{color:var(--fry); font-weight:700;}
   header nav a{color:var(--dim); text-decoration:none; font-size:15px; margin-left:18px;}
   header nav a:hover{color:var(--text);}
@@ -70,7 +72,7 @@ FFT.add({
 <body>
 <div class="wrap">
   <header>
-    <a class="logo" href="../"><span class="fry">🍟</span><span>FRENCHFRIES<b>777</b></span></a>
+    <a class="logo" href="../"><img class="lg" src="../logo.svg" alt="" width="34" height="34"><span>FRENCHFRIES<b>777</b></span></a>
     <div class="swr"><span class="sw" data-notr><a href="https://frenchfries777mc.github.io/games/">Games</a><a href="https://frenchfries777mc.github.io/educations/">Educations</a><a class="on" href="../" aria-current="page">Tools</a></span></div>
     <div class="right"><nav><a href="../#tools">도구</a><a href="https://frenchfries777mc.github.io/games/wiki/#tools">위키</a></nav><span data-lang-slot></span></div>
   </header>
