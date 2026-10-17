@@ -158,7 +158,7 @@ function switchTo(id){ if(id===P.cur) return; saveNow(); var d=readProj(id), e=e
   P.cur=id; $('projName').value=d.name||(e&&e.name)||T('나의 웹페이지'); setImgs(d.imgs); try{ loadJSON(d.ws); }catch(err){ console.error(err); blank(); } ws.clearUndo(); writeIdx(); syncBar(); renderProjs(); }
 function deleteProject(id){ var e=entry(id); if(!e) return;
   ask(F('"{0}" 프로젝트를 삭제할까요? 되돌릴 수 없어요.',e.name),T('삭제'),true).then(function(ok){ if(!ok) return;
-    try{ localStorage.removeItem(PK+id); }catch(err){} P.list=P.list.filter(function(x){ return x.id!==id; });
+    try{ localStorage.removeItem(PK+id); localStorage.removeItem('ffblocks.ai.'+id); }catch(err){} P.list=P.list.filter(function(x){ return x.id!==id; });
     if(id===P.cur){ P.cur=null; var nx=P.list.slice().sort(function(a,b){ return b.t-a.t; })[0];
       if(nx){ writeIdx(); switchTo(nx.id); } else createProject(T('나의 웹페이지'),blank); }
     writeIdx(); renderProjs(); toast(T('프로젝트를 삭제했어요')); }); }
