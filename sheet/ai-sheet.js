@@ -59,7 +59,7 @@ var CHIPS={ask:[['📋 세 줄 요약','이 표를 세 줄로 요약해 줘'],['
 function chips(m){ var box=$('aiChips'); box.innerHTML=''; CHIPS[m].forEach(function(c){ var b=document.createElement('button'), full=T(c[1]); b.textContent=T(c[0]); b.title=full; b.onclick=function(){ $('aiQ').value=full; $('aiQ').focus(); }; box.appendChild(b); }); }
 function trDemo(){
   close(); var a=A.act(), r=a.r, c=a.c, at=function(i){ return E.addr(r+i,c); };
-  var rows=[[T('한국어'),T('영어')],[T('오늘은 날씨가 맑아요'),''],[T('저는 떡볶이를 좋아해요'),''],[T('주말에 친구와 축구를 했어요'),'']];
+  var rows=[[T('한국어'),T('영어')],[T('좋은 주말 보내세요!'),''],[T('엄마가 김치찌개를 끓여 주셨어요.'),''],[T('전원 버튼을 3초 이상 길게 누르세요.'),'']];
   for(var i=1;i<rows.length;i++) rows[i][1]='=AI("'+T('영어로 번역')+'", '+at(i)+')';
   A.pasteText(rows.map(function(x){ return x.join('\t'); }).join('\n')); A.toast(T('B열이 영어로 채워져요'));
 }
