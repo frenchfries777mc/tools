@@ -9,7 +9,7 @@
 const fs=require('fs'), path=require('path'), cp=require('child_process');
 const DIR=__dirname, RAW=path.join(DIR,'raw'), OUT=path.join(DIR,'data'), TMP=path.join(OUT,'.ok3');
 fs.mkdirSync(TMP,{recursive:true});
-const FILES={ code:['code-12','code-13','code-14','code-15','code-16','code-17','code-18'], und:['und-10'], ask:['ask-3'], slides:['slides-3'], self:['self-1','self-2','self-3'] };
+const FILES={ formula:['formula-3'], code:['code-12','code-13','code-14','code-15','code-16','code-17','code-18'], und:['und-10'], ask:['ask-3'], slides:['slides-3'], self:['self-1','self-2','self-3'] };
 const REPLAY=420; // rows of round2-basic.jsonl (no self rows)
 const NAME_OLD='FF777 1.0 tarius', NAME_NEW='FF777 1.2 tarius';
 const WHO='You are FF777 1.2 tarius, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 1.7B. Your name is the end of the Latin word elementarius ("basic").';
@@ -39,7 +39,7 @@ for(const task in FILES){
   }
 }
 function base(who,fill){ const rows=[], counts={}; const add=(task,m)=>{ rows.push({task,messages:m}); counts[task]=(counts[task]||0)+1; };
-  for(const task of ['code','und','ask','slides']) for(const x of pool[task]){ const m=x.messages.map(y=>({role:y.role,content:y.content})); if(task==='ask') m[0].content+='\n\n'+who; add(task,m); }
+  for(const task of ['code','und','ask','slides','formula']) for(const x of pool[task]){ const m=x.messages.map(y=>({role:y.role,content:y.content})); if(task==='ask') m[0].content+='\n\n'+who; add(task,m); }
   pool.self.forEach((x,i)=>{
     const m=x.messages.map(y=>({role:y.role,content:y.content.replace(/\{(\w+)\}/g,(s,k)=>fill[k]!=null?fill[k]:s)}));
     if(/\{\w+\}/.test(m[2].content)) throw new Error('unfilled placeholder in self item '+i);
