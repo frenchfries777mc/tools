@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
 <script src="../i18n.js"></script>
 <script src="strings.js"></script>
+<script src="strings-tpl.js"></script>
 <style>
 :root{ --bg:#08090d; --panel:#10131b; --panel2:#151925; --line:#222837; --text:#eef0f5; --dim:#8a93a6; --fry:#ffc93c; --fry2:#ff8a3d; --stage:#0b0d13; --grid:rgba(138,147,166,.13); --lab:#a78bfa; }
 html[data-ff-theme=light]{ --bg:#f6f3ec; --panel:#ffffff; --panel2:#f1ede4; --line:#e2dccf; --text:#1f1b14; --dim:#6d6658; --stage:#fbfaf6; --grid:rgba(80,70,50,.12); --lab:#6d4fd8; }
@@ -162,6 +163,58 @@ td .del:hover{color:#ff8b8b; background:var(--panel2);}
 @keyframes sp{to{transform:rotate(360deg);}}
 #toast{position:fixed; left:50%; bottom:28px; transform:translateX(-50%); background:#1d2230; color:#eef0f5; border:1px solid var(--line); padding:9px 16px; border-radius:99px; z-index:300; opacity:0; transition:opacity .2s; pointer-events:none; max-width:92vw; text-align:center;}
 #toast.on{opacity:1;}
+/* template gallery */
+#gallery{flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; background:var(--bg);}
+.gwrap{max-width:1180px; margin:0 auto; padding:18px 16px 60px;}
+.ghead h1{margin:0 0 4px; font-size:22px; font-weight:800;}
+.ghead p{margin:0 0 14px; color:var(--dim); font-size:14px; line-height:1.6;}
+.gfil{display:flex; flex-direction:column; gap:8px; margin:0 0 10px;}
+.gsub{display:flex; flex-wrap:wrap; gap:6px;}
+.gsub button{border:1px solid var(--line); background:var(--panel2); border-radius:99px; padding:6px 13px; cursor:pointer; font-size:13.5px; color:var(--dim); min-height:34px;}
+.gsub button:hover{color:var(--text);}
+.gsub button.on{border-color:var(--lab); color:var(--lab); background:rgba(167,139,250,.12); font-weight:700;}
+.gsrch{display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px;}
+.gsrch input[type=search]{flex:1 1 220px; min-width:0; height:38px; border-radius:10px; border:1px solid var(--line); background:var(--panel); padding:0 12px; font-size:15px;}
+.gsrch input[type=search]:focus{outline:none; border-color:var(--lab);}
+.gsrch .chk{font-size:13px; color:var(--dim); padding:0;}
+.gcount{color:var(--dim); font-size:12.5px; margin:6px 0 4px;}
+.gh2{display:flex; align-items:center; gap:8px; margin:18px 0 8px; font-size:15px; font-weight:800;}
+.gh2::after{content:''; flex:1; height:1px; background:var(--line);}
+.gcards{display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr)); gap:10px;}
+.gcard{display:flex; flex-direction:column; gap:6px; text-align:left; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:12px 14px; min-width:0;}
+.gcard.ok{cursor:pointer;} .gcard.ok:hover{border-color:var(--lab); background:var(--panel2);}
+.gcard.soon{opacity:.62; cursor:default;}
+.gtags{display:flex; flex-wrap:wrap; gap:5px; align-items:center;}
+.gtag{font-size:11.5px; padding:2px 8px; border-radius:99px; background:var(--panel2); border:1px solid var(--line); color:var(--dim); white-space:nowrap;}
+.gtag.m{color:#8fc2ff;} .gtag.s{color:#3fe08f;}
+.gtag.soon{color:var(--dim); border-style:dashed;}
+.gtag.mine{color:var(--fry); border-color:#5a4a1c;}
+.gcard h3{margin:0; font-size:15.5px; font-weight:800; line-height:1.35; overflow-wrap:anywhere;}
+.gcard p{margin:0; color:var(--dim); font-size:13px; line-height:1.55; flex:1;}
+.gtpl{display:flex; align-items:center; gap:8px; font-size:13px; font-weight:700; color:var(--lab); min-width:0;}
+.gtpl .ic{font-size:18px;}
+.gtpl .nm{min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;}
+.gtpl .go{flex:0 0 auto; padding:4px 11px; border-radius:99px; background:linear-gradient(90deg,var(--fry),var(--fry2)); color:#1c1405; font-size:12.5px;}
+.gcard.soon .gtpl{color:var(--dim); font-weight:500;}
+.gempty{color:var(--dim); text-align:center; padding:40px 10px; line-height:1.7;}
+.gnote{color:var(--dim); font-size:12.5px; line-height:1.6; margin:26px 0 0;}
+/* my versions */
+.vbox{display:flex; flex-direction:column; gap:6px;}
+.vl{font-size:12.5px; color:var(--dim); margin-top:4px;}
+.txin{width:100%; height:36px; background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:0 10px; font-size:14.5px; min-width:0;}
+.txin:focus,.vedit:focus{outline:none; border-color:var(--lab);}
+.prm .txin{margin-top:2px;}
+.vrow{display:flex; gap:6px;} .vrow .tbtn{height:36px;}
+.vlist{list-style:none; margin:2px 0 4px; padding:0; display:flex; flex-direction:column; gap:4px;}
+.vlist li{display:flex; align-items:center; gap:2px; background:var(--bg); border:1px solid var(--line); border-radius:9px; padding:2px 4px 2px 2px; min-width:0;}
+.vlist li.on{border-color:var(--lab);}
+.vlist li.vempty{display:block; color:var(--dim); font-size:12.5px; line-height:1.55; padding:8px 10px; border-style:dashed;}
+.vn{flex:1; min-width:0; text-align:left; border:0; background:transparent; cursor:pointer; padding:7px 8px; font-size:13.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; border-radius:7px;}
+.vn:hover{background:var(--panel2);}
+.vi{flex:0 0 32px; height:32px; border:0; background:transparent; color:var(--dim); cursor:pointer; border-radius:7px; font-size:16px;}
+.vi:hover{background:var(--panel2); color:var(--text);} .vi.arm{color:#ff8b8b;}
+.vedit{flex:1; min-width:0; height:32px; background:var(--panel); border:1px solid var(--lab); border-radius:7px; padding:0 8px; font-size:14px;}
+@media(max-width:620px){ .gwrap{padding:14px 16px 50px;} .ghead h1{font-size:20px;} }
 /* iPad landscape and smaller laptops: the list becomes a strip on top */
 @media(max-width:1180px){
   .main{grid-template-columns:minmax(0,1fr) 330px; grid-template-rows:auto minmax(0,1fr);}
@@ -200,12 +253,26 @@ td .del:hover{color:#ff8b8b; background:var(--panel2);}
 <header class="top">
   <a class="home" href="../" aria-label="도구 목록">🍟</a>
   <span class="brand" data-notr>FRY <b>LAB</b></span>
-  <span class="sub">과학·수학 실험실</span>
+  <span class="sub" id="subTxt">과학·수학 실험실</span>
   <span class="sp"></span>
+  <button class="tbtn" id="galBtn" title="템플릿 갤러리" aria-label="템플릿 갤러리"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg><span class="lb">갤러리</span></button>
   <button class="tbtn aib" id="aiBtn" title="AI 도우미"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/></svg><span class="lb">AI 도우미</span></button>
   <span data-lang-slot></span>
 </header>
-<div class="main">
+<main id="gallery" hidden aria-label="템플릿 갤러리">
+  <div class="gwrap">
+    <div class="ghead"><h1>템플릿 갤러리</h1><p>중1~고3 수학·과학 단원에서 템플릿을 골라 값과 식, 이름을 바꿔 보고, 나만의 버전으로 저장해요.</p></div>
+    <div class="gfil">
+      <div class="gsub" id="gSubj" role="group" aria-label="과목"></div>
+      <div class="gsub" id="gGrade" role="group" aria-label="학년"></div>
+      <div class="gsrch"><input type="search" id="gSearch" placeholder="단원이나 내용 찾기" aria-label="단원이나 내용 찾기" autocomplete="off"><label class="chk"><input type="checkbox" id="gSoon">준비 중인 단원도 보기</label></div>
+    </div>
+    <div class="gcount" id="gCount"></div>
+    <div id="gList"></div>
+    <p class="gnote">교육과정(2022 개정)을 바탕으로 정리한 참고용 목록이라 학교와 학년도에 따라 단원 배치가 다를 수 있어요. 준비 중인 단원은 템플릿을 계속 늘려 갈게요.</p>
+  </div>
+</main>
+<div class="main" id="labMain">
   <nav id="nav" aria-label="실험 목록"></nav>
   <section id="stage">
     <div class="sbar">
@@ -226,6 +293,15 @@ td .del:hover{color:#ff8b8b; background:var(--panel2);}
       <div class="col">
         <div class="h2">조절하기</div>
         <div id="ctl"></div>
+        <div class="h2">내 버전</div>
+        <div class="vbox">
+          <label class="vl" for="vTitle">화면에 보일 내 제목</label>
+          <input id="vTitle" class="txin" type="text" maxlength="40" placeholder="예: 우리 모둠 실험 1" autocomplete="off">
+          <label class="vl" for="vName">저장할 버전 이름</label>
+          <div class="vrow"><input id="vName" class="txin" type="text" maxlength="30" placeholder="이름 (비워 두면 자동)" autocomplete="off"><button class="tbtn pri" id="vSave">저장</button></div>
+          <ul id="vList" class="vlist"></ul>
+          <button class="tbtn" id="vDefault">처음 값으로 되돌리기</button>
+        </div>
       </div>
       <div class="col">
         <div class="h2">측정값</div>
@@ -266,7 +342,10 @@ td .del:hover{color:#ff8b8b; background:var(--panel2);}
 <div id="toast" role="status"></div>
 <script src="../ai.js"></script>
 <script src="app.js"></script>
+<script src="curriculum.js"></script>
 <script src="experiments.js"></script>
+<script src="templates.js"></script>
+<script src="gallery.js"></script>
 <script src="ai-lab.js"></script>
 </body>
 </html>
