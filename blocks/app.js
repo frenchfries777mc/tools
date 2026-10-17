@@ -4,7 +4,9 @@
 var T=FFT.T, F=FFT.F, $=function(id){ return document.getElementById(id); };
 var LS='ffblocks.v1';
 function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
-function lsSet(k,v){ try{ localStorage.setItem(k,v); return true; }catch(e){ return false; } }
+/* #embed=<project id>: read-only mode used by Fry Slides to get the built HTML of a saved project (nothing is written to storage) */
+var EMB=(/^#embed=(.+)$/.exec(location.hash)||[])[1]; if(EMB) try{ EMB=decodeURIComponent(EMB); }catch(e){}
+function lsSet(k,v){ if(EMB) return false; try{ localStorage.setItem(k,v); return true; }catch(e){ return false; } }
 
 var theme=Blockly.Theme.defineTheme('ffdark',{name:'ffdark',base:Blockly.Themes.Classic,
   componentStyles:{workspaceBackgroundColour:'#0b0d13',toolboxBackgroundColour:'#10131b',toolboxForegroundColour:'#eef0f5',flyoutBackgroundColour:'#151925',flyoutForegroundColour:'#cfd5e1',flyoutOpacity:.97,scrollbarColour:'#3a4256',scrollbarOpacity:.7,insertionMarkerColour:'#ffffff',insertionMarkerOpacity:.3,cursorColour:'#ffc93c',selectedGlowColour:'#ffc93c'},
@@ -408,9 +410,10 @@ document.addEventListener('keydown',function(e){
 P=readIdx(); if(!P){ P={cur:null,list:[]}; var old=null; try{ old=JSON.parse(lsGet(LS)||'null'); }catch(e){}
   if(old&&old.ws){ var oid=pid(); lsSet(PK+oid,JSON.stringify(old)); P.list.push({id:oid,name:old.name||T('나의 웹페이지'),t:Date.now()}); P.cur=oid; writeIdx(); } }
 P.list=P.list.filter(function(e){ return e&&e.id; });
-(function(){ var cand=[P.cur].concat(P.list.slice().sort(function(a,b){ return b.t-a.t; }).map(function(e){ return e.id; })), ok=false;
+(function(){ var cand=[EMB||P.cur].concat(P.list.slice().sort(function(a,b){ return b.t-a.t; }).map(function(e){ return e.id; })), ok=false;
   for(var k=0;k<cand.length&&!ok;k++){ var id=cand[k], d=id&&entry(id)&&readProj(id); if(d&&d.ws){ P.cur=id; $('projName').value=d.name||T('나의 웹페이지'); setImgs(d.imgs); try{ loadJSON(d.ws); ok=true; }catch(e){ console.error(e); } } }
   if(!ok){ P.cur=null; createProject(T(BH_EXAMPLES[0].name),function(){ loadXML(BH_EXAMPLES[0].xml()); arrange(); }); } })();
 setTimeout(syncBar,50);
+if(EMB){ var embTry=0, embSend=function(){ var html=''; try{ if(P.cur===EMB) html=finalHTML(); }catch(e){ console.error(e); } if(!html&&++embTry<10) return setTimeout(embSend,300); try{ parent.postMessage({ffbhBuilt:1,id:EMB,html:html},'*'); }catch(e){} }; setTimeout(embSend,350); }
 window.__bh={ws:ws,copy:copyBlock,paste:pasteBlock,deleteAll:deleteAll,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,loadJSON:loadJSON,save:saveNow,toast:toast,projects:function(){ return P; },examples:BH_EXAMPLES};
 })();
