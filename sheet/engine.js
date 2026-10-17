@@ -221,8 +221,8 @@ Engine.prototype.ev=function(n,si){
     case 'bin': {
       var a=this.scal(this.ev(n.a,si)), b=this.scal(this.ev(n.b,si));
       switch(n.o){
-        case '+': return toNum(a)+toNum(b);
-        case '-': return toNum(a)-toNum(b);
+        case '+': { var da=asDate(a); if(da&&!isErr(b)&&typeof b!=='string') return dateStr(new Date(da.getTime()+toNum(b)*864e5)); return toNum(a)+toNum(b); }
+        case '-': { var d1=asDate(a), d2=asDate(b); if(d1&&d2) return Math.round((d1-d2)/864e5); if(d1&&typeof b==='number') return dateStr(new Date(d1.getTime()-b*864e5)); return toNum(a)-toNum(b); }
         case '*': return toNum(a)*toNum(b);
         case '/': { var d=toNum(b); if(d===0) fail('#DIV/0!'); return toNum(a)/d; }
         case '^': return Math.pow(toNum(a),toNum(b));
@@ -282,6 +282,14 @@ function round(n,d,mode){ var f=Math.pow(10,d), x=n*f; x=+x.toPrecision(15);
   var r=mode==='up'?(x<0?-Math.ceil(-x):Math.ceil(x)):mode==='down'?(x<0?-Math.floor(-x):Math.floor(x)):(x<0?-Math.round(-x):Math.round(x)); return r/f; }
 function todayStr(t){ var d=new Date(); var p=function(n){ return (n<10?'0':'')+n; }; var s=d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate()); return t?s+' '+p(d.getHours())+':'+p(d.getMinutes()):s; }
 
+/* dates are kept as "YYYY-MM-DD" text; arithmetic goes through UTC day counts */
+function asDate(v){
+  if(typeof v!=='string') return null;
+  var m=/^\s*(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})(?:[ T]\d{1,2}:\d{2})?\s*$/.exec(v); if(!m) return null;
+  var y=+m[1], mo=+m[2], d=+m[3], t=new Date(Date.UTC(y,mo-1,d)); if(t.getUTCMonth()!==mo-1||t.getUTCDate()!==d) return null; return t;
+}
+function dateStr(t){ var p=function(n){ return (n<10?'0':'')+n; }; return t.getUTCFullYear()+'-'+p(t.getUTCMonth()+1)+'-'+p(t.getUTCDate()); }
+function dateArg(self,x){ var v=self.scal(x); if(typeof v==='number') return new Date(Date.UTC(1899,11,30)+v*864e5); var d=asDate(v); if(!d) fail('#VALUE!'); return d; }
 var FN={};
 function def(names,f,lazy){ names.split(' ').forEach(function(n){ FN[n]=f; }); if(lazy) f.lazy=true; }
 def('SUM',function(a){ return this.nums(a).reduce(function(s,x){ return s+x; },0); });
@@ -357,7 +365,10 @@ def('SEARCH',function(a){ var f=toStr(this.scal(a[0])).toLowerCase(), s=toStr(th
 def('REPT',function(a){ var n=toNum(this.scal(a[1])); if(n<0||n>10000) fail('#VALUE!'); return toStr(this.scal(a[0])).repeat(Math.floor(n)); });
 def('EXACT',function(a){ return toStr(this.scal(a[0]))===toStr(this.scal(a[1])); });
 def('VALUE',function(a){ return toNum(this.scal(a[0])); });
-def('TEXT',function(a){ var n=this.scal(a[0]), f=toStr(this.scal(a[1])); if(typeof n!=='number'){ n=toNum(n); }
+def('TEXT',function(a){ var n=this.scal(a[0]), f=toStr(this.scal(a[1]));
+  if(/[ymd]/i.test(f.replace(/"[^"]*"/g,''))&&!/[0#]/.test(f)){ var dd=asDate(n)||(typeof n==='number'?new Date(Date.UTC(1899,11,30)+n*864e5):null); if(!dd) fail('#VALUE!'); var p2=function(x){ return (x<10?'0':'')+x; }; var wk=['일','월','화','수','목','금','토'][dd.getUTCDay()];
+    return f.replace(/yyyy|yy|mm|dd|aaa/gi,function(t){ t=t.toLowerCase(); return t==='yyyy'?dd.getUTCFullYear():t==='yy'?String(dd.getUTCFullYear()).slice(2):t==='mm'?p2(dd.getUTCMonth()+1):t==='dd'?p2(dd.getUTCDate()):wk; }); }
+  if(typeof n!=='number'){ n=toNum(n); }
   var pct=f.indexOf('%')>=0; if(pct) n*=100; var dec=(f.split('.')[1]||'').replace(/[^0#]/g,'').length, grp=f.indexOf(',')>=0;
   var s=grp?n.toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec}):n.toFixed(dec); return s+(pct?'%':''); });
 def('CHAR',function(a){ return String.fromCharCode(toNum(this.scal(a[0]))); });
@@ -385,16 +396,46 @@ def('HLOOKUP',function(a){ var x=this.scal(a[0]), g=asRng(a[1]), row=toNum(this.
 def('XLOOKUP',function(a){ var x=this.scal(a[0]), keys=this.cells(a[1]), vals=this.cells(a[2]), i=matchIn(this,x,keys,0);
   if(i<0){ if(a[3]!=null) return this.scal(a[3]); fail('#N/A'); } var v=vals[i]; return v==null?0:v; });
 
+/* v10 additions: dates, conditional aggregates, rounding, statistics */
+def('DATE',function(a){ var y=toNum(this.scal(a[0])), m=toNum(this.scal(a[1])), d=toNum(this.scal(a[2])); return dateStr(new Date(Date.UTC(y,m-1,d))); });
+def('YEAR',function(a){ return dateArg(this,a[0]).getUTCFullYear(); });
+def('MONTH',function(a){ return dateArg(this,a[0]).getUTCMonth()+1; });
+def('DAY',function(a){ return dateArg(this,a[0]).getUTCDate(); });
+def('WEEKDAY',function(a){ var w=dateArg(this,a[0]).getUTCDay(), t=a[1]!=null?toNum(this.scal(a[1])):1; return t===2?(w+6)%7+1:t===3?(w+6)%7:w+1; });
+def('DAYS',function(a){ return Math.round((dateArg(this,a[0])-dateArg(this,a[1]))/864e5); });
+def('EDATE',function(a){ var d=dateArg(this,a[0]), n=toNum(this.scal(a[1])); var t=new Date(Date.UTC(d.getUTCFullYear(),d.getUTCMonth()+n,1)); var last=new Date(Date.UTC(t.getUTCFullYear(),t.getUTCMonth()+1,0)).getUTCDate(); t.setUTCDate(Math.min(d.getUTCDate(),last)); return dateStr(t); });
+def('DATEDIF',function(a){ var s=dateArg(this,a[0]), e=dateArg(this,a[1]), u=toStr(this.scal(a[2])).toUpperCase(); if(e<s) fail('#NUM!');
+  var months=(e.getUTCFullYear()-s.getUTCFullYear())*12+e.getUTCMonth()-s.getUTCMonth(); if(e.getUTCDate()<s.getUTCDate()) months--;
+  if(u==='D') return Math.round((e-s)/864e5); if(u==='M') return months; if(u==='Y') return Math.floor(months/12); fail('#NUM!'); });
+function ifsMax(self,a,sign){ var s=self.cells(a[0]), ok=multi(self,a,1), best=null; ok.forEach(function(b,i){ if(b&&typeof s[i]==='number'&&(best==null||sign*s[i]>sign*best)) best=s[i]; }); return best==null?0:best; }
+def('MAXIFS',function(a){ return ifsMax(this,a,1); });
+def('MINIFS',function(a){ return ifsMax(this,a,-1); });
+def('CEILING',function(a){ var x=toNum(this.scal(a[0])), s=a[1]!=null?toNum(this.scal(a[1])):1; if(s===0) return 0; return +(Math.ceil(+(x/s).toPrecision(15))*s).toPrecision(15); });
+def('FLOOR',function(a){ var x=toNum(this.scal(a[0])), s=a[1]!=null?toNum(this.scal(a[1])):1; if(s===0) fail('#DIV/0!'); return +(Math.floor(+(x/s).toPrecision(15))*s).toPrecision(15); });
+def('MROUND',function(a){ var x=toNum(this.scal(a[0])), s=toNum(this.scal(a[1])); if(s===0) return 0; return +(Math.round(+(x/s).toPrecision(15))*s).toPrecision(15); });
+def('SUMSQ',function(a){ return this.nums(a).reduce(function(s,x){ return s+x*x; },0); });
+def('ISEVEN',function(a){ return Math.floor(toNum(this.scal(a[0])))%2===0; });
+def('ISODD',function(a){ return Math.abs(Math.floor(toNum(this.scal(a[0]))))%2===1; });
+function pct(n,k){ n=n.slice().sort(function(x,y){ return x-y; }); if(!n.length||k<0||k>1) fail('#NUM!'); var p=k*(n.length-1), lo=Math.floor(p), hi=Math.ceil(p); return n[lo]+(n[hi]-n[lo])*(p-lo); }
+def('PERCENTILE',function(a){ return pct(this.nums([a[0]]),toNum(this.scal(a[1]))); });
+def('QUARTILE',function(a){ var q=toNum(this.scal(a[1])); if(q<0||q>4) fail('#NUM!'); return pct(this.nums([a[0]]),q/4); });
+function pairs(self,a){ var x=self.cells(a[0]), y=self.cells(a[1]), px=[], py=[]; if(x.length!==y.length) fail('#N/A'); x.forEach(function(v,i){ if(typeof v==='number'&&typeof y[i]==='number'){ px.push(v); py.push(y[i]); } }); if(px.length<2) fail('#DIV/0!'); return [px,py]; }
+function mean(n){ return n.reduce(function(s,x){ return s+x; },0)/n.length; }
+function sxy(p){ var mx=mean(p[0]), my=mean(p[1]), a=0, b=0, c=0; p[0].forEach(function(x,i){ var dx=x-mx, dy=p[1][i]-my; a+=dx*dy; b+=dx*dx; c+=dy*dy; }); return [a,b,c]; }
+def('CORREL',function(a){ var s=sxy(pairs(this,a)); if(!s[1]||!s[2]) fail('#DIV/0!'); return s[0]/Math.sqrt(s[1]*s[2]); });
+def('SLOPE',function(a){ var s=sxy(pairs(this,[a[1],a[0]])); if(!s[1]) fail('#DIV/0!'); return s[0]/s[1]; });
+def('INTERCEPT',function(a){ var p=pairs(this,[a[1],a[0]]), s=sxy(p); if(!s[1]) fail('#DIV/0!'); return mean(p[1])-s[0]/s[1]*mean(p[0]); });
+def('COUNTUNIQUE',function(a){ var seen={}, n=0; this.each(a,function(v){ if(v==null||v==='') return; var k=typeof v+':'+String(v).toLowerCase(); if(!seen[k]){ seen[k]=1; n++; } }); return n; });
+
 /* ---------- display ---------- */
 function formatValue(v,nf){
   if(v==null) return '';
   if(isErr(v)) return v.e;
   if(v===true) return 'TRUE'; if(v===false) return 'FALSE';
   if(typeof v==='number'){
-    if(nf==='n0') return v.toLocaleString('en-US',{maximumFractionDigits:0});
-    if(nf==='n2') return v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-    if(nf==='p0') return (v*100).toLocaleString('en-US',{maximumFractionDigits:0})+'%';
-    if(nf==='p1') return (v*100).toLocaleString('en-US',{minimumFractionDigits:1,maximumFractionDigits:1})+'%';
+    var nm=/^([npd])(\d)$/.exec(nf||'');
+    if(nm){ var dc=+nm[2], o={minimumFractionDigits:dc,maximumFractionDigits:dc}; if(nm[1]==='d') o.useGrouping=false;
+      return nm[1]==='p'?(v*100).toLocaleString('en-US',o)+'%':v.toLocaleString('en-US',o); }
     if(nf==='w0') return (v<0?'-':'')+'₩'+Math.abs(v).toLocaleString('en-US',{maximumFractionDigits:0});
     if(nf==='u2') return (v<0?'-':'')+'$'+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
     return fmtGeneral(v);
@@ -422,6 +463,6 @@ def('AI',function(a){
 
 var api={K:K,RC:RC,KC:KC,colName:colName,colIdx:colIdx,addr:addr,parseAddr:parseAddr,parseRange:parseRange,rangeStr:rangeStr,
   tokenize:tokenize,rebuild:rebuild,parse:parse,literal:literal,shiftFormula:shiftFormula,adjustFormula:adjustFormula,renameSheetInFormula:renameSheetInFormula,
-  Engine:Engine,Err:Err,errHint:errHint,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,FN:FN,quoteSheet:quoteSheet};
+  Engine:Engine,Err:Err,errHint:errHint,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,asDate:asDate,dateStr:dateStr,FN:FN,quoteSheet:quoteSheet};
 if(typeof module!=='undefined'&&module.exports) module.exports=api; else root.FSE=api;
 })(this);
