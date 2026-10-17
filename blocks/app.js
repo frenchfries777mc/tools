@@ -16,6 +16,7 @@ Blockly.Names.prototype.safeName=function(name){
   if(/^[0-9]/.test(name)) name='my_'+name;
   return name;
 };
+if(('ontouchstart' in window)||navigator.maxTouchPoints>0){ try{ Blockly.config.snapRadius=48; Blockly.config.connectingSnapRadius=76; }catch(e){} } // bigger drop target for fingers
 var ws=Blockly.inject('ws',{toolbox:BH.toolbox(),theme:theme,renderer:'zelos',trashcan:true,media:'lib/media/',
   grid:{spacing:28,length:2,colour:'#1a1f2b',snap:false},
   zoom:{controls:true,wheel:false,pinch:true,startScale:('ontouchstart' in window)?0.72:0.68,maxScale:2,minScale:0.3,scaleSpeed:1.15},
@@ -66,7 +67,7 @@ function showPreview(){ if(window.matchMedia('(max-width:900px)').matches&&docum
 function refresh(force){
   if(runState==='stop'&&force!=='run'){ if($('pCode').classList.contains('on')) showCode(); return; }
   var prev; try{ prev=BH.build(ws,{trap:true}); }catch(err){ console.error(err); return; }
-  if(force||prev!==lastPrev){ lastPrev=prev; $('frame').srcdoc=prev; if(runState==='pause') setRun('run'); }
+  if(force||prev!==lastPrev){ lastPrev=prev; clearLog(); $('frame').srcdoc=prev; if(runState==='pause') setRun('run'); }
   if($('pCode').classList.contains('on')) showCode();
 }
 function hl(src){
@@ -89,7 +90,7 @@ $('pauseBtn').onclick=function(){ var w=$('frame').contentWindow;
   if(runState==='stop'){ runNow(); return; }
   if(runState==='pause'){ setRun('run'); if(w) w.postMessage({ffbh:'resume'},'*'); }
   else { setRun('pause'); if(w) w.postMessage({ffbh:'pause'},'*'); showPreview(); } };
-$('stopBtn').onclick=function(){ setRun('stop'); lastPrev=''; $('frame').srcdoc=stoppedPage(); };
+$('stopBtn').onclick=function(){ setRun('stop'); lastPrev=''; clearLog(); $('frame').srcdoc=stoppedPage(); };
 setRun('run');
 $('openTab').onclick=function(){ var u=URL.createObjectURL(new Blob([finalHTML()],{type:'text/html'})); var w=window.open(u,'_blank'); if(!w) location.href=u; setTimeout(function(){ URL.revokeObjectURL(u); },60000); };
 $('copyCode').onclick=function(){ var t=finalHTML(); var done=function(){ toast(T('코드를 복사했어요')); };
@@ -101,31 +102,68 @@ function fname(ext){ return (($('projName').value||'').trim()||'page').replace(/
 function download(blob,name){ var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },4000); }
 function downloadHTML(){ download(new Blob([finalHTML()],{type:'text/html;charset=utf-8'}),fname('.html')); toast(T('HTML 파일을 만들었어요')); }
 $('dlBtn').onclick=downloadHTML;
-var saveT=null;
-var fullWarned=false;
-function save(){ clearTimeout(saveT); saveT=setTimeout(function(){ var ok=lsSet(LS,JSON.stringify({name:$('projName').value,ws:Blockly.serialization.workspaces.save(ws),imgs:BH.IMGS}));
-  if(!ok&&!fullWarned){ fullWarned=true; toast(T('저장 공간이 꽉 찼어요. 프로젝트 파일로 저장해 두세요')); } if(ok) fullWarned=false; },300); }
+/* ---------- projects: several saved projects in the browser ---------- */
+var PIDX='ffblocks.projects', PK='ffblocks.p.', P={cur:null,list:[]}, saveT=null, fullWarned=false;
+function readIdx(){ try{ var o=JSON.parse(lsGet(PIDX)||'null'); if(o&&Array.isArray(o.list)) return o; }catch(e){} return null; }
+function writeIdx(){ return lsSet(PIDX,JSON.stringify(P)); }
+function pid(){ return 'p'+Date.now().toString(36)+Math.floor(Math.random()*1296).toString(36); }
+function entry(id){ return P.list.filter(function(x){ return x.id===id; })[0]; }
+function readProj(id){ try{ return JSON.parse(lsGet(PK+id)||'null'); }catch(e){ return null; } }
+function snapshot(){ return {name:$('projName').value,ws:Blockly.serialization.workspaces.save(ws),imgs:BH.IMGS}; }
+function saveNow(){ clearTimeout(saveT); if(!P.cur) return; var d=snapshot(), ok=lsSet(PK+P.cur,JSON.stringify(d)), e=entry(P.cur); if(e){ e.name=d.name; e.t=Date.now(); } writeIdx();
+  if(!ok&&!fullWarned){ fullWarned=true; toast(T('저장 공간이 꽉 찼어요. 프로젝트 파일로 저장해 두세요')); } if(ok) fullWarned=false; return ok; }
+function save(){ clearTimeout(saveT); saveT=setTimeout(saveNow,300); }
+window.addEventListener('pagehide',function(){ saveNow(); });
+document.addEventListener('visibilitychange',function(){ if(document.hidden) saveNow(); });
 function setImgs(o){ var I=BH.IMGS; Object.keys(I).forEach(function(k){ delete I[k]; }); if(o&&typeof o==='object') Object.keys(o).forEach(function(k){ var m=o[k]; if(m&&typeof m.data==='string'&&/^data:image\//.test(m.data)) I[k]=m; }); }
 $('projName').addEventListener('input',save);
 $('projName').addEventListener('keydown',function(e){ if(e.key==='Enter') this.blur(); });
 function blank(){ loadJSON({blocks:{languageVersion:0,blocks:[{type:'page_root',x:30,y:30,fields:{TITLE:T('나의 웹페이지'),BG:'#ffffff',CENTER:true},inputs:{BODY:{block:{type:'el_heading',fields:{SIZE:'h1',TEXT:T('안녕하세요'),NAME:T('제목')+'1'}}}}}]}}); }
+function uniqProj(base){ base=(base||T('나의 웹페이지')).trim().slice(0,40)||T('나의 웹페이지'); var names=P.list.map(function(x){ return x.name; }); if(names.indexOf(base)<0) return base; var b=base.replace(/\s*\d+$/,''), k=2; while(names.indexOf(b+' '+k)>=0) k++; return b+' '+k; }
+function createProject(name,loader){ saveNow(); var id=pid(), nm=uniqProj(name); P.cur=id; P.list.unshift({id:id,name:nm,t:Date.now()}); $('projName').value=nm; setImgs(null); loader(); ws.clearUndo(); saveNow(); syncBar(); renderProjs(); }
+function switchTo(id){ if(id===P.cur) return; saveNow(); var d=readProj(id), e=entry(id);
+  if(!d||!d.ws){ P.list=P.list.filter(function(x){ return x.id!==id; }); writeIdx(); renderProjs(); toast(T('이 프로젝트는 열 수 없어요')); return; }
+  P.cur=id; $('projName').value=d.name||(e&&e.name)||T('나의 웹페이지'); setImgs(d.imgs); try{ loadJSON(d.ws); }catch(err){ console.error(err); blank(); } ws.clearUndo(); writeIdx(); syncBar(); renderProjs(); }
+function deleteProject(id){ var e=entry(id); if(!e) return;
+  ask(F('"{0}" 프로젝트를 삭제할까요? 되돌릴 수 없어요.',e.name),T('삭제'),true).then(function(ok){ if(!ok) return;
+    try{ localStorage.removeItem(PK+id); }catch(err){} P.list=P.list.filter(function(x){ return x.id!==id; });
+    if(id===P.cur){ P.cur=null; var nx=P.list.slice().sort(function(a,b){ return b.t-a.t; })[0];
+      if(nx){ writeIdx(); switchTo(nx.id); } else createProject(T('나의 웹페이지'),blank); }
+    writeIdx(); renderProjs(); toast(T('프로젝트를 삭제했어요')); }); }
+function ask(msg,okText,danger){ return new Promise(function(res){ var dlg=$('askDlg'), ok=$('askOk'), no=$('askNo'); $('askMsg').textContent=msg; ok.textContent=okText||T('확인'); ok.className='tbtn '+(danger?'dang':'pri'); dlg.classList.add('open');
+  function done(v){ dlg.classList.remove('open'); ok.onclick=no.onclick=null; res(v); } ok.onclick=function(){ done(true); }; no.onclick=function(){ done(false); }; setTimeout(function(){ no.focus(); },30); }); }
+function renderProjs(){ var box=$('projList'); if(!$('projDlg').classList.contains('open')) return; box.innerHTML='';
+  P.list.slice().sort(function(a,b){ return b.t-a.t; }).forEach(function(e){ var d=document.createElement('div'), cur=e.id===P.cur; d.className='prow'+(cur?' cur':'');
+    d.innerHTML='<input data-notr spellcheck="false" aria-label=""><div class="pm"></div><div class="pbt"><button data-a="open"></button><button data-a="del" class="dang"></button></div>';
+    var inp=d.querySelector('input'); inp.value=e.name; inp.setAttribute('aria-label',T('프로젝트 이름'));
+    d.querySelector('.pm').textContent=(cur?T('지금 여는 중')+' · ':'')+new Date(e.t).toLocaleString(FFT.lang||'ko',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    var ob=d.querySelector('[data-a=open]'); ob.textContent=cur?T('닫기'):T('열기'); d.querySelector('[data-a=del]').textContent=T('삭제');
+    inp.onchange=function(){ var v=(this.value||'').trim().slice(0,40)||e.name; e.name=v; this.value=v; if(cur){ $('projName').value=v; saveNow(); } else { var dd=readProj(e.id); if(dd){ dd.name=v; lsSet(PK+e.id,JSON.stringify(dd)); } writeIdx(); } };
+    inp.onkeydown=function(ev){ if(ev.key==='Enter') this.blur(); };
+    d.querySelector('.pbt').onclick=function(ev){ var a=ev.target.dataset.a; if(a==='open'){ if(!cur) switchTo(e.id); $('projDlg').classList.remove('open'); } else if(a==='del') deleteProject(e.id); };
+    box.appendChild(d); }); }
+function openProjs(){ $('projDlg').classList.add('open'); renderProjs(); }
+$('projBtn').onclick=openProjs;
+$('projNew').onclick=function(){ createProject(T('나의 웹페이지'),blank); $('projDlg').classList.remove('open'); toast(T('새 프로젝트를 만들었어요')); };
 $('fileMenu').addEventListener('click',function(e){
   var b=e.target.closest('[data-f]'); if(!b) return; closeMenus(); var f=b.dataset.f;
-  if(f==='new'){ if(!confirm(T('지금 블록을 모두 지우고 새로 시작할까요?'))) return; $('projName').value=T('나의 웹페이지'); setImgs(null); blank(); save(); }
+  if(f==='projects') openProjs();
+  else if(f==='new'){ createProject(T('나의 웹페이지'),blank); toast(T('새 프로젝트를 만들었어요')); }
   else if(f==='save'){ download(new Blob([JSON.stringify({app:'block-html',v:1,name:$('projName').value,ws:Blockly.serialization.workspaces.save(ws),imgs:BH.IMGS},null,1)],{type:'application/json'}),fname('.json')); }
   else if(f==='open') $('fileIn').click();
   else if(f==='html') downloadHTML();
 });
 $('fileIn').addEventListener('change',function(){
   var file=this.files&&this.files[0]; this.value=''; if(!file) return;
-  var r=new FileReader(); r.onload=function(){ try{ var o=JSON.parse(r.result); if(!o.ws) throw 0; $('projName').value=o.name||file.name.replace(/\.json$/i,''); setImgs(o.imgs); loadJSON(o.ws); save(); toast(T('프로젝트를 열었어요')); }catch(e){ toast(T('이 파일은 열 수 없어요')); } };
+  var r=new FileReader(); r.onload=function(){ try{ var o=JSON.parse(r.result); if(!o.ws) throw 0; var nm=o.name||file.name.replace(/\.json$/i,'');
+    createProject(nm,function(){ setImgs(o.imgs); loadJSON(o.ws); }); toast(T('프로젝트를 열었어요')); }catch(e){ console.error(e); toast(T('이 파일은 열 수 없어요')); } };
   r.readAsText(file);
 });
 
 /* ---------- examples ---------- */
 var exMenu=$('exMenu');
 BH_EXAMPLES.forEach(function(ex,i){ var b=document.createElement('button'); b.innerHTML='<span></span><small></small>'; b.firstChild.textContent=T(ex.name); b.lastChild.textContent=T(ex.desc);
-  b.onclick=function(){ closeMenus(); if(ws.getAllBlocks(false).length>3&&!confirm(T('지금 블록 대신 예제를 열까요? (지금 것은 사라져요)'))) return; $('projName').value=T(ex.name); loadXML(ex.xml()); arrange(); save(); }; exMenu.appendChild(b); });
+  b.onclick=function(){ closeMenus(); createProject(T(ex.name),function(){ loadXML(ex.xml()); arrange(); }); toast(T('새 프로젝트로 열었어요')); }; exMenu.appendChild(b); });
 
 /* ---------- menus ---------- */
 function openMenu(m,anchor){ var was=m.classList.contains('open'); closeMenus(); if(was) return; m.classList.add('open');
@@ -231,7 +269,7 @@ function renderMgr(){
     d.querySelector('.pa').onclick=function(e){ var a=e.target.dataset.a; if(!a) return;
       if(a==='add'){ addToPage(id); $('mgrDlg').classList.remove('open'); }
       if(a==='edit'){ $('mgrDlg').classList.remove('open'); openPad(id); }
-      if(a==='del'){ var u=usedBy(id); if(u.length&&!confirm(F('이 그림을 쓰는 블록이 {0}개 있어요. 그래도 지울까요?',u.length))) return; delete I[id]; afterImgChange(); renderMgr(); } };
+      if(a==='del'){ var u=usedBy(id), go=function(){ delete I[id]; afterImgChange(); renderMgr(); }; if(u.length) ask(F('이 그림을 쓰는 블록이 {0}개 있어요. 그래도 지울까요?',u.length),T('삭제'),true).then(function(ok){ if(ok) go(); }); else go(); } };
     box.appendChild(d); });
 }
 ws.registerButtonCallback('imgDraw',function(){ openPad(null); });
@@ -249,7 +287,8 @@ function pasteBlock(){ var st=window.__clip; if(!st){ try{ st=JSON.parse(lsGet(C
   var m=ws.getMetricsManager().getViewMetrics(true), x=st.x!=null?st.x+30*pasteN:m.left+60, y=st.y!=null?st.y+30*pasteN:m.top+60;
   if(x<m.left||x>m.left+m.width-80||y<m.top||y>m.top+m.height-60){ x=m.left+60+((pasteN*30)%180); y=m.top+60+((pasteN*30)%180); }
   st.x=x; st.y=y; Blockly.Events.setGroup(true); var nb; try{ nb=Blockly.serialization.blocks.append(st,ws,{recordUndo:true}); }finally{ Blockly.Events.setGroup(false); } if(nb&&nb.select) nb.select(); }
-function deleteAll(){ var tops=ws.getTopBlocks(false); if(!tops.length) return; if(!confirm(T('블록을 모두 지울까요? 되돌리기로 다시 살릴 수 있어요.'))) return;
+function deleteAll(){ var tops=ws.getTopBlocks(false); if(!tops.length) return; ask(T('블록을 모두 지울까요? 되돌리기로 다시 살릴 수 있어요.'),T('모두 지우기'),true).then(function(ok){ if(ok) doDeleteAll(); }); }
+function doDeleteAll(){ var tops=ws.getTopBlocks(false);
   tops.sort(function(a,b){ return (a.type==='page_root')-(b.type==='page_root'); }); // pages go last so undo brings them back first
   Blockly.Events.setGroup(true); try{ tops.forEach(function(b){ b.dispose(false); }); }finally{ Blockly.Events.setGroup(false); } toast(T('블록을 모두 지웠어요')); }
 function syncBar(){ var sel=Blockly.getSelected(); $('ebCopy').disabled=!(sel&&!sel.isShadow()); $('ebUndo').disabled=!ws.getUndoStack().length; $('ebRedo').disabled=!ws.getRedoStack().length; }
@@ -258,6 +297,9 @@ $('ebPaste').onclick=pasteBlock;
 $('ebUndo').onclick=function(){ ws.undo(false); syncBar(); };
 $('ebRedo').onclick=function(){ ws.undo(true); syncBar(); };
 $('ebDel').onclick=deleteAll;
+$('ebTidy').onclick=function(){ arrange(); setTimeout(function(){ ws.scrollCenter(); },30); toast(T('블록을 정리했어요')); };
+$('ebCenter').onclick=function(){ ws.scrollCenter(); };
+$('ebSearch').onclick=openSearch;
 ws.addChangeListener(function(e){ if(e.type===Blockly.Events.SELECTED||!e.isUiEvent) setTimeout(syncBar,0); });
 // keep the selection when a bar button is pressed on touch screens
 document.getElementById('editBar').addEventListener('pointerdown',function(e){ e.stopPropagation(); });
@@ -277,10 +319,64 @@ REG.register({id:'ffDelAll',scopeType:Blockly.ContextMenuRegistry.ScopeType.WORK
   preconditionFn:function(sc){ return sc.workspace.getTopBlocks(false).length?'enabled':'disabled'; },callback:deleteAll});
 try{ REG.unregister('workspaceDelete'); }catch(e){}
 
+/* ---------- block search ---------- */
+var CAT=null;
+function catalog(){ if(CAT) return CAT; CAT=[]; var seen={}, hw=new Blockly.Workspace();
+  BH.toolbox().contents.forEach(function(cat){ if(cat.kind!=='category'||!cat.contents) return;
+    cat.contents.forEach(function(it){ if(it.kind!=='block') return; var st={type:it.type}; if(it.inputs) st.inputs=it.inputs; if(it.fields) st.fields=it.fields; if(it.extraState) st.extraState=it.extraState;
+      var key=JSON.stringify(st); if(seen[key]) return; seen[key]=1;
+      try{ var b=Blockly.serialization.blocks.append(st,hw), tip=typeof b.tooltip==='string'?b.tooltip:'', txt=b.toString(90).replace(/\s+/g,' ');
+        CAT.push({st:st,text:txt,cat:cat.name,tip:tip,color:b.getColour(),hay:(txt+' '+cat.name+' '+tip+' '+it.type).toLowerCase()}); }catch(e){} }); });
+  try{ hw.dispose(); }catch(e){} return CAT; }
+function insertBlock(st){ var m=ws.getMetricsManager().getViewMetrics(true), n=(insertBlock.n=(insertBlock.n||0)+1)%6, c=JSON.parse(JSON.stringify(st));
+  c.x=m.left+m.width/2-80+n*28; c.y=m.top+m.height/3+n*28; Blockly.Events.setGroup(true); var nb; try{ nb=Blockly.serialization.blocks.append(c,ws,{recordUndo:true}); }finally{ Blockly.Events.setGroup(false); } if(nb&&nb.select) nb.select(); }
+function renderSearch(){ var q=($('srchQ').value||'').trim().toLowerCase(), box=$('srchList'), words=q.split(/\s+/).filter(Boolean), list=catalog();
+  var hit=list.filter(function(c){ return words.every(function(w){ return c.hay.indexOf(w)>=0; }); }).slice(0,40);
+  box.innerHTML=''; if(!hit.length){ box.innerHTML='<div class="empty"></div>'; box.firstChild.textContent=T('찾는 블록이 없어요. 다른 낱말로 찾아 보세요.'); return; }
+  hit.forEach(function(c){ var b=document.createElement('button'); b.className='srow'; b.innerHTML='<i></i><span></span><small></small>'; b.firstChild.style.background=c.color; b.children[1].textContent=c.text; b.lastChild.textContent=c.cat;
+    b.onclick=function(){ $('srchDlg').classList.remove('open'); insertBlock(c.st); toast(T('블록을 넣었어요')); }; box.appendChild(b); }); }
+function openSearch(){ $('srchDlg').classList.add('open'); $('srchQ').value=''; renderSearch(); setTimeout(function(){ $('srchQ').focus(); },40); }
+$('srchQ').addEventListener('input',renderSearch);
+$('srchQ').addEventListener('keydown',function(e){ if(e.key==='Enter'){ var b=$('srchList').querySelector('.srow'); if(b) b.click(); } });
+$('srchClose').onclick=function(){ $('srchDlg').classList.remove('open'); };
+ws.registerButtonCallback('blkSearch',openSearch);
+
+/* ---------- log panel and friendly errors ---------- */
+var logN=0, errN=0, NOEL=T('요소가 없어요');
+function clearLog(){ logN=errN=0; $('logBox').innerHTML=''; syncLog(); }
+function syncLog(){ $('logN').textContent=logN; $('logBar').classList.toggle('err',errN>0); }
+function friendly(m){ m=String(m).replace(/^Uncaught\s+(\w+:\s*)?/,'');
+  if(m.indexOf(NOEL)>=0) return m;
+  if(/is not defined/.test(m)) return T('이름을 찾을 수 없어요. 변수를 먼저 만들었는지 확인해 보세요')+' ('+m+')';
+  if(/null|undefined/.test(m)&&/properties|reading|setting/.test(m)) return T('아직 없는 것을 쓰려고 했어요. 요소 이름과 순서를 확인해 보세요')+' ('+m+')';
+  return m; }
+function flashBlock(name){ var bl=ws.getAllBlocks(false).filter(function(b){ var f=b.getField&&b.getField('EL'); return f&&f.getValue()===name; })[0]; if(!bl) return;
+  if(bl.select) bl.select(); ws.centerOnBlock(bl.id); try{ ws.highlightBlock(bl.id,true); setTimeout(function(){ ws.highlightBlock(bl.id,false); },3000); }catch(e){} }
+function addLog(level,text){ var box=$('logBox'), d=document.createElement('div'); d.className='lg '+level; var err=level==='error';
+  if(err){ errN++; text=friendly(text); var mm=text.match(/"([^"]+)"\s*(?=[^"]*$)/); if(text.indexOf(NOEL)>=0){ var nm=text.match(/"([^"]+)"/); if(nm){ flashBlock(nm[1]); d.classList.add('go'); d.onclick=function(){ flashBlock(nm[1]); showBlocksView(); }; } } }
+  d.textContent=(err?'⚠ ':'')+text; box.appendChild(d); logN++; while(box.children.length>200) box.removeChild(box.firstChild); box.scrollTop=box.scrollHeight; syncLog();
+  if(err){ $('pPrev').classList.add('logOpen'); } }
+function showBlocksView(){ if(window.matchMedia('(max-width:900px)').matches){ var b=document.querySelector('#seg button[data-v="blocks"]'); if(b) b.click(); } }
+window.addEventListener('message',function(e){ var d=e.data; if(!d||!d.ffbhLog||e.source!==$('frame').contentWindow) return; addLog(d.ffbhLog[0],d.ffbhLog[1]); });
+$('logToggle').onclick=function(){ $('pPrev').classList.toggle('logOpen'); };
+$('logClear').onclick=clearLog;
+
+/* ---------- keyboard shortcuts: Ctrl+Enter run, Ctrl+S save, / search, Esc close ---------- */
+document.addEventListener('keydown',function(e){
+  var t=e.target, typing=t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable);
+  if(e.key==='Escape'){ var ov=document.querySelectorAll('.ov.open'); if(ov.length){ var top=ov[ov.length-1]; if(top.id==='askDlg') $('askNo').click(); else if(top.id==='baiDlg') $('baiClose').click(); else top.classList.remove('open'); } return; }
+  if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){ e.preventDefault(); runNow(); return; }
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){ e.preventDefault(); saveNow(); toast(T('저장했어요')); return; }
+  if(e.key==='/'&&!typing&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&!document.querySelector('.ov.open')){ e.preventDefault(); openSearch(); } });
+
 /* ---------- start ---------- */
-var saved=null; try{ saved=JSON.parse(lsGet(LS)||'null'); }catch(e){}
-if(saved&&saved.ws){ $('projName').value=saved.name||T('나의 웹페이지'); setImgs(saved.imgs); try{ loadJSON(saved.ws); }catch(e){ console.error(e); blank(); } }
-else { $('projName').value=T(BH_EXAMPLES[0].name); loadXML(BH_EXAMPLES[0].xml()); arrange(); save(); }
+/* old single autosave (ffblocks.v1) becomes the first entry of the project list; the old key is left untouched as a backup */
+P=readIdx(); if(!P){ P={cur:null,list:[]}; var old=null; try{ old=JSON.parse(lsGet(LS)||'null'); }catch(e){}
+  if(old&&old.ws){ var oid=pid(); lsSet(PK+oid,JSON.stringify(old)); P.list.push({id:oid,name:old.name||T('나의 웹페이지'),t:Date.now()}); P.cur=oid; writeIdx(); } }
+P.list=P.list.filter(function(e){ return e&&e.id; });
+(function(){ var cand=[P.cur].concat(P.list.slice().sort(function(a,b){ return b.t-a.t; }).map(function(e){ return e.id; })), ok=false;
+  for(var k=0;k<cand.length&&!ok;k++){ var id=cand[k], d=id&&entry(id)&&readProj(id); if(d&&d.ws){ P.cur=id; $('projName').value=d.name||T('나의 웹페이지'); setImgs(d.imgs); try{ loadJSON(d.ws); ok=true; }catch(e){ console.error(e); } } }
+  if(!ok){ P.cur=null; createProject(T(BH_EXAMPLES[0].name),function(){ loadXML(BH_EXAMPLES[0].xml()); arrange(); }); } })();
 setTimeout(syncBar,50);
-window.__bh={ws:ws,copy:copyBlock,paste:pasteBlock,deleteAll:deleteAll,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,loadJSON:loadJSON,save:save,toast:toast,examples:BH_EXAMPLES};
+window.__bh={ws:ws,copy:copyBlock,paste:pasteBlock,deleteAll:deleteAll,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,loadJSON:loadJSON,save:saveNow,toast:toast,projects:function(){ return P; },examples:BH_EXAMPLES};
 })();
