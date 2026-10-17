@@ -227,7 +227,9 @@ function liveView(s,b,th,edit,opt){
     fr.addEventListener('load',function(){ try{ fr.contentWindow.addEventListener('keydown',function(e){ if(e.key==='Escape') liveEsc(fr); },true); }catch(err){} }); }
   else { fr.setAttribute('sandbox','allow-scripts allow-forms'); fr.srcdoc=c.h+ESC_JS; }
   d.appendChild(fr);
-  if(edit){ var bt=document.createElement('button'); bt.className='lvEdit'; bt.dataset.liveEdit='1'; bt.textContent=T('화면 바꾸기'); d.appendChild(bt); }
+  if(edit){ var bt=document.createElement('button'); bt.className='lvEdit'; bt.dataset.liveEdit='1'; bt.textContent=T('화면 바꾸기'); d.appendChild(bt);
+    /* the running screen takes every press, so this grip picks the box to move it or pull its handles */
+    var gp=document.createElement('button'); gp.className='lvSize'; gp.dataset.liveSize='1'; gp.textContent='⤡ '+T('크기·위치'); gp.title=T('끌어서 옮기거나, 누른 뒤 모서리를 당겨 크기를 바꿔요'); d.appendChild(gp); }
   return d; }
 function liveEsc(fr){ try{ fr.blur(); }catch(e){} try{ window.focus(); }catch(e){} document.getElementById('present').classList.remove('inLive'); }
 window.addEventListener('message',function(e){ if(!e.data||e.data.ffslLive!=='esc') return; var fr=[].slice.call(document.querySelectorAll('iframe.lvf')).filter(function(x){ return x.contentWindow===e.source; })[0]; if(fr) liveEsc(fr); });
@@ -963,7 +965,9 @@ $('picBtn').onclick=pickImage;
 host.addEventListener('click',function(e){ if(gen||busyOn||noClick()) return;
   if(e.target.closest('[data-rm]')){ var s=deck.slides[cur]; if(!s) return; pushUndo(); s.img=''; s.iw=s.ih=0; changed(true); return; }
   if(e.target.closest('.pic.empty')) pickImage();
-  else if(e.target.closest('[data-live-edit]')||(e.target.closest('.dv.live')&&!e.target.closest('iframe'))) openLive();
+  else if(e.target.closest('[data-live-size]')) return;
+  else if(e.target.closest('[data-live-edit],.dv.live.empty')) openLive();
+  else if(e.target.closest('.dv.live')) return;
   else if(e.target.closest('.dv')) openData(); });
 var cw=$('canvasWrap');
 cw.addEventListener('dragover',function(e){ if(e.dataTransfer&&[].indexOf.call(e.dataTransfer.types||[],'Files')>=0){ e.preventDefault(); } });
