@@ -167,6 +167,21 @@ drawB('draw_text','에 글',[['TEXT',''],['X','x','Number'],['Y','y','Number'],[
 drawB('draw_image','에 그림',[['IMG',''],['X','x','Number'],['Y','y','Number'],['W','너비','Number']],'내 그림이나 그림 주소를 그림판에 그려요 (x, y는 왼쪽 위)',
   function(b){ need('draw'); need('image'); return '__image('+[lit(b.getFieldValue('EL')),v(b,'IMG',"''"),v(b,'X','0'),v(b,'Y','0'),v(b,'W','80')].join(', ')+');\n'; });
 
+/* ---------- save / log / distance / drag ---------- */
+def('act_store',function(){ this.appendValueInput('NAME').appendField(T('저장하기')).appendField(T('이름')); this.appendValueInput('VALUE').appendField(T('값')); this.setInputsInline(true); act(this,'이름을 붙여 값을 저장해요. 받은 HTML 파일에서는 다시 열어도 남아 있어요 (미리보기는 다시 실행하면 사라져요)'); },
+  function(b){ need('store'); return '__save('+(G.valueToCode(b,'NAME',O.COMMA)||"'save'")+', '+(G.valueToCode(b,'VALUE',O.COMMA)||"''")+');\n'; });
+def('val_load',function(){ this.appendValueInput('NAME').appendField(T('불러오기')).appendField(T('이름')); this.appendValueInput('DEF').appendField(T('없으면')); this.setInputsInline(true); val(this,null,'저장해 둔 값을 가져와요. 저장한 적이 없으면 "없으면" 값을 써요'); },
+  function(b){ need('store'); return ['__load('+(G.valueToCode(b,'NAME',O.COMMA)||"'save'")+', '+(G.valueToCode(b,'DEF',O.COMMA)||'0')+')',O.FUNCTION_CALL]; });
+def('act_log',function(){ this.appendValueInput('VALUE').appendField(T('로그에 남기기')); act(this,'미리보기 아래 로그 칸에 값을 적어요. 어디서 틀렸는지 찾을 때 좋아요'); },
+  function(b){ return 'console.log('+(G.valueToCode(b,'VALUE',O.NONE)||"''")+');\n'; });
+def('val_dist',function(){ this.appendValueInput('X1').setCheck('Number').appendField(T('거리')).appendField('x1'); this.appendValueInput('Y1').setCheck('Number').appendField('y1'); this.appendValueInput('X2').setCheck('Number').appendField('x2'); this.appendValueInput('Y2').setCheck('Number').appendField('y2'); this.setInputsInline(true); val(this,'Number','두 점 사이의 거리. 거리가 두 반지름의 합보다 작으면 부딪힌 거예요'); },
+  function(b){ need('dist'); return ['__dist('+[v(b,'X1','0'),v(b,'Y1','0'),v(b,'X2','0'),v(b,'Y2','0')].join(', ')+')',O.FUNCTION_CALL]; });
+def('val_today',function(){ this.appendDummyInput().appendField(T('오늘')).appendField(new Blockly.FieldDropdown(function(){ return [[T('날짜 글자'),'date'],[T('시각 글자'),'time'],[T('년'),'year'],[T('월 (1~12)'),'month']]; }),'U'); val(this,null,'오늘 날짜나 지금 시각'); },
+  function(b){ var u=b.getFieldValue('U'), m={date:'new Date().toLocaleDateString()',time:'new Date().toLocaleTimeString()',year:'new Date().getFullYear()',month:'(new Date().getMonth() + 1)'}; return [m[u]||m.date,u==='month'?O.ATOMIC:O.FUNCTION_CALL]; });
+def('ev_drag',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('을(를) 누른 채 움직이면')); hat(this,'마우스를 누른 채, 또는 손가락으로 짚고 움직이는 동안 계속 해요. "누른 위치"를 함께 써요'); },
+  function(b){ var n=lit(b.getFieldValue('EL')); need('$'); need('pos');
+    return '$('+n+').style.touchAction = \'none\';\n$('+n+').addEventListener(\'pointermove\', function (e) {\n  if (!e.buttons) return;\n  __pos(e, this);\n'+G.statementToCode(b,'DO')+'});\n'; });
+
 /* ---------- raw JavaScript ---------- */
 def('js_raw',function(){ this.appendDummyInput().appendField('JS').appendField(new Blockly.FieldTextInput('console.log("hi");'),'CODE'); this.setPreviousStatement(true); this.setNextStatement(true); this.setColour(C.js); this.setTooltip(T('자바스크립트 한 줄을 직접 써요')); },
   function(b){ return b.getFieldValue('CODE')+'\n'; });
@@ -175,7 +190,7 @@ def('js_val',function(){ this.appendDummyInput().appendField('JS').appendField(n
 
 /* ---------- helpers that go into the page, only the ones used ---------- */
 var HELP={
-  '$':"function $(name) {\n  var el = document.getElementById(name);\n  if (!el) throw new Error('\"' + name + '\" 요소가 없어요');\n  return el;\n}",
+  '$':"function $(name) {\n  var el = document.getElementById(name);\n  if (!el) throw new Error('\"' + name + '\" "+T('요소가 없어요').replace(/'/g,"\\'")+"');\n  return el;\n}",
   get:"function __get(name) {\n  var el = $(name);\n  return el.tagName === 'INPUT' ? el.value : el.textContent;\n}\nfunction __num(x) {\n  var n = parseFloat(x);\n  return isNaN(n) ? 0 : n;\n}",
   set:"function __set(name, value) {\n  var el = $(name);\n  if (el.tagName === 'INPUT') el.value = value;\n  else if (el.tagName === 'IMG') el.src = value;\n  else if (el.tagName === 'CANVAS') el.getContext('2d').clearRect(0, 0, el.width, el.height);\n  else el.textContent = value;\n}",
   add:"function __add(name, value) {\n  var el = $(name);\n  if (el.tagName === 'UL') {\n    var li = document.createElement('li');\n    li.textContent = value;\n    el.appendChild(li);\n  } else if (el.tagName === 'INPUT') el.value += value;\n  else el.textContent += value;\n}",
@@ -183,6 +198,8 @@ var HELP={
   move:"function __move(name, x, y) {\n  var s = $(name).style;\n  s.position = 'absolute';\n  s.left = x + 'px';\n  s.top = y + 'px';\n}",
   show:"function __show(name, mode) {\n  var el = $(name);\n  if (mode === 'toggle') mode = el.style.display === 'none' ? 'show' : 'hide';\n  el.style.display = mode === 'hide' ? 'none' : '';\n}",
   pos:"var __mx = 0, __my = 0;\nfunction __pos(e, el) {\n  var r = el.getBoundingClientRect();\n  __mx = Math.round((e.clientX - r.left) * (el.width ? el.width / r.width : 1));\n  __my = Math.round((e.clientY - r.top) * (el.height ? el.height / r.height : 1));\n}",
+  store:"var __mem = {};\nfunction __save(k, v) {\n  k = 'ffb:' + k;\n  __mem[k] = v;\n  try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {}\n}\nfunction __load(k, d) {\n  k = 'ffb:' + k;\n  try {\n    var s = localStorage.getItem(k);\n    if (s !== null) return JSON.parse(s);\n  } catch (e) {}\n  return k in __mem ? __mem[k] : d;\n}",
+  dist:"function __dist(x1, y1, x2, y2) { return Math.hypot(x2 - x1, y2 - y1); }",
   key:"var __key = '';",
   timers:"var __timers = [];",
   beep:"var __audio;\nfunction __beep(freq, sec) {\n  __audio = __audio || new (window.AudioContext || window.webkitAudioContext)();\n  var o = __audio.createOscillator(), g = __audio.createGain(), t = __audio.currentTime;\n  o.frequency.value = freq;\n  o.connect(g); g.connect(__audio.destination);\n  g.gain.setValueAtTime(0.2, t);\n  g.gain.exponentialRampToValueAtTime(0.001, t + sec);\n  o.start(t); o.stop(t + sec);\n}",
@@ -247,8 +264,9 @@ function build(ws,opts){
     '.box.row { flex-direction: row; flex-wrap: wrap; align-items: center;'+(center?' justify-content: center;':'')+' }',
     '.space { height: 24px; }'
   ].join('\n    ');
+  var logPre='<script>(function(){function s(l,a){var t=[].map.call(a,function(x){try{return typeof x===\'object\'?JSON.stringify(x):String(x);}catch(e){return String(x);}}).join(\' \');try{parent.postMessage({ffbhLog:[l,t]},\'*\');}catch(e){}}[\'log\',\'info\',\'warn\',\'error\'].forEach(function(k){var o=console[k];console[k]=function(){s(k,arguments);if(o)o.apply(console,arguments);};});var oe=window.onerror;window.onerror=function(m){s(\'error\',[m]);return oe?oe.apply(this,arguments):false;};addEventListener(\'unhandledrejection\',function(e){s(\'error\',[e.reason&&e.reason.message||e.reason]);});})();<\/script>\n';
   var pre=opts.trap?'<script>window.__loop=1e6;setInterval(function(){window.__loop=1e6;},200);(function(){var P=0,Q=[],sT=setTimeout,sI=setInterval,rA=window.requestAnimationFrame&&window.requestAnimationFrame.bind(window),st=null;window.setTimeout=function(f,ms){var a=[].slice.call(arguments,2);if(typeof f!==\'function\')return sT(f,ms);return sT(function(){if(P)Q.push(function(){f.apply(window,a);});else f.apply(window,a);},ms);};window.setInterval=function(f,ms){var a=[].slice.call(arguments,2);if(typeof f!==\'function\')return sI(f,ms);return sI(function(){if(!P)f.apply(window,a);},ms);};if(rA)window.requestAnimationFrame=function(f){return rA(function(t){if(P)Q.push(function(){rA(f);});else f(t);});};addEventListener(\'message\',function(e){var d=e.data;if(!d||d.ffbh===undefined)return;if(d.ffbh===\'pause\'&&!P){P=1;st=document.createElement(\'style\');st.textContent=\'*,*::before,*::after{animation-play-state:paused!important;transition:none!important}\';document.head.appendChild(st);document.querySelectorAll(\'audio,video\').forEach(function(m){if(!m.paused){m.pause();m.__ffp=1;}});}else if(d.ffbh===\'resume\'&&P){P=0;if(st)st.remove();var q=Q;Q=[];q.forEach(function(f){f();});document.querySelectorAll(\'audio,video\').forEach(function(m){if(m.__ffp){m.__ffp=0;m.play();}});}});})();window.onerror=function(m){var d=document.getElementById("__err")||document.body.appendChild(Object.assign(document.createElement("div"),{id:"__err"}));d.style.cssText="position:fixed;left:8px;right:8px;bottom:8px;padding:10px 14px;border-radius:10px;background:#7f1d1d;color:#fff;font:14px sans-serif;text-align:left;z-index:99999";d.textContent="⚠ "+m;};<\/script>\n':'';
-  return '<!DOCTYPE html>\n<html lang="'+(FFT.lang||'ko')+'">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>'+esc(title)+'</title>\n  <!-- '+T('Block HTML로 만든 페이지')+' -->\n'+(pre?'  '+pre:'')+
+  return '<!DOCTYPE html>\n<html lang="'+(FFT.lang||'ko')+'">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>'+esc(title)+'</title>\n  <!-- '+T('Block HTML로 만든 페이지')+' -->\n'+(pre?'  '+pre+'  '+logPre:'')+
     '  <style>\n    '+css+'\n  </style>\n</head>\n<body>\n'+body+(js.trim()?'  <script>\n'+js.replace(/^(?=.)/gm,'    ')+'\n  <\/script>\n':'')+'</body>\n</html>\n';
 }
 
@@ -260,7 +278,7 @@ function toolbox(){
   var img={shadow:{type:'val_myimg'}};
   return {kind:'categoryToolbox',contents:[
     {kind:'category',name:T('시작'),colour:C.ev,contents:[
-      {kind:'block',type:'ev_start'},lab('누르거나 쓰면'),{kind:'block',type:'ev_click'},{kind:'block',type:'ev_change'},{kind:'block',type:'ev_key'},lab('시간마다'),{kind:'block',type:'ev_timer'}]},
+      {kind:'block',type:'ev_start'},lab('누르거나 쓰면'),{kind:'block',type:'ev_click'},{kind:'block',type:'ev_drag'},{kind:'block',type:'ev_change'},{kind:'block',type:'ev_key'},lab('시간마다'),{kind:'block',type:'ev_timer'}]},
     {kind:'category',name:T('화면'),colour:C.page,contents:[
       {kind:'block',type:'page_root'},lab('글'),{kind:'block',type:'el_heading'},{kind:'block',type:'el_text'},{kind:'block',type:'el_list'},{kind:'block',type:'el_link'},
       lab('누르고 쓰기'),{kind:'block',type:'el_button'},{kind:'block',type:'el_input'},
@@ -276,7 +294,7 @@ function toolbox(){
       {kind:'block',type:'draw_line',inputs:{X1:n(10),Y1:n(10),X2:n(200),Y2:n(150),COLOR:shc('#111111')}},
       {kind:'block',type:'draw_text',inputs:{TEXT:sh('text',T('안녕')),X:n(20),Y:n(40),COLOR:shc('#111111')}},
       {kind:'block',type:'draw_image',inputs:{IMG:img,X:n(20),Y:n(20),W:n(80)}},
-      lab('누른 곳'),{kind:'block',type:'val_mouse'}]},
+      lab('누른 곳'),{kind:'block',type:'ev_drag'},{kind:'block',type:'val_mouse'},lab('부딪힘'),{kind:'block',type:'val_dist',inputs:{X1:n(0),Y1:n(0),X2:n(50),Y2:n(50)}}]},
     {kind:'category',name:T('바꾸기'),colour:C.act,contents:[
       {kind:'block',type:'act_set',inputs:{VALUE:sh('text',T('안녕!'))}},
       {kind:'block',type:'act_append',inputs:{VALUE:sh('text',T('항목'))}},
@@ -295,7 +313,10 @@ function toolbox(){
       {kind:'block',type:'act_beep',inputs:{SEC:n(0.3)}},
       {kind:'block',type:'act_alert',inputs:{VALUE:sh('text',T('안녕하세요!'))}}]},
     {kind:'category',name:T('시간'),colour:'#3a6fd8',contents:[
-      {kind:'block',type:'act_after',inputs:{SEC:n(1)}},{kind:'block',type:'ev_timer'},{kind:'block',type:'act_stop'},{kind:'block',type:'val_time'}]},
+      {kind:'block',type:'act_after',inputs:{SEC:n(1)}},{kind:'block',type:'ev_timer'},{kind:'block',type:'act_stop'},{kind:'block',type:'val_time'},{kind:'block',type:'val_today'}]},
+    {kind:'category',name:T('저장·로그'),colour:'#8e6bbf',contents:[
+      {kind:'block',type:'act_store',inputs:{NAME:sh('text',T('최고점')),VALUE:n(0)}},{kind:'block',type:'val_load',inputs:{NAME:sh('text',T('최고점')),DEF:n(0)}},
+      lab('기록'),{kind:'block',type:'act_log',inputs:{VALUE:sh('text',T('안녕!'))}}]},
     {kind:'sep'},
     {kind:'category',name:T('조건'),colour:'#5b80a5',contents:[
       {kind:'block',type:'controls_if'},{kind:'block',type:'controls_if',extraState:{hasElse:true}},
@@ -310,7 +331,8 @@ function toolbox(){
       {kind:'block',type:'math_random_int',inputs:{FROM:n(1),TO:n(100)}},{kind:'block',type:'math_round',inputs:{NUM:n(3.5)}},
       {kind:'block',type:'math_modulo',inputs:{DIVIDEND:n(10),DIVISOR:n(3)}},{kind:'block',type:'math_single',inputs:{NUM:n(9)}},
       {kind:'block',type:'math_number_property',inputs:{NUMBER_TO_CHECK:n(0)}},{kind:'block',type:'math_constrain',inputs:{VALUE:n(50),LOW:n(0),HIGH:n(100)}},
-      {kind:'block',type:'math_random_float'}]},
+      {kind:'block',type:'math_random_float'},
+      lab('거리'),{kind:'block',type:'val_dist',inputs:{X1:n(0),Y1:n(0),X2:n(30),Y2:n(40)}}]},
     {kind:'category',name:T('글자'),colour:'#5ba58c',contents:[
       {kind:'block',type:'text'},{kind:'block',type:'text_join'},{kind:'block',type:'text_length',inputs:{VALUE:sh('text','abc')}},
       {kind:'block',type:'text_isEmpty',inputs:{VALUE:sh('text','')}},{kind:'block',type:'text_indexOf',inputs:{FIND:sh('text','a')}},

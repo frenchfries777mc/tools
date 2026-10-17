@@ -70,7 +70,7 @@ button,input,select{font:inherit; color:inherit;}
   .stabs .stab{display:none;}
 }
 @media(max-width:1180px){ .tbtn.rb .lb{display:none;} }
-@media(max-width:960px){ .brand{display:none;} #exBtn .lb,#fileBtn .lb,#dlBtn .lb{display:none;} .top{flex-wrap:wrap; gap:6px;} #projName{flex-basis:70px;} .langSel{max-width:96px;} }
+@media(max-width:960px){ .brand{display:none;} #exBtn .lb,#fileBtn .lb,#dlBtn .lb,#projBtn .lb{display:none;} .top{flex-wrap:wrap; gap:6px;} #projName{flex-basis:140px; min-width:110px;} .langSel{max-width:96px;} }
 @media(max-width:620px){ .brand{display:none;} .tbtn .lb{display:none;} #projName{max-width:none;} .top{flex-wrap:wrap;} .top .sp{display:none;} .seg{order:9; flex:1 1 auto; justify-content:center;} .seg button{flex:1;} [data-lang-slot]{order:10;} .langSel{max-width:96px;} }
 .menu{position:fixed; z-index:60; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:6px; min-width:230px; box-shadow:0 20px 50px rgba(0,0,0,.55); display:none; max-height:80vh; overflow:auto;}
 .menu.open{display:block;}
@@ -135,7 +135,39 @@ button,input,select{font:inherit; color:inherit;}
 #editBar button.dang{color:#ff8b8b;}
 #editBar svg{width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
 #editBar .vs{width:1px; background:var(--line); margin:4px 2px;}
+#editBar{flex-wrap:wrap; justify-content:flex-end; max-width:calc(100% - 24px);}
+@media(max-width:1500px){ #editBar .lb{display:none;} }
 @media(max-width:700px){ #editBar .lb{display:none;} #editBar button{padding:0 9px;} }
+/* projects, search, ask, log */
+.dlg.narrow{width:min(560px,100%);} .dlg.tiny{width:min(400px,100%);}
+#projList,#srchList{overflow:auto; padding:10px 12px; display:flex; flex-direction:column; gap:8px; min-height:80px;}
+.prow{display:grid; grid-template-columns:1fr auto; gap:4px 10px; align-items:center; border:1px solid var(--line); background:var(--panel2); border-radius:12px; padding:8px 10px;}
+.prow.cur{border-color:var(--fry);}
+.prow input{background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:7px 9px; min-width:0; font-weight:500;}
+.prow .pm{grid-column:1; font-size:12px; color:var(--dim);}
+.prow .pbt{grid-column:2; grid-row:1/3; display:flex; gap:6px;}
+.pbt button{height:38px; min-width:58px; padding:0 12px; border-radius:9px; border:1px solid var(--line); background:var(--panel); cursor:pointer;}
+.pbt button.dang,.tbtn.dang{color:#ff7b7b;}
+.tbtn.dang{background:#2a1416; border-color:#ff7b7b; font-weight:700;}
+.srchTop{padding:10px 12px 0;}
+.srchTop input{width:100%; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:11px 12px; font-size:16px;}
+.srow{display:grid; grid-template-columns:12px 1fr auto; gap:10px; align-items:center; text-align:left; border:1px solid var(--line); background:var(--panel2); border-radius:10px; padding:10px 12px; cursor:pointer; min-height:44px;}
+.srow:hover{border-color:var(--fry);}
+.srow i{width:12px; height:12px; border-radius:4px;}
+.srow small{color:var(--dim); font-size:12px;}
+#srchList{max-height:min(60vh,480px);}
+.askBody{padding:22px 20px 8px; font-size:15px; line-height:1.6;}
+.askFoot{display:flex; justify-content:flex-end; gap:8px; padding:12px 16px 16px;}
+.askFoot .tbtn{height:40px; min-width:80px; justify-content:center;}
+#logBar{display:flex; align-items:center; gap:6px; padding:3px 8px; border-top:1px solid var(--line); background:var(--panel); flex:0 0 auto;}
+#logBar button{border:0; background:transparent; color:var(--dim); cursor:pointer; padding:6px 8px; border-radius:8px; font-size:12.5px;}
+#logBar button:hover{background:var(--panel2); color:var(--text);}
+#logBar .sp{flex:1;}
+#logN{background:var(--panel2); border-radius:99px; padding:1px 7px; font-weight:500;}
+#logBar.err #logN{background:#7f1d1d; color:#fff;}
+#logBox{display:none; flex:0 0 auto; max-height:34%; min-height:70px; overflow:auto; background:#05060a; border-top:1px solid var(--line); padding:6px 10px; font:12px/1.55 'JetBrains Mono',monospace; user-select:text; -webkit-user-select:text;}
+#pPrev.logOpen #logBox{display:block;}
+.lg{white-space:pre-wrap; word-break:break-all; color:#cfd5e1;} .lg.error{color:#ff9b9b;} .lg.warn{color:#ffd37a;} .lg.go{cursor:pointer; text-decoration:underline dotted;}
 /* AI dialog */
 .tbtn.aib{border-color:#5a4a1c; color:var(--fry);}
 #baiDlg .dlg{width:min(620px,100%);}
@@ -160,6 +192,7 @@ button,input,select{font:inherit; color:inherit;}
 <header class="top">
   <a class="home" href="../" aria-label="도구 목록">🍟</a>
   <span class="brand" data-notr>BLOCK <b>HTML</b></span>
+  <button class="tbtn" id="projBtn" title="내 프로젝트"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span class="lb">내 프로젝트</span></button>
   <input id="projName" value="나의 웹페이지" aria-label="프로젝트 이름" spellcheck="false">
   <span class="sp"></span>
   <span class="runGrp" id="runGrp">
@@ -177,6 +210,10 @@ button,input,select{font:inherit; color:inherit;}
 <div class="main">
   <div class="wsWrap"><div id="ws" data-notr></div>
   <div id="editBar">
+    <button id="ebSearch" title="블록 찾기 ( / )"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
+    <button id="ebTidy" title="블록 정리"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="4" rx="1.5"/><rect x="4" y="13" width="7" height="4" rx="1.5"/><rect x="13" y="10" width="7" height="10" rx="1.5"/></svg></button>
+    <button id="ebCenter" title="가운데로"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/></svg></button>
+    <span class="vs"></span>
     <button id="ebUndo" title="되돌리기"><svg viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button>
     <button id="ebRedo" title="다시 하기"><svg viewBox="0 0 24 24"><path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></svg></button>
     <span class="vs"></span>
@@ -193,14 +230,16 @@ button,input,select{font:inherit; color:inherit;}
       <button class="ib" id="openTab" title="새 탭에서 열기"><svg viewBox="0 0 24 24"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></button>
       <button class="ib" id="copyCode" title="코드 복사"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
     </div>
-    <div class="pane on" id="pPrev"><div id="veil"><span>⏸ 멈춤 · 이어하려면 멈추기를 다시 눌러요</span></div><iframe id="frame" title="미리보기" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe></div>
+    <div class="pane on" id="pPrev"><div id="veil"><span>⏸ 멈춤 · 이어하려면 멈추기를 다시 눌러요</span></div><iframe id="frame" title="미리보기" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe>
+      <div id="logBar"><button id="logToggle">📋 <span>로그</span> <b id="logN">0</b></button><span class="sp"></span><button id="logClear">로그 비우기</button></div><div id="logBox" data-notr></div></div>
     <div class="pane" id="pCode"><pre id="code" data-notr></pre></div>
     <div class="hint" id="hint">블록을 바꾸면 미리보기가 바로 바뀌어요.</div>
   </aside>
 </div>
 <div class="menu" id="exMenu"></div>
 <div class="menu" id="fileMenu">
-  <button data-f="new">새 프로젝트<small>빈 페이지에서 시작</small></button>
+  <button data-f="projects">내 프로젝트<small>여러 개를 만들어 두고 골라 열기, 이름 바꾸기, 삭제</small></button>
+  <button data-f="new">새 프로젝트<small>빈 페이지에서 새로 시작해요. 지금 것은 목록에 남아요</small></button>
   <hr>
   <button data-f="save">프로젝트 파일로 저장<small>블록을 .json 파일로 받아요. 나중에 다시 열 수 있어요</small></button>
   <button data-f="open">프로젝트 파일 열기<small>저장해 둔 .json 파일</small></button>
@@ -233,6 +272,21 @@ button,input,select{font:inherit; color:inherit;}
     <pre id="baiLive" data-notr hidden></pre>
   </div>
   <div class="baiFoot"><button class="tbtn" id="baiUndo" hidden>AI 전으로 되돌리기</button><span class="sp"></span><button class="tbtn" id="baiStop" hidden>멈추기</button><button class="tbtn pri" id="baiGo">코드 만들기</button></div>
+</div></div>
+<div class="ov" id="projDlg"><div class="dlg narrow">
+  <div class="dh"><h3>내 프로젝트</h3><button class="tbtn pri" id="projNew">＋ 새 프로젝트</button><button class="x" data-close aria-label="닫기">×</button></div>
+  <div id="projList"></div>
+  <div class="hint">이 브라우저에 자동으로 저장돼요. 다른 기기로 옮기려면 파일 메뉴에서 프로젝트 파일로 저장하세요.</div>
+</div></div>
+<div class="ov" id="srchDlg"><div class="dlg narrow">
+  <div class="dh"><h3>블록 찾기</h3><button class="x" id="srchClose" aria-label="닫기">×</button></div>
+  <div class="srchTop"><input type="search" id="srchQ" data-notr placeholder="예: 소리, 랜덤, 저장" autocomplete="off" spellcheck="false"></div>
+  <div id="srchList"></div>
+  <div class="hint">누르면 지금 보이는 곳에 블록이 놓여요.</div>
+</div></div>
+<div class="ov" id="askDlg"><div class="dlg tiny">
+  <div class="askBody" id="askMsg"></div>
+  <div class="askFoot"><button class="tbtn" id="askNo">취소</button><button class="tbtn pri" id="askOk">확인</button></div>
 </div></div>
 <input type="file" id="photoIn" accept="image/*" hidden>
 <input type="file" id="fileIn" accept=".json,application/json" hidden>
