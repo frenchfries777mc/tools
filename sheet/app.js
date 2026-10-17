@@ -516,6 +516,7 @@ function cmd(n){
     case 'dv': return openDv();
     case 'note': return editNote();
     case 'rowmenu': return openMenu($('rowMenu'),document.querySelector('[data-cmd=rowmenu]'));
+    case 'datamenu': return openMenu($('dataMenu'),$('bData'));
   }
 }
 document.getElementById('ribbon').addEventListener('click',function(e){ var b=e.target.closest('[data-cmd]'); if(b) cmd(b.dataset.cmd); });
@@ -673,7 +674,7 @@ function openMenu(m,anchorEl,up){
   m.style.left=x+'px'; m.style.top=y+'px';
 }
 function closeMenus(){ document.querySelectorAll('.menu.open').forEach(function(m){ m.classList.remove('open'); }); }
-document.addEventListener('pointerdown',function(e){ if(!e.target.closest('.menu')&&!e.target.closest('#fileBtn,[data-cmd=rowmenu],.tab')) closeMenus(); },true);
+document.addEventListener('pointerdown',function(e){ if(!e.target.closest('.menu')&&!e.target.closest('#fileBtn,[data-cmd=rowmenu],[data-cmd=datamenu],.tab')) closeMenus(); },true);
 function openDlg(id,focusEl){ commitEdit(); $(id).classList.add('open'); if(focusEl) setTimeout(function(){ focusEl.focus(); },30); }
 function closeDlgs(){ document.querySelectorAll('.ov.open').forEach(function(o){ if(o.id==='aiDlg') return; o.classList.remove('open'); if(o.id==='askDlg'&&askRes){ var f=askRes; askRes=null; f(null); } }); overlay(); }
 document.querySelectorAll('.ov').forEach(function(o){ o.addEventListener('click',function(e){ if(o.id==='aiDlg') return; if(e.target===o||e.target.closest('[data-close]')) closeDlgs(); }); });
@@ -1196,6 +1197,44 @@ function openTpl(){
     g.appendChild(b); });
   openDlg('tplDlg');
 }
+
+/* ---------- v11: data menu, pivot table ---------- */
+$('dataMenu').addEventListener('click',function(e){ var b=e.target.closest('[data-d]'); if(!b) return; closeMenus(); dataCmd(b.dataset.d); });
+function dataCmd(d){
+  if(d==='pivot') return openPivot();
+}
+var pvG=null;
+function pvFillCols(){
+  var hdr=$('pvHdr').checked, g=pvG, si=doc.active, keep=[$('pvKey').value,$('pvVal').value];
+  [$('pvKey'),$('pvVal')].forEach(function(sl,n){ sl.innerHTML='';
+    for(var c=g.c1;c<=g.c2;c++){ var o=document.createElement('option'), t=hdr?E.formatValue(eng.value(si,g.r1,c)):''; o.value=c; o.textContent=E.colName(c)+(t?' · '+t:''); sl.appendChild(o); }
+    if(keep[n]!==''&&keep[n]!=null&&sl.querySelector('option[value="'+keep[n]+'"]')) sl.value=keep[n]; });
+}
+function openPivot(){
+  commitEdit(); var g=(sel.r1===sel.r2&&sel.c1===sel.c2)?region(act.r,act.c):Object.assign({},sel);
+  if(!g||g.r2<=g.r1) return toast(T('피벗으로 만들 표를 먼저 고르세요'));
+  if(g.r2-g.r1>5000) g.r2=g.r1+5000;
+  pvG=g; $('pvRg').textContent=sh.name+'!'+E.rangeStr(g); $('pvHdr').checked=hasHeader(g);
+  $('pvKey').innerHTML=''; $('pvVal').innerHTML=''; pvFillCols();
+  $('pvKey').value=g.c1; var vc=g.c2, si=doc.active;
+  for(var c=g.c1+1;c<=g.c2;c++){ if(typeof eng.value(si,g.r1+1,c)==='number'){ vc=c; break; } }
+  $('pvVal').value=vc; openDlg('pvDlg');
+}
+$('pvHdr').addEventListener('change',pvFillCols);
+$('pvOk').onclick=function(){
+  var g=pvG; if(!g) return; var hdr=$('pvHdr').checked, kc=+$('pvKey').value, vc=+$('pvVal').value, agg=$('pvAgg').value, si=doc.active, rows=[];
+  for(var r=g.r1+(hdr?1:0);r<=g.r2;r++){ var row=[]; row[kc]=eng.value(si,r,kc); row[vc]=eng.value(si,r,vc); rows.push(row); }
+  if(!rows.length) return toast(T('피벗으로 만들 표를 먼저 고르세요'));
+  var res=E.pivot(rows,kc,vc,agg,$('pvSort').value), kh=hdr?E.formatValue(eng.value(si,g.r1,kc)):F('{0}열',E.colName(kc)), vh=hdr?E.formatValue(eng.value(si,g.r1,vc)):F('{0}열',E.colName(vc));
+  var lab=T(agg==='sum'?'합계':agg==='count'?'개수':'평균'), nf=agg==='avg'?'n2':'';
+  pushUndo(); closeDlgs();
+  var ns=newSheet(uniqueName(T('피벗'))), num=function(v){ return v==null?'':E.fmtGeneral(+v.toPrecision(12)); };
+  put(ns,0,0,kh,HD); put(ns,0,1,lab+' · '+vh,HD);
+  res.rows.forEach(function(x,i){ var kt=x[0]===''?T('(빈 칸)'):E.formatValue(x[0]); put(ns,i+1,0,/^[='@+\-]/.test(kt)&&typeof x[0]==='string'?"'"+kt:kt,{bd:1}); var f={bd:1,al:'r'}; if(nf) f.nf=nf; put(ns,i+1,1,num(x[1]),f); });
+  var tf={b:1,bd:1,bg:'#2b3550',fc:'#ffd76a'}; put(ns,res.rows.length+1,0,T('총합계'),tf); var tv=Object.assign({al:'r'},tf); if(nf) tv.nf=nf; put(ns,res.rows.length+1,1,num(res.total),tv);
+  ns.cw[0]=150; ns.cw[1]=170; ns.fr=1; ns.rows=Math.max(ROWS,res.rows.length+20);
+  doc.sheets.push(ns); eng=new E.Engine(doc); switchSheet(doc.sheets.length-1); saveSoon(); toast(F('{0}개 항목으로 피벗을 만들었어요',res.rows.length));
+};
 
 /* ---------- start ---------- */
 window.addEventListener('pointerdown',function(e){ mouseMode=e.pointerType==='mouse'; },true);

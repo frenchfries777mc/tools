@@ -427,6 +427,23 @@ def('SLOPE',function(a){ var s=sxy(pairs(this,[a[1],a[0]])); if(!s[1]) fail('#DI
 def('INTERCEPT',function(a){ var p=pairs(this,[a[1],a[0]]), s=sxy(p); if(!s[1]) fail('#DIV/0!'); return mean(p[1])-s[0]/s[1]*mean(p[0]); });
 def('COUNTUNIQUE',function(a){ var seen={}, n=0; this.each(a,function(v){ if(v==null||v==='') return; var k=typeof v+':'+String(v).toLowerCase(); if(!seen[k]){ seen[k]=1; n++; } }); return n; });
 
+/* v11: pivot table. rows = evaluated values (no header row); groups by column kc and sums / counts / averages column vc.
+   agg 'sum'|'count'|'avg'; sort 'first' (order of appearance) | 'key' | 'val' (largest first). Returns {rows:[[key,value]], total}. */
+function pivot(rows,kc,vc,agg,sort){
+  var map=Object.create(null), list=[], T={n:0,s:0,m:0};
+  rows.forEach(function(row){
+    var kv=row[kc]; if(kv==null) kv=''; var disp=isErr(kv)?kv.e:formatValue(kv), id=disp.toLowerCase();
+    var g=map[id]; if(!g){ g=map[id]={key:kv,n:0,s:0,m:0}; list.push(g); }
+    var v=row[vc]; if(v==null||v===''||isErr(v)) return;
+    g.n++; T.n++; if(typeof v==='number'){ g.s+=v; g.m++; T.s+=v; T.m++; }
+  });
+  function val(g){ return agg==='count'?g.n:agg==='avg'?(g.m?g.s/g.m:null):g.s; }
+  var out=list.map(function(g){ return [g.key,val(g)]; });
+  if(sort==='key') out.sort(function(a,b){ var ea=a[0]==='', eb=b[0]==='';  if(ea||eb) return ea===eb?0:ea?1:-1; return cmpVals(a[0],b[0]); });
+  else if(sort==='val') out.sort(function(a,b){ if(a[1]==null||b[1]==null) return a[1]==null&&b[1]==null?0:a[1]==null?1:-1; return b[1]-a[1]; });
+  return {rows:out,total:val(T)};
+}
+
 /* ---------- display ---------- */
 function formatValue(v,nf){
   if(v==null) return '';
@@ -463,6 +480,6 @@ def('AI',function(a){
 
 var api={K:K,RC:RC,KC:KC,colName:colName,colIdx:colIdx,addr:addr,parseAddr:parseAddr,parseRange:parseRange,rangeStr:rangeStr,
   tokenize:tokenize,rebuild:rebuild,parse:parse,literal:literal,shiftFormula:shiftFormula,adjustFormula:adjustFormula,renameSheetInFormula:renameSheetInFormula,
-  Engine:Engine,Err:Err,errHint:errHint,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,asDate:asDate,dateStr:dateStr,FN:FN,quoteSheet:quoteSheet};
+  Engine:Engine,Err:Err,errHint:errHint,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,pivot:pivot,asDate:asDate,dateStr:dateStr,FN:FN,quoteSheet:quoteSheet};
 if(typeof module!=='undefined'&&module.exports) module.exports=api; else root.FSE=api;
 })(this);

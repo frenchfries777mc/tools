@@ -157,6 +157,7 @@ button,input,select{font:inherit; color:inherit;}
   #grid tr.npr,#grid td.npr,#grid th.npr,#grid col.npr{display:none!important;}
 }
 /* v10 */
+.chkRow{display:flex!important; align-items:center; gap:8px; cursor:pointer; color:var(--text)!important; margin:4px 0 8px!important;} .chkRow input{width:18px; height:18px; accent-color:#ffc93c;}
 #grid td.nt::after{content:''; position:absolute; top:0; right:0; border-style:solid; border-width:0 8px 8px 0; border-color:transparent #ff5d5d transparent transparent;}
 #grid td.flt{padding-right:22px;} #grid td.flt::before{content:'▾'; position:absolute; right:0; top:0; width:22px; height:100%; text-align:center; color:var(--fry); background:rgba(255,201,60,.14); font-size:13px; cursor:pointer;}
 #grid td.flton::before{background:rgba(255,201,60,.5); color:#1c1405;}
@@ -276,6 +277,7 @@ button,input,select{font:inherit; color:inherit;}
   <button class="rb" data-cmd="dv" title="드롭다운 목록"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M9 11l3 3 3-3"/></svg><span class="lb">목록</span></button>
   <button class="rb" data-cmd="note" id="bNote" title="메모"><svg viewBox="0 0 24 24"><path d="M4 4h16v12h-7l-5 4v-4H4z"/></svg><span class="lb">메모</span></button>
   <button class="rb" data-cmd="check" title="체크박스"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/></svg><span class="lb">체크박스</span></button>
+  <button class="rb" data-cmd="datamenu" id="bData" title="데이터 도구"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M10 10v10"/><path d="M14 14.5h4M14 17h2"/></svg><span class="lb">데이터</span></button>
   <span class="sepv"></span>
   <button class="rb" data-cmd="print" title="인쇄 (PDF 저장)"><svg viewBox="0 0 24 24"><path d="M7 9V3h10v6"/><rect x="4" y="9" width="16" height="8" rx="2"/><path d="M7 14h10v7H7z"/></svg></button>
   <button class="rb" data-cmd="keys" title="단축키 보기"><svg viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/></svg></button>
@@ -348,6 +350,9 @@ button,input,select{font:inherit; color:inherit;}
   <button data-r="clr" class="dang">선택한 내용 지우기</button>
 </div>
 <div class="menu" id="dvMenu"></div>
+<div class="menu" id="dataMenu">
+  <button data-d="pivot">피벗 테이블 만들기…</button>
+</div>
 <div class="menu" id="tabMenu">
   <button data-t="rename">이름 바꾸기</button>
   <button data-t="dup">복제</button>
@@ -428,6 +433,21 @@ button,input,select{font:inherit; color:inherit;}
     <p class="vhint" style="margin:10px 0 0">이 칸을 누르면 ▾ 버튼이 나와요. 목록에 없는 값은 입력할 수 없어요.</p>
   </div>
   <div class="acts"><button class="tbtn" id="dvOff">목록 없애기</button><button class="tbtn pri" id="dvOk">적용</button></div>
+</div></div>
+<div class="ov" id="pvDlg"><div class="dlg">
+  <div class="dh"><h3>피벗 테이블</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody">
+    <div class="aiCtx" id="pvRg" data-notr></div>
+    <label class="chkRow"><input type="checkbox" id="pvHdr"><span>첫 줄은 제목</span></label>
+    <label>묶을 열</label><select id="pvKey" class="dsel" data-notr></select>
+    <label>계산할 열</label><select id="pvVal" class="dsel" data-notr></select>
+    <label>계산 방법</label>
+    <select id="pvAgg" class="dsel"><option value="sum">합계</option><option value="count">개수</option><option value="avg">평균</option></select>
+    <label>순서</label>
+    <select id="pvSort" class="dsel"><option value="first">처음 나온 순서</option><option value="key">이름순</option><option value="val">값이 큰 순서</option></select>
+    <p class="vhint" style="margin:10px 0 0">결과는 새 시트에 값으로 만들어져요. 원래 표를 고쳤다면 피벗을 다시 만드세요.</p>
+  </div>
+  <div class="acts"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="pvOk">피벗 만들기</button></div>
 </div></div>
 <div class="ov" id="tplDlg"><div class="dlg">
   <div class="dh"><h3>템플릿</h3><button class="x" data-close aria-label="닫기">×</button></div>
