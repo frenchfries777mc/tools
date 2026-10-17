@@ -15,8 +15,8 @@ const REPLAY={code:120, und:80, tr:60, graph:60, formula:40, table:40}; // from 
 const MODELS={
   basic:{name:'FF777 1.0 tarius', who:'You are FF777 1.0 tarius, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 1.7B. Your name is the end of the Latin word elementarius ("basic").',
          fill:{NAME:'FF777 1.0 tarius', BASE:'Qwen3 1.7B', LATIN:'elementarius', MEANING_KO:'기본', MEANING_EN:'basic'}},
-  smart:{name:'FF777 1.0 lectus', who:'You are FF777 1.0 lectus, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 4B. Your name is the end of the Latin word intellectus ("understanding").',
-         fill:{NAME:'FF777 1.0 lectus', BASE:'Qwen3 4B', LATIN:'intellectus', MEANING_KO:'이해력', MEANING_EN:'understanding'}}
+  smart:{name:'FF777 1.2 lectus', who:'You are FF777 1.2 lectus, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 4B. Your name is the end of the Latin word intellectus ("understanding").',
+         fill:{NAME:'FF777 1.2 lectus', BASE:'Qwen3 4B', LATIN:'intellectus', MEANING_KO:'이해력', MEANING_EN:'understanding'}}
 };
 
 let seed=20261016; const rnd=()=>{ seed=(seed*1103515245+12345)&0x7fffffff; return seed/0x7fffffff; };
