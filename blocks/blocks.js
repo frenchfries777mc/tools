@@ -141,6 +141,24 @@ def('act_restart',function(){ this.appendDummyInput().appendField(T('다시 시�
 def('act_beep',function(){ this.appendValueInput('SEC').setCheck('Number').appendField(T('소리 내기')).appendField(new Blockly.FieldDropdown(function(){ return NOTES.map(function(n){ return [T(n[0]),n[1]]; }); }),'NOTE'); this.appendDummyInput().appendField(T('초')); this.setInputsInline(true); act(this,'삐 소리를 내요'); },
   function(b){ need('beep'); return '__beep('+b.getFieldValue('NOTE')+', '+(G.valueToCode(b,'SEC',O.COMMA)||'0.3')+');\n'; });
 
+/* ---------- sounds: effects and melodies, all made with Web Audio (no sound files) ---------- */
+var SFX=[['동전','coin'],['점프','jump'],['펑','boom'],['레이저','laser'],['뿅','pop'],['성공','win'],['실패','lose']];
+def('act_sfx',function(){ this.appendDummyInput().appendField(T('효과음')).appendField(new Blockly.FieldDropdown(function(){ return SFX.map(function(s){ return [T(s[0]),s[1]]; }); }),'SFX').appendField(T('내기')); act(this,'게임에 쓰는 짧은 효과음을 내요. 소리 파일 없이 바로 만들어요'); },
+  function(b){ need('sfx'); return '__sfx('+lit(b.getFieldValue('SFX'))+');\n'; });
+/* notes C3..C6 as "C4", "C#4"; Korean (and other solfège) names are shown next to the letter */
+var SOLF=['도','도#','레','레#','미','파','파#','솔','솔#','라','라#','시'], LET=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+function noteOpts(){ var o=[[T('쉼표'),'rest']];
+  for(var oc=3;oc<=6;oc++) for(var i=0;i<12&&!(oc===6&&i>0);i++){ var s=T(SOLF[i].replace('#',''))+(SOLF[i].indexOf('#')>0?'#':''), c=LET[i]+oc; o.push([s.charAt(0)===c.charAt(0)?c:s+' '+c,c]); }
+  return o; }
+def('act_note',function(){ this.appendDummyInput().appendField(T('음')).appendField(new Blockly.FieldDropdown(noteOpts),'NOTE')
+    .appendField(new Blockly.FieldDropdown(function(){ return [[T('1박'),'1'],[T('2박'),'2'],[T('3박'),'3'],[T('4박'),'4'],[T('반 박'),'0.5'],[T('4분의 1박'),'0.25']]; }),'BEAT').appendField(T('연주하기'));
+  this.setFieldValue('C4','NOTE'); act(this,'음을 정한 박자만큼 연주해요. 여러 개를 이어 붙이면 차례로 연주돼서 멜로디가 돼요'); },
+  function(b){ need('note'); return '__note('+lit(b.getFieldValue('NOTE'))+', '+b.getFieldValue('BEAT')+');\n'; });
+def('act_tempo',function(){ this.appendValueInput('N').setCheck('Number').appendField(T('빠르기를')); this.appendDummyInput().appendField(T('(으)로 정하기 (1분에 박자 수)')); this.setInputsInline(true); act(this,'음 연주하기의 빠르기예요. 1분에 몇 박자를 연주할지 정해요 (처음엔 120)'); },
+  function(b){ need('note'); return '__bpm = Math.max(20, Math.min(400, '+(G.valueToCode(b,'N',O.COMMA)||'120')+'));\n'; });
+def('act_sound_stop',function(){ this.appendDummyInput().appendField(T('모든 소리 멈추기')); act(this,'나고 있는 소리와 연주할 차례인 음을 모두 멈춰요'); },
+  function(){ need('snd'); return '__soundStop();\n'; });
+
 /* ---------- moving around: nudge, follow the cursor, hit test ---------- */
 def('act_nudge',function(){ this.appendValueInput('N').setCheck('Number').appendField(elField(),'EL').appendField(T('의')).appendField(new Blockly.FieldDropdown(function(){ return [[T('x좌표(가로)를'),'x'],[T('y좌표(세로)를'),'y']]; }),'AXIS'); this.appendDummyInput().appendField(T('만큼 움직이기')); this.setInputsInline(true); act(this,'지금 있는 곳에서 가로(x)나 세로(y)로 얼마만큼 옮겨요. 마이너스 값이면 반대쪽으로 가요'); },
   function(b){ need('nudge'); var ax=b.getFieldValue('AXIS'), d=G.valueToCode(b,'N',O.COMMA)||'0';
@@ -157,6 +175,19 @@ def('val_hit',function(){ this.appendDummyInput().appendField(elField(),'A').app
   function(b){ need('hit'); return ['__hit('+lit(b.getFieldValue('A'))+', '+lit(b.getFieldValue('B'))+')',O.FUNCTION_CALL]; });
 def('act_stay',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('화면 안에 가두기')); act(this,'요소가 페이지 밖으로 나가지 않게 해요. 움직이기 블록 뒤에 붙여 써요'); },
   function(b){ need('stay'); return '__stay('+lit(b.getFieldValue('EL'))+');\n'; });
+
+/* ---------- games: touching event, score board, random spot ---------- */
+def('ev_hit',function(){ this.appendDummyInput().appendField(elField(),'A').appendField(T('와(과)')).appendField(elField(),'B').appendField(T('이(가) 닿으면')); hat(this,'두 요소가 닿는 순간 한 번 해요. 떨어졌다가 다시 닿으면 또 해요'); },
+  function(b){ need('hitev'); return '__onHit('+lit(b.getFieldValue('A'))+', '+lit(b.getFieldValue('B'))+', '+AF()+') {\n'+hatBody(b,true)+'});\n'; });
+def('act_rpos',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('을(를) 화면 아무 곳으로 옮기기')); act(this,'화면 안의 아무 곳으로 옮겨요. 먹이나 별을 새로 놓을 때 좋아요'); },
+  function(b){ need('rpos'); return '__rpos('+lit(b.getFieldValue('EL'))+');\n'; });
+def('act_score',function(){ this.appendValueInput('N').setCheck('Number').appendField(T('점수를')); this.appendDummyInput().appendField(new Blockly.FieldDropdown(function(){ return [[T('만큼 바꾸기'),'add'],[T('(으)로 정하기'),'set']]; }),'MODE');
+  this.setInputsInline(true); act(this,'점수를 더하거나(마이너스면 빼요) 정해요. 화면 오른쪽 위 점수판에 바로 보여요'); },
+  function(b){ need('score'); return '__setScore('+(G.valueToCode(b,'N',O.COMMA)||'0')+', '+(b.getFieldValue('MODE')==='add')+');\n'; });
+def('act_scoreboard',function(){ this.appendDummyInput().appendField(T('점수판')).appendField(new Blockly.FieldDropdown(function(){ return [[T('보이기'),'show'],[T('숨기기'),'hide']]; }),'MODE'); act(this,'화면 오른쪽 위 점수판을 보이거나 숨겨요. 점수 블록을 쓰면 처음부터 보여요'); },
+  function(b){ need('score'); return '__scoreBoard().style.display = '+(b.getFieldValue('MODE')==='hide'?"'none'":"''")+';\n'; });
+def('val_score',function(){ this.appendDummyInput().appendField(T('점수')); val(this,'Number','지금 점수'); },
+  function(){ need('score'); return ['__score',O.ATOMIC]; });
 
 /* ---------- values ---------- */
 function val(b,check,tip){ b.setOutput(true,check||null); b.setColour(C.val); if(tip) b.setTooltip(T(tip)); }
@@ -237,17 +268,23 @@ var HELP={
   dist:"function __dist(x1, y1, x2, y2) { return Math.hypot(x2 - x1, y2 - y1); }",
   nudge:"function __nudge(name, dx, dy) {\n  var el = $(name), s = el.style;\n  if (s.position !== 'absolute') {\n    var r = el.getBoundingClientRect();\n    s.position = 'absolute';\n    s.left = (r.left + window.pageXOffset) + 'px';\n    s.top = (r.top + window.pageYOffset) + 'px';\n  }\n  s.left = ((parseFloat(s.left) || 0) + dx) + 'px';\n  s.top = ((parseFloat(s.top) || 0) + dy) + 'px';\n}",
   where:"function __where(name, axis) {\n  var r = $(name).getBoundingClientRect();\n  return Math.round(axis === 'x' ? r.left + window.pageXOffset : r.top + window.pageYOffset);\n}",
-  hit:"function __hit(a, b) {\n  var p = $(a).getBoundingClientRect(), q = $(b).getBoundingClientRect();\n  return p.left < q.right && p.right > q.left && p.top < q.bottom && p.bottom > q.top;\n}",
+  hit:"function __hit(a, b) {\n  var p = $(a).getBoundingClientRect(), q = $(b).getBoundingClientRect();\n  if (!p.width || !q.width) return false;\n  return p.left < q.right && p.right > q.left && p.top < q.bottom && p.bottom > q.top;\n}",
   stay:"function __stay(name) {\n  var el = $(name), s = el.style, d = document.documentElement;\n  if (s.position !== 'absolute') return;\n  var x = Math.max(0, Math.min(parseFloat(s.left) || 0, d.clientWidth - el.offsetWidth));\n  var y = Math.max(0, Math.min(parseFloat(s.top) || 0, d.clientHeight - el.offsetHeight));\n  s.left = x + 'px';\n  s.top = y + 'px';\n}",
   cursor:"var __cx = 0, __cy = 0;\nfunction __track(e) {\n  __cx = Math.round(e.pageX);\n  __cy = Math.round(e.pageY);\n}\ndocument.addEventListener('pointermove', __track);\ndocument.addEventListener('pointerdown', __track);",
   follow:"var __fol = {}, __folOn = false, __moved = false;\ndocument.addEventListener('pointermove', function () { __moved = true; });\ndocument.addEventListener('pointerdown', function () { __moved = true; });\nfunction __folLoop() {\n  for (var n in __fol) {\n    var el = document.getElementById(n);\n    if (!el) { delete __fol[n]; continue; }\n    if (!__moved) continue;\n    var s = el.style, tx = __cx - el.offsetWidth / 2, ty = __cy - el.offsetHeight / 2;\n    if (s.position !== 'absolute') {\n      var r = el.getBoundingClientRect();\n      s.position = 'absolute';\n      s.left = (r.left + window.pageXOffset) + 'px';\n      s.top = (r.top + window.pageYOffset) + 'px';\n    }\n    var x = parseFloat(s.left) || 0, y = parseFloat(s.top) || 0, k = __fol[n] === 'soft' ? 0.15 : 1;\n    s.left = (x + (tx - x) * k) + 'px';\n    s.top = (y + (ty - y) * k) + 'px';\n    s.pointerEvents = 'none';\n  }\n  requestAnimationFrame(__folLoop);\n}\nfunction __follow(name, mode) {\n  if (mode === 'stop') {\n    delete __fol[name];\n    var e = document.getElementById(name);\n    if (e) e.style.pointerEvents = '';\n    return;\n  }\n  $(name);\n  __fol[name] = mode;\n  document.body.style.touchAction = 'none';\n  if (!__folOn) { __folOn = true; __folLoop(); }\n}",
   key:"var __key = '';",
   timers:"var __timers = [];",
-  beep:"var __audio;\nfunction __beep(freq, sec) {\n  __audio = __audio || new (window.AudioContext || window.webkitAudioContext)();\n  var o = __audio.createOscillator(), g = __audio.createGain(), t = __audio.currentTime;\n  o.frequency.value = freq;\n  o.connect(g); g.connect(__audio.destination);\n  g.gain.setValueAtTime(0.2, t);\n  g.gain.exponentialRampToValueAtTime(0.001, t + sec);\n  o.start(t); o.stop(t + sec);\n}",
+  beep:"function __beep(freq, sec) {\n  __snd();\n  __tone(freq, __audio.currentTime, sec, 'sine', 0.2);\n}",
+  snd:"var __audio, __sndBus = null;\nfunction __snd() {\n  if (!__audio) {\n    __audio = new (window.AudioContext || window.webkitAudioContext)();\n    ['pointerdown', 'keydown'].forEach(function (k) { document.addEventListener(k, function () { if (__audio.state === 'suspended') __audio.resume(); }); });\n  }\n  if (!__sndBus) { __sndBus = __audio.createGain(); __sndBus.connect(__audio.destination); }\n  return __sndBus;\n}\nfunction __tone(freq, t, sec, type, vol, to, hold) {\n  var o = __audio.createOscillator(), g = __audio.createGain();\n  o.type = type;\n  o.frequency.setValueAtTime(freq, t);\n  if (to) o.frequency.exponentialRampToValueAtTime(to, t + sec);\n  g.gain.setValueAtTime(vol, t);\n  if (hold) g.gain.setValueAtTime(vol, t + sec * hold);\n  g.gain.exponentialRampToValueAtTime(0.001, t + sec);\n  o.connect(g); g.connect(__snd());\n  o.start(t); o.stop(t + sec + 0.02);\n}\nfunction __soundStop() {\n  if (__sndBus) { __sndBus.disconnect(); __sndBus = null; }\n  __noteT = 0;\n}\nvar __noteT = 0, __bpm = 120;",
+  sfx:"function __sfx(k) {\n  __snd();\n  var t = __audio.currentTime;\n  if (k === 'coin') { __tone(988, t, 0.08, 'square', 0.1); __tone(1319, t + 0.08, 0.3, 'square', 0.1); }\n  else if (k === 'jump') __tone(260, t, 0.25, 'square', 0.1, 820);\n  else if (k === 'laser') __tone(1500, t, 0.22, 'sawtooth', 0.08, 120);\n  else if (k === 'pop') __tone(500, t, 0.09, 'sine', 0.3, 1100);\n  else if (k === 'win') [523.25, 659.25, 783.99, 1046.5].forEach(function (f, i) { __tone(f, t + i * 0.1, 0.3, 'triangle', 0.22); });\n  else if (k === 'lose') [392, 349.23, 311.13, 261.63].forEach(function (f, i) { __tone(f, t + i * 0.18, 0.3, 'sawtooth', 0.08, 0, 0.6); });\n  else if (k === 'boom') {\n    var n = __audio.createBuffer(1, Math.round(__audio.sampleRate * 0.6), __audio.sampleRate), d = n.getChannelData(0);\n    for (var i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2);\n    var s = __audio.createBufferSource(), f = __audio.createBiquadFilter();\n    s.buffer = n; f.type = 'lowpass'; f.frequency.value = 900;\n    s.connect(f); f.connect(__snd());\n    s.start(t);\n  }\n}",
+  note:"function __note(n, beats) {\n  __snd();\n  var m = /^([A-G])(#?)(\\d)$/.exec(n), t = Math.max(__audio.currentTime, __noteT), sec = beats * 60 / __bpm;\n  if (m) __tone(440 * Math.pow(2, ('C D EF G A B'.indexOf(m[1]) + (m[2] ? 1 : 0) - 9) / 12 + (m[3] - 4)), t, sec * 0.95, 'triangle', 0.25, 0, 0.6);\n  __noteT = t + sec;\n}",
+  hitev:"var __hits = [];\nfunction __onHit(a, b, f) {\n  __hits.push({ a: a, b: b, f: f, on: false });\n  if (__hits.length === 1) requestAnimationFrame(__hitLoop);\n}\nfunction __hitLoop() {\n  requestAnimationFrame(__hitLoop);\n  __hits.forEach(function (h) {\n    var now = !!(document.getElementById(h.a) && document.getElementById(h.b) && __hit(h.a, h.b));\n    if (now && !h.on) { h.on = true; h.f(); }\n    h.on = now;\n  });\n}",
+  rpos:"function __rpos(name) {\n  var el = $(name), s = el.style, d = document.documentElement;\n  s.position = 'absolute';\n  var c = getComputedStyle(el), w = el.offsetWidth + parseFloat(c.marginLeft) + parseFloat(c.marginRight), h = el.offsetHeight + parseFloat(c.marginTop) + parseFloat(c.marginBottom);\n  s.left = Math.round(window.pageXOffset + Math.random() * Math.max(0, d.clientWidth - w)) + 'px';\n  s.top = Math.round(window.pageYOffset + Math.random() * Math.max(0, d.clientHeight - h)) + 'px';\n}",
+  score:"var __score = 0, __board = null;\nfunction __scoreBoard() {\n  if (!__board) {\n    __board = document.createElement('div');\n    __board.style.cssText = 'position: fixed; top: 10px; right: 10px; padding: 6px 14px; border-radius: 12px; background: rgba(17, 17, 17, .75); color: #fff; font: 700 20px system-ui, sans-serif; z-index: 9999; pointer-events: none';\n    document.body.appendChild(__board);\n  }\n  __board.textContent = '"+T('점수').replace(/'/g,"\\'")+": ' + __score;\n  return __board;\n}\nfunction __setScore(v, add) {\n  v = parseFloat(v) || 0;\n  __score = add ? __score + v : v;\n  __scoreBoard();\n}\n__scoreBoard();",
   image:"var __imgCache = {};\nfunction __image(name, src, x, y, w) {\n  if (!src) return;\n  var g = __pen(name), im = __imgCache[src];\n  if (!im) { im = new Image(); im.src = src; __imgCache[src] = im; }\n  var go = function () { g.drawImage(im, x, y, w, w * im.naturalHeight / im.naturalWidth); };\n  if (im.complete && im.naturalWidth) go(); else im.addEventListener('load', go, { once: true });\n}",
   draw:"function __pen(name) { return $(name).getContext('2d'); }\nfunction __clear(name) { var c = $(name); __pen(name).clearRect(0, 0, c.width, c.height); }\nfunction __rect(name, x, y, w, h, color) { var g = __pen(name); g.fillStyle = color; g.fillRect(x, y, w, h); }\nfunction __circle(name, x, y, r, color) { var g = __pen(name); g.fillStyle = color; g.beginPath(); g.arc(x, y, Math.max(0, r), 0, Math.PI * 2); g.fill(); }\nfunction __line(name, x1, y1, x2, y2, color) { var g = __pen(name); g.strokeStyle = color; g.lineWidth = 3; g.lineCap = 'round'; g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); g.stroke(); }\nfunction __text(name, text, x, y, color) { var g = __pen(name); g.fillStyle = color; g.font = '20px sans-serif'; g.fillText(text, x, y); }"
 };
-var HELP_DEPS={nudge:['$'],where:['$'],hit:['$'],stay:['$'],follow:['$','cursor'],image:['$','draw'],get:['$'],set:['$'],add:['$'],size:['$'],move:['$'],show:['$'],draw:['$']};
+var HELP_DEPS={beep:['snd'],sfx:['snd'],note:['snd'],hitev:['$','hit'],rpos:['$'],nudge:['$'],where:['$'],hit:['$'],stay:['$'],follow:['$','cursor'],image:['$','draw'],get:['$'],set:['$'],add:['$'],size:['$'],move:['$'],show:['$'],draw:['$']};
 
 function dbgHelper(vars){
   return 'var __dq = Promise.resolve(), __dgo = null, __dfree = 0, __drun = 0, __dbusy = {};\n'+
@@ -256,6 +293,13 @@ function dbgHelper(vars){
   "function __step(id) {\n  return new Promise(function (done) {\n    __dq = __dq.then(function () {\n      if (__dfree) return;\n      return new Promise(function (go) { __dgo = go; parent.postMessage({ ffbhStep: { id: id, vars: __dvars() } }, '*'); });\n    }).then(done);\n  });\n}\n"+
   "function __dbegin() { __drun++; }\nfunction __dend() { if (--__drun <= 0) { __drun = 0; __dfree = 0; parent.postMessage({ ffbhStepEnd: 1 }, '*'); } }\n"+
   "addEventListener('message', function (e) {\n  var d = e.data;\n  if (!d || !d.ffbhDbg) return;\n  if (d.ffbhDbg === 'free') __dfree = 1;\n  if (__dgo) { var g = __dgo; __dgo = null; g(); }\n});"; }
+
+/* "변수 보기": the preview (never the downloaded page) sends the project's variables to the editor whenever one changes */
+function watchHelper(vars){
+  return '// '+T('변수 보기')+'\n(function () {\n  var __wl = \'\';\n  setInterval(function () {\n    var __wo = [];\n'+
+  vars.map(function(v){ return '    try { __wo.push([ '+lit(v[0])+', typeof '+v[1]+" === 'undefined' ? '' : __wshow("+v[1]+') ]); } catch (e) {}\n'; }).join('')+
+  "    var __ws = JSON.stringify(__wo);\n    if (__ws !== __wl) { __wl = __ws; parent.postMessage({ ffbhVars: __wo }, '*'); }\n  }, 150);\n  addEventListener('message', function (e) { if (e.data && e.data.ffbhVarsAsk) __wl = ''; });\n"+
+  "  function __wshow(v) { if (typeof v === 'function') return 'ƒ'; try { var t = typeof v === 'string' || typeof v === 'object' ? JSON.stringify(v) : String(v); return t.length > 70 ? t.slice(0, 70) + '…' : t; } catch (e) { return String(v); } }\n})();"; }
 
 /* ---------- HTML ---------- */
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -298,7 +342,7 @@ function build(ws,opts){
   var js, dbgVars=[];
   try{
   G.init(ws); var handlers='', starts='';
-  if(DBG) ws.getAllVariables().forEach(function(v){ try{ dbgVars.push([v.name,G.getVariableName(v.getId())]); }catch(e){} });
+  if(DBG||opts.trap) ws.getAllVariables().forEach(function(v){ try{ dbgVars.push([v.name,G.getVariableName(v.getId())]); }catch(e){} });
   ws.getTopBlocks(true).forEach(function(b){
     if(!b.isEnabled()) return;
     if(DBG) b.suppressPrefixSuffix=true;
@@ -316,6 +360,7 @@ function build(ws,opts){
   var helpers=Object.keys(HELP).filter(function(k){ return NEED[k]; }).map(function(k){ return HELP[k]; }).join('\n');
   if(NEED.imgs){ var used=Object.keys(USED).filter(function(id){ return IMGS[id]; }); helpers='// '+T('내 그림')+'\nvar __imgs = {\n'+used.map(function(id){ return '  '+lit(IMGS[id].name)+': '+lit(IMGS[id].data); }).join(',\n')+'\n};\n'+(NEED.image?'for (var __k in __imgs) { var __im = new Image(); __im.src = __imgs[__k]; }\n':'')+helpers; }
   if(helpers) js='// '+T('도우미 함수')+'\n'+helpers+'\n\n'+js;
+  if(opts.trap) js=watchHelper(dbgVars.concat(NEED.score?[[T('점수'),'__score']]:[]))+'\n\n'+js;
   var fg=textColorFor(bg);
   var css=[
     'body { margin: 0; padding: 24px; font-family: system-ui, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; line-height: 1.5; background: '+bg+'; color: '+fg+';'+(center?' text-align: center;':'')+' }',
@@ -331,7 +376,7 @@ function build(ws,opts){
     '.space { height: 24px; }'
   ].join('\n    ');
   var logPre='<script>(function(){function s(l,a){var t=[].map.call(a,function(x){try{return typeof x===\'object\'?JSON.stringify(x):String(x);}catch(e){return String(x);}}).join(\' \');try{parent.postMessage({ffbhLog:[l,t]},\'*\');}catch(e){}}[\'log\',\'info\',\'warn\',\'error\'].forEach(function(k){var o=console[k];console[k]=function(){s(k,arguments);if(o)o.apply(console,arguments);};});var oe=window.onerror;window.onerror=function(m){s(\'error\',[m]);return oe?oe.apply(this,arguments):false;};addEventListener(\'unhandledrejection\',function(e){s(\'error\',[e.reason&&e.reason.message||e.reason]);});})();<\/script>\n';
-  var pre=opts.trap?'<script>window.__loop=1e6;setInterval(function(){window.__loop=1e6;},200);(function(){var P=0,Q=[],sT=setTimeout,sI=setInterval,rA=window.requestAnimationFrame&&window.requestAnimationFrame.bind(window),st=null;window.setTimeout=function(f,ms){var a=[].slice.call(arguments,2);if(typeof f!==\'function\')return sT(f,ms);return sT(function(){if(P)Q.push(function(){f.apply(window,a);});else f.apply(window,a);},ms);};window.setInterval=function(f,ms){var a=[].slice.call(arguments,2);if(typeof f!==\'function\')return sI(f,ms);return sI(function(){if(!P)f.apply(window,a);},ms);};if(rA)window.requestAnimationFrame=function(f){return rA(function(t){if(P)Q.push(function(){rA(f);});else f(t);});};addEventListener(\'message\',function(e){var d=e.data;if(!d||d.ffbh===undefined)return;if(d.ffbh===\'pause\'&&!P){P=1;st=document.createElement(\'style\');st.textContent=\'*,*::before,*::after{animation-play-state:paused!important;transition:none!important}\';document.head.appendChild(st);document.querySelectorAll(\'audio,video\').forEach(function(m){if(!m.paused){m.pause();m.__ffp=1;}});}else if(d.ffbh===\'resume\'&&P){P=0;if(st)st.remove();var q=Q;Q=[];q.forEach(function(f){f();});document.querySelectorAll(\'audio,video\').forEach(function(m){if(m.__ffp){m.__ffp=0;m.play();}});}});})();window.onerror=function(m){var d=document.getElementById("__err")||document.body.appendChild(Object.assign(document.createElement("div"),{id:"__err"}));d.style.cssText="position:fixed;left:8px;right:8px;bottom:8px;padding:10px 14px;border-radius:10px;background:#7f1d1d;color:#fff;font:14px sans-serif;text-align:left;z-index:99999";d.textContent="⚠ "+m;};<\/script>\n':'';
+  var pre=opts.trap?'<script>window.__loop=1e6;setInterval(function(){window.__loop=1e6;},200);(function(){var P=0,Q=[],sT=setTimeout,sI=setInterval,rA=window.requestAnimationFrame&&window.requestAnimationFrame.bind(window),st=null,AX=[],AC=window.AudioContext||window.webkitAudioContext;if(AC)window.AudioContext=window.webkitAudioContext=function(){var c=new AC();AX.push(c);return c;};window.setTimeout=function(f,ms){var a=[].slice.call(arguments,2);if(typeof f!==\'function\')return sT(f,ms);return sT(function(){if(P)Q.push(function(){f.apply(window,a);});else f.apply(window,a);},ms);};window.setInterval=function(f,ms){var a=[].slice.call(arguments,2);if(typeof f!==\'function\')return sI(f,ms);return sI(function(){if(!P)f.apply(window,a);},ms);};if(rA)window.requestAnimationFrame=function(f){return rA(function(t){if(P)Q.push(function(){rA(f);});else f(t);});};addEventListener(\'message\',function(e){var d=e.data;if(!d||d.ffbh===undefined)return;if(d.ffbh===\'pause\'&&!P){P=1;AX.forEach(function(c){try{c.suspend();}catch(e){}});st=document.createElement(\'style\');st.textContent=\'*,*::before,*::after{animation-play-state:paused!important;transition:none!important}\';document.head.appendChild(st);document.querySelectorAll(\'audio,video\').forEach(function(m){if(!m.paused){m.pause();m.__ffp=1;}});}else if(d.ffbh===\'resume\'&&P){P=0;AX.forEach(function(c){try{c.resume();}catch(e){}});if(st)st.remove();var q=Q;Q=[];q.forEach(function(f){f();});document.querySelectorAll(\'audio,video\').forEach(function(m){if(m.__ffp){m.__ffp=0;m.play();}});}});})();window.onerror=function(m){var d=document.getElementById("__err")||document.body.appendChild(Object.assign(document.createElement("div"),{id:"__err"}));d.style.cssText="position:fixed;left:8px;right:8px;bottom:8px;padding:10px 14px;border-radius:10px;background:#7f1d1d;color:#fff;font:14px sans-serif;text-align:left;z-index:99999";d.textContent="⚠ "+m;};<\/script>\n':'';
   return '<!DOCTYPE html>\n<html lang="'+(FFT.lang||'ko')+'">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>'+esc(title)+'</title>\n  <!-- '+T('Block HTML로 만든 페이지')+' -->\n'+(pre?'  '+pre+'  '+logPre:'')+
     '  <style>\n    '+css+'\n  </style>\n</head>\n<body>\n'+body+(js.trim()?'  <script>\n'+js.replace(/^(?=.)/gm,'    ')+'\n  <\/script>\n':'')+'</body>\n</html>\n';
 }
@@ -344,7 +389,7 @@ function toolbox(){
   var img={shadow:{type:'val_myimg'}};
   return {kind:'categoryToolbox',contents:[
     {kind:'category',name:T('시작'),colour:C.ev,contents:[
-      {kind:'block',type:'ev_start'},lab('누르거나 쓰면'),{kind:'block',type:'ev_click'},{kind:'block',type:'ev_drag'},{kind:'block',type:'ev_change'},{kind:'block',type:'ev_key'},{kind:'block',type:'ev_keyup'},lab('시간마다'),{kind:'block',type:'ev_timer'}]},
+      {kind:'block',type:'ev_start'},lab('누르거나 쓰면'),{kind:'block',type:'ev_click'},{kind:'block',type:'ev_drag'},{kind:'block',type:'ev_change'},{kind:'block',type:'ev_key'},{kind:'block',type:'ev_keyup'},lab('닿으면'),{kind:'block',type:'ev_hit'},lab('시간마다'),{kind:'block',type:'ev_timer'}]},
     {kind:'category',name:T('화면'),colour:C.page,contents:[
       {kind:'block',type:'page_root'},lab('글'),{kind:'block',type:'el_heading'},{kind:'block',type:'el_text'},{kind:'block',type:'el_list'},{kind:'block',type:'el_link'},
       lab('누르고 쓰기'),{kind:'block',type:'el_button'},{kind:'block',type:'el_input'},
@@ -378,9 +423,16 @@ function toolbox(){
       lab('위치와 닿음'),{kind:'block',type:'val_where'},{kind:'block',type:'val_hit'},
       {kind:'block',type:'act_size',fields:{PROP:'rotate'},inputs:{N:n(45)}},
       lab('누른 곳'),{kind:'block',type:'val_mouse'}]},
+    {kind:'category',name:T('게임'),colour:'#e8590c',contents:[
+      lab('닿으면'),{kind:'block',type:'ev_hit'},{kind:'block',type:'val_hit'},
+      lab('점수'),{kind:'block',type:'act_score',inputs:{N:n(1)}},{kind:'block',type:'act_score',fields:{MODE:'set'},inputs:{N:n(0)}},{kind:'block',type:'val_score'},{kind:'block',type:'act_scoreboard'},
+      lab('위치'),{kind:'block',type:'act_rpos'},{kind:'block',type:'act_stay'},{kind:'block',type:'act_nudge2',inputs:{DX:n(10),DY:n(0)}},
+      lab('소리'),{kind:'block',type:'act_sfx'},{kind:'block',type:'act_restart'}]},
     {kind:'category',name:T('소리·알림'),colour:'#2e9bd6',contents:[
-      {kind:'block',type:'act_beep',inputs:{SEC:n(0.3)}},
-      {kind:'block',type:'act_alert',inputs:{VALUE:sh('text',T('안녕하세요!'))}}]},
+      lab('효과음'),{kind:'block',type:'act_sfx'},{kind:'block',type:'act_sfx',fields:{SFX:'win'}},
+      lab('음악'),{kind:'block',type:'act_note'},{kind:'block',type:'act_note',fields:{NOTE:'E4',BEAT:'0.5'}},{kind:'block',type:'act_tempo',inputs:{N:n(120)}},{kind:'block',type:'act_sound_stop'},
+      lab('삐 소리'),{kind:'block',type:'act_beep',inputs:{SEC:n(0.3)}},
+      lab('알림'),{kind:'block',type:'act_alert',inputs:{VALUE:sh('text',T('안녕하세요!'))}}]},
     {kind:'category',name:T('시간'),colour:'#3a6fd8',contents:[
       {kind:'block',type:'act_after',inputs:{SEC:n(1)}},{kind:'block',type:'ev_timer'},{kind:'block',type:'act_stop'},{kind:'block',type:'act_restart'},{kind:'block',type:'val_time'},{kind:'block',type:'val_today'}]},
     {kind:'category',name:T('저장·로그'),colour:'#8e6bbf',contents:[
