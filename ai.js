@@ -34,6 +34,7 @@ FFT.add({
 '준비 중':['coming soon','próximamente','bientôt','bald verfügbar','準備中'],
 '아직 준비 중인 모델이에요':['This model is not ready yet','Este modelo aún no está listo','Ce modèle n’est pas encore prêt','Dieses Modell ist noch nicht bereit','このモデルはまだ準備中です'],
 '멈췄어요':['Stopped','Detenido','Arrêté','Gestoppt','止めました'],
+'같은 말을 반복해서 멈췄어요. 다시 보내 보세요':['It kept repeating itself, so it was stopped. Try again','Se repetía sin parar y se detuvo. Inténtalo de nuevo','Il se répétait, donc il a été arrêté. Réessayez','Es wiederholte sich und wurde gestoppt. Versuche es noch einmal','同じことを繰り返したので止めました。もう一度送ってください'],
 '자체 AI':['Built-in AI','IA integrada','IA intégrée','Eingebaute KI','内蔵AI'],
 '기본 · 약 1GB':['Standard · about 1 GB','Estándar · unos 1 GB','Standard · environ 1 Go','Standard · ca. 1 GB','標準 · 約1GB'],
 '가벼움 · 약 0.5GB':['Light · about 0.5 GB','Ligero · unos 0,5 GB','Léger · environ 0,5 Go','Leicht · ca. 0,5 GB','軽量 · 約0.5GB'],
@@ -216,12 +217,17 @@ function askLocal(c,o){
       throw AIError(/context|prompt.*(long|length)|exceed/i.test(m)?T('자체 AI에게는 너무 긴 요청이에요. 고를 칸을 줄이거나 API 키를 써 보세요'):T('자체 AI가 답하지 못했어요'),'api'); };
     if(!o.onText) return e.chat.completions.create(req).then(function(r){
       return clean((r.choices&&r.choices[0]&&r.choices[0].message&&r.choices[0].message.content)||'').trim(); },fail);
+    var looped=false;
+    // a small model can get stuck writing the same thing forever: stop it when the tail is one short piece repeated
+    var loops=function(t){ if(t.length<300) return false; var w=t.slice(-240);
+      for(var p=1;p<=60;p++) if(w.slice(p)===w.slice(0,240-p)) return true; return false; };
     req.stream=true; stopNow=function(){ stopped=true; e.interruptGenerate(); };
     return e.chat.completions.create(req).then(function(it){
       var out='', ai=it[Symbol.asyncIterator]();
       function next(){ return ai.next().then(function(r){
-        if(r.done){ if(stopped) throw AIError(T('멈췄어요'),'stop'); return clean(out).trim(); }
-        var d=r.value.choices&&r.value.choices[0]&&r.value.choices[0].delta; if(d&&d.content){ out+=d.content; o.onText(clean(out)); }
+        if(r.done){ if(stopped) throw AIError(looped?T('같은 말을 반복해서 멈췄어요. 다시 보내 보세요'):T('멈췄어요'),'stop'); return clean(out).trim(); }
+        var d=r.value.choices&&r.value.choices[0]&&r.value.choices[0].delta; if(d&&d.content){ out+=d.content; o.onText(clean(out));
+          if(!stopped&&loops(out)){ looped=true; stopped=true; e.interruptGenerate(); } }
         return next(); }); }
       return next();
     }).then(null,fail);
