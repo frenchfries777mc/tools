@@ -148,6 +148,7 @@ function slideAct(kind,q){
   A.blurEdit(); var before=A.snap(); run={stopped:false}; A.setBusy(true);
   var lay=kind==='add'?null:s.layout, p;
   if(kind==='add') p=FFP.slidesAddPrompt(d.name,titles(),i,q);
+  else if(kind==='fix') p=FFP.slidesActPrompt(d.name,i,d.slides.length,slideJSON(s),'rewrite')+'\nExtra instruction from the user: '+q;
   else p=FFP.slidesActPrompt(d.name,i,d.slides.length,slideJSON(s),kind);
   function once(extra){ return ask({system:sysOne(lay), prompt:p+(extra||''), json:true, maxTokens:FFAI.isLocal()?1200:3000, onText:function(){}}).then(function(t){
     if(run.stopped) throw stopErr(); var x=readAll(t), r=x.slides&&x.slides[0]; if(!r) return null; var n=norm(r,lay||'bullets'); if(lay) n.layout=lay; return hasText(n)?n:null; }); }
@@ -163,10 +164,23 @@ function slideAct(kind,q){
 $('genBtn').onclick=generate;
 $('genStop').onclick=stop; $('busyStop').onclick=stop;
 $('aiBtn').onclick=function(){ A.blurEdit(); A.openMenu($('aiMenu'),this); };
+var aiMode='new', MODE_NOTE={new:'주제를 쓰면 새 발표 자료를 만들어요. 지금 발표 자료는 목록에 그대로 남아요.', fix:'지금 슬라이드를 어떻게 고칠지 써 주세요. 되돌리기로 되돌릴 수 있어요.', add:'새 슬라이드에 무엇을 넣을지 써 주세요. 지금 슬라이드 뒤에 들어가요.'},
+  MODE_PH={new:'예: 우리 동네 환경 문제와 해결 방법', fix:'예: 더 쉬운 말로, 예시를 하나 넣어서', add:'예: 우리가 할 수 있는 일 세 가지'}, MODE_OK={new:'새로 만들기', fix:'고치기', add:'추가하기'};
+function setMode(m){ aiMode=m; document.querySelectorAll('#aiMode button').forEach(function(b){ b.classList.toggle('on',b.dataset.m===m); });
+  $('aiModeNote').textContent=T(MODE_NOTE[m]); $('aiIn').placeholder=T(MODE_PH[m]); $('aiOk').textContent=T(MODE_OK[m]); }
+function openAiDlg(m){ var s=A.deck.slides[A.cur]; document.querySelector('#aiMode [data-m="fix"]').disabled=!s||A.LAYS.indexOf(s.layout)<0; if(m==='fix'&&document.querySelector('#aiMode [data-m="fix"]').disabled) m='new';
+  setMode(m); $('aiIn').value=m==='new'?(A.deck.slides.length?'':(A.deck.topic||'')):''; $('aiDlg').classList.add('open'); setTimeout(function(){ $('aiIn').focus(); },60); }
+function closeAiDlg(){ $('aiDlg').classList.remove('open'); }
+$('aiDlg').addEventListener('click',function(e){ if(e.target.closest('[data-close]')) closeAiDlg(); });
+$('aiMode').addEventListener('click',function(e){ var b=e.target.closest('button'); if(b&&!b.disabled) setMode(b.dataset.m); });
+$('aiIn').addEventListener('keydown',function(e){ e.stopPropagation(); if(e.key==='Escape') closeAiDlg(); if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){ e.preventDefault(); $('aiOk').click(); } });
+$('aiOk').onclick=function(){ var v=$('aiIn').value.trim(); if(!v) return $('aiIn').focus(); closeAiDlg();
+  if(aiMode==='new') A.newDeckWith(v).then(generate); else slideAct(aiMode==='fix'?'fix':'add',v); };
+window.addEventListener('keydown',function(e){ if(e.key==='Escape'&&$('aiDlg').classList.contains('open')){ closeAiDlg(); e.stopPropagation(); } },true);
+$('aiBtn').onclick=function(){ A.blurEdit(); A.openMenu($('aiMenu'),this); };
 $('aiMenu').addEventListener('click',function(e){
   var b=e.target.closest('[data-a]'); if(!b) return; A.closeMenus(); var k=b.dataset.a;
-  if(k==='add') A.ask(T('AI로 슬라이드 추가'),T('새 슬라이드에 무엇을 넣을지 써 주세요. 지금 슬라이드 뒤에 들어가요.'),T('예: 우리가 할 수 있는 일 세 가지'),T('만들기')).then(function(v){ if(v) slideAct('add',v); });
-  else slideAct(k);
+  if(k==='dlg') openAiDlg('new'); else slideAct(k);
 });
 window.FSLAI={extract:extract, readAll:readAll, norm:norm, generate:generate, slideAct:slideAct, stop:stop};
 })();

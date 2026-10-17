@@ -173,6 +173,28 @@ button,input,select,textarea{font:inherit; color:inherit;}
 .dfoot{display:flex; gap:8px; justify-content:flex-end; padding:10px 16px; border-top:1px solid var(--line);}
 #toast{position:fixed; left:50%; bottom:28px; transform:translateX(-50%); background:#1d2230; color:#eef0f5; border:1px solid var(--line); padding:9px 16px; border-radius:99px; z-index:300; opacity:0; transition:opacity .2s; pointer-events:none; max-width:92vw; text-align:center;}
 #toast.on{opacity:1;}
+/* new layouts, tools */
+.sl ul.in.agenda{counter-reset:ag; padding-left:0;}
+.sl ul.in.agenda li{counter-increment:ag; padding:.28em .6em .28em 1.7em; margin:0 0 .35em; background:var(--s-card); border-radius:.4em; position:relative;}
+.sl ul.in.agenda li::before{content:counter(ag); left:.45em; top:.3em; width:auto; height:auto; border-radius:0; background:none; color:var(--s-ac); font-weight:800;}
+.sl ul.in.timeline{padding-left:1.7em; border-left:0;}
+.sl ul.in.timeline::after{content:''; position:absolute; left:.45em; top:.4em; bottom:.4em; width:4px; border-radius:2px; background:var(--s-ac); opacity:.4;}
+.sl ul.in.timeline li::before{left:-1.55em; top:.3em; width:.62em; height:.62em; border:3px solid var(--s-bg); box-shadow:0 0 0 3px var(--s-ac); z-index:1;}
+.sl .ans .in{padding:.3em .7em; border-left:8px solid var(--s-ac); background:var(--s-card); border-radius:.3em; font-weight:700; color:var(--s-ac);}
+.sl.edit .ans .in.ph::before{content:attr(data-ph);}
+.sl .dv{position:absolute; display:flex; align-items:center; justify-content:center; overflow:hidden;}
+.sl .dv.empty{border:3px dashed rgba(127,140,170,.55); border-radius:14px; color:var(--s-sub); font-size:34px;}
+.sl.edit .dv{cursor:pointer;} .sl.edit .dv:hover{box-shadow:inset 0 0 0 2px var(--s-ac); border-radius:6px;}
+.sl .dv table{border-radius:8px;}
+.thumb.hid .tv{opacity:.45;} .thumb .hb{position:absolute; right:3px; top:2px; z-index:2; font-style:normal; font-size:34px; line-height:1; color:#ff7b7b; text-shadow:0 0 4px #000; pointer-events:none;}
+.swr{display:flex; gap:6px; align-items:center; padding:4px 10px 6px; flex-wrap:wrap;}
+.menu .sw{width:26px; height:26px; padding:0; border-radius:50%; border:2px solid var(--line); display:block; flex:0 0 auto;} .menu .sw.on{border-color:var(--fry);}
+.swr input[type=color]{width:30px; height:28px; padding:0; border:0; background:none; cursor:pointer;}
+.seg{display:flex; gap:4px; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:3px;}
+.seg button{flex:1; border:0; background:transparent; border-radius:8px; padding:8px 6px; cursor:pointer; font-size:13.5px;} .seg button.on{background:var(--fry); color:#1c1405; font-weight:700;}
+#pStage.tf-fade{animation:tf .32s ease;} #pStage.tf-slide{animation:tfs .32s ease;} #pStage.tf-zoom{animation:tfz .32s ease;}
+@keyframes tfs{from{opacity:0; transform:translateX(7%);} to{opacity:1; transform:none;}} @keyframes tfz{from{opacity:0; transform:scale(.92);} to{opacity:1; transform:none;}}
+@media(max-width:1200px){ #newDeckBtn .lb,#mgrBtn .lb{display:none;} }
 /* presenting */
 #present{position:fixed; inset:0; z-index:200; background:#000; display:none; align-items:center; justify-content:center; touch-action:none; -webkit-user-select:none; user-select:none; cursor:pointer;}
 #present.on{display:flex;}
@@ -223,6 +245,9 @@ button,input,select,textarea{font:inherit; color:inherit;}
   <input id="deckName" aria-label="발표 자료 이름" spellcheck="false" autocomplete="off">
   <span class="saved" id="saved"></span>
   <span class="sp"></span>
+  <button class="tbtn" id="newDeckBtn" title="새 슬라이드 쇼 (Ctrl+Alt+N)"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span class="lb">새 슬라이드 쇼</span></button>
+  <button class="tbtn" id="mgrBtn" title="내 슬라이드"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span class="lb">내 슬라이드</span></button>
+  <button class="ib dang" id="delDeckBtn" title="이 슬라이드 쇼 지우기" aria-label="이 슬라이드 쇼 지우기"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>
   <button class="tbtn" id="deckBtn" title="발표 자료 목록"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span class="lb">발표 자료</span></button>
   <button class="tbtn aib" id="aiSetBtn" title="AI 설정"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/></svg><span class="lb">AI 설정</span></button>
   <button class="tbtn play" id="playBtn" title="발표하기"><svg viewBox="0 0 24 24"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg><span class="lb">발표하기</span></button>
@@ -263,8 +288,9 @@ button,input,select,textarea{font:inherit; color:inherit;}
         <button class="tbtn" id="picBtn" title="그림 넣기"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 9"/></svg><span class="lb">그림 넣기</span></button>
         <span class="vs"></span>
         <select id="laySel" title="레이아웃" aria-label="레이아웃">
-          <option value="title">제목</option><option value="section">구역 제목</option><option value="bullets">글머리표</option><option value="two">두 칸</option><option value="stat">큰 숫자</option><option value="quote">인용</option><option value="closing">마무리</option><option value="image">그림</option>
+          <option value="title">제목</option><option value="section">구역 제목</option><option value="bullets">글머리표</option><option value="two">두 칸</option><option value="stat">큰 숫자</option><option value="quote">인용</option><option value="closing">마무리</option><option value="image">그림</option><option value="agenda">차례</option><option value="timeline">타임라인</option><option value="table">표</option><option value="chart">그래프</option><option value="quiz">퀴즈</option><option value="timer">타이머</option>
         </select>
+        <button class="tbtn" id="optBtn" title="슬라이드 옵션"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg><span class="lb">옵션</span></button>
         <button class="tbtn aib" id="aiBtn" title="AI로 이 슬라이드 고치기"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/></svg><span class="lb">AI</span></button>
         <button class="tbtn" id="themeBtn" title="테마"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18c1.2 0 1.6-.8 1.6-1.6 0-1.3-1-1.6-1-2.8 0-.9.7-1.6 1.6-1.6H17a4 4 0 0 0 4-4c0-4.4-4-8-9-8z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10.5" cy="7.5" r="1"/><circle cx="15" cy="7.5" r="1"/></svg><span class="lb">테마</span></button>
       </div>
@@ -298,8 +324,9 @@ button,input,select,textarea{font:inherit; color:inherit;}
   <button data-a="shorter">✂️ 더 짧게</button>
   <button data-a="longer">📝 더 자세히</button>
   <hr>
-  <button data-a="add">➕ AI로 슬라이드 추가</button>
+  <button data-a="dlg">🆕 새로 만들기 · 고치기 · 추가…</button>
 </div>
+<div class="menu" id="optMenu"></div>
 <div class="menu" id="themeMenu"><div class="themes" id="themeList"></div></div>
 <div class="ov" id="mgrDlg"><div class="dlg" style="width:min(620px,100%)">
   <div class="dh"><h3>발표 자료 관리</h3><button class="x" data-close aria-label="닫기">×</button></div>
@@ -314,7 +341,20 @@ button,input,select,textarea{font:inherit; color:inherit;}
   <div class="dh"><h3>단축키</h3><button class="x" data-close aria-label="닫기">×</button></div>
   <div class="dbody" id="keysBody" style="overflow:auto"></div>
 </div></div>
-<div class="ov" id="askDlg"><div class="dlg">
+<div class="ov" id="dataDlg"><div class="dlg">
+  <div class="dh"><h3 id="dataTitle"></h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><p id="dataNote"></p>
+    <label id="dataTypeRow" class="lab" style="margin:0">그래프 모양 <select id="dataType" style="height:34px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);padding:0 8px;margin-left:6px"><option value="bar">막대</option><option value="line">꺾은선</option><option value="pie">원</option></select></label>
+    <textarea id="dataIn" data-notr spellcheck="false" style="min-height:170px;width:100%;resize:vertical;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px;line-height:1.5"></textarea></div>
+  <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="dataOk">확인</button></div>
+</div></div>
+<div class="ov" id="aiDlg" data-xonly><div class="dlg">
+  <div class="dh"><h3>AI 슬라이드</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><div class="seg" id="aiMode"><button data-m="new" class="on">새로 만들기</button><button data-m="fix">지금 슬라이드 고치기</button><button data-m="add">뒤에 추가</button></div>
+    <p id="aiModeNote"></p><textarea id="aiIn" data-notr spellcheck="false" style="min-height:96px;width:100%;resize:vertical;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px;line-height:1.5"></textarea></div>
+  <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="aiOk">만들기</button></div>
+</div></div>
+<div class="ov" id="askDlg" data-xonly><div class="dlg">
   <div class="dh"><h3 id="askTitle"></h3><button class="x" data-close aria-label="닫기">×</button></div>
   <div class="dbody"><p id="askNote"></p><textarea id="askIn" data-notr spellcheck="false"></textarea></div>
   <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="askOk">확인</button></div>
