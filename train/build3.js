@@ -3,16 +3,16 @@
    (Colab notebook, ROUND=3) on top of the model already on Hugging Face.
    Also writes data/round3-smart.jsonl: the same new coding items plus lectus' name (no replay), for the first full training of lectus (Qwen3 4B), which now reads full + round2-smart + round3-smart.
    New: Block HTML coding with the newer blocks (move, follow the cursor, touching, save/load, log), careful EDITs that change only what was asked,
-   request understanding, and the model's own name FF777 1.1 tarius. A sample of round 2 is mixed in so nothing is forgotten (its name is rewritten to 1.1).
+   request understanding, and the model's own name FF777 1.2 tarius. A sample of round 2 is mixed in so nothing is forgotten (its name is rewritten to 1.1).
    node train/build3.js */
 'use strict';
 const fs=require('fs'), path=require('path'), cp=require('child_process');
 const DIR=__dirname, RAW=path.join(DIR,'raw'), OUT=path.join(DIR,'data'), TMP=path.join(OUT,'.ok3');
 fs.mkdirSync(TMP,{recursive:true});
-const FILES={ code:['code-12','code-13','code-14'], und:['und-10'], self:['self-1'] };
+const FILES={ code:['code-12','code-13','code-14','code-15','code-16','code-17','code-18'], und:['und-10'], ask:['ask-3'], slides:['slides-3'], self:['self-1','self-2','self-3'] };
 const REPLAY=420; // rows of round2-basic.jsonl (no self rows)
-const NAME_OLD='FF777 1.0 tarius', NAME_NEW='FF777 1.1 tarius';
-const WHO='You are FF777 1.1 tarius, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 1.7B. Your name is the end of the Latin word elementarius ("basic").';
+const NAME_OLD='FF777 1.0 tarius', NAME_NEW='FF777 1.2 tarius';
+const WHO='You are FF777 1.2 tarius, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 1.7B. Your name is the end of the Latin word elementarius ("basic").';
 const FILL={NAME:NAME_NEW, BASE:'Qwen3 1.7B', LATIN:'elementarius', MEANING_KO:'기본', MEANING_EN:'basic'};
 const WHO_L='You are FF777 1.0 lectus, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 4B. Your name is the end of the Latin word intellectus ("understanding").';
 const FILL_L={NAME:'FF777 1.0 lectus', BASE:'Qwen3 4B', LATIN:'intellectus', MEANING_KO:'이해력', MEANING_EN:'understanding'};
@@ -39,7 +39,7 @@ for(const task in FILES){
   }
 }
 function base(who,fill){ const rows=[], counts={}; const add=(task,m)=>{ rows.push({task,messages:m}); counts[task]=(counts[task]||0)+1; };
-  for(const task of ['code','und']) for(const x of pool[task]) add(task,x.messages.map(y=>({role:y.role,content:y.content})));
+  for(const task of ['code','und','ask','slides']) for(const x of pool[task]){ const m=x.messages.map(y=>({role:y.role,content:y.content})); if(task==='ask') m[0].content+='\n\n'+who; add(task,m); }
   pool.self.forEach((x,i)=>{
     const m=x.messages.map(y=>({role:y.role,content:y.content.replace(/\{(\w+)\}/g,(s,k)=>fill[k]!=null?fill[k]:s)}));
     if(/\{\w+\}/.test(m[2].content)) throw new Error('unfilled placeholder in self item '+i);
