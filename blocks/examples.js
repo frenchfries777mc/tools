@@ -156,6 +156,28 @@ var EX=[
     B('ev_click',{x:420,y:380,f:{EL:bt},s:{DO:[IF(0,[B('act_set',{f:{EL:box},v:{VALUE:S(T('너무 일러요! 초록색을 기다려요'))}}),SET(st,NUMB(2))]),
       IF(1,[SET(st,NUMB(2)),B('act_set',{f:{EL:box},v:{VALUE:JOIN([TX(T('반응 속도: ')),G(ms),TX(T(' 밀리초'))])}}),B('act_beep',{f:{NOTE:'659.25'},v:{SEC:N(0.1)}})])]}})
   ]); }}
+,{name:'주사위 굴리기',desc:'버튼을 누르면 1부터 6까지 무작위로 나와요',xml:function(){
+  var dice=T('주사위'), bt=T('버튼')+'1', res=T('결과'), n=T('눈');
+  return wrap([
+    page(T('주사위 굴리기'),'#dcfce7',[B('el_heading',{f:{SIZE:'h1',TEXT:'🎲',NAME:dice}}),B('el_button',{f:{TEXT:T('굴리기'),NAME:bt}}),B('el_heading',{f:{SIZE:'h2',TEXT:'',NAME:res}})]),
+    B('ev_start',{x:420,y:20,s:{DO:[SET(n,NUMB(1))]}}),
+    B('ev_click',{x:420,y:120,f:{EL:bt},s:{DO:[SET(n,X(B('math_random_int',{v:{FROM:N(1),TO:N(6)}}))),B('act_set',{f:{EL:res},v:{VALUE:JOIN([TX(T('나온 숫자: ')),G(n)])}}),B('act_beep',{f:{NOTE:'523.25'},v:{SEC:N(0.1)}})]}})
+  ]); }}
+,{name:'타이머',desc:'시작을 누르면 10초부터 줄어들어요',xml:function(){
+  var left=T('남은시간'), t=T('초'), bt=T('버튼')+'1';
+  return wrap([
+    page(T('타이머'),'#e0f2fe',[B('el_heading',{f:{SIZE:'h1',TEXT:'10',NAME:left}}),B('el_button',{f:{TEXT:T('시작'),NAME:bt}})]),
+    B('ev_start',{x:420,y:20,s:{DO:[SET(t,NUMB(0))]}}),
+    B('ev_click',{x:420,y:120,f:{EL:bt},s:{DO:[SET(t,NUMB(10)),B('act_set',{f:{EL:left},v:{VALUE:G(t)}})]}}),
+    B('ev_timer',{x:420,y:260,f:{SEC:1},s:{DO:[B('controls_if',{v:{IF0:CMP('GT',G(t),NUMB(0))},s:{DO0:[CHG(t,-1),B('act_set',{f:{EL:left},v:{VALUE:G(t)}}),
+      B('controls_if',{v:{IF0:CMP('EQ',G(t),NUMB(0))},s:{DO0:[B('act_beep',{f:{NOTE:'659.25'},v:{SEC:N(0.3)}}),B('act_alert',{v:{VALUE:S(T('시간이 다 됐어요!'))}})]}})]}})]}})
+  ]); }}
+,{name:'색깔 바뀌는 버튼',desc:'누를 때마다 글자 배경색이 바뀌어요',xml:function(){
+  var box=T('색상자'), bt=T('버튼')+'1';
+  return wrap([
+    page(T('색깔 바뀌는 버튼'),'#ffffff',[B('el_heading',{f:{SIZE:'h1',TEXT:T('이 글자의 배경이 바뀌어요'),NAME:box}}),B('el_button',{f:{TEXT:T('색 바꾸기'),NAME:bt}})]),
+    B('ev_click',{x:420,y:20,f:{EL:bt},s:{DO:[B('act_style',{f:{EL:box,PROP:'background'},v:{VALUE:X(B('val_rcolor'))}})]}})
+  ]); }}
 ];
 window.BH_EXAMPLES=EX;
 })();
