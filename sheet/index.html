@@ -175,6 +175,8 @@ button,input,select{font:inherit; color:inherit;}
 @media print{ #bdDlg{display:none!important;} }
 /* v10 */
 .chkRow{display:flex!important; align-items:center; gap:8px; cursor:pointer; color:var(--text)!important; margin:4px 0 8px!important;} .chkRow input{width:18px; height:18px; accent-color:#ffc93c;}
+#grid td.lk{background-image:repeating-linear-gradient(135deg,transparent 0 5px,rgba(255,255,255,.05) 5px 6px);}
+#xrOut.bad{color:#ff6b6b;}
 #grid td.nt::after{content:''; position:absolute; top:0; right:0; border-style:solid; border-width:0 8px 8px 0; border-color:transparent #ff5d5d transparent transparent;}
 #grid td.flt{padding-right:22px;} #grid td.flt::before{content:'▾'; position:absolute; right:0; top:0; width:22px; height:100%; text-align:center; color:var(--fry); background:rgba(255,201,60,.14); font-size:13px; cursor:pointer;}
 #grid td.flton::before{background:rgba(255,201,60,.5); color:#1c1405;}
@@ -375,7 +377,14 @@ button,input,select{font:inherit; color:inherit;}
 <div class="menu" id="dvMenu"></div>
 <div class="menu" id="dataMenu">
   <button data-d="pivot">피벗 테이블 만들기…</button>
+  <button data-d="pvRefresh">피벗 새로 고침</button>
   <button data-d="names">이름 범위 관리…</button>
+  <button data-d="xref">다른 시트 참조 만들기…</button>
+  <hr>
+  <button data-d="lockSel">선택 범위 잠그기</button>
+  <button data-d="unlockSel">선택 범위 잠금 풀기</button>
+  <button data-d="lockSheet">시트 전체 잠그기</button>
+  <button data-d="unlockSheet">시트 잠금 모두 풀기</button>
   <hr>
   <button data-d="dedupe">중복 항목 제거…</button>
   <button data-d="split">텍스트를 여러 열로 나누기…</button>
@@ -383,6 +392,7 @@ button,input,select{font:inherit; color:inherit;}
 </div>
 <div class="menu" id="tabMenu">
   <button data-t="rename">이름 바꾸기</button>
+  <button data-t="pvr">피벗 새로 고침</button>
   <button data-t="dup">복제</button>
   <button data-t="left">왼쪽으로</button>
   <button data-t="right">오른쪽으로</button>
@@ -396,7 +406,9 @@ button,input,select{font:inherit; color:inherit;}
 </div></div>
 <div class="ov" id="findDlg"><div class="dlg">
   <div class="dh"><h3>찾기와 바꾸기</h3><button class="x" data-close aria-label="닫기">×</button></div>
-  <div class="dbody"><label>찾을 내용</label><input type="text" id="fFind"><label>바꿀 내용</label><input type="text" id="fRep"></div>
+  <div class="dbody"><label>찾을 내용</label><input type="text" id="fFind"><label>바꿀 내용</label><input type="text" id="fRep">
+    <label>찾을 곳</label><select id="fScope" class="dsel"><option value="sheet">이 시트</option><option value="sel">선택 범위</option><option value="all">모든 시트</option></select><div class="aiCtx" id="fSelRg" data-notr></div>
+    <label class="chkRow"><input type="checkbox" id="fCase"><span>대소문자 구분</span></label></div>
   <div class="acts"><button class="tbtn" id="fNext">다음 찾기</button><button class="tbtn" id="fOne">바꾸기</button><button class="tbtn pri" id="fAll">모두 바꾸기</button></div>
 </div></div>
 <div class="ov" id="docDlg"><div class="dlg">
@@ -467,13 +479,13 @@ button,input,select{font:inherit; color:inherit;}
   <div class="dbody">
     <div class="aiCtx" id="pvRg" data-notr></div>
     <label class="chkRow"><input type="checkbox" id="pvHdr"><span>첫 줄은 제목</span></label>
-    <label>묶을 열</label><select id="pvKey" class="dsel" data-notr></select>
+    <label>묶을 열 (여러 개 고르면 차례로 묶어요)</label><div id="pvKeys"></div>
     <label>계산할 열</label><select id="pvVal" class="dsel" data-notr></select>
     <label>계산 방법</label>
-    <select id="pvAgg" class="dsel"><option value="sum">합계</option><option value="count">개수</option><option value="avg">평균</option></select>
+    <select id="pvAgg" class="dsel"><option value="sum">합계</option><option value="avg">평균</option><option value="count">개수</option><option value="max">최댓값</option><option value="min">최솟값</option></select>
     <label>순서</label>
     <select id="pvSort" class="dsel"><option value="first">처음 나온 순서</option><option value="key">이름순</option><option value="val">값이 큰 순서</option></select>
-    <p class="vhint" style="margin:10px 0 0">결과는 새 시트에 값으로 만들어져요. 원래 표를 고쳤다면 피벗을 다시 만드세요.</p>
+    <p class="vhint" style="margin:10px 0 0">결과는 새 시트에 만들어져요. 원래 표를 고친 뒤에는 데이터 메뉴나 시트 탭 메뉴의 "피벗 새로 고침"을 누르세요.</p>
   </div>
   <div class="acts"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="pvOk">피벗 만들기</button></div>
 </div></div>
@@ -509,6 +521,19 @@ button,input,select{font:inherit; color:inherit;}
     <div class="dRow" style="margin-top:0"><input type="text" id="nmRef" placeholder="예: A2:A10 또는 시트2!A2:A10" spellcheck="false" autocomplete="off" autocapitalize="characters"><button class="tbtn" id="nmUse">지금 선택</button></div>
   </div>
   <div class="acts"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="nmSave">저장</button></div>
+</div></div>
+<div class="ov" id="xrDlg"><div class="dlg">
+  <div class="dh"><h3>다른 시트 참조</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody">
+    <p class="vhint" style="margin:0 0 10px">다른 시트의 칸이나 범위를 가리키는 수식을 만들어요. 수식에서는 =시트2!A1 처럼 시트 이름 뒤에 !를 붙여요. 이름에 띄어쓰기가 있으면 ='내 시트'!A1 처럼 따옴표로 감싸요.</p>
+    <label>시트</label><select id="xrSheet" class="dsel" data-notr></select>
+    <label>범위</label>
+    <div class="dRow" style="margin-top:0"><input type="text" id="xrRg" placeholder="예: A1 또는 A1:B5" spellcheck="false" autocomplete="off" autocapitalize="characters"><button class="tbtn" id="xrUse">지금 선택</button></div>
+    <label>계산 방법</label>
+    <select id="xrFn" class="dsel"><option value="">그대로 (=시트2!A1:B5)</option><option value="SUM">합계 SUM</option><option value="AVERAGE">평균 AVERAGE</option><option value="COUNT">개수 COUNT</option><option value="MAX">최댓값 MAX</option><option value="MIN">최솟값 MIN</option></select>
+    <label>만들어진 수식</label><div class="aiCtx" id="xrOut" data-notr></div>
+  </div>
+  <div class="acts"><button class="tbtn" data-close>닫기</button><button class="tbtn" id="xrCopy">복사</button><button class="tbtn pri" id="xrIns">지금 칸에 넣기</button></div>
 </div></div>
 <div class="ov" id="dpDlg"><div class="dlg">
   <div class="dh"><h3>중복 항목 제거</h3><button class="x" data-close aria-label="닫기">×</button></div>
