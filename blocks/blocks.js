@@ -26,7 +26,7 @@ function elField(kinds){
   });
 }
 /* "내 그림": pictures drawn or uploaded by the user. id -> {name, data (data URL), w, h, thumb} */
-var IMGS={}, USED={};
+var IMGS={}, USED={}, USEDS={};
 function imgField(){
   return new Blockly.FieldDropdown(function(){
     var ids=Object.keys(IMGS), v=this.getValue&&this.getValue();
@@ -101,12 +101,18 @@ def('ev_click',function(){ this.appendDummyInput().appendField(elField(),'EL').a
     return '$('+lit(n)+').addEventListener(\'click\', '+AF()+(mouse?'e':'')+') {\n'+(mouse?'  __pos(e, this);\n':'')+hatBody(b)+'});\n'; });
 def('ev_change',function(){ this.appendDummyInput().appendField(elField(['el_input']),'EL').appendField(T('에 글을 쓰면')); hat(this,'입력칸의 내용이 바뀔 때마다 해요'); },
   function(b){ need('$'); return '$('+lit(b.getFieldValue('EL'))+').addEventListener(\'input\', '+AF()+') {\n'+hatBody(b)+'});\n'; });
-var KEYS=[['아무 키','any'],['스페이스',' '],['엔터','Enter'],['↑','ArrowUp'],['↓','ArrowDown'],['←','ArrowLeft'],['→','ArrowRight'],['W','w'],['A','a'],['S','s'],['D','d']];
-def('ev_key',function(){ this.appendDummyInput().appendField(new Blockly.FieldDropdown(function(){ return KEYS.map(function(k){ return [T(k[0]),k[1]]; }); }),'KEY').appendField(T('키를 누르면')); hat(this,'키보드 키를 눌렀을 때 해요'); },
+var KEYS=[['아무 키','any'],['스페이스',' '],['엔터','Enter'],['↑','ArrowUp'],['↓','ArrowDown'],['←','ArrowLeft'],['→','ArrowRight'],['Esc','Escape'],['Shift','Shift'],['Tab','Tab'],['Backspace','Backspace']];
+'abcdefghijklmnopqrstuvwxyz'.split('').forEach(function(c){ KEYS.push([c.toUpperCase(),c]); });
+'0123456789'.split('').forEach(function(c){ KEYS.push([c,c]); });
+function keyCond(k){ return k==='any'?'true':(k.length===1&&/[a-z]/.test(k)?'e.key.toLowerCase() === '+lit(k):'e.key === '+lit(k)); }
+function keyDrop(){ return new Blockly.FieldDropdown(function(){ return KEYS.map(function(k){ return [T(k[0]),k[1]]; }); }); }
+def('ev_key',function(){ this.appendDummyInput().appendField(keyDrop(),'KEY').appendField(T('키를 누르면')); hat(this,'키보드 키를 눌렀을 때 해요'); },
   function(b){ var k=b.getFieldValue('KEY'); need('key');
-    var cond=k==='any'?'true':(k.length===1&&/[a-z]/.test(k)?'e.key.toLowerCase() === '+lit(k):'e.key === '+lit(k));
-    return 'document.addEventListener(\'keydown\', '+AF()+'e) {\n  __key = e.key;\n  if ('+cond+') {\n'+(k!=='any'&&k.length>1||k===' '?'    e.preventDefault();\n':'')+G.prefixLines(hatBody(b),'  ')+'  }\n});\n'; });
-def('ev_keyup',function(){ this.appendDummyInput().appendField(new Blockly.FieldDropdown(function(){ return KEYS.map(function(k){ return [T(k[0]),k[1]]; }); }),'KEY').appendField(T('키를 눌렀다 떼면')); hat(this,'키보드 키에서 손을 뗐을 때 해요'); },
+    return 'document.addEventListener(\'keydown\', '+AF()+'e) {\n  __key = e.key;\n  if ('+keyCond(k)+') {\n'+(k!=='any'&&k.length>1||k===' '?'    e.preventDefault();\n':'')+G.prefixLines(hatBody(b),'  ')+'  }\n});\n'; });
+def('ev_keyhold',function(){ this.appendDummyInput().appendField(keyDrop(),'KEY').appendField(T('키를 누르고 있는 동안 (끊김 없이)')); hat(this,'키를 누르고 있는 동안 일정한 간격으로 계속 해요. 처음 멈칫하거나 뚝뚝 끊기지 않아서 움직이기에 좋아요'); },
+  function(b){ var k=b.getFieldValue('KEY'); need('key'); need('keyhold');
+    return '__keyHold(function (e) { return '+keyCond(k)+'; }, '+AF()+'e) {\n'+(k!=='any'&&k.length>1||k===' '?'  e.preventDefault();\n':'')+hatBody(b,true)+'});\n'; });
+def('ev_keyup',function(){ this.appendDummyInput().appendField(keyDrop(),'KEY').appendField(T('키를 눌렀다 떼면')); hat(this,'키보드 키에서 손을 뗐을 때 해요'); },
   function(b){ var k=b.getFieldValue('KEY'); need('key');
     var cond=k==='any'?'true':(k.length===1&&/[a-z]/.test(k)?'e.key.toLowerCase() === '+lit(k):'e.key === '+lit(k));
     return 'document.addEventListener(\'keyup\', '+AF()+'e) {\n  __key = e.key;\n  if ('+cond+') {\n'+G.prefixLines(hatBody(b),'  ')+'  }\n});\n'; });
@@ -156,6 +162,22 @@ def('act_note',function(){ this.appendDummyInput().appendField(T('음')).appendF
   function(b){ need('note'); return '__note('+lit(b.getFieldValue('NOTE'))+', '+b.getFieldValue('BEAT')+');\n'; });
 def('act_tempo',function(){ this.appendValueInput('N').setCheck('Number').appendField(T('빠르기를')); this.appendDummyInput().appendField(T('(으)로 정하기 (1분에 박자 수)')); this.setInputsInline(true); act(this,'음 연주하기의 빠르기예요. 1분에 몇 박자를 연주할지 정해요 (처음엔 120)'); },
   function(b){ need('note'); return '__bpm = Math.max(20, Math.min(400, '+(G.valueToCode(b,'N',O.COMMA)||'120')+'));\n'; });
+var SNDS={};
+function sndField(){ var f=new Blockly.FieldDropdown(function(){ var o=Object.keys(SNDS).map(function(n){ return [n,n]; }); o.push([T('＋ mp3 파일 넣기'),'+']); return o; });
+  f.setValidator(function(v){ if(v==='+'){ var me=this; setTimeout(function(){ if(window.BH&&BH.pickSound) BH.pickSound(me); },0); return null; } return v; }); return f; }
+def('act_mp3',function(){ this.appendDummyInput().appendField(T('내 소리')).appendField(sndField(),'SND').appendField(new Blockly.FieldDropdown(function(){ return [[T('한 번 재생하기'),'once'],[T('반복해서 재생하기'),'loop']]; }),'LOOP'); this.setFieldValue('+','SND'); act(this,'내가 넣은 mp3 같은 소리 파일을 재생해요. 목록 맨 아래 mp3 파일 넣기로 파일을 골라요'); },
+  function(b){ var n=b.getFieldValue('SND'); if(!SNDS[n]) return ''; USEDS[n]=1; need('mp3'); return '__mp3('+lit(n)+', '+(b.getFieldValue('LOOP')==='loop')+');\n'; });
+/* logic gates and condition loops */
+var GATES=[['그리고 (AND)','AND'],['또는 (OR)','OR'],['둘 중 하나만 (XOR)','XOR'],['둘 다 아님 (NOR)','NOR'],['둘이 함께는 아님 (NAND)','NAND']];
+def('logic_gate',function(){ this.appendValueInput('A').setCheck('Boolean'); this.appendValueInput('B').setCheck('Boolean').appendField(new Blockly.FieldDropdown(function(){ return GATES.map(function(g){ return [T(g[0]),g[1]]; }); }),'GATE'); this.setInputsInline(true); this.setOutput(true,'Boolean'); this.setColour('#5b80a5'); this.setTooltip(T('두 조건을 합쳐요. AND는 둘 다 참, OR은 하나라도 참, XOR은 정확히 하나만 참, NOR은 둘 다 거짓, NAND는 둘 다 참만 아니면 참이에요')); },
+  function(b){ var a=G.valueToCode(b,'A',O.NONE)||'false', c=G.valueToCode(b,'B',O.NONE)||'false', g=b.getFieldValue('GATE');
+    var js=g==='AND'?'(('+a+') && ('+c+'))':g==='OR'?'(('+a+') || ('+c+'))':g==='XOR'?'(!!('+a+') !== !!('+c+'))':g==='NOR'?'!(('+a+') || ('+c+'))':'!(('+a+') && ('+c+'))'; return [js,O.ATOMIC]; });
+def('logic_between',function(){ this.appendValueInput('X').setCheck('Number'); this.appendValueInput('LO').setCheck('Number').appendField(T('이(가)')); this.appendValueInput('HI').setCheck('Number').appendField(T('이상')); this.appendDummyInput().appendField(T('이하 사이에 있나?')); this.setInputsInline(true); this.setOutput(true,'Boolean'); this.setColour('#5b80a5'); this.setTooltip(T('숫자가 두 값 사이(같은 것 포함)에 있으면 참이에요')); },
+  function(b){ var x=G.valueToCode(b,'X',O.NONE)||'0', lo=G.valueToCode(b,'LO',O.NONE)||'0', hi=G.valueToCode(b,'HI',O.NONE)||'0'; return ['(('+x+') >= ('+lo+') && ('+x+') <= ('+hi+'))',O.ATOMIC]; });
+def('loop_while',function(){ this.appendValueInput('COND').setCheck('Boolean').appendField(T('조건')); this.appendDummyInput().appendField(T('인 동안 반복')); this.appendStatementInput('DO'); this.setInputsInline(true); this.setPreviousStatement(true,'EL'); this.setNextStatement(true,'EL'); this.setColour('#5ba55b'); this.setTooltip(T('조건이 참인 동안 안의 블록을 계속 해요. 조건이 거짓이 되면 멈춰요')); },
+  function(b){ var c=G.valueToCode(b,'COND',O.NONE)||'false', body=G.statementToCode(b,'DO'); body=G.addLoopTrap(body,b); return 'while ('+c+') {\n'+body+'}\n'; });
+def('loop_dowhile',function(){ this.appendDummyInput().appendField(T('먼저 한 번 하고')); this.appendStatementInput('DO'); this.appendValueInput('COND').setCheck('Boolean').appendField(T('조건')); this.appendDummyInput().appendField(T('인 동안 계속 반복')); this.setInputsInline(false); this.setPreviousStatement(true,'EL'); this.setNextStatement(true,'EL'); this.setColour('#5ba55b'); this.setTooltip(T('안의 블록을 먼저 한 번 하고, 조건이 참이면 계속 반복해요')); },
+  function(b){ var c=G.valueToCode(b,'COND',O.NONE)||'false', body=G.statementToCode(b,'DO'); body=G.addLoopTrap(body,b); return 'do {\n'+body+'} while ('+c+');\n'; });
 def('act_sound_stop',function(){ this.appendDummyInput().appendField(T('모든 소리 멈추기')); act(this,'나고 있는 소리와 연주할 차례인 음을 모두 멈춰요'); },
   function(){ need('snd'); return '__soundStop();\n'; });
 
@@ -273,9 +295,11 @@ var HELP={
   cursor:"var __cx = 0, __cy = 0;\nfunction __track(e) {\n  __cx = Math.round(e.pageX);\n  __cy = Math.round(e.pageY);\n}\ndocument.addEventListener('pointermove', __track);\ndocument.addEventListener('pointerdown', __track);",
   follow:"var __fol = {}, __folOn = false, __moved = false;\ndocument.addEventListener('pointermove', function () { __moved = true; });\ndocument.addEventListener('pointerdown', function () { __moved = true; });\nfunction __folLoop() {\n  for (var n in __fol) {\n    var el = document.getElementById(n);\n    if (!el) { delete __fol[n]; continue; }\n    if (!__moved) continue;\n    var s = el.style, tx = __cx - el.offsetWidth / 2, ty = __cy - el.offsetHeight / 2;\n    if (s.position !== 'absolute') {\n      var r = el.getBoundingClientRect();\n      s.position = 'absolute';\n      s.left = (r.left + window.pageXOffset) + 'px';\n      s.top = (r.top + window.pageYOffset) + 'px';\n    }\n    var x = parseFloat(s.left) || 0, y = parseFloat(s.top) || 0, k = __fol[n] === 'soft' ? 0.15 : 1;\n    s.left = (x + (tx - x) * k) + 'px';\n    s.top = (y + (ty - y) * k) + 'px';\n    s.pointerEvents = 'none';\n  }\n  requestAnimationFrame(__folLoop);\n}\nfunction __follow(name, mode) {\n  if (mode === 'stop') {\n    delete __fol[name];\n    var e = document.getElementById(name);\n    if (e) e.style.pointerEvents = '';\n    return;\n  }\n  $(name);\n  __fol[name] = mode;\n  document.body.style.touchAction = 'none';\n  if (!__folOn) { __folOn = true; __folLoop(); }\n}",
   key:"var __key = '';",
+  keyhold:"var __down = {};\nfunction __keyHold(match, fn) {\n  var id = null;\n  function stop() { if (id) { clearInterval(id); id = null; } }\n  document.addEventListener('keydown', function (e) {\n    __key = e.key;\n    __down[e.key.toLowerCase()] = e;\n    if (e.repeat || id || !match(e)) return;\n    fn(e);\n    id = setInterval(function () { fn(e); }, 30);\n  });\n  document.addEventListener('keyup', function (e) {\n    delete __down[e.key.toLowerCase()];\n    if (id && !Object.keys(__down).some(function (k) { return match(__down[k]); })) stop();\n  });\n  window.addEventListener('blur', function () { __down = {}; stop(); });\n}",
+  mp3:"var __auds = [];\nfunction __mp3(name, loop) {\n  var a = new Audio(__mp3s[name]);\n  a.loop = !!loop;\n  __auds.push(a);\n  a.addEventListener('ended', function () { var i = __auds.indexOf(a); if (i >= 0) __auds.splice(i, 1); });\n  var p = a.play();\n  if (p && p.catch) p.catch(function () {});\n}",
   timers:"var __timers = [];",
   beep:"function __beep(freq, sec) {\n  __snd();\n  __tone(freq, __audio.currentTime, sec, 'sine', 0.2);\n}",
-  snd:"var __audio, __sndBus = null;\nfunction __snd() {\n  if (!__audio) {\n    __audio = new (window.AudioContext || window.webkitAudioContext)();\n    ['pointerdown', 'keydown'].forEach(function (k) { document.addEventListener(k, function () { if (__audio.state === 'suspended') __audio.resume(); }); });\n  }\n  if (__audio.state === 'suspended') __audio.resume();\n  if (!__sndBus) { __sndBus = __audio.createGain(); __sndBus.connect(__audio.destination); }\n  return __sndBus;\n}\nfunction __tone(freq, t, sec, type, vol, to, hold) {\n  var o = __audio.createOscillator(), g = __audio.createGain();\n  o.type = type;\n  o.frequency.setValueAtTime(freq, t);\n  if (to) o.frequency.exponentialRampToValueAtTime(to, t + sec);\n  g.gain.setValueAtTime(vol, t);\n  if (hold) g.gain.setValueAtTime(vol, t + sec * hold);\n  g.gain.exponentialRampToValueAtTime(0.001, t + sec);\n  o.connect(g); g.connect(__snd());\n  o.start(t); o.stop(t + sec + 0.02);\n}\nfunction __soundStop() {\n  if (__sndBus) { __sndBus.disconnect(); __sndBus = null; }\n  __noteT = 0;\n}\nvar __noteT = 0, __bpm = 120;",
+  snd:"var __audio, __sndBus = null;\nfunction __snd() {\n  if (!__audio) {\n    __audio = new (window.AudioContext || window.webkitAudioContext)();\n    ['pointerdown', 'keydown'].forEach(function (k) { document.addEventListener(k, function () { if (__audio.state === 'suspended') __audio.resume(); }); });\n  }\n  if (__audio.state === 'suspended') __audio.resume();\n  if (!__sndBus) { __sndBus = __audio.createGain(); __sndBus.connect(__audio.destination); }\n  return __sndBus;\n}\nfunction __tone(freq, t, sec, type, vol, to, hold) {\n  var o = __audio.createOscillator(), g = __audio.createGain();\n  o.type = type;\n  o.frequency.setValueAtTime(freq, t);\n  if (to) o.frequency.exponentialRampToValueAtTime(to, t + sec);\n  g.gain.setValueAtTime(vol, t);\n  if (hold) g.gain.setValueAtTime(vol, t + sec * hold);\n  g.gain.exponentialRampToValueAtTime(0.001, t + sec);\n  o.connect(g); g.connect(__snd());\n  o.start(t); o.stop(t + sec + 0.02);\n}\nfunction __soundStop() {\n  if (typeof __auds !== 'undefined') __auds.splice(0).forEach(function (a) { a.pause(); });\n  if (__sndBus) { __sndBus.disconnect(); __sndBus = null; }\n  __noteT = 0;\n}\nvar __noteT = 0, __bpm = 120;",
   sfx:"function __sfx(k) {\n  __snd();\n  var t = __audio.currentTime;\n  if (k === 'coin') { __tone(988, t, 0.08, 'square', 0.1); __tone(1319, t + 0.08, 0.3, 'square', 0.1); }\n  else if (k === 'jump') __tone(260, t, 0.25, 'square', 0.1, 820);\n  else if (k === 'laser') __tone(1500, t, 0.22, 'sawtooth', 0.08, 120);\n  else if (k === 'pop') __tone(500, t, 0.09, 'sine', 0.3, 1100);\n  else if (k === 'win') [523.25, 659.25, 783.99, 1046.5].forEach(function (f, i) { __tone(f, t + i * 0.1, 0.3, 'triangle', 0.22); });\n  else if (k === 'lose') [392, 349.23, 311.13, 261.63].forEach(function (f, i) { __tone(f, t + i * 0.18, 0.3, 'sawtooth', 0.08, 0, 0.6); });\n  else if (k === 'boom') {\n    var n = __audio.createBuffer(1, Math.round(__audio.sampleRate * 0.6), __audio.sampleRate), d = n.getChannelData(0);\n    for (var i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2);\n    var s = __audio.createBufferSource(), f = __audio.createBiquadFilter();\n    s.buffer = n; f.type = 'lowpass'; f.frequency.value = 900;\n    s.connect(f); f.connect(__snd());\n    s.start(t);\n  }\n}",
   note:"function __note(n, beats) {\n  __snd();\n  var m = /^([A-G])(#?)(\\d)$/.exec(n), t = Math.max(__audio.currentTime, __noteT), sec = beats * 60 / __bpm;\n  if (m) __tone(440 * Math.pow(2, ('C D EF G A B'.indexOf(m[1]) + (m[2] ? 1 : 0) - 9) / 12 + (m[3] - 4)), t, sec * 0.95, 'triangle', 0.25, 0, 0.6);\n  __noteT = t + sec;\n}",
   hitev:"var __hits = [];\nfunction __onHit(a, b, f) {\n  __hits.push({ a: a, b: b, f: f, on: false });\n  if (__hits.length === 1) requestAnimationFrame(__hitLoop);\n}\nfunction __hitLoop() {\n  requestAnimationFrame(__hitLoop);\n  __hits.forEach(function (h) {\n    var now = !!(document.getElementById(h.a) && document.getElementById(h.b) && __hit(h.a, h.b));\n    if (now && !h.on) { h.on = true; h.f(); }\n    h.on = now;\n  });\n}",
@@ -337,7 +361,7 @@ function build(ws,opts){
     body+=bodyHTML(b,'  ',true);
   });
   // JavaScript
-  NEED={}; USED={}; G.INFINITE_LOOP_TRAP=opts.trap?'if (--window.__loop < 0) throw new Error("'+T('반복이 끝나지 않아요')+'");\n':null;
+  NEED={}; USED={}; USEDS={}; G.INFINITE_LOOP_TRAP=opts.trap?'if (--window.__loop < 0) throw new Error("'+T('반복이 끝나지 않아요')+'");\n':null;
   DBG=!!opts.debug; dbgSeq=0; G.STATEMENT_PREFIX=DBG?'await __step(%1);\n':null;
   var js, dbgVars=[];
   try{
@@ -359,6 +383,7 @@ function build(ws,opts){
   Object.keys(HELP_DEPS).forEach(function(k){ if(NEED[k]) HELP_DEPS[k].forEach(need); });
   var helpers=Object.keys(HELP).filter(function(k){ return NEED[k]; }).map(function(k){ return HELP[k]; }).join('\n');
   if(NEED.imgs){ var used=Object.keys(USED).filter(function(id){ return IMGS[id]; }); helpers='// '+T('내 그림')+'\nvar __imgs = {\n'+used.map(function(id){ return '  '+lit(IMGS[id].name)+': '+lit(IMGS[id].data); }).join(',\n')+'\n};\n'+(NEED.image?'for (var __k in __imgs) { var __im = new Image(); __im.src = __imgs[__k]; }\n':'')+helpers; }
+  if(NEED.mp3){ helpers='var __mp3s = {\n'+Object.keys(USEDS).filter(function(n){ return SNDS[n]; }).map(function(n){ return '  '+lit(n)+': '+lit(SNDS[n].data); }).join(',\n')+'\n};\n'+helpers; }
   if(helpers) js='// '+T('도우미 함수')+'\n'+helpers+'\n\n'+js;
   if(opts.trap) js=watchHelper(dbgVars.concat(NEED.score?[[T('점수'),'__score']]:[]))+'\n\n'+js;
   var fg=textColorFor(bg);
@@ -389,7 +414,7 @@ function toolbox(){
   var img={shadow:{type:'val_myimg'}};
   return {kind:'categoryToolbox',contents:[
     {kind:'category',name:T('시작'),colour:C.ev,contents:[
-      {kind:'block',type:'ev_start'},lab('누르거나 쓰면'),{kind:'block',type:'ev_click'},{kind:'block',type:'ev_drag'},{kind:'block',type:'ev_change'},{kind:'block',type:'ev_key'},{kind:'block',type:'ev_keyup'},lab('닿으면'),{kind:'block',type:'ev_hit'},lab('시간마다'),{kind:'block',type:'ev_timer'}]},
+      {kind:'block',type:'ev_start'},lab('누르거나 쓰면'),{kind:'block',type:'ev_click'},{kind:'block',type:'ev_drag'},{kind:'block',type:'ev_change'},{kind:'block',type:'ev_key'},{kind:'block',type:'ev_keyhold'},{kind:'block',type:'ev_keyup'},lab('닿으면'),{kind:'block',type:'ev_hit'},lab('시간마다'),{kind:'block',type:'ev_timer'}]},
     {kind:'category',name:T('화면'),colour:C.page,contents:[
       {kind:'block',type:'page_root'},lab('글'),{kind:'block',type:'el_heading'},{kind:'block',type:'el_text'},{kind:'block',type:'el_list'},{kind:'block',type:'el_link'},
       lab('누르고 쓰기'),{kind:'block',type:'el_button'},{kind:'block',type:'el_input'},
@@ -430,7 +455,7 @@ function toolbox(){
       lab('소리'),{kind:'block',type:'act_sfx'},{kind:'block',type:'act_restart'}]},
     {kind:'category',name:T('소리·알림'),colour:'#2e9bd6',contents:[
       lab('효과음'),{kind:'block',type:'act_sfx'},{kind:'block',type:'act_sfx',fields:{SFX:'win'}},
-      lab('음악'),{kind:'block',type:'act_note'},{kind:'block',type:'act_note',fields:{NOTE:'E4',BEAT:'0.5'}},{kind:'block',type:'act_tempo',inputs:{N:n(120)}},{kind:'block',type:'act_sound_stop'},
+      lab('음악'),{kind:'block',type:'act_note'},{kind:'block',type:'act_note',fields:{NOTE:'E4',BEAT:'0.5'}},{kind:'block',type:'act_tempo',inputs:{N:n(120)}},{kind:'block',type:'act_mp3'},{kind:'block',type:'act_sound_stop'},
       lab('삐 소리'),{kind:'block',type:'act_beep',inputs:{SEC:n(0.3)}},
       lab('알림'),{kind:'block',type:'act_alert',inputs:{VALUE:sh('text',T('안녕하세요!'))}}]},
     {kind:'category',name:T('시간'),colour:'#3a6fd8',contents:[
@@ -441,10 +466,10 @@ function toolbox(){
     {kind:'sep'},
     {kind:'category',name:T('조건'),colour:'#5b80a5',contents:[
       {kind:'block',type:'controls_if'},{kind:'block',type:'controls_if',extraState:{hasElse:true}},
-      lab('비교'),{kind:'block',type:'logic_compare'},{kind:'block',type:'logic_operation'},{kind:'block',type:'logic_negate'},{kind:'block',type:'logic_boolean'},
+      lab('비교'),{kind:'block',type:'logic_compare'},{kind:'block',type:'logic_operation'},{kind:'block',type:'logic_negate'},lab('논리 게이트'),{kind:'block',type:'logic_gate',fields:{GATE:'AND'}},{kind:'block',type:'logic_gate',fields:{GATE:'OR'}},{kind:'block',type:'logic_gate',fields:{GATE:'XOR'}},{kind:'block',type:'logic_gate',fields:{GATE:'NOR'}},{kind:'block',type:'logic_gate',fields:{GATE:'NAND'}},{kind:'block',type:'logic_between',inputs:{LO:n(1),HI:n(10)}},lab('기본'),{kind:'block',type:'logic_boolean'},
       {kind:'block',type:'logic_ternary'}]},
     {kind:'category',name:T('반복'),colour:'#5ba55b',contents:[
-      {kind:'block',type:'controls_repeat_ext',inputs:{TIMES:n(10)}},{kind:'block',type:'controls_whileUntil'},
+      {kind:'block',type:'controls_repeat_ext',inputs:{TIMES:n(10)}},{kind:'block',type:'controls_whileUntil'},lab('조건 반복'),{kind:'block',type:'loop_while'},{kind:'block',type:'loop_dowhile'},lab('기본'),
       {kind:'block',type:'controls_for',inputs:{FROM:n(1),TO:n(10),BY:n(1)}},{kind:'block',type:'controls_forEach'},{kind:'block',type:'controls_flow_statements'},
       lab('시간마다'),{kind:'block',type:'ev_timer'}]},
     {kind:'category',name:T('계산'),colour:'#5b67a5',contents:[
@@ -468,5 +493,5 @@ function toolbox(){
   ]};
 }
 
-window.BH={missingPics:missingPics, markPics:markPics, IMGS:IMGS, build:build, toolbox:toolbox, EL:EL, KNOWN:KNOWN, elNames:elNames, C:C};
+window.BH={SNDS:SNDS, missingPics:missingPics, markPics:markPics, IMGS:IMGS, build:build, toolbox:toolbox, EL:EL, KNOWN:KNOWN, elNames:elNames, C:C};
 })();

@@ -110,8 +110,17 @@ var custom=null, customT=null;
 function finalHTML(){ return custom!==null?custom:BH.build(ws,{trap:false}); }
 function showCode(){ if(custom!==null) return; var v=finalHTML(); if($('codeEdit').value!==v) $('codeEdit').value=v; }
 function dropCustom(msg){ if(custom==null) return; custom=null; clearTimeout(customT); $('codeReset').hidden=true; $('codeNote').hidden=false; if(msg) toast(T('직접 쓴 HTML은 지웠어요. 블록 코드로 돌아왔어요')); }
-$('codeEdit').addEventListener('input',function(){ var v=$('codeEdit').value; custom=v; $('codeReset').hidden=false; clearTimeout(customT);
-  customT=setTimeout(function(){ if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=v; },500); });
+var pasting=false;
+$('codeEdit').addEventListener('input',function(){ if(pasting) return; var v=$('codeEdit').value; custom=v; $('codeReset').hidden=false; clearTimeout(customT);
+  customT=setTimeout(function(){ var t=$('codeEdit').value; if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=t; },Math.min(3000,500+Math.round(v.length/400))); });
+/* a big paste freezes the page when the text box lays out all of it at once: while it is put in piece by piece (one piece per frame, box hidden so nothing is laid out) the page keeps answering, then the preview refreshes once */
+$('codeEdit').addEventListener('paste',function(e){ var cd=e.clipboardData, text=cd&&cd.getData('text'); if(!text||text.length<60000) return;
+  e.preventDefault(); var ta=this, pos=0, CH=200000, n=text.length, v=ta.value, s0=ta.selectionStart, e0=ta.selectionEnd, parts=[v.slice(0,s0)];
+  pasting=true; clearTimeout(customT); ta.readOnly=true; ta.style.visibility='hidden';
+  (function step(){ parts.push(text.slice(pos,pos+CH)); pos+=CH;
+    if(pos<n){ toast(F('큰 코드를 불러오는 중… {0}%',Math.round(pos/n*100))); requestAnimationFrame(step); return; }
+    parts.push(v.slice(e0)); toast(F('큰 코드를 불러오는 중… {0}%',100));
+    setTimeout(function(){ ta.value=parts.join(''); var at=s0+n; try{ ta.setSelectionRange(at,at); }catch(x){} ta.style.visibility=''; ta.readOnly=false; pasting=false; toast(T('큰 코드를 모두 불러왔어요')); ta.dispatchEvent(new Event('input')); },30); })(); });
 $('codeReset').onclick=function(){ dropCustom(false); lastPrev=''; refresh('run'); showCode(); toast(T('블록 코드로 되돌렸어요')); };
 function setPane(p){ document.querySelectorAll('.stab').forEach(function(b){ b.classList.toggle('on',b.dataset.p===p); }); $('pPrev').classList.toggle('on',p==='prev'); $('pCode').classList.toggle('on',p==='code'); if(p==='code') showCode(); }
 document.querySelectorAll('.stab').forEach(function(b){ b.onclick=function(){ setPane(b.dataset.p); }; });
@@ -158,21 +167,30 @@ function writeIdx(){ return lsSet(PIDX,JSON.stringify(P)); }
 function pid(){ return 'p'+Date.now().toString(36)+Math.floor(Math.random()*1296).toString(36); }
 function entry(id){ return P.list.filter(function(x){ return x.id===id; })[0]; }
 function readProj(id){ try{ return JSON.parse(lsGet(PK+id)||'null'); }catch(e){ return null; } }
-function snapshot(){ return {name:$('projName').value,ws:Blockly.serialization.workspaces.save(ws),imgs:BH.IMGS}; }
+function snapshot(){ return {name:$('projName').value,ws:Blockly.serialization.workspaces.save(ws),imgs:BH.IMGS,snds:BH.SNDS}; }
 function saveNow(){ clearTimeout(saveT); if(!P.cur) return; var d=snapshot(), ok=lsSet(PK+P.cur,JSON.stringify(d)), e=entry(P.cur); if(e){ e.name=d.name; e.t=Date.now(); } writeIdx();
   if(!ok&&!fullWarned){ fullWarned=true; toast(T('저장 공간이 꽉 찼어요. 프로젝트 파일로 저장해 두세요')); } if(ok) fullWarned=false; return ok; }
 function save(){ clearTimeout(saveT); saveT=setTimeout(saveNow,300); }
 window.addEventListener('pagehide',function(){ saveNow(); });
 document.addEventListener('visibilitychange',function(){ if(document.hidden) saveNow(); });
+function setSnds(o){ var S=BH.SNDS; Object.keys(S).forEach(function(k){ delete S[k]; }); if(o&&typeof o==='object') Object.keys(o).forEach(function(k){ var m=o[k]; if(m&&typeof m.data==='string'&&/^data:audio\//.test(m.data)) S[k]={name:k,data:m.data}; }); }
+/* mp3 / sound files for the "내 소리" block: the block's dropdown has a "＋ mp3 파일 넣기" entry that opens this picker */
+var sndIn=document.createElement('input'); sndIn.type='file'; sndIn.accept='audio/*,.mp3,.wav,.ogg,.m4a'; sndIn.hidden=true; document.body.appendChild(sndIn);
+BH.pickSound=function(field){ sndIn.value=''; sndIn.onchange=function(){ var f=sndIn.files&&sndIn.files[0]; if(!f) return;
+  if(f.size>5*1024*1024){ toast(T('소리 파일이 너무 커요. 5MB보다 작은 파일을 골라 주세요')); return; }
+  var r=new FileReader(); r.onload=function(){ var data=String(r.result); if(!/^data:audio\//.test(data)) data=data.replace(/^data:[^;,]*/,'data:audio/mpeg');
+    var base=f.name.replace(/\.[^.]+$/,'').slice(0,24)||T('소리'), name=base, k=2; while(BH.SNDS[name]) name=base+k++;
+    BH.SNDS[name]={name:name,data:data}; if(field&&field.setValue) field.setValue(name); save(); toast(T('소리 파일을 넣었어요')); refresh(true); };
+  r.readAsDataURL(f); }; sndIn.click(); };
 function setImgs(o){ var I=BH.IMGS; Object.keys(I).forEach(function(k){ delete I[k]; }); if(o&&typeof o==='object') Object.keys(o).forEach(function(k){ var m=o[k]; if(m&&typeof m.data==='string'&&/^data:image\//.test(m.data)) I[k]=m; }); setTimeout(regenThumbs,0); }
 $('projName').addEventListener('input',save);
 $('projName').addEventListener('keydown',function(e){ if(e.key==='Enter') this.blur(); });
 function blank(){ loadJSON({blocks:{languageVersion:0,blocks:[{type:'page_root',x:30,y:30,fields:{TITLE:T('나의 웹페이지'),BG:'#ffffff',CENTER:true},inputs:{BODY:{block:{type:'el_heading',fields:{SIZE:'h1',TEXT:T('안녕하세요'),NAME:T('제목')+'1'}}}}}]}}); }
 function uniqProj(base){ base=(base||T('나의 웹페이지')).trim().slice(0,40)||T('나의 웹페이지'); var names=P.list.map(function(x){ return x.name; }); if(names.indexOf(base)<0) return base; var b=base.replace(/\s*\d+$/,''), k=2; while(names.indexOf(b+' '+k)>=0) k++; return b+' '+k; }
-function createProject(name,loader){ saveNow(); var id=pid(), nm=uniqProj(name); P.cur=id; P.list.unshift({id:id,name:nm,t:Date.now()}); $('projName').value=nm; setImgs(null); loader(); ws.clearUndo(); saveNow(); syncBar(); renderProjs(); }
+function createProject(name,loader){ saveNow(); var id=pid(), nm=uniqProj(name); P.cur=id; P.list.unshift({id:id,name:nm,t:Date.now()}); $('projName').value=nm; setImgs(null); setSnds(null); loader(); ws.clearUndo(); saveNow(); syncBar(); renderProjs(); }
 function switchTo(id){ if(id===P.cur) return; saveNow(); var d=readProj(id), e=entry(id);
   if(!d||!d.ws){ P.list=P.list.filter(function(x){ return x.id!==id; }); writeIdx(); renderProjs(); toast(T('이 프로젝트는 열 수 없어요')); return; }
-  P.cur=id; $('projName').value=d.name||(e&&e.name)||T('나의 웹페이지'); setImgs(d.imgs); try{ loadJSON(d.ws); }catch(err){ console.error(err); blank(); } ws.clearUndo(); writeIdx(); syncBar(); renderProjs(); }
+  P.cur=id; $('projName').value=d.name||(e&&e.name)||T('나의 웹페이지'); setImgs(d.imgs); setSnds(d.snds); try{ loadJSON(d.ws); }catch(err){ console.error(err); blank(); } ws.clearUndo(); writeIdx(); syncBar(); renderProjs(); }
 function deleteProject(id){ var e=entry(id); if(!e) return;
   ask(F('"{0}" 프로젝트를 삭제할까요? 되돌릴 수 없어요.',e.name),T('삭제'),true).then(function(ok){ if(!ok) return;
     try{ localStorage.removeItem(PK+id); localStorage.removeItem('ffblocks.ai.'+id); }catch(err){} P.list=P.list.filter(function(x){ return x.id!==id; });
@@ -198,14 +216,14 @@ $('fileMenu').addEventListener('click',function(e){
   var b=e.target.closest('[data-f]'); if(!b) return; closeMenus(); var f=b.dataset.f;
   if(f==='projects') openProjs();
   else if(f==='new'){ createProject(T('나의 웹페이지'),blank); toast(T('새 프로젝트를 만들었어요')); }
-  else if(f==='save'){ download(new Blob([JSON.stringify({app:'block-html',v:1,name:$('projName').value,ws:Blockly.serialization.workspaces.save(ws),imgs:BH.IMGS},null,1)],{type:'application/json'}),fname('.json')); }
+  else if(f==='save'){ download(new Blob([JSON.stringify({app:'block-html',v:1,name:$('projName').value,ws:Blockly.serialization.workspaces.save(ws),imgs:BH.IMGS,snds:BH.SNDS},null,1)],{type:'application/json'}),fname('.json')); }
   else if(f==='open') $('fileIn').click();
   else if(f==='html') downloadHTML();
 });
 $('fileIn').addEventListener('change',function(){
   var file=this.files&&this.files[0]; this.value=''; if(!file) return;
   var r=new FileReader(); r.onload=function(){ try{ var o=JSON.parse(r.result); if(!o.ws) throw 0; var nm=o.name||file.name.replace(/\.json$/i,'');
-    createProject(nm,function(){ setImgs(o.imgs); loadJSON(o.ws); }); toast(T('프로젝트를 열었어요')); }catch(e){ console.error(e); toast(T('이 파일은 열 수 없어요')); } };
+    createProject(nm,function(){ setImgs(o.imgs); setSnds(o.snds); loadJSON(o.ws); }); toast(T('프로젝트를 열었어요')); }catch(e){ console.error(e); toast(T('이 파일은 열 수 없어요')); } };
   r.readAsText(file);
 });
 
@@ -426,7 +444,7 @@ P=readIdx(); if(!P){ P={cur:null,list:[]}; var old=null; try{ old=JSON.parse(lsG
   if(old&&old.ws){ var oid=pid(); lsSet(PK+oid,JSON.stringify(old)); P.list.push({id:oid,name:old.name||T('나의 웹페이지'),t:Date.now()}); P.cur=oid; writeIdx(); } }
 P.list=P.list.filter(function(e){ return e&&e.id; });
 (function(){ var cand=[EMB||P.cur].concat(P.list.slice().sort(function(a,b){ return b.t-a.t; }).map(function(e){ return e.id; })), ok=false;
-  for(var k=0;k<cand.length&&!ok;k++){ var id=cand[k], d=id&&entry(id)&&readProj(id); if(d&&d.ws){ P.cur=id; $('projName').value=d.name||T('나의 웹페이지'); setImgs(d.imgs); try{ loadJSON(d.ws); ok=true; }catch(e){ console.error(e); } } }
+  for(var k=0;k<cand.length&&!ok;k++){ var id=cand[k], d=id&&entry(id)&&readProj(id); if(d&&d.ws){ P.cur=id; $('projName').value=d.name||T('나의 웹페이지'); setImgs(d.imgs); setSnds(d.snds); try{ loadJSON(d.ws); ok=true; }catch(e){ console.error(e); } } }
   if(!ok){ P.cur=null; createProject(T(BH_EXAMPLES[0].name),function(){ loadXML(BH_EXAMPLES[0].xml()); arrange(); }); } })();
 setTimeout(syncBar,50);
 if(EMB){ var embTry=0, embSend=function(){ var html=''; try{ if(P.cur===EMB) html=finalHTML(); }catch(e){ console.error(e); } if(!html&&++embTry<10) return setTimeout(embSend,300); try{ parent.postMessage({ffbhBuilt:1,id:EMB,html:html},'*'); }catch(e){} }; setTimeout(embSend,350); }
