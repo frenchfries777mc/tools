@@ -125,7 +125,7 @@ function close(){ $('aiDlg').classList.remove('open'); }
 document.querySelectorAll('.atab').forEach(function(b){ b.onclick=function(){ setMode(b.dataset.m); }; });
 $('aiGo').onclick=function(){ if(running){ try{ FFAI.stop(); }catch(e){} } else go(); };
 $('aiQ').addEventListener('keydown',function(e){ if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){ e.preventDefault(); go(); } e.stopPropagation(); });
-$('aiClose').onclick=close; $('aiDlg').addEventListener('click',function(e){ if(e.target.id==='aiDlg') close(); });
+$('aiClose').onclick=close;
 $('aiSet').onclick=function(){ FFAI.settings(); };
 $('aiFn').onclick=function(){ close(); var a=A.act(); A.select(a.r,a.c); A.toast(T('칸에 =AI("할 일", A2) 처럼 써 보세요')); };
 $('aiRerun').onclick=function(){ close(); rerunSel(); };
