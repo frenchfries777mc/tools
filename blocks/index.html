@@ -60,8 +60,12 @@ button,input,select{font:inherit; color:inherit;}
 .pane.on{display:flex; flex-direction:column;}
 #frame{flex:1; width:100%; border:0; background:#fff;}
 #code{flex:1; margin:0; overflow:auto; padding:14px; font-family:'JetBrains Mono',monospace; font-size:12.5px; line-height:1.6; color:#d6dbe6; white-space:pre; tab-size:2; background:#0b0d13; -webkit-user-select:text; user-select:text;}
-#codeBar{display:flex; align-items:center; gap:8px; padding:6px 8px; border-bottom:1px solid var(--line); flex-wrap:wrap;} #codeBar .tbtn{height:32px;} #codeNote{font-size:12px; color:#ffb86b;}
-#codeEdit{flex:1; margin:0; border:0; outline:0; resize:none; padding:14px; font-family:'JetBrains Mono',monospace; font-size:12.5px; line-height:1.6; color:#d6dbe6; white-space:pre; overflow:auto; tab-size:2; background:#0b0d13;}
+#codeWrap{flex:1; min-height:0; position:relative; background:#0b0d13;}
+#codeWrap #code{position:absolute; inset:0; overflow:hidden; pointer-events:none;}
+#codeEdit{position:absolute; inset:0; width:100%; height:100%; margin:0; border:0; outline:0; resize:none; padding:14px; box-sizing:border-box; font-family:'JetBrains Mono',monospace; font-size:12.5px; line-height:1.6; white-space:pre; overflow:auto; tab-size:2; background:transparent; color:transparent; caret-color:#d6dbe6; -webkit-text-fill-color:transparent;}
+#codeEdit::selection{background:rgba(124,196,255,.3);}
+#codeBar{display:flex; align-items:center; gap:8px; padding:6px 8px; border-bottom:1px solid var(--line); flex-wrap:wrap;} #codeBar .tbtn{height:32px;} #codeBar [hidden]{display:none;} #codeNote{font-size:12px; color:#ffb86b;}
+
 #code .k{color:#ffb86b;} #code .s{color:#9be29b;} #code .c{color:#6b7488;} #code .t{color:#7cc4ff;}
 .hint{font-size:12px; color:var(--dim); padding:6px 12px; border-top:1px solid var(--line);}
 @media(max-width:900px){
@@ -262,7 +266,7 @@ button,input,select{font:inherit; color:inherit;}
         <div id="dbgVars" data-notr></div>
       </div>
       <div id="logBar"><button id="logToggle">📋 <span>로그</span> <b id="logN">0</b></button><span class="sp"></span><button id="logClear">로그 비우기</button></div><div id="logBox" data-notr></div></div>
-    <div class="pane" id="pCode"><div id="codeBar"><button class="tbtn" id="codeEditBtn">✏️ 직접 고치기</button><button class="tbtn" id="codeReset" hidden>블록 코드로 되돌리기</button><span id="codeNote" hidden>직접 쓴 HTML을 실행 중이에요 · 블록을 바꾸면 사라져요</span></div><pre id="code" data-notr></pre><textarea id="codeEdit" data-notr hidden spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea></div>
+    <div class="pane" id="pCode"><div id="codeBar"><button class="tbtn" id="codeReset" hidden>블록 코드로 되돌리기</button><span id="codeNote">여기서 바로 고칠 수 있어요 · 블록을 바꾸면 블록 코드로 돌아와요</span></div><div id="codeWrap"><pre id="code" data-notr aria-hidden="true"></pre><textarea id="codeEdit" data-notr spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="HTML 코드"></textarea></div></div>
     <div class="hint" id="hint">블록을 바꾸면 미리보기가 바로 바뀌어요.</div>
   </aside>
 </div>
