@@ -180,7 +180,101 @@ window.addEventListener('keydown',function(e){ if(e.key==='Escape'&&$('aiDlg').c
 $('aiBtn').onclick=function(){ A.blurEdit(); A.openMenu($('aiMenu'),this); };
 $('aiMenu').addEventListener('click',function(e){
   var b=e.target.closest('[data-a]'); if(!b) return; A.closeMenus(); var k=b.dataset.a;
-  if(k==='dlg') openAiDlg('new'); else slideAct(k);
+  if(k==='dlg') openAiDlg('new'); else if(k==='spell') spell(); else slideAct(k);
 });
-window.FSLAI={extract:extract, readAll:readAll, norm:norm, generate:generate, slideAct:slideAct, stop:stop};
+
+/* ---------- "맞춤법 고치기": the AI returns the slide's text with only the mistakes fixed; each change is shown as a word diff
+   to accept or reject. Fields that changed too much (a rewrite, not a spelling fix) are left out and the person is told. ---------- */
+var SPF=['title','subtitle','leftTitle','left','rightTitle','right','bullets','caption','quote','by','notes'];
+var SPL={title:'제목',subtitle:'부제목',leftTitle:'왼쪽 제목',left:'왼쪽 내용',rightTitle:'오른쪽 제목',right:'오른쪽 내용',bullets:'글머리표',caption:'설명',quote:'인용',by:'말한 사람',notes:'발표자 메모'};
+function spellFields(s){ var fs=(A.LAY[s.layout]||[]).map(function(b){ return b.f; }), o={};
+  SPF.forEach(function(f){ if(f!=='notes'&&fs.indexOf(f)<0) return; var v=s[f]; if(Array.isArray(v)?v.some(function(x){ return String(x||'').trim(); }):String(v||'').trim()) o[f]=Array.isArray(v)?v.map(String):String(v); });
+  return o; }
+function toks(t){ return String(t||'').match(/\s+|[^\s]+/g)||[]; }
+/* word diff: [{eq:'text'} | {del:'old', ins:'new'}] */
+function wdiff(a,b){
+  var x=toks(a), y=toks(b), n=x.length, m=y.length, L=[], i, j;
+  for(i=0;i<=n;i++){ L.push(new Array(m+1).fill(0)); }
+  for(i=n-1;i>=0;i--) for(j=m-1;j>=0;j--) L[i][j]=x[i]===y[j]?L[i+1][j+1]+1:Math.max(L[i+1][j],L[i][j+1]);
+  var out=[], cur=null; i=0; j=0;
+  var push=function(k,t){ if(k==='eq'){ cur=null; var l=out[out.length-1]; if(l&&l.eq!=null) l.eq+=t; else out.push({eq:t}); } else { if(!cur){ cur={del:'',ins:''}; out.push(cur); } cur[k]+=t; } };
+  while(i<n||j<m){ if(i<n&&j<m&&x[i]===y[j]){ push('eq',x[i]); i++; j++; } else if(j<m&&(i>=n||L[i][j+1]>=L[i+1][j])){ push('ins',y[j]); j++; } else { push('del',x[i]); i++; } }
+  return out; }
+function lev(a,b){ if(a===b) return 0; var p=[], i, j; for(j=0;j<=b.length;j++) p.push(j);
+  for(i=1;i<=a.length;i++){ var q=[i]; for(j=1;j<=b.length;j++) q.push(Math.min(p[j]+1,q[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1))); p=q; } return p[b.length]; }
+/* a spelling fix keeps the length and most letters: false when the text was rewritten */
+function sane(a,b){ a=String(a); b=String(b); if(!b.trim()) return !a.trim();
+  var la=a.length, lb=b.length, big=Math.max(la,lb), d=0;
+  if(Math.abs(la-lb)>Math.max(3,big*0.25)) return false;
+  wdiff(a,b).forEach(function(h){ if(h.eq==null) d+=lev(h.del,h.ins); });
+  return d<=Math.max(2,big*0.3); }
+var spDlg=null, spState=null;
+function spellUI(){
+  if(spDlg) return spDlg;
+  var st=document.createElement('style'); st.textContent='#spDlg .dlg{width:min(620px,100%)} #spDlg .dbody{overflow:auto} .spF{border:1px solid var(--line);border-radius:10px;padding:8px 10px;line-height:1.7}'+
+    '.spF b{display:block;font-size:12.5px;color:var(--dim);margin-bottom:2px} .spH{cursor:pointer;border-radius:5px;padding:0 2px;outline:1px dashed transparent} .spH:hover{outline-color:var(--fry)}'+
+    '.spH del{color:#ff8f8f;text-decoration:line-through} .spH ins{color:#3fe08f;text-decoration:none;font-weight:700} .spH.off ins{color:var(--dim);text-decoration:line-through;font-weight:400} .spH.off del{color:inherit;text-decoration:none}'+
+    '.spWarn{color:#ffb86b;font-size:13px} .spNote{color:var(--dim);font-size:13px;margin:0}';
+  document.head.appendChild(st);
+  spDlg=document.createElement('div'); spDlg.className='ov'; spDlg.id='spDlg'; spDlg.setAttribute('data-xonly','');
+  spDlg.innerHTML='<div class="dlg"><div class="dh"><h3></h3><button class="x" aria-label="">×</button></div><div class="dbody"><p class="spNote"></p><div class="spList"></div></div>'+
+    '<div class="dfoot"><button class="tbtn spAll"></button><button class="tbtn spNone"></button><button class="tbtn pri spOk"></button></div></div>';
+  document.body.appendChild(spDlg);
+  var q=function(c){ return spDlg.querySelector(c); };
+  q('h3').textContent=T('맞춤법 고치기'); q('.x').setAttribute('aria-label',T('닫기')); q('.spNote').textContent=T('바뀐 곳을 누르면 받기와 버리기가 바뀌어요');
+  q('.spAll').textContent=T('모두 받기'); q('.spNone').textContent=T('모두 버리기'); q('.spOk').textContent=T('적용');
+  q('.x').onclick=function(){ spDlg.classList.remove('open'); };
+  q('.spAll').onclick=function(){ spDlg.querySelectorAll('.spH').forEach(function(h){ h.classList.remove('off'); }); };
+  q('.spNone').onclick=function(){ spDlg.querySelectorAll('.spH').forEach(function(h){ h.classList.add('off'); }); };
+  q('.spList').addEventListener('click',function(e){ var h=e.target.closest('.spH'); if(h) h.classList.toggle('off'); });
+  q('.spOk').onclick=spellApply;
+  return spDlg;
+}
+function spellShow(i,items,bad){
+  var d=spellUI(), list=d.querySelector('.spList'); list.innerHTML=''; spState={i:i, items:items};
+  items.forEach(function(it,k){ var box=document.createElement('div'); box.className='spF'; var b=document.createElement('b'); b.textContent=it.label; box.appendChild(b);
+    it.diff.forEach(function(h,hi){ if(h.eq!=null){ box.appendChild(document.createTextNode(h.eq)); return; }
+      var sp=document.createElement('span'); sp.className='spH'; sp.dataset.k=k; sp.dataset.h=hi; sp.title=T('누르면 받기·버리기');
+      if(h.del){ var de=document.createElement('del'); de.textContent=h.del; sp.appendChild(de); } if(h.ins){ var ins=document.createElement('ins'); ins.textContent=h.ins; sp.appendChild(ins); }
+      box.appendChild(sp); });
+    list.appendChild(box); });
+  bad.forEach(function(l){ var w=document.createElement('p'); w.className='spWarn'; w.textContent='⚠ '+F('{0}: AI가 뜻까지 너무 많이 바꿔서 뺐어요',l); list.appendChild(w); });
+  ['.spAll','.spNone','.spOk'].forEach(function(c){ d.querySelector(c).style.display=items.length?'':'none'; });
+  d.classList.add('open');
+}
+function spellApply(){
+  var st=spState, s=A.deck.slides[st.i]; spDlg.classList.remove('open'); if(!s) return;
+  var off={}; spDlg.querySelectorAll('.spH.off').forEach(function(h){ off[h.dataset.k+':'+h.dataset.h]=1; });
+  var n=JSON.parse(JSON.stringify(s)), changed=0;
+  st.items.forEach(function(it,k){ var t=it.diff.map(function(h,hi){ if(h.eq!=null) return h.eq; if(off[k+':'+hi]) return h.del; changed++; return h.ins; }).join('');
+    if(it.idx!=null){ n[it.f]=(n[it.f]||[]).slice(); n[it.f][it.idx]=t; } else n[it.f]=t; });
+  if(!changed) return A.toast(T('바꾼 곳이 없어요'));
+  A.pushUndo(); A.putSlide(st.i,n); A.toast(F('{0}곳을 고쳤어요 · 되돌리기 가능',changed));
+}
+function spell(){
+  if(run||A.busy) return; var i=A.cur, s=A.deck.slides[i]; if(!s) return A.toast(T('고칠 슬라이드가 없어요'));
+  A.blurEdit(); var o=spellFields(s), keys=Object.keys(o);
+  if(!keys.length) return A.toast(T('이 슬라이드에는 고칠 글이 없어요'));
+  run={stopped:false}; A.setBusy(true);
+  function once(extra){ return ask({system:FFP.spellSys, prompt:FFP.spellPrompt(JSON.stringify(o))+(extra||''), json:true, maxTokens:FFAI.isLocal()?1500:4000}).then(function(t){
+    if(run.stopped) throw stopErr(); var j=tryJSON(String(t||'')); if(j&&Array.isArray(j.slides)) j=j.slides[0]; if(j&&j.slide&&typeof j.slide==='object') j=j.slide;
+    return j&&typeof j==='object'&&!Array.isArray(j)&&keys.some(function(k){ return j[k]!=null; })?j:null; }); }
+  once().then(function(j){ return j||once(FFP.slidesRetry); }).then(function(j){
+    if(!j) throw new Error(T('AI 답을 읽지 못했어요'));
+    var items=[], bad=[];
+    keys.forEach(function(k){ var a=o[k], b=j[k], lab=T(SPL[k]||k);
+      if(b==null) return;
+      if(Array.isArray(a)){ var bl=Array.isArray(b)?b.map(str):typeof b==='string'?b.split('\n'):null;
+        if(!bl||bl.length!==a.length){ bad.push(lab); return; }
+        var ok=a.every(function(x,ix){ return sane(x,bl[ix]); }); if(!ok){ bad.push(lab); return; }
+        a.forEach(function(x,ix){ if(x!==bl[ix]) items.push({f:k, idx:ix, label:lab+' '+(ix+1), diff:wdiff(x,bl[ix])}); }); return; }
+      b=str(b); if(!sane(a,b)){ bad.push(lab); return; }
+      if(a!==b) items.push({f:k, label:lab, diff:wdiff(a,b)}); });
+    if(!items.length&&!bad.length){ A.toast(T('고칠 맞춤법이 없어요')); return; }
+    spellShow(i,items,bad);
+  }).then(null,function(e){ if(e&&e.kind==='stop'||run&&run.stopped) return; if(!e||e.kind!=='nokey') A.toast((e&&e.message)||T('AI에 연결하지 못했어요')); console.warn(e); })
+  .then(function(){ run=null; A.setBusy(false); });
+}
+(function(){ var m=$('aiMenu'), hr=m&&m.querySelector('hr'); if(!m) return; var b=document.createElement('button'); b.dataset.a='spell'; b.textContent='🔤 '+T('맞춤법 고치기'); m.insertBefore(b,hr); })();
+window.FSLAI={spell:spell, wdiff:wdiff, sane:sane, extract:extract, readAll:readAll, norm:norm, generate:generate, slideAct:slideAct, stop:stop};
 })();
