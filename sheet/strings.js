@@ -598,3 +598,31 @@ FFT.add({
 "정리할 공백이 없어요":["No extra spaces found", "No hay espacios sobrantes", "Aucun espace superflu", "Keine überflüssigen Leerzeichen", "整理する空白はありません"],
 "{0}칸의 공백을 정리했어요":["Trimmed spaces in {0} cells", "Espacios recortados en {0} celdas", "Espaces nettoyés dans {0} cellules", "Leerzeichen in {0} Zellen bereinigt", "{0}セルの空白を整理しました"]
 });
+
+/* v15: mini bars, sparklines, icon sets */
+FFT.add({
+"미니 막대, 스파크라인, 아이콘":["Mini bars, sparklines, icons", "Minibarras, minigráficos, iconos", "Mini-barres, graphiques sparkline, icônes", "Minibalken, Sparklines, Symbole", "ミニバー、スパークライン、アイコン"],
+"아이콘":["Icons", "Iconos", "Icônes", "Symbole", "アイコン"],
+"미니 막대·스파크라인·아이콘…":["Mini bars, sparklines, icons…", "Minibarras, minigráficos, iconos…", "Mini-barres, sparklines, icônes…", "Minibalken, Sparklines, Symbole…", "ミニバー・スパークライン・アイコン…"],
+"미니 막대·스파크라인·아이콘":["Mini bars, sparklines, icons", "Minibarras, minigráficos, iconos", "Mini-barres, sparklines, icônes", "Minibalken, Sparklines, Symbole", "ミニバー・スパークライン・アイコン"],
+"종류":["Type", "Tipo", "Type", "Typ", "種類"],
+"미니 막대":["Mini bar", "Minibarra", "Mini-barre", "Minibalken", "ミニバー"],
+"스파크라인 · 꺾은선":["Sparkline · line", "Minigráfico · línea", "Sparkline · courbe", "Sparkline · Linie", "スパークライン・折れ線"],
+"스파크라인 · 막대":["Sparkline · columns", "Minigráfico · columnas", "Sparkline · colonnes", "Sparkline · Säulen", "スパークライン・棒"],
+"화살표 아이콘":["Arrow icons", "Iconos de flechas", "Icônes de flèches", "Pfeilsymbole", "矢印アイコン"],
+"신호등 아이콘":["Traffic light icons", "Iconos de semáforo", "Icônes de feux tricolores", "Ampelsymbole", "信号アイコン"],
+"스파크라인을 그릴 열":["Column to draw the sparklines in", "Columna donde dibujar los minigráficos", "Colonne où dessiner les sparklines", "Spalte für die Sparklines", "スパークラインを描く列"],
+"예: F":["e.g. F", "p. ej. F", "ex. F", "z. B. F", "例: F"],
+"고른 범위의 줄마다 값들을 이 열의 같은 줄 칸에 작은 그래프로 그려요.":["The values of each row in the selected range are drawn as a small graph in the same row of this column.", "Los valores de cada fila del rango se dibujan como un gráfico pequeño en la misma fila de esta columna.", "Les valeurs de chaque ligne de la plage sont tracées en petit graphique dans la même ligne de cette colonne.", "Die Werte jeder Zeile des Bereichs werden als kleines Diagramm in derselben Zeile dieser Spalte gezeichnet.", "選んだ範囲の行ごとの値を、この列の同じ行のセルに小さなグラフで描きます。"],
+"구분 기준 (가장 작은 값 0%, 가장 큰 값 100%)":["Cut-offs (smallest value 0%, largest 100%)", "Umbrales (valor menor 0%, mayor 100%)", "Seuils (plus petite valeur 0 %, plus grande 100 %)", "Schwellen (kleinster Wert 0 %, größter 100 %)", "区切り (最小値0%、最大値100%)"],
+"노랑부터":["Yellow from", "Amarillo desde", "Jaune à partir de", "Gelb ab", "黄色から"],
+"% · 초록부터":["% · green from", "% · verde desde", "% · vert à partir de", "% · Grün ab", "% ・緑から"],
+"낮을수록 좋아요 (초록과 빨강을 바꿔요)":["Lower is better (swap green and red)", "Menor es mejor (intercambia verde y rojo)", "Plus bas = mieux (inverse vert et rouge)", "Niedriger ist besser (Grün und Rot tauschen)", "低いほど良い (緑と赤を入れ替え)"],
+"이 시트에 넣은 것":["Added to this sheet", "Añadido a esta hoja", "Ajouté à cette feuille", "In diesem Blatt hinzugefügt", "このシートに入れたもの"],
+"넣기":["Add", "Añadir", "Ajouter", "Hinzufügen", "入れる"],
+"아직 없어요":["None yet", "Aún no hay", "Rien pour l’instant", "Noch nichts", "まだありません"],
+"넣었어요":["Added", "Añadido", "Ajouté", "Hinzugefügt", "入れました"],
+"표시할 열을 알 수 없어요. 예: F":["Can’t read that column. Example: F", "No se entiende la columna. Ejemplo: F", "Colonne illisible. Exemple : F", "Spalte nicht lesbar. Beispiel: F", "列が読み取れません。例: F"],
+"고른 범위 밖의 열을 고르세요":["Choose a column outside the selected range", "Elige una columna fuera del rango", "Choisis une colonne hors de la plage", "Wähle eine Spalte außerhalb des Bereichs", "選んだ範囲の外の列を選んでください"],
+"기준은 0~100 사이, 노랑이 초록보다 작아야 해요":["Cut-offs must be 0 to 100, with yellow lower than green", "Los umbrales van de 0 a 100 y el amarillo debe ser menor que el verde", "Les seuils vont de 0 à 100, le jaune doit être inférieur au vert", "Schwellen liegen zwischen 0 und 100, Gelb muss kleiner als Grün sein", "区切りは0〜100で、黄色は緑より小さくしてください"]
+});

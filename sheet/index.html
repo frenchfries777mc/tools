@@ -156,6 +156,8 @@ button,input,select{font:inherit; color:inherit;}
   #grid thead th,#grid tbody th{background:#eee!important; color:#333!important;}
   #grid tr.npr,#grid td.npr,#grid th.npr,#grid col.npr{display:none!important;}
 }
+/* v15: icon sets */
+#grid td.ic{padding-left:24px;} #grid td .ico{position:absolute; left:6px; top:0; font-size:12px; line-height:25px; pointer-events:none;}
 /* v14: data cleaning */
 .chkGrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:0 12px;}
 .spPrev{border:1px solid var(--line); background:var(--bg); border-radius:9px; padding:10px; font-family:'JetBrains Mono','Noto Sans KR',monospace; font-size:13px; min-height:42px; word-break:break-all; color:var(--fry);}
@@ -289,6 +291,7 @@ button,input,select{font:inherit; color:inherit;}
   <button class="rb" data-cmd="scale" title="색 단계"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1" fill="#ff6b6b" stroke="none"/><rect x="9.5" y="4" width="5" height="16" rx="1" fill="#ffc93c" stroke="none"/><rect x="16" y="4" width="5" height="16" rx="1" fill="#3fe08f" stroke="none"/></svg><span class="lb">색 단계</span></button>
   <button class="rb" data-cmd="bars" title="데이터 막대"><svg viewBox="0 0 24 24"><path d="M3 6h12M3 12h17M3 18h7" stroke-width="3"/></svg><span class="lb">막대</span></button>
   <button class="rb" data-cmd="cfrule" title="조건부 서식"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18"/><rect x="4" y="11" width="16" height="3.5" fill="#ff6b6b" stroke="none"/></svg><span class="lb">조건 서식</span></button>
+  <button class="rb" data-cmd="cfviz" title="미니 막대, 스파크라인, 아이콘"><svg viewBox="0 0 24 24"><path d="M3 18l4-6 4 3 5-9 5 5"/><path d="M4 21h5M12 21h8" stroke-width="3"/></svg><span class="lb">아이콘</span></button>
   <button class="rb" data-cmd="dv" title="드롭다운 목록"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M9 11l3 3 3-3"/></svg><span class="lb">목록</span></button>
   <button class="rb" data-cmd="note" id="bNote" title="메모"><svg viewBox="0 0 24 24"><path d="M4 4h16v12h-7l-5 4v-4H4z"/></svg><span class="lb">메모</span></button>
   <button class="rb" data-cmd="check" title="체크박스"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/></svg><span class="lb">체크박스</span></button>
@@ -443,7 +446,7 @@ button,input,select{font:inherit; color:inherit;}
     <div class="dmH">이 시트의 규칙</div>
     <div id="cfList"></div>
   </div>
-  <div class="acts"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="cfAdd">규칙 추가</button></div>
+  <div class="acts"><button class="tbtn" id="cfViz" style="margin-right:auto">미니 막대·스파크라인·아이콘…</button><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="cfAdd">규칙 추가</button></div>
 </div></div>
 <div class="ov" id="dvDlg"><div class="dlg">
   <div class="dh"><h3>드롭다운 목록</h3><button class="x" data-close aria-label="닫기">×</button></div>
@@ -527,13 +530,31 @@ button,input,select{font:inherit; color:inherit;}
       <label class="chkRow"><input type="checkbox" id="spSpace"><span>공백</span></label>
       <label class="chkRow"><input type="checkbox" id="spOther"><span>직접 입력</span></label>
     </div>
-    <input type="text" id="spCustom" placeholder="예: / 또는 -" maxlength="8" data-notr style="margin-bottom:8px">
+    <input type="text" id="spCustom" placeholder="예: / 또는 -" maxlength="8" style="margin-bottom:8px">
     <label class="chkRow"><input type="checkbox" id="spMerge"><span>겹친 기준은 하나로 보기</span></label>
     <label class="chkRow"><input type="checkbox" id="spTrim" checked><span>나뉜 칸의 앞뒤 공백 지우기</span></label>
     <div class="dmH">미리보기 (첫 줄)</div>
     <div class="spPrev" id="spPrev" data-notr></div>
   </div>
   <div class="acts"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="spOk">나누기</button></div>
+</div></div>
+<div class="ov" id="cfxDlg"><div class="dlg">
+  <div class="dh"><h3>미니 막대·스파크라인·아이콘</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody">
+    <div class="aiCtx" id="cfxRg" data-notr></div>
+    <label>종류</label>
+    <select id="cfxType" class="dsel"><option value="mbar">미니 막대</option><option value="spark">스파크라인 · 꺾은선</option><option value="sparkc">스파크라인 · 막대</option><option value="arrows">화살표 아이콘</option><option value="lights">신호등 아이콘</option></select>
+    <div id="cfxSparkOpt"><label>스파크라인을 그릴 열</label><input type="text" id="cfxDc" placeholder="예: F" maxlength="3"><p class="vhint" style="margin:6px 0 0">고른 범위의 줄마다 값들을 이 열의 같은 줄 칸에 작은 그래프로 그려요.</p></div>
+    <div id="cfxColOpt"><label>색</label><div class="swRow" id="cfxSw"></div></div>
+    <div id="cfxIcoOpt" style="display:none">
+      <label>구분 기준 (가장 작은 값 0%, 가장 큰 값 100%)</label>
+      <div class="dRow"><span>노랑부터</span><input type="text" id="cfxP1" value="33" inputmode="numeric" style="max-width:70px"><span>% · 초록부터</span><input type="text" id="cfxP2" value="67" inputmode="numeric" style="max-width:70px"><span>%</span></div>
+      <label class="chkRow" style="margin-top:10px!important"><input type="checkbox" id="cfxRev"><span>낮을수록 좋아요 (초록과 빨강을 바꿔요)</span></label>
+    </div>
+    <div class="dmH">이 시트에 넣은 것</div>
+    <div id="cfxList"></div>
+  </div>
+  <div class="acts"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="cfxAdd">넣기</button></div>
 </div></div>
 <div class="ov" id="tplDlg"><div class="dlg">
   <div class="dh"><h3>템플릿</h3><button class="x" data-close aria-label="닫기">×</button></div>
