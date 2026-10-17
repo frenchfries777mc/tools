@@ -471,6 +471,21 @@ function pivot(rows,kc,vc,agg,sort){
   return {rows:out,total:val(T)};
 }
 
+/* v14: data cleaning. trimText works like TRIM (also non-breaking and full-width spaces); splitText splits on any of the delimiters;
+   dedupeRows returns keep[] flags: a row is dropped when an earlier row has the same values (case-insensitive) in the key columns. Rows whose key cells are all empty are kept. */
+var SPACES=/[\u00a0\u2000-\u200b\u3000\ufeff]/g;
+function trimText(s){ return String(s).replace(SPACES,' ').replace(/\s+/g,' ').trim(); }
+function splitText(s,delims,merge,trim){
+  s=String(s); var ds=(delims||[]).filter(function(d){ return d!=null&&d!==''; }).sort(function(a,b){ return b.length-a.length; });
+  var out=[s]; if(ds.length) out=s.split(new RegExp('(?:'+ds.map(function(d){ return d.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }).join('|')+')'+(merge?'+':'')));
+  return trim?out.map(function(x){ return x.replace(SPACES,' ').trim(); }):out;
+}
+function dedupeRows(rows,cols){
+  var seen=Object.create(null);
+  return rows.map(function(row){ var empty=true, key=cols.map(function(c){ var v=row[c]; if(v==null||v==='') return ''; empty=false; return isErr(v)?'e:'+v.e:typeof v+':'+String(v).toLowerCase(); }).join('\u0001');
+    if(empty) return true; if(seen[key]) return false; seen[key]=1; return true; });
+}
+
 /* ---------- display ---------- */
 function formatValue(v,nf){
   if(v==null) return '';
@@ -507,6 +522,6 @@ def('AI',function(a){
 
 var api={K:K,RC:RC,KC:KC,colName:colName,colIdx:colIdx,addr:addr,parseAddr:parseAddr,parseRange:parseRange,rangeStr:rangeStr,
   tokenize:tokenize,rebuild:rebuild,parse:parse,literal:literal,shiftFormula:shiftFormula,adjustFormula:adjustFormula,renameSheetInFormula:renameSheetInFormula,
-  Engine:Engine,Err:Err,errHint:errHint,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,pivot:pivot,parseNameRef:parseNameRef,nameRef:nameRef,validName:validName,refText:refText,asDate:asDate,dateStr:dateStr,FN:FN,quoteSheet:quoteSheet};
+  Engine:Engine,Err:Err,errHint:errHint,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,pivot:pivot,trimText:trimText,splitText:splitText,dedupeRows:dedupeRows,parseNameRef:parseNameRef,nameRef:nameRef,validName:validName,refText:refText,asDate:asDate,dateStr:dateStr,FN:FN,quoteSheet:quoteSheet};
 if(typeof module!=='undefined'&&module.exports) module.exports=api; else root.FSE=api;
 })(this);

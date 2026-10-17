@@ -561,3 +561,40 @@ FFT.add({
 "\"{0}\" 이름을 만들었어요":["Created the name \"{0}\"", "Nombre \"{0}\" creado", "Nom « {0} » créé", "Name „{0}“ erstellt", "名前「{0}」を作りました"],
 "\"{0}\" 이름을 붙였어요":["Named the selection \"{0}\"", "Selección nombrada \"{0}\"", "Sélection nommée « {0} »", "Auswahl „{0}“ benannt", "選択範囲に「{0}」と名前を付けました"]
 });
+
+/* v14: data cleaning */
+FFT.add({
+"중복 항목 제거…":["Remove duplicates…", "Quitar duplicados…", "Supprimer les doublons…", "Duplikate entfernen…", "重複を削除…"],
+"텍스트를 여러 열로 나누기…":["Split text into columns…", "Dividir texto en columnas…", "Fractionner le texte en colonnes…", "Text in Spalten teilen…", "テキストを列に分割…"],
+"공백 정리 (앞뒤·겹친 공백)":["Trim spaces (leading, trailing, repeated)", "Recortar espacios (inicio, final, repetidos)", "Nettoyer les espaces (début, fin, répétés)", "Leerzeichen bereinigen (Anfang, Ende, doppelt)", "空白を整理 (前後・連続)"],
+"중복 항목 제거":["Remove duplicates", "Quitar duplicados", "Supprimer les doublons", "Duplikate entfernen", "重複を削除"],
+"같은 값을 찾을 열 (고른 열이 모두 같으면 중복)":["Columns to compare (a row is a duplicate when all chosen columns match)", "Columnas a comparar (una fila es duplicada si coinciden todas las elegidas)", "Colonnes à comparer (une ligne est un doublon si toutes les colonnes choisies sont identiques)", "Zu vergleichende Spalten (doppelt, wenn alle gewählten Spalten gleich sind)", "比べる列 (選んだ列がすべて同じなら重複)"],
+"처음 나온 줄만 남기고 나머지는 지워서 위로 당겨요. 대소문자는 구분하지 않아요.":["Only the first occurrence is kept; the rest are deleted and the rows below move up. Upper/lower case is ignored.", "Solo se conserva la primera aparición; el resto se borra y las filas suben. No distingue mayúsculas.", "Seule la première occurrence est conservée ; les autres sont supprimées et les lignes remontent. La casse est ignorée.", "Nur das erste Vorkommen bleibt, der Rest wird gelöscht und die Zeilen rücken nach oben. Groß-/Kleinschreibung wird ignoriert.", "最初の行だけを残して残りを削除し、上に詰めます。大文字・小文字は区別しません。"],
+"중복 제거":["Remove", "Quitar", "Supprimer", "Entfernen", "削除"],
+"텍스트 나누기":["Split text", "Dividir texto", "Fractionner le texte", "Text teilen", "テキスト分割"],
+"나눌 기준":["Split by", "Dividir por", "Fractionner selon", "Trennen nach", "区切り文字"],
+"쉼표 ( , )":["Comma ( , )", "Coma ( , )", "Virgule ( , )", "Komma ( , )", "カンマ ( , )"],
+"세미콜론 ( ; )":["Semicolon ( ; )", "Punto y coma ( ; )", "Point-virgule ( ; )", "Semikolon ( ; )", "セミコロン ( ; )"],
+"탭":["Tab", "Tabulador", "Tabulation", "Tabulator", "タブ"],
+"공백":["Space", "Espacio", "Espace", "Leerzeichen", "スペース"],
+"직접 입력":["Custom", "Personalizado", "Personnalisé", "Eigene", "自分で入力"],
+"예: / 또는 -":["e.g. / or -", "p. ej. / o -", "ex. / ou -", "z. B. / oder -", "例: / や -"],
+"겹친 기준은 하나로 보기":["Treat repeated separators as one", "Tratar separadores repetidos como uno", "Considérer les séparateurs répétés comme un seul", "Mehrfache Trennzeichen als eins behandeln", "連続した区切りは1つとして扱う"],
+"나뉜 칸의 앞뒤 공백 지우기":["Trim spaces around each part", "Quitar espacios alrededor de cada parte", "Supprimer les espaces autour de chaque partie", "Leerzeichen um jeden Teil entfernen", "分けた各セルの前後の空白を消す"],
+"미리보기 (첫 줄)":["Preview (first row)", "Vista previa (primera fila)", "Aperçu (première ligne)", "Vorschau (erste Zeile)", "プレビュー (1行目)"],
+"나누기":["Split", "Dividir", "Fractionner", "Teilen", "分割"],
+"첫 번째 열만 나눠요":["Only the first column is split", "Solo se divide la primera columna", "Seule la première colonne est fractionnée", "Nur die erste Spalte wird geteilt", "最初の列だけ分割します"],
+"중복을 지울 표를 먼저 고르세요":["Select a table to clean first", "Selecciona primero una tabla", "Sélectionne d’abord un tableau", "Wähle zuerst eine Tabelle", "先に表を選んでください"],
+"열을 하나 이상 고르세요":["Choose at least one column", "Elige al menos una columna", "Choisis au moins une colonne", "Wähle mindestens eine Spalte", "列を1つ以上選んでください"],
+"중복된 줄이 없어요":["No duplicate rows", "No hay filas duplicadas", "Aucune ligne en double", "Keine doppelten Zeilen", "重複した行はありません"],
+"중복 {0}줄을 지웠어요 ({1}줄 남음)":["Removed {0} duplicate rows ({1} left)", "{0} filas duplicadas quitadas (quedan {1})", "{0} lignes en double supprimées ({1} restantes)", "{0} doppelte Zeilen entfernt ({1} übrig)", "重複{0}行を削除しました (残り{1}行)"],
+"나눌 글자가 든 칸을 먼저 고르세요":["Select cells that contain text to split", "Selecciona celdas con texto para dividir", "Sélectionne des cellules contenant du texte", "Wähle Zellen mit Text zum Teilen", "分割する文字が入ったセルを選んでください"],
+"나눌 기준을 하나 이상 고르세요":["Choose at least one separator", "Elige al menos un separador", "Choisis au moins un séparateur", "Wähle mindestens ein Trennzeichen", "区切りを1つ以上選んでください"],
+"나눌 곳이 없어요. 기준을 확인하세요":["Nothing to split. Check the separators", "Nada que dividir. Revisa los separadores", "Rien à fractionner. Vérifie les séparateurs", "Nichts zu teilen. Prüfe die Trennzeichen", "分割する箇所がありません。区切りを確認してください"],
+"열이 너무 많아져요":["That would create too many columns", "Se crearían demasiadas columnas", "Cela créerait trop de colonnes", "Das würde zu viele Spalten ergeben", "列が多くなりすぎます"],
+"오른쪽 칸 {0}개의 내용을 덮어써요. 계속할까요?":["This overwrites {0} cells to the right. Continue?", "Se sobrescribirán {0} celdas a la derecha. ¿Continuar?", "Cela écrase {0} cellules à droite. Continuer ?", "Dadurch werden {0} Zellen rechts überschrieben. Fortfahren?", "右の{0}セルの内容を上書きします。続けますか？"],
+"{0}줄을 {1}개 열로 나눴어요":["Split {0} rows into {1} columns", "{0} filas divididas en {1} columnas", "{0} lignes fractionnées en {1} colonnes", "{0} Zeilen in {1} Spalten geteilt", "{0}行を{1}列に分割しました"],
+"정리할 데이터가 없어요":["Nothing to clean", "Nada que limpiar", "Rien à nettoyer", "Nichts zu bereinigen", "整理するデータがありません"],
+"정리할 공백이 없어요":["No extra spaces found", "No hay espacios sobrantes", "Aucun espace superflu", "Keine überflüssigen Leerzeichen", "整理する空白はありません"],
+"{0}칸의 공백을 정리했어요":["Trimmed spaces in {0} cells", "Espacios recortados en {0} celdas", "Espaces nettoyés dans {0} cellules", "Leerzeichen in {0} Zellen bereinigt", "{0}セルの空白を整理しました"]
+});
