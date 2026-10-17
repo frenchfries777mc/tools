@@ -1,0 +1,119 @@
+{
+ "built": "2026-10-17T11:20:21.271Z",
+ "pool": {
+  "code": 1644,
+  "tr": 1150,
+  "formula": 460,
+  "table": 337,
+  "graph": 711,
+  "und": 811,
+  "ask": 510,
+  "slides": 428
+ },
+ "gen": 662,
+ "codeHtml": {
+  "rows": 1644,
+  "noParse": 0,
+  "buildFail": 0,
+  "runFail": 0,
+  "tooLong": 0,
+  "curLong": 0,
+  "ok": 1644
+ },
+ "undHtml": {
+  "rows": 811,
+  "noParse": 0,
+  "buildFail": 0,
+  "runFail": 0,
+  "tooLong": 0,
+  "curLong": 0,
+  "ok": 811
+ },
+ "blocked": 50,
+ "variants": {
+  "smart": {
+   "total": 7672,
+   "take": {
+    "tr": 1025,
+    "und": 950,
+    "code": 925,
+    "graph": 750,
+    "table": 300,
+    "formula": 920,
+    "memo-chip": 318,
+    "memo-ex": 192,
+    "gen": 1112,
+    "askslides": 350,
+    "fun": 248,
+    "pun": 90,
+    "self": 50,
+    "joke": 442
+   },
+   "pct": {
+    "tr": 13.4,
+    "und": 12.4,
+    "code": 12.1,
+    "graph": 9.8,
+    "table": 3.9,
+    "formula": 12,
+    "memo-chip": 4.1,
+    "memo-ex": 2.5,
+    "gen": 14.5,
+    "askslides": 4.6,
+    "fun": 3.2,
+    "pun": 1.2,
+    "self": 0.7,
+    "joke": 5.8
+   },
+   "dups": {
+    "tr": 0,
+    "und": 139,
+    "code": 0,
+    "graph": 39,
+    "table": 0
+   }
+  },
+  "basic": {
+   "total": 4506,
+   "take": {
+    "tr": 410,
+    "und": 380,
+    "code": 370,
+    "graph": 300,
+    "table": 120,
+    "formula": 920,
+    "memo-chip": 318,
+    "memo-ex": 192,
+    "gen": 556,
+    "askslides": 140,
+    "fun": 248,
+    "pun": 90,
+    "self": 20,
+    "joke": 442
+   },
+   "pct": {
+    "tr": 9.1,
+    "und": 8.4,
+    "code": 8.2,
+    "graph": 6.7,
+    "table": 2.7,
+    "formula": 20.4,
+    "memo-chip": 7.1,
+    "memo-ex": 4.3,
+    "gen": 12.3,
+    "askslides": 3.1,
+    "fun": 5.5,
+    "pun": 2,
+    "self": 0.4,
+    "joke": 9.8
+   },
+   "dups": {
+    "tr": 0,
+    "und": 0,
+    "code": 0,
+    "graph": 0,
+    "table": 0
+   }
+  }
+ }
+}
