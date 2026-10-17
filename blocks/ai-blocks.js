@@ -148,7 +148,7 @@ $('baiStop').onclick=function(){ FFAI.stop(); };
 $('baiQ').addEventListener('keydown',function(e){ if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){ e.preventDefault(); go(); } });
 $('baiUndo').onclick=undoAI;
 $('baiSet').onclick=function(){ FFAI.settings(); };
-$('baiClose').onclick=close; $('baiDlg').addEventListener('click',function(e){ if(e.target.id==='baiDlg') close(); });
+$('baiClose').onclick=close; // closes only with the X button, so a text drag that ends outside the window does not close it
 prep();
 window.__bhai={catalog:getCatalog, check:check, open:open, undo:undoAI};
 })();

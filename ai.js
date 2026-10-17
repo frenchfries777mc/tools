@@ -301,7 +301,7 @@ function build(){
   q('.del').textContent=T('키 지우기'); q('.test').textContent=T('연결 확인'); q('.save').textContent=T('저장');
   Object.keys(PROVIDERS).forEach(function(p){ var b=document.createElement('button'); b.textContent=T(PROVIDERS[p].name); b.dataset.p=p; b.onclick=function(){ keep(); cur.provider=p; fill(); }; q('.ffai-seg').appendChild(b); });
   q('.show').onclick=function(){ var k=q('.k'); k.type=k.type==='password'?'text':'password'; };
-  q('.ffai-x').onclick=cancel; ov.addEventListener('click',function(e){ if(e.target===ov) cancel(); });
+  q('.ffai-x').onclick=cancel; // closes only with the X button, so a text drag that ends outside the window does not close it
   q('.del').onclick=function(){
     if(cur.provider==='local'){ keep(); var m=cur.models.local; delete cur.local[m]; store(cur); msg(T('지우는 중…'),'');
       checkGPU().then(webllm).then(function(W){ if(engId===mlcId(m)&&eng){ eng.unload(); eng=null; engId=''; } return W.deleteModelAllInfoInCache(mlcId(m),appCfg(W,m)); })
