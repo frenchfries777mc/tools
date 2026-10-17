@@ -67,7 +67,7 @@ function zipRead(u8){ // -> {names:[], text(name):Promise<string|null>}
 
 /* ================= EXPORT ================= */
 var BSTYLE={1:'thin',2:'medium',3:'thick'};
-var CF_OP={gt:'greaterThan',ge:'greaterThanOrEqual',lt:'lessThan',le:'lessThanOrEqual',eq:'equal',bt:'between'};
+var CF_OP={gt:'greaterThan',ge:'greaterThanOrEqual',lt:'lessThan',le:'lessThanOrEqual',eq:'equal',ne:'notEqual',bt:'between'};
 
 function Styles(){
   this.fonts=['<font><sz val="11"/><name val="Calibri"/><family val="2"/></font>']; this.fills=['<fill><patternFill patternType="none"/></fill>','<fill><patternFill patternType="gray125"/></fill>'];
@@ -108,24 +108,36 @@ function zCode(nf){
 function cellFmt(x){ return x&&(x.b||x.i||x.fc||x.bg||x.al||x.nf||x.bd||x.bx); }
 function sidesOf(x){ var bx={}, any=false; if(x){ if(x.bd){ ['t','r','b','l'].forEach(function(s){ bx[s]={c:'#8b94a8',w:1}; any=true; }); } if(x.bx) for(var s in x.bx){ if(x.bx[s]){ bx[s]=x.bx[s]; any=true; } } } return any?bx:null; }
 
-/* ctx: {E, val(si,r,c), sheetName(si), names:[{name,ref}], charts(si)->[resolved]} */
+/* ctx: {E, val(si,r,c), text(si,r,c) (shown text), spills(si)->[{r1,c1,r2,c2,rows}], sheetName(si), names:[{name,ref}], charts(si)->[resolved]} */
 function write(doc, ctx){
   var E=ctx.E, st=new Styles(), sst=[], sstMap={}, files=[], ctypes=[], sheetRels=[];
   function S(str){ var i=sstMap[str]; if(i==null){ i=sst.length; sst.push(str); sstMap[str]=i; } return i; }
-  var wbSheets='', wbRels='', chartNo=0, drawNo=0, cmtNo=0, skipped={};
+  var wbSheets='', wbRels='', chartNo=0, drawNo=0, cmtNo=0, skipped={}, dynArr=false, fdb=[];
   doc.sheets.forEach(function(s,si){
     var nm=ctx.sheetName(si), mergeAt=function(r,c){ for(var i=0;i<s.merges.length;i++){ var g=s.merges[i]; if(r>=g.r1&&r<=g.r2&&c>=g.c1&&c<=g.c2) return g; } return null; };
-    var rows={}, mr=0, mc=0, rels=[], tail='', notes=[];
+    var rows={}, mr=0, mc=0, rels=[], tail='', notes=[], sps=ctx.spills?ctx.spills(si):[], spAt={};
+    sps.forEach(function(g){ spAt[g.r1+','+g.c1]=g; });
     function put(r,c,o){ (rows[r]||(rows[r]={}))[c]=o; if(r>mr) mr=r; if(c>mc) mc=c; }
     for(var k in s.cells){ var rc=E.RC(k), r=rc[0], c=rc[1], x=s.cells[k], mg=s.merges.length?mergeAt(r,c):null;
       if(mg&&(mg.r1!==r||mg.c1!==c)) continue;
       var has=x.v!=null&&x.v!=='', o={x:x};
       if(has){ var raw=String(x.v);
-        if(raw[0]==='='&&x.nf!=='t'){ var v=ctx.val(si,r,c); o.f=raw.slice(1);
+        if(raw[0]==='='&&x.nf!=='t'){ var v=ctx.val(si,r,c); o.f=E.toXl?E.toXl(raw.slice(1)):raw.slice(1); if(spAt[r+','+c]){ o.arr=rng(spAt[r+','+c]); dynArr=true; }
           if(E.isErr(v)){ o.t='e'; o.v=v.e; } else if(typeof v==='number'){ o.t='n'; o.v=isFinite(v)?String(v):'0'; } else if(typeof v==='boolean'){ o.t='b'; o.v=v?'1':'0'; } else { o.t='str'; o.v=v==null?'':String(v); } }
         else { var l=x.nf==='t'?raw:E.literal(raw); if(typeof l==='number'&&isFinite(l)){ o.t='n'; o.v=String(l); } else if(typeof l==='boolean'){ o.t='b'; o.v=l?'1':'0'; } else { o.t='s'; o.v=S(String(l==null?'':l)); } } }
       else if(!cellFmt(x)&&!x.nt) continue;
       put(r,c,o); if(x.nt) notes.push({r:r,c:c,t:x.nt}); }
+    // spilled cells of dynamic arrays are stored as plain values (Excel does the same; the anchor's formula fills them again)
+    sps.forEach(function(g){ for(var r=g.r1;r<=Math.min(g.r2,g.r1+20000);r++) for(var c=g.c1;c<=Math.min(g.c2,g.c1+500);c++){ if(r===g.r1&&c===g.c1) continue; var v=g.rows[r-g.r1][c-g.c1]; if(v==null) continue;
+      var o=rows[r]&&rows[r][c]; if(o&&o.t!=null) continue; if(!o){ o={x:{}}; put(r,c,o); }
+      if(E.isErr(v)){ o.t='e'; o.v=v.e; } else if(typeof v==='number'){ o.t='n'; o.v=isFinite(v)?String(v):'0'; } else if(typeof v==='boolean'){ o.t='b'; o.v=v?'1':'0'; } else { o.t='s'; o.v=S(String(v)); } } });
+    // filter: Excel lists the values to show; rows the filter hides are written hidden
+    var af='', hid={};
+    if(s.flt&&s.flt.r2>s.flt.r1){ var ft=s.flt, fcols='';
+      Object.keys(ft.h||{}).map(Number).sort(function(a,b){ return a-b; }).forEach(function(c){ var hide=ft.h[c]; if(!hide||!hide.length||c<ft.c1||c>ft.c2||!ctx.text) return; var hs={}, show={}, list=[], blank=false; hide.forEach(function(t){ hs[t]=1; });
+        for(var r=ft.r1+1;r<=ft.r2;r++){ var t=ctx.text(si,r,c); if(hs[t]) hid[r]=1; else if(t==='') blank=true; else if(!show[t]){ show[t]=1; list.push(t); } }
+        fcols+='<filterColumn colId="'+(c-ft.c1)+'"><filters'+(blank?' blank="1"':'')+'>'+list.map(function(t){ return '<filter val="'+esc(t)+'"/>'; }).join('')+'</filters></filterColumn>'; });
+      af='<autoFilter ref="'+rng(ft)+'">'+fcols+'</autoFilter>'; fdb.push('<definedName name="_xlnm._FilterDatabase" localSheetId="'+si+'" hidden="1">'+esc(absRef(nm,ft))+'</definedName>'); }
     // merged blocks: every covered cell carries the block's fill and its outer edges (Excel draws borders per cell)
     s.merges.forEach(function(g){ var tl=s.cells[E.K(g.r1,g.c1)]||{}, own=sidesOf(tl);
       for(var r=g.r1;r<=Math.min(g.r2,g.r1+2000);r++) for(var c=g.c1;c<=Math.min(g.c2,g.c1+200);c++){
@@ -133,17 +145,18 @@ function write(doc, ctx){
         var o=rows[r]&&rows[r][c]; if(!o){ o={x:{}}; put(r,c,o); }
         o.mx={bx:Object.keys(bx).length?bx:null}; if(r>mr) mr=r; if(c>mc) mc=c; } });
     var sd='';
-    Object.keys(rows).map(Number).sort(function(a,b){ return a-b; }).forEach(function(r){
-      var cs=rows[r], cells=Object.keys(cs).map(Number).sort(function(a,b){ return a-b; }).map(function(c){
+    var rks=Object.keys(rows); Object.keys(hid).forEach(function(r){ if(!rows[r]) rks.push(r); });
+    rks.map(Number).sort(function(a,b){ return a-b; }).forEach(function(r){
+      var cs=rows[r]||{}, cells=Object.keys(cs).map(Number).sort(function(a,b){ return a-b; }).map(function(c){
         var o=cs[c], x=o.x, sp={b:x.b,i:x.i,fc:x.fc,bg:x.bg,al:x.al,nf:x.nf,bx:o.mx?o.mx.bx:sidesOf(x)};
         if(o.mx&&!sp.bg){ var g=mergeAt(r,c), tl=g&&s.cells[E.K(g.r1,g.c1)]; if(tl&&tl.bg) sp.bg=tl.bg; }
-        var sid=st.xf(sp), at=' r="'+a1(r,c)+'"'+(sid?' s="'+sid+'"':'');
+        var sid=st.xf(sp), at=' r="'+a1(r,c)+'"'+(sid?' s="'+sid+'"':'')+(o.arr?' cm="1"':'');
         if(o.t==null) return '<c'+at+'/>';
         if(o.t==='s') return '<c'+at+' t="s"><v>'+o.v+'</v></c>';
-        var f=o.f!=null?'<f>'+esc(o.f)+'</f>':'';
+        var f=o.f!=null?(o.arr?'<f t="array" ref="'+o.arr+'">':'<f>')+esc(o.f)+'</f>':'';
         if(o.t==='n') return '<c'+at+'>'+f+'<v>'+o.v+'</v></c>';
         return '<c'+at+' t="'+o.t+'">'+f+'<v>'+esc(o.v)+'</v></c>'; });
-      sd+='<row r="'+(r+1)+'">'+cells.join('')+'</row>'; });
+      sd+='<row r="'+(r+1)+'"'+(hid[r]?' hidden="1"':'')+'>'+cells.join('')+'</row>'; });
     // cols
     var cw='', cwk=Object.keys(s.cw||{}).map(Number).filter(function(c){ return s.cw[c]>0; }).sort(function(a,b){ return a-b; });
     cwk.forEach(function(c){ cw+='<col min="'+(c+1)+'" max="'+(c+1)+'" width="'+(Math.max(0,Math.round((s.cw[c]-5)/7*256)/256))+'" customWidth="1"/>'; });
@@ -197,7 +210,7 @@ function write(doc, ctx){
       files.push({name:'xl/comments'+cn2+'.xml',data:ENC.encode('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><comments xmlns="'+NS_MAIN+'"><authors><author>Fry Sheet</author></authors><commentList>'+notes.map(function(n){ return '<comment ref="'+a1(n.r,n.c)+'" authorId="0"><text><r><t xml:space="preserve">'+esc(n.t)+'</t></r></text></comment>'; }).join('')+'</commentList></comments>')});
       ctypes.push(['/xl/comments'+cn2+'.xml','application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml']);
       rels.push('<Relationship Id="rId2" Type="'+NS_R+'/comments" Target="../comments'+cn2+'.xml"/>','<Relationship Id="rId3" Type="'+NS_R+'/vmlDrawing" Target="../drawings/vmlDrawing'+cn2+'.vml"/>'); tail+='<legacyDrawing r:id="rId3"/>'; }
-    var xml='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="'+NS_MAIN+'" xmlns:r="'+NS_R+'"><dimension ref="A1:'+a1(mr,mc)+'"/>'+view+'<sheetFormatPr defaultColWidth="13" defaultRowHeight="15"/>'+(cw?'<cols>'+cw+'</cols>':'')+'<sheetData>'+sd+'</sheetData>'+mxml+cf+dvs+'<pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3"/>'+tail+'</worksheet>';
+    var xml='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="'+NS_MAIN+'" xmlns:r="'+NS_R+'"><dimension ref="A1:'+a1(mr,mc)+'"/>'+view+'<sheetFormatPr defaultColWidth="13" defaultRowHeight="15"/>'+(cw?'<cols>'+cw+'</cols>':'')+'<sheetData>'+sd+'</sheetData>'+af+mxml+cf+dvs+'<pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3"/>'+tail+'</worksheet>';
     files.push({name:'xl/worksheets/sheet'+(si+1)+'.xml',data:ENC.encode(xml)});
     ctypes.push(['/xl/worksheets/sheet'+(si+1)+'.xml','application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml']);
     if(rels.length) files.push({name:'xl/worksheets/_rels/sheet'+(si+1)+'.xml.rels',data:ENC.encode('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+rels.join('')+'</Relationships>')});
@@ -205,7 +218,10 @@ function write(doc, ctx){
   });
   var n=doc.sheets.length;
   wbRels+='<Relationship Id="rId'+(n+1)+'" Type="'+NS_R+'/styles" Target="styles.xml"/><Relationship Id="rId'+(n+2)+'" Type="'+NS_R+'/sharedStrings" Target="sharedStrings.xml"/>';
-  var dn2=(ctx.names||[]).map(function(x){ return '<definedName name="'+esc(x.name)+'">'+esc(x.ref)+'</definedName>'; }).join('');
+  if(dynArr){ // cells marked cm="1" are dynamic (spilling) arrays, not old Ctrl+Shift+Enter ones
+    wbRels+='<Relationship Id="rId'+(n+3)+'" Type="'+NS_R+'/sheetMetadata" Target="metadata.xml"/>'; ctypes.push(['/xl/metadata.xml','application/vnd.openxmlformats-officedocument.spreadsheetml.sheetMetadata+xml']);
+    files.push({name:'xl/metadata.xml',data:ENC.encode('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><metadata xmlns="'+NS_MAIN+'" xmlns:xda="http://schemas.microsoft.com/office/spreadsheetml/2017/dynamicarray"><metadataTypes count="1"><metadataType name="XLDAPR" minSupportedVersion="120000" copy="1" pasteAll="1" pasteValues="1" merge="1" splitFirst="1" rowColShift="1" clearFormats="1" clearComments="1" assign="1" coerce="1" cellMeta="1"/></metadataTypes><futureMetadata name="XLDAPR" count="1"><bk><extLst><ext uri="{bdbb8cdc-fa1e-496e-a857-3c3f30c029c3}"><xda:dynamicArrayProperties fDynamic="1" fCollapsed="0"/></ext></extLst></bk></futureMetadata><cellMetadata count="1"><bk><rc t="1" v="0"/></bk></cellMetadata></metadata>')}); }
+  var dn2=fdb.join('')+(ctx.names||[]).map(function(x){ return '<definedName name="'+esc(x.name)+'">'+esc(x.ref)+'</definedName>'; }).join('');
   files.unshift({name:'xl/workbook.xml',data:ENC.encode('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="'+NS_MAIN+'" xmlns:r="'+NS_R+'"><bookViews><workbookView activeTab="'+(doc.active|0)+'"/></bookViews><sheets>'+wbSheets+'</sheets>'+(dn2?'<definedNames>'+dn2+'</definedNames>':'')+'</workbook>')});
   files.push({name:'xl/_rels/workbook.xml.rels',data:ENC.encode('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+wbRels+'</Relationships>')});
   files.push({name:'xl/styles.xml',data:ENC.encode(st.xml())});
@@ -293,7 +309,7 @@ function parseStyles(txt,theme){
 }
 var CFHEX=CFCOL.map(function(c){ return '#'+toRGB(c).toLowerCase(); });
 function dxfCss(h){ if(!h) return null; var i=CFHEX.indexOf(h); if(i>=0) return CFCOL[i]; var n=parseInt(h.slice(1),16); return 'rgba('+(n>>16&255)+','+(n>>8&255)+','+(n&255)+',.5)'; }
-var REV_OP={greaterThan:'gt',greaterThanOrEqual:'ge',lessThan:'lt',lessThanOrEqual:'le',equal:'eq',between:'bt'};
+var REV_OP={greaterThan:'gt',greaterThanOrEqual:'ge',lessThan:'lt',lessThanOrEqual:'le',equal:'eq',notEqual:'ne',between:'bt'};
 function cfVal(t){ t=(t||'').trim(); if(/^-?\d+(\.\d+)?([eE][-+]?\d+)?$/.test(t)) return t; var m=/^"((?:[^"]|"")*)"$/.exec(t); return m?m[1].replace(/""/g,'"'):null; }
 function relsOf(txt,base){ var o={}, d=parseXml(txt); if(d) Array.prototype.forEach.call(q(d,'Relationship'),function(e){ var t=e.getAttribute('Target'); if(t[0]==='/') t=t.slice(1); else { var parts=(base+t).split('/'), out=[]; parts.forEach(function(p){ if(p==='..') out.pop(); else if(p!=='.') out.push(p); }); t=out.join('/'); } o[e.getAttribute('Id')]={type:e.getAttribute('Type').replace(/^.*\//,''),target:t}; }); return o; }
 
@@ -322,6 +338,10 @@ function readSheet(txt,rels,styles,T,names,si){
   if(!d) return Promise.resolve(ex);
   Array.prototype.forEach.call(q(d,'mergeCell'),function(e){ var g=parseRange(e.getAttribute('ref')); if(g&&(g.r2>g.r1||g.c2>g.c1)) ex.merges.push(g); });
   var pane=q1(d,'pane'); if(pane&&/frozen/.test(pane.getAttribute('state')||'')){ ex.fc=+pane.getAttribute('xSplit')||0; ex.fr=+pane.getAttribute('ySplit')||0; }
+  // filter: value lists only (custom conditions and colour filters are left out)
+  var afe=kids(d.documentElement,'autoFilter')[0], ag=afe&&parseRange(afe.getAttribute('ref')||'');
+  if(ag&&ag.r2>ag.r1){ ex.flt={g:ag,cols:[]}; kids(afe,'filterColumn').forEach(function(fc){ var fl=kids(fc,'filters')[0]; if(!fl) return;
+    ex.flt.cols.push({c:ag.c1+(+fc.getAttribute('colId')||0),show:kids(fl,'filter').map(function(e){ return e.getAttribute('val')||''; }),blank:/^(1|true)$/.test(fl.getAttribute('blank')||'')}); }); }
   Array.prototype.forEach.call(q(d,'col'),function(e){ var w=parseFloat(e.getAttribute('width')); if(!(w>0)||e.getAttribute('hidden')==='1'||e.getAttribute('hidden')==='true') return; var lo=+e.getAttribute('min')-1, hi=Math.min(+e.getAttribute('max')-1,lo+300); for(var c=lo;c<=hi;c++) ex.cw[c]=Math.round(w*7+5); });
   // conditional formats (the later a rule's priority number, the weaker it is; the app lets the last rule win)
   var rules=[];

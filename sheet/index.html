@@ -46,6 +46,7 @@ button,input,select{font:inherit; color:inherit;}
 .fx{display:grid; place-items:center; padding:0 10px; color:var(--dim); font-style:italic; font-family:Georgia,serif; border-right:1px solid var(--line);}
 #fin{flex:1; min-width:0; border:0; background:transparent; padding:8px 10px; font-family:'JetBrains Mono','Noto Sans KR',monospace; font-size:13.5px;}
 #fin:focus{outline:none; background:var(--panel);}
+#fin.spl::placeholder{color:var(--dim); opacity:.8;}
 .main{flex:1; display:flex; min-height:0; position:relative;}
 #gridWrap{flex:1; overflow:auto; position:relative; background:var(--bg); -webkit-overflow-scrolling:touch;}
 #gridIn{position:relative; width:max-content;}
@@ -69,6 +70,7 @@ button,input,select{font:inherit; color:inherit;}
 #fillH::before{content:''; position:absolute; inset:-12px;}
 #fillBox{position:absolute; border:2px dashed var(--fry2); pointer-events:none; z-index:1; display:none;}
 #refBox{position:absolute; border:2px dashed #5ab0ff; background:rgba(90,176,255,.08); pointer-events:none; z-index:1; display:none;}
+#splBox{position:absolute; border:1.5px dashed #5ab0ff; pointer-events:none; z-index:1; display:none;}
 #cellEd{position:absolute; z-index:6; display:none; border:2px solid var(--sel); background:#0b0d13; color:var(--text); padding:0 5px; font-family:inherit; font-size:13.5px; outline:none; box-shadow:0 6px 24px rgba(0,0,0,.5); min-width:60px;}
 #cellEd.on{display:block;}
 #cellEd.ghost{display:block; opacity:0; pointer-events:none; width:1px!important; min-width:0; height:1px!important;}
@@ -150,7 +152,7 @@ button,input,select{font:inherit; color:inherit;}
 .keyGrid .kh{grid-column:1/-1; color:var(--fry); font-size:12px; font-weight:700; margin-top:10px;}
 @media print{
   html,body{height:auto!important; overflow:visible!important; background:#fff!important; color:#000!important; display:block!important;}
-  .top,.ribbon,.fbar,.foot,#drawer,.more,#selBox,#actBox,#fillBox,#refBox,#fillH,#cellEd,#toast,#acBox,.menu,.ov{display:none!important;}
+  .top,.ribbon,.fbar,.foot,#drawer,.more,#selBox,#actBox,#fillBox,#refBox,#fillH,#cellEd,#toast,#acBox,.menu,.ov,#splBox{display:none!important;}
   .main,#gridWrap,#gridIn{display:block!important; overflow:visible!important; position:static!important; width:auto!important; background:#fff!important;}
   #grid{zoom:1;} #grid th,#grid td{border-color:#bbb!important; color:#000!important; background:#fff!important; position:static!important;}
   #grid thead th,#grid tbody th{background:#eee!important; color:#333!important;}
@@ -313,7 +315,7 @@ button,input,select{font:inherit; color:inherit;}
   <div id="gridWrap">
     <div id="gridIn">
       <table id="grid" data-notr><colgroup id="cols"></colgroup><thead><tr id="hrow"></tr></thead><tbody id="gbody"></tbody></table>
-      <div id="selBox"></div><div id="actBox"></div><div id="fillBox"></div><div id="refBox"></div><div id="fillH"></div>
+      <div id="selBox"></div><div id="actBox"></div><div id="fillBox"></div><div id="refBox"></div><div id="splBox"></div><div id="fillH"></div>
       <input id="cellEd" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off">
       <div id="dvBtn" title="목록에서 고르기">▾</div>
       <div class="more"><button id="addRows">+ 행 50개</button><button id="addCols">+ 열 10개</button></div>
@@ -359,6 +361,7 @@ button,input,select{font:inherit; color:inherit;}
   <button data-r="fitCol">선택한 열 너비 자동 맞춤</button>
   <button data-r="fzRow">여기까지 행 고정</button>
   <button data-r="fzCol">여기까지 열 고정</button>
+  <button data-r="fzHere">이 칸의 위·왼쪽 고정 (틀 고정)</button>
   <button data-r="fzOff">고정 풀기</button>
   <button data-r="unmerge">선택 범위 병합 풀기</button>
   <hr>
@@ -440,14 +443,14 @@ button,input,select{font:inherit; color:inherit;}
   <div class="dbody">
     <div class="aiCtx" id="cfRg" data-notr></div>
     <label>조건</label>
-    <select id="cfOp" class="dsel"><option value="gt">보다 큼 (&gt;)</option><option value="ge">크거나 같음 (≥)</option><option value="lt">보다 작음 (&lt;)</option><option value="le">작거나 같음 (≤)</option><option value="eq">같음 (=)</option><option value="bt">사이</option><option value="tx">글자 포함</option><option value="dup">중복된 값</option><option value="bl">빈 칸</option></select>
+    <select id="cfOp" class="dsel"><option value="gt">보다 큼 (&gt;)</option><option value="ge">크거나 같음 (≥)</option><option value="lt">보다 작음 (&lt;)</option><option value="le">작거나 같음 (≤)</option><option value="eq">같음 (=)</option><option value="ne">같지 않음 (≠)</option><option value="bt">사이</option><option value="tx">글자 포함</option><option value="dup">중복된 값</option><option value="bl">빈 칸</option></select>
     <div class="dRow"><input type="text" id="cfA" placeholder="값"><span id="cfAnd">~</span><input type="text" id="cfB" placeholder="값"></div>
     <label>색</label>
     <div class="swRow" id="cfSw"></div>
     <div class="dmH">이 시트의 규칙</div>
     <div id="cfList"></div>
   </div>
-  <div class="acts"><button class="tbtn" id="cfViz" style="margin-right:auto">미니 막대·스파크라인·아이콘…</button><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="cfAdd">규칙 추가</button></div>
+  <div class="acts"><button class="tbtn" id="cfViz" style="margin-right:auto">미니 막대·스파크라인·아이콘…</button><button class="tbtn" id="cfScale">색 단계</button><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="cfAdd">규칙 추가</button></div>
 </div></div>
 <div class="ov" id="dvDlg"><div class="dlg">
   <div class="dh"><h3>드롭다운 목록</h3><button class="x" data-close aria-label="닫기">×</button></div>

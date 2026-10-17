@@ -18,6 +18,10 @@ Err.prototype.toString=function(){ return this.e; };
 function isErr(v){ return v instanceof Err; }
 function fail(e){ throw new Err(e); }
 function Rng(si,r1,c1,r2,c2){ this.si=si; this.r1=r1; this.c1=c1; this.r2=r2; this.c2=c2; }
+/* v19: a 2-D block of values (rows of cells), made by FILTER, SORT, UNIQUE, SEQUENCE, SORTBY, array literals and
+   element-wise operators on ranges (=A2:A9*2). A formula whose result is an Arr spills into the cells right and below. */
+function Arr(rows){ this.rows=rows; }
+function isMulti(x){ return x instanceof Arr||(x instanceof Rng&&!(x.r1===x.r2&&x.c1===x.c2)); }
 
 /* ---------- tokenizer ---------- */
 var SHEETCH=/[A-Za-z0-9_.가-힣ㄱ-ㅎㅏ-ㅣ]/;
@@ -200,8 +204,9 @@ function toBool(v){ if(v==null) return false; if(typeof v==='boolean') return v;
   var u=String(v).toUpperCase(); if(u==='TRUE') return true; if(u==='FALSE') return false; fail('#VALUE!'); }
 
 /* ---------- engine ---------- */
-function Engine(doc){ this.doc=doc; this.cache=[]; this.busy={}; this.parsed=new Map(); }
-Engine.prototype.reset=function(){ this.cache=[]; };
+function Engine(doc){ this.doc=doc; this.cache=[]; this.busy={}; this.parsed=new Map(); this.reset(); }
+/* spill[si]: Map anchor key -> {r1,c1,r2,c2,rows}; pend[si]: formulas that may spill, each evaluated once (done) */
+Engine.prototype.reset=function(){ this.cache=[]; this.spill=[]; this.pend=[]; this.log=null; this.cyc=false; };
 /* named ranges: doc.names = [{name, ref:"Sheet1!$A$2:$A$10"}] */
 Engine.prototype.nameDef=function(up){ var l=this.doc.names; if(!l) return null; for(var i=0;i<l.length;i++) if(l[i].name.toUpperCase()===up) return l[i]; return null; };
 Engine.prototype.sheetIndex=function(name,own){
@@ -217,19 +222,86 @@ Engine.prototype.ast=function(raw){
 };
 Engine.prototype.value=function(si,r,c){
   var sh=this.doc.sheets[si]; if(!sh) return new Err('#REF!');
-  var cell=sh.cells[K(r,c)]; if(!cell||cell.v==null||cell.v==='') return null;
+  var cell=sh.cells[K(r,c)]; if(!cell||cell.v==null||cell.v==='') return this.spilled(si,r,c);
   var raw=cell.v;
   if(cell.nf==='t'||raw[0]!=='=') return cell.nf==='t'?String(raw):literal(raw);
   var cache=this.cache[si]||(this.cache[si]=new Map()), k=K(r,c);
   if(cache.has(k)) return cache.get(k);
-  var bk=si+':'+k; if(this.busy[bk]) return new Err('#CYCLE!');
+  var bk=si+':'+k; if(this.busy[bk]){ this.cyc=true; return new Err('#CYCLE!'); }
   this.busy[bk]=1; var v;
-  try{ v=this.ev(this.ast(raw),si); if(v instanceof Rng) v=this.first(v); if(v==null) v=0; if(typeof v==='number'&&!isFinite(v)) v=new Err('#NUM!'); }
+  try{ v=this.place(si,r,c,this.ev(this.ast(raw),si)); if(v==null) v=0; if(typeof v==='number'&&!isFinite(v)) v=new Err('#NUM!'); }
   catch(e){ v=isErr(e)?e:new Err('#ERROR!'); }
-  delete this.busy[bk]; cache.set(k,v); return v;
+  delete this.busy[bk]; cache.set(k,v); if(this.log) this.log.push([si,k]); return v;
+};
+/* a formula's result as the anchor cell shows it; a block (Arr or several cells of a range) is registered as a spill,
+   or becomes #SPILL! when a cell it would cover already holds something or belongs to another spill */
+var MAXSPILL=200000;
+Engine.prototype.place=function(si,r,c,v){
+  if(v instanceof Rng&&isMulti(v)) v=new Arr(grid(this,v));
+  if(v instanceof Rng) return this.first(v);
+  if(!(v instanceof Arr)) return v;
+  var rows=v.rows, h=rows.length, w=h?rows[0].length:0;
+  if(!h||!w) return new Err('#CALC!');
+  if(h===1&&w===1) return rows[0][0];
+  if(h*w>MAXSPILL) return new Err('#SPILL!');
+  var cells=this.doc.sheets[si].cells, g={r1:r,c1:c,r2:r+h-1,c2:c+w-1,rows:rows}, k0=K(r,c), blocked=false;
+  for(var i=0;i<h&&!blocked;i++) for(var j=0;j<w;j++){ if(!i&&!j) continue; var x=cells[K(r+i,c+j)]; if(x&&x.v!=null&&x.v!==''){ blocked=true; break; } }
+  var m=this.spill[si]||(this.spill[si]=new Map());
+  if(!blocked) m.forEach(function(o,ok){ if(ok!==k0&&!(o.r2<g.r1||o.r1>g.r2||o.c2<g.c1||o.c1>g.c2)) blocked=true; });
+  if(blocked){ m.delete(k0); return new Err('#SPILL!'); }
+  m.set(k0,g); return rows[0][0];
+};
+function mayArr(n){ // can this formula's result be a block? (only those are evaluated early to find spills)
+  switch(n.k){ case 'rng': return !(n.r1===n.r2&&n.c1===n.c2&&!n.col); case 'arr': case 'name': return true;
+    case 'neg': case 'pct': return mayArr(n.a); case 'bin': return mayArr(n.a)||mayArr(n.b);
+    case 'fn': return !!ARRFN[n.n]||(!!PASSFN[n.n]&&n.args.some(mayArr)); }
+  return false;
+}
+var ARRFN={FILTER:1,SORT:1,SORTBY:1,UNIQUE:1,SEQUENCE:1}, PASSFN={IF:1,IFERROR:1,IFNA:1};
+Engine.prototype.cands=function(si){
+  var p=this.pend[si]; if(p) return p; p=this.pend[si]=[]; var cells=this.doc.sheets[si].cells;
+  for(var k in cells){ var x=cells[k]; if(!x||x.nf==='t'||typeof x.v!=='string'||x.v[0]!=='='||!mayArr(this.ast(x.v))) continue; var rc=RC(k); p.push({r:rc[0],c:rc[1],k:+k,done:false}); }
+  return p;
+};
+/* evaluate a may-spill formula ahead of time. If it ran into a cell that is still being calculated, everything it cached
+   is dropped again (it may have seen a half-finished picture) and it is tried later in the normal order */
+Engine.prototype.early=function(si,o){
+  var outer=this.log, oc=this.cyc; this.log=[]; this.cyc=false;
+  this.value(si,o.r,o.c);
+  var hit=this.cyc, log=this.log; this.log=outer; this.cyc=oc||hit;
+  if(!hit){ o.done=true; return; }
+  var self=this; log.forEach(function(e){ var c=self.cache[e[0]]; if(c) c.delete(e[1]); var m=self.spill[e[0]]; if(m) m.delete(e[1]);
+    (self.pend[e[0]]||[]).forEach(function(q){ if(q.k===e[1]) q.done=false; }); });
+};
+/* the value an empty cell shows: a piece of a spill from a formula above or to the left, or nothing */
+Engine.prototype.spilled=function(si,r,c){
+  var p=this.cands(si); if(!p.length) return null;
+  for(var i=0;i<p.length;i++){ var o=p[i]; if(o.done||o.r>r||o.c>c||this.busy[si+':'+o.k]) continue; this.early(si,o); }
+  var g=this.spillAt(si,r,c); if(!g) return null; var v=g.rows[r-g.r1][c-g.c1]; return v===undefined?null:v;
+};
+Engine.prototype.spillAt=function(si,r,c){ var m=this.spill[si], hit=null; if(m) m.forEach(function(g){ if(!hit&&r>=g.r1&&r<=g.r2&&c>=g.c1&&c<=g.c2) hit=g; }); return hit; };
+/* every spill on a sheet (evaluates all may-spill formulas): [{r1,c1,r2,c2,rows}] */
+Engine.prototype.spills=function(si){
+  var self=this; this.cands(si).forEach(function(o){ if(!o.done) self.value(si,o.r,o.c); o.done=true; });
+  var out=[]; if(this.spill[si]) this.spill[si].forEach(function(g){ out.push(g); }); return out;
 };
 Engine.prototype.first=function(g){ return this.value(g.si,g.r1,g.c1); };
-Engine.prototype.scal=function(v){ if(v instanceof Rng){ if(v.r1===v.r2&&v.c1===v.c2) return this.first(v); return this.first(v); } if(isErr(v)) throw v; return v; };
+Engine.prototype.scal=function(v){ if(v instanceof Rng){ if(v.r1===v.r2&&v.c1===v.c2) return this.first(v); return this.first(v); } if(v instanceof Arr) return v.rows[0][0]; if(isErr(v)) throw v; return v; };
+/* rows of values of a range, block or single value */
+function grid(self,x){
+  if(x instanceof Arr) return x.rows;
+  if(x instanceof Rng){ var o=[]; for(var r=x.r1;r<=x.r2;r++){ var row=[]; for(var c=x.c1;c<=x.c2;c++) row.push(self.value(x.si,r,c)); o.push(row); } return o; }
+  if(isErr(x)) throw x; return [[x]];
+}
+function safe(f){ try{ var v=f(); if(typeof v==='number'&&!isFinite(v)) v=new Err('#NUM!'); return v; }catch(e){ if(isErr(e)) return e; throw e; } }
+/* element-wise: a single row or column is stretched like Excel does; cells outside the other shape become #N/A */
+function lift(self,xs,f){
+  var G=xs.map(function(x){ return grid(self,x); }), h=0, w=0;
+  G.forEach(function(g){ h=Math.max(h,g.length); w=Math.max(w,g[0].length); });
+  var out=[]; for(var i=0;i<h;i++){ var row=[]; for(var j=0;j<w;j++){ var miss=false, a=G.map(function(g){ var ii=g.length===1?0:i, jj=g[0].length===1?0:j; if(ii>=g.length||jj>=g[0].length){ miss=true; return null; } return g[ii][jj]; });
+    row.push(miss?new Err('#N/A'):safe(function(){ return f.apply(null,a); })); } out.push(row); }
+  return new Arr(out);
+}
 Engine.prototype.maxRow=function(si){ var sh=this.doc.sheets[si], m=-1; for(var k in sh.cells){ var r=Math.floor(k/KC); if(r>m) m=r; } return m; };
 Engine.prototype.ev=function(n,si){
   var self=this;
@@ -242,20 +314,13 @@ Engine.prototype.ev=function(n,si){
       return new Rng(s2,Math.min(r1,r2),Math.min(n.c1,n.c2),Math.max(r1,r2),Math.max(n.c1,n.c2)); }
     case 'name': { var nd=this.nameDef(n.n); if(!nd) fail('#NAME?'); var pr=parseNameRef(nd.ref); if(!pr) fail('#REF!');
       return this.ev(pr.t==='ref'?{k:'ref',sh:pr.sh,r:pr.a.r,c:pr.a.c}:{k:'rng',sh:pr.sh,r1:pr.a.r,c1:pr.a.c,r2:pr.b.r,c2:pr.b.c,col:!!pr.col},si); }
-    case 'arr': return {arr:n.items.map(function(x){ return self.scal(self.ev(x,si)); })};
-    case 'neg': return -toNum(this.scal(this.ev(n.a,si)));
-    case 'pct': return toNum(this.scal(this.ev(n.a,si)))/100;
+    case 'arr': return new Arr([n.items.map(function(x){ return self.scal(self.ev(x,si)); })]);
+    case 'neg': { var x1=this.ev(n.a,si); if(isMulti(x1)) return lift(this,[x1],function(v){ if(isErr(v)) throw v; return -toNum(v); }); return -toNum(this.scal(x1)); }
+    case 'pct': { var x2=this.ev(n.a,si); if(isMulti(x2)) return lift(this,[x2],function(v){ if(isErr(v)) throw v; return toNum(v)/100; }); return toNum(this.scal(x2))/100; }
     case 'bin': {
-      var a=this.scal(this.ev(n.a,si)), b=this.scal(this.ev(n.b,si));
-      switch(n.o){
-        case '+': { var da=asDate(a); if(da&&!isErr(b)&&typeof b!=='string') return dateStr(new Date(da.getTime()+toNum(b)*864e5)); return toNum(a)+toNum(b); }
-        case '-': { var d1=asDate(a), d2=asDate(b); if(d1&&d2) return Math.round((d1-d2)/864e5); if(d1&&typeof b==='number') return dateStr(new Date(d1.getTime()-b*864e5)); return toNum(a)-toNum(b); }
-        case '*': return toNum(a)*toNum(b);
-        case '/': { var d=toNum(b); if(d===0) fail('#DIV/0!'); return toNum(a)/d; }
-        case '^': return Math.pow(toNum(a),toNum(b));
-        case '&': return toStr(a)+toStr(b);
-        default: return compare(a,b,n.o);
-      }
+      var a=this.ev(n.a,si), b=this.ev(n.b,si);
+      if(isMulti(a)||isMulti(b)) return lift(this,[a,b],function(x,y){ if(isErr(x)) throw x; if(isErr(y)) throw y; return binop(x,y,n.o); });
+      return binop(this.scal(a),this.scal(b),n.o);
     }
     case 'fn': {
       var f=FN[n.n]; if(!f) fail('#NAME?');
@@ -266,6 +331,17 @@ Engine.prototype.ev=function(n,si){
   }
   fail('#ERROR!');
 };
+function binop(a,b,o){
+  switch(o){
+    case '+': { var da=asDate(a); if(da&&!isErr(b)&&typeof b!=='string') return dateStr(new Date(da.getTime()+toNum(b)*864e5)); return toNum(a)+toNum(b); }
+    case '-': { var d1=asDate(a), d2=asDate(b); if(d1&&d2) return Math.round((d1-d2)/864e5); if(d1&&typeof b==='number') return dateStr(new Date(d1.getTime()-b*864e5)); return toNum(a)-toNum(b); }
+    case '*': return toNum(a)*toNum(b);
+    case '/': { var d=toNum(b); if(d===0) fail('#DIV/0!'); return toNum(a)/d; }
+    case '^': return Math.pow(toNum(a),toNum(b));
+    case '&': return toStr(a)+toStr(b);
+    default: return compare(a,b,o);
+  }
+}
 function cmpVals(a,b){ // -1,0,1 ; numbers < text < booleans like Excel
   if(a==null) a=(typeof b==='string')?'':0; if(b==null) b=(typeof a==='string')?'':0;
   var ta=typeof a, tb=typeof b, rank={number:0,string:1,boolean:2};
@@ -281,13 +357,13 @@ Engine.prototype.each=function(args,cb){
   for(var i=0;i<args.length;i++){
     var a=args[i];
     if(a instanceof Rng){ for(var r=a.r1;r<=a.r2;r++) for(var c=a.c1;c<=a.c2;c++) cb(this.value(a.si,r,c),true,r-a.r1,c-a.c1); }
-    else if(a&&a.arr){ a.arr.forEach(function(x){ cb(x,true); }); }
+    else if(a instanceof Arr){ a.rows.forEach(function(row,i){ row.forEach(function(x,j){ cb(x,true,i,j); }); }); }
     else cb(a,false);
   }
 };
 Engine.prototype.nums=function(args){ var out=[]; this.each(args,function(v,fr){ if(isErr(v)) throw v; if(fr){ if(typeof v==='number') out.push(v); } else if(v!=null) out.push(toNum(v)); }); return out; };
-Engine.prototype.cells=function(g){ var out=[]; if(!(g instanceof Rng)){ out.push(g); return out; } for(var r=g.r1;r<=g.r2;r++) for(var c=g.c1;c<=g.c2;c++) out.push(this.value(g.si,r,c)); return out; };
-function dims(g){ return g instanceof Rng?[g.r2-g.r1+1,g.c2-g.c1+1]:[1,1]; }
+Engine.prototype.cells=function(g){ var out=[]; if(g instanceof Arr) return [].concat.apply([],g.rows); if(!(g instanceof Rng)){ out.push(g); return out; } for(var r=g.r1;r<=g.r2;r++) for(var c=g.c1;c<=g.c2;c++) out.push(this.value(g.si,r,c)); return out; };
+function dims(g){ return g instanceof Rng?[g.r2-g.r1+1,g.c2-g.c1+1]:g instanceof Arr?[g.rows.length,g.rows[0].length]:[1,1]; }
 
 function crit(c){
   var op='=', v=c;
@@ -362,9 +438,13 @@ def('LN',function(a){ var x=toNum(this.scal(a[0])); if(x<=0) fail('#NUM!'); retu
 def('LOG10',function(a){ var x=toNum(this.scal(a[0])); if(x<=0) fail('#NUM!'); return Math.log10(x); });
 def('LOG',function(a){ var x=toNum(this.scal(a[0])), b=a[1]?toNum(this.scal(a[1])):10; if(x<=0||b<=0||b===1) fail('#NUM!'); return Math.log(x)/Math.log(b); });
 def('EXP',function(a){ return Math.exp(toNum(this.scal(a[0]))); });
-def('IF',function(a,si){ var c=toBool(this.scal(this.ev(a[0],si))); var b=c?a[1]:a[2]; if(!b) return c; var v=this.ev(b,si); return v instanceof Rng?this.first(v):v; },true);
+def('IF',function(a,si){ var c0=this.ev(a[0],si);
+  if(isMulti(c0)){ var y=a[1]?this.ev(a[1],si):true, n=a[2]?this.ev(a[2],si):false; return lift(this,[c0,y,n],function(c,p,q){ if(isErr(c)) throw c; return toBool(c)?p:q; }); } // IF(A2:A9>50, …) per cell
+  var c=toBool(this.scal(c0)); var b=c?a[1]:a[2]; if(!b) return c; var v=this.ev(b,si); return v instanceof Rng&&!isMulti(v)?this.first(v):v; },true);
 def('IFS',function(a,si){ for(var i=0;i+1<a.length;i+=2){ if(toBool(this.scal(this.ev(a[i],si)))) return this.scal(this.ev(a[i+1],si)); } fail('#N/A'); },true);
-def('IFERROR',function(a,si){ try{ var v=this.scal(this.ev(a[0],si)); if(isErr(v)) throw v; return v; }catch(e){ if(!isErr(e)) throw e; return a[1]?this.scal(this.ev(a[1],si)):''; } },true);
+def('IFERROR',function(a,si){ try{ var v0=this.ev(a[0],si);
+    if(v0 instanceof Arr){ var self=this, alt=null, got=false; return new Arr(v0.rows.map(function(row){ return row.map(function(x){ if(!isErr(x)) return x; if(!got){ alt=a[1]?self.scal(self.ev(a[1],si)):''; got=true; } return alt; }); })); }
+    var v=this.scal(v0); if(isErr(v)) throw v; return v; }catch(e){ if(!isErr(e)) throw e; return a[1]?this.scal(this.ev(a[1],si)):''; } },true);
 def('IFNA',function(a,si){ try{ return this.scal(this.ev(a[0],si)); }catch(e){ if(isErr(e)&&e.e==='#N/A') return a[1]?this.scal(this.ev(a[1],si)):''; throw e; } },true);
 def('AND',function(a){ var r=true, any=false; this.each(a,function(v,fr){ if(isErr(v)) throw v; if(fr&&typeof v!=='boolean'&&typeof v!=='number') return; any=true; if(!toBool(v)) r=false; }); if(!any) fail('#VALUE!'); return r; });
 def('OR',function(a){ var r=false, any=false; this.each(a,function(v,fr){ if(isErr(v)) throw v; if(fr&&typeof v!=='boolean'&&typeof v!=='number') return; any=true; if(toBool(v)) r=true; }); if(!any) fail('#VALUE!'); return r; });
@@ -407,8 +487,8 @@ def('ROWS',function(a){ return dims(a[0])[0]; });
 def('COLUMNS',function(a){ return dims(a[0])[1]; });
 def('CHOOSE',function(a,si){ var i=toNum(this.scal(this.ev(a[0],si))); if(i<1||i>=a.length) fail('#VALUE!'); return this.scal(this.ev(a[Math.floor(i)],si)); },true);
 function asRng(x){ if(!(x instanceof Rng)) fail('#VALUE!'); return x; }
-def('INDEX',function(a){ var g=asRng(a[0]), d=dims(g), r=a[1]!=null?toNum(this.scal(a[1])):1, c=a[2]!=null?toNum(this.scal(a[2])):1;
-  if(d[0]===1&&a[2]==null){ c=r; r=1; } if(r<1||c<1||r>d[0]||c>d[1]) fail('#REF!'); return this.value(g.si,g.r1+r-1,g.c1+c-1); });
+def('INDEX',function(a){ var g=a[0] instanceof Arr?a[0]:asRng(a[0]), d=dims(g), r=a[1]!=null?toNum(this.scal(a[1])):1, c=a[2]!=null?toNum(this.scal(a[2])):1;
+  if(d[0]===1&&a[2]==null){ c=r; r=1; } if(r<1||c<1||r>d[0]||c>d[1]) fail('#REF!'); return g instanceof Arr?g.rows[r-1][c-1]:this.value(g.si,g.r1+r-1,g.c1+c-1); });
 function matchIn(self,x,list,type){
   if(type===0){ var f=crit(typeof x==='string'?'='+x:x); for(var i=0;i<list.length;i++){ if(typeof x==='string'?f(list[i]):(cmpVals(list[i],x)===0&&list[i]!=null)) return i; } return -1; }
   var best=-1; for(var j=0;j<list.length;j++){ var v=list[j]; if(v==null) continue; var c=cmpVals(v,x); if(type>0?c<=0:c>=0) best=j; else break; } return best;
@@ -510,6 +590,55 @@ function sparkSvg(vals,kind,col){
   return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none">'+o+'</svg>';
 }
 
+/* v19: array functions. Each returns an Arr that spills from the formula's cell (see Engine.place). */
+function opt(self,x,d){ return x==null?d:toNum(self.scal(x)); }
+function transpose(G){ return G[0].map(function(_,j){ return G.map(function(row){ return row[j]; }); }); }
+function sortKey(a,b){ // blanks always last, then errors; otherwise numbers < text < TRUE/FALSE
+  var ea=a==null||a==='', eb=b==null||b===''; if(ea||eb) return ea===eb?0:ea?2:-2;
+  var xa=isErr(a), xb=isErr(b); if(xa||xb) return xa===xb?0:xa?2:-2; return cmpVals(a,b); }
+function sortRows(G,keys){ // keys: [{vals:[one per row], ord:1|-1}]; stable
+  var idx=G.map(function(_,i){ return i; });
+  idx.sort(function(x,y){ for(var k=0;k<keys.length;k++){ var c=sortKey(keys[k].vals[x],keys[k].vals[y]); if(c) return Math.abs(c)===2?c:c*keys[k].ord; } return x-y; });
+  return idx.map(function(i){ return G[i]; });
+}
+function order(self,x){ var o=opt(self,x,1); if(o!==1&&o!==-1) fail('#VALUE!'); return o; }
+def('SEQUENCE',function(a){ var h=Math.floor(opt(this,a[0],1)), w=Math.floor(opt(this,a[1],1)), st=opt(this,a[2],1), sp=opt(this,a[3],1);
+  if(h<1||w<1) fail('#CALC!'); if(h*w>MAXSPILL) fail('#NUM!');
+  var out=[]; for(var i=0;i<h;i++){ var row=[]; for(var j=0;j<w;j++) row.push(+(st+(i*w+j)*sp).toPrecision(15)); out.push(row); } return new Arr(out); });
+def('FILTER',function(a){ var A=grid(this,a[0]), I=grid(this,a[1]), h=A.length, w=A[0].length, out;
+  function ok(t){ if(isErr(t)) throw t; return toBool(t); }
+  if(I[0].length===1&&I.length===h) out=A.filter(function(_,i){ return ok(I[i][0]); });
+  else if(I.length===1&&I[0].length===w){ var keep=I[0].map(ok); out=keep.some(Boolean)?A.map(function(row){ return row.filter(function(_,j){ return keep[j]; }); }):[]; }
+  else fail('#VALUE!');
+  if(!out.length){ if(a[2]!==undefined) return a[2]; fail('#CALC!'); }
+  return new Arr(out); });
+def('SORT',function(a){ var A=grid(this,a[0]), ix=Math.floor(opt(this,a[1],1)), o=order(this,a[2]), byc=a[3]!=null&&toBool(this.scal(a[3]));
+  if(byc) A=transpose(A); if(ix<1||ix>A[0].length) fail('#VALUE!');
+  var out=sortRows(A,[{vals:A.map(function(row){ return row[ix-1]; }),ord:o}]); return new Arr(byc?transpose(out):out); });
+def('SORTBY',function(a){ var A=grid(this,a[0]), keys=[], byc=null; if(a.length<2) fail('#VALUE!');
+  for(var i=1;i<a.length;i+=2){ var B=grid(this,a[i]), o=order(this,a[i+1]), col;
+    if(B[0].length===1&&B.length===A.length&&byc!==true){ col=B.map(function(r){ return r[0]; }); byc=false; }
+    else if(B.length===1&&B[0].length===A[0].length&&byc!==false){ col=B[0]; byc=true; }
+    else fail('#VALUE!');
+    keys.push({vals:col,ord:o}); }
+  if(byc) return new Arr(transpose(sortRows(transpose(A),keys)));
+  return new Arr(sortRows(A,keys)); });
+def('UNIQUE',function(a){ var A=grid(this,a[0]), byc=a[1]!=null&&toBool(this.scal(a[1])), once=a[2]!=null&&toBool(this.scal(a[2]));
+  if(byc) A=transpose(A); var cnt=Object.create(null), first=[];
+  A.forEach(function(row){ var key=row.map(function(v){ return v==null?'':isErr(v)?'e:'+v.e:typeof v+':'+String(v).toLowerCase(); }).join('\u0001');
+    if(!cnt[key]){ cnt[key]=0; first.push([key,row]); } cnt[key]++; });
+  var out=first.filter(function(x){ return !once||cnt[x[0]]===1; }).map(function(x){ return x[1]; });
+  if(!out.length) fail('#CALC!'); return new Arr(byc?transpose(out):out); });
+
+/* .xlsx keeps functions newer than Excel 2007 under a prefix (FILTER is "_xlfn._xlws.FILTER" in the file) */
+var XLFN={FILTER:'_xlfn._xlws.FILTER',SORT:'_xlfn._xlws.SORT',SORTBY:'_xlfn.SORTBY',UNIQUE:'_xlfn.UNIQUE',SEQUENCE:'_xlfn.SEQUENCE',XLOOKUP:'_xlfn.XLOOKUP',IFS:'_xlfn.IFS',IFNA:'_xlfn.IFNA',
+  CONCAT:'_xlfn.CONCAT',TEXTJOIN:'_xlfn.TEXTJOIN',MAXIFS:'_xlfn.MAXIFS',MINIFS:'_xlfn.MINIFS',XOR:'_xlfn.XOR',DAYS:'_xlfn.DAYS','STDEV.S':'_xlfn.STDEV.S','STDEV.P':'_xlfn.STDEV.P','VAR.S':'_xlfn.VAR.S','RANK.EQ':'_xlfn.RANK.EQ'};
+function fnNames(f,map){ var toks=tokenize(f), ch=false;
+  toks.forEach(function(t,i){ if(t.t!=='id') return; var j=i+1; while(toks[j]&&toks[j].t==='ws') j++; if(!toks[j]||toks[j].t!=='op'||toks[j].v!=='(') return; var n=map(t.v); if(n!=null&&n!==t.s){ t.s=n; ch=true; } });
+  return ch?rebuild(toks):f; }
+function toXl(f){ return fnNames(f,function(u){ return XLFN[u]||null; }); }
+function fromXl(f){ return fnNames(String(f),function(u){ return /^_XL(FN|WS)\./.test(u)?u.replace(/^(_XLFN\.)?(_XLWS\.)?/,''):null; }); } // the file reader may have dropped _xlfn. already
+
 /* ---------- display ---------- */
 function formatValue(v,nf){
   if(v==null) return '';
@@ -525,7 +654,7 @@ function formatValue(v,nf){
   }
   return String(v);
 }
-var ERRH={'#DIV/0!':'0으로 나눌 수 없어요. 나누는 칸이 0이거나 비어 있는지 확인하세요','#REF!':'없어진 칸이나 시트를 가리키고 있어요. 지운 행·열이 있는지 확인하세요','#NAME?':'함수 이름이나 이름표를 알 수 없어요. 철자를 확인하세요','#VALUE!':'숫자가 아닌 글자로 계산하려고 해요. 계산에 쓰는 칸을 확인하세요','#N/A':'찾는 값이 표에 없어요','#NUM!':'계산할 수 없는 숫자예요. 범위나 순서 값을 확인하세요','#ERROR!':'수식 모양이 맞지 않아요. 괄호와 쉼표를 확인하세요','#AI!':'AI 함수를 쓸 수 없어요. AI 설정을 확인하세요'};
+var ERRH={'#DIV/0!':'0으로 나눌 수 없어요. 나누는 칸이 0이거나 비어 있는지 확인하세요','#REF!':'없어진 칸이나 시트를 가리키고 있어요. 지운 행·열이 있는지 확인하세요','#NAME?':'함수 이름이나 이름표를 알 수 없어요. 철자를 확인하세요','#VALUE!':'숫자가 아닌 글자로 계산하려고 해요. 계산에 쓰는 칸을 확인하세요','#N/A':'찾는 값이 표에 없어요','#NUM!':'계산할 수 없는 숫자예요. 범위나 순서 값을 확인하세요','#ERROR!':'수식 모양이 맞지 않아요. 괄호와 쉼표를 확인하세요','#AI!':'AI 함수를 쓸 수 없어요. AI 설정을 확인하세요','#SPILL!':'결과가 넘쳐 채워질 칸에 이미 값이 있어요. 아래·오른쪽 칸을 비우세요','#CALC!':'결과가 비었어요. 조건에 맞는 값이 없는지 확인하세요'};
 function errHint(v){ return isErr(v)?(ERRH[v.e]||''):''; }
 
 /* =AI("instruction", cells…): the answer comes from the page's AI hook (api.aiHook), which caches
@@ -546,6 +675,6 @@ def('AI',function(a){
 
 var api={K:K,RC:RC,KC:KC,colName:colName,colIdx:colIdx,addr:addr,parseAddr:parseAddr,parseRange:parseRange,rangeStr:rangeStr,
   tokenize:tokenize,rebuild:rebuild,parse:parse,literal:literal,shiftFormula:shiftFormula,adjustFormula:adjustFormula,renameSheetInFormula:renameSheetInFormula,
-  Engine:Engine,Err:Err,errHint:errHint,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,pivot:pivot,iconFor:iconFor,sparkSvg:sparkSvg,ICOL:ICOL,trimText:trimText,splitText:splitText,dedupeRows:dedupeRows,parseNameRef:parseNameRef,nameRef:nameRef,validName:validName,refText:refText,asDate:asDate,dateStr:dateStr,FN:FN,quoteSheet:quoteSheet};
+  Engine:Engine,Err:Err,errHint:errHint,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,pivot:pivot,iconFor:iconFor,sparkSvg:sparkSvg,ICOL:ICOL,Arr:Arr,toXl:toXl,fromXl:fromXl,trimText:trimText,splitText:splitText,dedupeRows:dedupeRows,parseNameRef:parseNameRef,nameRef:nameRef,validName:validName,refText:refText,asDate:asDate,dateStr:dateStr,FN:FN,quoteSheet:quoteSheet};
 if(typeof module!=='undefined'&&module.exports) module.exports=api; else root.FSE=api;
 })(this);
