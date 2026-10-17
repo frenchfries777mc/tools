@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>실시간 퀴즈 · Fry Slides</title>
+<meta name="description" content="발표자가 연 실시간 퀴즈에 휴대폰으로 참여해요. 이름만 쓰면 돼요.">
+<meta name="theme-color" content="#08090d">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Noto+Sans+KR:wght@400;700;800&display=swap" rel="stylesheet">
+<script src="../i18n.js"></script>
+<script src="strings.js"></script>
+<style>
+:root{ --bg:#08090d; --panel:#10131b; --panel2:#171b27; --line:#262c3b; --text:#eef0f5; --dim:#9099ad; --fry:#ffc93c; --fry2:#ff8a3d; }
+*{box-sizing:border-box;}
+html,body{margin:0; min-height:100%; background:var(--bg); color:var(--text);}
+body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif; font-size:16px; display:flex; flex-direction:column; min-height:100vh; min-height:100dvh;
+  padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0); -webkit-tap-highlight-color:transparent;}
+button,input{font:inherit; color:inherit;}
+[hidden]{display:none!important;}
+.top{display:flex; align-items:center; gap:8px; padding:10px 16px; border-bottom:1px solid var(--line); background:var(--panel);}
+.brand{font-family:'Oswald',sans-serif; font-weight:700; font-size:18px; letter-spacing:.04em;} .brand b{color:var(--fry);}
+.sp{flex:1;} #who{color:var(--dim); font-size:14px; max-width:40vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.dot{width:10px; height:10px; border-radius:50%; background:#5b6273; flex:0 0 auto;} .dot.on{background:#2fd17a;} .dot.bad{background:#ff6b6b;}
+.langSel{height:30px; border-radius:8px; border:1px solid var(--line); background:var(--panel2); padding:0 4px; font-size:13px;}
+main{flex:1; width:100%; max-width:560px; margin:0 auto; padding:20px 16px 32px; display:flex; flex-direction:column; gap:14px;}
+h1{font-size:22px; margin:6px 0 0;} p{margin:0; color:var(--dim); line-height:1.55;}
+.in{width:100%; height:56px; border-radius:14px; border:1px solid var(--line); background:var(--panel); padding:0 16px; font-size:20px;} .in:focus{outline:none; border-color:var(--fry);}
+#codeIn{font-family:'Oswald',ui-monospace,monospace; letter-spacing:.2em; text-transform:uppercase; text-align:center; font-size:28px;}
+.btn{height:56px; border-radius:14px; border:0; background:linear-gradient(90deg,var(--fry),var(--fry2)); color:#1c1405; font-weight:800; font-size:18px; cursor:pointer;} .btn:disabled{opacity:.5;}
+.btn2{height:44px; border-radius:12px; border:1px solid var(--line); background:var(--panel2); cursor:pointer; padding:0 16px;}
+.err{color:#ff9b9b;}
+.msg{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:12px; padding:30px 10px;} .msg .ic{font-size:56px;} .msg b{font-size:20px;}
+.spin{width:40px; height:40px; border-radius:50%; border:4px solid var(--line); border-top-color:var(--fry); animation:sp 1s linear infinite;} @keyframes sp{to{transform:rotate(360deg);}}
+#banner{background:#3a2a10; color:#ffd88a; padding:10px 16px; font-size:14px; text-align:center;}
+.qn{color:var(--fry); font-weight:800; font-size:14px; letter-spacing:.05em;} #qText{font-size:21px; font-weight:700; line-height:1.45; white-space:pre-wrap; color:var(--text);}
+#qCh{display:flex; flex-direction:column; gap:10px;}
+.ch{position:relative; display:flex; align-items:center; gap:12px; min-height:60px; width:100%; text-align:left; border-radius:14px; border:2px solid var(--line); background:var(--panel); padding:10px 14px; font-size:18px; cursor:pointer; overflow:hidden;}
+.ch .no{flex:0 0 auto; width:34px; height:34px; border-radius:50%; display:grid; place-items:center; font-weight:800; color:#111; background:var(--c);}
+.ch .tx{flex:1; min-width:0; overflow-wrap:anywhere; position:relative;} .ch .pc{position:relative; font-variant-numeric:tabular-nums; color:var(--dim); font-size:15px;}
+.ch .fill{position:absolute; left:0; top:0; bottom:0; background:rgba(255,255,255,.07); width:0;}
+.ch.my{border-color:var(--fry); background:#2a2412;} .ch.ok{border-color:#2fd17a; background:#10291c;} .ch.no2{opacity:.55;}
+.ch:disabled{cursor:default;}
+#qSt{font-size:16px; text-align:center; padding:6px 0; color:var(--text); font-weight:700;} #qSt.good{color:#5ee69a;} #qSt.bad2{color:#ffb36b;}
+</style>
+</head>
+<body>
+<div class="top"><span class="brand">FRY <b>QUIZ</b></span><span class="sp"></span><span id="who" data-notr></span><span class="dot" id="dot"></span><span data-lang-slot></span></div>
+<div id="banner" hidden>연결이 끊겼어요. 다시 연결하는 중…</div>
+<main>
+  <section id="vCode" hidden><h1>실시간 퀴즈 참여</h1><p style="margin:8px 0 14px">발표 화면에 보이는 코드 6자리를 넣어요.</p>
+    <input id="codeIn" class="in" data-notr maxlength="7" autocomplete="off" autocapitalize="characters" spellcheck="false" inputmode="text" aria-label="참여 코드"><p id="codeErr" class="err" style="margin-top:8px"></p>
+    <button class="btn" id="codeGo" style="width:100%;margin-top:12px">다음</button></section>
+  <section id="vName" hidden><h1>이름을 써 주세요</h1><p style="margin:8px 0 14px">발표자 화면에는 몇 명이 참여했는지만 보여요. 이름은 저장되지 않아요.</p>
+    <input id="nameIn" class="in" data-notr maxlength="20" autocomplete="nickname" spellcheck="false" aria-label="이름" placeholder="이름 또는 별명"><p id="nameErr" class="err" style="margin-top:8px"></p>
+    <button class="btn" id="nameGo" style="width:100%;margin-top:12px">참여하기</button></section>
+  <section id="vMsg" class="msg" hidden><div class="ic" id="mIc"></div><div class="spin" id="mSpin" hidden></div><b id="mT"></b><p id="mP"></p><button class="btn2" id="mBtn" hidden>다시 시도</button></section>
+  <section id="vQ" hidden><div class="qn" id="qNum"></div><div id="qText" data-notr></div><div id="qCh"></div><div id="qSt"></div></section>
+</main>
+<script src="lq-net.js"></script>
+<script>
+(function(){
+'use strict';
+var T=FFT.T, F=FFT.F, $=function(id){ return document.getElementById(id); };
+var CIRC='①②③④⑤⑥', COLS=['#ffc93c','#6fb1ff','#7ee2b0','#ff8fa3','#c9a6ff','#ffb36b'];
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+/* the id that lets this tab come back as the same person after a lost connection or a reload; kept per tab (sessionStorage), so two tabs are two people */
+function ssGet(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } }
+function ssSet(k,v){ try{ sessionStorage.setItem(k,v); }catch(e){} }
+var code=FFLQ.cleanCode(decodeURIComponent(location.hash.slice(1))), name=lsGet('ffslq.name')||'', pid='', h=null, last=0, joined=false, ended=false, q=null, my=null, retryT=null, fails=0;
+function view(id){ ['vCode','vName','vMsg','vQ'].forEach(function(v){ $(v).hidden=v!==id; }); }
+function msg(ic,t,p,spin,btn){ view('vMsg'); $('mIc').textContent=ic||''; $('mIc').hidden=!ic; $('mSpin').hidden=!spin; $('mT').textContent=T(t||''); $('mP').textContent=T(p||''); $('mBtn').hidden=!btn; }
+function dot(s){ $('dot').className='dot'+(s==='on'?' on':s==='bad'?' bad':''); }
+var memPid={}; function pidFor(c){ var k='ffslq.pid.'+c, v=ssGet(k)||memPid[k]; if(!v){ v=Date.now().toString(36)+Math.random().toString(36).slice(2,10); memPid[k]=v; ssSet(k,v); } return v; }
+function askCode(err){ view('vCode'); $('codeIn').value=code; $('codeErr').textContent=err?T(err):''; setTimeout(function(){ $('codeIn').focus(); },50); }
+function askName(){ view('vName'); $('nameIn').value=name; $('nameErr').textContent=''; setTimeout(function(){ $('nameIn').focus(); },50); }
+$('codeGo').onclick=function(){ var c=FFLQ.cleanCode($('codeIn').value); if(c.length!==6){ $('codeErr').textContent=T('코드 6자리를 넣어 주세요'); return; } code=c; try{ history.replaceState(null,'','#'+code); }catch(e){} askName(); };
+$('codeIn').addEventListener('keydown',function(e){ if(e.key==='Enter') $('codeGo').click(); });
+$('nameGo').onclick=function(){ var n=$('nameIn').value.replace(/\s+/g,' ').trim().slice(0,20); if(!n){ $('nameErr').textContent=T('이름을 써 주세요'); return; } name=n; lsSet('ffslq.name',n); ssSet('ffslq.nm.'+code,n); $('who').textContent=n; pid=pidFor(code); fails=0; connect(); };
+$('nameIn').addEventListener('keydown',function(e){ if(e.key==='Enter') $('nameGo').click(); });
+$('mBtn').onclick=function(){ fails=0; connect(); };
+function connect(){ clearTimeout(retryT); if(h){ try{ h.close(); }catch(e){} } if(ended) return; last=Date.now(); dot('');
+  if(!joined) msg('', '연결하는 중…', '', true);
+  var me=h=FFLQ.net().join(code,{
+    open:function(){ if(me!==h) return; last=Date.now(); h.send({t:'join', pid:pid, name:name}); },
+    data:function(m){ if(me!==h) return; onMsg(m); },
+    close:function(){ if(me===h) lost(); },
+    error:function(k){ if(me!==h) return; if(!joined&&(k==='nohost'||k==='lib')&&++fails>=2){ dot('bad'); h.close(); h=null;
+        if(k==='lib') msg('⚠️','실시간 연결 도구를 불러오지 못했어요','인터넷 연결을 확인하고 다시 시도해 주세요.',false,true);
+        else { askCode('이 코드로 열린 퀴즈를 찾지 못했어요. 코드를 다시 확인해 주세요'); } return; }
+      lost(); }}); }
+function lost(){ if(ended) return; dot('bad'); if(joined) $('banner').hidden=false; clearTimeout(retryT); retryT=setTimeout(connect,joined?2500:3000); }
+setInterval(function(){ if(!h||ended) return; if(Date.now()-last>16000){ last=Date.now(); lost(); } else if(joined) h.send({t:'ping'}); },5000);
+function onMsg(m){ if(!m||typeof m!=='object') return; last=Date.now();
+  if(m.t==='hi'){ joined=true; fails=0; dot('on'); $('banner').hidden=true; if(m.name) $('who').textContent=m.name; if(!q) waitView(); return; }
+  if(m.t==='wait'){ dot('on'); $('banner').hidden=true; q=null; my=null; waitView(); return; }
+  if(m.t==='q'){ dot('on'); $('banner').hidden=true; var same=q&&q.q===m.q; q=m; if(!same||m.my!=null||m.rev) my=m.my; draw(); return; }
+  if(m.t==='got'){ if(q&&q.q===m.q){ my=m.a; draw(); } return; }
+  if(m.t==='full'){ ended=true; stop(); msg('🙅','자리가 꽉 찼어요','이 퀴즈는 40명까지 참여할 수 있어요.'); return; }
+  if(m.t==='end'){ ended=true; stop(); msg('👋','퀴즈가 끝났어요','참여해 줘서 고마워요!'); return; } }
+function stop(){ clearTimeout(retryT); dot(''); $('banner').hidden=true; var x=h; h=null; setTimeout(function(){ try{ if(x) x.close(); }catch(e){} },200); }
+function waitView(){ msg('⏳','다음 문제를 기다리는 중이에요','발표자가 퀴즈 슬라이드로 넘어가면 여기에 문제가 나와요.'); }
+function draw(){ if(!q) return waitView(); view('vQ'); $('qNum').textContent=F('문제 {0}',q.n); $('qText').textContent=q.text||'';
+  var box=$('qCh'), tot=q.cnt?q.cnt.reduce(function(a,v){ return a+v; },0):0; box.innerHTML='';
+  q.ch.forEach(function(c,i){ var b=document.createElement('button'); b.className='ch'+(my===i?' my':'')+(q.rev&&i===q.ok?' ok':'')+(q.rev&&q.ok>=0&&i!==q.ok&&my!==i?' no2':''); b.style.setProperty('--c',COLS[i%COLS.length]);
+    b.innerHTML='<span class="fill"></span><span class="no"></span><span class="tx" data-notr></span>'+(q.rev&&q.cnt?'<span class="pc"></span>':''); b.querySelector('.no').textContent=CIRC[i]||i+1; b.querySelector('.tx').textContent=c;
+    if(q.rev&&q.cnt){ var p=tot?Math.round(q.cnt[i]/tot*100):0; b.querySelector('.pc').textContent=p+'%'; b.querySelector('.fill').style.width=p+'%'; }
+    b.disabled=!!q.rev; b.onclick=function(){ if(q.rev||!h) return; my=i; draw(); h.send({t:'ans', q:q.q, a:i}); }; box.appendChild(b); });
+  var st=$('qSt'); st.className='';
+  if(q.rev){ if(q.ok<0) st.textContent=T('정답이 공개됐어요'); else if(my===q.ok){ st.textContent=T('정답이에요! 🎉'); st.className='good'; } else { st.textContent=my==null?F('답을 내지 않았어요. 정답은 {0}',CIRC[q.ok]):F('아쉬워요. 정답은 {0}',CIRC[q.ok]); st.className='bad2'; } }
+  else st.textContent=T(my!=null?'답을 냈어요. 정답을 공개하기 전까지 바꿀 수 있어요':'답을 하나 골라 주세요'); }
+$('who').textContent=name;
+if(code.length===6){ var back=ssGet('ffslq.pid.'+code), bn=ssGet('ffslq.nm.'+code); if(back&&bn){ name=bn; $('who').textContent=bn; pid=back; connect(); } else askName(); } else askCode();
+window.__lqj={get st(){ return {joined:joined, ended:ended, q:q, my:my}; }};
+})();
+</script>
+</body>
+</html>
