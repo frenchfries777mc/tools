@@ -429,6 +429,8 @@ FFT.add({
 "살아있는 화면 고르기":["Choose a live screen","Elegir pantalla en vivo","Choisir un écran interactif","Live-Bildschirm wählen","動く画面を選ぶ"],
 "살아있는 화면 고치기":["Change the live screen","Cambiar la pantalla en vivo","Modifier l’écran interactif","Live-Bildschirm ändern","動く画面を変える"],
 "화면 바꾸기":["Change screen","Cambiar pantalla","Changer d’écran","Bildschirm ändern","画面を変える"],
+"크기·위치":["Size · position","Tamaño · posición","Taille · position","Größe · Position","サイズ・位置"],
+"끌어서 옮기거나, 누른 뒤 모서리를 당겨 크기를 바꿔요":["Drag to move, or tap and pull a corner to resize","Arrastra para mover, o toca y tira de una esquina para cambiar el tamaño","Glissez pour déplacer, ou touchez puis tirez un coin pour redimensionner","Ziehen zum Verschieben, oder antippen und an einer Ecke ziehen","ドラッグで移動、タップして角を引くとサイズ変更"],
 "발표 때 직접 실행하는 화면이에요":["This screen runs live while you present","Esta pantalla se ejecuta en vivo al presentar","Cet écran s’exécute en direct pendant la présentation","Dieser Bildschirm läuft live während der Präsentation","発表のときに実際に動かす画面です"],
 "iframe 안에서 누르기 / Esc":["Click inside the frame / Esc","Haz clic dentro del marco / Esc","Cliquer dans le cadre / Échap","Im Rahmen klicken / Esc","枠の中をクリック / Esc"],
 "Esc: 슬라이드 넘기기로 돌아가기":["Esc: back to paging slides","Esc: volver a pasar diapositivas","Échap : revenir au changement de diapo","Esc: zurück zum Blättern","Esc: スライド送りに戻る"],
