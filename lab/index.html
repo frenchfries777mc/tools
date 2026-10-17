@@ -196,6 +196,15 @@ td .del:hover{color:#ff8b8b; background:var(--panel2);}
 .gtpl .nm{min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;}
 .gtpl .go{flex:0 0 auto; padding:4px 11px; border-radius:99px; background:linear-gradient(90deg,var(--fry),var(--fry2)); color:#1c1405; font-size:12.5px;}
 .gcard.soon .gtpl{color:var(--dim); font-weight:500;}
+.gtag.multi{color:var(--lab); border-color:var(--lab);}
+.gpkback{position:fixed; inset:0; z-index:200; display:flex; align-items:center; justify-content:center; padding:16px; background:rgba(0,0,0,.55);}
+.gpk{width:min(480px,100%); max-height:min(80vh,640px); display:flex; flex-direction:column; background:var(--panel); border:1px solid var(--line); border-radius:16px; box-shadow:0 12px 40px rgba(0,0,0,.4);}
+.gpkhd{display:flex; align-items:flex-start; gap:8px; padding:14px 10px 8px 16px;}
+.gpkt{flex:1; min-width:0;} .gpkt h3{margin:0; font-size:16px; font-weight:800; line-height:1.35; overflow-wrap:anywhere;} .gpkt span{color:var(--dim); font-size:12.5px;}
+.gpkls{overflow-y:auto; -webkit-overflow-scrolling:touch; padding:4px 8px 12px;}
+.gpkls .ex{align-items:center; min-height:48px; padding:10px; border-color:var(--line); margin-bottom:6px; color:var(--text);}
+.gpkls .ex:hover,.gpkls .ex:focus-visible{border-color:var(--lab); background:var(--panel2);}
+.gpkls .ex .ds{display:block;} .gpkls .gtag{margin-left:auto;}
 .gempty{color:var(--dim); text-align:center; padding:40px 10px; line-height:1.7;}
 .gnote{color:var(--dim); font-size:12.5px; line-height:1.6; margin:26px 0 0;}
 /* my versions */
@@ -345,7 +354,10 @@ td .del:hover{color:#ff8b8b; background:var(--panel2);}
 <script src="curriculum.js"></script>
 <script src="experiments.js"></script>
 <script src="templates.js"></script>
+<script src="tpl-m1.js"></script>
 <script src="tpl-m2.js"></script>
+<script src="tpl-s1.js"></script>
+<script src="tpl-s2.js"></script>
 <script src="gallery.js"></script>
 <script src="ai-lab.js"></script>
 </body>

@@ -1,8 +1,9 @@
 /* Fry Lab curriculum map: Korean middle school (중1~중3) to high school (고1~고3) math and science.
    Written from the author's own knowledge of the 2022 revised curriculum (2022 개정 교육과정), not copied from the official
    documents, so unit names and which grade they sit in are approximate and can differ by school and year.
-   Each row: [grade, subject ('math'|'sci'), unit, one-line learning goal, template id or null].
-   A template id is an experiment id in experiments.js / templates.js; null means "준비 중" (no template yet).
+   Each row: [grade, subject ('math'|'sci'), unit, one-line learning goal, template id, array of ids, or null].
+   A template id is an experiment id in experiments.js / templates.js; null means "준비 중" (no template yet); an array holds several experiments.
+   Later files (tpl-*.js) may attach more experiments to a unit with LABCUR.link(unitName, ids); ids(row) always returns an array.
    For 고2/고3 the rows are the elective courses (대수, 미적분, 확률과 통계, 물리학, 화학, 생명과학, 지구과학), placed by the usual year. */
 window.LABCUR={
   grades:['중1','중2','중3','고1','고2','고3'],
@@ -76,4 +77,11 @@ window.LABCUR={
     ['고3','sci','화학: 산 염기 평형','약산의 이온화와 완충 용액 이해하기',null],
     ['고3','sci','지구과학: 지구의 변화','대기와 해양, 지구 환경의 변화 알기',null]
   ]
+};
+window.LABCUR.ids=function(row){ var v=row&&row[4]; return Array.isArray(v)?v.slice():(v?[v]:[]); };
+window.LABCUR.link=function(unitName,ids){
+  var row=window.LABCUR.units.filter(function(r){ return r[2]===unitName; })[0];
+  if(!row){ console.warn('LABCUR.link: unknown unit',unitName); return; }
+  var cur=window.LABCUR.ids(row); (Array.isArray(ids)?ids:[ids]).forEach(function(id){ if(id&&cur.indexOf(id)<0) cur.push(id); });
+  row[4]=cur.length?cur:null;
 };
