@@ -128,6 +128,34 @@ button,input,select{font:inherit; color:inherit;}
 #toast{position:fixed; left:50%; bottom:64px; transform:translateX(-50%); background:#1d2230; border:1px solid var(--line); padding:9px 16px; border-radius:99px; z-index:70; opacity:0; transition:opacity .2s; pointer-events:none; white-space:nowrap;}
 #toast.on{opacity:1;}
 @media(max-width:620px){ .brand{display:none;} .saved{display:none;} .tbtn .lb{display:none;} }
+/* v9: freeze, autocomplete, doc manager, print */
+#grid td.fz,#grid th.fz{background:var(--bg);}
+#grid td.fzr{border-bottom:2px solid #4a5268;} #grid td.fzc{border-right:2px solid #4a5268;}
+#grid tbody th.fzr{border-bottom:2px solid #4a5268;} #grid thead th.fzc{border-right:2px solid #4a5268;}
+#acBox{position:fixed; z-index:65; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:4px; box-shadow:0 14px 40px rgba(0,0,0,.55); display:none; width:min(340px,calc(100vw - 16px)); max-height:240px; overflow:auto;}
+#acBox.open{display:block;}
+#acBox button{display:block; width:100%; text-align:left; border:0; background:transparent; border-radius:7px; padding:7px 9px; cursor:pointer; min-height:38px;}
+#acBox button.on,#acBox button:hover{background:var(--panel2);}
+#acBox code{font-family:'JetBrains Mono',monospace; color:var(--fry); font-size:12.5px;}
+#acBox span{display:block; color:var(--dim); font-size:12px; margin-top:1px;}
+.dmRow{display:flex; align-items:center; gap:6px; padding:6px 8px; border:1px solid var(--line); border-radius:10px; background:var(--bg); margin-bottom:6px;}
+.dmRow.cur{border-color:rgba(255,201,60,.55);}
+.dmRow .nm{flex:1; min-width:0; text-align:left; border:0; background:transparent; cursor:pointer; padding:6px 4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:500;}
+.dmRow small{color:var(--dim); white-space:nowrap;}
+.dmRow .ib{width:36px; height:36px; border:1px solid var(--line); border-radius:8px; background:var(--panel2); cursor:pointer; flex:0 0 auto; font-size:15px;}
+.dmRow .ib:hover{border-color:var(--fry);} .dmRow .ib.dang{color:#ff7b7b;}
+.dmH{color:var(--dim); font-size:12px; margin:14px 0 6px;}
+.keyGrid{display:grid; grid-template-columns:auto 1fr; gap:6px 14px; align-items:center;}
+.keyGrid kbd{font-family:'JetBrains Mono',monospace; font-size:12px; background:var(--bg); border:1px solid var(--line); border-radius:6px; padding:3px 7px; white-space:nowrap; justify-self:start;}
+.keyGrid .kh{grid-column:1/-1; color:var(--fry); font-size:12px; font-weight:700; margin-top:10px;}
+@media print{
+  html,body{height:auto!important; overflow:visible!important; background:#fff!important; color:#000!important; display:block!important;}
+  .top,.ribbon,.fbar,.foot,#drawer,.more,#selBox,#actBox,#fillBox,#refBox,#fillH,#cellEd,#toast,#acBox,.menu,.ov{display:none!important;}
+  .main,#gridWrap,#gridIn{display:block!important; overflow:visible!important; position:static!important; width:auto!important; background:#fff!important;}
+  #grid{zoom:1;} #grid th,#grid td{border-color:#bbb!important; color:#000!important; background:#fff!important; position:static!important;}
+  #grid thead th,#grid tbody th{background:#eee!important; color:#333!important;}
+  #grid tr.npr,#grid td.npr,#grid th.npr,#grid col.npr{display:none!important;}
+}
 /* 시각화 */
 .vizDlg .dlg{width:min(1100px,100%); height:min(88vh,820px); max-height:none;}
 .vtabs{display:flex; gap:4px; padding:8px 12px 0; flex-wrap:wrap; border-bottom:1px solid var(--line);}
@@ -209,7 +237,7 @@ button,input,select{font:inherit; color:inherit;}
   <button class="rb" data-cmd="al-c" title="가운데 정렬"><svg viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M5 18h14"/></svg></button>
   <button class="rb" data-cmd="al-r" title="오른쪽 정렬"><svg viewBox="0 0 24 24"><path d="M4 6h16M10 12h10M6 18h14"/></svg></button>
   <select id="nfSel" title="표시 형식">
-    <option value="">일반</option><option value="n0">1,234</option><option value="n2">1,234.56</option><option value="p0">12%</option><option value="p1">12.3%</option><option value="t">텍스트</option>
+    <option value="">일반</option><option value="n0">1,234</option><option value="n2">1,234.56</option><option value="p0">12%</option><option value="p1">12.3%</option><option value="w0">₩1,234</option><option value="u2">$1,234.56</option><option value="t">텍스트</option>
   </select>
   <button class="rb" data-cmd="clearfmt" title="서식 지우기"><svg viewBox="0 0 24 24"><path d="M4 20h16"/><path d="M14 4l6 6-8 8H8l-4-4z"/></svg></button>
   <span class="sepv"></span>
@@ -226,6 +254,8 @@ button,input,select{font:inherit; color:inherit;}
   <button class="rb" data-cmd="bars" title="데이터 막대"><svg viewBox="0 0 24 24"><path d="M3 6h12M3 12h17M3 18h7" stroke-width="3"/></svg><span class="lb">막대</span></button>
   <button class="rb" data-cmd="check" title="체크박스"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/></svg><span class="lb">체크박스</span></button>
   <span class="sepv"></span>
+  <button class="rb" data-cmd="print" title="인쇄 (PDF 저장)"><svg viewBox="0 0 24 24"><path d="M7 9V3h10v6"/><rect x="4" y="9" width="16" height="8" rx="2"/><path d="M7 14h10v7H7z"/></svg></button>
+  <button class="rb" data-cmd="keys" title="단축키 보기"><svg viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/></svg></button>
   <button class="rb" data-cmd="rowmenu" title="행과 열"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg><span class="lb">행·열</span></button>
 </div>
 
@@ -262,7 +292,9 @@ button,input,select{font:inherit; color:inherit;}
   <hr>
   <button data-f="xlsx">엑셀 파일로 저장 (.xlsx)</button>
   <button data-f="csv">이 시트를 CSV로 저장</button>
+  <button data-f="print">인쇄 (PDF 저장)</button>
   <hr>
+  <button data-f="docs">문서 관리…</button>
   <div class="mh">내 문서</div>
   <div id="docList"></div>
   <hr>
@@ -276,6 +308,12 @@ button,input,select{font:inherit; color:inherit;}
   <button data-r="insColL">왼쪽에 열 넣기</button>
   <button data-r="insColR">오른쪽에 열 넣기</button>
   <button data-r="delCol" class="dang">선택한 열 지우기</button>
+  <hr>
+  <hr>
+  <button data-r="fitCol">선택한 열 너비 자동 맞춤</button>
+  <button data-r="fzRow">여기까지 행 고정</button>
+  <button data-r="fzCol">여기까지 열 고정</button>
+  <button data-r="fzOff">고정 풀기</button>
   <hr>
   <button data-r="clearCf">선택 범위의 색 단계·막대 없애기</button>
 </div>
@@ -297,6 +335,38 @@ button,input,select{font:inherit; color:inherit;}
   <div class="dbody"><label>찾을 내용</label><input type="text" id="fFind"><label>바꿀 내용</label><input type="text" id="fRep"></div>
   <div class="acts"><button class="tbtn" id="fNext">다음 찾기</button><button class="tbtn" id="fOne">바꾸기</button><button class="tbtn pri" id="fAll">모두 바꾸기</button></div>
 </div></div>
+<div class="ov" id="docDlg"><div class="dlg">
+  <div class="dh"><h3>문서 관리</h3><button class="tbtn pri" id="dmNew" style="height:32px">+ 새 문서</button><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><div id="dmList"></div><div id="dmTrashBox"><div class="dmH">최근 삭제한 문서 (최대 5개)</div><div id="dmTrash"></div></div></div>
+</div></div>
+<div class="ov" id="keyDlg"><div class="dlg">
+  <div class="dh"><h3>단축키</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><div class="keyGrid">
+    <div class="kh">이동과 선택</div>
+    <kbd>← ↑ → ↓</kbd><span>한 칸 이동 (Shift: 범위 넓히기)</span>
+    <kbd>Ctrl + 방향키</kbd><span>데이터 끝으로 이동</span>
+    <kbd>Home / PageUp / PageDown</kbd><span>줄 맨 앞 / 한 화면 위 / 한 화면 아래</span>
+    <kbd>Ctrl + Home</kbd><span>A1로 이동</span>
+    <kbd>Ctrl + A</kbd><span>모두 선택</span>
+    <div class="kh">칸 편집과 복사</div>
+    <kbd>F2 · 더블클릭</kbd><span>칸 고치기</span>
+    <kbd>Enter · Tab</kbd><span>입력 확정 후 아래 · 오른쪽으로</span>
+    <kbd>Esc</kbd><span>입력 취소</span>
+    <kbd>Delete</kbd><span>선택한 칸 지우기</span>
+    <kbd>Ctrl + Z / Y</kbd><span>실행 취소 / 다시 실행</span>
+    <kbd>Ctrl + C / X / V</kbd><span>복사 / 잘라내기 / 붙여넣기</span>
+    <kbd>Ctrl + D</kbd><span>위 칸 내용을 아래로 채우기</span>
+    <kbd>Ctrl + B / I</kbd><span>굵게 / 기울임</span>
+    <kbd>Ctrl + F</kbd><span>찾기와 바꾸기</span>
+    <div class="kh">파일</div>
+    <kbd>Ctrl + S</kbd><span>지금 저장</span>
+    <kbd>Ctrl + P</kbd><span>인쇄 (PDF 저장)</span>
+    <kbd>Ctrl + /</kbd><span>이 창 열기</span>
+    <div class="kh">수식 쓰기</div>
+    <kbd>=SU…</kbd><span>함수 이름을 치면 후보가 떠요. Tab으로 고르기</span>
+  </div></div>
+</div></div>
+<div id="acBox"></div>
 <div class="ov" id="askDlg"><div class="dlg">
   <div class="dh"><h3 id="askT"></h3><button class="x" data-close aria-label="닫기">×</button></div>
   <div class="dbody"><p id="askP" style="margin:0 0 6px;color:var(--dim)"></p><input type="text" id="askI"></div>
