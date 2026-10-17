@@ -1,0 +1,27 @@
+{
+ "built": "2026-10-17T02:37:42.536Z",
+ "pool": {
+  "code": 277,
+  "und": 69,
+  "self": 40
+ },
+ "tooLong": 3,
+ "repeats": 0,
+ "total": 846,
+ "counts": {
+  "code": 277,
+  "und": 69,
+  "self": 80,
+  "r2-code": 63,
+  "r2-first-code": 32,
+  "r2-und": 40,
+  "r2-graph": 49,
+  "r2-ask": 96,
+  "r2-slides": 75,
+  "r2-first-graph": 14,
+  "r2-first-und": 19,
+  "r2-first-table": 7,
+  "r2-first-tr": 17,
+  "r2-first-formula": 8
+ }
+}
