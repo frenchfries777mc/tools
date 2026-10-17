@@ -83,5 +83,19 @@ test('fromXl removes the prefixes',()=>eq(E.fromXl('_xlfn._xlws.SORT(_xlfn.UNIQU
 
 test('fromXl also takes a lone _xlws. prefix',()=>eq(E.fromXl('_xlws.FILTER(A1:A3,A1:A3>1)'),'FILTER(A1:A3,A1:A3>1)'));
 
+const f=(x,a)=>{ const r=vals(sheet(Object.assign({A1:x},a||{})),['A1']); return r[0]; };
+const near=(x,v,tol,a)=>{ const r=parseFloat(f(x,a)); assert.ok(Math.abs(r-v)<(tol||1e-4),x+' = '+r+' wanted '+v); };
+test('v20 trig',()=>{ near('=SIN(0)',0); near('=COS(0)',1); near('=ATAN2(1,1)',Math.PI/4); near('=DEGREES(PI())',180); near('=RADIANS(180)',Math.PI); });
+test('v20 combinatorics',()=>{ eq(f('=FACT(5)'),'120'); eq(f('=COMBIN(5,2)'),'10'); eq(f('=PERMUT(5,2)'),'20'); eq(f('=GCD(12,18)'),'6'); eq(f('=LCM(4,6)'),'12'); eq(f('=EVEN(3)'),'4'); eq(f('=ODD(2)'),'3'); eq(f('=QUOTIENT(7,2)'),'3'); });
+test('v20 stats',()=>{ near('=NORM.S.DIST(1.96,TRUE)',0.975,0.001); near('=NORM.S.INV(0.975)',1.95996,0.001); near('=GEOMEAN(2,8)',4); near('=HARMEAN(2,2)',2); near('=BINOM.DIST(2,4,0.5,FALSE)',0.375); near('=POISSON.DIST(0,1,FALSE)',0.367879,1e-4); });
+test('v20 regression',()=>{ const a={B1:'1',B2:'2',B3:'3',C1:'2',C2:'4',C3:'6'}; near('=RSQ(C1:C3,B1:B3)',1,1e-6,a); near('=FORECAST(4,C1:C3,B1:B3)',8,1e-6,a); });
+test('v20 logic/info',()=>{ eq(f('=SWITCH(2,1,"a",2,"b","z")'),'b'); eq(f('=SWITCH(9,1,"a","z")'),'z'); eq(f('=ISNA(NA())'),'TRUE'); eq(f('=ISLOGICAL(TRUE)'),'TRUE'); });
+test('v20 text',()=>{ eq(f('=TEXTBEFORE("a-b-c","-")'),'a'); eq(f('=TEXTAFTER("a-b-c","-")'),'b-c'); eq(f('=CODE("A")'),'65'); eq(f('=UNICHAR(65)'),'A'); eq(f('=NUMBERVALUE("1,5",",")'),'1.5'); });
+test('v20 TEXTSPLIT spills',()=>eq(vals(sheet({A1:'=TEXTSPLIT("a,b,c",",")'}),['A1','B1','C1']),['a','b','c']));
+test('v20 TRANSPOSE/VSTACK/HSTACK',()=>{ eq(vals(sheet({A1:'1',A2:'2',C1:'=TRANSPOSE(A1:A2)'}),['C1','D1']),['1','2']); eq(vals(sheet({A1:'1',B1:'2',D1:'=VSTACK(A1:A1,B1:B1)'}),['D1','D2']),['1','2']); eq(vals(sheet({A1:'1',B1:'2',D1:'=HSTACK(A1,B1)'}),['D1','E1']),['1','2']); });
+test('v20 dates',()=>{ eq(f('=EOMONTH(DATE(2024,1,15),1)').length>0,true); eq(f('=TEXT(EOMONTH(DATE(2024,1,15),1),"yyyy-mm-dd")'),'2024-02-29'); eq(f('=TEXT(WORKDAY(DATE(2024,1,5),1),"yyyy-mm-dd")'),'2024-01-08'); eq(f('=NETWORKDAYS(DATE(2024,1,1),DATE(2024,1,7))'),'5'); eq(f('=ISOWEEKNUM(DATE(2024,1,1))'),'1'); });
+test('v20 finance',()=>{ near('=PMT(0.05/12,360,-200000)',1073.64,0.01); near('=FV(0.05,10,-100)',1257.79,0.01); near('=PV(0.05,10,-100)',772.17,0.01); near('=NPV(0.1,100,100)',173.55,0.01); near('=SLN(1000,100,9)',100); near('=IRR(B1:B3)',0.1,1e-4,{B1:'-100',B2:'55',B3:'60.5'}); });
+test('v20 LOOKUP',()=>eq(f('=LOOKUP(2,B1:B3,C1:C3)',{B1:'1',B2:'2',B3:'3',C1:'a',C2:'b',C3:'c'}),'b'));
+
 console.log(pass+' passed, '+failed+' failed');
 process.exit(failed?1:0);
