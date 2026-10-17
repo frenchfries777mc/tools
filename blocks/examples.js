@@ -145,6 +145,17 @@ var EX=[
       B('act_set',{f:{EL:sc},v:{VALUE:JOIN([TX(T('점수: ')),G(score),TX(' / 5')])}}),B('act_beep',{f:{NOTE:'659.25'},v:{SEC:N(0.1)}}),place(),
       B('controls_if',{v:{IF0:CMP('GTE',G(score),NUMB(5))},s:{DO0:[B('act_stop'),B('act_show',{f:{EL:st,MODE:'hide'}}),B('act_alert',{v:{VALUE:S(T('성공! ⭐ 5개를 모았어요 🎉'))}})]}})]}})]}})
   ]); }}
+,{name:'반응 속도',desc:'화면이 초록색으로 바뀌면 빨리 눌러요',xml:function(){
+  var st=T('상태'), ms=T('밀리초'), box=T('신호'), bt=T('버튼')+'1';
+  function IF(c,body){ return B('controls_if',{v:{IF0:CMP('EQ',G(st),NUMB(c))},s:{DO0:body}}); }
+  return wrap([
+    page(T('반응 속도'),'#0f172a',[B('el_heading',{f:{SIZE:'h2',TEXT:T('기다리세요…'),NAME:box}}),B('el_button',{f:{TEXT:T('누르기'),NAME:bt}}),B('el_text',{f:{TEXT:T('초록색이 되면 바로 눌러요. 다시 하려면 위의 실행하기를 다시 눌러요'),NAME:T('안내')}})]),
+    B('ev_start',{x:420,y:20,s:{DO:[SET(st,NUMB(0)),SET(ms,NUMB(0)),B('act_set',{f:{EL:box},v:{VALUE:S(T('기다리세요…'))}}),B('act_style',{f:{EL:box,PROP:'background'},v:{VALUE:COL('#ef4444')}}),
+      B('act_after',{v:{SEC:X(B('math_random_int',{v:{FROM:N(2),TO:N(5)}}))},s:{DO:[SET(st,NUMB(1)),SET(ms,NUMB(0)),B('act_set',{f:{EL:box},v:{VALUE:S(T('지금 눌러요!'))}}),B('act_style',{f:{EL:box,PROP:'background'},v:{VALUE:COL('#22c55e')}})]}})]}}),
+    B('ev_timer',{x:420,y:260,f:{SEC:0.01},s:{DO:[IF(1,[CHG(ms,10)])]}}),
+    B('ev_click',{x:420,y:380,f:{EL:bt},s:{DO:[IF(0,[B('act_set',{f:{EL:box},v:{VALUE:S(T('너무 일러요! 초록색을 기다려요'))}}),SET(st,NUMB(2))]),
+      IF(1,[SET(st,NUMB(2)),B('act_set',{f:{EL:box},v:{VALUE:JOIN([TX(T('반응 속도: ')),G(ms),TX(T(' 밀리초'))])}}),B('act_beep',{f:{NOTE:'659.25'},v:{SEC:N(0.1)}})])]}})
+  ]); }}
 ];
 window.BH_EXAMPLES=EX;
 })();
