@@ -182,7 +182,7 @@ button,input,select{font:inherit; color:inherit;}
 #pPrev.logOpen #logBox{display:block;}
 .lg{white-space:pre-wrap; word-break:break-all; color:#cfd5e1;} .lg.error{color:#ff9b9b;} .lg.warn{color:#ffd37a;} .lg.go{cursor:pointer; text-decoration:underline dotted;}
 /* AI dialog */
-.tbtn.aib{border-color:#5a4a1c; color:var(--fry);}
+.tbtn.aib{color:var(--dim); font-size:13px; height:30px; padding:0 10px;} .tbtn.aib:hover{color:var(--fry); border-color:#5a4a1c;}
 #baiDlg .dlg{width:min(620px,100%);}
 .bai{padding:12px 16px; display:flex; flex-direction:column; gap:10px; overflow:auto;}
 #baiQ{width:100%; min-height:120px; resize:vertical; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:10px 12px; font:inherit; line-height:1.5; color:var(--text);}
@@ -224,7 +224,7 @@ button,input,select{font:inherit; color:inherit;}
     <button class="tbtn rb" id="stopBtn" title="정지하기"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg><span class="lb">정지하기</span></button>
   </span>
   <span class="seg" id="seg"><button data-v="blocks" class="on">블록</button><button data-v="prev">미리보기</button><button data-v="code">코드</button></span>
-  <button class="tbtn aib" id="aiBtn"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/></svg><span class="lb">AI</span></button>
+  <button class="tbtn aib" id="aiBtn" title="AI 도우미 (시험 기능)"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/></svg><span class="lb">AI 도우미(시험)</span></button>
   <button class="tbtn" id="exBtn"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/></svg><span class="lb">예제</span></button>
   <button class="tbtn" id="fileBtn"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg><span class="lb">파일</span></button>
   <button class="tbtn pri" id="dlBtn"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg><span class="lb">HTML 받기</span></button>
@@ -290,9 +290,9 @@ button,input,select{font:inherit; color:inherit;}
   <div id="mgrList"></div>
 </div></div>
 <div class="ov" id="baiDlg"><div class="dlg">
-  <div class="dh"><h3>AI로 코드 만들기</h3><button class="tbtn" id="baiSet">AI 설정</button><button class="x" id="baiClose" aria-label="닫기">×</button></div>
+  <div class="dh"><h3>AI 도우미 (시험 기능)</h3><button class="tbtn" id="baiSet">AI 설정</button><button class="x" id="baiClose" aria-label="닫기">×</button></div>
   <div class="bai" id="baiBody">
-    <p class="baiNote">만들거나 고치고 싶은 것을 글로 써 주세요. AI가 지금 블록을 고칠지 새로 짤지 알아서 정해요.</p>
+    <p class="baiNote">만들거나 고치고 싶은 것을 글로 써 주세요. AI가 지금 블록을 고칠지 새로 짤지는 알아서 정해요. 결과는 거친 초안이에요. 안 돌아가거나 틀릴 수 있으니 미리보기로 확인하고 직접 고쳐 주세요. 작고 단순한 페이지에 더 잘 맞아요.</p>
     <textarea id="baiQ" data-notr spellcheck="false"></textarea>
     <div class="baiFix" id="baiFixBox" hidden>
       <div class="exLab">틀린 곳을 알려 주세요</div>
