@@ -212,7 +212,8 @@ function engine(model){
 function askLocal(c,o){
   var run=function(){ return engine(c.model).then(function(e){
     var msgs=(o.system?[{role:'system',content:o.system}]:[]).concat([{role:'user',content:o.prompt}]);
-    var req={messages:msgs, max_tokens:Math.min(o.maxTokens||2048,2560), temperature:0.3, extra_body:{enable_thinking:false}}, stopped=false;
+    var req={messages:msgs, max_tokens:Math.min(o.maxTokens||2048,2560), temperature:o.temperature||0.3, extra_body:{enable_thinking:false}}, stopped=false;
+    if(o.freqPenalty) req.frequency_penalty=o.freqPenalty;
     var clean=function(t){ return t.replace(/<think>[\s\S]*?(<\/think>|$)/g,'').replace(/^\s+/,''); };
     var fail=function(err){ if(err&&err.kind) throw err; console.error(err); var m=String(err&&err.message||'');
       throw AIError(/context|prompt.*(long|length)|exceed/i.test(m)?T('자체 AI에게는 너무 긴 요청이에요. 고를 칸을 줄이거나 API 키를 써 보세요'):T('자체 AI가 답하지 못했어요'),'api'); };
@@ -220,8 +221,8 @@ function askLocal(c,o){
       return clean((r.choices&&r.choices[0]&&r.choices[0].message&&r.choices[0].message.content)||'').trim(); },fail);
     var looped=false;
     // a small model can get stuck writing the same thing forever: stop it when the tail is one short piece repeated
-    var loops=function(t){ if(t.length<300) return false; var w=t.slice(-240);
-      for(var p=1;p<=60;p++) if(w.slice(p)===w.slice(0,240-p)) return true; return false; };
+    var loops=function(t){ if(t.length<600) return false; var w=t.slice(-480); // XML blocks repeat in pieces of up to ~160 characters
+      for(var p=1;p<=200;p++) if(w.slice(p)===w.slice(0,480-p)) return true; return false; };
     req.stream=true; stopNow=function(){ stopped=true; e.interruptGenerate(); };
     return e.chat.completions.create(req).then(function(it){
       var out='', ai=it[Symbol.asyncIterator]();
