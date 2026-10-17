@@ -14,6 +14,7 @@
 <script src="i18n.js"></script>
 <script>
 FFT.add({
+'위키':['Wiki','Wiki','Wiki','Wiki','ウィキ'],
 'AI 가르치기':['Teach the AI','Enseñar a la IA','Enseigner à l’IA','KI beibringen','AIに教える'],
 '실험실':['Lab','Laboratorio','Labo','Labor','実験室'],
 '실험 9가지':['9 experiments','9 experimentos','9 expériences','9 Experimente','実験9種'],
@@ -82,7 +83,6 @@ FFT.add({
   header nav a{color:var(--dim); text-decoration:none; font-size:15px; margin-left:18px;}
   header nav a:hover{color:var(--text);}
   header .right{display:flex; align-items:center;}
-  .wkb{display:inline-flex; align-items:center; gap:5px; margin-right:12px; color:var(--dim); text-decoration:none; font-size:14.5px; font-weight:600; border:1px solid var(--line); border-radius:99px; padding:4px 12px; background:var(--panel);} .wkb:hover{color:var(--text);}
   .langSel{background:var(--panel); color:var(--dim); border:1px solid var(--line); border-radius:8px; padding:6px 9px; font:inherit; font-size:14px; cursor:pointer; margin-left:16px;}
   .langSel:hover{color:var(--text); border-color:var(--fry);}
   .swr{margin:0 auto 0 20px;}
@@ -161,7 +161,6 @@ FFT.add({
   html[data-ff-theme=light] .langSel{background:#fff;} html[data-ff-theme=light] .ffa-set,html[data-ff-theme=light] .ffa-bell{background:#fff; color:#1f1b14; border-color:#d9d2c3;}
   @media(max-width:860px){ .why{grid-template-columns:1fr;} }
   @media(max-width:520px){
-    .wkb{margin-right:8px; padding:5px 9px;} .wkb .wkt{display:none;}
     .wrap{padding:0 16px;} header nav{display:none;} header{gap:8px;} .logo{font-size:16px; gap:8px; min-width:0; flex:1 1 auto;} .logo span:last-child{min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;} header .right{flex:0 0 auto;} .logo .fry{width:30px; height:30px; font-size:17px;} .langSel{margin-left:0; padding:6px 6px;} .ffa-wrap{margin-left:8px !important;} .ffa-chip{max-width:118px !important;} .ffa-btn{padding:7px 10px !important;} .hero{padding:38px 0 24px;} .hero p{font-size:16.5px;}
     .body{padding:4px 18px 20px;} .game h2{font-size:34px;}
     .play{flex:1; justify-content:center;}
@@ -173,7 +172,7 @@ FFT.add({
   <header>
     <a class="logo" href="./"><span class="fry">🍟</span><span>FRENCHFRIES<b>777</b></span></a>
     <div class="swr"><span class="sw" data-notr><a href="https://frenchfries777mc.github.io/games/">Games</a><a href="https://frenchfries777mc.github.io/educations/">Educations</a><a class="on" href="./" aria-current="page">Tools</a></span></div>
-    <div class="right"><a class="wkb" data-notr href="https://frenchfries777mc.github.io/games/wiki/#tools" title="Wiki" aria-label="Wiki"><span>📖</span><span class="wkt">Wiki</span></a><nav><a href="#tools">도구</a><a href="https://github.com/frenchfries777mc" target="_blank" rel="noopener">GitHub</a></nav><span data-lang-slot></span><span data-ff-account data-ff-nohub></span></div>
+    <div class="right"><nav><a href="#tools">도구</a><a href="https://frenchfries777mc.github.io/games/wiki/#tools">위키</a><a href="https://github.com/frenchfries777mc" target="_blank" rel="noopener">GitHub</a></nav><span data-lang-slot></span><span data-ff-account data-ff-nohub></span></div>
   </header>
 
   <section class="hero">
