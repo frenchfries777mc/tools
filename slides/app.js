@@ -99,7 +99,7 @@ function isLine(e){ return e.k==='line'||e.k==='arrow'; }
 /* a shape: closed ones are a box (x,y,w,h); a line or an arrow runs from (x,y) to (x+w,y+h), so w and h can be negative */
 function fixEl(e){ if(!e||typeof e!=='object'||SHK.indexOf(e.k)<0) return null; var L=isLine(e);
   return {id:String(e.id||uid()).slice(0,40), k:e.k, x:num(e.x,400,-2000,3000), y:num(e.y,250,-2000,3000), w:L?num(e.w,300,-4000,4000):num(e.w,300,20,4000), h:L?num(e.h,0,-4000,4000):num(e.h,200,20,4000),
-    fill:L?'':fixCol(e.fill,'ac'), line:fixCol(e.line,L?'fg':'')||(L?'fg':''), sw:num(e.sw,L?6:0,L?1:0,40), text:L?'':String(e.text==null?'':e.text).slice(0,2000), back:!!e.back}; }
+    fill:L?'':fixCol(e.fill,'ac'), line:fixCol(e.line,L?'fg':'')||(L?'fg':''), sw:num(e.sw,L?6:0,L?1:0,40), text:L?'':String(e.text==null?'':e.text).slice(0,2000), back:!!e.back, op:L?100:num(e.op,100,10,100), al:['l','c','r'].indexOf(e.al)>=0?e.al:'c', fs:L?0:num(e.fs,0,0,400)}; }
 function fixPos(p){ var o={}; if(p&&typeof p==='object'&&!Array.isArray(p)) for(var k in p){ var r=p[k]; if(r&&typeof r==='object'&&isFinite(+r.x)&&isFinite(+r.y)) o[k]={x:num(r.x,0,-2000,3000), y:num(r.y,0,-2000,3000), w:num(r.w,200,20,4000), h:num(r.h,100,20,4000)}; } return o; }
 function fixSlide(s){ var b=blank(); s=s&&typeof s==='object'?s:{};
   if(LAYS.indexOf(s.layout)<0) s.layout='bullets'; if(!s.id) s.id=uid();
@@ -254,7 +254,7 @@ function chartSVG(rows,type,th,w,h){
     o+=tx(cx,h-bot+lf+22,clip(r.l,slot-8,lf),lf,'middle',400,th.sub); });
   return o+'</svg>'; }
 /* ---------- shapes: SVG on screen, native shapes in the .pptx (text inside the closed ones) ---------- */
-var SHAPES=[['rect','네모'],['round','둥근 네모'],['ell','동그라미'],['tri','세모'],['star','별'],['line','선'],['arrow','화살표']], SH_FS=34;
+var SHAPES=[['rect','네모'],['round','둥근 네모'],['ell','동그라미'],['tri','세모'],['star','별'],['text','글상자'],['line','선'],['arrow','화살표']], SH_FS=34;
 function colOf(v,th){ return v==='ac'?th.ac:v==='fg'?th.fg:v||''; }
 function shTextCol(e,th){ var f=colOf(e.fill,th); return f?(lum(f)>.4?'#111111':'#ffffff'):th.fg; }
 /* a five-point star filling the box like PowerPoint's star5 */
@@ -269,14 +269,14 @@ function shapeEl(e,th,edit){
     if(ah){ var bx=x2-ux*ah, by=y2-uy*ah, q=ah*.6; g+='<polygon points="'+x2+','+y2+' '+(bx-uy*q)+','+(by+ux*q)+' '+(bx+uy*q)+','+(by-ux*q)+'" fill="'+st+'"/>'; }
     if(edit) g+='<line class="hit" x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="transparent" stroke-width="'+Math.max(34,sw+24)+'" stroke-linecap="round"/>';
     d.style.cssText='left:'+l+'px;top:'+t+'px;width:'+bw+'px;height:'+bh+'px;'; }
-  else { var w=e.w, h=e.h, f=colOf(e.fill,th)||'none', ln=sw&&st, s2=ln?sw/2:0, iw=Math.max(1,w-2*s2), ih=Math.max(1,h-2*s2), a=' fill="'+f+'"'+(ln?' stroke="'+st+'" stroke-width="'+sw+'" stroke-linejoin="round"':'');
+  else { var w=e.w, h=e.h, f=colOf(e.fill,th)||'none', ln=sw&&st, s2=ln?sw/2:0, iw=Math.max(1,w-2*s2), ih=Math.max(1,h-2*s2), a=' fill="'+f+'"'+(ln?' stroke="'+st+'" stroke-width="'+sw+'" stroke-linejoin="round"':'')+(e.op<100&&f!=='none'?' fill-opacity="'+e.op/100+'"':'');
     bw=w; bh=h;
     g=e.k==='ell'?'<ellipse cx="'+w/2+'" cy="'+h/2+'" rx="'+iw/2+'" ry="'+ih/2+'"'+a+'/>':e.k==='tri'?'<polygon points="'+w/2+','+s2+' '+(w-s2)+','+(h-s2)+' '+s2+','+(h-s2)+'"'+a+'/>':
       e.k==='star'?'<polygon points="'+starPts(s2,s2,iw,ih)+'"'+a+'/>':'<rect x="'+s2+'" y="'+s2+'" width="'+iw+'" height="'+ih+'" rx="'+(e.k==='round'?Math.min(w,h)*.16667:0)+'"'+a+'/>';
     d.style.cssText='left:'+e.x+'px;top:'+e.y+'px;width:'+w+'px;height:'+h+'px;'; }
   d.innerHTML='<svg width="'+bw+'" height="'+bh+'" viewBox="0 0 '+bw+' '+bh+'" xmlns="http://www.w3.org/2000/svg">'+g+'</svg>';
   if(!isLine(e)&&(e.text||edit)){ var tb=shTextBox(e), x=document.createElement('div'), inn=document.createElement('div'); x.className='stx';
-    x.style.cssText='left:'+tb.x+'px;top:'+tb.y+'px;width:'+tb.w+'px;height:'+tb.h+'px;color:'+shTextCol(e,th)+';';
+    x.style.cssText='left:'+tb.x+'px;top:'+tb.y+'px;width:'+tb.w+'px;height:'+tb.h+'px;color:'+shTextCol(e,th)+';text-align:'+({l:'left',c:'center',r:'right'}[e.al]||'center')+';'; if(e.fs) x.dataset.fm=e.fs;
     inn.className='in'; inn.textContent=e.text; if(edit){ inn.setAttribute('data-ph',T('글 쓰기')); inn.spellcheck=false; if(!e.text) inn.classList.add('ph'); } x.appendChild(inn); d.appendChild(x); }
   return d; }
 /* slide number and footer text (not on the title and closing slides); shared by screen, print and .pptx */
@@ -299,8 +299,8 @@ function fitIn(inn,box,hi,lo,key,fresh){
   if(over()){ set(lo); if(!over()){ for(var i=0;i<7;i++){ var m=(lo+hi)/2; set(m); if(over()) hi=m; else lo=m; } } v=Math.floor(lo*2)/2; set(v); }
   if(fitCache.size>3000) fitCache.clear(); fitCache.set(key,v);
 }
-function fitShapes(el,th,fresh){ el.querySelectorAll('.stx').forEach(function(x){ var inn=x.firstChild, t=inn.classList.contains('ph')?'':inn.innerText; if(!t.trim()){ inn.style.fontSize=SH_FS+'px'; return; }
-  fitIn(inn,x,SH_FS,12,'shp|'+th.id+(th.f||'')+'|'+x.style.width+'x'+x.style.height+'|'+t,fresh); }); }
+function fitShapes(el,th,fresh){ el.querySelectorAll('.stx').forEach(function(x){ var inn=x.firstChild, t=inn.classList.contains('ph')?'':inn.innerText, hi=+x.dataset.fm||SH_FS; if(!t.trim()){ inn.style.fontSize=hi+'px'; return; }
+  fitIn(inn,x,hi,12,'shp'+hi+'|'+th.id+(th.f||'')+'|'+x.style.width+'x'+x.style.height+'|'+t,fresh); }); }
 function fitAll(el,s,th,fresh){ el.querySelectorAll('.fld').forEach(function(box){ var b=boxDef(s,box.dataset.f); if(b) fitBox(box,b,th,s.layout,fresh); }); fitShapes(el,th,fresh); }
 /* font size (slide px) of every field, measured off screen */
 function measure(s,th){ var m=$('measure'); m.innerHTML=''; var el=slideEl(s,th,false); m.appendChild(el); fitAll(el,s,th);
@@ -487,20 +487,48 @@ function delSel(){ var s=deck.slides[cur], e=selShape(); if(!s||!selK) return;
 /* ---------- shapes, builds and the bar of the picked box ---------- */
 var SWC=['#ffffff','#111111','#3d7fe0','#ff8a3d','#2fb27a','#e0526b','#8a5ce0','#ffc93c'];
 var SHI={rect:'<rect x="3" y="6" width="18" height="12"/>', round:'<rect x="3" y="6" width="18" height="12" rx="4"/>', ell:'<circle cx="12" cy="12" r="8"/>', tri:'<path d="M12 4l9 16H3z"/>',
-  star:'<path d="M12 3l2.6 6 6.4.5-4.9 4.2 1.5 6.3L12 16.7 6.4 20l1.5-6.3L3 9.5l6.4-.5z"/>', line:'<path d="M4 20L20 4"/>', arrow:'<path d="M4 20L19 5M11 5h8v8"/>'};
-function addShape(k){ var s=deck.slides[cur]; if(!s||gen||busyOn) return; blurEdit(); pushUndo(); var n=s.els.length%6*24, L=k==='line'||k==='arrow', sq=k==='ell'||k==='star'||k==='tri';
+  star:'<path d="M12 3l2.6 6 6.4.5-4.9 4.2 1.5 6.3L12 16.7 6.4 20l1.5-6.3L3 9.5l6.4-.5z"/>', text:'<path d="M5 6h14M12 6v13M9 19h6"/>', line:'<path d="M4 20L20 4"/>', arrow:'<path d="M4 20L19 5M11 5h8v8"/>'};
+function addShape(k){ var s=deck.slides[cur]; if(!s||gen||busyOn) return; blurEdit(); pushUndo(); if(k==='text'){ var te=fixEl({id:uid(), k:'rect', x:380+s.els.length%6*24, y:300+s.els.length%6*24, w:520, h:140, fill:'', line:'', sw:0, text:'', al:'l'}); s.els.push(te); selK='e:'+te.id; changed(); setTimeout(function(){ editShapeText(selK); },60); return; }
+  var n=s.els.length%6*24, L=k==='line'||k==='arrow', sq=k==='ell'||k==='star'||k==='tri';
   var e=fixEl({id:uid(), k:k, x:(L?440:sq?520:490)+n, y:(L?360:240)+n, w:L?400:sq?240:300, h:L?0:sq?240:200, fill:'ac', line:'fg', sw:L?6:0}); s.els.push(e); selK='e:'+e.id; changed(); }
+/* emoji and icons: a big text-only shape (no fill, no outline), so it moves, resizes, builds and exports like any shape */
+var EMOJIS=['⭐','❤️','👍','👏','🎉','✅','❌','❓','❗','💡','🎯','📌','🔥','🚀','🏆','📖','✏️','🔬','🧪','🌍','🌱','☀️','🌙','☁️','⚡','🍎','🎵','😀','😎','🤔','😮','😢','👀','🙌','🧠','⏰','📅','💬','🔔','🏳️','➡️','⬅️','⬆️','⬇️','➕','➖','✖️','➗'];
+function addEmoji(ch){ var s=deck.slides[cur]; if(!s||gen||busyOn) return; blurEdit(); pushUndo(); var n=s.els.length%6*24;
+  var e=fixEl({id:uid(), k:'rect', x:520+n, y:240+n, w:240, h:240, fill:'', line:'', sw:0, text:ch, fs:200}); s.els.push(e); selK='e:'+e.id; changed(); }
+/* line things up on the slide (picked box, picture or shape) */
+function alignSel(m){ var s=deck.slides[cur], r=s&&selK&&keyBox(s,selK); if(!r) return; var M=48, bx=r.ln?Math.min(r.x,r.x+r.w):r.x, by=r.ln?Math.min(r.y,r.y+r.h):r.y, bw=Math.abs(r.w), bh=Math.abs(r.h), dx=0, dy=0;
+  if(m==='l') dx=M-bx; else if(m==='ch') dx=Math.round((W-bw)/2)-bx; else if(m==='r') dx=W-M-bw-bx; else if(m==='t') dy=M-by; else if(m==='cv') dy=Math.round((H-bh)/2)-by; else if(m==='b') dy=H-M-bh-by; else return;
+  blurEdit(); pushUndo(); putBox(s,selK,{x:r.x+dx,y:r.y+dy,w:r.w,h:r.h,ln:r.ln}); changed(); }
+/* copy a shape and paste it on any slide or deck (also through the system clipboard, so Ctrl+C / Ctrl+V work) */
+var CLIPK='ffslides.clip', CLIPP='FFSLIDES_EL:', clipEl=null;
+function readClip(){ if(clipEl) return clipEl; try{ var j=localStorage.getItem(CLIPK); if(j) clipEl=JSON.parse(j); }catch(x){} return clipEl; }
+function copySel(){ var e=selShape(); if(!e) return toast(T('복사할 도형을 먼저 골라 주세요')); clipEl=JSON.parse(JSON.stringify(e)); var j=JSON.stringify(clipEl);
+  try{ localStorage.setItem(CLIPK,j); }catch(x){} try{ if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(CLIPP+j).catch(function(){}); }catch(x){}
+  toast(T('복사했어요. 다른 슬라이드에서 붙여넣기를 눌러요')); selBar(); }
+function pasteEl(src){ var s=deck&&deck.slides[cur]; src=src||readClip(); if(!s||!src||gen||busyOn) return; if(s.els.length>=80) return toast(T('도형이 너무 많아요'));
+  blurEdit(); pushUndo(); var c=fixEl(JSON.parse(JSON.stringify(src))); if(!c) return; c.id=uid(); var n=s.els.length%6*24; c.x=Math.max(-100,Math.min(1200,c.x+(n?n:20))); c.y=Math.max(-100,Math.min(640,c.y+(n?n:20))); s.els.push(c); selK='e:'+c.id; changed(); }
+/* a table-of-contents slide from the other slides' titles */
+function makeToc(){ if(!deck.slides.length||gen||busyOn) return; var t=[]; deck.slides.forEach(function(x,i){ if(x.hide||x.layout==='title'||x.layout==='closing') return; var h=(x.title||(x.layout==='quote'?'':x.stat)||'').trim(); if(h) t.push((x.layout==='section'?'':'')+h); });
+  if(!t.length) return toast(T('제목이 있는 슬라이드가 없어요'));
+  blurEdit(); pushUndo(); var ns=blank('bullets'); ns.title=T('차례'); ns.bullets=t.slice(0,12); var at=deck.slides[0]&&deck.slides[0].layout==='title'?1:0; deck.slides.splice(at,0,ns); cur=at; selK=null; changed(true); toast(F('차례 슬라이드를 만들었어요 ({0}개 제목)',ns.bullets.length)); }
+/* find and replace in every slide's text (titles, lists, shape text, notes) */
+function frFields(f){ var o=[]; deck.slides.forEach(function(s){ LISTS.forEach(function(k){ (s[k]||[]).forEach(function(v,i){ o.push({g:s[k],i:i,v:v,set:function(x){ s[k][i]=x; }}); }); }); TEXTS.forEach(function(k){ if(k==='ctype'||k==='bg') return; if(typeof s[k]==='string'&&s[k]) o.push({v:s[k],set:function(x){ s[k]=x; }}); }); (s.els||[]).forEach(function(e){ if(e.text) o.push({v:e.text,set:function(x){ e.text=x; }}); }); }); return o; }
+function frCount(q,cs){ if(!q) return 0; var n=0, re=new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),cs?'g':'gi'); frFields().forEach(function(o){ var m=o.v.match(re); if(m) n+=m.length; }); return n; }
+function frDo(q,r,cs){ var re=new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),cs?'g':'gi'), n=0; var fl=frFields(); fl.forEach(function(o){ var m=o.v.match(re); if(m){ n+=m.length; } }); if(!n) return 0;
+  blurEdit(); pushUndo(); fl.forEach(function(o){ if(re.test(o.v)){ re.lastIndex=0; o.set(o.v.replace(re,function(){ return r; })); } re.lastIndex=0; }); fitCache.clear(); changed(true); return n; }
 function buildIx(s,k){ for(var i=0;i<s.build.length;i++) if(s.build[i].k===k) return i; return -1; }
 function setAnim(a){ var s=deck.slides[cur]; if(!s||!selK) return; var i=buildIx(s,selK); if(a==='none'&&i<0||i>=0&&s.build[i].a===a) return; pushUndo();
   if(a==='none') s.build.splice(i,1); else if(i>=0) s.build[i].a=a; else s.build.push({k:selK, a:a}); changed(); }
 function moveBuild(d){ var s=deck.slides[cur], i=s?buildIx(s,selK):-1, j=i+d; if(i<0||j<0||j>=s.build.length) return; pushUndo(); var x=s.build.splice(i,1)[0]; s.build.splice(j,0,x); changed(); }
 function selBar(){ var b=$('selBar'), s=deck&&deck.slides[cur]; b.innerHTML=''; b.hidden=!s||gen||busyOn;
-  if(!selK){ b.className='selBar hint'; b.textContent=T('글상자·그림·도형을 누르면 끌어서 옮기고 모서리로 크기를 바꿀 수 있어요'); return; }
+  if(!selK){ b.className='selBar hint'; b.textContent=T('글상자·그림·도형을 누르면 끌어서 옮기고 모서리로 크기를 바꿀 수 있어요'); if(readClip()){ var pb=document.createElement('button'); pb.className='tbtn'; pb.dataset.sb='paste'; pb.textContent=T('붙여넣기'); b.appendChild(pb); } return; }
   b.className='selBar'; var e=selShape(), bi=buildIx(s,selK);
   var add=function(k,txt,dis){ var x=document.createElement('button'); x.className='tbtn'; x.dataset.sb=k; x.textContent=T(txt); if(dis) x.disabled=true; b.appendChild(x); return x; };
   if(e){ if(!isLine(e)) add('fill','채우기'); add('line',isLine(e)?'선 색·굵기':'테두리'); if(!isLine(e)) add('text','글 쓰기'); }
   add('anim',bi>=0?F('나타나기 {0}번',bi+1):'나타나는 효과').classList.toggle('on',bi>=0);
-  if(e){ add('front','맨 앞으로'); add('back','글 뒤로'); add('dup','복제'); add('del','지우기').classList.add('dang'); }
+  if(e&&!isLine(e)) add('talign','글 정렬');
+  add('align','맞추기');
+  if(e){ add('front','맨 앞으로'); add('back','글 뒤로'); add('dup','복제'); add('copy','복사'); add('del','지우기').classList.add('dang'); }
   else { add('reset','원래 자리로',!s.pos[selK]); if(selK==='img'&&s.img) add('del','그림 빼기').classList.add('dang'); } }
 function drawElMenu(kind){ var m=$('elMenu'), s=deck.slides[cur], e=selShape(), t=eth(s,th()); m.innerHTML='';
   var hd=function(txt){ var d=document.createElement('div'); d.className='mh'; d.textContent=T(txt); m.appendChild(d); };
@@ -511,6 +539,9 @@ function drawElMenu(kind){ var m=$('elMenu'), s=deck.slides[cur], e=selShape(), 
     add('an:none','효과 없음 (처음부터 보이기)',a==='none'); add('an:fade','서서히 나타나기',a==='fade'); add('an:fly','날아 들어오기',a==='fly');
     if(i>=0){ m.appendChild(document.createElement('hr')); hd(F('{0}번째로 나타나요 (모두 {1}개)',i+1,s.build.length)); add('an:up','더 먼저 나타나기',0,i===0); add('an:down','더 나중에 나타나기',0,i===s.build.length-1); }
     return; }
+  if(kind==='align'){ hd('슬라이드에서 맞추기'); [['l','왼쪽'],['ch','가로 가운데'],['r','오른쪽'],['t','위쪽'],['cv','세로 가운데'],['b','아래쪽']].forEach(function(q){ add('al2:'+q[0],q[1]); }); return; }
+  if(kind==='talign'){ hd('글자 정렬'); [['l','왼쪽'],['c','가운데'],['r','오른쪽']].forEach(function(q){ add('al:'+q[0],q[1],e&&e.al===q[0]); }); return; }
+  if(kind==='emoji'){ hd('이모지 넣기'); var g2=document.createElement('div'); g2.className='emg'; m.appendChild(g2); EMOJIS.forEach(function(c){ var b=document.createElement('button'); b.dataset.o='em:'+c; b.textContent=c; g2.appendChild(b); }); return; }
   if(!e) return; var key=kind==='fill'?'fill':'line', L=isLine(e); m._k=key;
   hd(kind==='fill'?'채우기 색':L?'선 색':'테두리 색'); var row=document.createElement('div'); row.className='swr'; m.appendChild(row);
   var sw=function(v,bg,label){ var b=document.createElement('button'); b.className='sw'+(e[key]===v?' on':'')+(v===''?' none':''); b.dataset.o='c:'+v; b.style.background=bg; b.title=T(label||v); b.setAttribute('aria-label',T(label||v)); row.appendChild(b); };
@@ -519,10 +550,13 @@ function drawElMenu(kind){ var m=$('elMenu'), s=deck.slides[cur], e=selShape(), 
   ci.addEventListener('pointerdown',function(){ if(!ci._u){ ci._u=1; pushUndo(); } });
   ci.addEventListener('input',function(){ var x=selShape(); if(!x) return; if(!ci._u){ ci._u=1; pushUndo(); } x[key]=ci.value; if(key==='line'&&!x.sw) x.sw=4; saveSoon(); updateThumb(cur); drawMain(); });
   ci.addEventListener('change',function(){ closeMenus(); });
+  if(kind==='fill'&&!L){ m.appendChild(document.createElement('hr')); hd('투명도'); [100,80,60,40,20].forEach(function(v){ add('o:'+v,v+'%',(e.op||100)===v); }); }
   if(kind==='line'){ m.appendChild(document.createElement('hr')); hd('굵기'); (L?[2,4,6,10,16]:[2,4,8,12]).forEach(function(w){ add('w:'+w,F('{0}px',w),e.sw===w&&(L||!!e.line)); }); } }
+$('emojiBtn').onclick=function(){ if(!deck.slides.length||gen||busyOn) return; blurEdit(); drawElMenu('emoji'); openMenu($('elMenu'),this); };
 $('shapeBtn').onclick=function(){ if(!deck.slides.length||gen||busyOn) return; blurEdit(); drawElMenu('shape'); openMenu($('elMenu'),this); };
-$('selBar').addEventListener('click',function(e){ var x=e.target.closest('[data-sb]'); if(!x||x.disabled) return; var k=x.dataset.sb, s=deck.slides[cur], sh=selShape(); if(!s||!selK) return;
-  if(k==='fill'||k==='line'||k==='anim'){ blurEdit(); drawElMenu(k); openMenu($('elMenu'),x); return; }
+$('selBar').addEventListener('click',function(e){ var x=e.target.closest('[data-sb]'); if(!x||x.disabled) return; var k=x.dataset.sb, s=deck.slides[cur], sh=selShape(); if(k==='paste') return pasteEl(); if(!s||!selK) return;
+  if(k==='fill'||k==='line'||k==='anim'||k==='align'||k==='talign'){ blurEdit(); drawElMenu(k); openMenu($('elMenu'),x); return; }
+  if(k==='copy') return copySel();
   if(k==='text') return editShapeText(selK);
   blurEdit();
   if(k==='reset'){ if(!s.pos[selK]) return; pushUndo(); delete s.pos[selK]; changed(); }
@@ -531,11 +565,15 @@ $('selBar').addEventListener('click',function(e){ var x=e.target.closest('[data-
   else if((k==='front'||k==='back')&&sh){ pushUndo(); s.els.splice(s.els.indexOf(sh),1); sh.back=k==='back'; if(k==='front') s.els.push(sh); else s.els.unshift(sh); changed(); toast(k==='front'?T('맨 앞으로 가져왔어요'):T('글 뒤로 보냈어요')); } });
 $('elMenu').addEventListener('click',function(ev){ var b=ev.target.closest('[data-o]'); if(!b||b.disabled) return; var k=b.dataset.o, e=selShape(), s=deck.slides[cur];
   if(k.indexOf('sh:')===0){ closeMenus(); return addShape(k.slice(3)); }
+  if(k.indexOf('em:')===0){ closeMenus(); return addEmoji(k.slice(3)); }
+  if(k.indexOf('al2:')===0){ closeMenus(); return alignSel(k.slice(4)); }
   if(k==='an:up'||k==='an:down'){ moveBuild(k==='an:up'?-1:1); drawElMenu('anim'); return; }
   if(k.indexOf('an:')===0){ closeMenus(); return setAnim(k.slice(3)); }
   if(!e||!s) return; closeMenus(); pushUndo();
   if(k.indexOf('c:')===0){ var key=$('elMenu')._k; e[key]=k.slice(2); if(key==='line'&&e[key]&&!e.sw) e.sw=4; }
   else if(k.indexOf('w:')===0){ e.sw=+k.slice(2); if(!e.line) e.line='fg'; }
+  else if(k.indexOf('o:')===0){ e.op=+k.slice(2); }
+  else if(k.indexOf('al:')===0){ e.al=k.slice(3); }
   changed(); });
 
 /* ---------- slide commands ---------- */
@@ -762,6 +800,8 @@ $('deckMenu').addEventListener('click',function(e){
   else if(k==='nums'){ if(!deck.slides.length) return; pushUndo(); deck.nums=!deck.nums; changed(true); }
   else if(k==='footer'){ if(!deck.slides.length) return; ask(T('바닥글'),T('제목·마무리를 뺀 모든 슬라이드 아래쪽에 작게 들어가요. 비우면 없어져요.'),T('예: 3학년 2반 · 김하늘'),T('확인'),deck.footer,true).then(function(v){ if(v==null) return; pushUndo(); deck.footer=v; changed(true); }); }
   else if(k==='imp') openImport();
+  else if(k==='toc') makeToc();
+  else if(k==='find') openFind();
   else if(k==='csv') openCsv();
   else if(k==='md') exportMD();
   else if(k==='del') deleteDeck(deck);
@@ -803,7 +843,8 @@ var cw=$('canvasWrap');
 cw.addEventListener('dragover',function(e){ if(e.dataTransfer&&[].indexOf.call(e.dataTransfer.types||[],'Files')>=0){ e.preventDefault(); } });
 cw.addEventListener('drop',function(e){ var fs=e.dataTransfer&&e.dataTransfer.files; if(fs&&fs.length){ e.preventDefault(); putPictures(fs); } });
 document.addEventListener('paste',function(e){ if(e.target.closest&&(e.target.closest('.in')||e.target.closest('input,textarea'))||pr.on||$('editor').hidden) return;
-  var tx=(e.clipboardData&&e.clipboardData.getData('text'))||''; if(tx.indexOf('\t')>=0&&/\n/.test(tx.trim())) return; // spreadsheet cells (Excel also adds a picture): handled by the table dialog
+  var tx=(e.clipboardData&&e.clipboardData.getData('text'))||''; if(tx.indexOf(CLIPP)===0){ e.preventDefault(); try{ pasteEl(JSON.parse(tx.slice(CLIPP.length))); }catch(x){} return; }
+  if(tx.indexOf('\t')>=0&&/\n/.test(tx.trim())) return; // spreadsheet cells (Excel also adds a picture): handled by the table dialog
   var fs=[].slice.call((e.clipboardData&&e.clipboardData.files)||[]).filter(function(f){ return /^image\//.test(f.type); }); if(fs.length){ e.preventDefault(); putPictures(fs); } });
 
 /* ---------- paste a spreadsheet (Excel / Google Sheets cells or CSV text): table slides and chart slides ---------- */
@@ -897,6 +938,12 @@ $('impOk').onclick=function(){ var sl=parseOutline($('impIn').value); if(!sl.len
   var firstNew=deck.slides.length; pushUndo(); if(!deck.slides.length&&isDefaultName(deck.name)&&sl[0].layout==='title'&&sl[0].title){ deck.name=sl[0].title.slice(0,80); $('deckName').value=deck.name; }
   deck.slides=deck.slides.concat(sl); cur=firstNew; refresh(); saveNow(); toast(F('슬라이드 {0}장을 만들었어요',sl.length)); };
 $('impIn').addEventListener('keydown',function(e){ e.stopPropagation(); if(e.key==='Escape') closeDlg('impDlg',null); });
+var frT=null;
+function openFind(){ if(!deck.slides.length) return; $('frQ').value=''; $('frR').value=''; $('frInfo').textContent=''; openDlg('frDlg'); setTimeout(function(){ $('frQ').focus(); },50); }
+function frInfo(){ var q=$('frQ').value; $('frInfo').textContent=q?F('{0}곳에서 찾았어요',frCount(q,$('frCase').checked)):''; }
+$('frQ').addEventListener('input',frInfo); $('frCase').addEventListener('change',frInfo);
+['frQ','frR'].forEach(function(id){ $(id).addEventListener('keydown',function(e){ e.stopPropagation(); if(e.key==='Escape') closeDlg('frDlg',null); if(e.key==='Enter'){ e.preventDefault(); $('frOk').click(); } }); });
+$('frOk').onclick=function(){ var q=$('frQ').value; if(!q) return; var n=frDo(q,$('frR').value,$('frCase').checked); if(!n){ $('frInfo').textContent=T('찾는 글이 없어요'); return; } closeDlg('frDlg',null); toast(F('{0}곳을 바꿨어요',n)); };
 function toMD(){ var o=[];
   deck.slides.forEach(function(s,i){ if(s.hide) return; var L=[], hd=(s.layout==='title'&&i===0)?'# ':(s.layout==='section'?'# ':'## ');
     var title=s.title||(s.layout==='quote'?'':s.stat)||''; if(title||s.layout!=='quote') L.push(hd+title);
@@ -944,7 +991,7 @@ TPLS.forEach(function(tp){ var b=document.createElement('button'); b.textContent
   if(isDefaultName(deck.name)) deck.name=T(tp.title); $('deckName').value=deck.name; cur=0; refresh(); saveNow(); }; $('tplChips').appendChild(b); });
 
 /* ---------- shortcut sheet ---------- */
-var KEYS=[['Ctrl+Z / Ctrl+Shift+Z','되돌리기 · 다시 하기'],['↑ ↓ ← →','슬라이드 이동'],['Ctrl+D','슬라이드 복제'],['Ctrl+Enter','새 슬라이드 넣기'],['Alt+↑ Alt+↓','슬라이드 순서 바꾸기'],['H','발표할 때 건너뛰기 켜고 끄기'],['Delete','슬라이드 지우기'],['Home End','첫·마지막 슬라이드'],['Ctrl+Alt+N','새 슬라이드 쇼 만들기'],['F5','처음부터 발표'],['Shift+F5','지금 슬라이드부터 발표'],['?','이 단축키 목록'],['← ↑ → ↓','(고른 상자) 조금씩 옮기기 · Shift는 크게'],['Delete','(고른 도형·그림) 지우기'],['Shift + 끌기','(도형) 비율 지키기 · 선은 45도씩'],
+var KEYS=[['Ctrl+Z / Ctrl+Shift+Z','되돌리기 · 다시 하기'],['↑ ↓ ← →','슬라이드 이동'],['Ctrl+D','슬라이드 복제'],['Ctrl+Enter','새 슬라이드 넣기'],['Ctrl+C · Ctrl+V','고른 도형 복사 · 붙여넣기'],['Alt+↑ Alt+↓','슬라이드 순서 바꾸기'],['H','발표할 때 건너뛰기 켜고 끄기'],['Delete','슬라이드 지우기'],['Home End','첫·마지막 슬라이드'],['Ctrl+Alt+N','새 슬라이드 쇼 만들기'],['F5','처음부터 발표'],['Shift+F5','지금 슬라이드부터 발표'],['?','이 단축키 목록'],['← ↑ → ↓','(고른 상자) 조금씩 옮기기 · Shift는 크게'],['Delete','(고른 도형·그림) 지우기'],['Shift + 끌기','(도형) 비율 지키기 · 선은 45도씩'],
   ['→ Space Enter','(발표) 다음'],['← Backspace','(발표) 이전'],['Home End','(발표) 처음 · 끝'],['S','(발표) 발표자 메모 보기'],['V','(발표) 발표자 화면 새 창으로 열기'],['L','(발표) 레이저 포인터'],['D · M · E','(발표) 펜 · 형광펜 · 낙서 지우기'],['B','(발표) 화면 끄기'],['숫자 + Enter','(발표) 그 번호 슬라이드로'],['A','(발표) 퀴즈 정답 보기'],['T','(발표) 타이머 멈춤·다시'],['Esc','(발표) 나가기']];
 function showKeys(){ var b=$('keysBody'); b.innerHTML=''; KEYS.forEach(function(k){ var r=document.createElement('div'); r.className='kr'; var a=document.createElement('kbd'); a.textContent=k[0]; var t=document.createElement('span'); t.textContent=T(k[1]); r.appendChild(a); r.appendChild(t); b.appendChild(r); }); openDlg('keysDlg'); }
 
@@ -1186,6 +1233,7 @@ document.addEventListener('keydown',function(e){
     if(nd){ e.preventDefault(); var stp=e.shiftKey?20:2; nudge(nd[0]*stp,nd[1]*stp); return; }
     if(e.key==='Delete'||e.key==='Backspace'){ e.preventDefault(); delSel(); return; }
     if(e.key==='Escape'){ setSel(null); return; } }
+  if(mod&&selK&&!$('editor').hidden&&!gen&&!busyOn&&(e.key==='c'||e.key==='C')&&selShape()){ e.preventDefault(); copySel(); return; }
   if(mod&&(e.key==='z'||e.key==='Z')){ e.preventDefault(); if(e.shiftKey) doRedo(); else doUndo(); }
   else if(mod&&(e.key==='y'||e.key==='Y')){ e.preventDefault(); doRedo(); }
   else if(mod&&(e.key==='d'||e.key==='D')){ e.preventDefault(); if(!$('editor').hidden&&!gen&&!busyOn) dupSlide(); }
@@ -1236,9 +1284,9 @@ function buildPPTX(P){
     if(isLine(e)){ var o={x:I(Math.min(e.x,e.x+e.w)), y:I(Math.min(e.y,e.y+e.h)), w:I(Math.abs(e.w)), h:I(Math.abs(e.h)), line:{color:c(e.line), width:PT(e.sw)}};
       if((e.w<0)!==(e.h<0)) o.flipH=true; if(e.k==='arrow') o.line[e.h>=0?'endArrowType':'beginArrowType']='triangle'; sl.addShape(p.ShapeType.line,o); return; }
     var ln=e.sw&&e.line, h2=ln?e.sw/2:0, ty={rect:p.ShapeType.rect, round:p.ShapeType.roundRect, ell:p.ShapeType.ellipse, tri:p.ShapeType.triangle, star:p.ShapeType.star5}[e.k];
-    var q={x:I(e.x+h2), y:I(e.y+h2), w:I(e.w-2*h2), h:I(e.h-2*h2), fill:e.fill?{color:c(e.fill)}:{type:'none'}, line:ln?{color:c(e.line), width:PT(e.sw)}:{type:'none'}};
+    var q={x:I(e.x+h2), y:I(e.y+h2), w:I(e.w-2*h2), h:I(e.h-2*h2), fill:e.fill?(e.op<100?{color:c(e.fill), transparency:100-e.op}:{color:c(e.fill)}):{type:'none'}, line:ln?{color:c(e.line), width:PT(e.sw)}:{type:'none'}};
     if(e.k==='round') q.rectRadius=I(Math.min(e.w,e.h)*.16667);
-    if(e.text.trim()){ q.shape=ty; q.fontFace=fb; q.fontSize=PT(fs['e:'+e.id]||SH_FS); q.color=C(shTextCol(e,t)); q.align='center'; q.valign='middle'; q.margin=0; sl.addText(e.text,q); }
+    if(e.text.trim()){ q.shape=ty; q.fontFace=fb; q.fontSize=PT(fs['e:'+e.id]||e.fs||SH_FS); q.color=C(shTextCol(e,t)); q.align={l:'left',c:'center',r:'right'}[e.al]||'center'; q.valign='middle'; q.margin=0; sl.addText(e.text,q); }
     else sl.addShape(ty,q); }
   var p=new P(); p.layout='LAYOUT_WIDE'; p.title=deck.name; p.author='Fry Slides'; p.company='Frenchfries777 Tools';
   deck.slides.forEach(function(s){
