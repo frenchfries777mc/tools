@@ -39,7 +39,7 @@ function arrange(){ // page on the left, scripts in a column to its right
   if(page){ page.moveTo(new Blockly.utils.Coordinate(30,30)); x=30+page.getHeightWidth().width+70; }
   tops.forEach(function(b){ if(b===page) return; b.moveTo(new Blockly.utils.Coordinate(x,y)); y+=b.getHeightWidth().height+36; });
 }
-function afterLoad(){ setTimeout(function(){ ws.scrollCenter(); var tb=ws.getTopBlocks(true)[0]; if(tb) ws.scroll(-tb.getRelativeToSurfaceXY().x*ws.scale+30, -tb.getRelativeToSurfaceXY().y*ws.scale+30); },30); refresh(true); }
+function afterLoad(){ dropCustom(false); setTimeout(function(){ ws.scrollCenter(); var tb=ws.getTopBlocks(true)[0]; if(tb) ws.scroll(-tb.getRelativeToSurfaceXY().x*ws.scale+30, -tb.getRelativeToSurfaceXY().y*ws.scale+30); },30); refresh(true); }
 
 /* keep element names unique, and follow renames in the blocks that use them */
 ws.addChangeListener(function(e){
@@ -94,6 +94,7 @@ function stoppedPage(){ return '<!DOCTYPE html><html><head><meta charset="UTF-8"
 function showPreview(){ if(window.matchMedia('(max-width:900px)').matches&&document.body.className==='v-blocks'){ var b=document.querySelector('#seg button[data-v="prev"]'); if(b) b.click(); } else setPane('prev'); }
 function refresh(force){
   if(runState==='stop'&&force!=='run'){ if($('pCode').classList.contains('on')) showCode(); return; }
+  if(custom!==null){ if(force!=='run'){ dropCustom(true); } else { clearLog(); dbgReset(); $('frame').srcdoc=custom; if(runState==='pause') setRun('run'); return; } }
   checkPics();
   var prev; try{ prev=BH.build(ws,{trap:true,debug:dbgOn}); }catch(err){ console.error(err); return; }
   if(force||prev!==lastPrev){ lastPrev=prev; clearLog(); dbgReset(); $('frame').srcdoc=prev; if(runState==='pause') setRun('run'); }
@@ -111,8 +112,17 @@ function hl(src){
     return e(part).replace(/(&lt;!--[\s\S]*?--&gt;)|(&lt;\/?[a-zA-Z0-9!]+)|("[^"\n]*")/g,function(m,c,t,s){ return c?'<span class="c">'+c+'</span>':t?'<span class="t">'+t+'</span>':'<span class="s">'+s+'</span>'; });
   }).join('');
 }
-function finalHTML(){ return BH.build(ws,{trap:false}); }
-function showCode(){ $('code').innerHTML=hl(finalHTML()); }
+/* typed HTML: the HTML code tab can be edited by hand; the preview, copy and download then use that text until the blocks change */
+var custom=null, customT=null;
+function finalHTML(){ return custom!==null?custom:BH.build(ws,{trap:false}); }
+function showCode(){ if(custom!==null||!$('codeEdit').hidden) return; $('code').innerHTML=hl(finalHTML()); }
+function setEdit(on){ $('codeEdit').hidden=!on; $('code').hidden=on; $('codeEditBtn').textContent=on?T('✔ 고치기 끝'):T('✏️ 직접 고치기');
+  if(on){ $('codeEdit').value=finalHTML(); $('codeEdit').focus(); } else showCode(); }
+function dropCustom(msg){ if(custom==null) return; custom=null; clearTimeout(customT); $('codeReset').hidden=$('codeNote').hidden=true; if($('codeEdit').hidden===false) setEdit(false); if(msg) toast(T('직접 쓴 HTML은 지웠어요. 블록 코드로 돌아왔어요')); }
+$('codeEditBtn').onclick=function(){ setEdit($('codeEdit').hidden); };
+$('codeEdit').addEventListener('input',function(){ var v=$('codeEdit').value; custom=v; $('codeReset').hidden=$('codeNote').hidden=false; clearTimeout(customT);
+  customT=setTimeout(function(){ if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=v; },500); });
+$('codeReset').onclick=function(){ dropCustom(false); lastPrev=''; refresh('run'); toast(T('블록 코드로 되돌렸어요')); };
 function setPane(p){ document.querySelectorAll('.stab').forEach(function(b){ b.classList.toggle('on',b.dataset.p===p); }); $('pPrev').classList.toggle('on',p==='prev'); $('pCode').classList.toggle('on',p==='code'); if(p==='code') showCode(); }
 document.querySelectorAll('.stab').forEach(function(b){ b.onclick=function(){ setPane(b.dataset.p); }; });
 document.querySelectorAll('#seg button').forEach(function(b){ b.onclick=function(){ var v=b.dataset.v;
