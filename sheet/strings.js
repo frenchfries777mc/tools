@@ -272,7 +272,12 @@ window.FNDOC=[
 ['날짜','WEEKDAY','WEEKDAY(날짜, [유형])','요일 번호 (유형 2: 월요일이 1)','Day of week number'],
 ['날짜','DAYS','DAYS(끝 날짜, 시작 날짜)','두 날짜 사이의 일수 (날짜끼리 빼도 돼요)','Days between dates'],
 ['날짜','EDATE','EDATE(날짜, 개월 수)','몇 달 뒤(앞) 날짜','Date months away'],
-['날짜','DATEDIF','DATEDIF(시작, 끝, "Y"/"M"/"D")','두 날짜 사이의 연·월·일 수','Years, months or days between dates']
+['날짜','DATEDIF','DATEDIF(시작, 끝, "Y"/"M"/"D")','두 날짜 사이의 연·월·일 수','Years, months or days between dates'],
+['배열','FILTER','FILTER(범위, 조건, [없을 때])','조건에 맞는 행만 골라 아래로 넘쳐 채워요. 예: =FILTER(A2:C20, B2:B20>=80)','Rows that match a condition, spilled below. e.g. =FILTER(A2:C20, B2:B20>=80)'],
+['배열','SORT','SORT(범위, [몇째 열], [1 또는 -1], [열 방향])','범위를 정렬해서 넘쳐 채워요 (-1은 큰 것부터)','The range sorted, spilled (-1 = largest first)'],
+['배열','SORTBY','SORTBY(범위, 기준 범위1, [1/-1], …)','다른 열을 기준으로 정렬해요. 기준을 여러 개 쓸 수 있어요','Sorts by other columns, several keys allowed'],
+['배열','UNIQUE','UNIQUE(범위, [열 방향], [한 번만 나온 것])','겹치지 않는 값만 넘쳐 채워요','Distinct values, spilled'],
+['배열','SEQUENCE','SEQUENCE(행 수, [열 수], [시작], [간격])','1, 2, 3… 같은 수를 넘쳐 채워요','A run of numbers 1, 2, 3…, spilled']
 ];
 (function(){ var o=[],g={}; window.FNDOC.forEach(function(f){ if(!g[f[0]]){ g[f[0]]=[]; o.push(g[f[0]]); } g[f[0]].push(f); }); window.FNDOC=[].concat.apply([],o); })();
 FFT.add({
@@ -632,4 +637,14 @@ FFT.add({
 FFT.add({
 '번역은 수식 함수가 없어서 AI() 함수로 해요. 칸마다 AI가 번역해서 채워요.':["Translation has no formula function, so it uses the AI() function. The AI translates each cell.", "No hay función de fórmula para traducir, así que se usa AI(). La IA traduce cada celda.", "Il n’y a pas de fonction de formule pour traduire, on utilise donc AI(). L’IA traduit chaque cellule.", "Für Übersetzungen gibt es keine Formel, daher wird AI() genutzt. Die KI übersetzt jede Zelle.", "翻訳できる数式の関数はないので、AI()関数を使います。AIがセルごとに翻訳します。"],
 '수식으로는 만들 수 없는 요청이에요.':["A formula can't do this request.", "Una fórmula no puede hacer esta petición.", "Une formule ne peut pas faire cette demande.", "Diese Anfrage geht mit einer Formel nicht.", "数式ではできない依頼です。"]
+});
+/* v19: array functions (spill), not-equal rule, colour scale in the rule dialog, freeze at the cell */
+FFT.add({
+'배열':['Arrays','Matrices','Tableaux','Arrays','配列'],
+'결과가 넘쳐 채워질 칸에 이미 값이 있어요. 아래·오른쪽 칸을 비우세요':['The cells the result spills into are not empty. Clear the cells below or to the right.','Las celdas donde se desborda el resultado no están vacías. Vacía las de abajo o la derecha.','Les cellules où le résultat déborde ne sont pas vides. Vide celles du dessous ou de droite.','Die Zellen für das Überlaufen sind nicht leer. Leere die Zellen darunter oder rechts.','結果があふれるセルに値があります。下や右のセルを空けてください'],
+'결과가 비었어요. 조건에 맞는 값이 없는지 확인하세요':['The result is empty. Check whether any value matches the condition.','El resultado está vacío. Comprueba si algún valor cumple la condición.','Le résultat est vide. Vérifie qu’une valeur remplit la condition.','Das Ergebnis ist leer. Prüfe, ob ein Wert die Bedingung erfüllt.','結果が空です。条件に合う値があるか確認してください'],
+'같지 않음 (≠)':['Not equal to (≠)','Distinto de (≠)','Différent de (≠)','Ungleich (≠)','等しくない (≠)'],
+'이 칸의 위·왼쪽 고정 (틀 고정)':['Freeze rows above and columns left of this cell','Inmovilizar filas de arriba y columnas a la izquierda','Figer les lignes au-dessus et colonnes à gauche','Zeilen darüber und Spalten links fixieren','このセルの上と左を固定'],
+'A1이 아닌 칸을 고르세요. 그 칸의 위쪽 행과 왼쪽 열이 고정돼요':['Pick a cell other than A1. The rows above it and the columns to its left are frozen.','Elige una celda que no sea A1. Se inmovilizan las filas de arriba y las columnas a la izquierda.','Choisis une cellule autre que A1. Les lignes au-dessus et les colonnes à gauche seront figées.','Wähle eine andere Zelle als A1. Zeilen darüber und Spalten links werden fixiert.','A1以外のセルを選んでください。その上の行と左の列が固定されます'],
+'{0}행과 {1}열까지 고정했어요':['Rows up to {0} and columns up to {1} frozen','Filas hasta {0} y columnas hasta {1} inmovilizadas','Lignes jusqu’à {0} et colonnes jusqu’à {1} figées','Zeilen bis {0} und Spalten bis {1} fixiert','{0}行目と{1}列まで固定しました']
 });
