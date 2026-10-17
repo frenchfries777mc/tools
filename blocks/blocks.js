@@ -123,6 +123,23 @@ def('act_stop',function(){ this.appendDummyInput().appendField(T('모든 "초마
 def('act_beep',function(){ this.appendValueInput('SEC').setCheck('Number').appendField(T('소리 내기')).appendField(new Blockly.FieldDropdown(function(){ return NOTES.map(function(n){ return [T(n[0]),n[1]]; }); }),'NOTE'); this.appendDummyInput().appendField(T('초')); this.setInputsInline(true); act(this,'삐 소리를 내요'); },
   function(b){ need('beep'); return '__beep('+b.getFieldValue('NOTE')+', '+(G.valueToCode(b,'SEC',O.COMMA)||'0.3')+');\n'; });
 
+/* ---------- moving around: nudge, follow the cursor, hit test ---------- */
+def('act_nudge',function(){ this.appendValueInput('N').setCheck('Number').appendField(elField(),'EL').appendField(T('의')).appendField(new Blockly.FieldDropdown(function(){ return [[T('x좌표(가로)를'),'x'],[T('y좌표(세로)를'),'y']]; }),'AXIS'); this.appendDummyInput().appendField(T('만큼 움직이기')); this.setInputsInline(true); act(this,'지금 있는 곳에서 가로(x)나 세로(y)로 얼마만큼 옮겨요. 마이너스 값이면 반대쪽으로 가요'); },
+  function(b){ need('nudge'); var ax=b.getFieldValue('AXIS'), d=G.valueToCode(b,'N',O.COMMA)||'0';
+    return '__nudge('+lit(b.getFieldValue('EL'))+', '+(ax==='x'?d+', 0':'0, '+d)+');\n'; });
+def('act_nudge2',function(){ this.appendValueInput('DX').setCheck('Number').appendField(elField(),'EL').appendField(T('을(를) 가로')); this.appendValueInput('DY').setCheck('Number').appendField(T('세로')); this.appendDummyInput().appendField(T('만큼 움직이기')); this.setInputsInline(true); act(this,'가로와 세로로 한꺼번에 옮겨요'); },
+  function(b){ need('nudge'); return '__nudge('+lit(b.getFieldValue('EL'))+', '+(G.valueToCode(b,'DX',O.COMMA)||'0')+', '+(G.valueToCode(b,'DY',O.COMMA)||'0')+');\n'; });
+def('val_where',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('의')).appendField(new Blockly.FieldDropdown(function(){ return [[T('x좌표'),'x'],[T('y좌표'),'y']]; }),'AXIS'); val(this,'Number','페이지 왼쪽 위에서 요소가 얼마나 떨어져 있는지 알려줘요'); },
+  function(b){ need('where'); return ['__where('+lit(b.getFieldValue('EL'))+', '+lit(b.getFieldValue('AXIS'))+')',O.FUNCTION_CALL]; });
+def('act_follow',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('이(가) 커서 따라다니기')).appendField(new Blockly.FieldDropdown(function(){ return [[T('바로'),'fast'],[T('부드럽게'),'soft'],[T('멈추기'),'stop']]; }),'MODE'); act(this,'마우스나 손가락을 따라 요소가 움직여요. 한 번만 놓으면 계속 따라다녀요'); },
+  function(b){ need('follow'); return '__follow('+lit(b.getFieldValue('EL'))+', '+lit(b.getFieldValue('MODE'))+');\n'; });
+def('val_cursor',function(){ this.appendDummyInput().appendField(T('커서 위치')).appendField(new Blockly.FieldDropdown([['x','x'],['y','y']]),'AXIS'); val(this,'Number','마우스(손가락)가 있는 곳. 페이지 왼쪽 위에서 얼마나 떨어졌는지 알려줘요'); },
+  function(b){ need('cursor'); return [b.getFieldValue('AXIS')==='x'?'__cx':'__cy',O.ATOMIC]; });
+def('val_hit',function(){ this.appendDummyInput().appendField(elField(),'A').appendField(T('와(과)')).appendField(elField(),'B').appendField(T('이(가) 닿았나?')); val(this,'Boolean','두 요소가 겹쳐 있으면 참이에요. "만약"과 함께 써요'); },
+  function(b){ need('hit'); return ['__hit('+lit(b.getFieldValue('A'))+', '+lit(b.getFieldValue('B'))+')',O.FUNCTION_CALL]; });
+def('act_stay',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('화면 안에 가두기')); act(this,'요소가 페이지 밖으로 나가지 않게 해요. 움직이기 블록 뒤에 붙여 써요'); },
+  function(b){ need('stay'); return '__stay('+lit(b.getFieldValue('EL'))+');\n'; });
+
 /* ---------- values ---------- */
 function val(b,check,tip){ b.setOutput(true,check||null); b.setColour(C.val); if(tip) b.setTooltip(T(tip)); }
 def('val_get',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('의')).appendField(new Blockly.FieldDropdown(function(){ return [[T('내용'),'text'],[T('숫자'),'num'],[T('너비'),'width'],[T('높이'),'height']]; }),'PROP'); val(this,null,'글자나 입력칸에 쓴 값을 가져와요. 숫자로 계산하려면 "숫자"를 골라요'); },
@@ -200,13 +217,19 @@ var HELP={
   pos:"var __mx = 0, __my = 0;\nfunction __pos(e, el) {\n  var r = el.getBoundingClientRect();\n  __mx = Math.round((e.clientX - r.left) * (el.width ? el.width / r.width : 1));\n  __my = Math.round((e.clientY - r.top) * (el.height ? el.height / r.height : 1));\n}",
   store:"var __mem = {};\nfunction __save(k, v) {\n  k = 'ffb:' + k;\n  __mem[k] = v;\n  try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {}\n}\nfunction __load(k, d) {\n  k = 'ffb:' + k;\n  try {\n    var s = localStorage.getItem(k);\n    if (s !== null) return JSON.parse(s);\n  } catch (e) {}\n  return k in __mem ? __mem[k] : d;\n}",
   dist:"function __dist(x1, y1, x2, y2) { return Math.hypot(x2 - x1, y2 - y1); }",
+  nudge:"function __nudge(name, dx, dy) {\n  var el = $(name), s = el.style;\n  if (s.position !== 'absolute') {\n    var r = el.getBoundingClientRect();\n    s.position = 'absolute';\n    s.left = (r.left + window.pageXOffset) + 'px';\n    s.top = (r.top + window.pageYOffset) + 'px';\n  }\n  s.left = ((parseFloat(s.left) || 0) + dx) + 'px';\n  s.top = ((parseFloat(s.top) || 0) + dy) + 'px';\n}",
+  where:"function __where(name, axis) {\n  var r = $(name).getBoundingClientRect();\n  return Math.round(axis === 'x' ? r.left + window.pageXOffset : r.top + window.pageYOffset);\n}",
+  hit:"function __hit(a, b) {\n  var p = $(a).getBoundingClientRect(), q = $(b).getBoundingClientRect();\n  return p.left < q.right && p.right > q.left && p.top < q.bottom && p.bottom > q.top;\n}",
+  stay:"function __stay(name) {\n  var el = $(name), s = el.style, d = document.documentElement;\n  if (s.position !== 'absolute') return;\n  var x = Math.max(0, Math.min(parseFloat(s.left) || 0, d.clientWidth - el.offsetWidth));\n  var y = Math.max(0, Math.min(parseFloat(s.top) || 0, d.clientHeight - el.offsetHeight));\n  s.left = x + 'px';\n  s.top = y + 'px';\n}",
+  cursor:"var __cx = 0, __cy = 0;\nfunction __track(e) {\n  __cx = Math.round(e.pageX);\n  __cy = Math.round(e.pageY);\n}\ndocument.addEventListener('pointermove', __track);\ndocument.addEventListener('pointerdown', __track);",
+  follow:"var __fol = {}, __folOn = false, __moved = false;\ndocument.addEventListener('pointermove', function () { __moved = true; });\ndocument.addEventListener('pointerdown', function () { __moved = true; });\nfunction __folLoop() {\n  for (var n in __fol) {\n    var el = document.getElementById(n);\n    if (!el) { delete __fol[n]; continue; }\n    if (!__moved) continue;\n    var s = el.style, tx = __cx - el.offsetWidth / 2, ty = __cy - el.offsetHeight / 2;\n    if (s.position !== 'absolute') {\n      var r = el.getBoundingClientRect();\n      s.position = 'absolute';\n      s.left = (r.left + window.pageXOffset) + 'px';\n      s.top = (r.top + window.pageYOffset) + 'px';\n    }\n    var x = parseFloat(s.left) || 0, y = parseFloat(s.top) || 0, k = __fol[n] === 'soft' ? 0.15 : 1;\n    s.left = (x + (tx - x) * k) + 'px';\n    s.top = (y + (ty - y) * k) + 'px';\n    s.pointerEvents = 'none';\n  }\n  requestAnimationFrame(__folLoop);\n}\nfunction __follow(name, mode) {\n  if (mode === 'stop') {\n    delete __fol[name];\n    var e = document.getElementById(name);\n    if (e) e.style.pointerEvents = '';\n    return;\n  }\n  $(name);\n  __fol[name] = mode;\n  document.body.style.touchAction = 'none';\n  if (!__folOn) { __folOn = true; __folLoop(); }\n}",
   key:"var __key = '';",
   timers:"var __timers = [];",
   beep:"var __audio;\nfunction __beep(freq, sec) {\n  __audio = __audio || new (window.AudioContext || window.webkitAudioContext)();\n  var o = __audio.createOscillator(), g = __audio.createGain(), t = __audio.currentTime;\n  o.frequency.value = freq;\n  o.connect(g); g.connect(__audio.destination);\n  g.gain.setValueAtTime(0.2, t);\n  g.gain.exponentialRampToValueAtTime(0.001, t + sec);\n  o.start(t); o.stop(t + sec);\n}",
   image:"var __imgCache = {};\nfunction __image(name, src, x, y, w) {\n  if (!src) return;\n  var g = __pen(name), im = __imgCache[src];\n  if (!im) { im = new Image(); im.src = src; __imgCache[src] = im; }\n  var go = function () { g.drawImage(im, x, y, w, w * im.naturalHeight / im.naturalWidth); };\n  if (im.complete && im.naturalWidth) go(); else im.addEventListener('load', go, { once: true });\n}",
   draw:"function __pen(name) { return $(name).getContext('2d'); }\nfunction __clear(name) { var c = $(name); __pen(name).clearRect(0, 0, c.width, c.height); }\nfunction __rect(name, x, y, w, h, color) { var g = __pen(name); g.fillStyle = color; g.fillRect(x, y, w, h); }\nfunction __circle(name, x, y, r, color) { var g = __pen(name); g.fillStyle = color; g.beginPath(); g.arc(x, y, Math.max(0, r), 0, Math.PI * 2); g.fill(); }\nfunction __line(name, x1, y1, x2, y2, color) { var g = __pen(name); g.strokeStyle = color; g.lineWidth = 3; g.lineCap = 'round'; g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); g.stroke(); }\nfunction __text(name, text, x, y, color) { var g = __pen(name); g.fillStyle = color; g.font = '20px sans-serif'; g.fillText(text, x, y); }"
 };
-var HELP_DEPS={image:['$','draw'],get:['$'],set:['$'],add:['$'],size:['$'],move:['$'],show:['$'],draw:['$']};
+var HELP_DEPS={nudge:['$'],where:['$'],hit:['$'],stay:['$'],follow:['$','cursor'],image:['$','draw'],get:['$'],set:['$'],add:['$'],size:['$'],move:['$'],show:['$'],draw:['$']};
 
 /* ---------- HTML ---------- */
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -307,6 +330,9 @@ function toolbox(){
       lab('색'),{kind:'block',type:'val_color'},{kind:'block',type:'val_rcolor'}]},
     {kind:'category',name:T('움직임'),colour:'#0f8f8f',contents:[
       {kind:'block',type:'act_move',inputs:{X:n(100),Y:n(100)}},
+      {kind:'block',type:'act_nudge',inputs:{N:n(10)}},{kind:'block',type:'act_nudge2',inputs:{DX:n(10),DY:n(0)}},{kind:'block',type:'act_stay'},
+      lab('커서 따라다니기'),{kind:'block',type:'act_follow'},{kind:'block',type:'val_cursor'},
+      lab('위치와 닿음'),{kind:'block',type:'val_where'},{kind:'block',type:'val_hit'},
       {kind:'block',type:'act_size',fields:{PROP:'rotate'},inputs:{N:n(45)}},
       lab('누른 곳'),{kind:'block',type:'val_mouse'}]},
     {kind:'category',name:T('소리·알림'),colour:'#2e9bd6',contents:[

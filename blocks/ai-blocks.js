@@ -76,18 +76,35 @@ function buildPrompt(q,modify,prevErr,prevOut){
 /* ---------- check an answer before it touches the workspace ---------- */
 function planOf(t){ var m=/PLAN:\s*(edit|new)/i.exec(String(t||'').slice(0,200)); return m?m[1].toLowerCase():null; }
 function extract(t){ t=String(t||''); var a=t.indexOf('<xml'), b=t.lastIndexOf('</xml>'); if(a<0||b<a) throw new Error('no <xml> element'); return t.slice(a,b+6); }
+var dropped=0; // blocks taken out of the last answer instead of asking the AI to write everything again
+function elKids(n,tag){ var o=[]; for(var c=n.firstElementChild;c;c=c.nextElementSibling) if(c.tagName.toLowerCase()===tag) o.push(c); return o; }
+function dropBlock(el){ // remove one block but keep the blocks chained after it
+  var par=el.parentNode, nx=elKids(el,'next')[0], follow=nx&&elKids(nx,'block')[0], pn=par.tagName.toLowerCase();
+  dropped++;
+  if(follow){ par.replaceChild(follow,el); return; }
+  par.removeChild(el);
+  if((pn==='next'||pn==='value'||pn==='statement')&&!par.firstElementChild&&par.parentNode) par.parentNode.removeChild(par);
+}
+function repair(dom){
+  Array.prototype.slice.call(dom.querySelectorAll('block,shadow')).forEach(function(n){
+    if(n.parentNode&&!Blockly.Blocks[n.getAttribute('type')]) dropBlock(n);
+  });
+  var pages=elKids(dom,'block').filter(function(b){ return b.getAttribute('type')==='page_root'; });
+  pages.slice(1).forEach(function(b){ dom.removeChild(b); dropped++; });
+}
+function loads(el){ var hw=new Blockly.Workspace(); try{ Blockly.Events.disable(); Blockly.Xml.domToBlock(el,hw); return true; }catch(e){ return false; } finally{ Blockly.Events.enable(); hw.dispose(); } }
 function check(xml){
   var dom; try{ dom=Blockly.utils.xml.textToDom(xml); }catch(e){ throw new Error('XML does not parse'); }
-  var bad=[]; dom.querySelectorAll('block,shadow').forEach(function(n){ var t=n.getAttribute('type'); if(!Blockly.Blocks[t]&&bad.indexOf(t)<0) bad.push(t); });
-  if(bad.length) throw new Error('unknown block types: '+bad.join(', '));
-  var pages=0; for(var c=dom.firstElementChild;c;c=c.nextElementSibling) if(c.tagName.toLowerCase()==='block'&&c.getAttribute('type')==='page_root') pages++;
-  if(pages!==1) throw new Error('needs exactly one top-level page_root, found '+pages);
-  // dry run in a headless workspace (element names known so the name dropdowns accept them)
-  var hw=new Blockly.Workspace(), m, rx=/<field name="NAME">([^<]*)<\/field>/g;
+  dropped=0; repair(dom);
+  // element names known so the name dropdowns accept them during the dry run
+  var m, rx=/<field name="NAME">([^<]*)<\/field>/g;
   while((m=rx.exec(xml))) BH.KNOWN.add(m[1].replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&amp;/g,'&'));
-  try{ Blockly.Events.disable(); Blockly.Xml.domToWorkspace(dom,hw); }catch(e){ throw new Error('Blockly could not load it: '+(e.message||e)); }
-  finally{ Blockly.Events.enable(); hw.dispose(); BH.KNOWN.clear(); }
-  return xml;
+  try{
+    elKids(dom,'block').forEach(function(b){ if(!loads(b)){ dom.removeChild(b); dropped++; } }); // a top-level script that cannot load is dropped, the rest stays
+    var pages=elKids(dom,'block').filter(function(b){ return b.getAttribute('type')==='page_root'; }).length;
+    if(pages!==1) throw new Error('needs exactly one top-level page_root, found '+pages);
+  } finally{ BH.KNOWN.clear(); }
+  return Blockly.utils.xml.domToText(dom);
 }
 
 /* ---------- dialog ---------- */
@@ -102,7 +119,7 @@ function busy(on){ busyNow=on; $('baiGo').disabled=on; $('baiGo').textContent=on
   clearInterval(tick); if(on){ t0=Date.now(); chars=0; $('baiLive').textContent=''; $('baiLive').hidden=true; tick=setInterval(status,500); } }
 function status(){ var s=Math.round((Date.now()-t0)/1000);
   var how=plan==='edit'?T('지금 블록을 고치기로 했어요')+' · ':plan==='new'?T('새로 짜기로 했어요')+' · ':'';
-  msg(phase==='fix'?F('AI 답을 고치는 중… {0}초',s):chars?how+F('AI가 블록 코드를 쓰는 중… 글자 {0}개 · {1}초',chars,s):F('AI가 생각하는 중… {0}초',s)); }
+  msg(phase==='fix'?F('AI에게 틀린 곳을 알려 다시 받는 중… {0}초',s):chars?how+F('AI가 블록 코드를 쓰는 중… 글자 {0}개 · {1}초',chars,s):F('AI가 생각하는 중… {0}초',s)); }
 function live(t){ chars=t.length; if(!plan) plan=planOf(t); var p=$('baiLive'), wasHidden=p.hidden, stick=wasHidden||p.scrollHeight-p.scrollTop-p.clientHeight<24; p.hidden=false; p.textContent=t.length>6000?'…'+t.slice(-6000):t; if(stick) p.scrollTop=p.scrollHeight; } // follows the end only while the reader is at the bottom
 function run(q,modify,tries,errText,lastOut){
   phase=errText?'fix':''; chars=0;
@@ -119,7 +136,7 @@ function go(){
     B.loadXML(xml); B.arrange();
     if(plan==='new'){ var pg=ws.getTopBlocks(false).filter(function(b){ return b.type==='page_root'; })[0], t=pg&&pg.getFieldValue('TITLE'); if(t) $('projName').value=t; }
     B.save(); $('baiUndo').hidden=false; busy(false);
-    msg(T('다 만들었어요! 미리보기에서 확인해 보세요'),'ok'); close(); B.toast(plan==='edit'?T('AI가 지금 블록을 고쳤어요'):T('AI가 블록을 새로 짰어요'));
+    msg(T('다 만들었어요! 미리보기에서 확인해 보세요'),'ok'); close(); B.toast((plan==='edit'?T('AI가 지금 블록을 고쳤어요'):T('AI가 블록을 새로 짰어요'))+(dropped?' · '+F('잘못된 블록 {0}개는 뺐어요',dropped):''));
   },function(e){ busy(false); if(e.kind!=='nokey') msg(e.message||T('AI에 연결하지 못했어요'),'bad'); else msg(''); }).then(function(){ if(busyNow) busy(false); });
 }
 function undoAI(){ if(!before) return; B.loadJSON(before.ws); $('projName').value=before.name; B.save(); before=null; $('baiUndo').hidden=true; msg(''); B.toast(T('AI 전으로 되돌렸어요')); }

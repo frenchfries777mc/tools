@@ -18,18 +18,19 @@ var T=FFT.T, F=FFT.F;
 var LS='ffai.v1';
 var BASE=(function(){ var s=document.currentScript&&document.currentScript.src; return s?s.replace(/[^\/]*$/,''):'../'; })();
 var PROVIDERS={
-  local:{name:'자체 AI', local:true, models:[['Qwen3-1.7B','기본 · 약 1GB'],['Qwen3-0.6B','가벼움 · 약 0.5GB'],['Qwen3-4B','똑똑함 · 약 2.5GB'],['FF-Tools-1.7B','FF777 1.0 tarius'],['FF-Tools-4B','FF777 1.0 lectus']]},
+  local:{name:'자체 AI', local:true, models:[['Qwen3-1.7B','기본 · 약 1GB'],['Qwen3-0.6B','가벼움 · 약 0.5GB'],['Qwen3-4B','똑똑함 · 약 2.5GB'],['FF-Tools-1.7B','FF777 1.1 tarius'],['FF-Tools-4B','FF777 1.0 lectus']]},
   claude:{name:'Claude', models:[['claude-opus-5-5','Claude Opus 5.5'],['claude-sonnet-5-5','Claude Sonnet 5.5'],['claude-haiku-5-5','Claude Haiku 5.5']], keyUrl:'https://console.anthropic.com/settings/keys', ph:'sk-ant-...'},
   gemini:{name:'Gemini', models:[['gemini-2.5-flash','Gemini 2.5 Flash'],['gemini-2.5-pro','Gemini 2.5 Pro']], keyUrl:'https://aistudio.google.com/apikey', ph:'AIza...', free:true},
   openai:{name:'OpenAI', models:[['gpt-4.1-mini','GPT-4.1 mini'],['gpt-4.1','GPT-4.1']], keyUrl:'https://platform.openai.com/api-keys', ph:'sk-...'}
 };
 /* the Tools-trained models (train/colab.ipynb): same Qwen3 model code, our own weights on Hugging Face */
 var HF='https://huggingface.co/Frenchfries777/';
-var TUNED={'FF-Tools-1.7B':{base:'Qwen3-1.7B', about:'FF777 1.0 tarius: Tools(블록 HTML, Fry Sheet)에 맞게 학습한 가벼운 AI예요. Qwen3 1.7B(Apache 2.0)를 바탕으로 만들었어요.'},
+var TUNED={'FF-Tools-1.7B':{base:'Qwen3-1.7B', about:'FF777 1.1 tarius: Tools(블록 HTML, Fry Sheet)에 맞게 학습한 가벼운 AI예요. Qwen3 1.7B(Apache 2.0)를 바탕으로 만들었어요.'},
            'FF-Tools-4B':{base:'Qwen3-4B', about:'FF777 1.0 lectus: Tools(블록 HTML, Fry Sheet)에 맞게 학습한 똑똑한 AI예요. Qwen3 4B(Apache 2.0)를 바탕으로 만들었어요.'}};
 
+function modelLabel(id){ var m=PROVIDERS.local.models.filter(function(x){ return x[0]===id; })[0]; return m&&TUNED[id]?m[1]:id; }
 FFT.add({
-'FF777 1.0 tarius: Tools(블록 HTML, Fry Sheet)에 맞게 학습한 가벼운 AI예요. Qwen3 1.7B(Apache 2.0)를 바탕으로 만들었어요.':['FF777 1.0 tarius: a light AI trained for Tools (Block HTML, Fry Sheet). Built on Qwen3 1.7B (Apache 2.0).','FF777 1.0 tarius: una IA ligera entrenada para Tools (Block HTML, Fry Sheet). Basada en Qwen3 1.7B (Apache 2.0).','FF777 1.0 tarius : une IA légère entraînée pour Tools (Block HTML, Fry Sheet). Basée sur Qwen3 1.7B (Apache 2.0).','FF777 1.0 tarius: eine leichte KI, trainiert für Tools (Block HTML, Fry Sheet). Basiert auf Qwen3 1.7B (Apache 2.0).','FF777 1.0 tarius：Tools（Block HTML、Fry Sheet）向けに学習した軽いAIです。Qwen3 1.7B（Apache 2.0）をもとに作りました。'],
+'FF777 1.1 tarius: Tools(블록 HTML, Fry Sheet)에 맞게 학습한 가벼운 AI예요. Qwen3 1.7B(Apache 2.0)를 바탕으로 만들었어요.':['FF777 1.1 tarius: a light AI trained for Tools (Block HTML, Fry Sheet). Built on Qwen3 1.7B (Apache 2.0).','FF777 1.1 tarius: una IA ligera entrenada para Tools (Block HTML, Fry Sheet). Basada en Qwen3 1.7B (Apache 2.0).','FF777 1.1 tarius : une IA légère entraînée pour Tools (Block HTML, Fry Sheet). Basée sur Qwen3 1.7B (Apache 2.0).','FF777 1.1 tarius: eine leichte KI, trainiert für Tools (Block HTML, Fry Sheet). Basiert auf Qwen3 1.7B (Apache 2.0).','FF777 1.1 tarius：Tools（Block HTML、Fry Sheet）向けに学習した軽いAIです。Qwen3 1.7B（Apache 2.0）をもとに作りました。'],
 'FF777 1.0 lectus: Tools(블록 HTML, Fry Sheet)에 맞게 학습한 똑똑한 AI예요. Qwen3 4B(Apache 2.0)를 바탕으로 만들었어요.':['FF777 1.0 lectus: a smart AI trained for Tools (Block HTML, Fry Sheet). Built on Qwen3 4B (Apache 2.0).','FF777 1.0 lectus: una IA lista entrenada para Tools (Block HTML, Fry Sheet). Basada en Qwen3 4B (Apache 2.0).','FF777 1.0 lectus : une IA performante entraînée pour Tools (Block HTML, Fry Sheet). Basée sur Qwen3 4B (Apache 2.0).','FF777 1.0 lectus: eine kluge KI, trainiert für Tools (Block HTML, Fry Sheet). Basiert auf Qwen3 4B (Apache 2.0).','FF777 1.0 lectus：Tools（Block HTML、Fry Sheet）向けに学習した賢いAIです。Qwen3 4B（Apache 2.0）をもとに作りました。'],
 '준비 중':['coming soon','próximamente','bientôt','bald verfügbar','準備中'],
 '아직 준비 중인 모델이에요':['This model is not ready yet','Este modelo aún no está listo','Ce modèle n’est pas encore prêt','Dieses Modell ist noch nicht bereit','このモデルはまだ準備中です'],
@@ -41,8 +42,8 @@ FFT.add({
 '똑똑함 · 약 2.5GB':['Smart · about 2.5 GB','Listo · unos 2,5 GB','Malin · environ 2,5 Go','Klug · ca. 2,5 GB','高性能 · 約2.5GB'],
 '자체 AI를 불러오지 못했어요':['Could not load the built-in AI','No se pudo cargar la IA integrada','Impossible de charger l’IA intégrée','Eingebaute KI konnte nicht laden','内蔵AIを読み込めませんでした'],
 '이 기기나 브라우저에서는 자체 AI를 쓸 수 없어요. AI 설정에서 API 키를 넣어 주세요':['The built-in AI does not run on this device or browser. Add an API key in AI settings','La IA integrada no funciona en este dispositivo o navegador. Añade una clave API en Ajustes de IA','L’IA intégrée ne marche pas sur cet appareil ou navigateur. Ajoute une clé API dans les réglages IA','Die eingebaute KI läuft auf diesem Gerät/Browser nicht. Trage in den KI-Einstellungen einen API-Schlüssel ein','この端末やブラウザでは内蔵AIを使えません。AI設定でAPIキーを入れてください'],
-'자체 AI 준비 중…':['Getting the built-in AI ready…','Preparando la IA integrada…','Préparation de l’IA intégrée…','Eingebaute KI wird vorbereitet…','内蔵AIを準備中…'],
-'자체 AI 준비 중… {0}%':['Getting the built-in AI ready… {0}%','Preparando la IA integrada… {0}%','Préparation de l’IA intégrée… {0} %','Eingebaute KI wird vorbereitet… {0}%','内蔵AIを準備中… {0}%'],
+'{0} 준비 중…':['Getting {0} ready…','Preparando {0}…','Préparation de {0}…','{0} wird vorbereitet…','{0}を準備中…'],
+'{0} 준비 중… {1}%':['Getting {0} ready… {1}%','Preparando {0}… {1}%','Préparation de {0}… {1} %','{0} wird vorbereitet… {1}%','{0}を準備中… {1}%'],
 '이 기기에서는 메모리가 부족해요. 더 가벼운 모델을 골라 보세요':['Not enough memory on this device. Pick a lighter model','No hay memoria suficiente. Elige un modelo más ligero','Mémoire insuffisante. Choisis un modèle plus léger','Zu wenig Speicher. Wähle ein leichteres Modell','メモリが足りません。軽いモデルを選んでください'],
 '자체 AI에게는 너무 긴 요청이에요. 고를 칸을 줄이거나 API 키를 써 보세요':['Too long for the built-in AI. Select fewer cells or use an API key','Demasiado largo para la IA integrada. Elige menos celdas o usa una clave API','Trop long pour l’IA intégrée. Sélectionne moins de cellules ou utilise une clé API','Zu lang für die eingebaute KI. Weniger Zellen wählen oder API-Schlüssel nutzen','内蔵AIには長すぎます。選ぶセルを減らすかAPIキーを使ってください'],
 '자체 AI가 답하지 못했어요':['The built-in AI could not answer','La IA integrada no pudo responder','L’IA intégrée n’a pas pu répondre','Die eingebaute KI konnte nicht antworten','内蔵AIが答えられませんでした'],
@@ -202,7 +203,7 @@ function engine(model){
     return webllm();
   }).then(function(W){
     var old=eng; eng=null; var p=old?old.unload():Promise.resolve();
-    return p.then(function(){ progress(0,T('자체 AI 준비 중…')); return W.CreateMLCEngine(id,{appConfig:appCfg(W,model), initProgressCallback:function(r){ progress(r.progress||0,F('자체 AI 준비 중… {0}%',Math.round((r.progress||0)*100))); }},{context_window_size:CTX}); });
+    return p.then(function(){ progress(0,F('{0} 준비 중…',modelLabel(model))); return W.CreateMLCEngine(id,{appConfig:appCfg(W,model), initProgressCallback:function(r){ progress(r.progress||0,F('{0} 준비 중… {1}%',modelLabel(model),Math.round((r.progress||0)*100))); }},{context_window_size:CTX}); });
   }).then(function(e){ progress(null); eng=e; engP=null; return e; },function(err){ progress(null); engP=null; engId='';
     if(err&&err.kind) throw err; console.error(err);
     throw AIError(/memory|OOM|allocate|device lost/i.test(String(err&&err.message))?T('이 기기에서는 메모리가 부족해요. 더 가벼운 모델을 골라 보세요'):T('자체 AI를 불러오지 못했어요'),'net'); });
@@ -236,7 +237,7 @@ function askLocal(c,o){
 }
 /* ---------- what the developer taught the site's own models (Supabase ff_ai_facts; only the developer can write) ---------- */
 var FACTS_URL='https://kebsbuvuutilitwlvxzv.supabase.co/rest/v1/ff_ai_facts?select=model,question,fact&order=id', FACTS_KEY='sb_publishable_4Egu0zm3p6cxWGvP_-GlIw_mlCpO1Nf';
-var ME={'FF-Tools-1.7B':{name:'tarius', who:'You are FF777 1.0 tarius, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 1.7B. Your name is the end of the Latin word elementarius ("basic").'},
+var ME={'FF-Tools-1.7B':{name:'tarius', who:'You are FF777 1.1 tarius, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 1.7B. Your name is the end of the Latin word elementarius ("basic").'},
         'FF-Tools-4B':{name:'lectus', who:'You are FF777 1.0 lectus, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 4B. Your name is the end of the Latin word intellectus ("understanding").'}};
 var factsP=null;
 function facts(){
