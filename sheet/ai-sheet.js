@@ -74,6 +74,16 @@ function out(html){ $('aiOut').innerHTML=html; }
 function liveOut(t){ var e=$('aiOut').firstChild; if(!e||e.className!=='aiLive'){ out('<pre class="aiLive"></pre>'); e=$('aiOut').firstChild; }
   var stick=e.scrollHeight-e.scrollTop-e.clientHeight<24; e.textContent=t; if(stick) e.scrollTop=e.scrollHeight; }
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+var TR_LANG=[['영어','영어'],['English','영어'],['스페인','스페인어'],['Spanish','스페인어'],['일본','일본어'],['Japanese','일본어'],['중국','중국어'],['Chinese','중국어'],['프랑스','프랑스어'],['French','프랑스어'],['독일','독일어'],['German','독일어'],['러시아','러시아어'],['이탈리아','이탈리아어'],['포르투갈','포르투갈어'],['한국어','한국어'],['Korean','한국어']];
+function translateFormula(q,a){ // a request to translate a cell is =AI("<language>로 번역", cell), not a formula the model should invent
+  if(!/번역|translate|traduc|traduire|übersetz|翻訳/i.test(q)) return null;
+  var lang=''; for(var i=0;i<TR_LANG.length;i++) if(q.toLowerCase().indexOf(TR_LANG[i][0].toLowerCase())>=0){ lang=TR_LANG[i][1]; break; }
+  if(!lang) return null;
+  var m=/([A-Za-z]{1,3}\d{1,5})/.exec(q), ref=m?m[1].toUpperCase():null;
+  if(!ref){ ref=a.c>0?E.addr(a.r,a.c-1):null; } if(!ref) return null;
+  var josa=/[가-힣]/.test(lang.slice(-1))&&((lang.charCodeAt(lang.length-1)-0xAC00)%28===0)?'로':'으로';
+  return {f:'=AI("'+lang+josa+' 번역", '+ref+')'};
+}
 function fnList(){ return (window.FNDOC||[]).map(function(f){ return f[1]; }).filter(function(n){ return n!=='AI'; }).join(', '); }
 function go(){
   var q=$('aiQ').value.trim(); if(!q) return $('aiQ').focus();
@@ -83,13 +93,20 @@ function go(){
     .then(function(r){ lastAnswer=r.trim(); out('<div class="aiAns">'+esc(lastAnswer).replace(/\n/g,'<br>')+'</div>');
       $('aiActs').innerHTML='<button class="tbtn" id="aiPut">'+T('답을 칸에 넣기')+'</button>';
       $('aiPut').onclick=function(){ var g=t?t.g:null, r0=g?g.r2+2:a.r, c0=g?g.c1:a.c; A.pushUndo(); lastAnswer.split('\n').forEach(function(l,i){ A.setRaw(r0+i,c0,l); }); A.changed(); A.select(r0,c0); close(); }; });
-  else if(mode==='formula') p=FFAI.ask({onText:liveOut, json:true, system:FFAI.isTuned()?FFP.formulaSys:FFP.formulaSys+' Use only these functions: '+fnList()+'.',
+  else if(mode==='formula'){
+    var tr=translateFormula(q,a);
+    if(tr){ busy(false); lastFormula=tr.f; out('<code class="aiF">'+esc(tr.f)+'</code><div class="aiEx">'+esc(T('번역은 수식 함수가 없어서 AI() 함수로 해요. 칸마다 AI가 번역해서 채워요.'))+'</div>');
+      $('aiActs').innerHTML='<button class="tbtn pri" id="aiPut">'+F('{0}에 넣기',E.addr(a.r,a.c))+'</button>';
+      $('aiPut').onclick=function(){ A.pushUndo(); A.setRaw(a.r,a.c,lastFormula); A.changed(); close(); }; return; }
+    p=FFAI.ask({onText:liveOut, json:true, system:FFAI.isTuned()?FFP.formulaSys:FFP.formulaSys+' Use only these functions: '+fnList()+'. For translating, summarizing or classifying text use =AI("instruction", cell). If no formula can do the request, reply {"formula":"","explain":"why not, in one short sentence"}.',
       prompt:FFP.formulaPrompt(t&&t.text,E.addr(a.r,a.c),q)})
-    .then(function(r){ var j=FFAI.parseJSON(r), f=String(j.formula||'').trim(); if(f&&f[0]!=='=') f='='+f; if(!f) throw new Error(T('AI 답을 읽지 못했어요'));
+    .then(function(r){ var j=FFAI.parseJSON(r), f=String(j.formula||'').trim(); if(f&&f[0]!=='=') f='='+f;
+      if(!f){ if(j.explain){ lastFormula=''; out('<div class="aiEx">'+esc(T('수식으로는 만들 수 없는 요청이에요.')+' '+j.explain)+'</div>'); $('aiActs').innerHTML=''; return; } throw new Error(T('AI 답을 읽지 못했어요')); }
       try{ E.parse(f.slice(1)); }catch(e){ throw new Error(T('AI가 만든 수식에 오류가 있어요')+': '+f); }
       lastFormula=f; out('<code class="aiF">'+esc(f)+'</code><div class="aiEx">'+esc(j.explain||'')+'</div>');
       $('aiActs').innerHTML='<button class="tbtn pri" id="aiPut">'+F('{0}에 넣기',E.addr(a.r,a.c))+'</button>';
       $('aiPut').onclick=function(){ A.pushUndo(); A.setRaw(a.r,a.c,lastFormula); A.changed(); close(); }; });
+  }
   else if(mode==='graph'){
     if(!t){ busy(false); out('<div class="aiErr">'+esc(T('그래프로 만들 표를 먼저 고르세요'))+'</div>'); return; }
     p=FFAI.ask({onText:liveOut, json:true, system:FFP.graphSys, prompt:FFP.graphPrompt(t.text,q)})

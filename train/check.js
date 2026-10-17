@@ -61,11 +61,17 @@ const checks={
     return msg(P.tableSys,P.tablePrompt(o.q),JSON.stringify({rows}));
   },
   formula(o){
+    if(o.cant){ // a request no formula can do: empty formula plus a short honest explanation
+      if(!o.q||!o.cell||!o.explain||o.formula) throw new Error('cant needs q, cell, explain and no formula');
+      const s0=sheetOf(rect(o.table),o.at);
+      return msg(P.formulaSys,P.formulaPrompt(tableText(s0),o.cell,o.q),JSON.stringify({formula:'',explain:String(o.explain)}));
+    }
     if(!o.q||!o.cell||!o.formula) throw new Error('needs q, cell, formula');
     const s=sheetOf(rect(o.table),o.at), f=String(o.formula).trim(); if(f[0]!=='=') throw new Error('formula must start with =');
     try{ E.parse(f.slice(1)); }catch(e){ throw new Error('formula does not parse: '+f); }
     const c=E.parseAddr(o.cell); if(!c) throw new Error('bad cell');
     if(c.r>=s.g.r1&&c.r<=s.g.r2&&c.c>=s.g.c1&&c.c<=s.g.c2&&s.doc.sheets[0].cells[E.K(c.r,c.c)]) throw new Error('target cell is inside the table data');
+    if(o.noeval){ if(!/^=AI\(/.test(f)) throw new Error('noeval only for =AI(...) formulas'); return msg(P.formulaSys,P.formulaPrompt(tableText(s),o.cell,o.q),JSON.stringify({formula:f,explain:String(o.explain||'')})); }
     s.doc.sheets[0].cells[E.K(c.r,c.c)]={v:f}; s.eng.reset(); const v=s.eng.value(0,c.r,c.c);
     if(E.isErr(v)) throw new Error('formula gives '+String(v.e||v)+': '+f);
     if(o.expect!==undefined&&o.expect!==null){ const ok=typeof o.expect==='number'?typeof v==='number'&&Math.abs(v-o.expect)<1e-6*Math.max(1,Math.abs(o.expect)):String(v)===String(o.expect);
