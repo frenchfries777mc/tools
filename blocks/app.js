@@ -109,18 +109,23 @@ function checkPics(){ var n=BH.markPics(ws), key=BH.missingPics(ws).map(function
 var custom=null, customT=null;
 function finalHTML(){ return custom!==null?custom:BH.build(ws,{trap:false}); }
 function showCode(){ if(custom!==null) return; var v=finalHTML(); if($('codeEdit').value!==v) $('codeEdit').value=v; }
-function dropCustom(msg){ if(custom==null) return; custom=null; clearTimeout(customT); $('codeReset').hidden=true; $('codeNote').hidden=false; if(msg) toast(T('직접 쓴 HTML은 지웠어요. 블록 코드로 돌아왔어요')); }
-var pasting=false;
+function dropCustom(msg){ if(custom==null) return; custom=null; clearTimeout(customT); $('codeEdit').readOnly=false; $('codeReset').hidden=true; $('codeNote').hidden=false; if(msg) toast(T('직접 쓴 HTML은 지웠어요. 블록 코드로 돌아왔어요')); }
+var pasting=false, BIGCODE=500000, MAXCODE=2500*1024;
+function ta0Big(t){ return t.readOnly&&custom!==null&&!pasting; }
 $('codeEdit').addEventListener('input',function(){ if(pasting) return; var v=$('codeEdit').value; custom=v; $('codeReset').hidden=false; clearTimeout(customT);
   customT=setTimeout(function(){ var t=$('codeEdit').value; if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=t; },Math.min(3000,500+Math.round(v.length/400))); });
 /* a big paste freezes the page when the text box lays out all of it at once: while it is put in piece by piece (one piece per frame, box hidden so nothing is laid out) the page keeps answering, then the preview refreshes once */
-$('codeEdit').addEventListener('paste',function(e){ var cd=e.clipboardData, text=cd&&cd.getData('text'); if(!text||text.length<60000) return;
+$('codeEdit').addEventListener('paste',function(e){ var cd=e.clipboardData, text=cd&&cd.getData('text'); if(!text||text.length<60000) return; if(text.length>MAXCODE){ e.preventDefault(); toast(T('코드가 너무 커요. 2,500KB까지 붙여넣을 수 있어요')); return; } if(ta0Big(this)){ e.preventDefault(); toast(T('큰 코드는 여기서 고칠 수 없어요. 아래 되돌리기를 누른 뒤 새로 붙여 넣어 주세요')); return; }
   e.preventDefault(); var ta=this, pos=0, CH=200000, n=text.length, v=ta.value, s0=ta.selectionStart, e0=ta.selectionEnd, parts=[v.slice(0,s0)];
   pasting=true; clearTimeout(customT); ta.readOnly=true; ta.style.visibility='hidden';
   (function step(){ parts.push(text.slice(pos,pos+CH)); pos+=CH;
     if(pos<n){ toast(F('큰 코드를 불러오는 중… {0}%',Math.round(pos/n*100))); requestAnimationFrame(step); return; }
     parts.push(v.slice(e0)); toast(F('큰 코드를 불러오는 중… {0}%',100));
-    setTimeout(function(){ ta.value=parts.join(''); var at=s0+n; try{ ta.setSelectionRange(at,at); }catch(x){} ta.style.visibility=''; ta.readOnly=false; pasting=false; toast(T('큰 코드를 모두 불러왔어요')); ta.dispatchEvent(new Event('input')); },30); })(); });
+    setTimeout(function(){ var full=parts.join('');
+      if(full.length>BIGCODE){ /* too big for the text box to show without freezing: keep all of it for the preview, copy and download, and show only the start (read only) */
+        custom=full; ta.value=full.slice(0,40000)+'\n\n'+F('… 큰 코드라 앞부분 {0}글자만 보여 줘요. 미리보기·복사·내려받기는 전체 {1}글자를 써요 …',40000,full.length); ta.readOnly=true; ta.style.visibility=''; pasting=false; $('codeReset').hidden=false;
+        if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=full; toast(F('큰 코드 {0}KB를 불러왔어요',Math.round(full.length/1024))); return; }
+      ta.value=full; var at=s0+n; try{ ta.setSelectionRange(at,at); }catch(x){} ta.style.visibility=''; ta.readOnly=false; pasting=false; toast(T('큰 코드를 모두 불러왔어요')); ta.dispatchEvent(new Event('input')); },30); })(); });
 $('codeReset').onclick=function(){ dropCustom(false); lastPrev=''; refresh('run'); showCode(); toast(T('블록 코드로 되돌렸어요')); };
 function setPane(p){ document.querySelectorAll('.stab').forEach(function(b){ b.classList.toggle('on',b.dataset.p===p); }); $('pPrev').classList.toggle('on',p==='prev'); $('pCode').classList.toggle('on',p==='code'); if(p==='code') showCode(); }
 document.querySelectorAll('.stab').forEach(function(b){ b.onclick=function(){ setPane(b.dataset.p); }; });
@@ -448,5 +453,5 @@ P.list=P.list.filter(function(e){ return e&&e.id; });
   if(!ok){ P.cur=null; createProject(T(BH_EXAMPLES[0].name),function(){ loadXML(BH_EXAMPLES[0].xml()); arrange(); }); } })();
 setTimeout(syncBar,50);
 if(EMB){ var embTry=0, embSend=function(){ var html=''; try{ if(P.cur===EMB) html=finalHTML(); }catch(e){ console.error(e); } if(!html&&++embTry<10) return setTimeout(embSend,300); try{ parent.postMessage({ffbhBuilt:1,id:EMB,html:html},'*'); }catch(e){} }; setTimeout(embSend,350); }
-window.__bh={showPreview:showPreview,showHTML:function(h){ custom=String(h); $('codeEdit').value=custom; $('codeReset').hidden=false; clearTimeout(customT); if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=custom; setPane('code'); },clearHTML:function(){ dropCustom(false); },ws:ws,copy:copyBlock,paste:pasteBlock,deleteAll:deleteAll,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,loadJSON:loadJSON,save:saveNow,toast:toast,projects:function(){ return P; },examples:BH_EXAMPLES};
+window.__bh={showPreview:showPreview,showHTML:function(h){ custom=String(h); $('codeEdit').readOnly=false; $('codeEdit').value=custom; $('codeReset').hidden=false; clearTimeout(customT); if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=custom; setPane('code'); },clearHTML:function(){ dropCustom(false); },ws:ws,copy:copyBlock,paste:pasteBlock,deleteAll:deleteAll,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,loadJSON:loadJSON,save:saveNow,toast:toast,projects:function(){ return P; },examples:BH_EXAMPLES};
 })();
