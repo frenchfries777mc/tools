@@ -4,6 +4,14 @@
  "notes": [
   {
    "date": "2026-10-17",
+   "build": "v7",
+   "title": "Frenchfries777 로고",
+   "items": [
+    "위쪽 메뉴와 탭 아이콘에 Frenchfries777 로고 추가"
+   ]
+  },
+  {
+   "date": "2026-10-17",
    "build": "v6",
    "title": "AI는 Fry Sheet 중심으로",
    "items": [
