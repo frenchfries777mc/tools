@@ -17,7 +17,8 @@ function newDoc(){ return {v:1, name:T('새 시트'), active:0, sheets:[newSheet
 function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
 function fixDoc(d){
   if(!d||!d.sheets||!d.sheets.length) return newDoc();
-  d.sheets.forEach(function(s){ s.cells=s.cells||{}; s.cw=s.cw||{}; s.cfs=s.cfs||[]; s.dv=s.dv||[]; s.charts=s.charts||[]; s.merges=s.merges||[]; s.fr=Math.max(0,s.fr|0); s.fc=Math.max(0,s.fc|0); s.rows=Math.max(s.rows||ROWS,10); s.cols=Math.max(s.cols||COLS,5); });
+  d.sheets.forEach(function(s){ s.cells=s.cells||{}; s.cw=s.cw||{}; s.cfs=s.cfs||[]; s.dv=s.dv||[]; s.charts=s.charts||[]; s.merges=s.merges||[]; s.fr=Math.max(0,s.fr|0); s.fc=Math.max(0,s.fc|0); s.rows=Math.max(s.rows||ROWS,10); s.cols=Math.max(s.cols||COLS,5);
+    if(s.lock){ var lk=s.lock; s.lock={all:lk.all?1:0,rg:(Array.isArray(lk.rg)?lk.rg:[]).filter(function(g){ return g&&g.r1>=0&&g.c1>=0&&g.r2>=g.r1&&g.c2>=g.c1; }).slice(0,200)}; if(!s.lock.all&&!s.lock.rg.length) delete s.lock; } });
   d.names=Array.isArray(d.names)?d.names.filter(function(n){ return n&&typeof n.name==='string'&&typeof n.ref==='string'; }):[];
   if(!(d.active>=0&&d.active<d.sheets.length)) d.active=0; return d;
 }
@@ -128,6 +129,7 @@ function paintCell(r,c){
   if(cell&&cell.cb&&!E.isErr(v)){ td.innerHTML='<span class="cb'+(v===true?' on':'')+'" data-cb="1"></span>'; cls='ctr'+(cell.al?' al-'+cell.al:''); }
   else td.textContent=E.formatValue(v,cell&&cell.nf);
   if(cell&&cell.nt) cls+=' nt';
+  if(sh.lock&&locked(r,c)) cls+=' lk';
   if(sh.flt&&r===sh.flt.r1&&c>=sh.flt.c1&&c<=sh.flt.c2) cls+=' flt'+(sh.flt.h[c]&&sh.flt.h[c].length?' flton':'');
   td.className=cls+fzCls(r,c)+(r===act.r&&c===act.c?' act':'');
   td.title=(E.isErr(v)?T(E.errHint(v)):'')||(cell&&cell.nt)||'';
@@ -261,6 +263,7 @@ function isOtherInput(el){ return el&&el!==ed&&el!==fin&&(el.tagName==='INPUT'||
 function startEdit(initial,typed,src){
   if(editing) return;
   var td=tdAt(act.r,act.c); if(!td) return;
+  if(guard(cellBox(act.r,act.c))) return;
   var cell=sh.cells[K(act.r,act.c)], raw=cell&&cell.v!=null?String(cell.v):'';
   editing={r:act.r,c:act.c,src:src||'cell',typed:!!typed,orig:raw};
   $('fillH').style.display='none';
@@ -294,6 +297,10 @@ function setRaw(r,c,val){
   if(val===''||val==null){ if(cell){ delete cell.v; if(!hasFmt(cell)) delete sh.cells[k]; } return; }
   if(!cell) cell=sh.cells[k]={}; cell.v=val; growTo(r,c);
 }
+/* v21: sheet protection. sh.lock={all:1,rg:[{r1,c1,r2,c2}]}; every way of changing a cell asks guard() first */
+function locked(r,c){ return E.lockHit(sh.lock,r,c); }
+function guard(g,s2){ if(!E.lockAny((s2||sh).lock,g)) return false; toast(T('잠긴 칸이라 고칠 수 없어요. 데이터 메뉴에서 잠금을 풀 수 있어요')); return true; }
+function cellBox(r,c){ return {r1:r,c1:c,r2:r,c2:c}; }
 function hasFmt(c){ return c.b||c.i||c.fc||c.bg||c.al||c.nf||c.cb||c.bd||c.bx||c.nt; }
 function refPoint(){
   if(!editing) return false; var inp=edInput(), v=inp.value; if(v[0]!=='=') return false;
@@ -315,11 +322,11 @@ function insertRef(r,c,extend){
 function syncFromBar(){ if(editing&&editing.src==='cell'){ ed.value=fin.value; fit(); } }
 
 ed.addEventListener('input',function(){
-  if(!editing){ var v=ed.value; startEdit(v,true); acUpdate(); return; }
+  if(!editing){ var v=ed.value; startEdit(v,true); if(!editing){ ed.value=''; return; } acUpdate(); return; }
   refDrag=null; $('refBox').style.display='none'; fit(); fin.value=ed.value; refMode(); acUpdate();
 });
-ed.addEventListener('compositionstart',function(){ if(!editing){ startEdit('',true); } });
-fin.addEventListener('focus',function(){ if(editing&&editing.src==='cell'){ var v=ed.value; editing.src='bar'; ed.className='ghost'; fin.value=v; } else if(!editing){ startEdit(null,false,'bar'); fin.value=(sh.cells[K(act.r,act.c)]||{}).v||''; } });
+ed.addEventListener('compositionstart',function(){ if(!editing){ startEdit('',true); if(!editing) ed.value=''; } });
+fin.addEventListener('focus',function(){ if(editing&&editing.src==='cell'){ var v=ed.value; editing.src='bar'; ed.className='ghost'; fin.value=v; } else if(!editing){ startEdit(null,false,'bar'); if(!editing){ fin.blur(); return; } fin.value=(sh.cells[K(act.r,act.c)]||{}).v||''; } });
 fin.addEventListener('input',function(){ refDrag=null; syncFromBar(); refMode(); acUpdate(); });
 nameBox.addEventListener('keydown',function(e){
   if(e.key!=='Enter') return; e.preventDefault(); var txt=nameBox.value.trim(), g=E.parseRange(txt), nd=findName(txt);
@@ -369,15 +376,17 @@ document.addEventListener('keydown',function(e){
     if(l==='a'){ e.preventDefault(); selectRange({r1:0,c1:0,r2:sh.rows-1,c2:sh.cols-1}); return; }
     if(l==='f'||l==='h'){ e.preventDefault(); cmd('find'); return; }
     if(l==='d'){ e.preventDefault(); fillDown(); return; }
-    if(l===';'){ e.preventDefault(); var nw=new Date(), pz=function(n){ return (n<10?'0':'')+n; }, ds=nw.getFullYear()+'-'+pz(nw.getMonth()+1)+'-'+pz(nw.getDate()); pushUndo(); forSel(function(r,c){ setRaw(r,c,e.shiftKey?ds+' '+pz(nw.getHours())+':'+pz(nw.getMinutes()):ds); }); changed(); return; }
+    if(l===';'){ e.preventDefault(); var nw=new Date(), pz=function(n){ return (n<10?'0':'')+n; }, ds=nw.getFullYear()+'-'+pz(nw.getMonth()+1)+'-'+pz(nw.getDate()); if(guard(sel)) return; pushUndo(); forSel(function(r,c){ setRaw(r,c,e.shiftKey?ds+' '+pz(nw.getHours())+':'+pz(nw.getMinutes()):ds); }); changed(); return; }
     if(l==='l'&&e.shiftKey){ e.preventDefault(); if(sh.flt) openFilter(act.c); else cmd('filter'); return; }
     if(l==='s'){ e.preventDefault(); saveNow(); toast(T('저장됨')); return; }
     if(l==='p'){ e.preventDefault(); cmd('print'); return; }
     if(k==='/'){ e.preventDefault(); openDlg('keyDlg'); return; }
     return;
   }
+  if(k===' '&&cur_cb()){ e.preventDefault(); if(guard(sel)) return; pushUndo(); var on2=null; forSel(function(r,c){ var x=sh.cells[K(r,c)]; if(!x||!x.cb||String(x.v||'')[0]==='=') return; if(on2===null) on2=eng.value(doc.active,r,c)!==true; x.v=on2?'TRUE':'FALSE'; }); changed(); return; }
   if(k.length===1&&document.activeElement!==ed){ e.preventDefault(); startEdit(k,true); }
 });
+function cur_cb(){ var x=sh.cells[K(act.r,act.c)]; return !!(x&&x.cb); }
 var lastExt={r:0,c:0};
 function extendTo(r,c){ r=Math.max(0,r); c=Math.max(0,c); growTo(r,c); r=Math.min(r,sh.rows-1); c=Math.min(c,sh.cols-1); lastExt={r:r,c:c}; sel=norm(anchor,lastExt); act={r:anchor.r,c:anchor.c}; overlay(); updateBar(); scrollTo(r,c); }
 function jump(d){ var r=act.r, c=act.c, has=function(r,c){ var x=sh.cells[K(r,c)]; return x&&x.v!=null&&x.v!==''; };
@@ -388,7 +397,7 @@ function jump(d){ var r=act.r, c=act.c, has=function(r,c){ var x=sh.cells[K(r,c)
   select(nr,nc);
 }
 function fillDown(){ if(sel.r2<=sel.r1) return toast(T('채울 범위를 아래로 넓게 고르세요')); doFill({r1:sel.r1,c1:sel.c1,r2:sel.r1,c2:sel.c2},{r1:sel.r1,c1:sel.c1,r2:sel.r2,c2:sel.c2}); }
-function clearSel(){ pushUndo(); forSel(function(r,c){ setRaw(r,c,''); }); changed(); }
+function clearSel(){ if(guard(sel)) return; pushUndo(); forSel(function(r,c){ setRaw(r,c,''); }); changed(); }
 function forSel(fn){ for(var r=sel.r1;r<=sel.r2;r++) for(var c=sel.c1;c<=sel.c2;c++) fn(r,c); }
 
 /* ---------- pointer ---------- */
@@ -475,7 +484,7 @@ document.addEventListener('pointercancel',function(e){ if(drag&&drag.touch){ dra
 gbody.addEventListener('dblclick',function(e){ var p=cellFromEl(e.target); if(!p||e.target.dataset.cb||!mouseMode||(editing&&refPoint())) return; commitEdit(); select(p.r,p.c); startEdit(null,false); });
 wrap.addEventListener('scroll',function(){ closeMenus(); },{passive:true});
 
-function toggleCheck(r,c){ var cell=sh.cells[K(r,c)]; if(!cell) return; var v=eng.value(doc.active,r,c); if(String(cell.v||'')[0]==='=') return toast(T('수식이 든 칸은 체크할 수 없어요')); pushUndo(); cell.v=v===true?'FALSE':'TRUE'; changed(); }
+function toggleCheck(r,c){ var cell=sh.cells[K(r,c)]; if(!cell||guard(cellBox(r,c))) return; var v=eng.value(doc.active,r,c); if(String(cell.v||'')[0]==='=') return toast(T('수식이 든 칸은 체크할 수 없어요')); pushUndo(); cell.v=v===true?'FALSE':'TRUE'; changed(); }
 
 /* ---------- fill ---------- */
 function incText(s,n){ var m=/^([\s\S]*?)(\d+)(\D*)$/.exec(s); if(!m) return null; var num=String(+m[2]+n); while(num.length<m[2].length) num='0'+num; return m[1]+num+m[3]; }
@@ -488,6 +497,7 @@ function listNext(t,off){
   return null;
 }
 function doFill(s,d){
+  if(guard(d)) return;
   pushUndo();
   var vert=d.r1!==s.r1||d.r2!==s.r2, lines, len;
   if(vert){ lines=[]; for(var c=s.c1;c<=s.c2;c++) lines.push(c); len=s.r2-s.r1+1; } else { lines=[]; for(var r=s.r1;r<=s.r2;r++) lines.push(r); len=s.c2-s.c1+1; }
@@ -522,6 +532,7 @@ function grab(cut){
   return clip.tsv;
 }
 function pasteInternal(){
+  var ph=clip.cells.length, pw=clip.cells[0].length; if(guard({r1:act.r,c1:act.c,r2:act.r+ph-1,c2:act.c+pw-1})||(clip.cut&&guard(clip.cut.g,doc.sheets[clip.cut.si]))) return;
   pushUndo(); var dr=act.r-clip.r, dc=act.c-clip.c;
   if(clip.cut){ var cs=doc.sheets[clip.cut.si], g=clip.cut.g; for(var r=g.r1;r<=g.r2;r++) for(var c=g.c1;c<=g.c2;c++) delete cs.cells[K(r,c)]; }
   clip.cells.forEach(function(row,i){ row.forEach(function(x,j){ var k=K(act.r+i,act.c+j); if(!x){ delete sh.cells[k]; return; }
@@ -533,6 +544,7 @@ function pasteInternal(){
 function pasteText(text){
   text=String(text).replace(/\r\n?/g,'\n'); if(text.slice(-1)==='\n') text=text.slice(0,-1);
   var rows=text.split('\n').map(function(l){ return l.split('\t'); });
+  if(guard({r1:act.r,c1:act.c,r2:act.r+rows.length-1,c2:act.c+Math.max.apply(null,rows.map(function(r){ return r.length; }))-1})) return;
   pushUndo(); rows.forEach(function(row,i){ row.forEach(function(v,j){ setRaw(act.r+i,act.c+j,v); }); });
   var w=Math.max.apply(null,rows.map(function(r){ return r.length; }));
   growTo(act.r+rows.length-1,act.c+w-1); sel={r1:act.r,c1:act.c,r2:Math.min(sh.rows-1,act.r+rows.length-1),c2:Math.min(sh.cols-1,act.c+w-1)}; changed();
@@ -543,7 +555,7 @@ document.addEventListener('cut',function(e){ if(editing||isOtherInput(document.a
 document.addEventListener('paste',function(e){ if(editing||isOtherInput(document.activeElement)) return; e.preventDefault(); doPaste(e.clipboardData.getData('text/plain')); });
 
 /* ---------- commands ---------- */
-function fmtSel(fn){ pushUndo(); forSel(function(r,c){ var k=K(r,c), x=sh.cells[k]||(sh.cells[k]={}); fn(x); if(x.v==null&&!hasFmt(x)) delete sh.cells[k]; }); changed(); }
+function fmtSel(fn){ if(guard(sel)) return; pushUndo(); forSel(function(r,c){ var k=K(r,c), x=sh.cells[k]||(sh.cells[k]={}); fn(x); if(x.v==null&&!hasFmt(x)) delete sh.cells[k]; }); changed(); }
 function cmd(n){
   if(n!=='fn'&&n!=='sum') commitEdit();
   var cur=sh.cells[K(act.r,act.c)]||{};
@@ -565,7 +577,7 @@ function cmd(n){
     case 'fn': return openFn();
     case 'sortA': return sortSel(true);
     case 'sortD': return sortSel(false);
-    case 'find': return openDlg('findDlg',$('fFind'));
+    case 'find': return fOpen();
     case 'print': closeMenus(); return setTimeout(function(){ window.print(); },60);
     case 'keys': return openDlg('keyDlg');
     case 'viz': if(window.FSViz) window.FSViz.open(); return;
@@ -637,6 +649,7 @@ function sortSel(asc,force){
     if(!rg&&sel.r1===0&&sel.r2===sh.rows-1){ var top=-1; for(var k0 in sh.cells){ var rc0=E.RC(k0), x0=sh.cells[k0]; if(rc0[1]===act.c&&x0.v!=null&&x0.v!==''&&(top<0||rc0[0]<top)) top=rc0[0]; } if(top>=0) rg=region(top,act.c); } // a whole column picked from its header: the table in that column
     if(rg) g=rg; else return toast(T('정렬할 데이터가 없어요')); }
   var start=g.r1+(force?(force.hdr?1:0):(hasHeader(g)?1:0)); if(start>=g.r2) return;
+  if(guard(g)) return;
   pushUndo(); var key=force?force.key:act.c, si=doc.active, rows=[];
   for(var r=start;r<=g.r2;r++){ var row=[]; for(var c=g.c1;c<=g.c2;c++) row.push(sh.cells[K(r,c)]||null); rows.push({row:row,v:eng.value(si,r,key),r:r}); }
   rows.sort(function(a,b){ var ea=a.v==null||a.v==='', eb=b.v==null||b.v===''; if(ea||eb) return ea===eb?0:ea?1:-1; var x=E.cmpVals(a.v,b.v); return asc?x:-x; });
@@ -661,6 +674,7 @@ function structural(isRow,at,count){
     cells[isRow?K(x,c):K(r,x)]=sh.cells[k]; }
   sh.cells=cells;
   doc.names.forEach(function(n){ n.ref=E.adjustFormula('='+n.ref,'',name,isRow,at,count).slice(1); });
+  doc.sheets.forEach(function(s){ if(s.pv) s.pv.ref=E.adjustFormula('='+s.pv.ref,'',name,isRow,at,count).slice(1); });
   doc.sheets.forEach(function(s){ for(var k in s.cells){ var cl=s.cells[k]; if(cl.v&&String(cl.v)[0]==='=') cl.v=E.adjustFormula(cl.v,s.name,name,isRow,at,count); } });
   if(!isRow){ var cwn={}; for(var c in sh.cw){ var x=+c; if(count>0){ if(x>=at) x+=count; } else { if(x>=at&&x<at-count) continue; if(x>=at-count) x+=count; } cwn[x]=sh.cw[c]; } sh.cw=cwn; }
   function adj(o){ var a=isRow?'r1':'c1', b=isRow?'r2':'c2';
@@ -686,7 +700,9 @@ function fitCols(c1,c2){
   buildGrid(); overlay(); saveSoon(); toast(T('열 너비를 맞췄어요'));
 }
 function rowCmd(n){
-  commitEdit(); closeMenus(); pushUndo();
+  commitEdit(); closeMenus();
+  if(/^(ins|del)/.test(n)&&sh.lock){ toast(T('잠금이 있는 시트에서는 행·열을 넣거나 지울 수 없어요')); return; }
+  pushUndo();
   var nr=sel.r2-sel.r1+1, nc=sel.c2-sel.c1+1;
   if(n==='insRowA') structural(true,sel.r1,nr);
   else if(n==='insRowB') structural(true,sel.r2+1,nr);
@@ -721,7 +737,7 @@ function switchSheet(i,rebuild){
 }
 function renderTabs(){
   var t=$('tabs'); t.innerHTML='';
-  doc.sheets.forEach(function(s,i){ var d=document.createElement('div'); d.className='tab'+(i===doc.active?' on':''); d.textContent=s.name; d.setAttribute('data-notr','');
+  doc.sheets.forEach(function(s,i){ var d=document.createElement('div'); d.className='tab'+(i===doc.active?' on':''); d.textContent=(s.lock&&s.lock.all?'🔒 ':'')+s.name; d.setAttribute('data-notr','');
     d.onclick=function(){ if(i===doc.active) openMenu($('tabMenu'),d,true); else { switchSheet(i); saveSoon(); } }; t.appendChild(d); });
 }
 function uniqueName(base){ var n=1, names=doc.sheets.map(function(s){ return s.name; }); while(names.indexOf(base+n)>=0) n++; return base+n; }
@@ -732,7 +748,9 @@ $('tabMenu').addEventListener('click',function(e){
       if(doc.sheets.some(function(s){ return s.name===v; })) return toast(T('같은 이름의 시트가 있어요'));
       pushUndo(); var old=sh.name; doc.sheets.forEach(function(s){ for(var k in s.cells){ var c=s.cells[k]; if(c.v&&String(c.v)[0]==='=') c.v=E.renameSheetInFormula(c.v,old,v); } });
       doc.names.forEach(function(n){ n.ref=E.renameSheetInFormula('='+n.ref,old,v).slice(1); });
+      doc.sheets.forEach(function(s){ if(s.pv) s.pv.ref=E.renameSheetInFormula('='+s.pv.ref,old,v).slice(1); });
       sh.name=v; renderTabs(); changed(); });
+  else if(b.dataset.t==='pvr') pvRefresh();
   else if(b.dataset.t==='dup'){ pushUndo(); var c=JSON.parse(JSON.stringify(sh)); c.name=uniqueName(sh.name+' '); doc.sheets.splice(i+1,0,c); switchSheet(i+1); saveSoon(); }
   else if(b.dataset.t==='left'&&i>0){ pushUndo(); doc.sheets.splice(i-1,0,doc.sheets.splice(i,1)[0]); doc.active=i-1; renderTabs(); changed(); }
   else if(b.dataset.t==='right'&&i<doc.sheets.length-1){ pushUndo(); doc.sheets.splice(i+1,0,doc.sheets.splice(i,1)[0]); doc.active=i+1; renderTabs(); changed(); }
@@ -785,22 +803,38 @@ $('fnList').addEventListener('click',function(e){ var b=e.target.closest('[data-
 });
 
 /* ---------- find & replace ---------- */
+/* options: scope 이 시트 / 선택 범위 (the box picked when the dialog opened) / 모든 시트, match case. Cells are visited sheet by sheet, row by row. */
+var fBox=null;
+function fOpts(){ return {q:$('fFind').value, cs:$('fCase').checked, sc:$('fScope').value}; }
+function fOpen(){
+  var multi=!(sel.r1===sel.r2&&sel.c1===sel.c2); fBox=multi?Object.assign({},sel):null;
+  $('fScope').querySelector('option[value="sel"]').disabled=!multi; $('fScope').value=multi?'sel':'sheet'; $('fSelRg').textContent=multi?E.rangeStr(sel):'';
+  openDlg('findDlg',$('fFind'));
+}
+function fList(o){
+  var out=[], sis=o.sc==='all'?doc.sheets.map(function(_,i){ return i; }):[doc.active];
+  sis.forEach(function(si){ var cs=doc.sheets[si].cells; Object.keys(cs).map(Number).sort(function(a,b){ return a-b; }).forEach(function(k){
+    if(o.sc==='sel'&&fBox){ var rc=E.RC(k); if(rc[0]<fBox.r1||rc[0]>fBox.r2||rc[1]<fBox.c1||rc[1]>fBox.c2) return; } out.push([si,k]); }); });
+  return out;
+}
+function fHas(hay,o){ return o.cs?hay.indexOf(o.q)>=0:hay.toLowerCase().indexOf(o.q.toLowerCase())>=0; }
+function fCellHit(si,k,o){ var c=doc.sheets[si].cells[k], rc=E.RC(k); return fHas(E.formatValue(eng.value(si,rc[0],rc[1]),c.nf)+'\u0000'+(c.v||''),o); }
 function findNext(){
-  var q=$('fFind').value; if(!q) return; var ql=q.toLowerCase(), keys=Object.keys(sh.cells).map(Number).sort(function(a,b){ return a-b; });
-  var cur=K(act.r,act.c), hit=null;
-  function txt(k){ var rc=E.RC(k), c=sh.cells[k]; return (E.formatValue(eng.value(doc.active,rc[0],rc[1]),c.nf)+'\u0000'+(c.v||'')).toLowerCase(); }
-  for(var i=0;i<keys.length;i++){ if(keys[i]>cur&&txt(keys[i]).indexOf(ql)>=0){ hit=keys[i]; break; } }
-  if(hit==null) for(i=0;i<keys.length;i++){ if(txt(keys[i]).indexOf(ql)>=0){ hit=keys[i]; break; } }
-  if(hit==null) return toast(T('찾는 내용이 없어요'));
-  var rc=E.RC(hit); select(rc[0],rc[1]);
+  var o=fOpts(); if(!o.q) return; var list=fList(o), hit=null, cur=[doc.active,K(act.r,act.c)];
+  for(var i=0;i<list.length&&!hit;i++){ var x=list[i]; if((x[0]>cur[0]||(x[0]===cur[0]&&x[1]>cur[1]))&&fCellHit(x[0],x[1],o)) hit=x; }
+  for(i=0;i<list.length&&!hit;i++) if(fCellHit(list[i][0],list[i][1],o)) hit=list[i];
+  if(!hit) return toast(T('찾는 내용이 없어요'));
+  if(hit[0]!==doc.active){ switchSheet(hit[0]); saveSoon(); }
+  var rc=E.RC(hit[1]); select(rc[0],rc[1]);
 }
 function escRe(s){ return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
+function fReplace(c,o){ var re=new RegExp(escRe(o.q),o.cs?'g':'gi'); if(!c.v||!re.test(String(c.v))) return false; re.lastIndex=0; c.v=String(c.v).replace(re,function(){ return $('fRep').value; }); return true; }
 $('fNext').onclick=findNext;
-$('fOne').onclick=function(){ var q=$('fFind').value; if(!q) return; var c=sh.cells[K(act.r,act.c)];
-  if(c&&c.v&&String(c.v).toLowerCase().indexOf(q.toLowerCase())>=0){ pushUndo(); c.v=String(c.v).replace(new RegExp(escRe(q),'i'),$('fRep').value); changed(); } findNext(); };
-$('fAll').onclick=function(){ var q=$('fFind').value; if(!q) return; var re=new RegExp(escRe(q),'gi'), n=0; pushUndo();
-  for(var k in sh.cells){ var c=sh.cells[k]; if(c.v&&re.test(String(c.v))){ re.lastIndex=0; c.v=String(c.v).replace(re,$('fRep').value); n++; } re.lastIndex=0; }
-  changed(); toast(F('{0}칸을 바꿨어요',n)); };
+$('fOne').onclick=function(){ var o=fOpts(); if(!o.q) return; var c=sh.cells[K(act.r,act.c)];
+  if(c&&c.v&&fHas(String(c.v),o)&&(o.sc!=='sel'||!fBox||(act.r>=fBox.r1&&act.r<=fBox.r2&&act.c>=fBox.c1&&act.c<=fBox.c2))){ if(guard(cellBox(act.r,act.c))) return; pushUndo(); fReplace(c,o); changed(); } findNext(); };
+$('fAll').onclick=function(){ var o=fOpts(); if(!o.q) return; var n=0, skip=0, list=fList(o); pushUndo();
+  list.forEach(function(x){ var s=doc.sheets[x[0]], c=s.cells[x[1]], rc=E.RC(x[1]); if(!c||!c.v||!fHas(String(c.v),o)) return; if(E.lockHit(s.lock,rc[0],rc[1])){ skip++; return; } if(fReplace(c,o)) n++; });
+  changed(); toast(F('{0}칸을 바꿨어요',n)+(skip?' · '+F('잠긴 {0}칸은 건너뛰었어요',skip):'')); };
 $('fFind').addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); findNext(); } });
 
 /* ---------- charts ---------- */
@@ -834,12 +868,13 @@ function drawChart(cv,ch){
   cv.width=W*dpr; cv.height=H*dpr; var g=cv.getContext('2d'); g.setTransform(dpr,0,0,dpr,0,0);
   g.fillStyle='#08090d'; g.fillRect(0,0,W,H);
   var d=chartData(ch), font='12px "Noto Sans KR",sans-serif'; g.font=font; g.textBaseline='middle';
+  if(ch.type==='dual'&&d.series.length<2) ch=Object.assign({},ch,{type:'bar'}); // two axes need at least two series
   var top=ch.title?30:12;
   if(ch.title){ g.fillStyle='#eef0f5'; g.font='600 14px "Noto Sans KR",sans-serif'; g.textAlign='center'; g.fillText(ch.title,W/2,15); g.font=font; }
   if(!d.series.length||!d.labels.length){ g.fillStyle='#8a93a6'; g.textAlign='center'; g.fillText(T('숫자 데이터가 없어요'),W/2,H/2); return; }
   // legend
   var lg=(ch.type==='scatter'?d.series.length>2:d.series.length>1)||ch.type==='pie', lx=10, ly=H-12;
-  var items=ch.type==='pie'?d.labels:(ch.type==='scatter'&&d.series.length>1?d.series.slice(1):d.series).map(function(s){ return s.name; });
+  var items=ch.type==='pie'?d.labels:(ch.type==='scatter'&&d.series.length>1?d.series.slice(1):d.series).map(function(s,i){ return ch.type==='dual'?s.name+(i?' ▶':' ◀'):s.name; });
   if(lg){ g.textAlign='left'; items.slice(0,12).forEach(function(n,i){ var w=g.measureText(n).width+26; if(lx+w>W-6){ lx=10; ly-=18; } g.fillStyle=PAL[i%PAL.length]; g.fillRect(lx,ly-5,10,10); g.fillStyle='#b8bfcc'; g.fillText(n,lx+14,ly); lx+=w; }); }
   var bottom=lg?(H-ly)+16:8;
   if(ch.type==='pie'){
@@ -852,6 +887,7 @@ function drawChart(cv,ch){
     return;
   }
   if(ch.type==='scatter'){ drawScatter(g,d,W,H,top,bottom,font); return; }
+  if(ch.type==='dual'){ drawDual(g,d,W,H,top,bottom); return; }
   var all=[]; d.series.forEach(function(s){ s.vals.forEach(function(x){ if(x!=null) all.push(x); }); });
   if(!all.length){ g.fillStyle='#8a93a6'; g.textAlign='center'; g.fillText(T('숫자 데이터가 없어요'),W/2,H/2); return; }
   var mn=Math.min(0,Math.min.apply(null,all)), mx=Math.max(0,Math.max.apply(null,all)); if(mn===mx) mx=mn+1;
@@ -883,6 +919,26 @@ function drawChart(cv,ch){
     d.series.forEach(function(s,j){ g.fillStyle=PAL[j%PAL.length]; s.vals.forEach(function(x,i){ if(x==null) return; var py=Y1-(x-mn)/(mx-mn)*(Y1-Y0), px=X0+bw*i+bw*.125+w2*j; g.fillRect(px,Math.min(py,zy),w2-1,Math.max(1,Math.abs(py-zy))); }); });
   }
 }
+/* two axes: the first series is drawn as bars on the left axis, the others as lines on the right axis */
+function drawDual(g,d,W,H,top,bottom){
+  var bars=d.series[0], lines=d.series.slice(1), n=d.labels.length;
+  function scale(vals){ var a=vals.filter(function(x){ return x!=null; }); if(!a.length) a=[0,1]; var mn=Math.min(0,Math.min.apply(null,a)), mx=Math.max(0,Math.max.apply(null,a)); if(mn===mx) mx=mn+1; var st=niceStep((mx-mn)/4); return {mn:Math.floor(mn/st)*st,mx:Math.ceil(mx/st)*st,st:st}; }
+  var lv=[]; lines.forEach(function(s){ lv=lv.concat(s.vals); });
+  var A=scale(bars.vals), B=scale(lv), ta=[], tb=[], t;
+  for(t=A.mn;t<=A.mx+A.st/2;t+=A.st) ta.push(+t.toPrecision(10)); for(t=B.mn;t<=B.mx+B.st/2;t+=B.st) tb.push(+t.toPrecision(10));
+  var wA=Math.max.apply(null,ta.map(function(t){ return g.measureText(E.fmtGeneral(t)).width; }))+10, wB=Math.max.apply(null,tb.map(function(t){ return g.measureText(E.fmtGeneral(t)).width; }))+10;
+  var X0=10+wA, X1=W-10-wB, Y0=top+4, Y1=H-bottom-20, bw=(X1-X0)/n, every=Math.ceil(n/Math.max(1,Math.floor((X1-X0)/48)));
+  var ya=function(v){ return Y1-(v-A.mn)/(A.mx-A.mn)*(Y1-Y0); }, yb=function(v){ return Y1-(v-B.mn)/(B.mx-B.mn)*(Y1-Y0); };
+  g.strokeStyle='#1f2533'; g.lineWidth=1;
+  ta.forEach(function(t){ var p=ya(t); g.beginPath(); g.moveTo(X0,p); g.lineTo(X1,p); g.stroke(); g.fillStyle=PAL[0]; g.textAlign='right'; g.fillText(E.fmtGeneral(t),X0-6,p); });
+  tb.forEach(function(t){ g.fillStyle=PAL[1]; g.textAlign='left'; g.fillText(E.fmtGeneral(t),X1+6,yb(t)); });
+  g.fillStyle='#b8bfcc'; g.textAlign='center'; d.labels.forEach(function(l,i){ if(i%every) return; g.fillText(l.length>8?l.slice(0,7)+'…':l,X0+bw*(i+.5),Y1+11); });
+  var zy=ya(0), w2=Math.max(1,bw*.6); g.fillStyle=PAL[0];
+  bars.vals.forEach(function(x,i){ if(x==null) return; var py=ya(x); g.fillRect(X0+bw*i+(bw-w2)/2,Math.min(py,zy),w2,Math.max(1,Math.abs(py-zy))); });
+  lines.forEach(function(s,j){ var col=PAL[(j+1)%PAL.length]; g.strokeStyle=col; g.fillStyle=col; g.lineWidth=2.4; g.beginPath(); var on=false;
+    s.vals.forEach(function(x,i){ if(x==null){ on=false; return; } var px=X0+bw*(i+.5), py=yb(x); if(on) g.lineTo(px,py); else g.moveTo(px,py); on=true; }); g.stroke();
+    if(n<=40) s.vals.forEach(function(x,i){ if(x==null) return; g.beginPath(); g.arc(X0+bw*(i+.5),yb(x),3,0,7); g.fill(); }); });
+}
 function drawScatter(g,d,W,H,top,bottom,font){
   // first numeric column is x, the others are y
   var xs=d.series.length>1?d.series[0].vals:d.labels.map(function(_,i){ return i+1; }), ys=d.series.length>1?d.series.slice(1):d.series;
@@ -904,7 +960,7 @@ function renderCharts(){
   if(!sh.charts.length){ body.innerHTML='<div class="empty">'+T('숫자가 든 표를 고른 뒤')+'<br>'+T('"+ 선택 범위로"를 누르면 차트가 생겨요.')+'<br>'+T('표를 고치면 차트도 바로 바뀌어요.')+'</div>'; return; }
   sh.charts.forEach(function(ch){
     var d=document.createElement('div'); d.className='chart';
-    d.innerHTML='<div class="row"><input class="ct" placeholder="차트 제목" data-notr><select data-notr><option value="bar">'+T('세로 막대')+'</option><option value="hbar">'+T('가로 막대')+'</option><option value="line">'+T('꺾은선')+'</option><option value="pie">'+T('원형')+'</option><option value="scatter">'+T('산점도')+'</option></select></div>'+
+    d.innerHTML='<div class="row"><input class="ct" placeholder="차트 제목" data-notr><select data-notr><option value="bar">'+T('세로 막대')+'</option><option value="hbar">'+T('가로 막대')+'</option><option value="line">'+T('꺾은선')+'</option><option value="pie">'+T('원형')+'</option><option value="scatter">'+T('산점도')+'</option><option value="dual">'+T('두 축')+'</option></select></div>'+
       '<canvas></canvas><div class="row" style="margin:8px 0 0"><span class="rg" data-notr></span><span style="flex:1"></span><button class="sm" data-a="rg">'+T('범위를 지금 선택으로')+'</button><button class="sm" data-a="png">PNG</button><button class="sm" data-a="del">'+T('지우기')+'</button></div>';
     var ti=d.querySelector('.ct'), sl=d.querySelector('select'), cv=d.querySelector('canvas');
     ti.placeholder=T('차트 제목'); ti.value=ch.title||''; sl.value=ch.type; d.querySelector('.rg').textContent=E.rangeStr(ch);
@@ -1454,6 +1510,7 @@ $('dpOk').onclick=function(){
   var rows=[]; for(var r=r0;r<=g.r2;r++){ var row=[]; cols.forEach(function(c){ row[c]=eng.value(si,r,c); }); rows.push(row); }
   var keep=E.dedupeRows(rows,cols), gone=keep.filter(function(k){ return !k; }).length;
   if(!gone){ closeDlgs(); return toast(T('중복된 줄이 없어요')); }
+  if(guard(g)){ return; }
   pushUndo(); closeDlgs();
   var kept=[]; keep.forEach(function(k,i){ if(!k) return; var r=r0+i, cs=[]; for(var c=g.c1;c<=g.c2;c++){ var x=sh.cells[K(r,c)]; cs.push(x?JSON.parse(JSON.stringify(x)):null); } kept.push({r:r,cs:cs}); });
   for(r=r0;r<=g.r2;r++) for(var c2=g.c1;c2<=g.c2;c2++) delete sh.cells[K(r,c2)];
@@ -1483,6 +1540,7 @@ $('spOk').onclick=function(){
   if(maxN<2){ closeDlgs(); return toast(T('나눌 곳이 없어요. 기준을 확인하세요')); }
   if(g.c1+maxN>MAXC) return toast(T('열이 너무 많아져요'));
   rows.forEach(function(p,i){ for(var j=1;j<p.length;j++){ var x=sh.cells[K(g.r1+i,g.c1+j)]; if(x&&x.v!=null&&x.v!=='') over++; } });
+  if(guard({r1:g.r1,c1:g.c1,r2:g.r2,c2:g.c1+maxN-1})) return;
   function go(){
     pushUndo(); closeDlgs();
     rows.forEach(function(p,i){ p.forEach(function(v,j){ var raw=v!==''&&/^[=']/.test(v)?"'"+v:v; setRaw(g.r1+i,g.c1+j,raw); }); });
@@ -1495,6 +1553,7 @@ function trimCells(){
   var n=0, todo=[]; for(var k in sh.cells){ var rc=E.RC(k); if(rc[0]<g.r1||rc[0]>g.r2||rc[1]<g.c1||rc[1]>g.c2) continue; var x=sh.cells[k]; if(x.v==null||typeof x.v!=='string') continue;
     var raw=x.v; if(raw[0]==='=') continue; var pre=raw[0]==="'"?"'":'', body=pre?raw.slice(1):raw, nb=E.trimText(body); if(nb!==body) todo.push([x,pre+nb]); }
   if(!todo.length) return toast(T('정리할 공백이 없어요'));
+  if(guard(g)) return;
   pushUndo(); todo.forEach(function(o){ o[0].v=o[1]; n++; }); changed(); toast(F('{0}칸의 공백을 정리했어요',n)+' ('+E.rangeStr(g)+')');
 }
 
@@ -1510,14 +1569,18 @@ function goName(nd){
   if(si!==doc.active) switchSheet(si);
   selectRange({r1:p.col?0:p.a.r,c1:p.a.c,r2:p.col?sh.rows-1:p.b.r,c2:p.b.c});
 }
+function nameBadMsg(bad){ return bad==='cell'?'칸 주소처럼 보이는 이름은 쓸 수 없어요':bad==='function'?'함수 이름과 같은 이름은 쓸 수 없어요':'이름은 글자로 시작하고 글자·숫자·_ 만 쓸 수 있어요'; }
 function drawNames(){
   var l=$('nmList'); l.innerHTML='';
   doc.names.forEach(function(n){ var d=document.createElement('div'); d.className='cfItem'; d.setAttribute('data-notr','');
-    d.innerHTML='<span class="nmN"></span><span class="nmR"></span><button class="ib tbtn nmGo" style="height:32px" aria-label="이동">→</button><button class="ib tbtn" style="height:32px" aria-label="지우기">×</button>';
-    d.children[0].textContent=n.name; d.children[1].textContent=n.ref.replace(/\$/g,''); d.children[2].title=T('이동'); d.children[3].title=T('지우기');
+    d.innerHTML='<span class="nmN"></span><span class="nmR"></span><button class="ib tbtn nmGo" style="height:32px" aria-label="이동">→</button><button class="ib tbtn" style="height:32px" aria-label="이름 바꾸기">✎</button><button class="ib tbtn" style="height:32px" aria-label="지우기">×</button>';
+    d.children[0].textContent=n.name; d.children[1].textContent=n.ref.replace(/\$/g,''); d.children[2].title=T('이동'); d.children[3].title=T('이름 바꾸기'); d.children[4].title=T('지우기');
     d.children[0].onclick=d.children[1].onclick=function(){ $('nmName').value=n.name; $('nmRef').value=n.ref.replace(/\$/g,''); };
     d.children[2].onclick=function(){ closeDlgs(); goName(n); };
-    d.children[3].onclick=function(){ pushUndo(); doc.names=doc.names.filter(function(x){ return x!==n; }); changed(); drawNames(); };
+    d.children[3].onclick=function(){ ask(T('이름 바꾸기'),'',n.name).then(function(v){ v=(v||'').trim(); if(!v||v===n.name) return;
+      var bad=E.validName(v); if(bad) return toast(T(nameBadMsg(bad))); var ex=findName(v); if(ex&&ex!==n) return toast(T('같은 이름이 이미 있어요'));
+      pushUndo(); var old=n.name; doc.sheets.forEach(function(s){ for(var k in s.cells){ var c=s.cells[k]; if(c.v&&String(c.v)[0]==='=') c.v=E.renameNameInFormula(c.v,old,v); } }); n.name=v; changed(); drawNames(); toast(F('"{0}" 이름으로 바꿨어요',v)); }); };
+    d.children[4].onclick=function(){ pushUndo(); doc.names=doc.names.filter(function(x){ return x!==n; }); changed(); drawNames(); };
     l.appendChild(d); });
   if(!doc.names.length) l.innerHTML='<div class="empty" style="padding:12px">'+T('아직 이름이 없어요')+'</div>';
 }
@@ -1525,7 +1588,7 @@ function openNames(){ commitEdit(); $('nmName').value=''; $('nmRef').value=E.ran
 $('nmUse').onclick=function(){ $('nmRef').value=E.rangeStr(sel); };
 $('nmSave').onclick=function(){
   var name=$('nmName').value.trim(), bad=E.validName(name);
-  if(bad) return toast(T(bad==='cell'?'칸 주소처럼 보이는 이름은 쓸 수 없어요':bad==='function'?'함수 이름과 같은 이름은 쓸 수 없어요':'이름은 글자로 시작하고 글자·숫자·_ 만 쓸 수 있어요'));
+  if(bad) return toast(T(nameBadMsg(bad)));
   var ref=E.nameRef($('nmRef').value,sh.name); if(!ref) return toast(T('범위를 알 수 없어요. 예: A2:A10'));
   if(!findName(name)&&doc.names.length>=200) return toast(T('이름은 200개까지 만들 수 있어요'));
   var upd=setName(name,ref); drawNames(); $('nmName').value=''; toast(F(upd?'"{0}" 이름을 바꿨어요':'"{0}" 이름을 만들었어요',name));
@@ -1539,41 +1602,107 @@ function dataCmd(d){
   if(d==='pivot') return openPivot();
   if(d==='names') return openNames();
   if(d==='dedupe') return openDedupe();
+  if(d==='pvRefresh') return pvRefresh();
+  if(d==='xref') return openXref();
+  if(d==='lockSel'||d==='unlockSel'||d==='lockSheet'||d==='unlockSheet') return lockCmd(d);
   if(d==='split') return openSplit();
   if(d==='trim') return trimCells();
 }
-var pvG=null;
+var pvG=null, PVAGG=['sum','avg','count','max','min'], PVLAB={sum:'합계',avg:'평균',count:'개수',max:'최댓값',min:'최솟값'};
 function pvFillCols(){
-  var hdr=$('pvHdr').checked, g=pvG, si=doc.active, keep=[$('pvKey').value,$('pvVal').value];
-  [$('pvKey'),$('pvVal')].forEach(function(sl,n){ sl.innerHTML='';
-    for(var c=g.c1;c<=g.c2;c++){ var o=document.createElement('option'), t=hdr?E.formatValue(eng.value(si,g.r1,c)):''; o.value=c; o.textContent=E.colName(c)+(t?' · '+t:''); sl.appendChild(o); }
-    if(keep[n]!==''&&keep[n]!=null&&sl.querySelector('option[value="'+keep[n]+'"]')) sl.value=keep[n]; });
+  var hdr=$('pvHdr').checked, g=pvG, si=doc.active, keep={}, kv=$('pvVal').value, l=$('pvKeys');
+  Array.prototype.forEach.call(l.querySelectorAll('input'),function(i){ keep[i.value]=i.checked; }); l.innerHTML=''; $('pvVal').innerHTML='';
+  for(var c=g.c1;c<=g.c2;c++){ var t=hdr?E.formatValue(eng.value(si,g.r1,c)):'', nm=E.colName(c)+(t?' · '+t:'');
+    var lb=document.createElement('label'); lb.className='dpCol'; lb.setAttribute('data-notr',''); lb.innerHTML='<input type="checkbox"><span></span>'; lb.firstChild.value=c; lb.firstChild.checked=keep[c]===undefined?c===g.c1:keep[c]; lb.lastChild.textContent=nm; l.appendChild(lb);
+    var o=document.createElement('option'); o.value=c; o.textContent=nm; $('pvVal').appendChild(o); }
+  if(kv!==''&&$('pvVal').querySelector('option[value="'+kv+'"]')) $('pvVal').value=kv;
 }
 function openPivot(){
   commitEdit(); var g=(sel.r1===sel.r2&&sel.c1===sel.c2)?region(act.r,act.c):Object.assign({},sel);
   if(!g||g.r2<=g.r1) return toast(T('피벗으로 만들 표를 먼저 고르세요'));
   if(g.r2-g.r1>5000) g.r2=g.r1+5000;
   pvG=g; $('pvRg').textContent=sh.name+'!'+E.rangeStr(g); $('pvHdr').checked=hasHeader(g);
-  $('pvKey').innerHTML=''; $('pvVal').innerHTML=''; pvFillCols();
-  $('pvKey').value=g.c1; var vc=g.c2, si=doc.active;
+  $('pvKeys').innerHTML=''; $('pvVal').innerHTML=''; $('pvVal').value=''; pvFillCols();
+  var vc=g.c2, si=doc.active;
   for(var c=g.c1+1;c<=g.c2;c++){ if(typeof eng.value(si,g.r1+1,c)==='number'){ vc=c; break; } }
   $('pvVal').value=vc; openDlg('pvDlg');
 }
 $('pvHdr').addEventListener('change',pvFillCols);
+/* a pivot sheet remembers how it was made (sh.pv: source ref, header flag, key / value columns as offsets in the source, aggregate, sort), so "새로 고침" can rebuild it */
+function pvCompute(def){
+  var p=E.parseNameRef(def.ref), si=p?eng.sheetIndex(p.sh,0):-1; if(!p||si<0||p.col) return null;
+  var g={r1:Math.min(p.a.r,p.b.r),c1:Math.min(p.a.c,p.b.c),r2:Math.max(p.a.r,p.b.r),c2:Math.max(p.a.c,p.b.c)}, kcs=def.keys.map(function(o){ return g.c1+o; }), vc=g.c1+def.vo, rows=[], r;
+  if(vc>g.c2||kcs.some(function(c){ return c>g.c2; })) return null;
+  for(r=g.r1+(def.hdr?1:0);r<=g.r2;r++){ var row=[]; kcs.forEach(function(c){ row[c]=eng.value(si,r,c); }); row[vc]=eng.value(si,r,vc); rows.push(row); }
+  if(!rows.length) return null;
+  var head=function(c){ return def.hdr?E.formatValue(eng.value(si,g.r1,c)):F('{0}열',E.colName(c)); };
+  return {res:E.pivot(rows,kcs,vc,def.agg,def.sort),kh:kcs.map(head),vh:head(vc)};
+}
+function pvFill(ns,def,o){
+  var nk=def.keys.length, lab=T(PVLAB[def.agg]||'합계'), nf=def.agg==='avg'?'n2':'', num=function(v){ return v==null?'':E.fmtGeneral(+v.toPrecision(12)); };
+  ns.cells={}; o.kh.forEach(function(h,i){ put(ns,0,i,h,HD); }); put(ns,0,nk,lab+' · '+o.vh,HD);
+  o.res.rows.forEach(function(x,i){ for(var j=0;j<nk;j++){ var kt=x[j]===''?T('(빈 칸)'):E.formatValue(x[j]); put(ns,i+1,j,/^[='@+\-]/.test(kt)&&typeof x[j]==='string'?"'"+kt:kt,{bd:1}); }
+    var f={bd:1,al:'r'}; if(nf) f.nf=nf; put(ns,i+1,nk,num(x[nk]),f); });
+  var n=o.res.rows.length+1, tf={b:1,bd:1,bg:'#2b3550',fc:'#ffd76a'}; put(ns,n,0,T('총합계'),tf); for(var j=1;j<nk;j++) put(ns,n,j,null,tf); var tv=Object.assign({al:'r'},tf); if(nf) tv.nf=nf; put(ns,n,nk,num(o.res.total),tv);
+  for(j=0;j<nk;j++) ns.cw[j]=ns.cw[j]||150; ns.cw[nk]=ns.cw[nk]||170; ns.fr=1; ns.rows=Math.max(ROWS,n+20); ns.pv=def;
+}
 $('pvOk').onclick=function(){
-  var g=pvG; if(!g) return; var hdr=$('pvHdr').checked, kc=+$('pvKey').value, vc=+$('pvVal').value, agg=$('pvAgg').value, si=doc.active, rows=[];
-  for(var r=g.r1+(hdr?1:0);r<=g.r2;r++){ var row=[]; row[kc]=eng.value(si,r,kc); row[vc]=eng.value(si,r,vc); rows.push(row); }
-  if(!rows.length) return toast(T('피벗으로 만들 표를 먼저 고르세요'));
-  var res=E.pivot(rows,kc,vc,agg,$('pvSort').value), kh=hdr?E.formatValue(eng.value(si,g.r1,kc)):F('{0}열',E.colName(kc)), vh=hdr?E.formatValue(eng.value(si,g.r1,vc)):F('{0}열',E.colName(vc));
-  var lab=T(agg==='sum'?'합계':agg==='count'?'개수':'평균'), nf=agg==='avg'?'n2':'';
+  var g=pvG; if(!g) return; var keys=[];
+  Array.prototype.forEach.call($('pvKeys').querySelectorAll('input'),function(i){ if(i.checked) keys.push(+i.value-g.c1); });
+  if(!keys.length) return toast(T('묶을 열을 하나 이상 고르세요'));
+  var ref=E.nameRef(E.rangeStr(g),sh.name), def={ref:ref,hdr:$('pvHdr').checked,keys:keys,vo:+$('pvVal').value-g.c1,agg:$('pvAgg').value,sort:$('pvSort').value}, o=pvCompute(def);
+  if(!o) return toast(T('피벗으로 만들 표를 먼저 고르세요'));
   pushUndo(); closeDlgs();
-  var ns=newSheet(uniqueName(T('피벗'))), num=function(v){ return v==null?'':E.fmtGeneral(+v.toPrecision(12)); };
-  put(ns,0,0,kh,HD); put(ns,0,1,lab+' · '+vh,HD);
-  res.rows.forEach(function(x,i){ var kt=x[0]===''?T('(빈 칸)'):E.formatValue(x[0]); put(ns,i+1,0,/^[='@+\-]/.test(kt)&&typeof x[0]==='string'?"'"+kt:kt,{bd:1}); var f={bd:1,al:'r'}; if(nf) f.nf=nf; put(ns,i+1,1,num(x[1]),f); });
-  var tf={b:1,bd:1,bg:'#2b3550',fc:'#ffd76a'}; put(ns,res.rows.length+1,0,T('총합계'),tf); var tv=Object.assign({al:'r'},tf); if(nf) tv.nf=nf; put(ns,res.rows.length+1,1,num(res.total),tv);
-  ns.cw[0]=150; ns.cw[1]=170; ns.fr=1; ns.rows=Math.max(ROWS,res.rows.length+20);
-  doc.sheets.push(ns); eng=new E.Engine(doc); switchSheet(doc.sheets.length-1); saveSoon(); toast(F('{0}개 항목으로 피벗을 만들었어요',res.rows.length));
+  var ns=newSheet(uniqueName(T('피벗'))); pvFill(ns,def,o);
+  doc.sheets.push(ns); eng=new E.Engine(doc); switchSheet(doc.sheets.length-1); saveSoon(); toast(F('{0}개 항목으로 피벗을 만들었어요',o.res.rows.length));
 };
+function pvRefresh(){
+  commitEdit(); if(!sh.pv) return toast(T('피벗 시트에서만 쓸 수 있어요'));
+  var o=pvCompute(sh.pv); if(!o) return toast(T('원본 표를 찾을 수 없어요. 피벗을 다시 만드세요'));
+  if(guard({r1:0,c1:0,r2:sh.rows,c2:sh.cols})) return;
+  pushUndo(); eng=new E.Engine(doc); pvFill(sh,sh.pv,o); buildGrid(); sel={r1:0,c1:0,r2:0,c2:0}; act={r:0,c:0}; anchor={r:0,c:0}; overlay(); updateBar(); saveSoon(); toast(F('{0}개 항목으로 피벗을 새로 고쳤어요',o.res.rows.length));
+}
+
+/* ---------- v21: protection, cross-sheet helper ---------- */
+function lockCmd(d){
+  commitEdit();
+  if(d==='lockSel'){
+    if(sh.lock&&sh.lock.all) return toast(T('시트 전체가 이미 잠겨 있어요'));
+    if(E.lockAny(sh.lock,sel)&&(sh.lock.rg||[]).some(function(g){ return g.r1<=sel.r1&&g.c1<=sel.c1&&g.r2>=sel.r2&&g.c2>=sel.c2; })) return toast(T('이미 잠겨 있어요'));
+    if(sh.lock&&sh.lock.rg.length>=200) return toast(T('잠금 범위는 200개까지 만들 수 있어요'));
+    pushUndo(); sh.lock=sh.lock||{all:0,rg:[]}; sh.lock.rg.push({r1:sel.r1,c1:sel.c1,r2:sel.r2,c2:sel.c2}); changed(); return toast(F('{0} 범위를 잠갔어요',E.rangeStr(sel)));
+  }
+  if(d==='unlockSel'){
+    if(sh.lock&&sh.lock.all) return toast(T('시트 전체가 잠겨 있어요. "시트 잠금 모두 풀기"를 먼저 하세요'));
+    if(!E.lockAny(sh.lock,sel)) return toast(T('잠긴 칸이 없어요'));
+    pushUndo(); sh.lock.rg=E.lockCut(sh.lock.rg,sel); if(!sh.lock.rg.length) delete sh.lock; changed(); return toast(F('{0} 범위의 잠금을 풀었어요',E.rangeStr(sel)));
+  }
+  if(d==='lockSheet'){ if(sh.lock&&sh.lock.all) return toast(T('시트 전체가 이미 잠겨 있어요')); pushUndo(); sh.lock=sh.lock||{all:0,rg:[]}; sh.lock.all=1; renderTabs(); changed(); return toast(T('시트 전체를 잠갔어요')); }
+  if(d==='unlockSheet'){ if(!sh.lock) return toast(T('잠긴 칸이 없어요')); pushUndo(); delete sh.lock; renderTabs(); changed(); return toast(T('시트의 잠금을 모두 풀었어요')); }
+}
+function xrSheets(){
+  var l=$('xrSheet'); l.innerHTML=''; doc.sheets.forEach(function(s,i){ var o=document.createElement('option'); o.value=i; o.textContent=s.name; l.appendChild(o); });
+  l.value=doc.sheets.length>1?(doc.active===0?1:0):doc.active; $('xrFn').value='';
+}
+function xrBuild(){
+  var si=+$('xrSheet').value, s=doc.sheets[si], t=$('xrRg').value.trim().replace(/\$/g,'').toUpperCase(), ok=false, txt='';
+  if(s){ var toks=E.tokenize(t).filter(function(x){ return x.t!=='ws'; }); ok=toks.length===1&&(toks[0].t==='ref'||toks[0].t==='rng')&&toks[0].sh==null&&!toks[0].dead; if(ok) txt='='+E.quoteSheet(s.name)+'!'+t; }
+  var fn=$('xrFn').value; $('xrOut').textContent=ok?(fn?'='+fn+'('+txt.slice(1)+')':txt):T('범위를 알 수 없어요. 예: A2:A10'); $('xrOut').classList.toggle('bad',!ok); return ok?txt:null;
+}
+function openXref(){
+  commitEdit(); xrSheets(); $('xrRg').value=E.rangeStr(sel); $('xrOut').classList.remove('bad'); xrBuild(); openDlg('xrDlg',$('xrRg'));
+}
+$('xrSheet').addEventListener('change',xrBuild); $('xrRg').addEventListener('input',xrBuild);
+$('xrUse').onclick=function(){ var si=+$('xrSheet').value; if(si===doc.active){ $('xrRg').value=E.rangeStr(sel); xrBuild(); } else { closeDlgs(); switchSheet(si); toast(T('범위를 고른 뒤 데이터 메뉴에서 다시 열어 주세요')); } };
+function xrFormula(){ var f=xrBuild(); if(!f) return null; var fn=$('xrFn').value; return fn?'='+fn+'('+f.slice(1)+')':f; }
+$('xrFn').addEventListener('change',xrBuild);
+$('xrIns').onclick=function(){
+  var f=xrFormula(); if(!f) return toast(T('범위를 알 수 없어요. 예: A2:A10'));
+  if(guard(cellBox(act.r,act.c))) return;
+  closeDlgs(); pushUndo(); setRaw(act.r,act.c,f); changed(); toast(F('{0} 에 수식을 넣었어요',E.addr(act.r,act.c)));
+};
+$('xrCopy').onclick=function(){ var f=xrFormula(); if(!f) return toast(T('범위를 알 수 없어요. 예: A2:A10')); try{ navigator.clipboard.writeText(f).catch(function(){}); }catch(e){} toast(T('복사했어요')); };
+$('xrRg').addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); $('xrIns').click(); } });
 
 /* ---------- start ---------- */
 window.addEventListener('pointerdown',function(e){ mouseMode=e.pointerType==='mouse'; },true);
@@ -1589,6 +1718,6 @@ if(!last||!lsGet(LSD+last)){ loadDoc(null); saveNow(); } else loadDoc(last);
 setZoom(z0);
 window.FSAPI={get doc(){ return doc; }, get eng(){ return eng; }, get sheet(){ return sh; }, sel:function(){ return sel; }, act:function(){ return act; }, region:region, hasHeader:hasHeader,
   drawChart:drawChart, chartData:chartData, PAL:PAL, toast:toast, download:download, commitEdit:commitEdit, uid:uid, pushUndo:pushUndo, saveSoon:saveSoon, openDrawer:openDrawer, renderCharts:renderCharts,
-  changed:changed, setRaw:setRaw, pasteText:pasteText, selectRange:selectRange, select:select, forSel:forSel};
+  changed:changed, setRaw:function(r,c,v){ if(locked(r,c)) return toast(T('잠긴 칸이라 고칠 수 없어요. 데이터 메뉴에서 잠금을 풀 수 있어요')); return setRaw(r,c,v); }, pasteText:pasteText, selectRange:selectRange, select:select, forSel:forSel};
 window.__fs={get doc(){ return doc; }, get eng(){ return eng; }, select:select, cmd:cmd, sel:function(){ return sel; }, act:function(){ return act; }, setRaw:setRaw, changed:changed, startEdit:startEdit, commitEdit:commitEdit};
 })();

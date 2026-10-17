@@ -219,7 +219,7 @@ function empty(msg){ var a=avail(), g=setup(a.w,a.h); fnt(g,15); g.fillStyle='#8
 /* ---------- UI ---------- */
 function opts(){
   var o=$('vizOpts'), t=table(), h='';
-  if(mode==='graph') h='<select id="vGtype" data-notr>'+[['bar','세로 막대'],['hbar','가로 막대'],['line','꺾은선'],['pie','원형'],['scatter','산점도']].map(function(x){ return '<option value="'+x[0]+'"'+(x[0]===gtype?' selected':'')+'>'+T(x[1])+'</option>'; }).join('')+'</select><button class="tbtn" id="vPin">'+T('시트에 차트로 고정')+'</button>';
+  if(mode==='graph') h='<select id="vGtype" data-notr>'+[['bar','세로 막대'],['hbar','가로 막대'],['line','꺾은선'],['pie','원형'],['scatter','산점도'],['dual','두 축']].map(function(x){ return '<option value="'+x[0]+'"'+(x[0]===gtype?' selected':'')+'>'+T(x[1])+'</option>'; }).join('')+'</select><button class="tbtn" id="vPin">'+T('시트에 차트로 고정')+'</button>';
   if(mode==='diagram'){ h='<select id="vDtype" data-notr>'+[['tree','트리'],['flow','흐름도'],['venn','벤 다이어그램']].map(function(x){ return '<option value="'+x[0]+'"'+(x[0]===dtype?' selected':'')+'>'+T(x[1])+'</option>'; }).join('')+'</select>';
     if(dtype==='venn'){ var cand=vennCandidates(t), cur=(vcols||cand.slice(0,3)); h+=t.heads.map(function(hd,j){ if(cand.indexOf(j)<0&&cur.indexOf(j)<0) return ''; return '<label class="vchk" data-notr><input type="checkbox" data-vc="'+j+'"'+(cur.indexOf(j)>=0?' checked':'')+'> '+hd.replace(/</g,'&lt;')+'</label>'; }).join(''); } }
   if(mode==='table') h='<span class="vhint">'+T('제목 칸을 누르면 정렬돼요')+'</span>';
