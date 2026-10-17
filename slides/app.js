@@ -92,7 +92,7 @@ function deco(th,lay){
 function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
 /* sec: seconds before auto-advance when presenting (0 = the deck's, -1 = stay), ish/ibc/ibw: the picture's shape (rect | round | ell), border colour and width. g (on a shape): group id
    pos: boxes moved or resized by hand ({field: {x,y,w,h}}), els: shapes, build: what appears one by one when presenting ([{k,a}] in order), tr: this slide's transition ('' = the deck's) */
-function blank(lay){ return {id:uid(), layout:lay||'bullets', title:'', subtitle:'', bullets:[], left:[], right:[], leftTitle:'', rightTitle:'', stat:'', caption:'', quote:'', by:'', notes:'', img:'', iw:0, ih:0, data:'', ctype:'bar', bg:'', live:'', hide:false, pos:{}, els:[], build:[], tr:'', sec:0, ish:'rect', ibc:'', ibw:0}; }
+function blank(lay){ return {id:uid(), layout:lay||'bullets', title:'', subtitle:'', bullets:[], left:[], right:[], leftTitle:'', rightTitle:'', stat:'', caption:'', quote:'', by:'', notes:'', img:'', iw:0, ih:0, data:'', ctype:'bar', bg:'', live:'', hide:false, pos:{}, els:[], build:[], tr:'', sec:0, ish:'rect', ibc:'', ibw:0, link:null, choices:[], qok:-1}; }
 var SHK=['rect','round','ell','tri','star','line','arrow'], ISH=['rect','round','ell'], ANIMS=['fade','fly'], TRS=['fade','slide','zoom','none'];
 function num(v,d,lo,hi){ v=+v; return isFinite(v)?Math.max(lo,Math.min(hi,Math.round(v))):d; }
 function fixCol(v,d){ v=v==null?d:String(v); return v===''||v==='ac'||v==='fg'||/^#[0-9a-f]{6}$/i.test(v)?v:d; }
@@ -114,6 +114,7 @@ function fixSlide(s){ var b=blank(); s=s&&typeof s==='object'?s:{};
   s.sec=num(s.sec,0,-1,3600); if(ISH.indexOf(s.ish)<0) s.ish='rect'; s.ibc=fixCol(s.ibc,''); s.ibw=num(s.ibw,0,0,40);
   var seen={}; s.build=(Array.isArray(s.build)?s.build:[]).filter(function(b){ if(!b||typeof b.k!=='string'||ANIMS.indexOf(b.a)<0||seen[b.k]) return false; seen[b.k]=1; return true; }).slice(0,80).map(function(b){ return {k:b.k, a:b.a}; });
   if(TRS.indexOf(s.tr)<0) s.tr='';
+  s.link=fixLink(s.link); s.choices=(Array.isArray(s.choices)?s.choices:[]).map(function(x){ return String(x==null?'':x).replace(/\s+/g,' ').trim().slice(0,80); }).filter(Boolean).slice(0,6); s.qok=num(s.qok,-1,-1,5);
   return s; }
 function newDeck(){ return {id:uid(), name:T('새 발표 자료'), theme:'light', slides:[], t:Date.now(), topic:'', aud:'', n:8, nums:false, footer:'', font:'', trans:'fade', master:fixMaster(), auto:fixAuto()}; }
 /* master slide (logo, footer text, slide number on every slide) and auto-advance when presenting; the footer text and number switch live in deck.footer / deck.nums */
@@ -137,7 +138,7 @@ function saveSoon(){ $('saved').textContent=''; clearTimeout(saveT); saveT=setTi
 function openDeck(d){
   if(deck&&deck!==d&&!deck.slides.length&&isDefaultName(deck.name)&&!deck.topic) store.decks=store.decks.filter(function(x){ return x!==deck; }); // drop an untouched empty deck
   deck=d; cur=0; undo=[]; redo=[]; if(store.decks.indexOf(d)<0) store.decks.unshift(d);
-  $('deckName').value=deck.name; refresh(); saveNow();
+  $('deckName').value=deck.name; syncLinks(false); refresh(); saveNow();
 }
 
 /* ---------- undo ---------- */
@@ -174,7 +175,7 @@ function slideEl(s,th,edit,opt){
         if(edit){ var rm=document.createElement('button'); rm.className='rm'; rm.dataset.rm='1'; rm.textContent='×'; rm.title=T('그림 빼기'); pc.appendChild(rm); } }
       el.appendChild(pc); return; }
     if(b.view==='live'){ el.appendChild(liveView(s,b,th,edit,opt)).dataset.bk='live'; return; }
-    if(b.view){ el.appendChild(dataView(s,b,th)).dataset.bk='data'; return; }
+    if(b.view){ var dv=el.appendChild(dataView(s,b,th)); dv.dataset.bk='data'; if(edit&&s.link) dv.appendChild(linkBadge(s)); return; }
     if(b.cls==='ans'&&opt.hideAns) return;
     var box=document.createElement('div'); box.className='fld k-'+b.k+(b.cls==='ans'?' ans':''); box.dataset.f=b.f; box.dataset.bk=b.f;
     box.style.cssText='left:'+b.x+'px;top:'+b.y+'px;width:'+b.w+'px;height:'+b.h+'px;justify-content:'+(b.va||'flex-start')+';text-align:'+(b.al||'left')+';';
@@ -690,7 +691,7 @@ function setLayout(lay){ var s=deck.slides[cur]; if(!s||s.layout===lay) return; 
   if(lay==='timer'&&!s.stat) s.stat='5:00';
   if(lay==='quote'&&!s.quote&&s.layout!=='quote'&&s.title){ s.quote=s.title; }
   if(lay==='stat'&&!s.caption&&s.bullets.length) s.caption=s.bullets[0];
-  s.layout=lay; s.pos={}; changed(); if(lay==='image'&&!s.img) pickImage(); else if((lay==='table'||lay==='chart')&&!s.data.trim()) openData(); else if(lay==='live'&&!liveCfg(s)) openLive(); }
+  s.layout=lay; s.pos={}; syncLink(s); changed(); if(lay==='image'&&!s.img) pickImage(); else if((lay==='table'||lay==='chart')&&!s.data.trim()) openData(); else if(lay==='live'&&!liveCfg(s)) openLive(); }
 function setTheme(id){ if(deck.theme===id) return; blurEdit(); if(deck.slides.length) pushUndo(); deck.theme=id; saveSoon(); if(deck.slides.length){ drawList(); drawMain(); } else drawStart(); drawThemes(); }
 $('undoBtn').onclick=doUndo; $('redoBtn').onclick=doRedo;
 $('addBtn').onclick=function(){ addSlide('bullets'); };
@@ -709,7 +710,8 @@ function drawOptMenu(){ var m=$('optMenu'), s=deck.slides[cur]; m.innerHTML=''; 
   var add=function(k,txt,on,dis){ var b=document.createElement('button'); b.dataset.o=k; b.textContent=(on?'✓ ':'')+T(txt); if(dis) b.disabled=true; m.appendChild(b); return b; };
   var hd=function(txt){ var d=document.createElement('div'); d.className='mh'; d.textContent=T(txt); m.appendChild(d); };
   add('hide',s.hide?'숨긴 슬라이드 보이기 (H)':'발표할 때 건너뛰기 (H)');
-  if(s.layout==='table'||s.layout==='chart') add('data',s.layout==='chart'?'그래프 내용 고치기':'표 내용 고치기');
+  if(s.layout==='table'||s.layout==='chart'){ add('data',s.layout==='chart'?'그래프 내용 고치기':'표 내용 고치기'); add('link',s.link?'시트 연결 바꾸기':'프라이 시트에서 가져오기 (연결)'); if(s.link){ add('relink','지금 새로 고침'); add('unlink','연결 끊기'); } }
+  if(s.layout==='quiz') add('choices','실시간 퀴즈 보기 고치기…');
   if(s.layout==='live') add('live','살아있는 화면 고치기');
   add('auto',s.sec?(s.sec<0?'자동 넘기기: 이 슬라이드에서 멈춤':F('자동 넘기기: 이 슬라이드 {0}초',s.sec)):'자동 넘기기 시간…');
   add('first','맨 앞으로 보내기',0,cur===0); add('last','맨 뒤로 보내기',0,cur===deck.slides.length-1);
@@ -729,7 +731,7 @@ function drawOptMenu(){ var m=$('optMenu'), s=deck.slides[cur]; m.innerHTML=''; 
 }
 $('optBtn').onclick=function(){ if(!deck.slides.length) return; blurEdit(); drawOptMenu(); openMenu($('optMenu'),this); };
 $('optMenu').addEventListener('click',function(e){ var b=e.target.closest('[data-o]'); if(!b||b.disabled) return; var k=b.dataset.o; closeMenus();
-  if(k==='hide') toggleHide(); else if(k==='data') openData(); else if(k==='live') openLive(); else if(k==='auto') openAuto(); else if(k==='first') moveSlide(cur,0); else if(k==='last') moveSlide(cur,deck.slides.length-1);
+  if(k==='hide') toggleHide(); else if(k==='data') openData(); else if(k==='link') openLink(); else if(k==='relink') refreshSlideLink(); else if(k==='unlink') unlinkSlide(); else if(k==='choices') openChoices(); else if(k==='live') openLive(); else if(k==='auto') openAuto(); else if(k==='first') moveSlide(cur,0); else if(k==='last') moveSlide(cur,deck.slides.length-1);
   else if(k.indexOf('bg:')===0) setBg(k.slice(3)); else if(k.indexOf('font:')===0) setFont(k.slice(5)); else if(k.indexOf('tr:')===0){ setTrans(k.slice(3)); toast(T('저장했어요')); } else if(k==='trAll'){ setTransAll(); toast(T('모든 슬라이드에 같은 효과를 넣었어요')); } });
 
 /* table and chart data: one text box, the slide draws it */
@@ -737,9 +739,109 @@ function openData(){ var s=deck.slides[cur]; if(!s||(s.layout!=='table'&&s.layou
   $('dataTitle').textContent=ch?T('그래프 내용'):T('표 내용');
   $('dataNote').textContent=ch?T('한 줄에 하나씩 "이름: 숫자"로 써요. 예) 사과: 12 (12줄까지)'):T('한 줄이 한 행이고, 칸은 쉼표·탭·|로 나눠요. 첫 줄은 제목 줄이에요. (9줄, 6칸까지)');
   $('dataIn').placeholder=ch?T('사과: 12\n바나나: 7\n포도: 9'):T('이름, 점수, 등수\n하늘, 92, 1\n바다, 88, 2');
-  $('dataIn').value=s.data; $('dataTypeRow').hidden=!ch; $('dataType').value=s.ctype; openDlg('dataDlg'); setTimeout(function(){ $('dataIn').focus(); },60); }
-$('dataOk').onclick=function(){ var s=deck.slides[cur]; if(!s) return closeDlg('dataDlg',null); pushUndo(); s.data=$('dataIn').value.replace(/\r/g,'').trim(); s.ctype=$('dataType').value; closeDlg('dataDlg',null); changed(); };
+  $('dataIn').value=s.data; $('dataTypeRow').hidden=!ch; $('dataType').value=s.ctype; dataLinkUI(); openDlg('dataDlg'); if(!s.link) setTimeout(function(){ $('dataIn').focus(); },60); }
+$('dataOk').onclick=function(){ var s=deck.slides[cur]; if(!s) return closeDlg('dataDlg',null); pushUndo(); if(!s.link) s.data=$('dataIn').value.replace(/\r/g,'').trim(); s.ctype=$('dataType').value; closeDlg('dataDlg',null); changed(); };
 $('dataIn').addEventListener('keydown',function(e){ e.stopPropagation(); if(e.key==='Escape') closeDlg('dataDlg',null); });
+/* ---------- link a table or chart slide to a Fry Sheet range. Fry Sheet is on the same site, so its documents are in this browser's storage
+   ('ffsheet.docs' = the list, 'ffsheet.doc.<id>' = one document). s.link = {doc, sh (sheet name), rg ('A1:C6'), dn (the document's name)}.
+   s.data keeps the values last read, so everything that draws or exports (editor, presenting, PDF, share link, .pptx) just uses s.data after
+   syncLinks() refreshed it, and a document that is gone still shows its last values. Formulas are worked out by Fry Sheet's own engine
+   (../sheet/engine.js, loaded the first time a link is needed). Another tab saving the sheet fires a 'storage' event here, which refreshes. ---------- */
+var SHI_K='ffsheet.docs', SHD_K='ffsheet.doc.', LINK_R=60, LINK_C=12, engP=null, shDocC={}, linkMiss={};
+function fixLink(l){ if(!l||typeof l!=='object'||typeof l.doc!=='string'||!l.doc) return null; var g=String(l.rg||'').toUpperCase().replace(/\s+/g,''); if(!/^[A-Z]{1,3}\d+(:[A-Z]{1,3}\d+)?$/.test(g)) return null;
+  return {doc:l.doc.slice(0,60), sh:String(l.sh==null?'':l.sh).slice(0,100), rg:g, dn:String(l.dn||'').slice(0,120)}; }
+function needEngine(){ if(window.FSE) return Promise.resolve(window.FSE); if(engP) return engP;
+  engP=new Promise(function(res,rej){ var s=document.createElement('script'); s.src='../sheet/engine.js'; s.onload=function(){ if(window.FSE) res(window.FSE); else { engP=null; rej(new Error('engine')); } }; s.onerror=function(){ engP=null; rej(new Error('engine')); }; document.head.appendChild(s); }); return engP; }
+function lsRead(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function sheetList(){ var o=[]; try{ o=JSON.parse(lsRead(SHI_K)||'[]'); }catch(e){} return (Array.isArray(o)?o:[]).filter(function(x){ return x&&x.id&&lsRead(SHD_K+x.id); }); }
+/* a parsed document and its engine, kept while the stored text stays the same */
+function sheetDoc(id){ var raw=lsRead(SHD_K+id); if(!raw){ delete shDocC[id]; return null; } var c=shDocC[id]; if(c&&c.raw===raw){ if(!c.eng&&window.FSE) c.eng=new FSE.Engine(c.doc); return c; }
+  var d=null; try{ d=JSON.parse(raw); }catch(e){} if(!d||!Array.isArray(d.sheets)||!d.sheets.length) return null;
+  d.sheets.forEach(function(x,i){ x.cells=x.cells&&typeof x.cells==='object'?x.cells:{}; if(typeof x.name!=='string') x.name=T('시트')+(i+1); }); d.names=Array.isArray(d.names)?d.names:[];
+  c=shDocC[id]={raw:raw, doc:d, eng:window.FSE?new FSE.Engine(d):null}; return c; }
+function sheetIx(d,name){ for(var i=0;i<d.sheets.length;i++) if(d.sheets[i].name===name) return i; return -1; }
+/* the cells that hold something, as a range like A1:C6 (or '' for an empty sheet) */
+function usedRange(sh){ var r1=1e9,c1=1e9,r2=-1,c2=-1; for(var k in sh.cells){ var x=sh.cells[k]; if(!x||x.v==null||x.v==='') continue; var rc=FSE.RC(k); r1=Math.min(r1,rc[0]); c1=Math.min(c1,rc[1]); r2=Math.max(r2,rc[0]); c2=Math.max(c2,rc[1]); }
+  return r2<0?'':FSE.rangeStr({r1:r1,c1:c1,r2:Math.min(r2,r1+LINK_R-1),c2:Math.min(c2,c1+LINK_C-1)}); }
+/* the range's values as the sheet shows them: {rows:[[{v,t}]]} or {miss:'doc'|'sheet'|'range'|'eng'} */
+function linkGrid(l){ if(!window.FSE) return {miss:'eng'}; var c=sheetDoc(l.doc); if(!c) return {miss:'doc'}; var si=sheetIx(c.doc,l.sh); if(si<0) return {miss:'sheet'};
+  var g=FSE.parseRange(l.rg); if(!g) return {miss:'range'}; var r2=Math.min(g.r2,g.r1+LINK_R-1), c2=Math.min(g.c2,g.c1+LINK_C-1), cells=c.doc.sheets[si].cells, rows=[], r, k;
+  for(r=g.r1;r<=r2;r++){ var row=[]; for(k=g.c1;k<=c2;k++){ var x=cells[FSE.K(r,k)], v=null; try{ v=c.eng.value(si,r,k); }catch(e){ v=null; } row.push({v:v, t:x||v!=null?String(FSE.formatValue(v,x&&x.nf)):''}); } rows.push(row); }
+  return {rows:rows, name:c.doc.name||'', cut:g.r2>r2||g.c2>c2}; }
+function cellNum(c){ if(typeof c.v==='number'&&isFinite(c.v)){ var n=csvNum(c.t); return n||{v:c.v, s:String(+c.v.toPrecision(12))}; } return csvNum(c.t); }
+/* rows of cells -> the slide's own data text (what the table / chart slide draws); info for the dialog */
+function gridData(rows,lay){ rows=rows.map(function(r){ return r.map(function(c){ return {v:c.v, t:String(c.t).replace(/[\t\r\n]+/g,' ').trim()}; }); });
+  while(rows.length&&rows[rows.length-1].every(function(c){ return !c.t; })) rows.pop();
+  var nc=rows.reduce(function(m,r){ var n=r.length; while(n&&!r[n-1].t) n--; return Math.max(m,n); },0); rows=rows.map(function(r){ return r.slice(0,nc); });
+  if(!rows.length||!nc) return {data:'', n:0};
+  if(lay==='table'){ var R=rows.slice(0,9).map(function(r){ return r.slice(0,6).map(function(c){ return nc===1?c.t.replace(/,/g,'，').replace(/\|/g,'｜'):c.t; }); });
+    return {data:R.map(function(r){ return r.join('\t'); }).join('\n'), n:R.length, w:Math.min(6,nc), cutR:rows.length>9, cutC:nc>6}; }
+  /* chart: the first column holds the names (unless it is all numbers), the first column after it with numbers holds the values; a first row of words is a header */
+  var isNumCol=function(i){ var ne=0, nn=0; rows.forEach(function(r,ri){ if(!ri) return; if(r[i]&&r[i].t){ ne++; if(cellNum(r[i])) nn++; } }); return nn&&nn>=ne*.6; };
+  var lab=nc>1?0:-1, val=-1, i; for(i=lab+1;i<nc;i++) if(isNumCol(i)||rows.length===1&&rows[0][i]&&cellNum(rows[0][i])){ val=i; break; }
+  if(val<0&&nc===1) val=0; if(val<0) return {data:'', n:0, nonum:1};
+  var body=rows; if(rows[0][val]&&rows[0][val].t&&!cellNum(rows[0][val])) body=rows.slice(1);
+  var L=[]; body.forEach(function(r){ var n=r[val]&&cellNum(r[val]); if(!n) return; var nm=lab>=0&&r[lab]?r[lab].t:''; L.push((nm||String(L.length+1))+': '+n.s); });
+  return {data:L.slice(0,12).join('\n'), n:Math.min(12,L.length), cutR:L.length>12, col:val, head:body!==rows?rows[0][val].t:''}; }
+/* read one slide's link again; true when its values changed */
+function syncLink(s){ if(!s.link||(s.layout!=='table'&&s.layout!=='chart')) return false; var g=linkGrid(s.link), was=linkMiss[s.id]||'';
+  if(g.miss){ if(g.miss!=='eng') linkMiss[s.id]=g.miss; return was!==(linkMiss[s.id]||''); }
+  delete linkMiss[s.id]; if(g.name) s.link.dn=g.name.slice(0,120); var d=gridData(g.rows,s.layout).data; if(d===s.data) return !!was; s.data=d; return true; }
+/* every linked slide of the open deck; redraw: also redraw what changed (and save the new values) */
+function syncLinks(redraw){ if(MODE||!deck) return false; var has=deck.slides.some(function(s){ return s.link; }); if(!has) return false;
+  if(!window.FSE){ needEngine().then(function(){ syncLinks(true); },function(e){ console.warn(e); }); return false; }
+  var chg=[]; deck.slides.forEach(function(s,i){ if(syncLink(s)) chg.push(i); }); if(!chg.length) return false;
+  if(redraw){ saveSoon(); if(pr.on){ if(!pr.end&&chg.indexOf(pr.i)>=0) drawPresent0(); }
+    else if(!$('editor').hidden&&deck.slides.length){ chg.forEach(function(i){ if(i===cur) drawMain(); updateThumb(i); }); if($('dataDlg').classList.contains('open')) dataLinkUI(); } }
+  return true; }
+window.addEventListener('storage',function(e){ if(!e.key||e.key===SHI_K||e.key.indexOf(SHD_K)===0) syncLinks(true); });
+document.addEventListener('visibilitychange',function(){ if(!document.hidden) syncLinks(true); });
+function linkMissText(k){ return T(k==='doc'?'연결한 시트 문서를 찾을 수 없어요':k==='sheet'?'연결한 시트(탭)를 찾을 수 없어요':'연결한 범위를 읽을 수 없어요')+' · '+T('마지막으로 가져온 값을 보여 줘요'); }
+function linkBadge(s){ var b=document.createElement('button'), m=linkMiss[s.id]; b.className='lnkB'+(m?' miss':''); b.dataset.linkOpen='1'; b.setAttribute('data-notr','');
+  b.textContent='🔗 '+T('시트 연결')+(m?' · '+T('시트를 찾을 수 없어요'):' · '+(s.link.dn||'')+' '+s.link.rg); b.title=m?linkMissText(m):T('Fry Sheet와 연결되어 있어요. 시트를 고치면 여기도 바뀌어요'); return b; }
+/* the link part of the table / chart dialog */
+function dataLinkUI(){ var s=deck.slides[cur]; if(!s) return; var l=s.link, m=l&&linkMiss[s.id];
+  $('dataLinkTxt').textContent=l?'🔗 '+T('시트 연결')+': '+(l.dn||T('이름 없음'))+' › '+l.sh+' › '+l.rg:''; $('dataLinkTxt').hidden=!l;
+  $('dataLinkMiss').textContent=m?linkMissText(m):''; $('dataLinkMiss').hidden=!m;
+  $('dataLinkBtn').textContent=T(l?'연결 바꾸기':'프라이 시트에서 가져오기 (연결)'); $('dataRefresh').hidden=$('dataUnlink').hidden=!l;
+  $('dataIn').readOnly=!!l; $('dataIn').classList.toggle('ro',!!l); if(l) $('dataIn').value=s.data; }
+$('dataLinkBtn').onclick=function(){ openLink(); };
+$('dataRefresh').onclick=function(){ var s=deck.slides[cur]; if(!s||!s.link) return; needEngine().then(function(){ var ch=syncLink(s); dataLinkUI(); if(ch){ saveSoon(); updateThumb(cur); drawMain(); } toast(linkMiss[s.id]?linkMissText(linkMiss[s.id]):T(ch?'시트에서 새로 가져왔어요':'바뀐 값이 없어요')); },function(){ toast(T('Fry Sheet 계산기를 불러오지 못했어요')); }); };
+$('dataUnlink').onclick=function(){ unlinkSlide(); dataLinkUI(); };
+function unlinkSlide(){ var s=deck.slides[cur]; if(!s||!s.link) return; blurEdit(); pushUndo(); s.link=null; delete linkMiss[s.id]; changed(); toast(T('연결을 끊었어요. 지금 값은 그대로 남아요')); }
+function refreshSlideLink(){ var s=deck.slides[cur]; if(!s||!s.link) return; needEngine().then(function(){ var ch=syncLink(s); if(ch){ saveSoon(); changed(); } toast(linkMiss[s.id]?linkMissText(linkMiss[s.id]):T(ch?'시트에서 새로 가져왔어요':'바뀐 값이 없어요')); },function(){ toast(T('Fry Sheet 계산기를 불러오지 못했어요')); }); }
+/* the picker: document, sheet, range (A1:C6), with a preview of the values that will be used */
+var lk={rows:null};
+function openLink(){ var s=deck.slides[cur]; if(!s||(s.layout!=='table'&&s.layout!=='chart')||gen||busyOn) return; blurEdit(); closeMenus();
+  var L=sheetList(), sel=$('lkDoc'); sel.innerHTML=''; L.forEach(function(x){ var o=document.createElement('option'); o.value=x.id; o.textContent=x.name||T('이름 없음'); sel.appendChild(o); });
+  $('lkNone').hidden=!!L.length; $('lkForm').hidden=!L.length; $('lkPrev').innerHTML=''; $('lkNote').textContent=''; $('lkOk').disabled=true; openDlg('linkDlg');
+  if(!L.length) return;
+  if(s.link&&L.some(function(x){ return x.id===s.link.doc; })) sel.value=s.link.doc;
+  $('lkNote').textContent=T('불러오는 중…');
+  needEngine().then(function(){ lkSheets(s.link&&s.link.doc===sel.value?s.link.sh:null); if(s.link&&s.link.doc===sel.value) $('lkRg').value=s.link.rg; lkShow(); },function(){ $('lkNote').textContent=T('Fry Sheet 계산기를 불러오지 못했어요'); }); }
+function lkSheets(keep){ var c=sheetDoc($('lkDoc').value), ss=$('lkSh'); ss.innerHTML=''; if(!c) return; c.doc.sheets.forEach(function(x){ var o=document.createElement('option'); o.value=x.name; o.textContent=x.name; ss.appendChild(o); });
+  ss.value=keep!=null&&sheetIx(c.doc,keep)>=0?keep:c.doc.sheets[c.doc.active>=0&&c.doc.active<c.doc.sheets.length?c.doc.active:0].name; lkAll(); }
+function lkAll(){ var c=sheetDoc($('lkDoc').value), si=c?sheetIx(c.doc,$('lkSh').value):-1; $('lkRg').value=si>=0?usedRange(c.doc.sheets[si]):''; }
+function lkLink(){ return fixLink({doc:$('lkDoc').value, sh:$('lkSh').value, rg:$('lkRg').value, dn:($('lkDoc').selectedOptions[0]||{}).textContent||''}); }
+function lkShow(){ var s=deck.slides[cur], p=$('lkPrev'), note=$('lkNote'), l=lkLink(); p.innerHTML=''; $('lkOk').disabled=true; if(!s) return;
+  if(!l){ note.textContent=$('lkRg').value.trim()?T('범위를 A1:C6처럼 써 주세요'):T('이 시트는 비어 있어요'); return; }
+  var g=linkGrid(l); if(g.miss){ note.textContent=T(g.miss==='eng'?'Fry Sheet 계산기를 불러오지 못했어요':'범위를 A1:C6처럼 써 주세요'); return; }
+  var G=FSE.parseRange(l.rg), t=document.createElement('table'), hr=document.createElement('tr'), d=gridData(g.rows,s.layout);
+  hr.appendChild(document.createElement('th')); g.rows[0].forEach(function(c,i){ var h=document.createElement('th'); h.textContent=FSE.colName(G.c1+i); hr.appendChild(h); }); t.appendChild(hr);
+  g.rows.slice(0,14).forEach(function(r,ri){ var tr=document.createElement('tr'), h=document.createElement('th'); h.textContent=G.r1+ri+1; tr.appendChild(h);
+    r.forEach(function(c,ci){ var td=document.createElement('td'); td.textContent=c.t; if(typeof c.v==='number') td.className='n'; if(s.layout==='chart'&&d.col===ci) td.classList.add('use'); tr.appendChild(td); }); t.appendChild(tr); });
+  if(g.rows.length>14){ var cut=document.createElement('tr'); cut.className='cut'; var td=document.createElement('td'); td.colSpan=g.rows[0].length+1; td.textContent=F('… 아래 {0}줄 더',g.rows.length-14); cut.appendChild(td); t.appendChild(cut); }
+  p.appendChild(t);
+  if(!d.n){ note.textContent=T(d.nonum?'숫자가 들어 있는 칸이 없어서 그래프는 만들 수 없어요':'고른 칸이 비어 있어요'); return; }
+  var w=[]; if(s.layout==='table'){ w.push(F('표 {0}줄 × {1}칸으로 들어가요',d.n,d.w)); if(d.cutR) w.push(T('표는 9줄까지라 앞의 9줄만 담아요')); if(d.cutC) w.push(T('표는 6칸까지라 앞의 6칸만 담아요')); }
+  else { w.push(F('그래프에 {0}개가 들어가요',d.n)+(d.head?' ('+d.head+')':'')); if(d.cutR) w.push(T('그래프는 12줄까지라 앞의 12줄만 담아요')); }
+  if(g.cut) w.push(F('범위가 커서 {0}줄 × {1}칸까지만 읽어요',LINK_R,LINK_C));
+  note.textContent=w.join(' · '); $('lkOk').disabled=false; }
+$('lkDoc').onchange=function(){ lkSheets(null); lkShow(); }; $('lkSh').onchange=function(){ lkAll(); lkShow(); }; $('lkAllB').onclick=function(){ lkAll(); lkShow(); };
+$('lkRg').addEventListener('input',lkShow);
+$('lkRg').addEventListener('keydown',function(e){ e.stopPropagation(); if(e.key==='Escape') closeDlg('linkDlg',null); if(e.key==='Enter'){ e.preventDefault(); if(!$('lkOk').disabled) $('lkOk').click(); } });
+$('lkOk').onclick=function(){ var s=deck.slides[cur], l=lkLink(); if(!s||!l) return; var g=linkGrid(l); if(g.miss) return; blurEdit(); pushUndo(); s.link=l; delete linkMiss[s.id]; s.data=gridData(g.rows,s.layout).data;
+  closeDlg('linkDlg',null); if($('dataDlg').classList.contains('open')) closeDlg('dataDlg',null); changed(); toast(T('시트와 연결했어요. 시트에서 값을 바꾸면 여기도 바뀌어요')); };
 /* live screen dialog */
 /* LABX: only the fallback names of the first 9 experiments (old decks, and if the Lab page cannot be read); the real list comes from Lab itself (loadLabCat) */
 var LABX=[['func','함수 그래프'],['prob','확률 실험'],['trig','단위원과 삼각함수'],['proj','포물선 운동'],['pend','진자'],['spring','용수철과 훅의 법칙'],['refr','빛의 굴절'],['wave','파동의 간섭'],['ohm','전기 회로와 옴의 법칙']], LIVE_MAX=1500000;
@@ -1090,7 +1192,7 @@ function toMD(){ var o=[];
     if(s.notes&&s.notes.trim()) L.push('',s.notes.trim().split('\n').map(function(x){ return '> '+x; }).join('\n'));
     o.push(L.join('\n').replace(/^\n+/,'')); });
   return o.join('\n\n')+'\n'; }
-function exportMD(){ if(!deck.slides.length) return toast(T('먼저 슬라이드를 만들어 주세요')); blurEdit(); download(new Blob([toMD()],{type:'text/markdown;charset=utf-8'}),fileName(deck.name)+'.md'); toast(T('Markdown 파일을 받았어요')); }
+function exportMD(){ if(!deck.slides.length) return toast(T('먼저 슬라이드를 만들어 주세요')); blurEdit(); syncLinks(true); download(new Blob([toMD()],{type:'text/markdown;charset=utf-8'}),fileName(deck.name)+'.md'); toast(T('Markdown 파일을 받았어요')); }
 
 /* ---------- templates (no AI needed) ---------- */
 var TPLS=[
@@ -1122,7 +1224,7 @@ TPLS.forEach(function(tp){ var b=document.createElement('button'); b.textContent
 
 /* ---------- shortcut sheet ---------- */
 var KEYS=[['Ctrl+Z / Ctrl+Shift+Z','되돌리기 · 다시 하기'],['↑ ↓ ← →','슬라이드 이동'],['Ctrl+D','슬라이드 복제'],['Ctrl+Enter','새 슬라이드 넣기'],['Ctrl+C · Ctrl+V','고른 도형 복사 · 붙여넣기'],['Ctrl+G · Ctrl+Shift+G','고른 도형 묶기 · 풀기'],['Ctrl+] · Ctrl+[','도형을 한 칸 앞으로 · 뒤로 (Shift: 맨 앞 · 맨 뒤)'],['Ctrl+A','도형 모두 고르기'],['Shift + Click · Drag','여러 도형 고르기 (Shift+누르기 · 빈 곳 끌기)'],['Alt+↑ Alt+↓','슬라이드 순서 바꾸기'],['H','발표할 때 건너뛰기 켜고 끄기'],['Delete','슬라이드 지우기'],['Home End','첫·마지막 슬라이드'],['Ctrl+Alt+N','새 슬라이드 쇼 만들기'],['F5','처음부터 발표'],['Shift+F5','지금 슬라이드부터 발표'],['?','이 단축키 목록'],['← ↑ → ↓','(고른 상자) 조금씩 옮기기 · Shift는 크게'],['Delete','(고른 도형·그림) 지우기'],['Shift + 끌기','(도형) 비율 지키기 · 선은 45도씩'],
-  ['→ Space Enter','(발표) 다음'],['← Backspace','(발표) 이전'],['Home End','(발표) 처음 · 끝'],['S','(발표) 발표자 메모 보기'],['V','(발표) 발표자 화면 새 창으로 열기'],['L','(발표) 레이저 포인터'],['D · M · E','(발표) 펜 · 형광펜 · 낙서 지우기'],['X','(발표) 지우개 (닿은 줄을 지워요)'],['W','(발표) 칠판 켜고 끄기'],['K','(발표) 자동 넘기기 멈춤 · 이어가기'],['B','(발표) 화면 끄기'],['숫자 + Enter','(발표) 그 번호 슬라이드로'],['A','(발표) 퀴즈 정답 보기'],['T','(발표) 타이머 멈춤·다시'],['Esc','(발표) 나가기']];
+  ['→ Space Enter','(발표) 다음'],['← Backspace','(발표) 이전'],['Home End','(발표) 처음 · 끝'],['S','(발표) 발표자 메모 보기'],['V','(발표) 발표자 화면 새 창으로 열기'],['L','(발표) 레이저 포인터'],['D · M · E','(발표) 펜 · 형광펜 · 낙서 지우기'],['X','(발표) 지우개 (닿은 줄을 지워요)'],['W','(발표) 칠판 켜고 끄기'],['K','(발표) 자동 넘기기 멈춤 · 이어가기'],['B','(발표) 화면 끄기'],['숫자 + Enter','(발표) 그 번호 슬라이드로'],['A','(발표) 퀴즈 정답 보기'],['Q','(발표) 실시간 퀴즈 열기 · 숨기기'],['T','(발표) 타이머 멈춤·다시'],['Esc','(발표) 나가기']];
 function showKeys(){ var b=$('keysBody'); b.innerHTML=''; KEYS.forEach(function(k){ var r=document.createElement('div'); r.className='kr'; var a=document.createElement('kbd'); a.textContent=k[0]; var t=document.createElement('span'); t.textContent=T(k[1]); r.appendChild(a); r.appendChild(t); b.appendChild(r); }); openDlg('keysDlg'); }
 
 /* ---------- presenting ---------- */
@@ -1136,12 +1238,13 @@ function nextVis(i,d){ for(var j=i+d;j>=0&&j<deck.slides.length;j+=d) if(vis(j))
 function present(from){
   blurEdit(); closeMenus(); if(!deck.slides.length) return;
   if(!deck.slides.some(function(s){ return !s.hide; })) return toast(T('모든 슬라이드를 숨겨서 발표할 수 없어요'));
+  if(syncLinks(false)) saveSoon();
   from=Math.max(0,Math.min(from||0,deck.slides.length-1)); if(!vis(from)){ var j=nextVis(from,1); from=j>=0?j:nextVis(from,-1); }
   pr.on=true; pr.i=from; pr.step=0; pr.end=false; pr.black=false; pr.cd=null; pr.shown=-1; pr.rev=-1; pr.go=''; inkKey=-1; setInk(''); setBoard(false); inkClear(); pr.au.paused=false; pr.au.dur=0; clearInterval(pr.au.tm); pr.au.tm=setInterval(auTick,100); pr.t0=Date.now(); clearInterval(pr.tm); pr.tm=setInterval(tick,1000); tick(); pvDeck();
   var el=$('present'); el.classList.add('on'); setLaser(false); drawPresent(); armAuto();
   try{ var fn=el.requestFullscreen||el.webkitRequestFullscreen; if(fn){ var p=fn.call(el); pr.fs=true; if(p&&p.catch) p.catch(function(){ pr.fs=false; }); } }catch(e){ pr.fs=false; }
 }
-function drawPresent(){ drawPresent0(); pvState(); }
+function drawPresent(){ drawPresent0(); pvState(); lqSync(); }
 function drawPresent0(){
   var ik=pr.end?-2:pr.i; if(inkKey!==ik){ inkKey=ik; inkClear(); setBoard(false); }
   var st=$('pStage'), n=deck.slides.length; st.innerHTML=''; $('pEnd').hidden=!pr.end; st.hidden=pr.end; st.style.visibility=pr.black?'hidden':'';
@@ -1183,16 +1286,16 @@ function auTick(){ var u=pr.au; if(!pr.on) return; var now=Date.now(), dt=Math.m
 function auPaint(){ var u=pr.au, b=$('pAutoB'), on=deck.auto.on&&pr.on; b.hidden=!on; $('pAuto').hidden=!on||u.dur<=0; $('pAuto').firstChild.style.width=u.dur>0?Math.round((1-u.left/u.dur)*1000)/10+'%':'0';
   $('pAuto').classList.toggle('paused',u.paused||!!ink.tool||pr.black); b.classList.toggle('on',u.paused); b.textContent=u.paused?'▶':'⏸'; b.title=T(u.paused?'자동 넘기기 이어가기 (K)':'자동 넘기기 멈추기 (K)')+(u.dur>0&&!u.paused?' · '+F('{0}초 남음',Math.ceil(u.left/1000)):''); }
 function auToggle(){ if(!deck.auto.on) return toast(T('자동 넘기기가 꺼져 있어요 (메뉴 > 자동 넘기기)')); var u=pr.au; u.paused=!u.paused; u.last=Date.now(); auPaint(); toast(T(u.paused?'자동 넘기기를 멈췄어요':'자동 넘기기를 이어가요')); }
-function exitPresent(){ if(!pr.on) return; pr.on=false; pvPost({type:'exit'}); setInk(''); setBoard(false); inkClear(); clearInterval(pr.au.tm); pr.au.dur=0; clearInterval(pr.tm); clearTimeout(pr.goT); pr.go=''; setLaser(false); $('present').classList.remove('on');
+function exitPresent(){ if(!pr.on) return; lqStop(); pr.on=false; pvPost({type:'exit'}); setInk(''); setBoard(false); inkClear(); clearInterval(pr.au.tm); pr.au.dur=0; clearInterval(pr.tm); clearTimeout(pr.goT); pr.go=''; setLaser(false); $('present').classList.remove('on');
   try{ var fe=document.fullscreenElement||document.webkitFullscreenElement; if(fe){ (document.exitFullscreen||document.webkitExitFullscreen).call(document); } }catch(e){}
   if(!pr.end) select(pr.i); }
 ['fullscreenchange','webkitfullscreenchange'].forEach(function(ev){ document.addEventListener(ev,function(){ if(pr.on&&pr.fs&&!(document.fullscreenElement||document.webkitFullscreenElement)) exitPresent(); }); });
 window.addEventListener('resize',function(){ if(pr.on){ scalePresent(); inkFit(); } });
 var pd=null;
-$('present').addEventListener('pointerdown',function(e){ if(e.target.closest('.pbar')||e.target.id==='pInk') return; pd={x:e.clientX,y:e.clientY}; });
+$('present').addEventListener('pointerdown',function(e){ if(e.target.closest('.pbar,#lq')||e.target.id==='pInk') return; pd={x:e.clientX,y:e.clientY}; });
 $('present').addEventListener('pointermove',function(e){ if(!pr.laser||(e.pointerType==='touch'&&!pd)) return; var d=$('pDot'); d.hidden=false; d.style.left=e.clientX+'px'; d.style.top=e.clientY+'px'; });
 $('present').addEventListener('pointerleave',function(e){ if(e.pointerType!=='touch') $('pDot').hidden=true; });
-$('present').addEventListener('pointerup',function(e){ if(e.pointerType==='touch') $('pDot').hidden=true; if(!pd||e.target.closest('.pbar')){ pd=null; return; } var dx=e.clientX-pd.x, dy=e.clientY-pd.y; pd=null;
+$('present').addEventListener('pointerup',function(e){ if(e.pointerType==='touch') $('pDot').hidden=true; if(!pd||e.target.closest('.pbar,#lq')){ pd=null; return; } var dx=e.clientX-pd.x, dy=e.clientY-pd.y; pd=null;
   if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){ if(dx<0) pNext(); else pPrev(); }
   else if(Math.abs(dx)<12&&Math.abs(dy)<12){ if(pr.black){ setBlack(false); return; } if(pr.laser&&e.pointerType==='touch') return; if(e.clientX<innerWidth*0.3) pPrev(); else pNext(); } });
 $('pNotesB').onclick=function(){ setNotesView(!pr.notes); }; $('pLaserB').onclick=function(){ setLaser(!pr.laser); };
@@ -1288,6 +1391,81 @@ function startPV(){
   window.addEventListener('resize',pvScale); if(window.ResizeObserver){ var ro=new ResizeObserver(pvScale); ro.observe($('pvCur')); ro.observe($('pvNextFr')); }
 }
 
+/* ---------- live audience quiz: while presenting a quiz slide, phones join with a code / QR (join.html#CODE), see the choices, tap an answer;
+   this screen shows the answers as a live bar chart, then reveals the right one. Up to 40 people, names only, nothing is stored anywhere:
+   the message layer is lq-net.js (PeerJS data channels by default; the PeerJS cloud server only introduces the two sides).
+   Each quiz slide's choices: s.choices (or lines like "1) ..." / "① ..." in the question, or O / X when the answer is O or X), the right one: s.qok or the answer text. ---------- */
+var QLINE=/^\s*(?:\(?([1-9]|[A-Fa-f])[.):\]]|([①-⑨]))\s*(\S.*)$/, CIRC='①②③④⑤⑥⑦⑧⑨';
+function quizParse(s){ var ch=[], rest=[]; String(s.quote||'').split('\n').forEach(function(l){ var m=QLINE.exec(l); if(m) ch.push(m[3].trim()); else rest.push(l); }); return {ch:ch, rest:rest.join('\n').trim()}; }
+function quizChoices(s){ if(s.choices.length>=2) return s.choices.slice(0,6); var q=quizParse(s); if(q.ch.length>=2) return q.ch.slice(0,6);
+  return /^(O|X|○|×|⭕|❌)$/i.test(s.caption.trim())?['O','X']:[]; }
+function qNorm(t){ return String(t||'').toLowerCase().replace(/^\s*(?:\(?([1-9]|[a-f])[.):\]]|[①-⑨])\s*/,'').replace(/[○⭕]/g,'o').replace(/[×❌✕]/g,'x').replace(/[\s.,!?'"“”()]/g,''); }
+function quizOk(s,ch){ if(s.qok>=0&&s.qok<ch.length) return s.qok; var a=s.caption.trim(), n=qNorm(a), i, m; if(!a||!ch.length) return -1;
+  for(i=0;i<ch.length;i++) if(qNorm(ch[i])===n) return i;
+  if((m=/^\(?([1-9])\)?\s*번?\s*(?:[.):]|$|\s)/.exec(a))&&+m[1]<=ch.length) return +m[1]-1;
+  if((i=CIRC.indexOf(a[0]))>=0&&i<ch.length) return i;
+  if((m=/^([A-Fa-f])(?:[.):]|$|\s)/.exec(a))&&m[1].toUpperCase().charCodeAt(0)-65<ch.length) return m[1].toUpperCase().charCodeAt(0)-65;
+  var hit=ch.map(function(c,j){ return qNorm(c).length>1&&n.indexOf(qNorm(c))>=0?j:-1; }).filter(function(j){ return j>=0; }); return hit.length===1?hit[0]:-1; }
+function quizText(s){ return s.choices.length>=2?String(s.quote||'').trim():quizParse(s).rest||String(s.quote||'').trim(); }
+/* choices dialog (slide options) */
+function openChoices(){ var s=deck.slides[cur]; if(!s||s.layout!=='quiz'||gen||busyOn) return; blurEdit(); closeMenus(); $('qzIn').value=quizChoices(s).join('\n'); qzOkSel(s.qok>=0?s.qok:quizOk(s,quizChoices(s))); openDlg('qzDlg'); setTimeout(function(){ $('qzIn').focus(); },60); }
+function qzLines(){ return $('qzIn').value.split('\n').map(function(x){ return x.replace(/\s+/g,' ').trim(); }).filter(Boolean).slice(0,6); }
+function qzOkSel(v){ var L=qzLines(), sel=$('qzOkSel'), o=document.createElement('option'); sel.innerHTML=''; o.value='-1'; o.textContent=T('정답 글로 알아서 찾기'); sel.appendChild(o);
+  L.forEach(function(c,i){ var x=document.createElement('option'); x.value=String(i); x.textContent=CIRC[i]+' '+c; sel.appendChild(x); }); sel.value=String(v!=null&&v<L.length?v:-1); if(sel.selectedIndex<0) sel.value='-1'; }
+$('qzIn').addEventListener('input',function(){ qzOkSel(+$('qzOkSel').value); });
+$('qzIn').addEventListener('keydown',function(e){ e.stopPropagation(); if(e.key==='Escape') closeDlg('qzDlg',null); });
+$('qzOk').onclick=function(){ var s=deck.slides[cur]; if(!s) return closeDlg('qzDlg',null); var L=qzLines(); if(L.length===1) return toast(T('보기는 두 개 이상 써 주세요')); pushUndo(); s.choices=L; s.qok=L.length?num($('qzOkSel').value,-1,-1,L.length-1):-1; closeDlg('qzDlg',null); changed(); toast(T(L.length?'보기를 저장했어요':'보기를 지웠어요')); };
+/* the session (presenter side) */
+var lq={on:false, code:'', h:null, st:'off', err:'', ppl:{}, ans:{}, q:null, key:'', show:true, qr:true, tries:0, ping:null};
+function lqUrl(){ return location.href.split('#')[0].replace(/[?].*$/,'').replace(/[^\/]*$/,'')+'join.html#'+lq.code; }
+function lqOnline(){ var now=Date.now(); return Object.keys(lq.ppl).filter(function(p){ var x=lq.ppl[p]; return x.on&&now-x.last<16000; }); }
+function lqCur(){ if(!pr.on||pr.end) return null; var s=deck.slides[pr.i]; if(!s||s.layout!=='quiz') return null; var ch=quizChoices(s), n=0;
+  deck.slides.forEach(function(x,i){ if(i<=pr.i&&!x.hide&&x.layout==='quiz') n++; });
+  if(ch.length<2) return {id:s.id, none:true, n:n}; return {id:s.id, n:n, text:quizText(s), ch:ch, ok:quizOk(s,ch), rev:pr.rev===pr.i}; }
+function lqCounts(q){ var c=q.ch.map(function(){ return 0; }), a=lq.ans[q.id]||{}; Object.keys(a).forEach(function(p){ if(a[p]>=0&&a[p]<c.length) c[a[p]]++; }); return c; }
+function lqMsg(pid){ var q=lq.q; if(!q||q.none) return {t:'wait'}; var a=lq.ans[q.id]||{}, m={t:'q', q:q.id, n:q.n, text:q.text, ch:q.ch, my:a[pid]!=null?a[pid]:null, rev:q.rev};
+  if(q.rev){ m.ok=q.ok; m.cnt=lqCounts(q); } return m; }
+function lqPush(){ Object.keys(lq.ppl).forEach(function(p){ var x=lq.ppl[p]; if(x.on) x.c.send(lqMsg(p)); }); }
+/* called after every move while presenting: a new question (or the answer shown) goes to the phones */
+function lqSync(){ if(!lq.on){ lqDraw(); return; } var q=lqCur(), key=q?q.id+'|'+(q.none?'n':q.ch.join('\u0001')+'|'+q.rev):'-'; lq.q=q; if(key!==lq.key){ lq.key=key; lqPush(); } lqDraw(); }
+function lqConn(c){ c.on.data=function(m){ if(!m||typeof m!=='object') return; var p=c.pid, x=p&&lq.ppl[p]; if(x&&x.c===c) x.last=Date.now();
+    if(m.t==='join'){ var pid=String(m.pid||'').slice(0,40), nm=String(m.name||'').replace(/\s+/g,' ').trim().slice(0,20)||T('이름 없음'); if(!pid) return;
+      if(!lq.ppl[pid]&&Object.keys(lq.ppl).length>=FFLQ.MAX){ c.send({t:'full'}); setTimeout(function(){ c.close(); },500); return; }
+      var old=lq.ppl[pid]; if(old&&old.c!==c){ old.c.on.close=null; old.c.close(); }
+      c.pid=pid; lq.ppl[pid]={name:nm, c:c, on:true, last:Date.now()}; c.send({t:'hi', name:nm}); c.send(lqMsg(pid)); lqDraw(); return; }
+    if(!x||x.c!==c) return;
+    if(m.t==='ans'){ var q=lq.q; if(!q||q.none||q.rev||m.q!==q.id) return; var a=m.a|0; if(a<0||a>=q.ch.length) return; (lq.ans[q.id]=lq.ans[q.id]||{})[p]=a; c.send({t:'got', q:q.id, a:a}); lqDraw(); } };
+  c.on.close=function(){ var x=c.pid&&lq.ppl[c.pid]; if(x&&x.c===c){ x.on=false; lqDraw(); } }; }
+function lqStart(){ if(lq.on||!pr.on) return; lq.on=true; lq.show=true; lq.qr=true; lq.ppl={}; lq.ans={}; lq.key=''; lq.tries=0; lqOpen(); clearInterval(lq.ping);
+  lq.ping=setInterval(function(){ Object.keys(lq.ppl).forEach(function(p){ var x=lq.ppl[p]; if(x.on) x.c.send({t:'ping'}); }); lqDraw(); },5000); lqSync(); }
+function lqOpen(){ lq.code=FFLQ.makeCode(); lq.st='wait'; lq.err=''; lqDrawJoin(); var code=lq.code;
+  lq.h=FFLQ.net().host(code,{open:function(){ if(lq.code!==code) return; lq.st='open'; lqDraw(); }, conn:function(c){ if(lq.code===code&&lq.on) lqConn(c); else c.close(); },
+    error:function(k){ if(lq.code!==code||!lq.on) return; if(k==='taken'&&lq.tries++<3){ try{ lq.h.close(); }catch(e){} lqOpen(); return; } lq.st='err'; lq.err=k; lqDraw(); }}); }
+function lqStop(){ if(!lq.on) return; Object.keys(lq.ppl).forEach(function(p){ var x=lq.ppl[p]; if(x.on){ x.c.send({t:'end'}); } x.c.on.close=null; }); var h=lq.h, ppl=lq.ppl;
+  setTimeout(function(){ Object.keys(ppl).forEach(function(p){ ppl[p].c.close(); }); try{ if(h) h.close(); }catch(e){} },400);
+  clearInterval(lq.ping); lq.on=false; lq.h=null; lq.st='off'; lq.ppl={}; lq.ans={}; lq.q=null; lq.key=''; lqDraw(); }
+function lqToggle(){ if(!pr.on) return; if(!lq.on){ if(!deck.slides.some(function(s){ return s.layout==='quiz'&&!s.hide; })) return toast(T('퀴즈 슬라이드가 없어요')); lqStart(); return; } lq.show=!lq.show; lqDraw(); }
+function lqDrawJoin(){ var url=lqUrl(); $('lqCode').textContent=lq.code.slice(0,3)+' '+lq.code.slice(3); $('lqUrl').textContent=url.replace(/^https?:\/\//,'');
+  var q=null; try{ q=window.FFQR&&FFQR.make(url); }catch(e){} if(q) FFQR.draw($('lqQr'),q,Math.max(2,Math.floor(220/(q.size+8)))); $('lqQr').hidden=!q; }
+function lqDraw(){ var box=$('lq'), b=$('pLqB'); b.hidden=!pr.on||!(lq.on||deck.slides.some(function(s){ return s.layout==='quiz'&&!s.hide; })); b.classList.toggle('on',lq.on);
+  var on=lqOnline().length; b.textContent=lq.on?'📲 '+on:'📲'; box.hidden=!lq.on||!lq.show||!pr.on; if(box.hidden) return;
+  $('lqPpl').textContent=F('참여 {0}명',on); $('lqJoin').hidden=!lq.qr; $('lqQrB').textContent=T(lq.qr?'QR 접기':'QR 보기');
+  $('lqMsg').textContent=lq.st==='wait'?T('연결 준비 중…'):lq.st==='err'?T(lq.err==='lib'?'실시간 연결 도구를 불러오지 못했어요. 인터넷 연결을 확인해 주세요':lq.err==='net'?'연결 서버에 닿지 못했어요. 인터넷 연결을 확인해 주세요':'연결하지 못했어요. 다시 해 주세요'):T('휴대폰으로 QR을 찍거나 주소를 열고 코드를 넣어요');
+  $('lqMsg').classList.toggle('bad',lq.st==='err');
+  var q=lq.q, bars=$('lqBars'), stat=$('lqStat'), rv=$('lqRev'); bars.innerHTML=''; stat.textContent=''; rv.hidden=true;
+  if(!q){ bars.innerHTML='<p class="lqTip"></p>'; bars.firstChild.textContent=T('퀴즈 슬라이드가 나오면 문제가 휴대폰으로 가요'); return; }
+  if(q.none){ bars.innerHTML='<p class="lqTip"></p>'; bars.firstChild.textContent=T('이 퀴즈에는 보기가 없어요. 편집 화면의 슬라이드 옵션 > 실시간 퀴즈 보기에서 넣어 주세요'); return; }
+  var cnt=lqCounts(q), tot=cnt.reduce(function(a,v){ return a+v; },0), mx=Math.max.apply(null,cnt.concat([1]));
+  q.ch.forEach(function(c,i){ var r=document.createElement('div'); r.className='lqBar'+(q.rev&&i===q.ok?' ok':q.rev&&q.ok>=0?' dim':''); r.innerHTML='<span class="lb"></span><span class="tr"><i></i></span><b></b>';
+    r.firstChild.textContent=CIRC[i]+' '+c; r.querySelector('i').style.width=Math.round(cnt[i]/mx*100)+'%'; r.lastChild.textContent=cnt[i]; r.setAttribute('data-notr',''); bars.appendChild(r); });
+  stat.textContent=F('{0}명이 답했어요',tot)+(q.rev?(q.ok>=0?' · '+F('정답률 {0}% ({1}/{2}명)',tot?Math.round(cnt[q.ok]/tot*100):0,cnt[q.ok],tot):' · '+T('정답이 보기에 없어서 맞힌 비율은 셀 수 없어요')):'');
+  rv.hidden=false; rv.textContent=T(q.rev?'정답 숨기기':'정답 공개'); }
+$('lqRev').onclick=function(e){ e.stopPropagation(); if(!pr.on||pr.end) return; pr.rev=pr.rev===pr.i?-1:pr.i; drawPresent(); armAuto(); };
+$('lqQrB').onclick=function(e){ e.stopPropagation(); lq.qr=!lq.qr; lqDraw(); };
+$('lqHide').onclick=function(e){ e.stopPropagation(); lq.show=false; lqDraw(); };
+$('lqEnd').onclick=function(e){ e.stopPropagation(); lqStop(); toast(T('실시간 퀴즈를 끝냈어요')); };
+$('pLqB').onclick=function(e){ e.stopPropagation(); lqToggle(); };
+
 /* ---------- share: read-only link and QR. Everything is client side: the slides are packed into the address after the # (deflate + base64url), which browsers never send to a server.
    The viewer (#v=...) unpacks them. It is not live: viewers page through on their own, and pictures are left out to keep the link short. ---------- */
 function b64u(u){ var s='', i; for(i=0;i<u.length;i+=8192) s+=String.fromCharCode.apply(null,u.subarray(i,i+8192)); return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
@@ -1312,7 +1490,7 @@ function shareDecode(pl){ pl=String(pl||''); var kind=pl[0], raw; try{ raw=unb64
 function shareBase(){ return location.href.split('#')[0]; }
 var shTok=0;
 function shOpts(){ return {notes:$('shNotes').checked, ans:$('shAns').checked, cur:$('shCur').checked}; }
-function shBuild(){ var tok=++shTok, o=shOpts(), j=shareJSON(o), qb=$('shQrBox'); $('shLink').value=''; $('shInfo').textContent=T('링크를 만드는 중…'); qb.hidden=true; $('shWarn').hidden=true; ['shCopy','shOpen','shShare'].forEach(function(id){ $(id).disabled=true; });
+function shBuild(){ syncLinks(true); var tok=++shTok, o=shOpts(), j=shareJSON(o), qb=$('shQrBox'); $('shLink').value=''; $('shInfo').textContent=T('링크를 만드는 중…'); qb.hidden=true; $('shWarn').hidden=true; ['shCopy','shOpen','shShare'].forEach(function(id){ $(id).disabled=true; });
   shareEncode(j.json).then(function(pl){ if(tok!==shTok) return; var url=shareBase()+'#v='+pl+(o.cur&&j.start>0?'&p='+(j.start+1):''); $('shLink').value=url; ['shCopy','shOpen','shShare'].forEach(function(id){ $(id).disabled=false; });
     var info=F('{0}장 · 링크 길이 {1}자',j.n,url.length), warn=[];
     if(j.hidden) warn.push(F('건너뛰기로 숨긴 슬라이드 {0}장은 빠졌어요',j.hidden)); if(j.live) warn.push(F('살아있는 화면 슬라이드 {0}장은 링크에 담기지 않아요 (건너뛰어요)',j.live)); if(j.pics) warn.push(F('그림 {0}장은 링크에 담기지 않아요',j.pics));
@@ -1365,6 +1543,7 @@ document.addEventListener('keydown',function(e){
     else if(k==='End'){ e.preventDefault(); pLast(); }
     else if(k==='v'||k==='V'){ e.preventDefault(); openPV(); }
     else if(k==='a'||k==='A'){ e.preventDefault(); pAns(); }
+    else if(k==='q'||k==='Q'){ e.preventDefault(); lqToggle(); }
     else if(k==='t'||k==='T'){ e.preventDefault(); if(pr.cd){ if(pr.cd.left===0){ pr.cd.left=pr.cd.total; pr.cd.run=true; } else pr.cd.run=!pr.cd.run; cdPaint(); toast(pr.cd.run?T('타이머가 다시 가요'):T('타이머를 멈췄어요')); } }
     else if(k==='Escape'){ e.preventDefault(); if(ink.tool) setInk(''); else if(pr.bb) setBoard(false); else exitPresent(); }
     else if(k==='k'||k==='K'){ e.preventDefault(); auToggle(); }
@@ -1411,7 +1590,7 @@ document.addEventListener('keydown',function(e){
 /* ---------- PDF / print ---------- */
 function printDeck(){
   if(!deck.slides.length) return toast(T('먼저 슬라이드를 만들어 주세요'));
-  blurEdit(); var r=$('printRoot'), t=th(); r.innerHTML='';
+  blurEdit(); syncLinks(true); var r=$('printRoot'), t=th(); r.innerHTML='';
   deck.slides.filter(function(s){ return !s.hide; }).forEach(function(s){ var p=document.createElement('div'); p.className='pp'; var el=slideEl(s,t,false); el.style.transform='none'; p.appendChild(el); r.appendChild(p); fitAll(el,s,t); });
   var old=document.title; document.title=fileName(deck.name);
   setTimeout(function(){ window.print(); document.title=old; },60);
@@ -1491,7 +1670,7 @@ function download(blob,name){ var u=URL.createObjectURL(blob), a=document.create
   setTimeout(function(){ URL.revokeObjectURL(u); a.remove(); },4000); }
 function exportPPTX(){
   if(!deck.slides.length) return toast(T('먼저 슬라이드를 만들어 주세요'));
-  blurEdit(); saveNow(); var b=$('pptxBtn'); b.disabled=true;
+  blurEdit(); syncLinks(true); saveNow(); var b=$('pptxBtn'); b.disabled=true;
   needPPTX().then(function(P){ return prepPics().then(function(){ return buildPPTX(P).write({outputType:'blob', compression:true}); }); }).then(function(blob){ download(blob,fileName(deck.name)+'.pptx'); })
     .then(function(){ toast(T('PPTX 파일을 받았어요')); },function(e){ console.error(e); toast(T('PPTX 파일을 만들지 못했어요')); })
     .then(function(){ b.disabled=!deck.slides.length; });
@@ -1570,5 +1749,5 @@ window.FSL={
   putSlide:function(i,s){ var o=deck.slides[i]; if(!o) return; s=fixSlide(s); s.id=o.id; s.img=o.img; s.iw=o.iw; s.ih=o.ih; s.hide=o.hide; s.bg=o.bg; s.data=o.data; s.ctype=o.ctype; s.pos=o.pos; s.els=o.els; s.build=o.build; s.tr=o.tr; s.sec=o.sec; s.ish=o.ish; s.ibc=o.ibc; s.ibw=o.ibw; deck.slides[i]=s; if(i===cur) drawMain(); updateThumb(i); saveSoon(); },
   insertSlide:function(i,s){ deck.slides.splice(i,0,fixSlide(s)); cur=i; refresh(); saveSoon(); }
 };
-window.__fsl={shareEncode:shareEncode, shareDecode:shareDecode, shareJSON:shareJSON, get deck(){ return deck; }, get store(){ return store; }, get cur(){ return cur; }, select:select, present:present, exitPresent:exitPresent, get pr(){ return pr; }, buildPPTX:buildPPTX, prepPics:prepPics, needPPTX:needPPTX, measure:measure, undo:doUndo, redo:doRedo, moveSlide:moveSlide};
+window.__fsl={get lq(){ return lq; }, quizChoices:quizChoices, quizOk:quizOk, syncLinks:syncLinks, gridData:gridData, shareEncode:shareEncode, shareDecode:shareDecode, shareJSON:shareJSON, get deck(){ return deck; }, get store(){ return store; }, get cur(){ return cur; }, select:select, present:present, exitPresent:exitPresent, get pr(){ return pr; }, buildPPTX:buildPPTX, prepPics:prepPics, needPPTX:needPPTX, measure:measure, undo:doUndo, redo:doRedo, moveSlide:moveSlide};
 })();
