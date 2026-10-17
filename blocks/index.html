@@ -122,6 +122,9 @@ button,input,select{font:inherit; color:inherit;}
 .pic .th{height:100px; border-radius:8px; background:#fff; display:grid; place-items:center; overflow:hidden;}
 .pic .th.clear{background:#e5e7eb;}
 .pic .th img{max-width:100%; max-height:100%;}
+.padTr{display:inline-flex; align-items:center; gap:6px; cursor:pointer; padding:4px 8px; border:1px solid var(--line); border-radius:8px;}
+.padTr i{width:16px; height:16px; border-radius:3px; border:1px solid #9ca3af; background-color:#e5e7eb; background-image:linear-gradient(45deg,#9ca3af 25%,transparent 25%,transparent 75%,#9ca3af 75%),linear-gradient(45deg,#9ca3af 25%,transparent 25%,transparent 75%,#9ca3af 75%); background-size:8px 8px; background-position:0 0,4px 4px;}
+.padTr:has(input:checked){border-color:var(--fry); color:var(--fry);}
 .pic input{background:var(--bg); border:1px solid var(--line); border-radius:7px; padding:5px 8px; font-size:13px; width:100%;}
 .pa{display:flex; gap:4px;}
 .pa button{flex:1; height:30px; border-radius:7px; border:1px solid var(--line); background:var(--panel); cursor:pointer; font-size:12.5px; padding:0 4px;}
@@ -255,7 +258,7 @@ button,input,select{font:inherit; color:inherit;}
     <span class="grp"><button class="tl" id="padUndo">↶ 되돌리기</button><button class="tl" id="padClear">모두 지우기</button></span>
   </div>
   <div id="padWrap"><canvas id="padCv" width="800" height="600"></canvas></div>
-  <div class="padFoot"><input type="text" id="padName" aria-label="그림 이름" data-notr><label><input type="checkbox" id="padBg"> 투명 배경</label><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="padSave">저장하고 넣기</button></div>
+  <div class="padFoot"><input type="text" id="padName" aria-label="그림 이름" data-notr><label class="padTr" title="체크하면 배경 없이 그린 부분만 저장돼요 (바둑판 무늬 = 투명)"><input type="checkbox" id="padBg"><i></i> 투명 배경</label><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="padSave">저장하고 넣기</button></div>
 </div></div>
 <div class="ov" id="mgrDlg"><div class="dlg">
   <div class="dh"><h3>내 그림</h3><button class="tbtn" id="mgrDraw">✏️ 그림 그리기</button><button class="tbtn" id="mgrPhoto">📷 사진 넣기</button><button class="x" data-close aria-label="닫기">×</button></div>
