@@ -165,7 +165,7 @@ function slideEl(s,th,edit,opt){
 function esc(t){ return String(t).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 function parseTable(t){ var L=String(t||'').replace(/\r/g,'').split('\n').filter(function(x){ return x.trim(); }).slice(0,9); if(!L.length) return [];
   var sep=L.some(function(x){ return x.indexOf('\t')>=0; })?'\t':L.some(function(x){ return x.indexOf('|')>=0; })?'|':',';
-  var R=L.map(function(x){ x=x.trim(); if(sep==='|') x=x.replace(/^\|/,'').replace(/\|$/,''); return x.split(sep).slice(0,6).map(function(c){ return c.trim(); }); });
+  var R=L.map(function(x){ x=sep==='\t'?x.replace(/^ +| +$/g,''):x.trim(); if(sep==='|') x=x.replace(/^\|/,'').replace(/\|$/,''); return x.split(sep).slice(0,6).map(function(c){ return c.trim(); }); });
   var n=Math.max.apply(null,R.map(function(r){ return r.length; })); R.forEach(function(r){ while(r.length<n) r.push(''); }); return R; }
 function parseChart(t){ var o=[]; String(t||'').replace(/\r/g,'').split('\n').forEach(function(l){ l=l.trim(); if(!l||o.length>=12) return;
   var m=/^(.*?)\s*[:：\t=,]\s*(-?\d[\d,]*(?:\.\d+)?)\s*(\S*)$/.exec(l)||/^(.*\S)\s+(-?\d[\d,]*(?:\.\d+)?)\s*(\S*)$/.exec(l); if(!m) return;
@@ -473,6 +473,7 @@ $('deckMenu').addEventListener('click',function(e){
   else if(k==='nums'){ if(!deck.slides.length) return; pushUndo(); deck.nums=!deck.nums; changed(true); }
   else if(k==='footer'){ if(!deck.slides.length) return; ask(T('바닥글'),T('제목·마무리를 뺀 모든 슬라이드 아래쪽에 작게 들어가요. 비우면 없어져요.'),T('예: 3학년 2반 · 김하늘'),T('확인'),deck.footer,true).then(function(v){ if(v==null) return; pushUndo(); deck.footer=v; changed(true); }); }
   else if(k==='imp') openImport();
+  else if(k==='csv') openCsv();
   else if(k==='md') exportMD();
   else if(k==='del') deleteDeck(deck);
 });
@@ -512,7 +513,81 @@ var cw=$('canvasWrap');
 cw.addEventListener('dragover',function(e){ if(e.dataTransfer&&[].indexOf.call(e.dataTransfer.types||[],'Files')>=0){ e.preventDefault(); } });
 cw.addEventListener('drop',function(e){ var fs=e.dataTransfer&&e.dataTransfer.files; if(fs&&fs.length){ e.preventDefault(); putPictures(fs); } });
 document.addEventListener('paste',function(e){ if(e.target.closest&&(e.target.closest('.in')||e.target.closest('input,textarea'))||pr.on||$('editor').hidden) return;
+  var tx=(e.clipboardData&&e.clipboardData.getData('text'))||''; if(tx.indexOf('\t')>=0&&/\n/.test(tx.trim())) return; // spreadsheet cells (Excel also adds a picture): handled by the table dialog
   var fs=[].slice.call((e.clipboardData&&e.clipboardData.files)||[]).filter(function(f){ return /^image\//.test(f.type); }); if(fs.length){ e.preventDefault(); putPictures(fs); } });
+
+/* ---------- paste a spreadsheet (Excel / Google Sheets cells or CSV text): table slides and chart slides ---------- */
+var csv={rows:[], sep:'\t'};
+function csvDetect(t){ var L=t.split('\n').filter(function(x){ return x.trim(); }).slice(0,8); if(L.some(function(x){ return x.indexOf('\t')>=0; })) return '\t'; var best=',', bn=0;
+  [',',';','|'].forEach(function(c){ var n=L.reduce(function(s,x){ return s+x.split(c).length-1; },0); if(n>bn){ bn=n; best=c; } }); return best; }
+function csvRows(t,sep){ t=String(t||'').replace(/^\ufeff/,'').replace(/\r\n?/g,'\n'); var rows=[], row=[], cell='', q=false, i, c;
+  for(i=0;i<t.length;i++){ c=t[i];
+    if(q){ if(c==='"'){ if(t[i+1]==='"'){ cell+='"'; i++; } else q=false; } else cell+=c; }
+    else if(c==='"'&&!cell.trim()){ q=true; cell=''; }
+    else if(c===sep){ row.push(cell); cell=''; }
+    else if(c==='\n'){ row.push(cell); rows.push(row); row=[]; cell=''; }
+    else cell+=c; }
+  row.push(cell); rows.push(row);
+  rows=rows.map(function(r){ return r.slice(0,40).map(function(x){ return x.replace(/[\t\n]+/g,' ').trim(); }); }).filter(function(r){ return r.some(Boolean); }).slice(0,500);
+  var n=rows.reduce(function(m,r){ return Math.max(m,r.length); },0); rows.forEach(function(r){ while(r.length<n) r.push(''); }); return rows; }
+/* a cell that is a number (1,234 · 12.5 · 3,5 · $40 · 80% · (12) · 15명): value and the text to show on the chart */
+var CSVU='%|％|원|명|개|점|건|회|배|kg|km|cm|mm|ml|g|m|l|s|°C|℃|°';
+function csvNum(c){ c=String(c==null?'':c).trim(); if(!c) return null; var m=new RegExp('^([-+−(]?)\\s*[$€£¥₩]?\\s*(\\d[\\d.,]*)\\s*\\)?\\s*('+CSVU+')?$').exec(c); if(!m) return null;
+  var n=m[2], neg=m[1]==='-'||m[1]==='−'||m[1]==='(', v, s;
+  if(/^\d{1,3}(,\d{3})+(\.\d+)?$/.test(n)){ v=parseFloat(n.replace(/,/g,'')); s=n; }
+  else if(/^\d{1,3}(\.\d{3})+,\d+$/.test(n)){ v=parseFloat(n.replace(/\./g,'').replace(',','.')); s=String(v); }
+  else if(/^\d+,\d+$/.test(n)){ v=parseFloat(n.replace(',','.')); s=String(v); }
+  else if(/^\d+(\.\d+)?$/.test(n)){ v=parseFloat(n); s=n; }
+  else return null;
+  if(isNaN(v)) return null; if(neg){ v=-v; s='-'+s; } return {v:v, s:s+(m[3]||'')}; }
+function csvLetter(i){ var s=''; i++; while(i>0){ var r=(i-1)%26; s=String.fromCharCode(65+r)+s; i=Math.floor((i-1)/26); } return s; }
+function csvHdr(){ var r=csv.rows; if(!r.length) return []; return $('csvHead').checked?r[0].map(function(x,i){ return x||csvLetter(i); }):r[0].map(function(x,i){ return csvLetter(i); }); }
+function csvBody(){ return $('csvHead').checked?csv.rows.slice(1):csv.rows; }
+function csvNumCols(){ var b=csvBody(), n=csv.rows.length?csv.rows[0].length:0, o=[]; for(var c=0;c<n;c++){ var ne=0, nn=0; b.forEach(function(r){ if(r[c]){ ne++; if(csvNum(r[c])) nn++; } }); if(nn&&nn>=ne*.6) o.push(c); } return o; }
+function csvParse(){ var t=$('csvIn').value, sel=$('csvSep').value; csv.sep=sel||csvDetect(t.replace(/\r/g,'')); csv.rows=csvRows(t,csv.sep); }
+function csvGuessHead(){ var r=csv.rows; if(r.length<2){ $('csvHead').checked=false; return; } $('csvHead').checked=!r[0].some(function(x){ return csvNum(x); }); }
+function csvFill(){ /* column pickers follow the data and the header choice */
+  var H=csvHdr(), nc=csvNumCols(), L=$('csvLab'), V=$('csvVal'), pl=L.value, pv=V.value; L.innerHTML=''; V.innerHTML='';
+  H.forEach(function(h,i){ var o=document.createElement('option'); o.value=i; o.textContent=h; L.appendChild(o); });
+  nc.forEach(function(i){ var o=document.createElement('option'); o.value=i; o.textContent=H[i]; V.appendChild(o); });
+  if(nc.length>1){ var o=document.createElement('option'); o.value='*'; o.textContent=T('숫자 칸마다 한 장씩'); V.appendChild(o); }
+  var lab=H.map(function(h,i){ return i; }).filter(function(i){ return nc.indexOf(i)<0; })[0]; L.value=pl&&pl<H.length?pl:String(lab==null?0:lab);
+  if(pv&&[].some.call(V.options,function(o){ return o.value===pv; })) V.value=pv; else if(V.options.length) V.value=String(nc.filter(function(i){ return String(i)!==L.value; })[0]!=null?nc.filter(function(i){ return String(i)!==L.value; })[0]:nc[0]); }
+function csvPreview(){ var p=$('csvPrev'); p.innerHTML=''; if(!csv.rows.length) return; var H=csvHdr(), nc=csvNumCols(), B=csvBody(), t=document.createElement('table'), tr=document.createElement('tr');
+  H.forEach(function(h){ var th=document.createElement('th'); th.textContent=h; tr.appendChild(th); }); t.appendChild(tr);
+  B.slice(0,8).forEach(function(r){ var x=document.createElement('tr'); r.forEach(function(c,i){ var td=document.createElement('td'); td.textContent=c; if(nc.indexOf(i)>=0) td.className='n'; x.appendChild(td); }); t.appendChild(x); });
+  if(B.length>8){ var cut=document.createElement('tr'); cut.className='cut'; var td=document.createElement('td'); td.colSpan=H.length; td.textContent=F('… 아래 {0}줄 더',B.length-8); cut.appendChild(td); t.appendChild(cut); }
+  p.appendChild(t); }
+function csvKind(){ return $('csvKind').querySelector('.on').dataset.k; }
+/* what will be made: slides plus the warnings about the limits of the table and chart layouts (9 rows x 6 columns, 12 chart rows) */
+function csvPlan(){ var out={slides:[], warn:[]}; if(!csv.rows.length) return out; var H=csvHdr(), B=csvBody(), kind=csvKind(), title=$('csvTitle').value.trim();
+  if(kind!=='chart'){ var per=8, parts=Math.max(1,Math.ceil(B.length/per)), one=H.length===1;
+    var cell=function(x){ return one?String(x).replace(/,/g,'，'):String(x); };
+    for(var k=0;k<parts;k++){ var rows=[H.slice(0,6)].concat(B.slice(k*per,k*per+per).map(function(r){ return r.slice(0,6); })), s=blank('table');
+      s.title=(title||T('표'))+(parts>1?' ('+(k+1)+'/'+parts+')':''); s.data=rows.map(function(r){ return r.map(cell).join('\t'); }).join('\n'); out.slides.push(s); }
+    if(parts>1) out.warn.push(F('표는 한 슬라이드에 8줄까지라 {0}장으로 나눠요',parts)); if(H.length>6) out.warn.push(T('표는 6칸까지라 앞의 6칸만 담아요')); }
+  if(kind!=='table'){ var nc=csvNumCols(), lab=+$('csvLab').value||0, v=$('csvVal').value, cols=v==='*'?nc.filter(function(i){ return i!==lab; }):(v===''||v==null?[]:[+v]);
+    if(!cols.length){ out.warn.push(T('숫자가 들어 있는 칸이 없어서 그래프는 만들 수 없어요')); }
+    cols.slice(0,8).forEach(function(c){ var lines=[]; B.forEach(function(r){ var n=csvNum(r[c]); if(n) lines.push(((r[lab]||String(lines.length+1)).replace(/[\n\t]+/g,' '))+': '+n.s); });
+      if(lines.length>12) out.warn.push(F('그래프는 12줄까지라 앞의 12줄만 담아요 ({0})',H[c])); if(!lines.length) return;
+      var s=blank('chart'); s.ctype=$('csvType').value; s.data=lines.slice(0,12).join('\n'); s.title=cols.length>1?(title?title+' · ':'')+H[c]:(title||H[c]||T('그래프')); out.slides.push(s); });
+    if(cols.length>8) out.warn.push(T('그래프는 8장까지만 만들어요')); }
+  return out; }
+function csvNote(){ var p=csvPlan(), ok=$('csvOk'); ok.disabled=!p.slides.length; var n=p.slides.length;
+  $('csvNote').textContent=!csv.rows.length?'':(n?F('슬라이드 {0}장이 만들어져요',n)+(p.warn.length?' · '+p.warn.join(' · '):''):p.warn.join(' · ')||T('만들 내용이 없어요'));
+  $('csvChartOpts').style.display=csvKind()==='table'?'none':''; }
+function csvChanged(guess){ csvParse(); if(guess) csvGuessHead(); csvFill(); csvPreview(); csvNote(); }
+function openCsv(text){ if(gen||busyOn) return; blurEdit(); closeMenus(); $('csvIn').value=text||''; $('csvTitle').value=''; $('csvSep').value=''; csvChanged(true); openDlg('csvDlg'); setTimeout(function(){ $('csvIn').focus(); },60); }
+$('csvIn').addEventListener('input',function(){ csvChanged(true); });
+$('csvSep').onchange=function(){ csvChanged(true); }; $('csvHead').onchange=function(){ csvChanged(false); };
+['csvLab','csvVal','csvType'].forEach(function(id){ $(id).onchange=csvNote; }); $('csvTitle').addEventListener('input',csvNote);
+$('csvKind').addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b) return; [].forEach.call($('csvKind').children,function(x){ x.classList.toggle('on',x===b); }); csvNote(); });
+$('csvIn').addEventListener('keydown',function(e){ e.stopPropagation(); if(e.key==='Escape') closeDlg('csvDlg',null); });
+$('csvTitle').addEventListener('keydown',function(e){ e.stopPropagation(); if(e.key==='Escape') closeDlg('csvDlg',null); if(e.key==='Enter'){ e.preventDefault(); $('csvOk').click(); } });
+$('csvOk').onclick=function(){ var p=csvPlan(); if(!p.slides.length) return; closeDlg('csvDlg',null); blurEdit(); pushUndo(); var at=deck.slides.length?cur+1:0; deck.slides.splice.apply(deck.slides,[at,0].concat(p.slides)); cur=at; refresh(); saveNow(); toast(F('슬라이드 {0}장을 만들었어요',p.slides.length)); };
+/* pasting spreadsheet cells anywhere on the editor opens the dialog with them */
+document.addEventListener('paste',function(e){ if(e.target.closest&&(e.target.closest('.in')||e.target.closest('input,textarea'))||pr.on||$('editor').hidden||gen||busyOn||document.querySelector('.ov.open')) return;
+  var t=(e.clipboardData&&e.clipboardData.getData('text'))||''; if(t.indexOf('\t')>=0&&/\n/.test(t.trim())){ e.preventDefault(); openCsv(t); } });
 
 /* ---------- outline in, Markdown out ---------- */
 function parseOutline(t){ var slides=[], c=null, any=/^\s*#{1,6}\s+\S/m.test(t);
