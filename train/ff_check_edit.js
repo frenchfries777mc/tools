@@ -69,12 +69,12 @@ const CEL = /축하|🎉|대단|잘했|성공|짝짝|congrat/i;
 // per-phrasing assertions: (b = base snapshot, a = answer snapshot, ctx) -> '' if the change shows, else the reason
 const A = {
   'bg-blue': (b, a) => { const c = rgb(a.bg.color); return c && c[3] > .5 && isBlue(c) ? '' : `배경 ${a.bg.color}`; },
-  'bg-night': (b, a) => { const c = rgb(a.bg.color), g = a.bg.image; const dark = c && lum(c) < .06; const bluish = c && c[2] >= c[0]; const grad = /gradient/.test(g); if (!(dark && (bluish || grad) || grad && /gradient/.test(g) && lumOfGrad(g) < .08)) return `배경 ${a.bg.color} ${g.slice(0, 60)}`; return readable(a); },
+  'bg-night': (b, a) => { const c = rgb(a.bg.color), g = a.bg.image; const dark = c && lum(c) < .06; const bluish = c && c[2] >= c[0] + 8; const grad = /gradient/.test(g); if (!(dark && (bluish || grad) || grad && /gradient/.test(g) && lumOfGrad(g) < .08)) return `배경 ${a.bg.color} ${g.slice(0, 60)}`; return readable(a); },
   'dark': (b, a) => { const c = rgb(a.bg.color); const ok = c && lum(c) < .08 || /gradient/.test(a.bg.image) && lumOfGrad(a.bg.image) < .08; return ok ? readable(a) : `배경 ${a.bg.color}`; },
   'bg-gradient': (b, a) => /gradient/.test(a.bg.image) ? '' : `배경 이미지 ${a.bg.image.slice(0, 40)} 색 ${a.bg.color}`,
   'text-big': (b, a) => { let up = 0, tot = 0, down = 0; for (const id in b.els) { const x = b.els[id], y = a.els[id]; if (!y || !x.text.trim() && x.tag !== 'BUTTON' && x.tag !== 'INPUT') continue; tot++; if (y.fs >= x.fs * 1.2) up++; if (y.fs < x.fs * .95) down++; } return tot && up / tot >= .6 && !down ? '' : `커진 글자 ${up}/${tot}, 작아짐 ${down}`; },
   'title-bigred': (b, a) => { const hb = b.heads[0], ha = a.heads[0]; if (!ha) return '제목 없음'; const c = rgb(ha.color); return isRed(c) && ha.fs >= hb.fs * 1.2 ? '' : `제목 색 ${ha.color} 크기 ${hb.fs}→${ha.fs}`; },
-  'title-text': (b, a) => { const t = '우리 반 페이지'; return a.title.includes(t) || a.heads.some(h => h.text.includes(t)) ? '' : `제목 "${a.heads[0] && a.heads[0].text.slice(0, 20)}" title="${a.title.slice(0, 20)}"`; },
+  'title-text': (b, a) => { const t = '우리 반 페이지'; return a.heads.some(h => h.text.includes(t)) ? '' : `제목 "${a.heads[0] && a.heads[0].text.slice(0, 20)}" title="${a.title.slice(0, 20)}"`; },
   'text-blue': (b, a) => { const h = a.heads[0], p = a.ps[0]; const ok = [h, p].filter(Boolean).every(x => isBlue(rgb(x.color))); return ok ? '' : `글자색 ${h && h.color} / ${p && p.color}`; },
   'align-left': (b, a) => { const ok = a.heads.every(h => /left|start/.test(h.align)) && a.ps.every(p => /left|start/.test(p.align)); return ok ? '' : `정렬 ${a.heads.map(h => h.align)} ${a.ps.map(p => p.align)}`; },
   'btn-red': (b, a) => a.buttons.length && a.buttons.every(x => isRed(rgb(x.bg))) ? '' : `버튼 배경 ${a.buttons.map(x => x.bg)}`,
@@ -125,6 +125,9 @@ function readable(a) { const c = rgb(a.bg.color) || [0, 0, 0, 1]; const bad = [.
       ctx.tenMsgs = ctx.tenDialog.slice(); if (bodyAt10 !== bodyAt9) { const add = bodyAt10.split('\n').filter(l => !bodyAt9.split('\n').includes(l)); ctx.tenMsgs.push(...add); }
       if (r.base === '클릭 카운터' && r.id === 'ten-alert') ctx.early = h.dialogs.slice(0, n0).length; // none of the first 9 clicks may alert
     }
+    // unrelated text must stay as it was (the model sometimes garbles a word it copies): reported as a warning, not a failure
+    const garbled = Object.keys(b.els).filter(id => snapA.els[id] && /^(P|LI|SPAN)$/.test(b.els[id].tag) && b.els[id].text.trim() && snapA.els[id].text !== b.els[id].text);
+    if (garbled.length) row.warn = '기존 글이 바뀜: ' + garbled.map(id => `${id} "${b.els[id].text.slice(0, 20)}" -> "${snapA.els[id].text.slice(0, 20)}"`).join('; ');
     const why = (A[r.id] || (() => 'no assertion'))(b, snapA, ctx);
     if (why) row.why.push('효과 없음: ' + why);
     row.pass = !row.why.length; if (r.base === '클릭 카운터' && (r.id === 'btn-sound' || r.id === 'ten-alert')) row.weak = '기본 페이지가 이미 이 동작을 함(증거 약함)'; rows.push(row); await h.close();
@@ -142,7 +145,7 @@ function readable(a) { const c = rgb(a.bg.color) || [0, 0, 0, 1]; const bad = [.
       console.log(`----- DIFF #${an.i} ${r.id} / ${r.base}\n` + d.split('\n').slice(2).join('\n').slice(0, 3000)); }
   }
   const byId = {}; rows.forEach(r => (byId[r.id] = byId[r.id] || []).push(r));
-  for (const r of rows) console.log(`#${r.i} ${r.id} / ${r.base} | ${r.pass ? 'PASS' + (r.weak ? ' (' + r.weak + ')' : '') : 'FAIL ' + r.why.join('; ')}`);
+  for (const r of rows) console.log(`#${r.i} ${r.id} / ${r.base} | ${r.pass ? 'PASS' + (r.weak ? ' (' + r.weak + ')' : '') : 'FAIL ' + r.why.join('; ')}` + (r.warn ? ' [경고 ' + r.warn + ']' : ''));
   console.log('\n== per phrasing ==');
   for (const id in byId) console.log(`${byId[id].filter(r => r.pass).length}/${byId[id].length} ${id} | ${byId[id][0].q}`);
   if (jsonOut) fs.writeFileSync(jsonOut, JSON.stringify(rows, null, 1));
