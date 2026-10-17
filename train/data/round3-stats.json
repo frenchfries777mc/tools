@@ -1,17 +1,21 @@
 {
- "built": "2026-10-17T02:37:42.536Z",
+ "built": "2026-10-17T05:12:45.984Z",
  "pool": {
-  "code": 277,
+  "code": 594,
   "und": 69,
-  "self": 40
+  "ask": 129,
+  "slides": 112,
+  "self": 132
  },
- "tooLong": 3,
- "repeats": 0,
- "total": 846,
+ "tooLong": 10,
+ "repeats": 6,
+ "total": 1588,
  "counts": {
-  "code": 277,
+  "code": 594,
   "und": 69,
-  "self": 80,
+  "ask": 129,
+  "slides": 112,
+  "self": 264,
   "r2-code": 63,
   "r2-first-code": 32,
   "r2-und": 40,
