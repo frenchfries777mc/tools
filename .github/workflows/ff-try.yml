@@ -11,6 +11,9 @@ on:
       shards:
         description: Number of parallel jobs (1-14)
         default: '7'
+      requests:
+        description: Request list (json file in the repo)
+        default: train/eval/example-requests.json
       max_new_tokens:
         description: Longest answer in tokens
         default: '1400'
@@ -44,4 +47,4 @@ jobs:
       - name: Run
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: python -u train/ff_try.py "${{ inputs.model }}" ${{ matrix.shard }} "${{ inputs.shards }}" "${{ inputs.max_new_tokens }}"
+        run: python -u train/ff_try.py "${{ inputs.model }}" ${{ matrix.shard }} "${{ inputs.shards }}" "${{ inputs.max_new_tokens }}" "${{ inputs.requests }}"

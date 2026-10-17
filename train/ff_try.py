@@ -7,11 +7,12 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 model_id, shard, shards = sys.argv[1], int(sys.argv[2]), int(sys.argv[3])
 max_new = int(sys.argv[4]) if len(sys.argv) > 4 else 1400
+req = sys.argv[5] if len(sys.argv) > 5 else 'train/eval/example-requests.json'
 src = open('blocks/ai-blocks.js', encoding='utf-8').read()
 m = re.search(r"var SYS_HTML=\[(.*?)\]\.join\('\\n'\);", src, re.S)
 system = eval('[' + m.group(1) + ']')  # list of plain string literals
 system = '\n'.join(system)
-items = json.load(open('train/eval/example-requests.json', encoding='utf-8'))
+items = json.load(open(req, encoding='utf-8'))
 token = os.environ.get('HF_TOKEN')
 tok = AutoTokenizer.from_pretrained(model_id, token=token)
 model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.float32, token=token)
