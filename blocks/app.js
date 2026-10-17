@@ -112,17 +112,16 @@ function hl(src){
     return e(part).replace(/(&lt;!--[\s\S]*?--&gt;)|(&lt;\/?[a-zA-Z0-9!]+)|("[^"\n]*")/g,function(m,c,t,s){ return c?'<span class="c">'+c+'</span>':t?'<span class="t">'+t+'</span>':'<span class="s">'+s+'</span>'; });
   }).join('');
 }
-/* typed HTML: the HTML code tab can be edited by hand; the preview, copy and download then use that text until the blocks change */
+/* typed HTML: the HTML code tab is always editable (a text box over the highlighted code); the preview, copy and download then use that text until the blocks change */
 var custom=null, customT=null;
 function finalHTML(){ return custom!==null?custom:BH.build(ws,{trap:false}); }
-function showCode(){ if(custom!==null||!$('codeEdit').hidden) return; $('code').innerHTML=hl(finalHTML()); }
-function setEdit(on){ $('codeEdit').hidden=!on; $('code').hidden=on; $('codeEditBtn').textContent=on?T('✔ 고치기 끝'):T('✏️ 직접 고치기');
-  if(on){ $('codeEdit').value=finalHTML(); $('codeEdit').focus(); } else showCode(); }
-function dropCustom(msg){ if(custom==null) return; custom=null; clearTimeout(customT); $('codeReset').hidden=$('codeNote').hidden=true; if($('codeEdit').hidden===false) setEdit(false); if(msg) toast(T('직접 쓴 HTML은 지웠어요. 블록 코드로 돌아왔어요')); }
-$('codeEditBtn').onclick=function(){ setEdit($('codeEdit').hidden); };
-$('codeEdit').addEventListener('input',function(){ var v=$('codeEdit').value; custom=v; $('codeReset').hidden=$('codeNote').hidden=false; clearTimeout(customT);
+function paintCode(v){ $('code').innerHTML=hl(v)+'\n'; }
+function showCode(){ if(custom!==null) return; var v=finalHTML(); if($('codeEdit').value!==v) $('codeEdit').value=v; paintCode(v); }
+function dropCustom(msg){ if(custom==null) return; custom=null; clearTimeout(customT); $('codeReset').hidden=true; $('codeNote').hidden=false; if(msg) toast(T('직접 쓴 HTML은 지웠어요. 블록 코드로 돌아왔어요')); }
+$('codeEdit').addEventListener('scroll',function(){ var c=$('code'); c.scrollTop=this.scrollTop; c.scrollLeft=this.scrollLeft; });
+$('codeEdit').addEventListener('input',function(){ var v=$('codeEdit').value; custom=v; paintCode(v); $('codeReset').hidden=false; clearTimeout(customT);
   customT=setTimeout(function(){ if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=v; },500); });
-$('codeReset').onclick=function(){ dropCustom(false); lastPrev=''; refresh('run'); toast(T('블록 코드로 되돌렸어요')); };
+$('codeReset').onclick=function(){ dropCustom(false); lastPrev=''; refresh('run'); showCode(); toast(T('블록 코드로 되돌렸어요')); };
 function setPane(p){ document.querySelectorAll('.stab').forEach(function(b){ b.classList.toggle('on',b.dataset.p===p); }); $('pPrev').classList.toggle('on',p==='prev'); $('pCode').classList.toggle('on',p==='code'); if(p==='code') showCode(); }
 document.querySelectorAll('.stab').forEach(function(b){ b.onclick=function(){ setPane(b.dataset.p); }; });
 document.querySelectorAll('#seg button').forEach(function(b){ b.onclick=function(){ var v=b.dataset.v;
@@ -425,5 +424,5 @@ P.list=P.list.filter(function(e){ return e&&e.id; });
   if(!ok){ P.cur=null; createProject(T(BH_EXAMPLES[0].name),function(){ loadXML(BH_EXAMPLES[0].xml()); arrange(); }); } })();
 setTimeout(syncBar,50);
 if(EMB){ var embTry=0, embSend=function(){ var html=''; try{ if(P.cur===EMB) html=finalHTML(); }catch(e){ console.error(e); } if(!html&&++embTry<10) return setTimeout(embSend,300); try{ parent.postMessage({ffbhBuilt:1,id:EMB,html:html},'*'); }catch(e){} }; setTimeout(embSend,350); }
-window.__bh={showPreview:showPreview,showHTML:function(h){ custom=String(h); $('codeEdit').value=custom; $('codeReset').hidden=$('codeNote').hidden=false; clearTimeout(customT); if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=custom; setPane('code'); },clearHTML:function(){ dropCustom(false); },ws:ws,copy:copyBlock,paste:pasteBlock,deleteAll:deleteAll,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,loadJSON:loadJSON,save:saveNow,toast:toast,projects:function(){ return P; },examples:BH_EXAMPLES};
+window.__bh={showPreview:showPreview,showHTML:function(h){ custom=String(h); $('codeEdit').value=custom; paintCode(custom); $('codeReset').hidden=false; clearTimeout(customT); if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=custom; setPane('code'); },clearHTML:function(){ dropCustom(false); },ws:ws,copy:copyBlock,paste:pasteBlock,deleteAll:deleteAll,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,loadJSON:loadJSON,save:saveNow,toast:toast,projects:function(){ return P; },examples:BH_EXAMPLES};
 })();
