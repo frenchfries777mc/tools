@@ -193,7 +193,16 @@ button,input,select{font:inherit; color:inherit;}
 .baiChips button{border:1px solid var(--line); background:var(--panel2); color:var(--text); border-radius:10px; padding:8px 10px; font:inherit; font-size:13px; cursor:pointer; text-align:left; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .baiChips button:hover{border-color:var(--fry); color:var(--fry);}
 .exLab{font-size:12px; color:var(--dim); margin:2px 0 -4px;}
-.bai.busy .exLab,.bai.busy .baiChips{display:none;}
+.bai.busy .exLab,.bai.busy .baiChips,.bai.busy .baiFix,.bai.busy #baiHist,.bai.busy #baiHistClear{display:none;}
+.baiFix{display:flex; flex-direction:column; gap:6px; padding:8px 10px; border:1px solid var(--line); border-radius:10px; background:var(--panel2);}
+.baiFix[hidden],#baiHist[hidden],#baiHistClear[hidden],#baiHistLab[hidden]{display:none;}
+.baiLast{font-size:12.5px; color:var(--dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.baiFixRow{display:flex; gap:6px;} .baiFixRow input{flex:1; min-width:0; background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:7px 10px; font:inherit; color:var(--text);}
+#baiHist{display:flex; flex-direction:column; gap:4px; max-height:150px; overflow:auto;}
+.baiH{display:flex; gap:4px;} .baiH .hq{flex:1; min-width:0; text-align:left; border:1px solid var(--line); background:var(--panel2); color:var(--text); border-radius:8px; padding:6px 9px; font:inherit; font-size:13px; cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.baiH .hq:hover{border-color:var(--fry); color:var(--fry);} .baiH .hq i{font-style:normal; font-size:11px; color:#38bdf8; border:1px solid #38bdf8; border-radius:99px; padding:0 6px; margin-right:7px;}
+.baiH .hx{border:0; background:transparent; color:var(--dim); cursor:pointer; font-size:17px; padding:0 8px; border-radius:8px;} .baiH .hx:hover{background:var(--panel2); color:#ff7b7b;}
+#baiHistClear{align-self:flex-start; height:28px; font-size:12.5px;}
 .baiMsg{min-height:20px; font-size:13.5px; color:var(--dim);}
 .baiMsg.ok{color:#3fe08f;} .baiMsg.bad{color:#ff7b7b;}
 .baiNote{color:var(--dim); font-size:12.5px; margin:0;}
@@ -285,8 +294,16 @@ button,input,select{font:inherit; color:inherit;}
   <div class="bai" id="baiBody">
     <p class="baiNote">만들거나 고치고 싶은 것을 글로 써 주세요. AI가 지금 블록을 고칠지 새로 짤지 알아서 정해요.</p>
     <textarea id="baiQ" data-notr spellcheck="false"></textarea>
+    <div class="baiFix" id="baiFixBox" hidden>
+      <div class="exLab">틀린 곳을 알려 주세요</div>
+      <div class="baiLast" id="baiLast" data-notr></div>
+      <div class="baiFixRow"><input type="text" id="baiFix" data-notr spellcheck="false" placeholder="예: 버튼을 눌러도 소리가 안 나요"><button class="tbtn pri" id="baiFixGo">이 부분만 고치기</button></div>
+    </div>
     <div class="exLab">예시 (누르면 입력돼요)</div>
     <div class="baiChips" id="baiChips"></div>
+    <div class="exLab" id="baiHistLab" hidden>내 요청 기록 (누르면 다시 쓸 수 있어요)</div>
+    <div id="baiHist" hidden></div>
+    <button class="tbtn" id="baiHistClear" hidden>기록 지우기</button>
     <div class="baiMsg" id="baiMsg"></div>
     <pre id="baiLive" data-notr hidden></pre>
   </div>

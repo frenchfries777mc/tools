@@ -123,43 +123,70 @@ var before=null, busyNow=false, plan=null;
 var CHIPS={new:[['🔢 숫자 맞히기','1부터 100 사이 숫자 맞히기 게임. 크다/작다를 알려 주고 맞히면 축하해 줘요'],['👆 클릭 카운터','버튼을 누를 때마다 숫자가 올라가는 클릭 카운터'],['📝 할 일 목록','할 일을 쓰고 추가 버튼을 누르면 목록에 쌓이는 할 일 목록'],['⚽ 튀는 공','그림판에 공이 튀어 다니는 애니메이션'],['⚡ 반응 속도','화면이 초록색으로 바뀌면 빨리 누르는 반응 속도 게임']],
   edit:[['🌙 밤하늘 배경','배경을 밤하늘로 바꿔 줘'],['🔊 버튼 소리','버튼을 누르면 소리가 나게 해 줘'],['🎉 10점 축하','점수가 10이 되면 축하 메시지를 띄워 줘'],['🔠 큰 빨간 제목','제목 글자를 더 크고 빨갛게 해 줘']]};
 function chips(){ var box=$('baiChips'), list=hasWork()?CHIPS.edit.concat(CHIPS.new.slice(0,2)):CHIPS.new; box.innerHTML=''; list.forEach(function(c){ var b=document.createElement('button'), full=T(c[1]); b.textContent=T(c[0]); b.title=full; b.onclick=function(){ $('baiQ').value=full; $('baiQ').focus(); }; box.appendChild(b); }); }
-function prep(){ chips(); $('baiQ').placeholder=hasWork()?T('예: 버튼을 누를 때마다 배경색이 바뀌게 해 줘'):T('예: 1부터 100 사이 숫자 맞히기 게임. 크다/작다를 알려 주고 맞히면 축하해 줘요'); }
+function prep(){ chips(); renderFix(); renderHist(); $('baiQ').placeholder=hasWork()?T('예: 버튼을 누를 때마다 배경색이 바뀌게 해 줘'):T('예: 1부터 100 사이 숫자 맞히기 게임. 크다/작다를 알려 주고 맞히면 축하해 줘요'); }
 function msg(t,cls){ var o=$('baiMsg'); o.textContent=t||''; o.className='baiMsg'+(cls?' '+cls:''); }
 var t0=0, tick=null, chars=0, phase='';
-function busy(on){ busyNow=on; $('baiGo').disabled=on; $('baiGo').textContent=on?T('만드는 중…'):T('코드 만들기'); $('baiStop').hidden=!on; $('baiBody').classList.toggle('busy',on);
+function busy(on){ busyNow=on; $('baiGo').disabled=$('baiFixGo').disabled=on; $('baiGo').textContent=on?T('만드는 중…'):T('코드 만들기'); $('baiStop').hidden=!on; $('baiBody').classList.toggle('busy',on);
   clearInterval(tick); if(on){ t0=Date.now(); chars=0; $('baiLive').textContent=''; $('baiLive').hidden=true; tick=setInterval(status,500); } }
 function status(){ var s=Math.round((Date.now()-t0)/1000);
   var how=plan==='edit'?T('지금 블록을 고치기로 했어요')+' · ':plan==='new'?T('새로 짜기로 했어요')+' · ':'';
   msg(phase==='fix'?F('AI에게 틀린 곳을 알려 다시 받는 중… {0}초',s):chars?how+F('AI가 블록 코드를 쓰는 중… 글자 {0}개 · {1}초',chars,s):F('AI가 생각하는 중… {0}초',s)); }
 function live(t){ chars=t.length; if(!plan) plan=planOf(t); var p=$('baiLive'), wasHidden=p.hidden, stick=wasHidden||p.scrollHeight-p.scrollTop-p.clientHeight<24; p.hidden=false; p.textContent=t.length>6000?'…'+t.slice(-6000):t; if(stick) p.scrollTop=p.scrollHeight; } // follows the end only while the reader is at the bottom
-function run(q,modify,tries,errText,lastOut){
+function run(q,modify,tries,errText,lastOut,fix){
   phase=errText?'fix':''; chars=0;
   return FFAI.ask({system:FFAI.isTuned()?FFP.blocksSys:SYS, prompt:buildPrompt(q,modify,errText,lastOut), maxTokens:12000, onText:live}).then(function(out){
-    try{ var x=check(extract(out)); plan=planOf(out)||plan||(modify?'edit':'new'); if(!modify) plan='new'; return x; }
-    catch(e){ if(tries>0){ return run(q,modify,tries-1,e.message,out); } throw new Error(T('AI가 만든 블록을 읽지 못했어요. 다시 해 보세요')); }
+    try{ if(fix&&planOf(out)==='new') throw new Error('this must be PLAN: edit - keep the current project and change only the part the person says is wrong');
+      var x=check(extract(out)); plan=planOf(out)||plan||(modify?'edit':'new'); if(!modify) plan='new'; if(fix) plan='edit'; return x; }
+    catch(e){ if(tries>0){ return run(q,modify,tries-1,e.message,out,fix); } throw new Error(T('AI가 만든 블록을 읽지 못했어요. 다시 해 보세요')); }
   });
 }
-function go(){
-  var q=$('baiQ').value.trim(); if(!q) return $('baiQ').focus(); if(busyNow) return;
-  var modify=hasWork(); plan=modify?null:'new'; busy(true); status();
-  run(q,modify,1).then(function(xml){
+function go(){ var q=$('baiQ').value.trim(); if(!q) return $('baiQ').focus(); if(busyNow) return; exec(q,q,false); }
+/* "틀린 곳을 알려 주세요": the AI changes only the part the person says is wrong (PLAN: edit), the whole project goes along */
+function fixGo(){
+  var c=$('baiFix').value.trim(); if(!c) return $('baiFix').focus(); if(busyNow||!hasWork()) return;
+  var last=lastReq(), q=(last?'The person first asked: "'+last+'"\n':'')+'The current project has a problem: '+c+'\nFix only that problem and keep everything else exactly as it is. Answer with PLAN: edit.';
+  exec(q,c,true);
+}
+function exec(q,shown,fix){
+  var modify=fix||hasWork(); plan=fix?'edit':modify?null:'new'; busy(true); status();
+  run(q,modify,1,undefined,undefined,fix).then(function(xml){
     before={name:$('projName').value, ws:Blockly.serialization.workspaces.save(ws)};
     B.loadXML(xml); B.arrange();
     if(plan==='new'){ var pg=ws.getTopBlocks(false).filter(function(b){ return b.type==='page_root'; })[0], t=pg&&pg.getFieldValue('TITLE'); if(t) $('projName').value=t; }
-    B.save(); $('baiUndo').hidden=false; busy(false);
-    msg(T('다 만들었어요! 미리보기에서 확인해 보세요'),'ok'); close(); B.toast((plan==='edit'?T('AI가 지금 블록을 고쳤어요'):T('AI가 블록을 새로 짰어요'))+(dropped?' · '+F('잘못된 블록 {0}개는 뺐어요',dropped):''));
+    B.save(); addHist(shown,fix,plan); if(fix) $('baiFix').value=''; $('baiUndo').hidden=false; busy(false);
+    msg(T('다 만들었어요! 미리보기에서 확인해 보세요'),'ok'); close(); B.toast((fix?T('AI가 틀린 곳만 고쳤어요'):plan==='edit'?T('AI가 지금 블록을 고쳤어요'):T('AI가 블록을 새로 짰어요'))+(dropped?' · '+F('잘못된 블록 {0}개는 뺐어요',dropped):''));
   },function(e){ busy(false); if(e.kind!=='nokey') msg(e.message||T('AI에 연결하지 못했어요'),'bad'); else msg(''); }).then(function(){ if(busyNow) busy(false); });
 }
+/* ---------- history of requests, kept per project in this browser ---------- */
+var HK='ffblocks.ai.', HMAX=30;
+function pidNow(){ var p=B.projects&&B.projects(); return p&&p.cur||'x'; }
+function hist(){ try{ var a=JSON.parse(localStorage.getItem(HK+pidNow())||'[]'); return Array.isArray(a)?a.filter(function(x){ return x&&typeof x.q==='string'; }):[]; }catch(e){ return []; } }
+function setHist(a){ try{ if(a.length) localStorage.setItem(HK+pidNow(),JSON.stringify(a.slice(0,HMAX))); else localStorage.removeItem(HK+pidNow()); }catch(e){} }
+function addHist(q,fix,pl){ q=String(q||'').trim().slice(0,2000); if(!q) return; var a=hist().filter(function(x){ return !(x.q===q&&!!x.fix===!!fix); }); a.unshift({q:q,fix:!!fix,plan:pl||'',t:Date.now()}); setHist(a); }
+function lastReq(){ var a=hist().filter(function(x){ return !x.fix; }); return a.length?a[0].q:''; }
+function renderHist(){
+  var a=hist(), box=$('baiHist'); box.innerHTML=''; $('baiHistLab').hidden=box.hidden=$('baiHistClear').hidden=!a.length;
+  a.forEach(function(h,i){ var row=document.createElement('div'), b=document.createElement('button'), x=document.createElement('button'), tag=document.createElement('i');
+    row.className='baiH'; b.className='hq'; b.title=h.q; tag.textContent=h.fix?'🔧':(h.plan==='edit'?'✏':'✨');
+    b.appendChild(tag); b.appendChild(document.createTextNode(h.q));
+    b.onclick=function(){ if(h.fix&&!$('baiFixBox').hidden){ $('baiFix').value=h.q; $('baiFix').focus(); } else { $('baiQ').value=h.q; $('baiQ').focus(); } };
+    x.className='hx'; x.textContent='×'; x.setAttribute('aria-label',T('이 기록 지우기')); x.onclick=function(){ var l=hist(); l.splice(i,1); setHist(l); renderHist(); };
+    row.appendChild(b); row.appendChild(x); box.appendChild(row); });
+}
+function renderFix(){ var show=hasWork()&&!!lastReq(); $('baiFixBox').hidden=!show; if(show) $('baiLast').textContent=T('방금 요청')+': '+lastReq(); }
 function undoAI(){ if(!before) return; B.loadJSON(before.ws); $('projName').value=before.name; B.save(); before=null; $('baiUndo').hidden=true; msg(''); B.toast(T('AI 전으로 되돌렸어요')); }
 function open(){ prep(); $('baiDlg').classList.add('open'); setTimeout(function(){ $('baiQ').focus(); },60); }
 function close(){ $('baiDlg').classList.remove('open'); }
 $('aiBtn').onclick=open;
 $('baiGo').onclick=go;
+$('baiFixGo').onclick=fixGo;
+$('baiFix').addEventListener('keydown',function(e){ if(e.key==='Enter'&&!e.isComposing){ e.preventDefault(); fixGo(); } });
+$('baiHistClear').onclick=function(){ setHist([]); renderHist(); };
 $('baiStop').onclick=function(){ FFAI.stop(); };
 $('baiQ').addEventListener('keydown',function(e){ if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){ e.preventDefault(); go(); } });
 $('baiUndo').onclick=undoAI;
 $('baiSet').onclick=function(){ FFAI.settings(); };
 $('baiClose').onclick=close; // closes only with the X button, so a text drag that ends outside the window does not close it
 prep();
-window.__bhai={catalog:getCatalog, check:check, open:open, undo:undoAI};
+window.__bhai={hist:hist, fix:fixGo, catalog:getCatalog, check:check, open:open, undo:undoAI};
 })();

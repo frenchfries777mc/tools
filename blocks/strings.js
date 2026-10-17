@@ -1,5 +1,13 @@
 /* Block HTML strings: [en, es, fr, de, ja] */
 FFT.add({
+'틀린 곳을 알려 주세요':["Tell me what is wrong", "Dinos qué está mal", "Dites-nous ce qui ne va pas", "Sag, was nicht stimmt", "間違っているところを教えてください"],
+'예: 버튼을 눌러도 소리가 안 나요':["e.g. The button makes no sound when pressed", "p. ej.: El botón no suena al pulsarlo", "ex. : Le bouton ne fait pas de son", "z. B. Der Button macht keinen Ton", "例: ボタンを押しても音が鳴りません"],
+'이 부분만 고치기':["Fix only this", "Corregir solo esto", "Corriger seulement ça", "Nur das korrigieren", "ここだけ直す"],
+'방금 요청':["Last request", "Última petición", "Dernière demande", "Letzte Anfrage", "さっきのお願い"],
+'내 요청 기록 (누르면 다시 쓸 수 있어요)':["My requests (click to reuse)", "Mis peticiones (clic para reutilizar)", "Mes demandes (cliquez pour réutiliser)", "Meine Anfragen (zum Wiederverwenden klicken)", "お願いの履歴（押すと再利用できます）"],
+'기록 지우기':["Clear history", "Borrar historial", "Effacer l’historique", "Verlauf löschen", "履歴を消す"],
+'이 기록 지우기':["Remove this entry", "Quitar esta entrada", "Supprimer cette entrée", "Diesen Eintrag entfernen", "この履歴を消す"],
+'AI가 틀린 곳만 고쳤어요':["The AI fixed only what was wrong", "La IA corrigió solo lo que estaba mal", "L’IA a corrigé seulement ce qui n’allait pas", "Die KI hat nur den Fehler korrigiert", "AIが間違いだけを直しました"],
 '화살표 키로 움직이는 게임 틀':["Arrow-key game starter", "Plantilla de juego con flechas", "Modèle de jeu aux flèches", "Pfeiltasten-Spielvorlage", "矢印キーで動くゲームの土台"],
 '화살표 키로 🚀를 움직여 ⭐ 5개를 모으는 게임. 목표와 점수가 있어요':["Move the 🚀 with the arrow keys and collect 5 ⭐. It has a goal and a score", "Mueve el 🚀 con las flechas y reúne 5 ⭐. Tiene meta y puntuación", "Déplacez la 🚀 avec les flèches et ramassez 5 ⭐. Il y a un but et un score", "Bewege die 🚀 mit den Pfeiltasten und sammle 5 ⭐. Mit Ziel und Punktestand", "矢印キーで🚀を動かして⭐を5個集めます。目標とスコア付き"],
 '화살표 키 게임 틀':["Arrow-key game", "Juego con flechas", "Jeu aux flèches", "Pfeiltasten-Spiel", "矢印キーゲーム"],
