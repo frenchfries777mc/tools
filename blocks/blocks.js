@@ -234,9 +234,9 @@ var HELP_DEPS={nudge:['$'],where:['$'],hit:['$'],stay:['$'],follow:['$','cursor'
 /* ---------- HTML ---------- */
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function idAttr(b){ var n=b.getFieldValue('NAME'); return n?' id="'+esc(n)+'"':''; }
-function bodyHTML(first,ind){
+function bodyHTML(first,ind,one){
   var out='', b=first;
-  for(;b;b=b.getNextBlock()){
+  for(;b;b=one?null:b.getNextBlock()){
     if(!b.isEnabled()) continue;
     var t=b.type, i=ind;
     if(t==='el_heading'){ var h=b.getFieldValue('SIZE'); out+=i+'<'+h+idAttr(b)+'>'+esc(b.getFieldValue('TEXT'))+'</'+h+'>\n'; }
@@ -260,6 +260,12 @@ function build(ws,opts){
   var page=ws.getTopBlocks(true).filter(function(b){ return b.type==='page_root'&&b.isEnabled(); })[0];
   var title=page?page.getFieldValue('TITLE'):T('나의 웹페이지'), bg=page?page.getFieldValue('BG'):'#ffffff', center=page?page.getFieldValue('CENTER')==='TRUE':true;
   var body=page?bodyHTML(page.getInputTargetBlock('BODY'),'  '):'';
+  // 페이지 블록 밖에 놓은 글·그림·버튼 블록도 페이지에 넣는다
+  ws.getAllBlocks(true).forEach(function(b){
+    if(EL.indexOf(b.type)<0||!b.isEnabled()||(page&&b.getRootBlock()===page)) return;
+    var p=b.getSurroundParent(); if(p&&p.type==='el_box') return;
+    body+=bodyHTML(b,'  ',true);
+  });
   // JavaScript
   NEED={}; USED={}; G.INFINITE_LOOP_TRAP=opts.trap?'if (--window.__loop < 0) throw new Error("'+T('반복이 끝나지 않아요')+'");\n':null;
   G.init(ws); var handlers='', starts='';
