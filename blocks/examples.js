@@ -123,6 +123,13 @@ var EX=[
         B('act_alert',{v:{VALUE:JOIN([TX(T('끝! 점수는 ')),G('score')])}})]}})]}}),
     key('ArrowLeft',20,['x',-10]),key('ArrowRight',130,['x',10]),key('ArrowUp',240,['y',-10]),key('ArrowDown',350,['y',10]),
     B('ev_drag',{x:20,y:460,f:{EL:cv},s:{DO:[SET('x',X(B('val_mouse',{f:{AXIS:'x'}}))),SET('y',X(B('val_mouse',{f:{AXIS:'y'}})))]}})
+  ]); }},{name:'커서 따라다니기',desc:'별이 커서를 따라다니고, 화살표 키로 로켓도 움직여요',xml:function(){
+  var st=T('별'), rk=T('로켓');
+  function key(k,y,ax,d){ return B('ev_key',{x:440,y:y,f:{KEY:k},s:{DO:[B('act_nudge',{f:{EL:rk,AXIS:ax},v:{N:N(d)}}),B('act_stay',{f:{EL:rk}})]}}); }
+  return wrap([
+    page(T('커서 따라다니기'),'#0f172a',[B('el_text',{f:{TEXT:T('마우스(손가락)를 움직여 보세요. 화살표 키로 🚀를 움직여요'),NAME:T('안내')}}),B('el_heading',{f:{SIZE:'h1',TEXT:'⭐',NAME:st}}),B('el_heading',{f:{SIZE:'h1',TEXT:'🚀',NAME:rk}})]),
+    B('ev_start',{x:440,y:20,s:{DO:[B('act_move',{f:{EL:rk},v:{X:N(60),Y:N(160)}}),B('act_follow',{f:{EL:st,MODE:'soft'}})]}}),
+    key('ArrowLeft',130,'x',-15),key('ArrowRight',240,'x',15),key('ArrowUp',350,'y',-15),key('ArrowDown',460,'y',15)
   ]); }}
 ];
 window.BH_EXAMPLES=EX;
