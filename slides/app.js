@@ -6,6 +6,8 @@
 'use strict';
 var T=FFT.T, F=FFT.F, $=function(id){ return document.getElementById(id); };
 var W=1280, H=720, LS='ffslides.v1';
+/* MODE: '' = the editor, 'pv' = presenter view window (#presenter), which gets the deck from the presenting window and never saves */
+var MODE=/^#presenter/.test(location.hash)?'pv':'';
 
 /* ---------- themes ---------- */
 var SANS="'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif", SERIF="'Noto Serif KR','Apple SD Gothic Neo',Georgia,'Batang',serif";
@@ -105,7 +107,7 @@ function loadStore(){ var o=null; try{ o=JSON.parse(localStorage.getItem(LS)||'n
   o.decks=o.decks.filter(function(d){ return d&&typeof d==='object'; }).map(function(d){ if(!d.id) d.id=uid(); return fixDeck(d); }); return o; }
 var store=loadStore(), deck=null, cur=0, undo=[], redo=[], gen=false, busyOn=false, saveT=null;
 function isDefaultName(n){ return !n||!String(n).trim()||n===T('새 발표 자료')||n==='새 발표 자료'; }
-function saveNow(){ clearTimeout(saveT); saveT=null; if(!deck) return; deck.t=Date.now(); store.last=deck.id;
+function saveNow(){ clearTimeout(saveT); saveT=null; if(!deck||MODE) return; deck.t=Date.now(); store.last=deck.id;
   if(store.decks.indexOf(deck)<0) store.decks.unshift(deck);
   try{ localStorage.setItem(LS,JSON.stringify(store)); $('saved').textContent=T('저장됨'); }catch(e){ $('saved').textContent=''; toast(T('저장 공간이 부족해서 저장하지 못했어요')); } }
 function saveSoon(){ $('saved').textContent=''; clearTimeout(saveT); saveT=setTimeout(saveNow,400); }
@@ -576,7 +578,7 @@ TPLS.forEach(function(tp){ var b=document.createElement('button'); b.textContent
 
 /* ---------- shortcut sheet ---------- */
 var KEYS=[['Ctrl+Z / Ctrl+Shift+Z','되돌리기 · 다시 하기'],['↑ ↓ ← →','슬라이드 이동'],['Ctrl+D','슬라이드 복제'],['Ctrl+Enter','새 슬라이드 넣기'],['Alt+↑ Alt+↓','슬라이드 순서 바꾸기'],['H','발표할 때 건너뛰기 켜고 끄기'],['Delete','슬라이드 지우기'],['Home End','첫·마지막 슬라이드'],['Ctrl+Alt+N','새 슬라이드 쇼 만들기'],['F5','처음부터 발표'],['Shift+F5','지금 슬라이드부터 발표'],['?','이 단축키 목록'],
-  ['→ Space Enter','(발표) 다음'],['← Backspace','(발표) 이전'],['Home End','(발표) 처음 · 끝'],['S','(발표) 발표자 메모 보기'],['L','(발표) 레이저 포인터'],['D · M · E','(발표) 펜 · 형광펜 · 낙서 지우기'],['B','(발표) 화면 끄기'],['숫자 + Enter','(발표) 그 번호 슬라이드로'],['A','(발표) 퀴즈 정답 보기'],['T','(발표) 타이머 멈춤·다시'],['Esc','(발표) 나가기']];
+  ['→ Space Enter','(발표) 다음'],['← Backspace','(발표) 이전'],['Home End','(발표) 처음 · 끝'],['S','(발표) 발표자 메모 보기'],['V','(발표) 발표자 화면 새 창으로 열기'],['L','(발표) 레이저 포인터'],['D · M · E','(발표) 펜 · 형광펜 · 낙서 지우기'],['B','(발표) 화면 끄기'],['숫자 + Enter','(발표) 그 번호 슬라이드로'],['A','(발표) 퀴즈 정답 보기'],['T','(발표) 타이머 멈춤·다시'],['Esc','(발표) 나가기']];
 function showKeys(){ var b=$('keysBody'); b.innerHTML=''; KEYS.forEach(function(k){ var r=document.createElement('div'); r.className='kr'; var a=document.createElement('kbd'); a.textContent=k[0]; var t=document.createElement('span'); t.textContent=T(k[1]); r.appendChild(a); r.appendChild(t); b.appendChild(r); }); openDlg('keysDlg'); }
 
 /* ---------- presenting ---------- */
@@ -591,11 +593,12 @@ function present(from){
   blurEdit(); closeMenus(); if(!deck.slides.length) return;
   if(!deck.slides.some(function(s){ return !s.hide; })) return toast(T('모든 슬라이드를 숨겨서 발표할 수 없어요'));
   from=Math.max(0,Math.min(from||0,deck.slides.length-1)); if(!vis(from)){ var j=nextVis(from,1); from=j>=0?j:nextVis(from,-1); }
-  pr.on=true; pr.i=from; pr.end=false; pr.black=false; pr.cd=null; pr.shown=-1; pr.rev=-1; pr.go=''; inkKey=-1; setInk(''); inkClear(); pr.t0=Date.now(); clearInterval(pr.tm); pr.tm=setInterval(tick,1000); tick();
+  pr.on=true; pr.i=from; pr.end=false; pr.black=false; pr.cd=null; pr.shown=-1; pr.rev=-1; pr.go=''; inkKey=-1; setInk(''); inkClear(); pr.t0=Date.now(); clearInterval(pr.tm); pr.tm=setInterval(tick,1000); tick(); pvDeck();
   var el=$('present'); el.classList.add('on'); setLaser(false); drawPresent();
   try{ var fn=el.requestFullscreen||el.webkitRequestFullscreen; if(fn){ var p=fn.call(el); pr.fs=true; if(p&&p.catch) p.catch(function(){ pr.fs=false; }); } }catch(e){ pr.fs=false; }
 }
-function drawPresent(){
+function drawPresent(){ drawPresent0(); pvState(); }
+function drawPresent0(){
   var ik=pr.end?-2:pr.i; if(inkKey!==ik){ inkKey=ik; inkClear(); }
   var st=$('pStage'), n=deck.slides.length; st.innerHTML=''; $('pEnd').hidden=!pr.end; st.hidden=pr.end; st.style.visibility=pr.black?'hidden':'';
   $('pNum').textContent=pr.end?n+' / '+n:(pr.i+1)+' / '+n; $('pProg').firstChild.style.width=(pr.end?100:Math.round((pr.i+1)/n*100))+'%';
@@ -615,8 +618,11 @@ function pNext(){ if(pr.end) return exitPresent(); var cs=deck.slides[pr.i];
   if(cs&&cs.layout==='quiz'&&pr.rev!==pr.i&&cs.caption.trim()){ pr.rev=pr.i; drawPresent(); return; }
   var j=nextVis(pr.i,1); if(j>=0) pr.i=j; else pr.end=true; drawPresent(); }
 function pPrev(){ if(pr.end){ pr.end=false; pr.shown=-1; } else { var j=nextVis(pr.i,-1); if(j>=0) pr.i=j; } drawPresent(); }
+function pHome(){ pr.end=false; var f=vis(0)?0:nextVis(0,1); pr.i=f<0?0:f; drawPresent(); }
+function pLast(){ pr.end=false; var L=deck.slides.length-1, la=vis(L)?L:nextVis(L,-1); pr.i=la<0?L:la; drawPresent(); }
+function pAns(){ pr.rev=pr.rev===pr.i?-1:pr.i; drawPresent(); }
 function pGo(){ var n=+pr.go; pr.go=''; clearTimeout(pr.goT); if(!n) return drawPresent(); var i=Math.max(0,Math.min(n-1,deck.slides.length-1)); if(!vis(i)){ var j=nextVis(i,1); i=j>=0?j:nextVis(i,-1); } pr.end=false; pr.i=i; drawPresent(); }
-function exitPresent(){ if(!pr.on) return; pr.on=false; setInk(''); inkClear(); clearInterval(pr.tm); clearTimeout(pr.goT); pr.go=''; setLaser(false); $('present').classList.remove('on');
+function exitPresent(){ if(!pr.on) return; pr.on=false; pvPost({type:'exit'}); setInk(''); inkClear(); clearInterval(pr.tm); clearTimeout(pr.goT); pr.go=''; setLaser(false); $('present').classList.remove('on');
   try{ var fe=document.fullscreenElement||document.webkitFullscreenElement; if(fe){ (document.exitFullscreen||document.webkitExitFullscreen).call(document); } }catch(e){}
   if(!pr.end) select(pr.i); }
 ['fullscreenchange','webkitfullscreenchange'].forEach(function(ev){ document.addEventListener(ev,function(){ if(pr.on&&pr.fs&&!(document.fullscreenElement||document.webkitFullscreenElement)) exitPresent(); }); });
@@ -652,17 +658,77 @@ $('pPenB').onclick=function(){ setInk('pen'); }; $('pHiB').onclick=function(){ s
 $('pPrev').onclick=pPrev; $('pNext').onclick=pNext; $('pExit').onclick=exitPresent;
 $('playBtn').onclick=function(){ present(0); };
 
+/* ---------- presenter view: a second window (same page, #presenter) that shows the current and next slide, the notes and a timer.
+   The two windows talk over a BroadcastChannel (same browser only): the presenting window sends the deck and its position, the presenter window sends back next / previous. ---------- */
+var bc=null; try{ bc=new BroadcastChannel('ffslides.presenter'); }catch(e){}
+function pvPost(m){ if(bc&&!MODE){ try{ bc.postMessage(m); }catch(e){} } }
+function pvDeck(){ if(bc&&!MODE) pvPost({type:'deck', deck:JSON.parse(JSON.stringify(deck))}); }
+function pvState(){ if(pr.on) pvPost({type:'state', id:deck.id, i:pr.i, end:pr.end, rev:pr.rev, black:pr.black, t0:pr.t0}); }
+if(bc&&!MODE) bc.onmessage=function(e){ var m=e.data||{}; if(m.type==='hello'){ if(pr.on){ pvDeck(); pvState(); } else pvPost({type:'idle'}); return; }
+  if(m.type!=='cmd'||!pr.on) return; var c=m.cmd;
+  if(c==='next') pNext(); else if(c==='prev') pPrev(); else if(c==='home') pHome(); else if(c==='last') pLast(); else if(c==='ans') pAns(); else if(c==='black') setBlack(!pr.black); else if(c==='exit') exitPresent(); };
+function openPV(){ if(!deck.slides.length||gen) return; var w=null; try{ w=window.open(location.href.split('#')[0]+'#presenter','ffpresenter','popup=yes,width=1180,height=740'); }catch(e){}
+  if(!w) toast(T('팝업이 막혀 있어요. 주소창에서 팝업을 허용해 주세요'));
+  if(!pr.on) present(0); else { pvDeck(); pvState(); } }
+$('pvBtn').onclick=openPV; $('pPvB').onclick=openPV;
+var pv={on:false, st:'wait', i:0, end:false, rev:-1, black:false, t0:0, acc:0, since:0, run:false, fs:22, tm:null, id:''};
+function pvSay(el,t){ el.innerHTML=''; var d=document.createElement('div'); d.className='pvMsg'; d.textContent=t; el.appendChild(d); }
+function pvFrame(box,s,opt){ box.innerHTML=''; var t=th(), el=slideEl(s,t,false,opt||{}); box.appendChild(el); el.style.transform='scale('+(box.clientWidth||W)/W+')'; fitAll(el,s,t); }
+function pvScale(){ ['pvCur','pvNextFr'].forEach(function(id){ var b=$(id), el=b.querySelector('.sl'); if(el&&b.clientWidth) el.style.transform='scale('+b.clientWidth/W+')'; }); }
+function pvRender(){
+  var d=deck, n=d.slides.length, S=$('pvStatus'), cur=$('pvCur'), nx=$('pvNextFr'), nt=$('pvNotes');
+  $('pvName').textContent=d.name;
+  S.textContent=pv.st==='end'?T('발표가 끝났어요'):pv.black?T('화면이 꺼져 있어요'):T('발표 중');
+  cur.style.opacity=pv.black?.3:'';
+  if(pv.end||pv.st==='end'){ pvSay(cur,T('발표가 끝났어요')); pvSay(nx,''); nt.textContent=''; $('pvNum').textContent=n+' / '+n; return; }
+  var s=d.slides[pv.i]; if(!s) return;
+  pvFrame(cur,s,{hideAns:s.layout==='quiz'&&pv.rev!==pv.i});
+  var j=nextVis(pv.i,1); if(j>=0) pvFrame(nx,d.slides[j],{hideAns:true}); else pvSay(nx,T('마지막 슬라이드예요'));
+  nt.textContent=(s.notes||'').trim()||''; if(s.layout==='quiz'&&s.caption.trim()) nt.textContent=(nt.textContent?nt.textContent+'\n\n':'')+T('정답')+': '+s.caption;
+  if(!nt.textContent) nt.textContent=T('이 슬라이드에는 메모가 없어요');
+  $('pvNum').textContent=(pv.i+1)+' / '+n; $('pvAns').hidden=s.layout!=='quiz';
+}
+function pvElapsed(){ return pv.acc+(pv.run?Date.now()-pv.since:0); }
+function pvTick(){ $('pvTime').textContent=fmtTime(Math.floor(pvElapsed()/1000)); var t=new Date(); $('pvWall').textContent=('0'+t.getHours()).slice(-2)+':'+('0'+t.getMinutes()).slice(-2); }
+function pvCmd(c){ if(bc) bc.postMessage({type:'cmd',cmd:c}); }
+function pvKey(e){ if(e.ctrlKey||e.metaKey||e.altKey) return; var k=e.key, c=null;
+  if(k==='ArrowRight'||k==='ArrowDown'||k==='PageDown'||k===' '||k==='Enter'||k==='n') c='next'; else if(k==='ArrowLeft'||k==='ArrowUp'||k==='PageUp'||k==='Backspace'||k==='p') c='prev';
+  else if(k==='Home') c='home'; else if(k==='End') c='last'; else if(k==='b'||k==='B'||k==='.') c='black'; else if(k==='a'||k==='A') c='ans';
+  if(c){ e.preventDefault(); pvCmd(c); } }
+function startPV(){
+  document.body.classList.add('mode-pv'); $('pv').hidden=false; deck=newDeck(); deck.name=''; document.title=T('발표자 화면')+' · Fry Slides';
+  try{ var f=parseInt(localStorage.getItem('ffslides.pvfs'),10); if(f>=12&&f<=60) pv.fs=f; }catch(e){}
+  $('pvNotes').style.fontSize=pv.fs+'px'; pvSay($('pvCur'),T('발표 화면을 기다리고 있어요. 편집 창에서 발표하기를 누르면 여기에 이어져요.')); pvSay($('pvNextFr'),''); $('pvNotes').textContent=''; $('pvStatus').textContent=T('기다리는 중'); $('pvNum').textContent=''; $('pvAns').hidden=true;
+  var hello=function(){ if(bc) bc.postMessage({type:'hello'}); };
+  if(bc) bc.onmessage=function(e){ var m=e.data||{};
+    if(m.type==='deck'){ deck=fixDeck(m.deck); fitCache.clear(); pv.on=true; pv.id=deck.id; }
+    else if(m.type==='state'){ if(!pv.on||pv.id!==m.id){ hello(); return; } if(pv.st==='end'||!pv.run&&!pv.acc||pv.t0!==m.t0){ pv.t0=m.t0; pv.acc=Math.max(0,Date.now()-m.t0); pv.since=Date.now(); pv.run=true; $('pvPause').textContent=T('멈춤'); }
+      pv.st='on'; pv.i=m.i; pv.end=m.end; pv.rev=m.rev; pv.black=m.black; pvRender(); }
+    else if(m.type==='exit'){ pv.st='end'; pv.end=true; if(pv.run){ pv.acc=pvElapsed(); pv.run=false; } pvRender(); }
+    else if(m.type==='idle'&&pv.st==='wait'){} };
+  hello(); setInterval(function(){ if(pv.st==='wait') hello(); },1500); pv.tm=setInterval(pvTick,500); pvTick();
+  $('pvPrev').onclick=function(){ pvCmd('prev'); }; $('pvNext').onclick=function(){ pvCmd('next'); }; $('pvBlack').onclick=function(){ pvCmd('black'); }; $('pvAns').onclick=function(){ pvCmd('ans'); };
+  $('pvExit').onclick=function(){ pvCmd('exit'); };
+  $('pvPause').onclick=function(){ if(pv.run){ pv.acc=pvElapsed(); pv.run=false; this.textContent=T('다시 가기'); } else { pv.since=Date.now(); pv.run=true; this.textContent=T('멈춤'); } pvTick(); };
+  $('pvReset').onclick=function(){ pv.acc=0; pv.since=Date.now(); pv.run=true; $('pvPause').textContent=T('멈춤'); pvTick(); };
+  var fsz=function(d){ pv.fs=Math.max(12,Math.min(60,pv.fs+d)); $('pvNotes').style.fontSize=pv.fs+'px'; try{ localStorage.setItem('ffslides.pvfs',String(pv.fs)); }catch(e){} };
+  $('pvFsM').onclick=function(){ fsz(-2); }; $('pvFsP').onclick=function(){ fsz(2); };
+  window.addEventListener('resize',pvScale); if(window.ResizeObserver){ var ro=new ResizeObserver(pvScale); ro.observe($('pvCur')); ro.observe($('pvNextFr')); }
+}
+
 /* ---------- keyboard ---------- */
 document.addEventListener('keydown',function(e){
+  if(MODE){ if(MODE==='pv') pvKey(e); return; }
   if(pr.on){ var k=e.key;
     if(/^\d$/.test(k)&&!e.ctrlKey&&!e.metaKey){ e.preventDefault(); pr.go=(pr.go+k).slice(0,3); $('pNum').textContent='→ '+pr.go; clearTimeout(pr.goT); pr.goT=setTimeout(function(){ pr.go=''; drawPresent(); },2500); return; }
     if(pr.go&&k==='Enter'){ e.preventDefault(); pGo(); return; }
     if(pr.go&&k==='Escape'){ e.preventDefault(); pr.go=''; drawPresent(); return; }
     if(k==='ArrowRight'||k==='ArrowDown'||k==='PageDown'||k===' '||k==='Enter'||k==='n'){ e.preventDefault(); pNext(); }
     else if(k==='ArrowLeft'||k==='ArrowUp'||k==='PageUp'||k==='Backspace'||k==='p'){ e.preventDefault(); pPrev(); }
-    else if(k==='Home'){ e.preventDefault(); pr.end=false; var f=vis(0)?0:nextVis(0,1); pr.i=f<0?0:f; drawPresent(); }
-    else if(k==='End'){ e.preventDefault(); pr.end=false; var L=deck.slides.length-1, la=vis(L)?L:nextVis(L,-1); pr.i=la<0?L:la; drawPresent(); }
-    else if(k==='a'||k==='A'){ e.preventDefault(); pr.rev=pr.rev===pr.i?-1:pr.i; drawPresent(); }
+    else if(k==='Home'){ e.preventDefault(); pHome(); }
+    else if(k==='End'){ e.preventDefault(); pLast(); }
+    else if(k==='v'||k==='V'){ e.preventDefault(); openPV(); }
+    else if(k==='a'||k==='A'){ e.preventDefault(); pAns(); }
     else if(k==='t'||k==='T'){ e.preventDefault(); if(pr.cd){ if(pr.cd.left===0){ pr.cd.left=pr.cd.total; pr.cd.run=true; } else pr.cd.run=!pr.cd.run; cdPaint(); toast(pr.cd.run?T('타이머가 다시 가요'):T('타이머를 멈췄어요')); } }
     else if(k==='Escape'){ e.preventDefault(); if(ink.tool) setInk(''); else exitPresent(); }
     else if(k==='d'||k==='D'){ e.preventDefault(); setInk('pen'); }
@@ -813,10 +879,10 @@ $('sUndo').onclick=function(){ if(!undo.length) return; redo.push(snap()); resto
 /* ---------- start ---------- */
 window.addEventListener('beforeunload',function(){ blurEdit(); saveNow(); });
 document.addEventListener('visibilitychange',function(){ if(document.hidden) saveNow(); });
-if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){ fitCache.clear(); if(deck&&deck.slides.length){ drawList(); drawMain(); } else if(deck) drawStart(); });
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){ fitCache.clear(); if(MODE) return; if(deck&&deck.slides.length){ drawList(); drawMain(); } else if(deck) drawStart(); });
 var first=null; store.decks.forEach(function(d){ if(d.id===store.last) first=d; });
 if(!first&&store.decks.length) first=store.decks.slice().sort(function(a,b){ return b.t-a.t; })[0];
-openDeck(first||newDeck());
+if(MODE==='pv') startPV(); else openDeck(first||newDeck());
 
 /* used by ai-slides.js */
 window.FSL={
