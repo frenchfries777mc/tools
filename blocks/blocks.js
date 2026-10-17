@@ -87,21 +87,27 @@ EL.concat(['el_space','el_html']).forEach(function(t){ G.forBlock[t]=function(){
 G.forBlock.page_root=function(){ return ''; };
 
 /* ---------- events ---------- */
+/* step-by-step debugging ("한 블록씩 실행"): the build puts "await __step(id)" before every block of the event scripts, and each script runs as an async function */
+var DBG=false, dbgSeq=0;
+function AF(){ return DBG?'async function (':'function ('; }
+function hatBody(b,guard){ var body=G.statementToCode(b,'DO'); if(!DBG) return body;
+  var k=guard?lit('g'+(++dbgSeq)):null;
+  return (guard?'  if (__dbusy['+k+']) return;\n  __dbusy['+k+'] = 1;\n':'')+'  __dbegin();\n  try {\n'+G.prefixLines(body,'  ')+'  } finally {\n    __dend();\n'+(guard?'    __dbusy['+k+'] = 0;\n':'')+'  }\n'; }
 function hat(b,tip){ b.appendStatementInput('DO'); b.setColour(C.ev); b.setTooltip(T(tip)); b.hat='cap'; }
 def('ev_start',function(){ this.appendDummyInput().appendField(T('페이지가 열리면')); hat(this,'페이지가 처음 열릴 때 한 번 해요'); },
-  function(b){ return G.statementToCode(b,'DO').replace(/^  /gm,''); });
+  function(b){ if(DBG) return '(async function () {\n'+hatBody(b)+'})();\n'; return G.statementToCode(b,'DO').replace(/^  /gm,''); });
 def('ev_click',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('을(를) 누르면')); hat(this,'버튼이나 그림, 그림판을 눌렀을 때 해요'); },
   function(b){ var n=b.getFieldValue('EL'), mouse=b.getDescendants(false).some(function(d){ return d.type==='val_mouse'; }); need('$'); if(mouse) need('pos');
-    return '$('+lit(n)+').addEventListener(\'click\', function ('+(mouse?'e':'')+') {\n'+(mouse?'  __pos(e, this);\n':'')+G.statementToCode(b,'DO')+'});\n'; });
+    return '$('+lit(n)+').addEventListener(\'click\', '+AF()+(mouse?'e':'')+') {\n'+(mouse?'  __pos(e, this);\n':'')+hatBody(b)+'});\n'; });
 def('ev_change',function(){ this.appendDummyInput().appendField(elField(['el_input']),'EL').appendField(T('에 글을 쓰면')); hat(this,'입력칸의 내용이 바뀔 때마다 해요'); },
-  function(b){ need('$'); return '$('+lit(b.getFieldValue('EL'))+').addEventListener(\'input\', function () {\n'+G.statementToCode(b,'DO')+'});\n'; });
+  function(b){ need('$'); return '$('+lit(b.getFieldValue('EL'))+').addEventListener(\'input\', '+AF()+') {\n'+hatBody(b)+'});\n'; });
 var KEYS=[['아무 키','any'],['스페이스',' '],['엔터','Enter'],['↑','ArrowUp'],['↓','ArrowDown'],['←','ArrowLeft'],['→','ArrowRight'],['W','w'],['A','a'],['S','s'],['D','d']];
 def('ev_key',function(){ this.appendDummyInput().appendField(new Blockly.FieldDropdown(function(){ return KEYS.map(function(k){ return [T(k[0]),k[1]]; }); }),'KEY').appendField(T('키를 누르면')); hat(this,'키보드 키를 눌렀을 때 해요'); },
   function(b){ var k=b.getFieldValue('KEY'); need('key');
     var cond=k==='any'?'true':(k.length===1&&/[a-z]/.test(k)?'e.key.toLowerCase() === '+lit(k):'e.key === '+lit(k));
-    return 'document.addEventListener(\'keydown\', function (e) {\n  __key = e.key;\n  if ('+cond+') {\n'+(k!=='any'&&k.length>1||k===' '?'    e.preventDefault();\n':'')+G.prefixLines(G.statementToCode(b,'DO'),'  ')+'  }\n});\n'; });
+    return 'document.addEventListener(\'keydown\', '+AF()+'e) {\n  __key = e.key;\n  if ('+cond+') {\n'+(k!=='any'&&k.length>1||k===' '?'    e.preventDefault();\n':'')+G.prefixLines(hatBody(b),'  ')+'  }\n});\n'; });
 def('ev_timer',function(){ this.appendDummyInput().appendField(new Blockly.FieldNumber(1,0.02,3600,0.01),'SEC').appendField(T('초마다')); hat(this,'정한 시간마다 계속 해요'); },
-  function(b){ need('timers'); var ms=Math.max(20,Math.round(b.getFieldValue('SEC')*1000)); return '__timers.push(setInterval(function () {\n'+G.statementToCode(b,'DO')+'}, '+ms+'));\n'; });
+  function(b){ need('timers'); var ms=Math.max(20,Math.round(b.getFieldValue('SEC')*1000)); return '__timers.push(setInterval('+AF()+') {\n'+hatBody(b,true)+'}, '+ms+'));\n'; });
 
 /* ---------- actions ---------- */
 def('act_set',function(){ this.appendValueInput('VALUE').appendField(elField(),'EL').appendField(T('의 내용을')); this.appendDummyInput().appendField(T('(으)로 바꾸기')); this.setInputsInline(true); act(this,'글자, 입력칸의 값, 그림 주소를 바꿔요'); },
@@ -123,7 +129,7 @@ def('act_show',function(){ this.appendDummyInput().appendField(elField(),'EL').a
 def('act_alert',function(){ this.appendValueInput('VALUE').appendField(T('알림창 띄우기')); act(this,'작은 알림창으로 보여줘요'); },
   function(b){ return 'alert('+(G.valueToCode(b,'VALUE',O.NONE)||"''")+');\n'; });
 def('act_after',function(){ this.appendValueInput('SEC').setCheck('Number'); this.appendDummyInput().appendField(T('초 뒤에')); this.appendStatementInput('DO'); this.setInputsInline(true); act(this,'정한 시간이 지난 뒤에 한 번 해요'); },
-  function(b){ return 'setTimeout(function () {\n'+G.statementToCode(b,'DO')+'}, ('+(G.valueToCode(b,'SEC',O.MULTIPLICATION)||'1')+') * 1000);\n'; });
+  function(b){ return 'setTimeout('+AF()+') {\n'+G.statementToCode(b,'DO')+'}, ('+(G.valueToCode(b,'SEC',O.MULTIPLICATION)||'1')+') * 1000);\n'; });
 def('act_stop',function(){ this.appendDummyInput().appendField(T('모든 "초마다" 멈추기')); act(this,'초마다 반복을 모두 멈춰요'); },
   function(){ need('timers'); return '__timers.forEach(clearInterval);\n'; });
 def('act_beep',function(){ this.appendValueInput('SEC').setCheck('Number').appendField(T('소리 내기')).appendField(new Blockly.FieldDropdown(function(){ return NOTES.map(function(n){ return [T(n[0]),n[1]]; }); }),'NOTE'); this.appendDummyInput().appendField(T('초')); this.setInputsInline(true); act(this,'삐 소리를 내요'); },
@@ -203,7 +209,7 @@ def('val_today',function(){ this.appendDummyInput().appendField(T('오늘')).app
   function(b){ var u=b.getFieldValue('U'), m={date:'new Date().toLocaleDateString()',time:'new Date().toLocaleTimeString()',year:'new Date().getFullYear()',month:'(new Date().getMonth() + 1)'}; return [m[u]||m.date,u==='month'?O.ATOMIC:O.FUNCTION_CALL]; });
 def('ev_drag',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('을(를) 누른 채 움직이면')); hat(this,'마우스를 누른 채, 또는 손가락으로 짚고 움직이는 동안 계속 해요. "누른 위치"를 함께 써요'); },
   function(b){ var n=lit(b.getFieldValue('EL')); need('$'); need('pos');
-    return '$('+n+').style.touchAction = \'none\';\n$('+n+').addEventListener(\'pointermove\', function (e) {\n  if (!e.buttons) return;\n  __pos(e, this);\n'+G.statementToCode(b,'DO')+'});\n'; });
+    return '$('+n+').style.touchAction = \'none\';\n$('+n+').addEventListener(\'pointermove\', '+AF()+'e) {\n  if (!e.buttons) return;\n  __pos(e, this);\n'+hatBody(b,true)+'});\n'; });
 
 /* ---------- raw JavaScript ---------- */
 def('js_raw',function(){ this.appendDummyInput().appendField('JS').appendField(new Blockly.FieldTextInput('console.log("hi");'),'CODE'); this.setPreviousStatement(true); this.setNextStatement(true); this.setColour(C.js); this.setTooltip(T('자바스크립트 한 줄을 직접 써요')); },
@@ -236,6 +242,14 @@ var HELP={
   draw:"function __pen(name) { return $(name).getContext('2d'); }\nfunction __clear(name) { var c = $(name); __pen(name).clearRect(0, 0, c.width, c.height); }\nfunction __rect(name, x, y, w, h, color) { var g = __pen(name); g.fillStyle = color; g.fillRect(x, y, w, h); }\nfunction __circle(name, x, y, r, color) { var g = __pen(name); g.fillStyle = color; g.beginPath(); g.arc(x, y, Math.max(0, r), 0, Math.PI * 2); g.fill(); }\nfunction __line(name, x1, y1, x2, y2, color) { var g = __pen(name); g.strokeStyle = color; g.lineWidth = 3; g.lineCap = 'round'; g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); g.stroke(); }\nfunction __text(name, text, x, y, color) { var g = __pen(name); g.fillStyle = color; g.font = '20px sans-serif'; g.fillText(text, x, y); }"
 };
 var HELP_DEPS={nudge:['$'],where:['$'],hit:['$'],stay:['$'],follow:['$','cursor'],image:['$','draw'],get:['$'],set:['$'],add:['$'],size:['$'],move:['$'],show:['$'],draw:['$']};
+
+function dbgHelper(vars){
+  return 'var __dq = Promise.resolve(), __dgo = null, __dfree = 0, __drun = 0, __dbusy = {};\n'+
+  'function __dvars() {\n  var o = [];\n'+vars.map(function(v){ return '  try { o.push([ '+lit(v[0])+', typeof '+v[1]+" === 'undefined' ? '' : __dshow("+v[1]+') ]); } catch (e) {}\n'; }).join('')+'  return o;\n}\n'+
+  "function __dshow(v) { if (typeof v === 'function') return 'ƒ'; try { var t = typeof v === 'string' ? JSON.stringify(v) : (typeof v === 'object' ? JSON.stringify(v) : String(v)); return t.length > 70 ? t.slice(0, 70) + '…' : t; } catch (e) { return String(v); } }\n"+
+  "function __step(id) {\n  return new Promise(function (done) {\n    __dq = __dq.then(function () {\n      if (__dfree) return;\n      return new Promise(function (go) { __dgo = go; parent.postMessage({ ffbhStep: { id: id, vars: __dvars() } }, '*'); });\n    }).then(done);\n  });\n}\n"+
+  "function __dbegin() { __drun++; }\nfunction __dend() { if (--__drun <= 0) { __drun = 0; __dfree = 0; parent.postMessage({ ffbhStepEnd: 1 }, '*'); } }\n"+
+  "addEventListener('message', function (e) {\n  var d = e.data;\n  if (!d || !d.ffbhDbg) return;\n  if (d.ffbhDbg === 'free') __dfree = 1;\n  if (__dgo) { var g = __dgo; __dgo = null; g(); }\n});"; }
 
 /* ---------- HTML ---------- */
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -274,13 +288,24 @@ function build(ws,opts){
   });
   // JavaScript
   NEED={}; USED={}; G.INFINITE_LOOP_TRAP=opts.trap?'if (--window.__loop < 0) throw new Error("'+T('반복이 끝나지 않아요')+'");\n':null;
+  DBG=!!opts.debug; dbgSeq=0; G.STATEMENT_PREFIX=DBG?'await __step(%1);\n':null;
+  var js, dbgVars=[];
+  try{
   G.init(ws); var handlers='', starts='';
+  if(DBG) ws.getAllVariables().forEach(function(v){ try{ dbgVars.push([v.name,G.getVariableName(v.getId())]); }catch(e){} });
   ws.getTopBlocks(true).forEach(function(b){
     if(!b.isEnabled()) return;
-    if(b.type==='ev_start') starts+=G.blockToCode(b)||'';
-    else if(/^ev_/.test(b.type)||/^procedures_def/.test(b.type)){ var c=G.blockToCode(b); if(Array.isArray(c)) c=c[0]; handlers+=c||''; }
+    if(DBG) b.suppressPrefixSuffix=true;
+    var isProc=/^procedures_def/.test(b.type);
+    if(isProc&&DBG) G.STATEMENT_PREFIX=null; // a function runs as one step (its call block)
+    try{
+      if(b.type==='ev_start') starts+=G.blockToCode(b)||'';
+      else if(/^ev_/.test(b.type)||isProc){ var c=G.blockToCode(b); if(Array.isArray(c)) c=c[0]; handlers+=c||''; }
+    } finally{ if(isProc&&DBG) G.STATEMENT_PREFIX='await __step(%1);\n'; }
   });
-  var js=G.finish(handlers+(starts?(handlers?'\n':'')+starts:''));
+  js=G.finish(handlers+(starts?(handlers?'\n':'')+starts:''));
+  } finally{ G.STATEMENT_PREFIX=null; DBG=false; }
+  if(opts.debug) js='// '+T('한 블록씩 실행')+'\n'+dbgHelper(dbgVars)+'\n\n'+js;
   Object.keys(HELP_DEPS).forEach(function(k){ if(NEED[k]) HELP_DEPS[k].forEach(need); });
   var helpers=Object.keys(HELP).filter(function(k){ return NEED[k]; }).map(function(k){ return HELP[k]; }).join('\n');
   if(NEED.imgs){ var used=Object.keys(USED).filter(function(id){ return IMGS[id]; }); helpers='// '+T('내 그림')+'\nvar __imgs = {\n'+used.map(function(id){ return '  '+lit(IMGS[id].name)+': '+lit(IMGS[id].data); }).join(',\n')+'\n};\n'+(NEED.image?'for (var __k in __imgs) { var __im = new Image(); __im.src = __imgs[__k]; }\n':'')+helpers; }
