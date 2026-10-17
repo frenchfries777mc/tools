@@ -78,6 +78,52 @@ var EX=[
       B('act_append',{f:{EL:list},v:{VALUE:X(B('val_get',{f:{EL:inp,PROP:'text'}}))}}),CHG(cnt,1),B('act_clear',{f:{EL:inp}}),
       B('act_set',{f:{EL:T('안내')},v:{VALUE:JOIN([TX(T('할 일 ')),G(cnt),TX(T('개'))])}})]}})]}})
   ]); }}
+,{name:'계산기',desc:'두 숫자로 더하기, 빼기, 곱하기, 나누기',xml:function(){
+  var a=T('첫째수'), b=T('둘째수'), res=T('계산결과');
+  function calc(op,btn){ return B('ev_click',{x:440,y:btn,f:{EL:op[0]},s:{DO:[B('act_set',{f:{EL:res},v:{VALUE:X(B('math_arithmetic',{f:{OP:op[1]},v:{A:X(B('val_get',{f:{EL:a,PROP:'num'}})),B:X(B('val_get',{f:{EL:b,PROP:'num'}}))}}))}})]}}); }
+  var ops=[['+','ADD'],['-','MINUS'],['x','MULTIPLY'],['/','DIVIDE']];
+  return wrap([
+    page(T('계산기'),'#e0f2fe',[B('el_heading',{f:{SIZE:'h1',TEXT:T('계산기'),NAME:T('제목')+'1'}}),
+      B('el_box',{f:{DIR:'row',BG:'',NAME:T('상자')+'1'},s:{BODY:[B('el_input',{f:{KIND:'number',TEXT:T('첫째 수'),NAME:a}}),B('el_input',{f:{KIND:'number',TEXT:T('둘째 수'),NAME:b}})]}}),
+      B('el_box',{f:{DIR:'row',BG:'',NAME:T('상자')+'2'},s:{BODY:ops.map(function(o){ return B('el_button',{f:{TEXT:o[0],NAME:o[0]}}); })}}),
+      B('el_heading',{f:{SIZE:'h1',TEXT:'=',NAME:res}})])
+  ].concat(ops.map(function(o,i){ return calc(o,20+i*110); }))); }}
+,{name:'수학 퀴즈',desc:'문제를 풀고 점수를 받아요',xml:function(){
+  var q=T('문제'), inp=T('답칸'), bt=T('제출'), fb=T('알림말'), sc=T('점수판'), qn='qn', score='score', ans='ans';
+  return wrap([
+    page(T('수학 퀴즈'),'#fff8e1',[B('el_heading',{f:{SIZE:'h2',TEXT:'3 + 4 = ?',NAME:q}}),B('el_input',{f:{KIND:'number',TEXT:T('답을 쓰세요'),NAME:inp}}),B('el_button',{f:{TEXT:T('제출'),NAME:bt}}),B('el_heading',{f:{SIZE:'h3',TEXT:'',NAME:fb}}),B('el_text',{f:{TEXT:T('점수: 0'),NAME:sc}})]),
+    B('ev_start',{x:440,y:20,s:{DO:[SET(qn,NUMB(1)),SET(score,NUMB(0)),SET(ans,NUMB(7))]}}),
+    B('ev_click',{x:440,y:130,f:{EL:bt},s:{DO:[
+      B('controls_if',{m:'<mutation else="1"></mutation>',v:{IF0:CMP('EQ',X(B('val_get',{f:{EL:inp,PROP:'num'}})),G(ans))},
+        s:{DO0:[CHG(score,1),B('act_set',{f:{EL:fb},v:{VALUE:S(T('맞았어요! 👍'))}}),B('act_style',{f:{EL:fb,PROP:'color'},v:{VALUE:COL('#22c55e')}}),B('act_beep',{f:{NOTE:'523.25'},v:{SEC:N(0.15)}})],
+          ELSE:[B('act_set',{f:{EL:fb},v:{VALUE:JOIN([TX(T('아쉬워요. 정답은 ')),G(ans)])}}),B('act_style',{f:{EL:fb,PROP:'color'},v:{VALUE:COL('#ef4444')}}),B('act_beep',{f:{NOTE:'261.63'},v:{SEC:N(0.2)}})]}}),
+      B('act_set',{f:{EL:sc},v:{VALUE:JOIN([TX(T('점수: ')),G(score)])}}),
+      CHG(qn,1),B('act_clear',{f:{EL:inp}}),
+      B('controls_if',{m:'<mutation elseif="1" else="1"></mutation>',v:{IF0:CMP('EQ',G(qn),NUMB(2)),IF1:CMP('EQ',G(qn),NUMB(3))},s:{
+        DO0:[B('act_set',{f:{EL:q},v:{VALUE:S('9 x 6 = ?')}}),SET(ans,NUMB(54))],
+        DO1:[B('act_set',{f:{EL:q},v:{VALUE:S('100 / 4 = ?')}}),SET(ans,NUMB(25))],
+        ELSE:[B('act_set',{f:{EL:q},v:{VALUE:JOIN([TX(T('끝! 점수는 ')),G(score),TX(' / 3')])}}),B('act_show',{f:{EL:bt,MODE:'hide'}}),B('act_show',{f:{EL:inp,MODE:'hide'}})]}})]}})
+  ]); }}
+,{name:'별 잡기 게임',desc:'화살표 키나 손가락으로 움직여 20초 동안 별을 잡아요',xml:function(){
+  var cv=T('그림판')+'1', sc=T('점수판'), tm=T('남은시간'), best=T('최고기록'), K=T('최고점');
+  function key(k,v,d){ return B('ev_key',{x:20,y:v,f:{KEY:k},s:{DO:[CHG(d[0],d[1])]}}); }
+  function clamp(n,hi){ return SET(n,X(B('math_constrain',{v:{VALUE:G(n),LOW:N(12),HIGH:N(hi)}}))); }
+  function rnd(n,hi){ return SET(n,X(B('math_random_int',{v:{FROM:N(20),TO:N(hi)}}))); }
+  return wrap([
+    page(T('별 잡기 게임'),'#0f172a',[B('el_heading',{f:{SIZE:'h2',TEXT:T('별 잡기'),NAME:T('제목')+'1'}}),B('el_canvas',{f:{W:320,H:220,NAME:cv}}),
+      B('el_text',{f:{TEXT:T('점수: 0'),NAME:sc}}),B('el_text',{f:{TEXT:T('남은 시간: 20'),NAME:tm}}),B('el_text',{f:{TEXT:'',NAME:best}})]),
+    B('ev_start',{x:440,y:20,s:{DO:[SET('x',NUMB(160)),SET('y',NUMB(110)),SET('score',NUMB(0)),SET('left',NUMB(20)),rnd('sx',300),rnd('sy',200),
+      B('act_set',{f:{EL:best},v:{VALUE:JOIN([TX(T('최고 기록: ')),X(B('val_load',{v:{NAME:TX(K),DEF:NUMB(0)}}))])}})]}}),
+    B('ev_timer',{x:440,y:230,f:{SEC:0.03},s:{DO:[clamp('x',308),clamp('y',208),B('draw_clear',{f:{EL:cv}}),
+      B('draw_circle',{f:{EL:cv},v:{X:G('sx'),Y:G('sy'),R:N(11),COLOR:COL('#ffc93c')}}),B('draw_circle',{f:{EL:cv},v:{X:G('x'),Y:G('y'),R:N(14),COLOR:COL('#38bdf8')}}),
+      B('controls_if',{v:{IF0:CMP('LT',X(B('val_dist',{v:{X1:G('x'),Y1:G('y'),X2:G('sx'),Y2:G('sy')}})),NUMB(25))},s:{DO0:[CHG('score',1),rnd('sx',300),rnd('sy',200),B('act_beep',{f:{NOTE:'659.25'},v:{SEC:N(0.08)}}),B('act_set',{f:{EL:sc},v:{VALUE:JOIN([TX(T('점수: ')),G('score')])}})]}})]}}),
+    B('ev_timer',{x:440,y:520,f:{SEC:1},s:{DO:[CHG('left',-1),B('act_set',{f:{EL:tm},v:{VALUE:JOIN([TX(T('남은 시간: ')),G('left')])}}),
+      B('controls_if',{v:{IF0:CMP('LTE',G('left'),NUMB(0))},s:{DO0:[B('act_stop'),
+        B('controls_if',{v:{IF0:CMP('GT',G('score'),X(B('val_load',{v:{NAME:TX(K),DEF:NUMB(0)}})))},s:{DO0:[B('act_store',{v:{NAME:TX(K),VALUE:G('score')}}),B('act_set',{f:{EL:best},v:{VALUE:JOIN([TX(T('새 기록! ')),G('score')])}})]}}),
+        B('act_alert',{v:{VALUE:JOIN([TX(T('끝! 점수는 ')),G('score')])}})]}})]}}),
+    key('ArrowLeft',20,['x',-10]),key('ArrowRight',130,['x',10]),key('ArrowUp',240,['y',-10]),key('ArrowDown',350,['y',10]),
+    B('ev_drag',{x:20,y:460,f:{EL:cv},s:{DO:[SET('x',X(B('val_mouse',{f:{AXIS:'x'}}))),SET('y',X(B('val_mouse',{f:{AXIS:'y'}})))]}})
+  ]); }}
 ];
 window.BH_EXAMPLES=EX;
 })();
