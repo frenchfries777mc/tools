@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tools 패치노트</title>
+<meta name="description" content="Frenchfries777 Tools 프로그램별 업데이트 기록">
+<meta name="theme-color" content="#08090d">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://frenchfries777mc.github.io/games/ff-lang.js"></script>
+<script src="../i18n.js"></script>
+<script>
+FFT.add({
+'패치노트':['Patch notes','Notas de versión','Notes de mise à jour','Patchnotes','パッチノート'],
+'프로그램별로 무엇이 바뀌었는지 날짜 순서로 적어 둬요.':['What changed in each program, newest first.','Qué cambió en cada programa, de lo más nuevo a lo más viejo.','Ce qui a changé dans chaque programme, du plus récent au plus ancien.','Was sich in jedem Programm geändert hat, neueste zuerst.','プログラムごとの変更点を新しい順に載せています。'],
+'불러오지 못했어요':['Could not load','No se pudo cargar','Chargement impossible','Konnte nicht geladen werden','読み込めませんでした'],
+'불러오는 중…':['Loading…','Cargando…','Chargement…','Lädt…','読み込み中…'],
+'도구':['Tools','Herramientas','Outils','Werkzeuge','ツール'],
+'위키':['Wiki','Wiki','Wiki','Wiki','Wiki']
+});
+</script>
+<style>
+  :root{ --bg:#08090d; --panel:#10131b; --line:#222837; --text:#eef0f5; --dim:#8a93a6; --fry:#ffc93c; --fry2:#ff8a3d; }
+  *{box-sizing:border-box;}
+  html,body{margin:0; padding:0; background:var(--bg); color:var(--text);}
+  body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif; font-size:16px; line-height:1.6; min-height:100vh;
+    padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+    background-image:radial-gradient(ellipse 900px 520px at 10% -10%, rgba(255,201,60,.10), transparent 60%), radial-gradient(ellipse 800px 600px at 110% 30%, rgba(63,224,143,.07), transparent 60%);
+    background-attachment:fixed;}
+  .wrap{max-width:860px; margin:0 auto; padding:0 22px;}
+  header{display:flex; align-items:center; justify-content:space-between; padding:26px 0 0;}
+  .logo{display:flex; align-items:center; gap:10px; font-family:'Oswald',sans-serif; font-weight:600; font-size:20px; letter-spacing:.04em; color:var(--text); text-decoration:none;}
+  .logo .fry{width:34px; height:34px; border-radius:9px; display:grid; place-items:center; font-size:20px; background:linear-gradient(135deg,var(--fry),var(--fry2)); box-shadow:0 6px 18px rgba(255,160,60,.25);}
+  .logo b{color:var(--fry); font-weight:700;}
+  header nav a{color:var(--dim); text-decoration:none; font-size:15px; margin-left:18px;}
+  header nav a:hover{color:var(--text);}
+  header .right{display:flex; align-items:center;}
+  .langSel{background:var(--panel); color:var(--dim); border:1px solid var(--line); border-radius:8px; padding:6px 9px; font:inherit; font-size:14px; cursor:pointer; margin-left:16px;}
+  .langSel:hover{color:var(--text); border-color:var(--fry);}
+  .swr{margin:0 auto 0 20px;}
+  .sw{display:inline-flex; padding:3px; border-radius:99px; border:1px solid var(--line); background:var(--panel);}
+  .sw a{font-family:'Oswald',sans-serif; font-weight:600; font-size:13.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--dim); text-decoration:none; padding:4px 13px; border-radius:99px;}
+  .sw a:hover{color:var(--text);}
+  .sw a.on{background:linear-gradient(90deg,var(--fry),var(--fry2)); color:#1c1405;}
+  @media(max-width:520px){ header{flex-wrap:wrap;} .swr{order:3; flex:1 0 100%; margin:14px 0 0;} header nav{display:none;} .wrap{padding:0 16px;} }
+  h1{font-family:'Oswald','Noto Sans KR',sans-serif; font-weight:700; font-size:clamp(34px,6vw,52px); margin:44px 0 0; letter-spacing:.01em;}
+  h1 span{background:linear-gradient(90deg,var(--fry),var(--fry2)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  .lead{color:var(--dim); margin:8px 0 0;}
+  .tabs{display:flex; flex-wrap:wrap; gap:8px; margin:26px 0 0;}
+  .tabs button{font:inherit; font-size:15px; font-weight:500; color:var(--dim); background:var(--panel); border:1px solid var(--line); border-radius:99px; padding:7px 16px; cursor:pointer;}
+  .tabs button:hover{color:var(--text);}
+  .tabs button.on{color:#1c1405; border-color:transparent; font-weight:700; background:linear-gradient(90deg,var(--fry),var(--fry2));}
+  .list{margin:26px 0 0; padding:0; list-style:none;}
+  .note{border:1px solid var(--line); background:var(--panel); border-radius:14px; padding:18px 22px; margin:0 0 14px;}
+  .note .top{display:flex; flex-wrap:wrap; align-items:baseline; gap:10px;}
+  .note .bd{font-family:'JetBrains Mono',monospace; font-size:13px; color:#1c1405; background:var(--fry); border-radius:6px; padding:1px 8px;}
+  .note h2{margin:0; font-size:18px;}
+  .note time{margin-left:auto; color:var(--dim); font-size:14px;}
+  .note ul{margin:10px 0 0; padding-left:20px;} .note li{margin:3px 0;}
+  .note li::marker{color:var(--fry);}
+  .msg{color:var(--dim); margin:26px 0;}
+  footer{margin:56px 0 40px; padding-top:20px; border-top:1px solid var(--line); color:var(--dim); font-size:14px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;}
+  footer a{color:var(--dim);}
+  html[data-ff-theme=light]{ --bg:#f4f5f8; --panel:#fff; --line:#dfe2ea; --text:#161a24; --dim:#5d667a; }
+  html[data-ff-theme=light] body{background-image:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="logo" href="../"><span class="fry">🍟</span><span>FRENCHFRIES<b>777</b></span></a>
+    <div class="swr"><span class="sw" data-notr><a href="https://frenchfries777mc.github.io/games/">Games</a><a href="https://frenchfries777mc.github.io/educations/">Educations</a><a class="on" href="../" aria-current="page">Tools</a></span></div>
+    <div class="right"><nav><a href="../#tools">도구</a><a href="https://frenchfries777mc.github.io/games/wiki/#tools">위키</a></nav><span data-lang-slot></span></div>
+  </header>
+
+  <h1><span>패치노트</span></h1>
+  <p class="lead">프로그램별로 무엇이 바뀌었는지 날짜 순서로 적어 둬요.</p>
+  <div class="tabs" id="tabs" data-notr></div>
+  <ul class="list" id="list" data-notr></ul>
+  <p class="msg" id="msg"></p>
+
+  <footer><span>Made by Frenchfries777 with Claude AI</span><a href="../">← Tools</a></footer>
+</div>
+<script>
+(function(){
+  var PROGS=[['site','Tools'],['sheet','Fry Sheet'],['blocks','Block HTML'],['slides','Fry Slides'],['lab','Fry Lab'],['ai','AI']];
+  var tabs=document.getElementById('tabs'), list=document.getElementById('list'), msg=document.getElementById('msg'), cache={};
+  function T(s){ return window.FFT&&FFT.T?FFT.T(s):s; }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function cur(){ var h=(location.hash||'').replace('#',''); return PROGS.some(function(p){ return p[0]===h; })?h:PROGS[1][0]; }
+  function draw(id){
+    Array.prototype.forEach.call(tabs.children,function(b){ b.classList.toggle('on',b.dataset.id===id); });
+    msg.textContent=''; list.innerHTML='';
+    function show(d){ list.innerHTML=(d.notes||[]).map(function(n){
+      return '<li class="note"><div class="top"><span class="bd">'+esc(n.build)+'</span><h2>'+esc(n.title)+'</h2><time>'+esc(n.date)+'</time></div><ul>'+(n.items||[]).map(function(i){ return '<li>'+esc(i)+'</li>'; }).join('')+'</ul></li>'; }).join(''); }
+    if(cache[id]) return show(cache[id]);
+    msg.textContent=T('불러오는 중…');
+    fetch(id+'.json',{cache:'no-cache'}).then(function(r){ if(!r.ok) throw 0; return r.json(); })
+      .then(function(d){ cache[id]=d; if(cur()===id){ msg.textContent=''; show(d); } },
+            function(){ if(cur()===id) msg.textContent=T('불러오지 못했어요'); });
+  }
+  PROGS.forEach(function(p){ var b=document.createElement('button'); b.type='button'; b.dataset.id=p[0]; b.textContent=p[1];
+    b.onclick=function(){ location.hash=p[0]; }; tabs.appendChild(b); });
+  window.addEventListener('hashchange',function(){ draw(cur()); });
+  draw(cur());
+})();
+</script>
+</body>
+</html>
