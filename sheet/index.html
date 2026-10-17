@@ -156,6 +156,13 @@ button,input,select{font:inherit; color:inherit;}
   #grid thead th,#grid tbody th{background:#eee!important; color:#333!important;}
   #grid tr.npr,#grid td.npr,#grid th.npr,#grid col.npr{display:none!important;}
 }
+/* v12: merged cells, border dialog */
+.bdGrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:8px; margin-top:12px;} .bdGrid .tbtn{justify-content:flex-start; height:42px;} .bdGrid .dang{color:#ff7b7b;}
+.bi{display:inline-block; width:18px; height:18px; border:1px dashed #4a5268; box-sizing:border-box; flex:0 0 auto;}
+.bi.all{border:2px solid var(--fry);} .bi.outer{border:2px solid var(--fry); background:linear-gradient(#4a5268,#4a5268) center/1px 100% no-repeat,linear-gradient(#4a5268,#4a5268) center/100% 1px no-repeat;}
+.bi.inner{background:linear-gradient(var(--fry),var(--fry)) center/2px 100% no-repeat,linear-gradient(var(--fry),var(--fry)) center/100% 2px no-repeat;}
+.bi.top{border-top:2px solid var(--fry);} .bi.bottom{border-bottom:2px solid var(--fry);} .bi.left{border-left:2px solid var(--fry);} .bi.right{border-right:2px solid var(--fry);}
+@media print{ #bdDlg{display:none!important;} }
 /* v10 */
 .chkRow{display:flex!important; align-items:center; gap:8px; cursor:pointer; color:var(--text)!important; margin:4px 0 8px!important;} .chkRow input{width:18px; height:18px; accent-color:#ffc93c;}
 #grid td.nt::after{content:''; position:absolute; top:0; right:0; border-style:solid; border-width:0 8px 8px 0; border-color:transparent #ff5d5d transparent transparent;}
@@ -259,6 +266,8 @@ button,input,select{font:inherit; color:inherit;}
   <button class="rb" data-cmd="decDn" title="소수점 줄이기"><b style="font-size:12px;font-family:'JetBrains Mono',monospace">.0←</b></button>
   <button class="rb" data-cmd="decUp" title="소수점 늘리기"><b style="font-size:12px;font-family:'JetBrains Mono',monospace">.00</b></button>
   <button class="rb" data-cmd="border" title="테두리"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M12 4v16M4 12h16"/></svg></button>
+  <button class="rb" data-cmd="borderdlg" title="테두리 설정 (칸마다 쪽, 색)"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1" stroke-dasharray="2 2.5"/><path d="M4 20h16" stroke="#ffc93c" stroke-width="3"/></svg></button>
+  <button class="rb" data-cmd="merge" id="bMerge" title="칸 병합 / 병합 풀기"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="1.5"/><path d="M8 12h8M8 12l2.5-2.5M8 12l2.5 2.5M16 12l-2.5-2.5M16 12l-2.5 2.5"/></svg><span class="lb">병합</span></button>
   <button class="rb" data-cmd="clearfmt" title="서식 지우기"><svg viewBox="0 0 24 24"><path d="M4 20h16"/><path d="M14 4l6 6-8 8H8l-4-4z"/></svg></button>
   <span class="sepv"></span>
   <button class="rb" data-cmd="sum" title="자동 합계"><b style="font-size:17px">Σ</b></button>
@@ -341,6 +350,7 @@ button,input,select{font:inherit; color:inherit;}
   <button data-r="fzRow">여기까지 행 고정</button>
   <button data-r="fzCol">여기까지 열 고정</button>
   <button data-r="fzOff">고정 풀기</button>
+  <button data-r="unmerge">선택 범위 병합 풀기</button>
   <hr>
   <button data-r="clearCf">선택 범위의 조건 서식 모두 없애기</button>
   <hr>
@@ -448,6 +458,27 @@ button,input,select{font:inherit; color:inherit;}
     <p class="vhint" style="margin:10px 0 0">결과는 새 시트에 값으로 만들어져요. 원래 표를 고쳤다면 피벗을 다시 만드세요.</p>
   </div>
   <div class="acts"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="pvOk">피벗 만들기</button></div>
+</div></div>
+<div class="ov" id="bdDlg"><div class="dlg">
+  <div class="dh"><h3>테두리 설정</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody">
+    <div class="aiCtx" id="bdRg" data-notr></div>
+    <div class="dRow"><label style="margin:0">색</label><input type="color" id="bdColor" value="#ffc93c" style="flex:0 0 52px;height:38px;padding:2px;background:var(--bg);border:1px solid var(--line);border-radius:8px">
+      <label style="margin:0 0 0 10px">굵기</label><select id="bdW" class="dsel" style="flex:1"><option value="1">얇게</option><option value="2">보통</option><option value="3">두껍게</option></select></div>
+    <div class="swRow" id="bdSw" style="margin-top:10px"></div>
+    <div class="bdGrid">
+      <button class="tbtn" data-b="all"><i class="bi all"></i>모두</button>
+      <button class="tbtn" data-b="outer"><i class="bi outer"></i>바깥쪽</button>
+      <button class="tbtn" data-b="inner"><i class="bi inner"></i>안쪽</button>
+      <button class="tbtn" data-b="top"><i class="bi top"></i>위쪽</button>
+      <button class="tbtn" data-b="bottom"><i class="bi bottom"></i>아래쪽</button>
+      <button class="tbtn" data-b="left"><i class="bi left"></i>왼쪽</button>
+      <button class="tbtn" data-b="right"><i class="bi right"></i>오른쪽</button>
+      <button class="tbtn dang" data-b="none"><i class="bi none"></i>없음</button>
+    </div>
+    <p class="vhint" style="margin:10px 0 0">고른 범위에 바로 적용돼요. 색과 굵기를 바꾸고 다른 쪽을 눌러 이어서 꾸밀 수 있어요.</p>
+  </div>
+  <div class="acts"><button class="tbtn pri" data-close>닫기</button></div>
 </div></div>
 <div class="ov" id="tplDlg"><div class="dlg">
   <div class="dh"><h3>템플릿</h3><button class="x" data-close aria-label="닫기">×</button></div>
