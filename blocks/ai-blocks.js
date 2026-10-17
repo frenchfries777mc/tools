@@ -181,9 +181,9 @@ function run(q,modify,tries,errText,lastOut,fix,calm){
 function readyGo(q){ var ex=BH_EXAMPLES.filter(function(e){ return e.name===readyEx; })[0]; if(!ex) return false;
   before={name:$('projName').value, ws:Blockly.serialization.workspaces.save(ws)};
   B.loadXML(ex.xml()); B.arrange(); $('projName').value=T(ex.name); B.save(); addHist(q,false,'new'); $('baiUndo').hidden=false; readyEx='';
-  // the code scrolls in like a live answer, but it is the stored example (the message says so): it is shown, not made by the AI
+  // the code scrolls in like a live answer; it is the stored example, shown (not made by the AI)
   var html=B.build(), n=0, step=Math.max(20,Math.ceil(html.length/90)), p=$('baiLive'); busyNow=true; $('baiGo').disabled=true; $('baiStop').hidden=true;
-  msg(T('예시 코드를 보여 주고 있어요 · 미리 만들어 둔 코드예요 (AI가 쓴 게 아니에요)')); p.hidden=false; p.textContent='';
+  msg(T('예시 코드를 보여 주고 있어요')); p.hidden=false; p.textContent='';
   var t=setInterval(function(){ n=Math.min(html.length,n+step); p.textContent=html.slice(0,n); p.scrollTop=p.scrollHeight;
     if(n>=html.length){ clearInterval(t); busyNow=false; $('baiGo').disabled=false; msg(T('다 만들었어요! 미리보기에서 확인해 보세요'),'ok'); setTimeout(function(){ p.hidden=true; close(); B.toast(T('검증된 예시를 넣었어요')); },700); } },40);
   return true; }
