@@ -18,7 +18,7 @@ var T=FFT.T, F=FFT.F;
 var LS='ffai.v1';
 var BASE=(function(){ var s=document.currentScript&&document.currentScript.src; return s?s.replace(/[^\/]*$/,''):'../'; })();
 var PROVIDERS={
-  local:{name:'자체 AI', local:true, models:[['Qwen3-1.7B','기본 · 약 1GB'],['Qwen3-0.6B','가벼움 · 약 0.5GB'],['Qwen3-4B','똑똑함 · 약 2.5GB'],['FF-Tools-1.7B','FF777 1.2 tarius'],['FF-Tools-4B','FF777 1.2 lectus']]},
+  local:{name:'자체 AI', local:true, models:[['Qwen3-1.7B','기본 · 약 1GB'],['Qwen3-0.6B','가벼움 · 약 0.5GB'],['Qwen3-4B','똑똑함 · 약 2.5GB'],['FF-Tools-1.7B','FF777 1.2 tarius'],['FF-Tools-4B','FF777 1.0 lectus']]},
   claude:{name:'Claude', models:[['claude-opus-5-5','Claude Opus 5.5'],['claude-sonnet-5-5','Claude Sonnet 5.5'],['claude-haiku-5-5','Claude Haiku 5.5']], keyUrl:'https://console.anthropic.com/settings/keys', ph:'sk-ant-...'},
   gemini:{name:'Gemini', models:[['gemini-2.5-flash','Gemini 2.5 Flash'],['gemini-2.5-pro','Gemini 2.5 Pro']], keyUrl:'https://aistudio.google.com/apikey', ph:'AIza...', free:true},
   openai:{name:'OpenAI', models:[['gpt-4.1-mini','GPT-4.1 mini'],['gpt-4.1','GPT-4.1']], keyUrl:'https://platform.openai.com/api-keys', ph:'sk-...'}
@@ -26,12 +26,12 @@ var PROVIDERS={
 /* the Tools-trained models (train/colab.ipynb): same Qwen3 model code, our own weights on Hugging Face */
 var HF='https://huggingface.co/Frenchfries777/';
 var TUNED={'FF-Tools-1.7B':{base:'Qwen3-1.7B', about:'FF777 1.2 tarius: Tools(블록 HTML, Fry Sheet)에 맞게 학습한 가벼운 AI예요. Qwen3 1.7B(Apache 2.0)를 바탕으로 만들었어요.'},
-           'FF-Tools-4B':{base:'Qwen3-4B', about:'FF777 1.2 lectus: Tools(블록 HTML, Fry Sheet)에 맞게 학습한 똑똑한 AI예요. Qwen3 4B(Apache 2.0)를 바탕으로 만들었어요.'}};
+           'FF-Tools-4B':{base:'Qwen3-4B', about:'FF777 1.0 lectus: Tools(블록 HTML, Fry Sheet)에 맞게 학습한 똑똑한 AI예요. Qwen3 4B(Apache 2.0)를 바탕으로 만들었어요.'}};
 
 function modelLabel(id){ var m=PROVIDERS.local.models.filter(function(x){ return x[0]===id; })[0]; return m&&TUNED[id]?m[1]:id; }
 FFT.add({
 'FF777 1.2 tarius: Tools(블록 HTML, Fry Sheet)에 맞게 학습한 가벼운 AI예요. Qwen3 1.7B(Apache 2.0)를 바탕으로 만들었어요.':['FF777 1.2 tarius: a light AI trained for Tools (Block HTML, Fry Sheet). Built on Qwen3 1.7B (Apache 2.0).','FF777 1.2 tarius: una IA ligera entrenada para Tools (Block HTML, Fry Sheet). Basada en Qwen3 1.7B (Apache 2.0).','FF777 1.2 tarius : une IA légère entraînée pour Tools (Block HTML, Fry Sheet). Basée sur Qwen3 1.7B (Apache 2.0).','FF777 1.2 tarius: eine leichte KI, trainiert für Tools (Block HTML, Fry Sheet). Basiert auf Qwen3 1.7B (Apache 2.0).','FF777 1.2 tarius：Tools（Block HTML、Fry Sheet）向けに学習した軽いAIです。Qwen3 1.7B（Apache 2.0）をもとに作りました。'],
-'FF777 1.2 lectus: Tools(블록 HTML, Fry Sheet)에 맞게 학습한 똑똑한 AI예요. Qwen3 4B(Apache 2.0)를 바탕으로 만들었어요.':['FF777 1.2 lectus: a smart AI trained for Tools (Block HTML, Fry Sheet). Built on Qwen3 4B (Apache 2.0).','FF777 1.2 lectus: una IA lista entrenada para Tools (Block HTML, Fry Sheet). Basada en Qwen3 4B (Apache 2.0).','FF777 1.2 lectus : une IA performante entraînée pour Tools (Block HTML, Fry Sheet). Basée sur Qwen3 4B (Apache 2.0).','FF777 1.2 lectus: eine kluge KI, trainiert für Tools (Block HTML, Fry Sheet). Basiert auf Qwen3 4B (Apache 2.0).','FF777 1.2 lectus：Tools（Block HTML、Fry Sheet）向けに学習した賢いAIです。Qwen3 4B（Apache 2.0）をもとに作りました。'],
+'FF777 1.0 lectus: Tools(블록 HTML, Fry Sheet)에 맞게 학습한 똑똑한 AI예요. Qwen3 4B(Apache 2.0)를 바탕으로 만들었어요.':['FF777 1.0 lectus: a smart AI trained for Tools (Block HTML, Fry Sheet). Built on Qwen3 4B (Apache 2.0).','FF777 1.0 lectus: una IA lista entrenada para Tools (Block HTML, Fry Sheet). Basada en Qwen3 4B (Apache 2.0).','FF777 1.0 lectus : une IA performante entraînée pour Tools (Block HTML, Fry Sheet). Basée sur Qwen3 4B (Apache 2.0).','FF777 1.0 lectus: eine kluge KI, trainiert für Tools (Block HTML, Fry Sheet). Basiert auf Qwen3 4B (Apache 2.0).','FF777 1.0 lectus：Tools（Block HTML、Fry Sheet）向けに学習した賢いAIです。Qwen3 4B（Apache 2.0）をもとに作りました。'],
 '준비 중':['coming soon','próximamente','bientôt','bald verfügbar','準備中'],
 '아직 준비 중인 모델이에요':['This model is not ready yet','Este modelo aún no está listo','Ce modèle n’est pas encore prêt','Dieses Modell ist noch nicht bereit','このモデルはまだ準備中です'],
 '멈췄어요':['Stopped','Detenido','Arrêté','Gestoppt','止めました'],
@@ -239,7 +239,7 @@ function askLocal(c,o){
 /* ---------- what the developer taught the site's own models (Supabase ff_ai_facts; only the developer can write) ---------- */
 var FACTS_URL='https://kebsbuvuutilitwlvxzv.supabase.co/rest/v1/ff_ai_facts?select=model,question,fact&order=id', FACTS_KEY='sb_publishable_4Egu0zm3p6cxWGvP_-GlIw_mlCpO1Nf';
 var ME={'FF-Tools-1.7B':{name:'tarius', who:'You are FF777 1.2 tarius, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 1.7B. Your name is the end of the Latin word elementarius ("basic").'},
-        'FF-Tools-4B':{name:'lectus', who:'You are FF777 1.2 lectus, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 4B. Your name is the end of the Latin word intellectus ("understanding").'}};
+        'FF-Tools-4B':{name:'lectus', who:'You are FF777 1.0 lectus, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 4B. Your name is the end of the Latin word intellectus ("understanding").'}};
 var factsP=null;
 function facts(){
   if(!factsP) factsP=fetch(FACTS_URL,{headers:{apikey:FACTS_KEY}}).then(function(r){ return r.ok?r.json():[]; }).then(function(a){ return Array.isArray(a)?a:[]; },function(){ return []; });
