@@ -486,6 +486,30 @@ function dedupeRows(rows,cols){
     if(empty) return true; if(seen[key]) return false; seen[key]=1; return true; });
 }
 
+/* v15: icon sets (arrows, traffic lights) for conditional formats. t = position of the value between the range's min (0) and max (1);
+   f.p1/f.p2 are the percent cut-offs (default 33/67) and f.rev swaps the colors (low is good) but keeps the arrow direction. Returns [glyph, color]. */
+var ICONS={arrows:['▼','▶','▲'],lights:['●','●','●']}, ICOL=['#ff5d5d','#ffc93c','#3fe08f'];
+function iconFor(f,t){
+  var p1=(f.p1==null?33:f.p1)/100, p2=(f.p2==null?67:f.p2)/100, lv=t>=p2?2:t>=p1?1:0;
+  return [(ICONS[f.set]||ICONS.arrows)[lv],ICOL[f.rev?2-lv:lv]];
+}
+/* sparkline as an SVG string (viewBox 100x24, stretched to the cell). vals: numbers or null; kind 'line' | 'col' */
+function sparkSvg(vals,kind,col){
+  var nums=vals.filter(function(x){ return x!=null; }); if(!nums.length) return null;
+  var lo=Math.min.apply(null,nums), hi=Math.max.apply(null,nums), W=100, H=24, pad=3, n=vals.length, o='';
+  function xs(i){ return n>1?4+i*(W-8)/(n-1):W/2; }
+  if(kind==='col'){
+    var b0=Math.min(0,lo), b1=Math.max(0,hi); if(b1===b0) b1=b0+1; var ys=function(v){ return H-pad-(v-b0)/(b1-b0)*(H-2*pad); }, bw=Math.max(2,(W-8)/n*.7), zy=ys(0);
+    vals.forEach(function(v,i){ if(v==null) return; var y=ys(v), x=n>1?4+(i+.5)*(W-8)/n-bw/2:W/2-bw/2; o+='<rect x="'+x.toFixed(2)+'" y="'+Math.min(y,zy).toFixed(2)+'" width="'+bw.toFixed(2)+'" height="'+Math.max(1,Math.abs(zy-y)).toFixed(2)+'" fill="'+col+'"/>'; });
+  } else {
+    var yl=function(v){ return hi===lo?H/2:H-pad-(v-lo)/(hi-lo)*(H-2*pad); }, segs=[], cur=[];
+    vals.forEach(function(v,i){ if(v==null){ if(cur.length) segs.push(cur); cur=[]; return; } cur.push(xs(i).toFixed(2)+','+yl(v).toFixed(2)); }); if(cur.length) segs.push(cur);
+    segs.forEach(function(sg){ if(sg.length>1) o+='<polyline points="'+sg.join(' ')+'" fill="none" stroke="'+col+'" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>'; });
+    var li=vals.length-1; while(li>=0&&vals[li]==null) li--; if(li>=0){ var lx=xs(li); o+='<polyline points="'+lx.toFixed(2)+','+yl(vals[li]).toFixed(2)+' '+(lx+.01).toFixed(2)+','+yl(vals[li]).toFixed(2)+'" fill="none" stroke="'+col+'" stroke-width="5" stroke-linecap="round" vector-effect="non-scaling-stroke"/>'; }
+  }
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none">'+o+'</svg>';
+}
+
 /* ---------- display ---------- */
 function formatValue(v,nf){
   if(v==null) return '';
@@ -522,6 +546,6 @@ def('AI',function(a){
 
 var api={K:K,RC:RC,KC:KC,colName:colName,colIdx:colIdx,addr:addr,parseAddr:parseAddr,parseRange:parseRange,rangeStr:rangeStr,
   tokenize:tokenize,rebuild:rebuild,parse:parse,literal:literal,shiftFormula:shiftFormula,adjustFormula:adjustFormula,renameSheetInFormula:renameSheetInFormula,
-  Engine:Engine,Err:Err,errHint:errHint,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,pivot:pivot,trimText:trimText,splitText:splitText,dedupeRows:dedupeRows,parseNameRef:parseNameRef,nameRef:nameRef,validName:validName,refText:refText,asDate:asDate,dateStr:dateStr,FN:FN,quoteSheet:quoteSheet};
+  Engine:Engine,Err:Err,errHint:errHint,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,pivot:pivot,iconFor:iconFor,sparkSvg:sparkSvg,ICOL:ICOL,trimText:trimText,splitText:splitText,dedupeRows:dedupeRows,parseNameRef:parseNameRef,nameRef:nameRef,validName:validName,refText:refText,asDate:asDate,dateStr:dateStr,FN:FN,quoteSheet:quoteSheet};
 if(typeof module!=='undefined'&&module.exports) module.exports=api; else root.FSE=api;
 })(this);
