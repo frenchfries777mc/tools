@@ -1,0 +1,49 @@
+{
+ "program": "site",
+ "name": "Tools 사이트",
+ "notes": [
+  {
+   "date": "2026-10-17",
+   "build": "v5",
+   "title": "패치노트 페이지",
+   "items": [
+    "프로그램별 패치노트 페이지 추가"
+   ]
+  },
+  {
+   "date": "2026-10-17",
+   "build": "v4",
+   "title": "위키 링크",
+   "items": [
+    "머리말에 위키 링크 추가"
+   ]
+  },
+  {
+   "date": "2026-10-16",
+   "build": "v3",
+   "title": "같은 창에서 열기",
+   "items": [
+    "도구가 같은 창에서 열리도록 변경",
+    "각 도구에 사이트로 돌아가는 🍟 버튼 추가"
+   ]
+  },
+  {
+   "date": "2026-10-16",
+   "build": "v2",
+   "title": "도구 추가",
+   "items": [
+    "Fry Slides, Fry Lab 카드 추가"
+   ]
+  },
+  {
+   "date": "2026-10-16",
+   "build": "v1",
+   "title": "사이트 공개",
+   "items": [
+    "도구 모음 첫 화면 (Fry Sheet, Block HTML)",
+    "Games, Educations, Tools 전환 스위치",
+    "6개 언어 지원"
+   ]
+  }
+ ]
+}
