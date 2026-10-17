@@ -143,6 +143,40 @@ button,input,select,textarea{font:inherit; color:inherit;}
 .sl.edit .in.ph::before{content:attr(data-ph); opacity:.38; pointer-events:none;}
 .sl.edit ul.in.ph::before{position:absolute; left:1.15em; top:0;}
 .sl.edit ul.in.ph li::before{opacity:.38;}
+/* free placement: the frame and handles of the picked box (sizes times --hk so they look the same at any zoom), shapes, builds */
+.sl.edit [data-bk]{touch-action:none;}
+.sl.edit .pic:not(.empty),.sl.edit .shp{cursor:move;}
+.sl .shp{position:absolute;} .sl .shp svg{position:absolute; left:0; top:0; overflow:visible; pointer-events:none;}
+.sl .shp.ln{pointer-events:none;} .sl .shp.ln svg .hit{pointer-events:stroke;}
+.sl .stx{position:absolute; display:flex; flex-direction:column; justify-content:center; overflow:hidden; text-align:center;}
+.sl .stx .in{line-height:1.25; text-wrap:balance;}
+.sl.edit .stx .in.ph::before{display:none;} .sl.edit .stx .in.ph:focus::before{display:inline;}
+.sl.edit .stx .in[contenteditable=true],.sl.edit .stx .in[contenteditable=plaintext-only]{cursor:text;}
+.sl.edit .isSel.fld,.sl.edit .isSel.fld:hover{box-shadow:none;}
+.sl .selFr{position:absolute; z-index:30; pointer-events:none; outline:calc(2px * var(--hk,1)) solid #3d8bff; outline-offset:0;}
+.sl .selFr.ln{outline:0;} .sl .selFr.fresh .hd{pointer-events:none;}
+.sl .hd{position:absolute; width:calc(34px * var(--hk,1)); height:calc(34px * var(--hk,1)); margin:calc(-17px * var(--hk,1)) 0 0 calc(-17px * var(--hk,1)); pointer-events:auto; touch-action:none; display:grid; place-items:center; z-index:31;}
+.sl .hd::after{content:''; width:calc(13px * var(--hk,1)); height:calc(13px * var(--hk,1)); border-radius:calc(3px * var(--hk,1)); background:#fff; border:calc(2px * var(--hk,1)) solid #3d8bff; box-shadow:0 0 calc(3px * var(--hk,1)) rgba(0,0,0,.4);}
+.sl .h-nw,.sl .h-se{cursor:nwse-resize;} .sl .h-ne,.sl .h-sw{cursor:nesw-resize;} .sl .h-n,.sl .h-s{cursor:ns-resize;} .sl .h-e,.sl .h-w{cursor:ew-resize;} .sl .h-p0,.sl .h-p1{cursor:crosshair;}
+.sl .h-p0::after,.sl .h-p1::after{border-radius:50%;}
+.sl .h-mv{left:50%; top:calc(-30px * var(--hk,1)); width:calc(40px * var(--hk,1)); height:calc(40px * var(--hk,1)); margin:calc(-20px * var(--hk,1)) 0 0 calc(-20px * var(--hk,1)); cursor:move;}
+.sl .selFr.low .h-mv{top:calc(100% + 30px * var(--hk,1));}
+.sl .h-mv::after{width:calc(26px * var(--hk,1)); height:calc(26px * var(--hk,1)); border-radius:50%; background:#3d8bff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3'/%3E%3C/svg%3E") center/70% no-repeat; border-color:#fff;}
+.sl .guide{position:absolute; z-index:29; pointer-events:none; background:#ff3bd4;} .sl .guide.v{top:0; bottom:0; width:calc(1px * var(--hk,1));} .sl .guide.h{left:0; right:0; height:calc(1px * var(--hk,1));}
+#slideHost.dragging{cursor:grabbing;} #slideHost.dragging .sl.edit .fld:hover{box-shadow:none;}
+.sl .bn{position:absolute; left:0; top:0; z-index:5; min-width:calc(22px * var(--hk,1)); height:calc(22px * var(--hk,1)); padding:0 calc(5px * var(--hk,1)); border-radius:calc(11px * var(--hk,1)); background:#8a5ce0; color:#fff; font:700 calc(13px * var(--hk,1))/calc(22px * var(--hk,1)) system-ui,sans-serif; text-align:center; pointer-events:none;}
+.sl .bh{visibility:hidden;}
+.sl .b-fade{animation:bfade .5s ease both;} .sl .b-fly{animation:bfly .55s cubic-bezier(.2,.8,.25,1) both;}
+@keyframes bfade{from{opacity:0;}} @keyframes bfly{from{opacity:0; transform:translateY(90px);}}
+.selBar{position:absolute; left:8px; right:8px; bottom:6px; height:36px; display:flex; align-items:center; justify-content:center; gap:6px; overflow-x:auto; overflow-y:hidden; scrollbar-width:none; z-index:3;}
+.selBar::-webkit-scrollbar{display:none;}
+.selBar .tbtn{height:32px; padding:0 11px; font-size:13px; flex:0 0 auto;} .selBar .tbtn.on{border-color:#8a5ce0; color:#c9b3ff;} .selBar .tbtn.dang{color:#ff8b8b;}
+.selBar.hint{color:var(--dim); font-size:12.5px; white-space:nowrap; justify-content:center;}
+@media(max-width:640px){ .selBar{justify-content:flex-start;} .selBar.hint{font-size:11.5px; justify-content:flex-start;} }
+.menu .shg{display:grid; grid-template-columns:repeat(4,1fr); gap:4px; padding:4px;}
+.menu .shg button{flex-direction:column; gap:4px; padding:10px 4px; justify-content:center; text-align:center; font-size:12.5px; white-space:normal;}
+.menu .shg svg{width:30px; height:30px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linejoin:round; stroke-linecap:round;}
+.menu .sw.none{background:linear-gradient(135deg,transparent 45%,#ff6b6b 45%,#ff6b6b 55%,transparent 55%)!important;}
 /* menus and dialogs */
 .menu{position:fixed; z-index:60; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:6px; min-width:230px; box-shadow:0 20px 50px rgba(0,0,0,.55); display:none; max-height:80vh; overflow:auto; -webkit-overflow-scrolling:touch;}
 .menu.open{display:block;}
@@ -358,6 +392,7 @@ body.mode-pv .top,body.mode-pv .main,body.mode-view .top,body.mode-view .main{di
         <button class="ib dang" id="delBtn" title="슬라이드 삭제"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>
         <button class="tbtn" id="sortBtn" title="슬라이드 모아보기"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span class="lb">모아보기</span></button>
         <button class="tbtn" id="picBtn" title="그림 넣기"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 9"/></svg><span class="lb">그림 넣기</span></button>
+        <button class="tbtn" id="shapeBtn" title="도형·화살표 넣기"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="10" height="10" rx="1"/><circle cx="16" cy="8" r="5"/></svg><span class="lb">도형</span></button>
         <span class="vs"></span>
         <select id="laySel" title="레이아웃" aria-label="레이아웃">
           <option value="title">제목</option><option value="section">구역 제목</option><option value="bullets">글머리표</option><option value="two">두 칸</option><option value="stat">큰 숫자</option><option value="quote">인용</option><option value="closing">마무리</option><option value="image">그림</option><option value="agenda">차례</option><option value="timeline">타임라인</option><option value="table">표</option><option value="chart">그래프</option><option value="quiz">퀴즈</option><option value="timer">타이머</option><option value="live">살아있는 화면</option>
@@ -367,7 +402,7 @@ body.mode-pv .top,body.mode-pv .main,body.mode-view .top,body.mode-view .main{di
         <button class="tbtn" id="themeBtn" title="테마"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18c1.2 0 1.6-.8 1.6-1.6 0-1.3-1-1.6-1-2.8 0-.9.7-1.6 1.6-1.6H17a4 4 0 0 0 4-4c0-4.4-4-8-9-8z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10.5" cy="7.5" r="1"/><circle cx="15" cy="7.5" r="1"/></svg><span class="lb">테마</span></button>
       </div>
       <div id="genBar" hidden><div class="spin"></div><span id="genTxt"></span><span class="gb"><i id="genFill"></i></span><button class="tbtn" id="genStop">멈추기</button></div>
-      <div id="canvasWrap"><div id="slideHost"></div><div id="waitMsg" hidden></div>
+      <div id="canvasWrap"><div id="slideHost"></div><div id="waitMsg" hidden></div><div class="selBar hint" id="selBar" hidden></div>
         <div id="busy" hidden><div class="bx"><div class="spin"></div><span id="busyTxt">AI가 쓰는 중…</span><button class="tbtn" id="busyStop">멈추기</button></div></div>
       </div>
       <div class="notesWrap"><textarea id="notes" data-notr spellcheck="false" placeholder="발표자 메모 (발표할 때 할 말을 적어 두세요)" aria-label="발표자 메모"></textarea></div>
@@ -400,6 +435,7 @@ body.mode-pv .top,body.mode-pv .main,body.mode-view .top,body.mode-view .main{di
   <button data-a="dlg">🆕 새로 만들기 · 고치기 · 추가…</button>
 </div>
 <div class="menu" id="optMenu"></div>
+<div class="menu" id="elMenu"></div>
 <div class="menu" id="themeMenu"><div class="themes" id="themeList"></div></div>
 <div class="ov" id="mgrDlg"><div class="dlg" style="width:min(620px,100%)">
   <div class="dh"><h3>발표 자료 관리</h3><button class="x" data-close aria-label="닫기">×</button></div>
