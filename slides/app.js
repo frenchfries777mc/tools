@@ -1458,10 +1458,10 @@ function exitPresent(){ if(!pr.on) return; lqStop(); pr.on=false; pvPost({type:'
 ['fullscreenchange','webkitfullscreenchange'].forEach(function(ev){ document.addEventListener(ev,function(){ if(pr.on&&pr.fs&&!(document.fullscreenElement||document.webkitFullscreenElement)) exitPresent(); }); });
 window.addEventListener('resize',function(){ if(pr.on){ scalePresent(); inkFit(); } });
 var pd=null;
-$('present').addEventListener('pointerdown',function(e){ if(e.target.closest('.pbar,#lq')||e.target.id==='pInk') return; pd={x:e.clientX,y:e.clientY}; });
+$('present').addEventListener('pointerdown',function(e){ if(e.target.closest('.pbar,#lq,#qaCap')||e.target.id==='pInk') return; pd={x:e.clientX,y:e.clientY}; });
 $('present').addEventListener('pointermove',function(e){ if(!pr.laser||(e.pointerType==='touch'&&!pd)) return; var d=$('pDot'); d.hidden=false; d.style.left=e.clientX+'px'; d.style.top=e.clientY+'px'; });
 $('present').addEventListener('pointerleave',function(e){ if(e.pointerType!=='touch') $('pDot').hidden=true; });
-$('present').addEventListener('pointerup',function(e){ if(e.pointerType==='touch') $('pDot').hidden=true; if(!pd||e.target.closest('.pbar,#lq')){ pd=null; return; } var dx=e.clientX-pd.x, dy=e.clientY-pd.y; pd=null;
+$('present').addEventListener('pointerup',function(e){ if(e.pointerType==='touch') $('pDot').hidden=true; if(!pd||e.target.closest('.pbar,#lq,#qaCap')){ pd=null; return; } var dx=e.clientX-pd.x, dy=e.clientY-pd.y; pd=null;
   if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){ if(dx<0) pNext(); else pPrev(); }
   else if(Math.abs(dx)<12&&Math.abs(dy)<12){ if(pr.black){ setBlack(false); return; } if(pr.laser&&e.pointerType==='touch') return; if(e.clientX<innerWidth*0.3) pPrev(); else pNext(); } });
 $('pNotesB').onclick=function(){ setNotesView(!pr.notes); }; $('pLaserB').onclick=function(){ setLaser(!pr.laser); };
@@ -1582,7 +1582,7 @@ $('qzIn').addEventListener('input',function(){ qzOkSel(+$('qzOkSel').value); });
 $('qzIn').addEventListener('keydown',function(e){ e.stopPropagation(); if(e.key==='Escape') closeDlg('qzDlg',null); });
 $('qzOk').onclick=function(){ var s=deck.slides[cur]; if(!s) return closeDlg('qzDlg',null); var L=qzLines(); if(L.length===1) return toast(T('보기는 두 개 이상 써 주세요')); pushUndo(); s.choices=L; s.qok=L.length?num($('qzOkSel').value,-1,-1,L.length-1):-1; closeDlg('qzDlg',null); changed(); toast(T(L.length?'보기를 저장했어요':'보기를 지웠어요')); };
 /* the session (presenter side) */
-var lq={on:false, code:'', h:null, st:'off', err:'', ppl:{}, ans:{}, q:null, key:'', show:true, qr:true, tries:0, ping:null, rx:true, rxN:{}};
+var lq={on:false, code:'', h:null, st:'off', err:'', ppl:{}, ans:{}, q:null, key:'', show:true, qr:true, tries:0, ping:null, rx:true, rxN:{}, qa:true, qaL:[], qaN:0, qaC:{}, qaCap:0, qaSig:null};
 function lqUrl(){ return location.href.split('#')[0].replace(/[?].*$/,'').replace(/[^\/]*$/,'')+'join.html#'+lq.code; }
 function lqOnline(){ var now=Date.now(); return Object.keys(lq.ppl).filter(function(p){ var x=lq.ppl[p]; return x.on&&now-x.last<16000; }); }
 function lqCur(){ if(!pr.on||pr.end) return null; var s=deck.slides[pr.i]; if(!s||s.layout!=='quiz') return null; var ch=quizChoices(s), n=0;
@@ -1598,9 +1598,10 @@ function lqConn(c){ c.on.data=function(m){ if(!m||typeof m!=='object') return; v
     if(m.t==='join'){ var pid=String(m.pid||'').slice(0,40), nm=String(m.name||'').replace(/\s+/g,' ').trim().slice(0,20)||T('이름 없음'); if(!pid) return;
       if(!lq.ppl[pid]&&Object.keys(lq.ppl).length>=FFLQ.MAX){ c.send({t:'full'}); setTimeout(function(){ c.close(); },500); return; }
       var old=lq.ppl[pid]; if(old&&old.c!==c){ old.c.on.close=null; old.c.close(); }
-      c.pid=pid; lq.ppl[pid]={name:nm, c:c, on:true, last:Date.now()}; c.send({t:'hi', name:nm, rx:lq.rx}); c.send(lqMsg(pid)); lqDraw(); return; }
+      c.pid=pid; lq.ppl[pid]={name:nm, c:c, on:true, last:Date.now()}; c.send({t:'hi', name:nm, rx:lq.rx, qa:lq.qa}); c.send(lqMsg(pid)); lqDraw(); return; }
     if(!x||x.c!==c) return;
     if(m.t==='rx'){ lqReact(x,m.e); return; }
+    if(m.t==='qa'){ lqAsk(c.pid,m.q); return; }
     if(m.t==='ans'){ var q=lq.q; if(!q||q.none||q.rev||m.q!==q.id) return; var a=m.a|0; if(a<0||a>=q.ch.length) return; (lq.ans[q.id]=lq.ans[q.id]||{})[p]=a; c.send({t:'got', q:q.id, a:a}); lqDraw(); } };
   c.on.close=function(){ var x=c.pid&&lq.ppl[c.pid]; if(x&&x.c===c){ x.on=false; lqDraw(); } }; }
 /* an audience reaction: only the fixed emoji, only while the session runs with reactions on, at most FFLQ.RX_RATE a second from one phone, at most FFLQ.RX_FLOAT floating at once */
@@ -1609,23 +1610,34 @@ function lqReact(x,e){ var now=Date.now(); if(!lq.on||!lq.rx||!pr.on||typeof e!=
   lq.rxN[e]=(lq.rxN[e]||0)+1; rxCount(); var f=$('rxFloat'); if(f.children.length>=FFLQ.RX_FLOAT) return;
   var i=document.createElement('i'); i.textContent=e; i.style.left=(6+Math.random()*86)+'%'; i.style.setProperty('--sx',Math.round((Math.random()-.5)*14)+'vw'); i.style.animationDelay=Math.round(Math.random()*120)+'ms';
   var gone=function(){ if(i.parentNode) i.parentNode.removeChild(i); }; i.addEventListener('animationend',gone); setTimeout(gone,4500); f.appendChild(i); }
+/* an audience question: only text, only while the session runs with questions on, control characters stripped, at most FFLQ.QA_LEN long, one per FFLQ.QA_GAP ms and FFLQ.QA_MAX in all from one phone (counted per phone id, so coming back does not reset it) */
+function lqAsk(p,s){ if(!lq.on||!lq.qa||!pr.on||typeof s!=='string') return; s=s.slice(0,FFLQ.QA_LEN*4).replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]+/g,' ').replace(/\s+/g,' ').trim().slice(0,FFLQ.QA_LEN).trim(); if(!s) return;
+  var now=Date.now(), c=lq.qaC[p]||(lq.qaC[p]={n:0,t:0}); if(c.n>=FFLQ.QA_MAX||now-c.t<FFLQ.QA_GAP) return; c.n++; c.t=now;
+  lq.qaL.unshift({id:++lq.qaN, q:s}); lqDraw(); }
+function qaShow(id){ var o=lq.qaL.filter(function(x){ return x.id===id; })[0], b=$('qaCap'); lq.qaCap=o?id:0; b.hidden=!o; if(o) $('qaTx').textContent=o.q; }
+function qaDel(id){ lq.qaL=lq.qaL.filter(function(x){ return x.id!==id; }); if(lq.qaCap===id) qaShow(0); lqDraw(); }
+function qaClear(){ lq.qaL=[]; lq.qaSig=null; $('lqQaLs').innerHTML=''; qaShow(0); }
+function qaDraw(){ var box=$('lqQa'), L=lq.qaL, sig=L.map(function(x){ return x.id; }).join(); $('lqQaOn').checked=lq.qa; box.hidden=!L.length; if(sig===lq.qaSig) return; lq.qaSig=sig;
+  var ls=$('lqQaLs'); ls.innerHTML=''; $('lqQaN').textContent=F('받은 질문 {0}개',L.length);
+  L.forEach(function(o){ var r=document.createElement('div'), t=document.createElement('span'), a=document.createElement('button'), d=document.createElement('button'); r.className='lqQr'; t.className='qt'; t.setAttribute('data-notr',''); t.textContent=o.q;
+    a.textContent=T('화면에 띄우기'); a.onclick=function(e){ e.stopPropagation(); qaShow(o.id); }; d.textContent=T('지우기'); d.className='dang'; d.onclick=function(e){ e.stopPropagation(); qaDel(o.id); }; r.appendChild(t); r.appendChild(a); r.appendChild(d); ls.appendChild(r); }); }
 function rxCount(){ var b=$('rxCnt'), on=lq.on&&lq.rx&&FFLQ.RX.some(function(e){ return lq.rxN[e]; }); b.hidden=!on; b.innerHTML=''; if(!on) return;
   FFLQ.RX.forEach(function(e){ if(!lq.rxN[e]) return; var sp=document.createElement('span'), n=document.createElement('b'); sp.textContent=e; n.textContent=lq.rxN[e]; sp.appendChild(n); b.appendChild(sp); }); }
 function rxClear(){ $('rxFloat').innerHTML=''; lq.rxN={}; rxCount(); }
-function lqStart(){ if(lq.on||!pr.on) return; lq.on=true; lq.show=true; lq.qr=true; lq.rx=true; rxClear(); lq.ppl={}; lq.ans={}; lq.key=''; lq.tries=0; lqOpen(); clearInterval(lq.ping);
+function lqStart(){ if(lq.on||!pr.on) return; lq.on=true; lq.show=true; lq.qr=true; lq.rx=true; rxClear(); lq.qa=true; lq.qaC={}; lq.qaN=0; qaClear(); lq.ppl={}; lq.ans={}; lq.key=''; lq.tries=0; lqOpen(); clearInterval(lq.ping);
   lq.ping=setInterval(function(){ Object.keys(lq.ppl).forEach(function(p){ var x=lq.ppl[p]; if(x.on) x.c.send({t:'ping'}); }); lqDraw(); },5000); lqSync(); }
 function lqOpen(){ lq.code=FFLQ.makeCode(); lq.st='wait'; lq.err=''; lqDrawJoin(); var code=lq.code;
   lq.h=FFLQ.net().host(code,{open:function(){ if(lq.code!==code) return; lq.st='open'; lqDraw(); }, conn:function(c){ if(lq.code===code&&lq.on) lqConn(c); else c.close(); },
     error:function(k){ if(lq.code!==code||!lq.on) return; if(k==='taken'&&lq.tries++<3){ try{ lq.h.close(); }catch(e){} lqOpen(); return; } lq.st='err'; lq.err=k; lqDraw(); }}); }
 function lqStop(){ if(!lq.on) return; Object.keys(lq.ppl).forEach(function(p){ var x=lq.ppl[p]; if(x.on){ x.c.send({t:'end'}); } x.c.on.close=null; }); var h=lq.h, ppl=lq.ppl;
   setTimeout(function(){ Object.keys(ppl).forEach(function(p){ ppl[p].c.close(); }); try{ if(h) h.close(); }catch(e){} },400);
-  clearInterval(lq.ping); lq.on=false; rxClear(); lq.h=null; lq.st='off'; lq.ppl={}; lq.ans={}; lq.q=null; lq.key=''; lqDraw(); }
+  clearInterval(lq.ping); lq.on=false; rxClear(); qaClear(); lq.qaC={}; lq.h=null; lq.st='off'; lq.ppl={}; lq.ans={}; lq.q=null; lq.key=''; lqDraw(); }
 function lqToggle(){ if(!pr.on) return; if(!lq.on){ if(!deck.slides.some(function(s){ return s.layout==='quiz'&&!s.hide; })) return toast(T('퀴즈 슬라이드가 없어요')); lqStart(); return; } lq.show=!lq.show; lqDraw(); }
 function lqDrawJoin(){ var url=lqUrl(); $('lqCode').textContent=lq.code.slice(0,3)+' '+lq.code.slice(3); $('lqUrl').textContent=url.replace(/^https?:\/\//,'');
   var q=null; try{ q=window.FFQR&&FFQR.make(url); }catch(e){} if(q) FFQR.draw($('lqQr'),q,Math.max(2,Math.floor(220/(q.size+8)))); $('lqQr').hidden=!q; }
 function lqDraw(){ var box=$('lq'), b=$('pLqB'); b.hidden=!pr.on||!(lq.on||deck.slides.some(function(s){ return s.layout==='quiz'&&!s.hide; })); b.classList.toggle('on',lq.on);
-  var on=lqOnline().length; b.textContent=lq.on?'📲 '+on:'📲'; box.hidden=!lq.on||!lq.show||!pr.on; if(box.hidden) return;
-  $('lqRxOn').checked=lq.rx; $('lqPpl').textContent=F('참여 {0}명',on); $('lqJoin').hidden=!lq.qr; $('lqQrB').textContent=T(lq.qr?'QR 접기':'QR 보기');
+  var on=lqOnline().length; b.textContent=lq.on?'📲 '+on+(lq.qaL.length?' 💬'+lq.qaL.length:''):'📲'; box.hidden=!lq.on||!lq.show||!pr.on; if(box.hidden) return;
+  $('lqRxOn').checked=lq.rx; qaDraw(); $('lqPpl').textContent=F('참여 {0}명',on); $('lqJoin').hidden=!lq.qr; $('lqQrB').textContent=T(lq.qr?'QR 접기':'QR 보기');
   $('lqMsg').textContent=lq.st==='wait'?T('연결 준비 중…'):lq.st==='err'?T(lq.err==='lib'?'실시간 연결 도구를 불러오지 못했어요. 인터넷 연결을 확인해 주세요':lq.err==='net'?'연결 서버에 닿지 못했어요. 인터넷 연결을 확인해 주세요':'연결하지 못했어요. 다시 해 주세요'):T('휴대폰으로 QR을 찍거나 주소를 열고 코드를 넣어요');
   $('lqMsg').classList.toggle('bad',lq.st==='err');
   var q=lq.q, bars=$('lqBars'), stat=$('lqStat'), rv=$('lqRev'); bars.innerHTML=''; stat.textContent=''; rv.hidden=true;
@@ -1640,6 +1652,10 @@ $('lqRev').onclick=function(e){ e.stopPropagation(); if(!pr.on||pr.end) return; 
 $('lqQrB').onclick=function(e){ e.stopPropagation(); lq.qr=!lq.qr; lqDraw(); };
 $('lqRxOn').onchange=function(){ lq.rx=this.checked; Object.keys(lq.ppl).forEach(function(p){ var x=lq.ppl[p]; if(x.on) x.c.send({t:'rx', on:lq.rx}); }); if(!lq.rx) rxClear(); toast(T(lq.rx?'청중 반응을 받아요':'청중 반응을 껐어요')); };
 $('lqRxOn').onclick=function(e){ e.stopPropagation(); };
+$('lqQaOn').onchange=function(){ lq.qa=this.checked; Object.keys(lq.ppl).forEach(function(p){ var x=lq.ppl[p]; if(x.on) x.c.send({t:'qa', on:lq.qa}); }); toast(T(lq.qa?'청중 질문을 받아요':'청중 질문을 껐어요')); };
+$('lqQaOn').onclick=function(e){ e.stopPropagation(); };
+$('lqQaAll').onclick=function(e){ e.stopPropagation(); qaClear(); lqDraw(); };
+$('qaX').onclick=function(e){ e.stopPropagation(); qaShow(0); };
 $('lqHide').onclick=function(e){ e.stopPropagation(); lq.show=false; lqDraw(); };
 $('lqEnd').onclick=function(e){ e.stopPropagation(); lqStop(); toast(T('실시간 퀴즈를 끝냈어요')); };
 $('pLqB').onclick=function(e){ e.stopPropagation(); lqToggle(); };
@@ -1723,7 +1739,7 @@ document.addEventListener('keydown',function(e){
     else if(k==='a'||k==='A'){ e.preventDefault(); pAns(); }
     else if(k==='q'||k==='Q'){ e.preventDefault(); lqToggle(); }
     else if(k==='t'||k==='T'){ e.preventDefault(); if(pr.cd){ if(pr.cd.left===0){ pr.cd.left=pr.cd.total; pr.cd.run=true; } else pr.cd.run=!pr.cd.run; cdPaint(); toast(pr.cd.run?T('타이머가 다시 가요'):T('타이머를 멈췄어요')); } }
-    else if(k==='Escape'){ e.preventDefault(); if(ink.tool) setInk(''); else if(pr.bb) setBoard(false); else exitPresent(); }
+    else if(k==='Escape'){ e.preventDefault(); if(ink.tool) setInk(''); else if(pr.bb) setBoard(false); else if(lq.qaCap) qaShow(0); else exitPresent(); }
     else if(k==='k'||k==='K'){ e.preventDefault(); auToggle(); }
     else if(k==='x'||k==='X'){ e.preventDefault(); setInk('er'); }
     else if(k==='w'||k==='W'){ e.preventDefault(); setBoard(!pr.bb); }

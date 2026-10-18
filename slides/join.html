@@ -42,8 +42,12 @@ h1{font-size:22px; margin:6px 0 0;} p{margin:0; color:var(--dim); line-height:1.
 .ch .fill{position:absolute; left:0; top:0; bottom:0; background:rgba(255,255,255,.07); width:0;}
 .ch.my{border-color:var(--fry); background:#2a2412;} .ch.ok{border-color:#2fd17a; background:#10291c;} .ch.no2{opacity:.55;}
 .ch:disabled{cursor:default;}
-#rxBar{position:sticky; bottom:0; background:var(--panel); border-top:1px solid var(--line); padding:8px 12px calc(8px + env(safe-area-inset-bottom,0)); }
+#dock{position:sticky; bottom:0;}
+#rxBar,#qaBar{background:var(--panel); border-top:1px solid var(--line); padding:8px 12px calc(8px + env(safe-area-inset-bottom,0)); }
 #rxBar .rxIn{max-width:560px; margin:0 auto;} #rxHd{display:flex; align-items:center; gap:8px; font-size:13px; color:var(--dim);} #rxHd .sp{flex:1;} #rxTog{height:30px; padding:0 10px; border-radius:8px; border:1px solid var(--line); background:var(--panel2); cursor:pointer; font-size:13px;}
+#qaBar .qaIn{max-width:560px; margin:0 auto;} #qaHd{display:flex; align-items:center; gap:8px; font-size:13px; color:var(--dim);} #qaHd .sp{flex:1;} #qaTog{height:30px; padding:0 10px; border-radius:8px; border:1px solid var(--line); background:var(--panel2); cursor:pointer; font-size:13px;}
+#qaRow{display:flex; gap:6px; margin-top:6px;} #qaBar.min #qaRow,#qaBar.min #qaSt{display:none;} #qaTx{flex:1; min-width:0; height:42px; border-radius:10px; border:1px solid var(--line); background:var(--panel2); color:inherit; padding:0 10px; font-size:16px;} #qaGo{height:42px; padding:0 14px; border-radius:10px; border:0; background:var(--fry); color:#1c1405; font-weight:700; cursor:pointer; font-size:15px;} #qaGo:disabled{opacity:.5;}
+#qaSt{min-height:18px; margin:4px 0 2px; font-size:13px; color:var(--dim);}
 #rxRow{display:grid; grid-template-columns:repeat(6,1fr); gap:6px; margin-top:6px;} #rxBar.min #rxRow{display:none;}
 .rxB{height:52px; border-radius:12px; border:1px solid var(--line); background:var(--panel2); font-size:26px; cursor:pointer; padding:0; transition:transform .12s;} .rxB:active{transform:scale(1.18); border-color:var(--fry);}
 #qSt{font-size:16px; text-align:center; padding:6px 0; color:var(--text); font-weight:700;} #qSt.good{color:#5ee69a;} #qSt.bad2{color:#ffb36b;}
@@ -62,8 +66,9 @@ h1{font-size:22px; margin:6px 0 0;} p{margin:0; color:var(--dim); line-height:1.
   <section id="vMsg" class="msg" hidden><div class="ic" id="mIc"></div><div class="spin" id="mSpin" hidden></div><b id="mT"></b><p id="mP"></p><button class="btn2" id="mBtn" hidden>다시 시도</button></section>
   <section id="vQ" hidden><div class="qn" id="qNum"></div><div id="qText" data-notr></div><div id="qCh"></div><div id="qSt"></div></section>
 </main>
-<div id="rxBar" hidden><div class="rxIn"><div id="rxHd"><span>반응 보내기</span><span class="sp"></span><button id="rxTog" aria-expanded="true">접기</button></div><div id="rxRow"></div></div></div>
-<script src="lq-net.js?v=s25"></script>
+<div id="dock"><div id="qaBar" hidden><div class="qaIn"><div id="qaHd"><span>질문 보내기</span><span class="sp"></span><button id="qaTog" aria-expanded="false">펼치기</button></div><div id="qaRow"><input id="qaTx" data-notr maxlength="80" autocomplete="off" aria-label="질문"><button id="qaGo" type="button">보내기</button></div><div id="qaSt" role="status"></div></div></div>
+<div id="rxBar" hidden><div class="rxIn"><div id="rxHd"><span>반응 보내기</span><span class="sp"></span><button id="rxTog" aria-expanded="true">접기</button></div><div id="rxRow"></div></div></div></div>
+<script src="lq-net.js?v=s26"></script>
 <script>
 (function(){
 'use strict';
@@ -74,7 +79,7 @@ function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
 /* the id that lets this tab come back as the same person after a lost connection or a reload; kept per tab (sessionStorage), so two tabs are two people */
 function ssGet(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } }
 function ssSet(k,v){ try{ sessionStorage.setItem(k,v); }catch(e){} }
-var rx=false, rxMin=false, rxN=0, rxT=0;
+var rx=false, rxMin=false, rxN=0, rxT=0, qa=false, qaMin=true, qaN=0, qaT=0, qaSt=null;
 var code=FFLQ.cleanCode(decodeURIComponent(location.hash.slice(1))), name=lsGet('ffslq.name')||'', pid='', h=null, last=0, joined=false, ended=false, q=null, my=null, retryT=null, fails=0;
 function view(id){ ['vCode','vName','vMsg','vQ'].forEach(function(v){ $(v).hidden=v!==id; }); }
 function msg(ic,t,p,spin,btn){ view('vMsg'); $('mIc').textContent=ic||''; $('mIc').hidden=!ic; $('mSpin').hidden=!spin; $('mT').textContent=T(t||''); $('mP').textContent=T(p||''); $('mBtn').hidden=!btn; }
@@ -101,17 +106,27 @@ function lost(){ if(ended) return; dot('bad'); if(joined) $('banner').hidden=fal
 setInterval(function(){ if(!h||ended) return; if(Date.now()-last>16000){ last=Date.now(); lost(); } else if(joined) h.send({t:'ping'}); },5000);
 function onMsg(m){ if(!m||typeof m!=='object') return; last=Date.now();
   if(m.t==='rx'){ rx=!!m.on; rxDraw(); return; }
-  if(m.t==='hi'){ joined=true; rx=!!m.rx; rxDraw(); fails=0; dot('on'); $('banner').hidden=true; if(m.name) $('who').textContent=m.name; if(!q) waitView(); return; }
+  if(m.t==='qa'){ qa=!!m.on; qaDraw(); return; }
+  if(m.t==='hi'){ joined=true; rx=!!m.rx; qa=!!m.qa; rxDraw(); qaDraw(); fails=0; dot('on'); $('banner').hidden=true; if(m.name) $('who').textContent=m.name; if(!q) waitView(); return; }
   if(m.t==='wait'){ dot('on'); $('banner').hidden=true; q=null; my=null; waitView(); return; }
   if(m.t==='q'){ dot('on'); $('banner').hidden=true; var same=q&&q.q===m.q; q=m; if(!same||m.my!=null||m.rev) my=m.my; draw(); return; }
   if(m.t==='got'){ if(q&&q.q===m.q){ my=m.a; draw(); } return; }
-  if(m.t==='full'){ ended=true; rxDraw(); stop(); msg('🙅','자리가 꽉 찼어요','이 퀴즈는 40명까지 참여할 수 있어요.'); return; }
-  if(m.t==='end'){ ended=true; rxDraw(); stop(); msg('👋','퀴즈가 끝났어요','참여해 줘서 고마워요!'); return; } }
+  if(m.t==='full'){ ended=true; rxDraw(); qaDraw(); stop(); msg('🙅','자리가 꽉 찼어요','이 퀴즈는 40명까지 참여할 수 있어요.'); return; }
+  if(m.t==='end'){ ended=true; rxDraw(); qaDraw(); stop(); msg('👋','퀴즈가 끝났어요','참여해 줘서 고마워요!'); return; } }
 /* the emoji bar: shown while the presenter has reactions on; at most 4 taps a second leave this phone (the presenter checks again) */
 function rxDraw(){ var b=$('rxBar'); b.hidden=!(rx&&joined&&!ended); b.classList.toggle('min',rxMin); $('rxTog').textContent=T(rxMin?'펼치기':'접기'); $('rxTog').setAttribute('aria-expanded',rxMin?'false':'true'); }
 function rxSend(e){ var now=Date.now(); if(!h||!rx) return; if(now-rxT>1000){ rxT=now; rxN=0; } if(++rxN>FFLQ.RX_RATE) return; h.send({t:'rx', e:e}); }
 FFLQ.RX.forEach(function(e){ var b=document.createElement('button'); b.className='rxB'; b.type='button'; b.textContent=e; b.setAttribute('aria-label',e); b.onclick=function(){ rxSend(e); }; $('rxRow').appendChild(b); });
 $('rxTog').onclick=function(){ rxMin=!rxMin; rxDraw(); };
+/* the question box: shown while the presenter has questions on; one question per FFLQ.QA_GAP ms and FFLQ.QA_MAX in all leave this phone (the presenter checks again) */
+function qaDraw(){ var b=$('qaBar'); b.hidden=!(qa&&joined&&!ended); b.classList.toggle('min',qaMin); $('qaTog').textContent=T(qaMin?'펼치기':'접기'); $('qaTog').setAttribute('aria-expanded',qaMin?'false':'true'); }
+function qaNote(t){ $('qaSt').textContent=T(t); clearTimeout(qaSt); if(t) qaSt=setTimeout(function(){ $('qaSt').textContent=''; },2500); }
+function qaSend(){ var s=$('qaTx').value.replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]+/g,' ').replace(/\s+/g,' ').trim().slice(0,FFLQ.QA_LEN), now=Date.now(); if(!h||!qa) return;
+  if(!s) return qaNote('질문을 써 주세요'); if(qaN>=FFLQ.QA_MAX) return qaNote('질문은 5개까지 보낼 수 있어요'); if(now-qaT<FFLQ.QA_GAP+500) return qaNote('10초 뒤에 또 보낼 수 있어요');
+  qaT=now; qaN++; h.send({t:'qa', q:s}); $('qaTx').value=''; qaNote('보냈어요'); }
+$('qaTog').onclick=function(){ qaMin=!qaMin; qaDraw(); if(!qaMin) $('qaTx').focus(); };
+$('qaGo').onclick=qaSend;
+$('qaTx').addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); qaSend(); } });
 function stop(){ clearTimeout(retryT); dot(''); $('banner').hidden=true; var x=h; h=null; setTimeout(function(){ try{ if(x) x.close(); }catch(e){} },200); }
 function waitView(){ msg('⏳','다음 문제를 기다리는 중이에요','발표자가 퀴즈 슬라이드로 넘어가면 여기에 문제가 나와요.'); }
 function draw(){ if(!q) return waitView(); view('vQ'); $('qNum').textContent=F('문제 {0}',q.n); $('qText').textContent=q.text||'';
@@ -125,7 +140,7 @@ function draw(){ if(!q) return waitView(); view('vQ'); $('qNum').textContent=F('
   else st.textContent=T(my!=null?'답을 냈어요. 정답을 공개하기 전까지 바꿀 수 있어요':'답을 하나 골라 주세요'); }
 $('who').textContent=name;
 if(code.length===6){ var back=ssGet('ffslq.pid.'+code), bn=ssGet('ffslq.nm.'+code); if(back&&bn){ name=bn; $('who').textContent=bn; pid=back; connect(); } else askName(); } else askCode();
-window.__lqj={get st(){ return {joined:joined, ended:ended, q:q, my:my, rx:rx}; }};
+window.__lqj={get st(){ return {joined:joined, ended:ended, q:q, my:my, rx:rx, qa:qa}; }};
 })();
 </script>
 </body>
