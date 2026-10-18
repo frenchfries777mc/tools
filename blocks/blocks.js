@@ -268,11 +268,13 @@ def('act_sound_stop',function(){ this.appendDummyInput().appendField(T('소리�
   function(){ need('snd'); return '__soundStop();\n'; });
 
 /* ---------- moving around: nudge, follow the cursor, hit test ---------- */
-def('act_nudge',function(){ this.appendValueInput('N').setCheck('Number').appendField(elField(),'EL').appendField(T('을(를)')).appendField(new Blockly.FieldDropdown(function(){ return [[T('가로(x)로'),'x'],[T('세로(y)로'),'y']]; }),'AXIS'); this.appendDummyInput().appendField(T('만큼 움직이기')); this.setInputsInline(true); act(this,'지금 있는 곳에서 가로(x)나 세로(y)로 얼마만큼 옮겨요. 마이너스 값이면 반대쪽으로 가요'); },
+function upY(d){ return /^-?\d+(\.\d+)?$/.test(d)?(d.charAt(0)==='-'?d.slice(1):(+d===0?'0':'-'+d)):'-('+d+')'; } // the page's y grows downward, so "up" is a minus
+def('act_nudge',function(){ this.appendValueInput('N').setCheck('Number').appendField(elField(),'EL').appendField(T('을(를)')).appendField(new Blockly.FieldDropdown(function(){ return [[T('가로(x)로'),'x'],[T('세로(y)로'),'y']]; }),'AXIS'); this.appendDummyInput().appendField(T('만큼 움직이기')); this.setInputsInline(true); act(this,'지금 있는 곳에서 가로(x)나 세로(y)로 얼마만큼 옮겨요. 가로는 +이면 오른쪽, 세로는 +이면 위쪽으로 가요. 마이너스 값이면 반대쪽이에요'); },
   function(b){ need('nudge'); var ax=b.getFieldValue('AXIS'), d=G.valueToCode(b,'N',O.COMMA)||'0';
+    if(ax==='y') d=upY(d); // 세로는 위쪽이 + (v44)
     return '__nudge('+er(b)+', '+(ax==='x'?d+', 0':'0, '+d)+');\n'; });
-def('act_nudge2',function(){ this.appendValueInput('DX').setCheck('Number').appendField(elField(),'EL').appendField(T('을(를) 가로')); this.appendValueInput('DY').setCheck('Number').appendField(T('세로')); this.appendDummyInput().appendField(T('만큼 움직이기')); this.setInputsInline(true); act(this,'가로와 세로로 한꺼번에 옮겨요'); },
-  function(b){ need('nudge'); return '__nudge('+er(b)+', '+(G.valueToCode(b,'DX',O.COMMA)||'0')+', '+(G.valueToCode(b,'DY',O.COMMA)||'0')+');\n'; });
+def('act_nudge2',function(){ this.appendValueInput('DX').setCheck('Number').appendField(elField(),'EL').appendField(T('을(를) 가로')); this.appendValueInput('DY').setCheck('Number').appendField(T('세로')); this.appendDummyInput().appendField(T('만큼 움직이기')); this.setInputsInline(true); act(this,'가로와 세로로 한꺼번에 옮겨요. 세로는 +이면 위쪽, 마이너스이면 아래쪽이에요'); },
+  function(b){ need('nudge'); return '__nudge('+er(b)+', '+(G.valueToCode(b,'DX',O.COMMA)||'0')+', '+upY(G.valueToCode(b,'DY',O.COMMA)||'0')+');\n'; });
 def('val_where',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('의')).appendField(new Blockly.FieldDropdown(function(){ return [[T('x좌표'),'x'],[T('y좌표'),'y']]; }),'AXIS'); val(this,'Number','페이지 왼쪽 위에서 요소가 얼마나 떨어져 있는지 알려줘요'); },
   function(b){ need('where'); return ['__where('+er(b)+', '+lit(b.getFieldValue('AXIS'))+')',O.FUNCTION_CALL]; });
 def('act_follow',function(){ this.appendDummyInput().appendField(elField(null,'hat'),'EL').appendField(T('이(가) 커서 따라다니기')).appendField(new Blockly.FieldDropdown(function(){ return [[T('바로'),'fast'],[T('부드럽게'),'soft'],[T('멈추기'),'stop']]; }),'MODE'); act(this,'마우스나 손가락을 따라 요소가 움직여요. 한 번만 놓으면 계속 따라다녀요'); },
@@ -1002,15 +1004,15 @@ function toolbox(){
   var cat=function(id,name,c,extra){ var o={kind:'category',name:T(name),colour:C[id],toolboxitemid:'cat_'+id}; if(typeof c==='string'){ o.custom=c; o.contents=extra||[]; } else o.contents=c; return o; };
   /* 12 categories (v40). Labels split the bigger ones into small groups. A "custom" category is filled by app.js; its "contents"
      only lists the fixed blocks it shows, so the block colours, block search and AI catalog see them too (Blockly uses "custom" and ignores "contents"). */
+  var picBtns=function(){ return [lab('그림·사진'),{kind:'button',text:T('✏️ 그림 그리기'),callbackKey:'imgDraw'},{kind:'button',text:T('📷 사진 넣기'),callbackKey:'imgPhoto'},{kind:'button',text:T('🗂 내 그림 관리'),callbackKey:'imgManage'}]; }; // shown at the top of 화면 and 그림판
   return {kind:'categoryToolbox',contents:[
     cat('ev','시작',[
       bk('ev_start'),lab('누르거나 쓰면'),bk('ev_click'),bk('ev_drag'),bk('ev_change'),lab('키보드'),bk('ev_key'),bk('ev_keyhold'),bk('ev_keyup')]),
-    cat('page','화면',[
+    cat('page','화면',picBtns().concat([
       bk('page_root'),lab('글'),bk('el_heading'),bk('el_text'),bk('el_list'),bk('el_link'),
       lab('누르고 쓰기'),bk('el_button'),bk('el_input'),
-      lab('그림·사진'),{kind:'button',text:T('✏️ 그림 그리기'),callbackKey:'imgDraw'},{kind:'button',text:T('📷 사진 넣기'),callbackKey:'imgPhoto'},{kind:'button',text:T('🗂 내 그림 관리'),callbackKey:'imgManage'},
       bk('el_picture'),bk('el_image'),bk('val_myimg'),
-      lab('묶고 띄우기'),bk('el_box'),bk('el_space'),bk('el_html')]),
+      lab('묶고 띄우기'),bk('el_box'),bk('el_space'),bk('el_html')])),
     cat('look','모양·바꾸기',[
       lab('말풍선'),bk('act_say',{inputs:{VALUE:sh('text',T('안녕!'))}}),bk('act_sayfor',{inputs:{VALUE:sh('text',T('안녕!')),SEC:n(2)}}),bk('act_say',{fields:{KIND:'think'},inputs:{VALUE:sh('text',T('음…'))}}),
       lab('내용 바꾸기'),bk('act_set',{inputs:{VALUE:sh('text',T('안녕!'))}}),bk('act_append',{inputs:{VALUE:sh('text',T('항목'))}}),bk('act_clear'),
@@ -1035,7 +1037,7 @@ function toolbox(){
       bk('tile_color',{inputs:{V:n(1),COLOR:shc('#9ca3af')}}),bk('tile_solid',{inputs:{V:n(1)}}),bk('tile_draw'),
       lab('타일맵 벽 살펴보기'),bk('tile_get',{inputs:{C:n(0),R:n(0)}}),bk('tile_wall',{inputs:{X:n(40),Y:n(40)}}),bk('tile_cell',{inputs:{N:n(100)}}),bk('tile_touch'),
       lab('벽에 막히며 움직이기'),bk('tile_move',{inputs:{DX:n(4),DY:n(0)}}),bk('tile_blocked')]),
-    cat('draw','그림판',[
+    cat('draw','그림판',picBtns().concat([
       bk('el_canvas'),lab('그리기'),bk('draw_clear'),
       bk('draw_rect',{inputs:{X:n(20),Y:n(20),W:n(80),H:n(50),COLOR:shc('#3b82f6')}}),
       bk('draw_circle',{inputs:{X:n(160),Y:n(110),R:n(30),COLOR:shc('#ffc93c')}}),
@@ -1043,7 +1045,7 @@ function toolbox(){
       bk('draw_text',{inputs:{TEXT:sh('text',T('안녕')),X:n(20),Y:n(40),COLOR:shc('#111111')}}),
       bk('draw_image',{inputs:{IMG:img,X:n(20),Y:n(20),W:n(80)}}),
       lab('칠하기와 굵기'),bk('draw_fill',{inputs:{COLOR:shc('#e0f2fe')}}),bk('draw_width',{inputs:{N:n(6)}}),bk('draw_fsize',{inputs:{N:n(28)}}),
-      bk('draw_orect',{inputs:{X:n(30),Y:n(30),W:n(100),H:n(60),COLOR:shc('#ef4444')}}),bk('draw_ocircle',{inputs:{X:n(160),Y:n(110),R:n(40),COLOR:shc('#22c55e')}})]),
+      bk('draw_orect',{inputs:{X:n(30),Y:n(30),W:n(100),H:n(60),COLOR:shc('#ef4444')}}),bk('draw_ocircle',{inputs:{X:n(160),Y:n(110),R:n(40),COLOR:shc('#22c55e')}})])),
     cat('sound','소리·시간',[
       lab('효과음'),bk('act_sfx'),bk('act_sfx',{fields:{SFX:'win'}}),
       lab('음악'),bk('act_note'),bk('act_note',{fields:{NOTE:'E4',BEAT:'0.5'}}),bk('act_tempo',{inputs:{N:n(120)}}),bk('act_mp3'),bk('act_sound_stop'),

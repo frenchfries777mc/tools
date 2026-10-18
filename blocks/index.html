@@ -350,6 +350,7 @@ button,input,select{font:inherit; color:inherit;}
   <div class="dh"><h3>그림 그리기</h3><button class="x" data-close aria-label="닫기">×</button></div>
   <div class="padTools">
     <span class="grp"><button class="tl on" data-tool="pen">✏️ 펜</button><button class="tl" data-tool="fill">🪣 채우기</button><button class="tl" data-tool="eraser">🧽 지우개</button></span>
+    <span class="grp"><button class="tl" data-tool="line" title="직선 (끌어서 그려요)">╱ 선</button><button class="tl" data-tool="rect" title="사각형 (Shift: 정사각형)">▭ 사각형</button><button class="tl" data-tool="oval" title="원 (Shift: 정원)">◯ 원</button><button class="tl" data-tool="tri" title="삼각형">△ 삼각형</button><button class="tl" data-tool="star" title="별">☆ 별</button><button class="tl" id="padSolid" title="도형 속을 채워요">속 채우기</button></span>
     <span id="padSw"></span>
     <span class="grp"><input type="range" id="padSize" min="2" max="60" value="8" aria-label="굵기"><span id="padDot"></span></span>
     <span class="grp"><button class="tl" id="padUndo">↶ 되돌리기</button><button class="tl" id="padClear">모두 지우기</button></span>
@@ -432,9 +433,9 @@ button,input,select{font:inherit; color:inherit;}
 <div id="toast"></div><div id="prog" hidden><div id="progTxt"></div><div id="progTrack"><div id="progBar"></div></div></div>
 <script src="sounds.js?v=41"></script>
 <script src="blocks.js?v=44"></script>
-<script src="objects.js?v=43"></script>
+<script src="objects.js?v=44"></script>
 <script src="shared.js?v=43"></script>
-<script src="examples.js?v=41"></script>
+<script src="examples.js?v=44"></script>
 <script src="app.js?v=44"></script>
 <script src="../ai.js?v=ai26"></script>
 <script src="../ai-prompts.js?v=41"></script>

@@ -12,9 +12,9 @@ var V='41', SHARED='@shared', INDEX_URL='objects/index.js?v='+V;
 /* toolbox: put the button right after "사진 넣기", wherever that category ends up */
 var baseToolbox=BH.toolbox;
 BH.toolbox=function(){
-  var tb=baseToolbox.apply(this,arguments), btn={kind:'button',text:T('🍎 오브젝트'),callbackKey:'imgObject'}, done=false;
-  (function walk(list){ for(var i=0;list&&i<list.length&&!done;i++){ var it=list[i];
-    if(it&&it.kind==='button'&&it.callbackKey==='imgPhoto'){ list.splice(i+1,0,btn); done=true; return; }
+  var tb=baseToolbox.apply(this,arguments), mk=function(){ return {kind:'button',text:T('🍎 오브젝트'),callbackKey:'imgObject'}; };
+  (function walk(list){ for(var i=0;list&&i<list.length;i++){ var it=list[i];
+    if(it&&it.kind==='button'&&it.callbackKey==='imgPhoto'){ list.splice(i+1,0,mk()); i++; continue; }
     if(it&&it.contents) walk(it.contents); } })(tb.contents);
   return tb;
 };

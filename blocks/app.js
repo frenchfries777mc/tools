@@ -329,18 +329,37 @@ $('padPick').addEventListener('input',function(){ setCol(this.value); });
 function syncTools(){ document.querySelectorAll('[data-tool]').forEach(function(b){ b.classList.toggle('on',b.dataset.tool===tool); }); }
 document.querySelectorAll('[data-tool]').forEach(function(b){ b.onclick=function(){ tool=b.dataset.tool; syncTools(); }; });
 $('padSize').addEventListener('input',function(){ size=+this.value; $('padDot').style.width=$('padDot').style.height=Math.max(3,size)+'px'; });
-function snap(){ hist.push(pg.getImageData(0,0,PW,PH)); if(hist.length>25) hist.shift(); }
-$('padUndo').onclick=function(){ if(hist.length) pg.putImageData(hist.pop(),0,0); };
+var redoH=[];
+function snap(){ hist.push(pg.getImageData(0,0,PW,PH)); if(hist.length>25) hist.shift(); redoH=[]; }
+function padUndo(){ if(!hist.length) return; redoH.push(pg.getImageData(0,0,PW,PH)); pg.putImageData(hist.pop(),0,0); }
+function padRedo(){ if(!redoH.length) return; hist.push(pg.getImageData(0,0,PW,PH)); pg.putImageData(redoH.pop(),0,0); }
+$('padUndo').onclick=padUndo;
+// while the drawing pad is open, Ctrl+Z / Ctrl+Y undo and redo the drawing, never the blocks behind it
+document.addEventListener('keydown',function(e){ if(!(e.ctrlKey||e.metaKey)||e.altKey||!$('padDlg').classList.contains('open')) return; var t=e.target; if(t&&(t.tagName==='TEXTAREA'||(t.tagName==='INPUT'&&t.type==='text')||t.isContentEditable)) return; var k=e.key.toLowerCase();
+  if(k==='z'||k==='y'){ e.preventDefault(); e.stopImmediatePropagation(); if(drawing) return; if(k==='y'||e.shiftKey) padRedo(); else padUndo(); } },true);
 $('padClear').onclick=function(){ snap(); pg.clearRect(0,0,PW,PH); };
 $('padBg').addEventListener('change',function(){ $('padWrap').classList.toggle('clear',this.checked); lsSet('ffblocks.padclear',this.checked?'1':'0'); });
 function pt(e){ var r=pad.getBoundingClientRect(); return {x:(e.clientX-r.left)*PW/r.width, y:(e.clientY-r.top)*PH/r.height, p:e.pointerType==='pen'&&e.pressure?Math.max(.25,e.pressure*1.6):1}; }
 function stroke(a,b){ pg.save(); pg.globalCompositeOperation=tool==='eraser'?'destination-out':'source-over'; pg.strokeStyle=col; pg.fillStyle=col; pg.lineCap='round'; pg.lineJoin='round';
   pg.lineWidth=size*(tool==='eraser'?2:1)*b.p; pg.beginPath(); pg.moveTo(a.x,a.y); pg.lineTo(b.x,b.y); pg.stroke(); pg.restore(); }
+var SHAPES={line:1,rect:1,oval:1,tri:1,star:1}, solid=false;
+function shape(a,b,keep){ var x0=a.x,y0=a.y,x1=b.x,y1=b.y; if(keep&&tool!=='line'){ var d=Math.max(Math.abs(x1-x0),Math.abs(y1-y0)); x1=x0+(x1<x0?-d:d); y1=y0+(y1<y0?-d:d); }
+  pg.save(); pg.globalCompositeOperation='source-over'; pg.strokeStyle=col; pg.fillStyle=col; pg.lineCap='round'; pg.lineJoin='round'; pg.lineWidth=size; pg.beginPath();
+  var l=Math.min(x0,x1), r=Math.max(x0,x1), t=Math.min(y0,y1), bt=Math.max(y0,y1), cx=(l+r)/2, cy=(t+bt)/2;
+  if(tool==='line'){ pg.moveTo(x0,y0); pg.lineTo(x1,y1); }
+  else if(tool==='rect') pg.rect(l,t,r-l,bt-t);
+  else if(tool==='oval') pg.ellipse(cx,cy,Math.max(.5,(r-l)/2),Math.max(.5,(bt-t)/2),0,0,Math.PI*2);
+  else if(tool==='tri'){ pg.moveTo(cx,t); pg.lineTo(r,bt); pg.lineTo(l,bt); pg.closePath(); }
+  else if(tool==='star'){ for(var i=0;i<10;i++){ var an=-Math.PI/2+i*Math.PI/5, rr=i%2?.4:1, px=cx+Math.cos(an)*rr*(r-l)/2, py=cy+Math.sin(an)*rr*(bt-t)/2; if(i) pg.lineTo(px,py); else pg.moveTo(px,py); } pg.closePath(); }
+  if(solid&&tool!=='line') pg.fill(); else pg.stroke(); pg.restore(); }
 pad.addEventListener('pointerdown',function(e){ if(drawing) return; e.preventDefault(); pad.setPointerCapture(e.pointerId); snap(); var p=pt(e);
   if(tool==='fill'){ flood(p.x|0,p.y|0); return; }
+  if(SHAPES[tool]){ drawing={id:e.pointerId,last:p,start:p,base:pg.getImageData(0,0,PW,PH)}; return; }
   drawing={id:e.pointerId,last:p}; stroke(p,{x:p.x+.01,y:p.y,p:p.p}); });
-pad.addEventListener('pointermove',function(e){ if(!drawing||e.pointerId!==drawing.id) return; e.preventDefault(); var evs=e.getCoalescedEvents?e.getCoalescedEvents():[e]; (evs.length?evs:[e]).forEach(function(ev){ var p=pt(ev); stroke(drawing.last,p); drawing.last=p; }); });
-['pointerup','pointercancel'].forEach(function(t){ pad.addEventListener(t,function(e){ if(drawing&&e.pointerId===drawing.id) drawing=null; }); });
+pad.addEventListener('pointermove',function(e){ if(!drawing||e.pointerId!==drawing.id) return; e.preventDefault();
+  if(drawing.base){ pg.putImageData(drawing.base,0,0); drawing.last=pt(e); shape(drawing.start,drawing.last,e.shiftKey); return; } var evs=e.getCoalescedEvents?e.getCoalescedEvents():[e]; (evs.length?evs:[e]).forEach(function(ev){ var p=pt(ev); stroke(drawing.last,p); drawing.last=p; }); });
+['pointerup','pointercancel'].forEach(function(t){ pad.addEventListener(t,function(e){ if(drawing&&e.pointerId===drawing.id){ if(drawing.base&&t==='pointerup'){ pg.putImageData(drawing.base,0,0); shape(drawing.start,pt(e),e.shiftKey); } else if(drawing.base) pg.putImageData(drawing.base,0,0); drawing=null; } }); });
+$('padSolid').onclick=function(){ solid=!solid; this.classList.toggle('on',solid); };
 function flood(x,y){
   var d=pg.getImageData(0,0,PW,PH), a=d.data, i0=(y*PW+x)*4, t=[a[i0],a[i0+1],a[i0+2],a[i0+3]];
   var h=col.replace('#',''), f=[parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16),255];
@@ -352,7 +371,7 @@ function flood(x,y){
   pg.putImageData(d,0,0);
 }
 function openPad(id){
-  padId=id||null; hist=[]; pg.clearRect(0,0,PW,PH); $('padName').value=id?I[id].name:uniqName(T('내 그림')); var wantClear=!id&&lsGet('ffblocks.padclear')==='1'; $('padBg').checked=wantClear; $('padWrap').classList.toggle('clear',wantClear);
+  padId=id||null; hist=[]; redoH=[]; pg.clearRect(0,0,PW,PH); $('padName').value=id?I[id].name:uniqName(T('내 그림')); var wantClear=!id&&lsGet('ffblocks.padclear')==='1'; $('padBg').checked=wantClear; $('padWrap').classList.toggle('clear',wantClear);
   tool='pen'; syncTools(); setCol(col);
   if(id){ var im=new Image(); im.onload=function(){ var k=Math.min(PW/im.width,PH/im.height,1), w=im.width*k, h=im.height*k; pg.drawImage(im,(PW-w)/2,(PH-h)/2,w,h); }; im.src=I[id].data; $('padBg').checked=!!I[id].clear; $('padWrap').classList.toggle('clear',!!I[id].clear); }
   $('padDlg').classList.add('open');
