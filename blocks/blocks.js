@@ -1063,7 +1063,7 @@ function toolbox(){
       lab('음악'),bk('act_note'),bk('act_note',{fields:{NOTE:'E4',BEAT:'0.5'}}),bk('act_tempo',{inputs:{N:n(120)}}),bk('act_mp3'),bk('act_sound_stop'),
       lab('삐 소리'),bk('act_beep',{inputs:{SEC:n(0.3)}}),
       lab('알림'),bk('act_alert',{inputs:{VALUE:sh('text',T('안녕하세요!'))}}),
-      lab('시간'),bk('act_wait',{inputs:{SEC:n(1)}}),bk('ev_timer'),bk('act_stop'),
+      lab('시간'),bk('act_wait',{inputs:{SEC:n(1)}}),bk('act_stop'),
       lab('이름 붙여 멈출 수 있는 시간'),bk('time_after',{inputs:{SEC:n(2)}}),bk('time_every',{inputs:{SEC:n(1)}}),bk('time_stop'),bk('time_running'),bk('time_stopall'),
       lab('시계와 달력'),bk('val_time'),bk('val_today')]),
     cat('save','저장',[
