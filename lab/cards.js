@@ -77,7 +77,7 @@ function drawUnit(b){
   var kinds=el('div','seg'); UNITS.forEach(function(c){ var k=el('button','',T(c.n)); k.type='button'; k.classList.toggle('on',c===cat); k.onclick=function(){ cat=c; from=Math.min(from,c.u.length-1); to=Math.min(to,c.u.length-1); if(from===to) to=(from+1)%c.u.length; draw(); }; kinds.appendChild(k); });
   b.appendChild(kinds);
   var row=el('div','cardRow'), inp=el('input','cardNum'); inp.type='text'; inp.inputMode='decimal'; inp.value=val; inp.setAttribute('aria-label',T('바꿀 값')); inp.setAttribute('data-notr','');
-  function sel(v,fn){ var s=el('select','cardSel'); cat.u.forEach(function(u,i){ var o=el('option','',u[0]); o.value=i; s.appendChild(o); }); s.value=v; s.onchange=function(){ fn(+s.value); upd(); }; s.setAttribute('data-notr',''); return s; }
+  function sel(v,fn){ var s=el('select','cardSel'); cat.u.forEach(function(u,i){ var o=el('option','',T(u[0])); o.value=i; s.appendChild(o); }); s.value=v; s.onchange=function(){ fn(+s.value); upd(); }; s.setAttribute('data-notr',''); return s; }
   var sf=sel(from,function(v){ from=v; }), st=sel(to,function(v){ to=v; });
   sf.setAttribute('aria-label',T('처음 단위')); st.setAttribute('aria-label',T('바꿀 단위'));
   var sw=el('button','tbtn','⇄'); sw.type='button'; sw.title=T('단위 서로 바꾸기'); sw.setAttribute('aria-label',T('단위 서로 바꾸기'));
@@ -88,8 +88,8 @@ function drawUnit(b){
   function n(){ var s=inp.value.replace(/,/g,'').trim(); return s===''||!isFinite(+s)?NaN:+s; }
   function upd(){ val=inp.value; var v=n(); all.innerHTML='';
     if(isNaN(v)){ res.textContent='—'; return; }
-    res.textContent=num(v)+' '+cat.u[from][0]+' = '+num(cvt(cat,v,from,to))+' '+cat.u[to][0];
-    cat.u.forEach(function(u,i){ var r=el('div','cardAr'+(i===from?' on':'')); r.appendChild(el('span','',u[0])); r.appendChild(el('b','',num(cvt(cat,v,from,i)))); all.appendChild(r); }); }
+    res.textContent=num(v)+' '+T(cat.u[from][0])+' = '+num(cvt(cat,v,from,to))+' '+T(cat.u[to][0]);
+    cat.u.forEach(function(u,i){ var r=el('div','cardAr'+(i===from?' on':'')); r.appendChild(el('span','',T(u[0]))); r.appendChild(el('b','',num(cvt(cat,v,from,i)))); all.appendChild(r); }); }
   inp.oninput=upd; upd(); setTimeout(function(){ inp.focus(); inp.select(); },30);
 }
 function drawForm(b){
@@ -97,9 +97,9 @@ function drawForm(b){
   var list=el('div','cardList'); b.appendChild(list);
   function paint(){ list.innerHTML=''; var qq=q.toLowerCase(), n=0;
     [['math','수학'],['sci','과학']].forEach(function(g){
-      var fs=FORMULAS.filter(function(f){ return f[0]===g[0]&&(!qq||(f[1]+' '+T(f[1])+' '+f[2]+' '+f[3]+' '+T(f[3])).toLowerCase().indexOf(qq)>=0); }); if(!fs.length) return;
+      var fs=FORMULAS.filter(function(f){ return f[0]===g[0]&&(!qq||(f[1]+' '+T(f[1])+' '+f[2]+' '+T(f[2])+' '+f[3]+' '+T(f[3])).toLowerCase().indexOf(qq)>=0); }); if(!fs.length) return;
       list.appendChild(el('h4','cardH',T(g[1])));
-      fs.forEach(function(f){ n++; var c=el('div','fcard'); c.appendChild(el('div','fn',T(f[1]))); var fm=el('div','ff',f[2]); fm.setAttribute('data-notr',''); c.appendChild(fm); c.appendChild(el('div','fv',T(f[3])));
+      fs.forEach(function(f){ n++; var c=el('div','fcard'); c.appendChild(el('div','fn',T(f[1]))); var fm=el('div','ff',T(f[2])); fm.setAttribute('data-notr',''); c.appendChild(fm); c.appendChild(el('div','fv',T(f[3])));
         if(f[4]&&window.LAB&&LAB.list.some(function(e){ return e.id===f[4]; })){ var go=el('button','tbtn',T('이 실험 열기')); go.type='button'; go.onclick=function(){ close(); LAB.open(f[4]); }; c.appendChild(go); }
         list.appendChild(c); }); });
     if(!n) list.appendChild(el('div','gempty',T('맞는 공식이 없어요. 다른 말로 찾아보세요.'))); }
