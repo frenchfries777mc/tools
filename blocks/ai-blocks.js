@@ -91,6 +91,33 @@ function buildHTMLPrompt(q,modify,errText,lastOut){
   if(errText) p+='\n\nYour previous answer had a problem ('+errText+'). Previous answer:\n'+String(lastOut||'').slice(0,FFAI.isLocal()?3000:12000)+'\n\nReply with the whole corrected page in one ```html block.';
   return p;
 }
+/* fixing: the AI answers with small edits (SEARCH / REPLACE) that are applied to the page here, so only the wrong part changes and the rest stays exactly as it was.
+   If the edits do not fit the page (or the answer is not edits at all), the normal "write the whole page" way takes over. */
+var SYS_PATCH=['You fix a small web page for a child who is learning to code. Reply with ONLY the edits, nothing else. One edit looks like this:',
+  '<<<<<<< SEARCH','(a few lines copied EXACTLY from the current page, enough to be found once)','=======','(the same place after the fix)','>>>>>>> REPLACE',
+  'Rules: change only what the problem needs. Do not rewrite the page. Several edits are fine. Copy the SEARCH lines exactly, including spaces. Do not use ``` fences.'].join('\n');
+function parsePatch(t){ var re=/<<<<<<<[ \t]*SEARCH[ \t]*\r?\n([\s\S]*?)\r?\n=======[ \t]*\r?\n([\s\S]*?)\r?\n?>>>>>>>[ \t]*REPLACE/g, out=[], m; t=String(t||'').replace(/```[a-z]*\n?/g,''); while((m=re.exec(t))) out.push([m[1],m[2]]); return out; }
+function applyPatch(base,edits){
+  var h=String(base);
+  edits.forEach(function(e){
+    var sr=e[0], rp=e[1], i=h.indexOf(sr);
+    if(sr.trim()===''||i<0){ // same lines, ignoring the spaces at the start and end of each line
+      var hl=h.split('\n'), sl=sr.split('\n').map(function(x){ return x.trim(); }); while(sl.length&&sl[sl.length-1]==='') sl.pop(); i=-1;
+      if(sl.length&&sl.join('')!==''){ for(var a=0;a+sl.length<=hl.length;a++){ var ok=true; for(var b=0;b<sl.length;b++) if(hl[a+b].trim()!==sl[b]){ ok=false; break; } if(ok){ if(i>=0) throw new Error('edit matches more than one place'); i=a; } } }
+      if(i<0) throw new Error('edit does not match the page');
+      var ind=/^\s*/.exec(hl[i])[0], rl=rp.split('\n'), rind=/^\s*/.exec(rl[0])[0];
+      rl=rl.map(function(x){ return x.slice(0,rind.length)===rind?ind+x.slice(rind.length):x; });
+      hl.splice.apply(hl,[i,sl.length].concat(rl)); h=hl.join('\n'); return; }
+    if(h.indexOf(sr,i+1)>=0) throw new Error('edit matches more than one place');
+    h=h.slice(0,i)+rp+h.slice(i+sr.length); });
+  return h; }
+var brokenNote=''; // set when the AI's page still had a problem after the retry, but was shown anyway
+var fixText=''; // what the person said is wrong, while a fix runs
+function runPatch(base,problem){
+  var lim=FFAI.isLocal()?6000:30000;
+  return FFAI.ask({system:SYS_PATCH, prompt:'Current page:\n```html\n'+base.slice(0,lim)+'\n```\n\nProblem: '+problem+'\nFix only this problem.', maxTokens:2500, onText:live, temperature:0}).then(function(out){
+    var edits=parsePatch(out); if(!edits.length) throw new Error('no edits');
+    return checkHTML(applyPatch(base,edits)); }); }
 function extractHTML(t){ t=String(t||'');
   var m=/```(?:html)?\s*\n([\s\S]*?)(?:```|$)/i.exec(t); if(m&&/<\w/.test(m[1])) t=m[1];
   var a=t.search(/<!doctype|<html|<head|<body/i); if(a<0) throw new Error('no html'); t=t.slice(a);
@@ -152,7 +179,7 @@ function check(xml){
 /* ---------- dialog ---------- */
 var before=null, busyNow=false, plan=null;
 var readyEx=''; // set when a chip with a ready-made example was tapped, until the text is edited
-var CHIPS={new:[['👆 클릭 카운터','버튼을 누를 때마다 숫자가 올라가는 클릭 카운터','클릭 카운터'],['📝 할 일 목록','할 일을 쓰고 추가 버튼을 누르면 목록에 쌓이는 할 일 목록','할 일 목록'],['🔢 숫자 맞히기','1부터 100 사이 숫자를 맞히는 게임','숫자 맞히기'],['🧺 과일 받기','떨어지는 과일을 바구니로 받는 게임','과일 받기 게임'],['🚀 우주 슈팅','외계인을 맞히는 우주 슈팅 게임','우주 슈팅'],['🧭 미로 탈출','벽을 피해 별까지 가는 미로 게임','미로 탈출']],
+var CHIPS={new:[['👆 클릭 카운터','버튼을 누를 때마다 숫자가 올라가는 클릭 카운터','클릭 카운터'],['📝 할 일 목록','할 일을 쓰고 추가 버튼을 누르면 목록에 쌓이는 할 일 목록','할 일 목록'],['🔢 숫자 맞히기','1부터 100 사이 숫자를 맞히는 게임','숫자 맞히기'],['⚡ 반응 속도','화면이 초록색으로 바뀌면 빨리 누르는 반응 속도 게임','반응 속도 게임']],
   edit:[['🌑 어두운 모드','어두운 모드로 바꿔 줘'],['🌈 그라데이션 배경','배경을 그라데이션으로 바꿔 줘'],['📌 만든 사람 글','맨 아래에 "만든 사람: 나" 글을 넣어 줘']]};
 function chips(){ var box=$('baiChips'), list=hasWork()?CHIPS.edit.concat(CHIPS.new.slice(0,2)):CHIPS.new; box.innerHTML=''; list.forEach(function(c){ var b=document.createElement('button'), full=T(c[1]); b.textContent=T(c[0]); b.title=full; b.onclick=function(){ $('baiQ').value=full; $('baiQ').focus(); if(c[2]) readyEx=c[2]; }; box.appendChild(b); }); }
 function prep(){ chips(); renderFix(); renderHist(); $('baiQ').placeholder=hasWork()?T('예: 버튼을 누를 때마다 배경색이 바뀌게 해 줘'):T('예: 1부터 100 사이 숫자 맞히기 게임. 크다/작다를 알려 주고 맞히면 축하해 줘요'); }
@@ -162,12 +189,20 @@ function busy(on){ busyNow=on; $('baiGo').disabled=$('baiFixGo').disabled=on; $(
   clearInterval(tick); if(on){ t0=Date.now(); chars=0; $('baiLive').textContent=''; $('baiLive').hidden=true; tick=setInterval(status,500); } }
 function status(){ var s=Math.round((Date.now()-t0)/1000);
   var how=plan==='edit'?T('지금 블록을 고치기로 했어요')+' · ':plan==='new'?T('새로 짜기로 했어요')+' · ':'';
-  msg(phase==='fix'?F('AI에게 틀린 곳을 알려 다시 받는 중… {0}초',s):chars?how+F('AI가 블록 코드를 쓰는 중… 글자 {0}개 · {1}초',chars,s):F('AI가 생각하는 중… {0}초',s)); }
+  msg(phase==='patch'?F('AI가 틀린 곳만 고치는 중… {0}초',s):phase==='fix'?F('AI에게 틀린 곳을 알려 다시 받는 중… {0}초',s):chars?how+F('AI가 블록 코드를 쓰는 중… 글자 {0}개 · {1}초',chars,s):F('AI가 생각하는 중… {0}초',s)); }
 function live(t){ chars=t.length; var p=$('baiLive'), wasHidden=p.hidden, stick=wasHidden||p.scrollHeight-p.scrollTop-p.clientHeight<24; p.hidden=false; p.textContent=t.length>6000?'…'+t.slice(-6000):t; if(stick) p.scrollTop=p.scrollHeight; } // follows the end only while the reader is at the bottom
 function run(q,modify,tries,errText,lastOut,fix,calm){
   phase=errText?'fix':''; chars=0;
+  // a fix (the person's, or the check's) is tried as small edits first
+  if((fix||errText)&&!calm&&!window.baiPatchOff&&!window.baiStopped){
+    var base=null, problem=errText||fixText||'';
+    try{ base=errText?extractHTML(lastOut):currentHTML(); }catch(e){ base=null; }
+    if(base&&problem&&!/cut off|no content|external scripts/.test(problem)){ phase='patch';
+      return runPatch(base,problem).then(null,function(e){ if(window.baiStopped) throw e; phase=errText?'fix':''; return runFull(q,modify,tries,errText,lastOut,fix,calm); }); } }
+  return runFull(q,modify,tries,errText,lastOut,fix,calm); }
+function runFull(q,modify,tries,errText,lastOut,fix,calm){
   var ask=calm?q+'\n(Keep it short and simple, and finish the page.)':q;
-  return FFAI.ask({system:SYS_HTML, prompt:buildHTMLPrompt(ask,modify,errText,lastOut), maxTokens:12000, onText:live, temperature:calm?0.7:0, freqPenalty:calm?0.5:0}).then(null,function(e){
+  return FFAI.ask({system:SYS_HTML, prompt:buildHTMLPrompt(ask,modify,errText,lastOut), maxTokens:12000, stopAt:'</html>', onText:live, temperature:calm?0.7:0, freqPenalty:calm?0.5:0}).then(null,function(e){
     // the model got stuck repeating itself: ask again once, calmer, instead of giving up
     if(tries>0&&e&&/반복|repeat/i.test(String(e.message||''))&&!(window.baiStopped)) return run(q,modify,tries-1,'',lastOut,fix,true).then(function(x){ return {retried:x}; });
     throw e;
@@ -176,6 +211,8 @@ function run(q,modify,tries,errText,lastOut,fix,calm){
     try{ return checkHTML(extractHTML(out)); }
     catch(e){
       if(tries>0&&!(window.baiStopped)) return run(q,modify,tries-1,e.message||String(e),out,fix,false); // one more try, telling the AI what was wrong
+      // even a page with a mistake is shown: the part that cannot be made into blocks goes into "JS 직접 쓰기" blocks, and "틀린 곳을 알려 주세요" can fix it
+      try{ var rough=extractHTML(out); brokenNote=e.message||String(e); return rough; }catch(e2){}
       throw new Error(T('AI가 만든 HTML을 읽지 못했어요. 다시 해 보세요'));
     }
   });
@@ -198,23 +235,23 @@ function readyGo(q){ var ex=BH_EXAMPLES.filter(function(e){ return e.name===read
   var t=setInterval(function(){ n=Math.min(html.length,n+step); p.textContent=html.slice(0,n); p.scrollTop=p.scrollHeight; msg(F('AI가 블록 코드를 쓰는 중… 글자 {0}개 · {1}초',n,Math.max(1,Math.round(n/step*0.04))));
     if(n>=html.length){ clearInterval(t); busyNow=false; $('baiGo').disabled=false; msg(T('다 만들었어요! 미리보기에서 확인해 보세요'),'ok'); setTimeout(function(){ p.hidden=true; close();  },700); } },40);
   return true; }
-function go(){ var q=$('baiQ').value.trim(); if(!q) return $('baiQ').focus(); if(busyNow) return; if(!readyEx&&!hasWork()) readyEx=libMatch(q);
-  if(readyEx&&readyGo(q)) return; exec(q,q,false); }
+function go(){ var q=$('baiQ').value.trim(); if(!q) return $('baiQ').focus(); if(busyNow) return; readyEx=''; exec(q,q,false); } // v44: the example chips only fill in the text; the AI always writes the page itself
 /* "틀린 곳을 알려 주세요": the AI changes only the part the person says is wrong (PLAN: edit), the whole project goes along */
 function fixGo(){
   var c=$('baiFix').value.trim(); if(!c) return $('baiFix').focus(); if(busyNow||!hasWork()) return;
   var last=lastReq(), q=(last?'The person first asked: "'+last+'"\n':'')+'The current project has a problem: '+c+'\nFix only that problem and keep everything else exactly as it is. Answer with PLAN: edit.';
-  exec(q,c,true);
+  fixText=c; exec(q,c,true);
 }
 function exec(q,shown,fix){
-  var modify=fix||hasWork(); plan=modify?'edit':'new'; busy(true); status();
+  var modify=fix||hasWork(); plan=modify?'edit':'new'; brokenNote=''; busy(true); status();
   run(q,modify,1,undefined,undefined,fix).then(function(html){
     before={name:$('projName').value, ws:Blockly.serialization.workspaces.save(ws)};
     B.showHTML(html); // the page first appears in the HTML code tab and the preview, as the AI wrote it
     var how=toBlocks(html); if(how.blocks) B.showPreview();
     if(!modify&&how.title) $('projName').value=how.title;
     B.save(); addHist(shown,fix,plan); if(fix) $('baiFix').value=''; $('baiUndo').hidden=false; busy(false);
-    msg(T('다 만들었어요! 미리보기에서 확인해 보세요'),'ok'); close();
+    msg(brokenNote?T('코드에 틀린 곳이 남았어요. 읽을 수 있는 만큼 블록으로 바꾸고 나머지는 JS 직접 쓰기 블록에 넣었어요'):T('다 만들었어요! 미리보기에서 확인해 보세요'),brokenNote?'bad':'ok'); close();
+    if(brokenNote){ B.toast(T('코드에 틀린 곳이 남았어요. 읽을 수 있는 만큼 블록으로 바꾸고 나머지는 JS 직접 쓰기 블록에 넣었어요')+' · '+T('"틀린 곳을 알려 주세요"로 고쳐 보세요')); return; }
     B.toast((fix?T('AI가 틀린 곳만 고쳤어요'):plan==='edit'?T('AI가 지금 페이지를 고쳤어요'):T('AI가 페이지를 새로 짰어요'))+' · '+how.note);
   },function(e){ busy(false); if(e.kind!=='nokey') msg(e.message||T('AI에 연결하지 못했어요'),'bad'); else msg(''); }).then(function(){ if(busyNow) busy(false); });
 }

@@ -715,7 +715,7 @@ function drawOptMenu(part){ var m=$('optMenu'), s=deck.slides[cur]; m.innerHTML=
   if(!part){ add('hide',s.hide?'숨긴 슬라이드 보이기 (H)':'발표할 때 건너뛰기 (H)');
   if(s.layout==='table'||s.layout==='chart'){ add('data',s.layout==='chart'?'그래프 내용 고치기':'표 내용 고치기'); add('link',s.link?'시트 연결 바꾸기':'프라이 시트에서 가져오기 (연결)'); if(s.link){ add('relink','지금 새로 고침'); add('unlink','연결 끊기'); } }
   if(s.layout==='quiz') add('choices','실시간 퀴즈 보기 고치기…');
-  if(s.layout==='live') add('live','살아있는 화면 고치기');
+  if(s.layout==='live'){ add('live','살아있는 화면 고치기'); if(liveCfg(s)) add('liveclear','살아있는 화면 지우기'); }
   add('auto',s.sec?(s.sec<0?'자동 넘기기: 이 슬라이드에서 멈춤':F('자동 넘기기: 이 슬라이드 {0}초',s.sec)):'자동 넘기기 시간…');
   add('first','맨 앞으로 보내기',0,cur===0); add('last','맨 뒤로 보내기',0,cur===deck.slides.length-1); }
   if(!part||part==='bg'){ hr(); hd('이 슬라이드 배경색');
@@ -735,7 +735,7 @@ function drawOptMenu(part){ var m=$('optMenu'), s=deck.slides[cur]; m.innerHTML=
 $('optBtn').onclick=function(){ if(!deck.slides.length) return; blurEdit(); drawOptMenu(); openMenu($('optMenu'),this); };
 $('optMenu').addEventListener('click',function(e){ var b=e.target.closest('[data-o]'); if(!b||b.disabled) return; closeMenus(); optAct(b.dataset.o); });
 function optAct(k){
-  if(k==='hide') toggleHide(); else if(k==='data') openData(); else if(k==='link') openLink(); else if(k==='relink') refreshSlideLink(); else if(k==='unlink') unlinkSlide(); else if(k==='choices') openChoices(); else if(k==='live') openLive(); else if(k==='auto') openAuto(); else if(k==='first') moveSlide(cur,0); else if(k==='last') moveSlide(cur,deck.slides.length-1);
+  if(k==='hide') toggleHide(); else if(k==='data') openData(); else if(k==='link') openLink(); else if(k==='relink') refreshSlideLink(); else if(k==='unlink') unlinkSlide(); else if(k==='choices') openChoices(); else if(k==='liveclear'){ var ls=deck.slides[cur]; if(ls){ pushUndo(); ls.live=''; changed(true); } } else if(k==='live') openLive(); else if(k==='auto') openAuto(); else if(k==='first') moveSlide(cur,0); else if(k==='last') moveSlide(cur,deck.slides.length-1);
   else if(k.indexOf('bg:')===0) setBg(k.slice(3)); else if(k.indexOf('font:')===0) setFont(k.slice(5)); else if(k.indexOf('tr:')===0){ setTrans(k.slice(3)); toast(T('저장했어요')); } else if(k==='trAll'){ setTransAll(); toast(T('모든 슬라이드에 같은 효과를 넣었어요')); } }
 
 /* table and chart data: one text box, the slide draws it */

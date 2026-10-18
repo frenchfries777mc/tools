@@ -33,6 +33,8 @@ function prescan(obj){ // remember element names before loading so name dropdown
   BH.KNOWN.clear();
   var s=typeof obj==='string'?obj:JSON.stringify(obj), re=/"NAME":"((?:[^"\\]|\\.)*)"/g, m;
   while((m=re.exec(s))) try{ BH.KNOWN.add(JSON.parse('"'+m[1]+'"')); }catch(e){}
+  var re2=/"(?:EL|A|B)":"((?:[^"\\]|\\.)*)"/g; while((m=re2.exec(s))) try{ var q=JSON.parse('"'+m[1]+'"').replace(/\*$/,''); if(q&&q.charAt(0)!=='@'&&q!=='?') BH.KNOWN.add(q); }catch(e){}
+  var rx2=/<field name="(?:EL|A|B)">([^<]*)<\/field>/g; while((m=rx2.exec(s))){ var q2=m[1].replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/\*$/,''); if(q2&&q2.charAt(0)!=='@'&&q2!=='?') BH.KNOWN.add(q2); }
   var rx=/<field name="NAME">([^<]*)<\/field>/g; while((m=rx.exec(s))) BH.KNOWN.add(m[1].replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&amp;/g,'&'));
 }
 function loadJSON(state){ loading=true; prescan(state); ws.clear(); try{ Blockly.serialization.workspaces.load(state,ws); }finally{ BH.KNOWN.clear(); loading=false; } afterLoad(); }
@@ -259,9 +261,16 @@ $('fileMenu').addEventListener('click',function(e){
   if(f==='projects') openProjs();
   else if(f==='new'){ createProject(T('나의 웹페이지'),blank); toast(T('새 프로젝트를 만들었어요')); }
   else if(f==='save'){ download(new Blob([JSON.stringify({app:'block-html',v:1,name:$('projName').value,ws:Blockly.serialization.workspaces.save(ws),imgs:BH.IMGS,snds:BH.SNDS},null,1)],{type:'application/json'}),fname('.json')); }
+  else if(f==='importhtml') $('htmlIn').click();
   else if(f==='open') $('fileIn').click();
   else if(f==='html') downloadHTML();
   else if(f==='share') openShare();
+});
+$('htmlIn').addEventListener('change',function(){
+  var file=this.files&&this.files[0]; this.value=''; if(!file) return;
+  var r=new FileReader(); r.onload=function(){ var html=String(r.result||''); if(!html.trim()) return toast(T('이 파일은 열 수 없어요'));
+    createProject(file.name.replace(/\.html?$/i,'').slice(0,40)||T('나의 웹페이지'),function(){}); toBlocks(html,false); };
+  r.readAsText(file);
 });
 $('fileIn').addEventListener('change',function(){
   var file=this.files&&this.files[0]; this.value=''; if(!file) return;

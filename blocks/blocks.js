@@ -172,7 +172,17 @@ var KEYS=[['아무','any'],['스페이스',' '],['엔터','Enter'],['↑','Arrow
 'abcdefghijklmnopqrstuvwxyz'.split('').forEach(function(c){ KEYS.push([c.toUpperCase(),c]); });
 '0123456789'.split('').forEach(function(c){ KEYS.push([c,c]); });
 function keyCond(k){ return k==='any'?'true':(k.length===1&&/[a-z]/.test(k)?'e.key.toLowerCase() === '+lit(k):'e.key === '+lit(k)); }
-function keyDrop(){ return new Blockly.FieldDropdown(function(){ return KEYS.map(function(k){ return [T(k[0]),k[1]]; }); }); }
+function keyDrop(){ var f=new Blockly.FieldDropdown(function(){ return KEYS.map(function(k){ return [T(k[0]),k[1]]; }); }), on=null;
+  // while the list is open, pressing a key picks that key (Esc still closes it)
+  function off(){ if(on){ document.removeEventListener('keydown',on,true); on=null; } }
+  var disp=f.dropdownDispose_; f.dropdownDispose_=function(){ off(); if(disp) return disp.apply(this,arguments); };
+  var show=f.showEditor_; f.showEditor_=function(){ var r=show.apply(this,arguments), self=this; off();
+    on=function(ev){ var dd=Blockly.DropDownDiv; if(dd.getOwner&&dd.getOwner()!==self) return off(); if(ev.key==='Escape'||ev.ctrlKey||ev.metaKey||ev.altKey) return;
+      var k=ev.key.length===1&&/[A-Za-z]/.test(ev.key)?ev.key.toLowerCase():ev.key;
+      if(!KEYS.some(function(x){ return x[1]===k&&k!=='any'; })) return;
+      ev.preventDefault(); ev.stopPropagation(); self.setValue(k); dd.hideIfOwner(self,true); off(); };
+    document.addEventListener('keydown',on,true); return r; };
+  return f; }
 def('ev_key',function(){ this.appendDummyInput().appendField(keyDrop(),'KEY').appendField(T('키를 누르면')); hat(this,'키보드 키를 눌렀을 때 해요'); },
   function(b){ var k=b.getFieldValue('KEY'); need('key');
     return 'document.addEventListener(\'keydown\', '+AF()+'e) {\n  __key = e.key;\n  if ('+keyCond(k)+') {\n'+(k!=='any'&&k.length>1||k===' '?'    e.preventDefault();\n':'')+G.prefixLines(hatBody(b),'  ')+'  }\n});\n'; });
@@ -303,6 +313,8 @@ def('val_prompt',function(){ this.appendValueInput('VALUE'); this.appendDummyInp
   function(b){ return ['(prompt('+(G.valueToCode(b,'VALUE',O.NONE)||"''")+') || \'\')',O.LOGICAL_OR]; });
 def('val_key',function(){ this.appendDummyInput().appendField(T('마지막으로 누른 키')); val(this,'String'); },
   function(){ need('key'); return ['__key',O.ATOMIC]; });
+def('val_keyheld',function(){ this.appendDummyInput().appendField(keyDrop(),'KEY').appendField(T('키를 누르고 있나?')); this.setOutput(true,'Boolean'); this.setTooltip(T('그 키를 지금 누르고 있으면 참이에요. 아무로 두면 어떤 키든 누르고 있을 때 참이에요')); },
+  function(b){ var k=b.getFieldValue('KEY'); need('keyheld'); return [k==='any'?'(Object.keys(__held).length > 0)':'(__held['+lit(k.toLowerCase())+'] === true)',O.ATOMIC]; });
 def('val_mouse',function(){ this.appendDummyInput().appendField(T('누른 곳의')).appendField(new Blockly.FieldDropdown([['x','x'],['y','y']]),'AXIS'); val(this,'Number','"누르면" 안에서 쓰면, 누른 곳이 그 요소 왼쪽 위에서 얼마나 떨어졌는지 알려줘요'); },
   function(b){ need('pos'); return [b.getFieldValue('AXIS')==='x'?'__mx':'__my',O.ATOMIC]; });
 def('val_time',function(){ this.appendDummyInput().appendField(T('지금')).appendField(new Blockly.FieldDropdown(function(){ return [[T('시'),'getHours'],[T('분'),'getMinutes'],[T('초'),'getSeconds'],[T('요일 (0=일)'),'getDay'],[T('날짜'),'getDate']]; }),'U'); val(this,'Number'); },
@@ -391,6 +403,8 @@ def('time_every',function(){ this.appendValueInput('SEC').setCheck('Number'); th
   function(b){ need('sched'); return '__sched('+lit(b.getFieldValue('NAME'))+', '+v(b,'SEC','1')+', '+AF()+') {\n'+G.statementToCode(b,'DO')+'}, true, '+owner(b)+');\n'; });
 def('time_stop',function(){ this.appendDummyInput().appendField(T('이름이')).appendField(nameIn(T('반복')),'NAME').appendField(T('인 시간 블록 멈추기')); tm(this,'이름이 같은 "뒤에 한 번"이나 "마다 계속" 블록을 멈춰요'); },
   function(b){ need('sched'); return '__unsched('+lit(b.getFieldValue('NAME'))+', '+owner(b)+');\n'; });
+def('time_running',function(){ this.appendDummyInput().appendField(T('이름이')).appendField(nameIn(T('반복')),'NAME').appendField(T('인 시간 블록이 돌고 있나?')); val(this,'Boolean','"마다 계속"이나 "뒤에 한 번"이 아직 돌고 있으면 참이에요'); },
+  function(b){ need('sched'); return ['__running('+lit(b.getFieldValue('NAME'))+', '+owner(b)+')',O.FUNCTION_CALL]; });
 def('time_stopall',function(){ this.appendDummyInput().appendField(T('시간 블록 모두 멈추기')); tm(this,'"뒤에 한 번"과 "마다 계속"으로 시작한 것을 모두 멈춰요'); },
   function(){ need('sched'); return '__stopAll();\n'; });
 
@@ -450,6 +464,43 @@ def('js_raw',function(){ this.appendDummyInput().appendField('JS').appendField(n
 def('js_val',function(){ this.appendDummyInput().appendField('JS').appendField(new Blockly.FieldTextInput('Math.PI'),'CODE'); val(this,null,'자바스크립트 식을 직접 써요'); },
   function(b){ return ['('+b.getFieldValue('CODE')+')',O.ATOMIC]; });
 
+/* ---------- general blocks that stand in for plain JavaScript (what "HTML 파일 가져오기" and "코드 블록으로 바꾸기" produce, and handy on their own):
+   an element itself, a property, a numbered slot, calling a function or a method, "new", turning a value into a number or text, returning, list push / contains ---------- */
+function jsArgs(b){ var a=[]; for(var i=0;i<4;i++){ var c=G.valueToCode(b,'A'+i,O.COMMA); if(!c) break; a.push(c); } return a.join(', '); }
+function jsArgIn(b){ for(var i=0;i<4;i++) b.appendValueInput('A'+i).appendField(i?',':T('· 넣을 값')); }
+function jsName(b,d,dflt){ return b.getFieldValue(d||'NAME')||dflt||'x'; }
+function jsNameIn(v){ return new Blockly.FieldTextInput(v); }
+def('js_el',function(){ this.appendDummyInput().appendField(T('요소')).appendField(elField(),'EL').appendField(T('자체')); val(this,null,'요소 하나를 통째로 가리켜요. "의 속성", "의 함수 부르기" 블록과 함께 써요'); },
+  function(b){ need('$'); return ['$('+er(b)+')',O.FUNCTION_CALL]; });
+def('js_prop',function(){ this.appendValueInput('OBJ'); this.appendDummyInput().appendField(T('의 속성')).appendField(jsNameIn('textContent'),'NAME'); this.setInputsInline(true); val(this,null,'어떤 것이 가진 속성 값을 가져와요 (예: 요소의 style, classList, 목록의 length)'); },
+  function(b){ var o=G.valueToCode(b,'OBJ',O.MEMBER); return [(o?o+'.':'')+jsName(b),O.MEMBER]; });
+def('js_propset',function(){ this.appendValueInput('OBJ'); this.appendDummyInput().appendField(T('의 속성')).appendField(jsNameIn('textContent'),'NAME').appendField(T('을(를)')); this.appendValueInput('VALUE'); this.appendDummyInput().appendField(T('(으)로 정하기')); this.setInputsInline(true); act(this,'속성 값을 바꿔요'); },
+  function(b){ var o=G.valueToCode(b,'OBJ',O.MEMBER); return (o?o+'.':'')+jsName(b)+' = '+(G.valueToCode(b,'VALUE',O.ASSIGNMENT)||"''")+';\n'; });
+def('js_idx',function(){ this.appendValueInput('OBJ'); this.appendDummyInput().appendField(T('의')); this.appendValueInput('I'); this.appendDummyInput().appendField(T('번째 칸 (0부터 세요)')); this.setInputsInline(true); val(this,null,'리스트나 글자의 몇 번째 칸인지 골라 가져와요. 첫 칸은 0번째예요'); },
+  function(b){ return [(G.valueToCode(b,'OBJ',O.MEMBER)||'[]')+'['+(G.valueToCode(b,'I',O.NONE)||'0')+']',O.MEMBER]; });
+def('js_idxset',function(){ this.appendValueInput('OBJ'); this.appendDummyInput().appendField(T('의')); this.appendValueInput('I'); this.appendDummyInput().appendField(T('번째 칸을')); this.appendValueInput('VALUE'); this.appendDummyInput().appendField(T('(으)로 정하기')); this.setInputsInline(true); act(this,'리스트의 칸 하나를 바꿔요. 첫 칸은 0번째예요'); },
+  function(b){ return (G.valueToCode(b,'OBJ',O.MEMBER)||'[]')+'['+(G.valueToCode(b,'I',O.NONE)||'0')+'] = '+(G.valueToCode(b,'VALUE',O.ASSIGNMENT)||"''")+';\n'; });
+def('js_mcall',function(){ this.appendValueInput('OBJ'); this.appendDummyInput().appendField(T('의 함수')).appendField(jsNameIn('toFixed'),'NAME').appendField(T('부르기')); jsArgIn(this); this.setInputsInline(true); val(this,null,'어떤 것이 가진 함수를 불러서 결과를 받아요. 넣을 값은 앞에서부터 채워요'); },
+  function(b){ var o=G.valueToCode(b,'OBJ',O.MEMBER); return [(o?o+'.':'')+jsName(b)+'('+jsArgs(b)+')',O.FUNCTION_CALL]; });
+def('js_mcalls',function(){ this.appendValueInput('OBJ'); this.appendDummyInput().appendField(T('의 함수')).appendField(jsNameIn('focus'),'NAME').appendField(T('부르기')); jsArgIn(this); this.setInputsInline(true); act(this,'어떤 것이 가진 함수를 불러요. 넣을 값은 앞에서부터 채워요'); },
+  function(b){ var o=G.valueToCode(b,'OBJ',O.MEMBER); return (o?o+'.':'')+jsName(b)+'('+jsArgs(b)+');\n'; });
+def('js_call',function(){ this.appendDummyInput().appendField(T('함수')).appendField(jsNameIn('isNaN'),'NAME').appendField(T('부르기')); jsArgIn(this); this.setInputsInline(true); val(this,null,'이름으로 함수를 불러서 결과를 받아요 (예: isNaN). 넣을 값은 앞에서부터 채워요'); },
+  function(b){ return [jsName(b)+'('+jsArgs(b)+')',O.FUNCTION_CALL]; });
+def('js_calls',function(){ this.appendDummyInput().appendField(T('함수')).appendField(jsNameIn('myFunction'),'NAME').appendField(T('부르기')); jsArgIn(this); this.setInputsInline(true); act(this,'이름으로 함수를 불러요. 넣을 값은 앞에서부터 채워요'); },
+  function(b){ return jsName(b)+'('+jsArgs(b)+');\n'; });
+def('js_new',function(){ this.appendDummyInput().appendField(T('새')).appendField(jsNameIn('Date'),'NAME').appendField(T('만들기')); jsArgIn(this); this.setInputsInline(true); val(this,null,'새 것을 만들어요 (예: Date, Audio, Image)'); },
+  function(b){ return ['new '+jsName(b)+'('+jsArgs(b)+')',O.NEW||O.MEMBER]; });
+def('js_num',function(){ this.appendValueInput('X'); this.appendDummyInput().appendField(T('을(를)')).appendField(new Blockly.FieldDropdown(function(){ return [[T('숫자로'),'Number'],[T('소수 숫자로'),'parseFloat'],[T('정수로'),'parseInt'],[T('글자로'),'String']]; }),'AS').appendField(T('바꾼 값')); this.setInputsInline(true); val(this,null,'값을 숫자나 글자로 바꿔요. 입력칸에 쓴 글은 숫자로 바꿔야 계산할 수 있어요'); },
+  function(b){ var x=G.valueToCode(b,'X',O.NONE)||"''", k=b.getFieldValue('AS'); return [k+'('+x+(k==='parseInt'?', 10':'')+')',O.FUNCTION_CALL]; });
+def('js_bool',function(){ this.appendValueInput('X'); this.appendDummyInput().appendField(T('이(가) 참으로 치는 값인가? (비어 있거나 0이면 거짓)')); this.setInputsInline(true); val(this,'Boolean','숫자나 글자를 "만약"에 넣을 때 써요. 0, 빈 글자, 비어 있는 것은 거짓이고 나머지는 참이에요'); },
+  function(b){ return ['Boolean('+(G.valueToCode(b,'X',O.NONE)||"''")+')',O.FUNCTION_CALL]; });
+def('js_return',function(){ this.appendDummyInput().appendField(T('여기서 끝내고 돌려주기')); this.appendValueInput('VALUE'); this.setInputsInline(true); this.setPreviousStatement(true); this.setTooltip(T('지금 하던 동작을 여기서 끝내요. 값을 붙이면 그 값을 돌려줘요 (비워 두면 그냥 끝내요)')); },
+  function(b){ var c=G.valueToCode(b,'VALUE',O.NONE); return 'return'+(c?' '+c:'')+';\n'; });
+def('js_push',function(){ this.appendValueInput('LIST'); this.appendDummyInput().appendField(T('맨 끝에')); this.appendValueInput('VALUE'); this.appendDummyInput().appendField(T('넣기')); this.setInputsInline(true); act(this,'리스트 맨 끝에 항목을 하나 더해요'); },
+  function(b){ return (G.valueToCode(b,'LIST',O.MEMBER)||'[]')+'.push('+(G.valueToCode(b,'VALUE',O.NONE)||"''")+');\n'; });
+def('js_has',function(){ this.appendValueInput('LIST'); this.appendDummyInput().appendField(T('에')); this.appendValueInput('VALUE'); this.appendDummyInput().appendField(T('이(가) 들어 있나?')); this.setInputsInline(true); val(this,'Boolean','리스트나 글자 안에 그 값이 들어 있으면 참이에요'); },
+  function(b){ return [(G.valueToCode(b,'LIST',O.MEMBER)||'[]')+'.includes('+(G.valueToCode(b,'VALUE',O.NONE)||"''")+')',O.FUNCTION_CALL]; });
+
 /* ---------- helpers that go into the page, only the ones used ---------- */
 var HELP={
   '$':"function $(name) {\n  if (name && name.nodeType) return name;\n  var el = document.getElementById(name);\n  if (!el) throw new Error('\"' + name + '\" "+T('요소가 없어요').replace(/'/g,"\\'")+"');\n  return el;\n}",
@@ -468,6 +519,7 @@ var HELP={
   cursor:"var __cx = 0, __cy = 0;\nfunction __track(e) {\n  __cx = Math.round(e.pageX);\n  __cy = Math.round(e.pageY);\n}\ndocument.addEventListener('pointermove', __track);\ndocument.addEventListener('pointerdown', __track);",
   follow:"var __fol = {}, __folOn = false, __moved = false;\ndocument.addEventListener('pointermove', function () { __moved = true; });\ndocument.addEventListener('pointerdown', function () { __moved = true; });\nfunction __folLoop() {\n  for (var n in __fol) {\n    var el = document.getElementById(n);\n    if (!el) { delete __fol[n]; continue; }\n    if (!__moved) continue;\n    var s = el.style, tx = __cx - el.offsetWidth / 2, ty = __cy - el.offsetHeight / 2;\n    if (s.position !== 'absolute') {\n      var r = el.getBoundingClientRect();\n      s.position = 'absolute';\n      s.left = (r.left + window.pageXOffset) + 'px';\n      s.top = (r.top + window.pageYOffset) + 'px';\n    }\n    var x = parseFloat(s.left) || 0, y = parseFloat(s.top) || 0, k = __fol[n] === 'soft' ? 0.15 : 1;\n    s.left = (x + (tx - x) * k) + 'px';\n    s.top = (y + (ty - y) * k) + 'px';\n    s.pointerEvents = 'none';\n  }\n  requestAnimationFrame(__folLoop);\n}\nfunction __follow(name, mode) {\n  if (mode === 'stop') {\n    delete __fol[name];\n    var e = document.getElementById(name);\n    if (e) e.style.pointerEvents = '';\n    return;\n  }\n  $(name);\n  __fol[name] = mode;\n  document.body.style.touchAction = 'none';\n  if (!__folOn) { __folOn = true; __folLoop(); }\n}",
   key:"var __key = '';",
+  keyheld:"var __held = {};\ndocument.addEventListener('keydown', function (e) { __held[e.key.toLowerCase()] = true; });\ndocument.addEventListener('keyup', function (e) { delete __held[e.key.toLowerCase()]; });\nwindow.addEventListener('blur', function () { __held = {}; });",
   keyhold:"var __down = {};\nfunction __keyHold(match, fn) {\n  var id = null;\n  function stop() { if (id) { clearInterval(id); id = null; } }\n  document.addEventListener('keydown', function (e) {\n    __key = e.key;\n    __down[e.key.toLowerCase()] = e;\n    if (e.repeat || id || !match(e)) return;\n    fn(e);\n    id = setInterval(function () { fn(e); }, 30);\n  });\n  document.addEventListener('keyup', function (e) {\n    delete __down[e.key.toLowerCase()];\n    if (id && !Object.keys(__down).some(function (k) { return match(__down[k]); })) stop();\n  });\n  window.addEventListener('blur', function () { __down = {}; stop(); });\n}",
   mp3:"var __auds = [];\nfunction __mp3(name, loop) {\n  var a = new Audio(__mp3s[name]);\n  a.loop = !!loop;\n  __auds.push(a);\n  a.addEventListener('ended', function () { var i = __auds.indexOf(a); if (i >= 0) __auds.splice(i, 1); });\n  var p = a.play();\n  if (p && p.catch) p.catch(function () {});\n}",
   timers:"var __timers = [];",
@@ -548,6 +600,7 @@ HELP.sched=src(function(){
   }
   function __dropOwner(owner) { __tasks.forEach(function (t) { if (t.o === owner) t.dead = true; }); }
   function __stopAll() { __tasks.forEach(function (t) { t.dead = true; }); }
+  function __running(name, owner) { return __tasks.some(function (t) { return t.n === name && t.o === (owner || null) && !t.dead; }); }
   function __run(t) {
     var r;
     try { r = t.f(); } catch (e) { setTimeout(function () { throw e; }, 0); return; }
@@ -997,7 +1050,7 @@ function toolbox(){
       lab('삐 소리'),bk('act_beep',{inputs:{SEC:n(0.3)}}),
       lab('알림'),bk('act_alert',{inputs:{VALUE:sh('text',T('안녕하세요!'))}}),
       lab('시간'),bk('act_after',{inputs:{SEC:n(1)}}),bk('ev_timer'),bk('act_stop'),
-      lab('이름 붙여 멈출 수 있는 시간'),bk('time_after',{inputs:{SEC:n(2)}}),bk('time_every',{inputs:{SEC:n(1)}}),bk('time_stop'),bk('time_stopall'),
+      lab('이름 붙여 멈출 수 있는 시간'),bk('time_after',{inputs:{SEC:n(2)}}),bk('time_every',{inputs:{SEC:n(1)}}),bk('time_stop'),bk('time_running'),bk('time_stopall'),
       lab('시계와 달력'),bk('val_time'),bk('val_today')]),
     cat('save','저장',[
       bk('act_store',{inputs:{NAME:sh('text',T('최고점')),VALUE:n(0)}}),bk('val_load',{inputs:{NAME:sh('text',T('최고점')),DEF:n(0)}}),
@@ -1006,7 +1059,7 @@ function toolbox(){
     {kind:'sep'},
     cat('logic','조건',[
       bk('controls_if'),bk('controls_if',{extraState:{hasElse:true}}),
-      lab('비교'),bk('logic_compare'),bk('logic_operation'),bk('logic_negate'),bk('logic_between',{inputs:{LO:n(1),HI:n(10)}}),
+      lab('비교'),bk('logic_compare'),bk('logic_operation'),bk('val_keyheld'),bk('logic_negate'),bk('logic_between',{inputs:{LO:n(1),HI:n(10)}}),
       lab('논리 게이트'),bk('logic_gate',{fields:{GATE:'AND'}}),bk('logic_gate',{fields:{GATE:'OR'}}),bk('logic_gate',{fields:{GATE:'XOR'}}),bk('logic_gate',{fields:{GATE:'NOR'}}),bk('logic_gate',{fields:{GATE:'NAND'}}),
       lab('기본'),bk('logic_boolean'),bk('logic_ternary')]),
     cat('loop','반복',[
@@ -1032,6 +1085,7 @@ function varsFlyout(w){
   var xml=Blockly.utils.xml, out=[], lab=function(t){ var e=xml.createElement('label'); e.setAttribute('text',T(t)); return e; };
   out.push(lab('변수')); out=out.concat(Blockly.Variables.flyoutCategory(w));
   out.push(lab('함수')); out=out.concat(Blockly.Procedures.flyoutCategory(w));
+  out.push(lab('JS 식과 호출')); ['js_el','js_prop','js_propset','js_idx','js_idxset','js_mcall','js_mcalls','js_call','js_calls','js_new','js_num','js_bool','js_push','js_has','js_return'].forEach(function(t){ var e=xml.createElement('block'); e.setAttribute('type',t); out.push(e); });
   out.push(lab('JS 직접 쓰기')); ['js_raw','js_val'].forEach(function(t){ var e=xml.createElement('block'); e.setAttribute('type',t); out.push(e); });
   return out;
 }
