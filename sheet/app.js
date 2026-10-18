@@ -591,13 +591,28 @@ function cmd(n){
     case 'cfviz': return openCfViz();
     case 'dv': return openDv();
     case 'note': return editNote();
-    case 'rowmenu': return openMenu($('rowMenu'),document.querySelector('[data-cmd=rowmenu]'));
     case 'merge': return mergeCmd();
     case 'borderdlg': return openBorder();
-    case 'datamenu': return openMenu($('dataMenu'),$('bData'));
   }
 }
-document.getElementById('ribbon').addEventListener('click',function(e){ var b=e.target.closest('[data-cmd]'); if(b) cmd(b.dataset.cmd); });
+/* every ribbon button and command-search entry (commands.js) runs through here: plain ids are cmd() names,
+   r.* the row/column menu, d.* the data tools, f.* the file menu, t.* the sheet tab menu, ai.* the AI window */
+function runCmd(id){
+  id=String(id||''); var p=id.indexOf('.'), ns=p>0?id.slice(0,p):'', n=p>0?id.slice(p+1):id;
+  if(ns==='r'){ if(n==='clr'){ closeMenus(); commitEdit(); return clearSel(); } return rowCmd(n); }
+  if(ns==='d'){ closeMenus(); return dataCmd(n); }
+  if(ns==='f'){ closeMenus(); commitEdit(); return fileCmd(n); }
+  if(ns==='t'){ closeMenus(); if(n==='add') return $('addTab').click(); return tabCmd(n); }
+  if(ns==='ai'){ commitEdit();
+    if(n==='set'){ if(window.FFAI) FFAI.settings(); return; }
+    if(n==='fn') return $('aiFn').click();
+    if(n==='rerun'){ if(window.FSAI) FSAI.rerun(); return; }
+    if(window.FSAI){ FSAI.open(); var tb=document.querySelector('#aiDlg .atab[data-m="'+n+'"]'); if(tb) tb.click(); } return; }
+  if(n==='fc'||n==='bg'){ var pk=$(n==='fc'?'fcPick':'bgPick'); try{ if(pk.showPicker) pk.showPicker(); else pk.click(); }catch(e){ pk.click(); } return; }
+  if(n==='nf'){ $('nfSel').focus(); return; }
+  return cmd(n);
+}
+document.getElementById('ribbon').addEventListener('click',function(e){ var b=e.target.closest('[data-cmd]'); if(b) runCmd(b.dataset.cmd); });
 document.getElementById('ribbon').addEventListener('pointerdown',function(e){ if(e.target.closest('[data-cmd=fn],[data-cmd=sum]')&&editing) e.preventDefault(); });
 $('nfSel').addEventListener('change',function(){ var v=this.value; commitEdit(); fmtSel(function(x){ if(v) x.nf=v; else delete x.nf; }); });
 $('fcPick').addEventListener('input',function(){ $('fcChip').style.background=this.value; });
@@ -743,20 +758,22 @@ function renderTabs(){
 function uniqueName(base){ var n=1, names=doc.sheets.map(function(s){ return s.name; }); while(names.indexOf(base+n)>=0) n++; return base+n; }
 $('addTab').onclick=function(){ commitEdit(); pushUndo(); doc.sheets.push(newSheet(uniqueName(T('시트')))); switchSheet(doc.sheets.length-1); saveSoon(); };
 $('tabMenu').addEventListener('click',function(e){
-  var b=e.target.closest('[data-t]'); if(!b) return; closeMenus(); var i=doc.active;
-  if(b.dataset.t==='rename') ask(T('시트 이름 바꾸기'),'',sh.name).then(function(v){ v=(v||'').trim().replace(/[\[\]:*?\/\\]/g,'').slice(0,31); if(!v||v===sh.name) return;
+  var b=e.target.closest('[data-t]'); if(!b) return; closeMenus(); tabCmd(b.dataset.t); });
+function tabCmd(t){
+  var i=doc.active; commitEdit();
+  if(t==='rename') ask(T('시트 이름 바꾸기'),'',sh.name).then(function(v){ v=(v||'').trim().replace(/[\[\]:*?\/\\]/g,'').slice(0,31); if(!v||v===sh.name) return;
       if(doc.sheets.some(function(s){ return s.name===v; })) return toast(T('같은 이름의 시트가 있어요'));
       pushUndo(); var old=sh.name; doc.sheets.forEach(function(s){ for(var k in s.cells){ var c=s.cells[k]; if(c.v&&String(c.v)[0]==='=') c.v=E.renameSheetInFormula(c.v,old,v); } });
       doc.names.forEach(function(n){ n.ref=E.renameSheetInFormula('='+n.ref,old,v).slice(1); });
       doc.sheets.forEach(function(s){ if(s.pv) s.pv.ref=E.renameSheetInFormula('='+s.pv.ref,old,v).slice(1); });
       sh.name=v; renderTabs(); changed(); });
-  else if(b.dataset.t==='pvr') pvRefresh();
-  else if(b.dataset.t==='dup'){ pushUndo(); var c=JSON.parse(JSON.stringify(sh)); c.name=uniqueName(sh.name+' '); doc.sheets.splice(i+1,0,c); switchSheet(i+1); saveSoon(); }
-  else if(b.dataset.t==='left'&&i>0){ pushUndo(); doc.sheets.splice(i-1,0,doc.sheets.splice(i,1)[0]); doc.active=i-1; renderTabs(); changed(); }
-  else if(b.dataset.t==='right'&&i<doc.sheets.length-1){ pushUndo(); doc.sheets.splice(i+1,0,doc.sheets.splice(i,1)[0]); doc.active=i+1; renderTabs(); changed(); }
-  else if(b.dataset.t==='del'){ if(doc.sheets.length<2) return toast(T('시트가 하나뿐이에요'));
+  else if(t==='pvr') pvRefresh();
+  else if(t==='dup'){ pushUndo(); var c=JSON.parse(JSON.stringify(sh)); c.name=uniqueName(sh.name+' '); doc.sheets.splice(i+1,0,c); switchSheet(i+1); saveSoon(); }
+  else if(t==='left'&&i>0){ pushUndo(); doc.sheets.splice(i-1,0,doc.sheets.splice(i,1)[0]); doc.active=i-1; renderTabs(); changed(); }
+  else if(t==='right'&&i<doc.sheets.length-1){ pushUndo(); doc.sheets.splice(i+1,0,doc.sheets.splice(i,1)[0]); doc.active=i+1; renderTabs(); changed(); }
+  else if(t==='del'){ if(doc.sheets.length<2) return toast(T('시트가 하나뿐이에요'));
     confirmDlg(F('"{0}" 시트를 지울까요?',sh.name)).then(function(ok){ if(!ok) return; pushUndo(); doc.sheets.splice(i,1); eng=new E.Engine(doc); switchSheet(Math.max(0,i-1)); saveSoon(); }); }
-});
+}
 
 /* ---------- menus & dialogs ---------- */
 function openMenu(m,anchorEl,up){
@@ -766,7 +783,7 @@ function openMenu(m,anchorEl,up){
   m.style.left=x+'px'; m.style.top=y+'px';
 }
 function closeMenus(){ document.querySelectorAll('.menu.open').forEach(function(m){ m.classList.remove('open'); }); }
-document.addEventListener('pointerdown',function(e){ if(!e.target.closest('.menu')&&!e.target.closest('#fileBtn,[data-cmd=rowmenu],[data-cmd=datamenu],.tab')) closeMenus(); },true);
+document.addEventListener('pointerdown',function(e){ if(!e.target.closest('.menu')&&!e.target.closest('#fileBtn,.tab')) closeMenus(); },true);
 function openDlg(id,focusEl){ commitEdit(); $(id).classList.add('open'); if(focusEl) setTimeout(function(){ focusEl.focus(); },30); }
 function closeDlgs(){ document.querySelectorAll('.ov.open').forEach(function(o){ if(o.id==='aiDlg') return; o.classList.remove('open'); if(o.id==='askDlg'&&askRes){ var f=askRes; askRes=null; f(null); } }); overlay(); }
 document.querySelectorAll('.ov').forEach(function(o){ o.addEventListener('click',function(e){ if(o.id==='aiDlg') return; if(e.target===o||e.target.closest('[data-close]')) closeDlgs(); }); });
@@ -1113,7 +1130,8 @@ function drawDocList(){
     b.onclick=function(){ closeMenus(); if(x.id===docId) return; saveNow(); loadDoc(x.id); }; l.appendChild(b); });
 }
 $('fileMenu').addEventListener('click',function(e){
-  var b=e.target.closest('[data-f]'); if(!b) return; closeMenus(); var f=b.dataset.f;
+  var b=e.target.closest('[data-f]'); if(!b) return; closeMenus(); fileCmd(b.dataset.f); });
+function fileCmd(f){
   if(f==='new'){ saveNow(); loadDoc(null); saveNow(); }
   else if(f==='open') $('fileIn').click();
   else if(f==='tpl') openTpl();
@@ -1122,7 +1140,7 @@ $('fileMenu').addEventListener('click',function(e){
   else if(f==='print') cmd('print');
   else if(f==='docs') openDocMgr();
   else if(f==='del') deleteDoc(docId);
-});
+}
 $('docName').addEventListener('input',function(){ doc.name=this.value; saveSoon(); });
 $('docName').addEventListener('keydown',function(e){ if(e.key==='Enter') this.blur(); });
 
@@ -1597,7 +1615,6 @@ $('nmName').addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preve
 $('nmRef').addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); $('nmSave').click(); } });
 
 /* ---------- v11: data menu, pivot table ---------- */
-$('dataMenu').addEventListener('click',function(e){ var b=e.target.closest('[data-d]'); if(!b) return; closeMenus(); dataCmd(b.dataset.d); });
 function dataCmd(d){
   if(d==='pivot') return openPivot();
   if(d==='names') return openNames();
@@ -1719,8 +1736,8 @@ if(opn){ try{ history.replaceState(null,'',location.pathname+location.search); }
 if(!last||!lsGet(LSD+last)){ loadDoc(null); saveNow(); } else loadDoc(last);
 setZoom(z0);
 if(opn&&sh.charts.length) setTimeout(openDrawer,0);
-window.FSAPI={get doc(){ return doc; }, get eng(){ return eng; }, get sheet(){ return sh; }, sel:function(){ return sel; }, act:function(){ return act; }, region:region, hasHeader:hasHeader,
+window.FSAPI={run:runCmd, get doc(){ return doc; }, get eng(){ return eng; }, get sheet(){ return sh; }, sel:function(){ return sel; }, act:function(){ return act; }, region:region, hasHeader:hasHeader,
   drawChart:drawChart, chartData:chartData, PAL:PAL, toast:toast, download:download, commitEdit:commitEdit, uid:uid, pushUndo:pushUndo, saveSoon:saveSoon, openDrawer:openDrawer, renderCharts:renderCharts,
   changed:changed, setRaw:function(r,c,v){ if(locked(r,c)) return toast(T('잠긴 칸이라 고칠 수 없어요. 데이터 메뉴에서 잠금을 풀 수 있어요')); return setRaw(r,c,v); }, pasteText:pasteText, selectRange:selectRange, select:select, forSel:forSel};
-window.__fs={get doc(){ return doc; }, get eng(){ return eng; }, select:select, cmd:cmd, sel:function(){ return sel; }, act:function(){ return act; }, setRaw:setRaw, changed:changed, startEdit:startEdit, commitEdit:commitEdit};
+window.__fs={get doc(){ return doc; }, get eng(){ return eng; }, select:select, cmd:cmd, run:runCmd, sel:function(){ return sel; }, act:function(){ return act; }, setRaw:setRaw, changed:changed, startEdit:startEdit, commitEdit:commitEdit};
 })();
