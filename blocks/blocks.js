@@ -181,11 +181,12 @@ def('act_note',function(){ this.appendDummyInput().appendField(T('음')).appendF
   function(b){ need('note'); return '__note('+lit(b.getFieldValue('NOTE'))+', '+b.getFieldValue('BEAT')+');\n'; });
 def('act_tempo',function(){ this.appendValueInput('N').setCheck('Number').appendField(T('빠르기를')); this.appendDummyInput().appendField(T('(으)로 정하기 (1분에 박자 수)')); this.setInputsInline(true); act(this,'음 연주하기의 빠르기예요. 1분에 몇 박자를 연주할지 정해요 (처음엔 120)'); },
   function(b){ need('note'); return '__bpm = Math.max(20, Math.min(400, '+(G.valueToCode(b,'N',O.COMMA)||'120')+'));\n'; });
-var SNDS={};
-function sndField(){ var f=new Blockly.FieldDropdown(function(){ var o=Object.keys(SNDS).map(function(n){ return [n,n]; }); o.push([T('＋ mp3 파일 넣기'),'+']); return o; });
+var SNDS={}, BUILTIN=window.BH_BUILTIN_SNDS||{};
+function sndOf(n){ return SNDS[n]||BUILTIN[n]; }
+function sndField(){ var f=new Blockly.FieldDropdown(function(){ var o=Object.keys(BUILTIN).map(function(n){ return [T(n),n]; }); Object.keys(SNDS).forEach(function(n){ if(!BUILTIN[n]) o.push([n,n]); }); o.push([T('＋ mp3 파일 넣기'),'+']); return o; });
   f.setValidator(function(v){ if(v==='+'){ var me=this; setTimeout(function(){ if(window.BH&&BH.pickSound) BH.pickSound(me); },0); return null; } return v; }); return f; }
-def('act_mp3',function(){ this.appendDummyInput().appendField(T('내 소리')).appendField(sndField(),'SND').appendField(new Blockly.FieldDropdown(function(){ return [[T('한 번 재생하기'),'once'],[T('반복해서 재생하기'),'loop']]; }),'LOOP'); this.setFieldValue('+','SND'); act(this,'내가 넣은 mp3 같은 소리 파일을 재생해요. 목록 맨 아래 mp3 파일 넣기로 파일을 골라요'); },
-  function(b){ var n=b.getFieldValue('SND'); if(!SNDS[n]) return ''; USEDS[n]=1; need('mp3'); return '__mp3('+lit(n)+', '+(b.getFieldValue('LOOP')==='loop')+');\n'; });
+def('act_mp3',function(){ this.appendDummyInput().appendField(T('내 소리')).appendField(sndField(),'SND').appendField(new Blockly.FieldDropdown(function(){ return [[T('한 번 재생하기'),'once'],[T('반복해서 재생하기'),'loop']]; }),'LOOP'); this.setFieldValue('기본 노래','SND'); act(this,'소리를 재생해요. 처음엔 기본 노래가 골라져 있고, 목록 맨 아래 mp3 파일 넣기로 내 파일을 골라도 돼요'); },
+  function(b){ var n=b.getFieldValue('SND'); if(!sndOf(n)) return ''; USEDS[n]=1; need('mp3'); return '__mp3('+lit(n)+', '+(b.getFieldValue('LOOP')==='loop')+');\n'; });
 /* logic gates and condition loops */
 var GATES=[['그리고 (AND)','AND'],['또는 (OR)','OR'],['둘 중 하나만 (XOR)','XOR'],['둘 다 아님 (NOR)','NOR'],['둘이 함께는 아님 (NAND)','NAND']];
 def('logic_gate',function(){ this.appendValueInput('A').setCheck('Boolean'); this.appendValueInput('B').setCheck('Boolean').appendField(new Blockly.FieldDropdown(function(){ return GATES.map(function(g){ return [T(g[0]),g[1]]; }); }),'GATE'); this.setInputsInline(true); this.setOutput(true,'Boolean'); this.setColour('#5b80a5'); this.setTooltip(T('두 조건을 합쳐요. AND는 둘 다 참, OR은 하나라도 참, XOR은 정확히 하나만 참, NOR은 둘 다 거짓, NAND는 둘 다 참만 아니면 참이에요')); },
@@ -797,7 +798,7 @@ function build(ws,opts){
     var pidv=String(opts.pid||title||'page');
     helpers='var __pid = '+lit(pidv).replace(/</g,'\\u003c')+';\nvar __mem = '+JSON.stringify(saved).replace(/</g,'\\u003c')+';\n'+(opts.trap?'function __sync(k, v) { try { parent.postMessage({ ffbhStore: [k, v] }, \'*\'); } catch (e) {} }':'function __sync() {}')+'\n'+helpers; }
   if(NEED.imgs){ var used=Object.keys(USED).filter(function(id){ return IMGS[id]; }); helpers='// '+T('내 그림')+'\nvar __imgs = {\n'+used.map(function(id){ return '  '+lit(IMGS[id].name)+': '+lit(IMGS[id].data); }).join(',\n')+'\n};\n'+(NEED.image?'for (var __k in __imgs) { var __im = new Image(); __im.src = __imgs[__k]; }\n':'')+helpers; }
-  if(NEED.mp3){ helpers='var __mp3s = {\n'+Object.keys(USEDS).filter(function(n){ return SNDS[n]; }).map(function(n){ return '  '+lit(n)+': '+lit(SNDS[n].data); }).join(',\n')+'\n};\n'+helpers; }
+  if(NEED.mp3){ helpers='var __mp3s = {\n'+Object.keys(USEDS).filter(function(n){ return sndOf(n); }).map(function(n){ return '  '+lit(n)+': '+lit(sndOf(n).data); }).join(',\n')+'\n};\n'+helpers; }
   if(helpers) js='// '+T('도우미 함수')+'\n'+helpers+'\n\n'+js;
   if(opts.trap) js=watchHelper(dbgVars.concat(NEED.score?[[T('점수'),'__score']]:[]))+'\n\n'+js;
   var fg=textColorFor(bg);
