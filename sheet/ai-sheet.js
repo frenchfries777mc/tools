@@ -22,7 +22,17 @@ function pump(){
     })(job);
   }
 }
+/* =AI("주어", B1): a bare word naming a part of the data means "take that part out", spelled out so the small model gets it */
+var PART_KO=/^(주어|서술어|술어|동사|목적어|보어|부사어|관형어|명사|대명사|형용사|부사|조사|감탄사|날짜|시간|요일|이름|사람|장소|숫자|금액|가격|전화번호|이메일|주소|나라|도시|색|색깔|단위|키워드|핵심어|핵심 단어)(만|은|는|이|가)?\s*(찾기|뽑기|골라|골라 줘|알려 줘|알려줘)?\s*\??$/,
+    PART_EN=/^(the\s+)?(subject|verb|object|nouns?|adjectives?|adverbs?|dates?|time|names?|places?|numbers?|prices?|emails?|phone( number)?|address|keywords?|country|city|colou?r)\s*\??$/i;
+function partTask(p){
+  var t=String(p==null?'':p).trim(), m;
+  if((m=PART_KO.exec(t))) return '데이터에서 '+m[1]+'만 골라 데이터에 쓰인 그대로 쓰기. 여러 개면 쉼표로 구분';
+  if((m=PART_EN.exec(t))) return 'Write only the '+m[2].toLowerCase()+' from the data, exactly as it is written there. If there are several, separate them with commas';
+  return p;
+}
 E.aiHook=function(prompt,parts){
+  prompt=partTask(prompt);
   var full=FFP.cellPrompt(prompt,parts), h=hash(full), st=store();
   if(force){ delete st[h]; delete errs[h]; }
   if(st[h]!=null) return st[h];
