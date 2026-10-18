@@ -108,6 +108,8 @@ FFT.add({
 '🗂 내 그림 관리':['🗂 My pictures','🗂 Mis imágenes','🗂 Mes images','🗂 Meine Bilder','🗂 わたしの絵の管理'],
 '페이지에 넣기':['Put on the page','Poner en la página','Mettre sur la page','Auf die Seite','ページに入れる'],
 '바꾸기':['Change','Cambiar','Changer','Ändern','変える'],
+'그림 고르기':['Pick a picture','Elegir un dibujo','Choisir un dessin','Bild wählen','絵を選ぶ'],
+'다시 시작':['Restart','Reiniciar','Recommencer','Neu starten','やり直す'],
 '그리기':['Draw','Dibujar','Dessiner','Malen','描く'],
 '누른 곳':['Where you pressed','Dónde pulsaste','Où tu as appuyé','Wo gedrückt','押した場所'],
 '누르고 쓰면':['When pressed or typed','Al pulsar o escribir','Quand on appuie ou écrit','Beim Drücken oder Tippen','押したり書いたりしたら'],
