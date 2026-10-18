@@ -5,7 +5,7 @@
 'use strict';
 var T=FFT.T, $=function(id){ return document.getElementById(id); };
 var LI=Math.max(0,['ko','en','es','fr','de','ja'].indexOf(FFT.lang));
-var LIB_URL='objects-lib.js?v=38';
+var LIB_URL='objects-lib.js?v=39';
 
 /* toolbox: put the button right after "사진 넣기", wherever that category ends up */
 var baseToolbox=BH.toolbox;
