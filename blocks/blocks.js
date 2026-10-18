@@ -1241,7 +1241,7 @@ function build(ws,opts){
     body+=bodyHTML(b,'  ',true);
   });
   // JavaScript
-  WAITS=ws.getAllBlocks(false).some(function(x){ return (x.type==='act_wait'||x.type==='act_glideto'||x.type==='act_glidexy'||x.type==='act_tween'||x.type==='act_path_go'||x.type==='act_type'||x.type==='act_speak_wait')&&x.isEnabled(); });
+  WAITS=ws.getAllBlocks(false).some(function(x){ return (x.type==='act_wait'||x.type==='act_glideto'||x.type==='act_glidexy'||x.type==='act_tween'||x.type==='act_path_go'||x.type==='act_type'||x.type==='act_speak_wait'||x.type==='act_fetch')&&x.isEnabled(); });
   NEED={}; USED={}; USEDS={}; G.INFINITE_LOOP_TRAP=opts.trap?'if (--window.__loop < 0) throw new Error("'+T('반복이 끝나지 않아요')+'");\n':null;
   DBG=!!opts.debug; dbgSeq=0; GLW=!!opts.glow&&!DBG; G.STATEMENT_PREFIX=DBG?'await __step(%1);\n':GLW?'__glow(%1);\n':null;
   var js, dbgVars=[];
@@ -1378,6 +1378,171 @@ def('act_voice_listen',function(){ this.appendDummyInput().appendField(new Block
   function(b){ need('voice'); return '__voice('+(b.getFieldValue('MODE')==='on')+');\n'; });
 def('val_voice_heard',function(){ this.appendDummyInput().appendField(T('방금 들은 말')); val(this,'String','마이크로 가장 나중에 들은 말이에요. 아직 못 들었으면 빈 글자예요'); },
   function(){ need('voice'); return ['__vHeard',O.ATOMIC]; });
+
+/* ---------- v59: 주소에서 글 가져오기, 전체 화면, 공유·복사, QR 그림, 목록 섞기·뽑기, 스톱워치 ---------- */
+HELP_DEPS.qr=['$']; HELP_DEPS.ulshuf=['$'];
+def('act_fetch',function(){ this.appendValueInput('URL').setCheck('String'); this.appendDummyInput().appendField(T('에서 글 가져오고 기다리기')); this.setInputsInline(true); act(this,'인터넷 주소(https://)에서 글을 가져오고 끝날 때까지 기다려요. 가져온 글은 "가져온 글" 블록에, 성공했는지는 "가져오기 성공했나?" 블록에 있어요. 다른 페이지가 읽어 가도 된다고 허락한 사이트(CORS)만 가능해요. 8초 안에 못 가져오면 실패로 쳐요'); },
+  function(b){ need('fetch'); return 'await __fetch('+(G.valueToCode(b,'URL',O.COMMA)||"''")+');\n'; });
+def('val_fetched',function(){ this.appendDummyInput().appendField(T('가져온 글')); val(this,'String','"주소에서 글 가져오고 기다리기"로 가져온 글이에요. 실패했거나 아직 안 가져왔으면 빈 글자예요'); },
+  function(){ need('fetch'); return ['__fetched',O.ATOMIC]; });
+def('val_fetch_ok',function(){ this.appendDummyInput().appendField(T('가져오기 성공했나?')); val(this,'Boolean','방금 한 "글 가져오기"가 성공했으면 참이에요. https:// 주소가 아니거나, 사이트가 허락하지 않았거나, 8초가 넘으면 거짓이에요'); },
+  function(){ need('fetch'); return ['__fetchOk',O.ATOMIC]; });
+def('val_json_get',function(){ this.appendValueInput('TEXT').setCheck('String'); this.appendDummyInput().appendField(T('을(를) JSON으로 보고')); this.appendValueInput('KEY').setCheck('String'); this.appendDummyInput().appendField(T('의 값')); this.setInputsInline(true); val(this,null,'JSON 글에서 키에 해당하는 값을 꺼내요. 안쪽은 점으로 이어요 (예: a.b.0 은 a 안의 b 안의 첫 번째). 없거나 JSON이 아니면 빈 글자예요'); },
+  function(b){ need('json'); return ['__jget('+(G.valueToCode(b,'TEXT',O.COMMA)||"''")+', '+(G.valueToCode(b,'KEY',O.COMMA)||"''")+')',O.FUNCTION_CALL]; });
+def('act_fullscreen',function(){ this.appendDummyInput().appendField(new Blockly.FieldDropdown(function(){ return [[T('화면 가득 키우기'),'on'],[T('전체 화면 나가기'),'off']]; }),'MODE'); act(this,'페이지를 화면 가득 키우거나 원래대로 돌려요. 버튼을 눌렀을 때만 돼요. 아이폰 사파리처럼 지원하지 않는 곳에서는 아무 일도 없어요'); },
+  function(b){ need('fs'); return '__fullscreen('+(b.getFieldValue('MODE')==='on')+');\n'; });
+def('act_share',function(){ this.appendValueInput('TEXT').setCheck('String'); this.appendDummyInput().appendField(T('을(를) 공유하기')); this.setInputsInline(true); act(this,'글이나 주소를 다른 앱으로 보내는 공유 창을 열어요. 버튼을 눌렀을 때만 돼요. 공유 창이 없는 곳에서는 대신 복사해요'); },
+  function(b){ need('share'); return '__share('+(G.valueToCode(b,'TEXT',O.COMMA)||"''")+');\n'; });
+def('act_copy',function(){ this.appendValueInput('TEXT').setCheck('String'); this.appendDummyInput().appendField(T('을(를) 복사하기')); this.setInputsInline(true); act(this,'글을 복사해서 어디든 붙여 넣을 수 있게 해요. 버튼을 눌렀을 때만 돼요'); },
+  function(b){ need('share'); return '__copy('+(G.valueToCode(b,'TEXT',O.COMMA)||"''")+');\n'; });
+def('act_qr',function(){ this.appendValueInput('TEXT').setCheck('String'); this.appendDummyInput().appendField(T('(으)로 QR 그림을')).appendField(elField(['el_canvas']),'EL').appendField(T('에 만들기')); this.setInputsInline(true); act(this,'글이나 주소를 폰 카메라로 읽을 수 있는 QR 그림으로 그려요. 그림판(캔버스) 위에 그려요. 글이 비어 있으면 지워요. 200글자까지만 써요'); },
+  function(b){ need('qr'); return '__qr('+er(b)+', '+(G.valueToCode(b,'TEXT',O.COMMA)||"''")+');\n'; });
+def('act_list_shuffle',function(){ this.appendValueInput('LIST').setCheck('Array'); this.appendDummyInput().appendField(T('을(를) 섞기')); this.setInputsInline(true); act(this,'리스트 안의 항목 순서를 아무렇게나 바꿔요. 같은 리스트 안에서 바뀌어요'); },
+  function(b){ need('lshuf'); return '__shuffle('+(G.valueToCode(b,'LIST',O.COMMA)||'[]')+');\n'; });
+def('val_list_pick',function(){ this.appendValueInput('LIST').setCheck('Array'); this.appendDummyInput().appendField(T('에서 하나 뽑기')); this.setInputsInline(true); val(this,null,'리스트에서 아무 항목이나 하나 뽑아요. 리스트가 비어 있으면 빈 글자예요'); },
+  function(b){ need('lshuf'); return ['__pick('+(G.valueToCode(b,'LIST',O.COMMA)||'[]')+')',O.FUNCTION_CALL]; });
+def('act_ul_shuffle',function(){ this.appendDummyInput().appendField(T('목록')).appendField(elField(['el_list']),'EL').appendField(T('의 항목 섞기')); act(this,'화면에 보이는 목록의 항목 순서를 아무렇게나 바꿔요'); },
+  function(b){ need('ulshuf'); need('lshuf'); return '__shuffleEl('+er(b)+');\n'; });
+def('act_stopwatch',function(){ this.appendDummyInput().appendField(T('스톱워치')).appendField(new Blockly.FieldDropdown(function(){ return [[T('재기 시작'),'start'],[T('멈추기'),'stop'],[T('처음으로'),'reset']]; }),'MODE'); act(this,'스톱워치를 시작하거나 멈춰요. "처음으로"는 0으로 돌리고 멈춰요. 멈추면 시간이 그대로 남아요'); },
+  function(b){ need('sw'); return '__sw('+lit(b.getFieldValue('MODE'))+');\n'; });
+def('val_stopwatch',function(){ this.appendDummyInput().appendField(T('스톱워치 시간(초)')); val(this,'Number','스톱워치가 잰 시간(초)이에요. 재는 동안에는 계속 늘어나고, 멈추면 그대로예요. 소수 셋째 자리까지 나와요'); },
+  function(){ need('sw'); return ['__swVal()',O.FUNCTION_CALL]; });
+HELP.fetch=src(function(){
+  var __fetched = '', __fetchOk = false;
+  async function __fetch(url) {
+    var t = 0;
+    __fetched = '';
+    __fetchOk = false;
+    try {
+      url = String(url == null ? '' : url).trim();
+      if (!/^https:\/\/[^\s]/i.test(url)) return;
+      var ctl = new AbortController();
+      t = setTimeout(function () { ctl.abort(); }, 8000);
+      var r = await fetch(url, { credentials: 'omit', referrerPolicy: 'no-referrer', signal: ctl.signal });
+      var s = await r.text();
+      if (!r.ok) return;
+      __fetched = s.length > 200000 ? s.slice(0, 200000) : s;
+      __fetchOk = true;
+    } catch (e) {
+      __fetched = '';
+      __fetchOk = false;
+    } finally {
+      clearTimeout(t);
+    }
+  }
+});
+HELP.json=src(function(){
+  function __jget(text, key) {
+    try {
+      var v = JSON.parse(String(text == null ? '' : text)), p = String(key == null ? '' : key).split('.'), i;
+      if (String(key).trim() === '') return '';
+      for (i = 0; i < p.length; i++) {
+        if (v === null || typeof v !== 'object' || !Object.prototype.hasOwnProperty.call(v, p[i])) return '';
+        v = v[p[i]];
+      }
+      if (v === null || v === undefined) return '';
+      if (typeof v === 'object') return JSON.stringify(v);
+      return v;
+    } catch (e) { return ''; }
+  }
+});
+HELP.fs=src(function(){
+  function __fullscreen(on) {
+    try {
+      var d = document, e = d.documentElement, f = on ? (e.requestFullscreen || e.webkitRequestFullscreen) : (d.exitFullscreen || d.webkitExitFullscreen);
+      if (!f) return;
+      var p = f.call(on ? e : d);
+      if (p && p.catch) p.catch(function () {});
+    } catch (e) {}
+  }
+});
+HELP.share=src(function(){
+  function __copy(text) {
+    text = text == null ? '' : String(text);
+    function old() {
+      try {
+        var t = document.createElement('textarea');
+        t.value = text;
+        t.setAttribute('readonly', '');
+        t.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0';
+        document.body.appendChild(t);
+        t.select();
+        t.setSelectionRange(0, text.length);
+        document.execCommand('copy');
+        document.body.removeChild(t);
+      } catch (e) {}
+    }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        var p = navigator.clipboard.writeText(text);
+        if (p && p.catch) p.catch(old);
+      } else old();
+    } catch (e) { old(); }
+  }
+  function __share(text) {
+    text = text == null ? '' : String(text);
+    try {
+      if (navigator.share) {
+        var p = navigator.share(/^https?:\/\/\S+$/i.test(text) ? { url: text } : { text: text });
+        if (p && p.catch) p.catch(function (e) { if (!e || e.name !== 'AbortError') __copy(text); });
+        return;
+      }
+    } catch (e) {}
+    __copy(text);
+  }
+});
+HELP.qr=';'+(window.FFQRSRC||'')+'\n'+src(function(){
+  function __qr(name, text) {
+    var c = $(name), s = text == null ? '' : String(text);
+    try {
+      var g = c.getContext('2d');
+      g.clearRect(0, 0, c.width, c.height);
+      if (!s) return;
+      if (s.length > 200) s = s.slice(0, 200);
+      var q = FFQR.make(s);
+      if (!q) return;
+      var n = q.size + 8, k = Math.max(1, Math.floor(Math.min(c.width, c.height) / n)), ox = Math.floor((c.width - n * k) / 2), oy = Math.floor((c.height - n * k) / 2), x, y;
+      g.fillStyle = '#fff';
+      g.fillRect(ox, oy, n * k, n * k);
+      g.fillStyle = '#000';
+      for (y = 0; y < q.size; y++) for (x = 0; x < q.size; x++) if (q.get(x, y)) g.fillRect(ox + (x + 4) * k, oy + (y + 4) * k, k, k);
+    } catch (e) {}
+  }
+});
+HELP.lshuf=src(function(){
+  function __shuffle(a) {
+    if (!Array.isArray(a)) return a;
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1)), t = a[i];
+      a[i] = a[j];
+      a[j] = t;
+    }
+    return a;
+  }
+  function __pick(a) {
+    return Array.isArray(a) && a.length ? a[Math.floor(Math.random() * a.length)] : '';
+  }
+});
+HELP.ulshuf=src(function(){
+  function __shuffleEl(name) {
+    var ul = $(name), a = Array.prototype.slice.call(ul.children);
+    __shuffle(a);
+    a.forEach(function (li) { ul.appendChild(li); });
+  }
+});
+HELP.sw=src(function(){
+  var __swT0 = 0, __swAcc = 0, __swRun = false;
+  function __sw(act) {
+    var now = performance.now();
+    if (act === 'start') { if (!__swRun) { __swRun = true; __swT0 = now; } }
+    else if (act === 'stop') { if (__swRun) { __swAcc += now - __swT0; __swRun = false; } }
+    else { __swAcc = 0; __swRun = false; }
+  }
+  function __swVal() {
+    var ms = __swAcc + (__swRun ? performance.now() - __swT0 : 0);
+    return Math.round(ms) / 1000;
+  }
+});
 
 Object.assign(HELP,{
   video:[
@@ -1635,6 +1800,11 @@ function toolbox(){
       lab('삐 소리'),bk('act_beep',{inputs:{SEC:n(0.3)}}),
       lab('소리 내어 읽기'),bk('act_speak_text',{inputs:{TEXT:sh('text',T('안녕하세요!'))}}),bk('act_speak_wait',{inputs:{TEXT:sh('text',T('안녕하세요!'))}}),bk('act_speak_stop'),
       lab('말로 시키기'),bk('ev_voice'),bk('act_voice_listen'),bk('val_voice_heard'),
+      lab('인터넷에서 글 가져오기'),bk('act_fetch',{inputs:{URL:sh('text','https://')}}),bk('val_fetched'),bk('val_fetch_ok'),bk('val_json_get',{inputs:{TEXT:{block:{type:'val_fetched'}},KEY:sh('text','a.b')}}),
+      lab('전체 화면'),bk('act_fullscreen'),bk('act_fullscreen',{fields:{MODE:'off'}}),
+      lab('공유하기와 복사하기'),bk('act_share',{inputs:{TEXT:sh('text',T('안녕하세요!'))}}),bk('act_copy',{inputs:{TEXT:sh('text',T('안녕하세요!'))}}),
+      lab('QR 그림'),bk('act_qr',{inputs:{TEXT:sh('text','https://')}}),
+      lab('스톱워치'),bk('act_stopwatch'),bk('act_stopwatch',{fields:{MODE:'stop'}}),bk('act_stopwatch',{fields:{MODE:'reset'}}),bk('val_stopwatch'),
       lab('알림'),bk('act_alert',{inputs:{VALUE:sh('text',T('안녕하세요!'))}}),
       lab('시간'),bk('act_wait',{inputs:{SEC:n(1)}}),bk('act_stop'),
       lab('이름 붙여 멈출 수 있는 시간'),bk('time_after',{inputs:{SEC:n(2)}}),bk('time_every',{inputs:{SEC:n(1)}}),bk('time_stop'),bk('time_running'),bk('time_stopall'),
@@ -1664,7 +1834,7 @@ function toolbox(){
       bk('text_charAt'),bk('text_changeCase',{inputs:{TEXT:sh('text','abc')}}),bk('text_trim',{inputs:{TEXT:sh('text',' abc ')}}),
       lab('리스트'),bk('lists_create_with',{extraState:{itemCount:0}}),bk('lists_create_with'),
       bk('lists_repeat',{inputs:{NUM:n(5)}}),bk('lists_length'),bk('lists_isEmpty'),
-      bk('lists_indexOf'),bk('lists_getIndex'),bk('lists_setIndex'),bk('lists_sort')]),
+      bk('lists_indexOf'),bk('lists_getIndex'),bk('lists_setIndex'),bk('lists_sort'),bk('act_list_shuffle'),bk('val_list_pick'),bk('act_ul_shuffle')]),
     cat('vars','변수·함수','FFVARS',[bk('js_raw'),bk('js_val')])
   ]};
 }
