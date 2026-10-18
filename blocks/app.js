@@ -454,7 +454,7 @@ $('ebPaste').onclick=pasteBlock;
 $('ebUndo').onclick=function(){ ws.undo(false); syncBar(); };
 $('ebRedo').onclick=function(){ ws.undo(true); syncBar(); };
 $('ebDel').onclick=deleteAll;
-$('ebTidy').onclick=function(){ arrange(); setTimeout(function(){ ws.scrollCenter(); },30); toast(T('블록을 정리했어요')); };
+$('ebTidy').onclick=function(){ arrange(); setTimeout(function(){ ws.scrollCenter(); },30); toast(T('블록을 자동 정렬했어요')); };
 $('ebCenter').onclick=function(){ ws.scrollCenter(); };
 $('ebSearch').onclick=openSearch;
 ws.addChangeListener(function(e){ if(e.type===Blockly.Events.SELECTED||!e.isUiEvent) setTimeout(syncBar,0); });
