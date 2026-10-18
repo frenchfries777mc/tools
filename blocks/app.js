@@ -24,6 +24,9 @@ var ws=Blockly.inject('ws',{toolbox:BH.toolbox(),theme:theme,renderer:'zelos',tr
   zoom:{controls:true,wheel:false,pinch:true,startScale:('ontouchstart' in window)?0.72:0.68,maxScale:2,minScale:0.3,scaleSpeed:1.15},
   move:{scrollbars:true,drag:true,wheel:true}});
 ws.addChangeListener(Blockly.Events.disableOrphans);
+ws.registerToolboxCategoryCallback('FFVARS',BH.varsFlyout); // "변수·함수": variables, functions and JS in one category
+/* Korean particles on the labels follow the names and values in front of them (BH.fixJosa) */
+var josaT=0; ws.addChangeListener(function(e){ if(e.isUiEvent||josaT) return; josaT=requestAnimationFrame(function(){ josaT=0; BH.fixJosaAll(ws); }); });
 
 var loading=false;
 function prescan(obj){ // remember element names before loading so name dropdowns accept them
@@ -103,7 +106,7 @@ function refresh(force){
   if(runState==='stop'&&force!=='run'){ if($('pCode').classList.contains('on')) showCode(); return; }
   if(custom!==null){ if(force!=='run'){ dropCustom(true); } else { clearLog(); dbgReset(); $('frame').srcdoc=custom; if(runState==='pause') setRun('run'); return; } }
   checkPics();
-  var prev; try{ prev=BH.build(ws,{trap:true,debug:dbgOn,pid:curPid(),saved:readStore(curPid())}); }catch(err){ console.error(err); return; }
+  var prev; try{ prev=BH.build(ws,{trap:true,debug:dbgOn,glow:true,link:true,pid:curPid(),saved:readStore(curPid())}); }catch(err){ console.error(err); return; }
   if(force||prev!==lastPrev){ lastPrev=prev; clearLog(); dbgReset(); $('frame').srcdoc=prev; if(runState==='pause') setRun('run'); }
   if($('pCode').classList.contains('on')) showCode();
 }
@@ -269,7 +272,9 @@ $('fileIn').addEventListener('change',function(){
 /* ---------- examples ---------- */
 var exMenu=$('exMenu');
 BH_EXAMPLES.forEach(function(ex,i){ var b=document.createElement('button'); b.innerHTML='<span></span><small></small>'; b.firstChild.textContent=T(ex.name); b.lastChild.textContent=T(ex.desc);
-  b.onclick=function(){ closeMenus(); createProject(T(ex.name),function(){ loadXML(ex.xml()); arrange(); }); toast(T('새 프로젝트로 열었어요')); }; exMenu.appendChild(b); });
+  b.onclick=function(){ closeMenus(); createProject(T(ex.name),function(){ loadExample(ex); }); toast(T('새 프로젝트로 열었어요')); }; exMenu.appendChild(b); });
+/* an example can bring its own pictures ("내 그림", e.g. 🍎 오브젝트 pictures) */
+function loadExample(ex,merge){ var im=typeof ex.imgs==='function'?ex.imgs():ex.imgs; if(im){ if(merge){ Object.keys(im).forEach(function(k){ BH.IMGS[k]=im[k]; }); setTimeout(regenThumbs,0); } else setImgs(im); } loadXML(ex.xml()); arrange(); } // merge: keep the project's own pictures too
 
 /* ---------- menus ---------- */
 function openMenu(m,anchor){ var was=m.classList.contains('open'); closeMenus(); if(was) return; m.classList.add('open');
@@ -552,10 +557,42 @@ P=readIdx(); if(!P){ P={cur:null,list:[]}; var old=null; try{ old=JSON.parse(lsG
 P.list=P.list.filter(function(e){ return e&&e.id; });
 (function(){ var cand=[EMB||P.cur].concat(P.list.slice().sort(function(a,b){ return b.t-a.t; }).map(function(e){ return e.id; })), ok=false;
   for(var k=0;k<cand.length&&!ok;k++){ var id=cand[k], d=id&&entry(id)&&readProj(id); if(d&&d.ws){ P.cur=id; $('projName').value=d.name||T('나의 웹페이지'); setImgs(d.imgs); setSnds(d.snds); try{ loadJSON(d.ws); ok=true; }catch(e){ console.error(e); } } }
-  if(!ok){ P.cur=null; createProject(T(BH_EXAMPLES[0].name),function(){ loadXML(BH_EXAMPLES[0].xml()); arrange(); }); } })();
+  if(!ok){ P.cur=null; createProject(T(BH_EXAMPLES[0].name),function(){ loadExample(BH_EXAMPLES[0]); }); } })();
 setTimeout(syncBar,50);
 if(/^#share=/.test(location.hash)) openShared(location.hash.slice(7));
 window.addEventListener('hashchange',function(){ if(/^#share=/.test(location.hash)) openShared(location.hash.slice(7)); });
 if(EMB){ var embTry=0, embSend=function(){ var html=''; try{ if(P.cur===EMB) html=finalHTML(); }catch(e){ console.error(e); } if(!html&&++embTry<10) return setTimeout(embSend,300); try{ parent.postMessage({ffbhBuilt:1,id:EMB,html:html},'*'); }catch(e){} }; setTimeout(embSend,350); }
-window.__bh={makeShare:makeShare,openShared:openShared,showPreview:showPreview,showHTML:function(h){ custom=String(h); $('codeEdit').readOnly=false; if(custom.length>BIGCODE) bigView(custom); else $('codeEdit').value=custom; setCust(true); clearTimeout(customT); if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=custom; setPane('code'); },clearHTML:function(){ dropCustom(false); },ws:ws,copy:copyBlock,paste:pasteBlock,deleteAll:deleteAll,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,loadJSON:loadJSON,save:saveNow,toast:toast,projects:function(){ return P; },examples:BH_EXAMPLES};
+/* ---------- the running block lights up: the preview sends the ids of the blocks that just ran (BH.build, glow) ---------- */
+function glowBlock(id,ms){ var b=ws.getBlockById(id); if(!b||!b.getSvgRoot) return; var r=b.getSvgRoot(); if(!r) return;
+  r.classList.add('ffRun'); clearTimeout(b.__glowT); b.__glowT=setTimeout(function(){ r.classList.remove('ffRun'); },ms||360); }
+window.addEventListener('message',function(e){ var d=e.data; if(!d||!Array.isArray(d.ffbhGlow)||e.source!==$('frame').contentWindow||document.hidden) return;
+  d.ffbhGlow.slice(0,400).forEach(function(id){ if(typeof id==='string') glowBlock(id); }); });
+/* ---------- 🔗 연결 보기: the selected block's element is outlined in the preview; tapping an element in the preview finds its block ---------- */
+var linkOn=lsGet('ffblocks.link')!=='0';
+function linkNames(b){ var out=[]; if(!b) return out;
+  var add=function(v){ if(typeof v!=='string') return; v=v.replace(/\*$/,''); if(!v||v==='?'||v.charAt(0)==='@'||out.indexOf(v)>=0) return; out.push(v); };
+  if(BH.EL.indexOf(b.type)>=0) add(b.getFieldValue('NAME'));
+  ['EL','A','B'].forEach(function(f){ if(b.getField&&b.getField(f)&&b.getField(f) instanceof Blockly.FieldDropdown) add(b.getFieldValue(f)); });
+  return out; }
+function linkSend(){ var w=$('frame').contentWindow; if(!w) return; var sel=Blockly.getSelected&&Blockly.getSelected();
+  try{ w.postMessage({ffbhLink:{on:linkOn,names:linkOn&&sel&&sel.workspace===ws?linkNames(sel):[]}},'*'); }catch(e){} }
+function setLink(on){ linkOn=on; $('linkBtn').classList.toggle('on',on); $('linkBtn').setAttribute('aria-pressed',on?'true':'false'); lsSet('ffblocks.link',on?'1':'0'); linkSend(); }
+$('linkBtn').onclick=function(){ setLink(!linkOn); toast(linkOn?T('블록과 화면 연결을 켰어요. 블록을 누르면 화면에서 테두리로 보여요'):T('블록과 화면 연결을 껐어요')); };
+ws.addChangeListener(function(e){ if(e.type===Blockly.Events.SELECTED) linkSend(); });
+function inView(b){ var m=ws.getMetricsManager().getViewMetrics(true), xy=b.getRelativeToSurfaceXY(), hw=b.getHeightWidth();
+  return xy.x>=m.left&&xy.y>=m.top&&xy.x+Math.min(hw.width,m.width*0.6)<=m.left+m.width&&xy.y+Math.min(hw.height,m.height*0.6)<=m.top+m.height; }
+window.addEventListener('message',function(e){ var d=e.data; if(!d||e.source!==$('frame').contentWindow) return;
+  if(d.ffbhLinkReady){ linkSend(); return; }
+  if(typeof d.ffbhPick!=='string'||!linkOn) return;
+  var all=ws.getAllBlocks(false), name=d.ffbhPick;
+  var b=all.filter(function(x){ return BH.EL.indexOf(x.type)>=0&&x.getFieldValue('NAME')===name; })[0]||all.filter(function(x){ return x.getField&&x.getField('EL')&&x.getFieldValue('EL')===name; })[0];
+  if(!b) return;
+  if(Blockly.getSelected()!==b){ if(Blockly.common&&Blockly.common.setSelected) Blockly.common.setSelected(b); else if(b.select) b.select(); }
+  if(!inView(b)) ws.centerOnBlock(b.id);
+  glowBlock(b.id,1100); });
+setLink(linkOn);
+/* "🍎 오브젝트 넣기" under the preview: the same picker and insert as the toolbox button */
+$('objPrevBtn').onclick=openObjects;
+
+window.__bh={loadExample:loadExample,makeShare:makeShare,openShared:openShared,showPreview:showPreview,showHTML:function(h){ custom=String(h); $('codeEdit').readOnly=false; if(custom.length>BIGCODE) bigView(custom); else $('codeEdit').value=custom; setCust(true); clearTimeout(customT); if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=custom; setPane('code'); },clearHTML:function(){ dropCustom(false); },ws:ws,copy:copyBlock,paste:pasteBlock,deleteAll:deleteAll,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,loadJSON:loadJSON,save:saveNow,toast:toast,projects:function(){ return P; },examples:BH_EXAMPLES};
 })();

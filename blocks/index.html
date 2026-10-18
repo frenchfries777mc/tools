@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<script src="../i18n.js?v=39"></script>
-<script src="strings.js?v=39"></script>
+<script src="../i18n.js?v=40"></script>
+<script src="strings.js?v=40"></script>
 <script src="lib/blockly_compressed.js"></script>
 <script src="lib/blocks_compressed.js"></script>
 <script src="lib/javascript_compressed.js"></script>
@@ -159,10 +159,10 @@ button,input,select{font:inherit; color:inherit;}
 #objTabs{display:flex; gap:6px; padding:10px 12px 4px; overflow-x:auto; flex:0 0 auto; scrollbar-width:thin;}
 #objTabs button{flex:0 0 auto; min-height:40px; padding:0 14px; border-radius:20px; border:1px solid var(--line); background:var(--panel2); cursor:pointer; white-space:nowrap; font-size:14px;}
 #objTabs button.on{background:var(--fry); color:#111; border-color:var(--fry); font-weight:700;}
-#objGrid{flex:1 1 auto; min-height:120px; overflow:auto; padding:8px 12px 12px; display:grid; grid-template-columns:repeat(auto-fill,minmax(92px,1fr)); gap:8px; align-content:start;}
+#objGrid{flex:1 1 auto; min-height:120px; overflow:auto; padding:8px 12px 12px; display:grid; grid-template-columns:repeat(auto-fill,minmax(88px,1fr)); gap:8px; align-content:start;}
 .obj{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; min-height:96px; padding:8px 4px 6px; border-radius:12px; border:1px solid var(--line); background:#f3f4f6; color:#1f2430; cursor:pointer; touch-action:manipulation;}
 .obj:hover,.obj:focus-visible{border-color:var(--fry); outline:2px solid var(--fry); outline-offset:-2px;}
-.obj img{width:56px; height:56px; pointer-events:none;}
+.obj img{width:72px; height:72px; pointer-events:none;}
 .obj span{font-size:12px; line-height:1.2; text-align:center; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 .objEmpty{grid-column:1/-1; color:var(--dim); text-align:center; padding:30px 10px;}
 .dlg.narrow{width:min(560px,100%);} .dlg.tiny{width:min(400px,100%);}
@@ -195,6 +195,13 @@ button,input,select{font:inherit; color:inherit;}
 #dbgVars span{font-size:12.5px; padding:3px 8px; border-radius:8px; background:var(--panel2); border:1px solid var(--line);} #dbgVars span b{color:var(--dim); font-weight:500;}
 #dbgVars span.ch{border-color:#ffc93c; background:#2a2410; color:#ffc93c;}
 #dbgVars .none{color:var(--dim); border:0; background:none;}
+/* v40: 🔗 연결 보기, 🍎 오브젝트 넣기 under the preview, the block that is running lights up */
+.lnk{height:34px; padding:0 10px; border-radius:8px; border:1px solid var(--line); background:transparent; color:var(--dim); cursor:pointer; font-size:12.5px; font-weight:700; white-space:nowrap;}
+.lnk.on{background:#2b2410; border-color:#ffc93c; color:#ffc93c;}
+#objBar{flex:0 0 auto; display:flex; padding:6px 8px; border-top:1px solid var(--line); background:var(--panel);}
+#objPrevBtn{flex:1; height:44px; min-height:44px; justify-content:center; font-size:15px; font-weight:700; background:#2b2410; border-color:#ffc93c; color:#ffd36b;}
+.ffRun>.blocklyPath{filter:drop-shadow(0 0 5px #fff3a0) drop-shadow(0 0 2px #ffffff); stroke:#fff6c2!important; stroke-width:3px!important;}
+.blocklyDraggable>.blocklyPath{transition:filter .35s ease-out, stroke-width .35s ease-out;}
 #varBar{flex:0 0 auto; display:flex; align-items:flex-start; gap:8px; border-top:2px solid #a55b80; background:var(--panel); padding:6px 10px; max-height:30%; overflow:auto;}
 #varBar[hidden]{display:none;} #varBar>b{font-size:12.5px; color:#e48bb8; padding:3px 0; flex:0 0 auto;}
 #varList{display:flex; flex-wrap:wrap; gap:5px; min-width:0;}
@@ -280,11 +287,13 @@ button,input,select{font:inherit; color:inherit;}
     <div class="stabs">
       <button class="stab on" data-p="prev">미리보기</button><button class="stab" data-p="code">HTML 코드</button>
       <span class="sp"></span>
+      <button class="lnk" id="linkBtn" aria-pressed="true" title="블록을 누르면 미리보기에서 그 요소에 테두리가 생기고, 미리보기에서 요소를 누르면 그 블록을 찾아 줘요">🔗 <span>연결 보기</span></button>
       <button class="ib" id="rerun" title="처음부터 다시 실행"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v5h-5"/></svg></button>
       <button class="ib" id="openTab" title="새 탭에서 열기"><svg viewBox="0 0 24 24"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></button>
       <button class="ib" id="copyCode" title="코드 복사"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
     </div>
     <div class="pane on" id="pPrev"><div id="veil"><span>⏸ 멈춤 · 이어하려면 멈추기를 다시 눌러요</span></div><iframe id="frame" title="미리보기" allow="autoplay" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe>
+      <div id="objBar"><button class="tbtn" id="objPrevBtn" title="그림 모음에서 골라 페이지에 넣어요">🍎 <span>오브젝트 넣기</span></button></div>
       <div id="varBar" hidden><b>변수</b><div id="varList" data-notr></div></div>
       <div id="dbgBar" hidden>
         <div class="dbgTop"><b id="dbgState"></b><span class="sp"></span><button class="tbtn pri" id="dbgNext">다음 블록 ▶</button><button class="tbtn" id="dbgFree">끝까지 실행</button><button class="tbtn" id="dbgOff">그만하기</button></div>
@@ -374,14 +383,14 @@ button,input,select{font:inherit; color:inherit;}
 <input type="file" id="photoIn" accept="image/*" hidden>
 <input type="file" id="fileIn" accept=".json,application/json" hidden>
 <div id="toast"></div><div id="prog" hidden><div id="progTxt"></div><div id="progTrack"><div id="progBar"></div></div></div>
-<script src="sounds.js?v=39"></script>
-<script src="blocks.js?v=39"></script>
-<script src="objects.js?v=39"></script>
-<script src="examples.js?v=39"></script>
-<script src="app.js?v=39"></script>
-<script src="../ai.js?v=39"></script>
-<script src="../ai-prompts.js?v=39"></script>
-<script src="html2blocks.js?v=39"></script>
-<script src="ai-blocks.js?v=39"></script>
+<script src="sounds.js?v=40"></script>
+<script src="blocks.js?v=40"></script>
+<script src="objects.js?v=40"></script>
+<script src="examples.js?v=40"></script>
+<script src="app.js?v=40"></script>
+<script src="../ai.js?v=40"></script>
+<script src="../ai-prompts.js?v=40"></script>
+<script src="html2blocks.js?v=40"></script>
+<script src="ai-blocks.js?v=40"></script>
 </body>
 </html>
