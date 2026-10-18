@@ -151,8 +151,8 @@ button,input,select{font:inherit; color:inherit;}
 #editBar svg{width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
 #editBar .vs{width:1px; background:var(--line); margin:4px 2px;}
 #editBar{flex-wrap:wrap; justify-content:flex-end; max-width:calc(100% - 24px);}
-@media(max-width:1500px){ #editBar .lb{display:none;} #editBar #ebTidy .lb{display:inline;} }
-@media(max-width:700px){ #editBar .lb,#editBar #ebTidy .lb{display:none;} #editBar button{padding:0 9px;} }
+@media(max-width:1500px){ #editBar .lb{display:none;} #editBar #ebTidy .lb,#editBar #ebSearch .lb{display:inline;} }
+@media(max-width:700px){ #editBar .lb,#editBar #ebTidy .lb,#editBar #ebSearch .lb{display:none;} #editBar button{padding:0 9px;} }
 /* projects, search, ask, log */
 #objDlg .dlg{height:min(720px,94vh);}
 #objSrc{color:var(--dim); font-size:12.5px; text-decoration:underline; padding:8px 6px;}
@@ -213,6 +213,10 @@ button,input,select{font:inherit; color:inherit;}
 .srow i{width:12px; height:12px; border-radius:4px;}
 .srow small{color:var(--dim); font-size:12px;}
 #srchList{max-height:min(60vh,480px);}
+.askBody{white-space:pre-line;}
+.appBody{padding:12px 16px; display:flex; flex-direction:column; gap:10px;} .appBody label{display:flex; flex-direction:column; gap:4px; font-size:13px; color:var(--dim);} .appBody input[type=text]{height:38px; padding:0 10px; border-radius:9px; border:1px solid var(--line); background:var(--panel2); color:var(--text); font-size:15px;} .appBody input[type=color]{height:38px; width:64px; padding:2px; border-radius:9px; border:1px solid var(--line); background:var(--panel2);} .appRow{display:flex; gap:12px; align-items:flex-end;} #appEmoji{width:90px;} #appPrev{margin-left:auto; border-radius:20px; width:64px; height:64px;} .appHelp{font-size:12.5px; line-height:1.6; color:var(--dim);}
+.recMeter{height:8px; margin:6px 20px 10px; border-radius:6px; background:var(--panel2); overflow:hidden;} .recMeter i{display:block; height:100%; width:0; background:#ef4444;}
+#shareQr{align-self:center; width:220px; height:220px; image-rendering:pixelated; border-radius:8px;} #shareQrNote{text-align:center; font-size:12.5px; color:var(--dim);}
 .askBody{padding:22px 20px 8px; font-size:15px; line-height:1.6;}
 .askFoot{display:flex; justify-content:flex-end; gap:8px; padding:12px 16px 16px;}
 .askFoot .tbtn{height:40px; min-width:80px; justify-content:center;}
@@ -302,7 +306,7 @@ button,input,select{font:inherit; color:inherit;}
 <div class="main">
   <div class="wsWrap"><div id="ws" data-notr></div>
   <div id="editBar">
-    <button id="ebSearch" title="블록 찾기 ( / )"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
+    <button id="ebSearch" title="블록 찾기 ( / )"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span class="lb">블록 찾기</span></button>
     <button id="ebTidy" title="블록 자동 정렬 (페이지는 왼쪽, 나머지 블록은 오른쪽에 줄 세워요)"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="4" rx="1.5"/><rect x="4" y="13" width="7" height="4" rx="1.5"/><rect x="13" y="10" width="7" height="10" rx="1.5"/></svg><span class="lb">자동 정렬</span></button>
     <button id="ebCenter" title="가운데로"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/></svg></button>
     <span class="vs"></span>
@@ -346,6 +350,7 @@ button,input,select{font:inherit; color:inherit;}
   <button data-f="open">프로젝트 파일 열기<small>저장해 둔 .json 파일</small></button>
   <hr>
   <button data-f="html">HTML 파일로 받기<small>어디서든 열리는 웹페이지 파일</small></button>
+  <button data-f="app">앱으로 받기<small>이름과 아이콘을 정해서 받아요. 폰·아이패드에서 '홈 화면에 추가'하면 주소창 없이 앱처럼 열려요</small></button>
   <button data-f="share">링크로 공유하기<small>링크 하나에 블록(과 그림·소리)을 담아요. 받은 사람은 바로 해 보고, 고칠 수도 있어요</small></button>
 </div>
 <div class="ov" id="padDlg"><div class="dlg">
@@ -420,11 +425,26 @@ button,input,select{font:inherit; color:inherit;}
 </div></div>
 <div class="ov" id="shareDlg"><div class="dlg narrow">
   <div class="dh"><h3>링크로 공유하기</h3><button class="x" data-close aria-label="닫기">×</button></div>
-  <div class="shareBody"><textarea id="shareLink" data-notr readonly spellcheck="false"></textarea><div id="shareInfo"></div></div>
+  <div class="shareBody"><textarea id="shareLink" data-notr readonly spellcheck="false"></textarea><div id="shareInfo"></div><canvas id="shareQr" hidden></canvas><div id="shareQrNote" hidden>폰 카메라로 이 QR을 비추면 바로 열려요</div></div>
   <div class="shareFoot"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="shareCopy" disabled>링크 복사</button></div>
 </div></div>
 <div id="playView"><div class="pvTop"><span class="pvTag">공유된 프로젝트</span><b id="playName" data-notr></b><span class="sp"></span><button class="tbtn" id="playRerun">처음부터</button><button class="tbtn pri" id="playEdit">편집하기</button><button class="tbtn" id="playClose">닫기</button></div>
   <iframe id="playFrame" title="공유된 프로젝트" allow="autoplay" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe></div>
+<div class="ov" id="appDlg"><div class="dlg narrow">
+  <div class="dh"><h3>앱으로 받기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="appBody">
+    <label>앱 이름<input type="text" id="appName" maxlength="20" data-notr></label>
+    <div class="appRow"><label>아이콘 그림<input type="text" id="appEmoji" maxlength="4" value="🎮" data-notr></label><label>바탕 색<input type="color" id="appBg" value="#4f46e5"></label><canvas id="appPrev" width="90" height="90"></canvas></div>
+    <div class="appHelp">받은 파일을 폰이나 아이패드의 사파리에서 열고 공유 단추 → '홈 화면에 추가'를 누르면 이 이름과 아이콘으로 앱이 생겨요. 인터넷이 꺼지면 열리지 않아요.</div>
+  </div>
+  <div class="shareFoot"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="appGo">앱 파일 받기</button></div>
+</div></div>
+<div class="ov" id="recDlg"><div class="dlg tiny">
+  <div class="dh"><h3>내 목소리 녹음</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="askBody" id="recMsg">아래 단추를 눌러 녹음을 시작해요. 최대 10초예요.</div>
+  <div class="recMeter"><i id="recBar"></i></div>
+  <div class="askFoot"><button class="tbtn" id="recGo">녹음 시작</button><button class="tbtn" id="recPlay" disabled>들어 보기</button><button class="tbtn pri" id="recUse" disabled>이 소리 쓰기</button></div>
+</div></div>
 <div class="ov" id="askDlg"><div class="dlg tiny">
   <div class="askBody" id="askMsg"></div>
   <input type="text" id="askIn" class="askIn" hidden maxlength="60" aria-label="입력" data-notr>
@@ -435,11 +455,12 @@ button,input,select{font:inherit; color:inherit;}
 <input type="file" id="fileIn" accept=".json,application/json" hidden>
 <div id="toast"></div><div id="prog" hidden><div id="progTxt"></div><div id="progTrack"><div id="progBar"></div></div></div>
 <script src="sounds.js?v=41"></script>
-<script src="blocks.js?v=52"></script>
+<script src="blocks.js?v=53"></script>
 <script src="objects.js?v=44"></script>
 <script src="shared.js?v=43"></script>
 <script src="examples.js?v=44"></script>
-<script src="app.js?v=49"></script>
+<script src="../slides/qr.js"></script>
+<script src="app.js?v=53"></script>
 <script src="../ai.js?v=ai26"></script>
 <script src="../ai-prompts.js?v=41"></script>
 <script src="lib/acorn.min.js"></script>
