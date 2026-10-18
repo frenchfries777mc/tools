@@ -38,8 +38,63 @@ button,input,select,textarea{font:inherit; color:inherit;}
 .tbtn.play svg{fill:currentColor; stroke:none;}
 .langSel{background:var(--panel2); color:var(--dim); border:1px solid var(--line); border-radius:8px; padding:6px 8px; font-size:13px;}
 @media(max-width:1100px){ .saved{display:none;} }
-@media(max-width:960px){ .brand{display:none;} #deckBtn .lb,#aiSetBtn .lb,#playBtn .lb,#pvBtn .lb,#shareBtn .lb{display:none;} .top{gap:6px;} #deckName{flex-basis:70px;} .langSel{max-width:96px;} }
-@media(max-width:620px){ .tbtn .lb{display:none;} #deckName{max-width:none;} .top{flex-wrap:wrap;} .langSel{max-width:90px;} }
+@media(max-width:960px){ .brand{display:none;} .top{gap:6px;} #deckName{flex-basis:70px;} .langSel{max-width:96px;} }
+@media(max-width:620px){ .tbtn .lb{display:none;} #deckName{max-width:none;} .langSel{max-width:84px;} .top{padding:6px 8px;} }
+/* command search (기능 찾기) */
+.cmdk{position:relative; display:flex; align-items:center; height:40px; width:clamp(190px,22vw,280px); flex:0 1 auto; border:1px solid var(--line); border-radius:10px; background:var(--bg);}
+.cmdk:focus-within{border-color:var(--fry);}
+.cmdk svg{position:absolute; left:11px; top:50%; width:17px; height:17px; margin-top:-8.5px; fill:none; stroke:var(--dim); stroke-width:2.2; stroke-linecap:round; pointer-events:none;}
+.cmdk input{flex:1; min-width:0; width:100%; height:100%; background:transparent; border:0; outline:none; padding:0 6px 0 36px; font-size:16px; -webkit-appearance:none; appearance:none;}
+.cmdk input::-webkit-search-cancel-button{display:none;}
+.cmdk input::placeholder{color:var(--dim); font-size:14px;}
+.cmdk kbd{flex:0 0 auto; margin-right:8px; font:600 11px/1 system-ui,sans-serif; color:var(--dim); border:1px solid var(--line); border-radius:5px; padding:4px 5px; background:var(--panel2); pointer-events:none;}
+.cmdk.open kbd{display:none;}
+@media(max-width:1100px){ .cmdk kbd{display:none;} .cmdk{width:clamp(170px,24vw,240px);} }
+@media(max-width:620px){
+  .cmdk{width:40px; flex:0 0 40px;} .cmdk input{padding:0; color:transparent; cursor:pointer;} .cmdk input::placeholder{color:transparent;} .cmdk kbd{display:none;}
+  .cmdk.open{position:fixed; left:8px; right:8px; top:calc(8px + env(safe-area-inset-top,0px)); width:auto; z-index:76; background:var(--panel); box-shadow:0 10px 30px rgba(0,0,0,.5);}
+  .cmdk.open input{padding:0 10px 0 36px; color:var(--text); cursor:text;} .cmdk.open input::placeholder{color:var(--dim);} }
+.cmdRes{position:fixed; z-index:75; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:6px; box-shadow:0 20px 50px rgba(0,0,0,.55); overflow:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain;}
+.cr{display:flex; align-items:center; gap:10px; width:100%; min-height:44px; padding:6px 10px; border:0; background:transparent; border-radius:8px; cursor:pointer; text-align:left;}
+.cr.on{background:var(--panel2); box-shadow:inset 0 0 0 1px var(--line);}
+.cr svg{width:18px; height:18px; flex:0 0 auto; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+.cr.aib svg,.cr.aib b{color:var(--fry);}
+.cr.dim{opacity:.55;}
+.crl{flex:1; min-width:0; display:flex; flex-direction:column;} .crl b{font-weight:600; font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.crl small{color:var(--dim); font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;} .crl small:empty{display:none;}
+.crt{flex:0 0 auto; font-size:11.5px; color:var(--dim); border:1px solid var(--line); border-radius:99px; padding:2px 8px;}
+.cr kbd{flex:0 0 auto; font:600 11px/1 system-ui,sans-serif; color:var(--dim); background:var(--panel2); border:1px solid var(--line); border-radius:5px; padding:4px 6px;}
+.crNone{color:var(--dim); padding:14px 12px; font-size:13.5px;}
+@media(max-width:480px){ .cr kbd{display:none;} }
+/* ribbon: tabs and the buttons of the open tab */
+.rbar{flex:0 0 auto; background:var(--panel); border-bottom:1px solid var(--line);}
+.rtabs{display:flex; gap:2px; padding:0 8px; overflow-x:auto; overflow-y:hidden; scrollbar-width:none; border-bottom:1px solid var(--line);}
+.rtabs::-webkit-scrollbar,.rpan::-webkit-scrollbar{display:none;}
+.rtab{flex:0 0 auto; height:40px; min-width:56px; padding:0 16px; border:0; border-bottom:2.5px solid transparent; background:transparent; color:var(--dim); cursor:pointer; font-weight:600; font-size:14px; white-space:nowrap;}
+.rtab:hover{color:var(--text);} .rtab.on{color:var(--text); border-bottom-color:var(--fry);}
+.rtab.aib{color:#c9a440;} .rtab.aib.on{color:var(--fry);}
+.rtab:focus-visible,.rb:focus-visible{outline:2px solid var(--fry); outline-offset:-2px;}
+.rpan{display:flex; align-items:center; gap:2px; padding:5px 8px; overflow-x:auto; overflow-y:hidden; scrollbar-width:none; -webkit-overflow-scrolling:touch;}
+.rb{position:relative; flex:0 0 auto; display:inline-flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; min-width:54px; height:50px; padding:4px 8px; border-radius:9px; border:1px solid transparent; background:transparent; color:var(--text); cursor:pointer; white-space:nowrap;}
+.rb svg{width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex:0 0 auto;}
+.rb .lb{font-size:12px; line-height:1.15;}
+.rb:hover:not(:disabled):not(.off){background:var(--panel2); border-color:var(--line);}
+.rb:disabled{opacity:.35; cursor:default;} .rb.off{opacity:.42;}
+.rb.on{background:rgba(255,201,60,.13); border-color:rgba(255,201,60,.45); color:var(--fry);}
+.rb.dang{color:#ff8b8b;}
+.rb.pri{background:linear-gradient(90deg,var(--fry),var(--fry2)); color:#1c1405; border:0; font-weight:700;}
+.rb.play svg{fill:currentColor; stroke:none;} .rb.play{color:#5fd39a;}
+.rb.aib{color:var(--fry); border-color:#5a4a1c; background:rgba(255,201,60,.06);}
+.rb.aib:hover:not(:disabled):not(.off){background:rgba(255,201,60,.14); border-color:#7a6424;}
+.rpan .rb.aib{margin:0 2px;}
+.rb.flash{animation:rbf 1.5s ease-out;}
+@keyframes rbf{0%,40%{box-shadow:0 0 0 3px var(--fry); background:rgba(255,201,60,.22);} 100%{box-shadow:0 0 0 0 rgba(255,201,60,0);}}
+.rsel{cursor:default;} .rsel select{height:28px; max-width:140px; border-radius:7px; border:1px solid var(--line); background:var(--panel2); padding:0 6px; font-size:13px; cursor:pointer;}
+.rpan.fr{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent); mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent);}
+.rpan.fl{-webkit-mask-image:linear-gradient(90deg,transparent,#000 36px); mask-image:linear-gradient(90deg,transparent,#000 36px);}
+.rpan.fl.fr{-webkit-mask-image:linear-gradient(90deg,transparent,#000 36px,#000 calc(100% - 36px),transparent); mask-image:linear-gradient(90deg,transparent,#000 36px,#000 calc(100% - 36px),transparent);}
+.rsep{flex:0 0 1px; align-self:stretch; margin:6px 5px; background:var(--line);}
+@media(max-width:640px){ .rtab{padding:0 13px;} .rb{min-width:50px; padding:4px 6px;} .rsep{margin:6px 3px;} }
 .main{flex:1; display:flex; min-height:0; position:relative;}
 /* start screen */
 #start{flex:1; overflow:auto; padding:34px 18px 60px; -webkit-overflow-scrolling:touch;}
@@ -87,14 +142,10 @@ button,input,select,textarea{font:inherit; color:inherit;}
 .addSl{display:flex; align-items:center; justify-content:center; gap:6px; margin:6px 4px 0 30px; width:calc(1280px * var(--ts)); height:40px; border:1.5px dashed var(--line); border-radius:8px; background:transparent; color:var(--dim); cursor:pointer;}
 .addSl:hover{border-color:var(--fry); color:var(--fry);}
 #stage{flex:1; min-width:0; display:flex; flex-direction:column; background:var(--stage);}
-.tools{display:flex; flex-wrap:wrap; align-items:center; gap:6px; padding:8px 12px; border-bottom:1px solid var(--line); background:var(--panel);}
-.tools .vs{width:1px; height:24px; background:var(--line); margin:0 2px;}
 .ib{width:34px; height:34px; display:grid; place-items:center; border-radius:8px; border:1px solid var(--line); background:var(--panel2); color:var(--text); cursor:pointer; padding:0;}
 .ib:disabled{opacity:.35; cursor:default;}
 .ib svg{width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
 .ib.dang{color:#ff8b8b;}
-#laySel{height:34px; border-radius:8px; border:1px solid var(--line); background:var(--panel2); padding:0 8px; max-width:150px;}
-@media(max-width:900px){ .tools .tbtn:not(#aiBtn) .lb{display:none;} .tools .tbtn{padding:0 9px;} }
 #genBar{display:flex; align-items:center; gap:10px; padding:8px 14px; background:#2a2410; color:var(--fry); border-bottom:1px solid #5a4a1c; font-size:13.5px;}
 #genBar .gb{flex:1; height:6px; border-radius:9px; background:rgba(255,201,60,.18); overflow:hidden; min-width:60px;}
 #genBar .gb i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--fry),var(--fry2)); transition:width .3s;}
@@ -111,7 +162,7 @@ button,input,select,textarea{font:inherit; color:inherit;}
 #notes{width:100%; height:92px; min-height:48px; resize:vertical; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:9px 12px; font-size:14px; line-height:1.5; display:block;}
 #notes:focus{outline:none; border-color:var(--fry);}
 @media(max-width:1100px){ :root{--ts:.11;} }
-@media(max-width:860px){ :root{--ts:.095;} .tools{gap:4px; padding:7px 8px;} .tools .vs{display:none;} #notes{height:76px;} }
+@media(max-width:860px){ :root{--ts:.095;} #notes{height:76px;} }
 @media(max-width:640px){
   :root{--ts:.085;}
   #editor{flex-direction:column-reverse;}
@@ -272,7 +323,7 @@ button,input,select,textarea{font:inherit; color:inherit;}
 .sortHint{margin:0; padding:8px 14px 12px; color:var(--dim); font-size:12.5px; border-top:1px solid var(--line);}
 @media(max-width:640px){ .sortGrid{grid-template-columns:repeat(2,1fr); gap:8px; padding:8px;} .sortBar .tbtn{padding:0 9px;} }
 /* presenter view (second window) */
-body.mode-pv .top,body.mode-pv .main,body.mode-view .top,body.mode-view .main{display:none!important;}
+body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body.mode-view .main,body.mode-view .rbar{display:none!important;}
 #pv{flex:1; min-height:0; display:flex; flex-direction:column; background:var(--bg);}
 .pvTop{display:flex; align-items:center; gap:10px; padding:8px 14px; border-bottom:1px solid var(--line); background:var(--panel);}
 .pvTop b{max-width:40vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
@@ -390,17 +441,10 @@ body.mode-pv .top,body.mode-pv .main,body.mode-view .top,body.mode-view .main{di
   <input id="deckName" aria-label="발표 자료 이름" spellcheck="false" autocomplete="off">
   <span class="saved" id="saved"></span>
   <span class="sp"></span>
-  <button class="tbtn" id="newDeckBtn" title="새 슬라이드 쇼 (Ctrl+Alt+N)"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span class="lb">새 슬라이드 쇼</span></button>
-  <button class="tbtn" id="mgrBtn" title="내 슬라이드"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span class="lb">내 슬라이드</span></button>
-  <button class="ib dang" id="delDeckBtn" title="이 슬라이드 쇼 지우기" aria-label="이 슬라이드 쇼 지우기"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>
-  <button class="tbtn" id="deckBtn" title="발표 자료 목록"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span class="lb">발표 자료</span></button>
-  <button class="tbtn aib" id="aiSetBtn" title="AI 설정"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/></svg><span class="lb">AI 설정</span></button>
-  <button class="tbtn" id="shareBtn" title="링크나 QR로 공유 (읽기 전용)"><svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 10.8l7.6-3.6M8.2 13.2l7.6 3.6"/></svg><span class="lb">공유</span></button>
-  <button class="tbtn" id="pvBtn" title="발표자 화면을 새 창으로 열고 발표 시작 (다음 슬라이드, 메모, 타이머)"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="13" height="9" rx="1.5"/><rect x="9" y="11" width="13" height="9" rx="1.5"/></svg><span class="lb">발표자 화면</span></button>
-  <button class="tbtn play" id="playBtn" title="발표하기"><svg viewBox="0 0 24 24"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg><span class="lb">발표하기</span></button>
-  <button class="tbtn pri" id="pptxBtn" title="PPTX 받기"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg><span class="lb">PPTX 받기</span></button>
+  <div class="cmdk" id="cmdk"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg><input id="cmdQ" type="search" placeholder="기능 찾기" aria-label="기능 찾기" title="기능 찾기 (Ctrl+K)" autocomplete="off" spellcheck="false" enterkeyhint="go" role="combobox" aria-expanded="false" aria-autocomplete="list"><kbd>Ctrl K</kbd></div>
   <span data-lang-slot></span>
 </header>
+<nav class="rbar" id="rbar" aria-label="도구"></nav>
 <div class="main">
   <section id="start" hidden>
     <div class="startIn">
@@ -425,25 +469,6 @@ body.mode-pv .top,body.mode-pv .main,body.mode-view .top,body.mode-view .main{di
   <section id="editor" hidden>
     <aside id="list" aria-label="슬라이드 목록"></aside>
     <div id="stage">
-      <div class="tools" id="tools">
-        <button class="ib" id="undoBtn" title="되돌리기"><svg viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button>
-        <button class="ib" id="redoBtn" title="다시 하기"><svg viewBox="0 0 24 24"><path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></svg></button>
-        <span class="vs"></span>
-        <button class="tbtn" id="addBtn" title="새 슬라이드"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span class="lb">새 슬라이드</span></button>
-        <button class="ib" id="dupBtn" title="슬라이드 복제"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
-        <button class="ib dang" id="delBtn" title="슬라이드 삭제"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>
-        <button class="tbtn" id="sortBtn" title="슬라이드 모아보기"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span class="lb">모아보기</span></button>
-        <button class="tbtn" id="picBtn" title="그림 넣기"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 9"/></svg><span class="lb">그림 넣기</span></button>
-        <button class="tbtn" id="shapeBtn" title="도형·화살표 넣기"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="10" height="10" rx="1"/><circle cx="16" cy="8" r="5"/></svg><span class="lb">도형</span></button>
-        <button class="tbtn" id="emojiBtn" title="이모지·아이콘 넣기"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5c1 1.6 2.2 2.3 3.5 2.3s2.5-.7 3.5-2.3M9 9.5h.01M15 9.5h.01"/></svg><span class="lb">이모지</span></button>
-        <span class="vs"></span>
-        <select id="laySel" title="레이아웃" aria-label="레이아웃">
-          <option value="title">제목</option><option value="section">구역 제목</option><option value="bullets">글머리표</option><option value="two">두 칸</option><option value="stat">큰 숫자</option><option value="quote">인용</option><option value="closing">마무리</option><option value="image">그림</option><option value="agenda">차례</option><option value="timeline">타임라인</option><option value="table">표</option><option value="chart">그래프</option><option value="quiz">퀴즈</option><option value="timer">타이머</option><option value="live">살아있는 화면</option>
-        </select>
-        <button class="tbtn" id="optBtn" title="슬라이드 옵션"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg><span class="lb">옵션</span></button>
-        <button class="tbtn aib" id="aiBtn" title="AI 도우미(시험 기능)로 이 슬라이드 고치기"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/></svg><span class="lb">AI 도우미(시험)</span></button>
-        <button class="tbtn" id="themeBtn" title="테마"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18c1.2 0 1.6-.8 1.6-1.6 0-1.3-1-1.6-1-2.8 0-.9.7-1.6 1.6-1.6H17a4 4 0 0 0 4-4c0-4.4-4-8-9-8z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10.5" cy="7.5" r="1"/><circle cx="15" cy="7.5" r="1"/></svg><span class="lb">테마</span></button>
-      </div>
       <div id="genBar" hidden><div class="spin"></div><span id="genTxt"></span><span class="gb"><i id="genFill"></i></span><button class="tbtn" id="genStop">멈추기</button></div>
       <div id="canvasWrap"><div id="slideHost"></div><div id="waitMsg" hidden></div><div class="selBar hint" id="selBar" hidden></div>
         <div id="busy" hidden><div class="bx"><div class="spin"></div><span id="busyTxt">AI가 쓰는 중…</span><button class="tbtn" id="busyStop">멈추기</button></div></div>
@@ -453,26 +478,10 @@ body.mode-pv .top,body.mode-pv .main,body.mode-view .top,body.mode-view .main{di
   </section>
 </div>
 <div class="menu" id="deckMenu">
-  <button data-d="new">새 발표 자료</button>
-  <button data-d="mgr">발표 자료 관리</button>
-  <button data-d="rename">이름 바꾸기</button>
-  <hr>
-  <button data-d="imp">글에서 슬라이드 만들기</button>
-  <button data-d="toc">차례 슬라이드 만들기</button>
-  <button data-d="find">찾아 바꾸기</button>
-  <button data-d="csv">표·그래프 붙여넣기 (엑셀, CSV)</button>
-  <button data-d="master">마스터 슬라이드 (로고·바닥글·번호)…</button>
-  <button data-d="auto">자동 넘기기…</button>
-  <button data-d="nums">슬라이드 번호 켜기</button>
-  <button data-d="footer">바닥글 쓰기</button>
-  <button data-d="md">Markdown으로 저장</button>
-  <button data-d="print">PDF로 저장 · 인쇄</button>
-  <button data-d="keys">단축키 보기</button>
-  <hr>
   <div class="mh">내 발표 자료</div>
   <div id="deckList"></div>
   <hr>
-  <button data-d="del" class="dang">이 발표 자료 지우기</button>
+  <button data-d="mgr">발표 자료 관리</button>
 </div>
 <div class="menu" id="aiMenu">
   <button data-a="rewrite">✍️ 다시 쓰기</button>
@@ -659,10 +668,12 @@ body.mode-pv .top,body.mode-pv .main,body.mode-view .top,body.mode-view .main{di
 <div id="measure" aria-hidden="true"></div>
 <div id="printRoot" aria-hidden="true"></div>
 <div id="toast" role="status"></div>
+<div class="cmdRes" id="cmdRes" role="listbox" aria-label="기능 찾기" hidden></div>
 <script src="../ai.js"></script>
 <script src="../ai-prompts.js"></script>
 <script src="qr.js"></script>
 <script src="lq-net.js"></script>
+<script src="ribbon.js"></script>
 <script src="app.js"></script>
 <script src="ai-slides.js"></script>
 </body>
