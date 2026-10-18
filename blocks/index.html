@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Block HTML · Frenchfries777 Tools</title>
+<meta name="description" content="자바스크립트를 블록으로 조립해서 HTML 파일로 받는 웹페이지 만들기 도구.">
+<meta name="theme-color" content="#08090d">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="../i18n.js?v=41"></script>
+<script src="strings.js?v=43"></script>
+<script src="lib/blockly_compressed.js"></script>
+<script src="lib/blocks_compressed.js"></script>
+<script src="lib/javascript_compressed.js"></script>
+<script>document.write('<script src="lib/msg/'+FFT.lang+'.js"><\/script>');</script>
+<style>
+:root{ --bg:#08090d; --panel:#10131b; --panel2:#151925; --line:#222837; --text:#eef0f5; --dim:#8a93a6; --fry:#ffc93c; --fry2:#ff8a3d; }
+*{box-sizing:border-box;}
+html,body{margin:0; height:100%; background:var(--bg); color:var(--text); overscroll-behavior:none;}
+body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif; font-size:14px; display:flex; flex-direction:column; height:100vh; height:100dvh; overflow:hidden;
+  padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0); -webkit-tap-highlight-color:transparent;}
+button,input,select{font:inherit; color:inherit;}
+.top{display:flex; align-items:center; gap:8px; padding:8px 12px; border-bottom:1px solid var(--line); background:var(--panel); flex:0 0 auto;}
+.home{display:grid; place-items:center; width:34px; height:34px; border-radius:9px; background:linear-gradient(135deg,var(--fry),var(--fry2)); text-decoration:none; font-size:18px; flex:0 0 auto;}
+.brand{font-family:'Oswald',sans-serif; font-weight:700; font-size:18px; letter-spacing:.04em; white-space:nowrap;}
+.brand b{color:var(--fry);}
+#projName{flex:1 1 120px; min-width:60px; max-width:300px; background:transparent; border:1px solid transparent; border-radius:8px; padding:6px 8px; font-size:15px; font-weight:500;}
+#projName:hover,#projName:focus{border-color:var(--line); background:var(--bg); outline:none;}
+.sp{flex:1;}
+.tbtn{display:inline-flex; align-items:center; gap:6px; height:34px; padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--panel2); cursor:pointer; white-space:nowrap;}
+.tbtn:hover{border-color:#3a4256;} .tbtn.pri{background:linear-gradient(90deg,var(--fry),var(--fry2)); color:#1c1405; border:0; font-weight:700;}
+.tbtn svg{width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round;}
+.runGrp{display:inline-flex; gap:4px; flex:0 0 auto;}
+.tbtn.rb{padding:0 10px;}
+.tbtn.run{color:#3fe08f; border-color:#1f5a3a;} .tbtn.run svg{fill:currentColor;}
+.tbtn.rb.on{background:#16241c; border-color:#3fe08f; color:#3fe08f;}
+#pauseBtn.on{background:#2a2410; border-color:var(--fry); color:var(--fry);}
+#stopBtn.on{background:#2a1416; border-color:#ff7b7b; color:#ff7b7b;}
+#veil{position:absolute; inset:0; display:none; place-items:center; background:rgba(5,6,10,.35); color:#fff; font-weight:700; font-size:15px; z-index:2;}
+#veil span{background:rgba(5,6,10,.8); padding:8px 16px; border-radius:99px;}
+#pPrev.paused #veil{display:grid;}
+.langSel{background:var(--panel2); color:var(--dim); border:1px solid var(--line); border-radius:8px; padding:6px 8px; font-size:13px;}
+.seg{display:none; padding:3px; border-radius:99px; border:1px solid var(--line); background:var(--bg); flex:0 0 auto;}
+.seg button{border:0; background:transparent; color:var(--dim); padding:5px 12px; border-radius:99px; cursor:pointer; font-size:13px; white-space:nowrap;}
+.seg button.on{background:linear-gradient(90deg,var(--fry),var(--fry2)); color:#1c1405; font-weight:700;}
+.main{flex:1; display:flex; min-height:0;}
+.wsWrap{flex:1 1 60%; min-width:0; position:relative; display:flex;}
+#ws{flex:1 1 auto; min-width:0; position:relative;}
+#side{flex:0 0 40%; max-width:560px; min-width:300px; display:flex; flex-direction:column; border-left:1px solid var(--line); background:var(--panel);}
+.stabs{display:flex; align-items:center; gap:4px; padding:6px 8px; border-bottom:1px solid var(--line);}
+.stab{border:0; background:transparent; color:var(--dim); padding:7px 12px; border-radius:8px; cursor:pointer;}
+.stab.on{background:var(--panel2); color:var(--text);}
+.stabs .sp{flex:1;}
+.ib{width:34px; height:34px; display:grid; place-items:center; border-radius:8px; border:1px solid transparent; background:transparent; color:var(--dim); cursor:pointer;}
+.ib:hover{background:var(--panel2); color:var(--text); border-color:var(--line);}
+.ib svg{width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+.pane{flex:1; min-height:0; display:none; position:relative;}
+.pane.on{display:flex; flex-direction:column;}
+#frame{flex:1; width:100%; border:0; background:#fff;}
+#codeWrap{flex:1; min-height:0; position:relative; background:#0b0d13;}
+#codeEdit{position:absolute; inset:0; width:100%; height:100%; margin:0; border:0; outline:0; resize:none; padding:14px; box-sizing:border-box; font-family:'JetBrains Mono',monospace; font-size:12.5px; line-height:1.6; white-space:pre; overflow:auto; tab-size:2; background:#0b0d13; color:#d6dbe6; caret-color:#ffc93c;}
+#prog{position:fixed; left:50%; bottom:24px; transform:translateX(-50%); z-index:60; min-width:240px; max-width:86vw; padding:12px 16px; border-radius:12px; background:rgba(20,22,30,.94); color:#fff; font-size:13px; box-shadow:0 6px 24px rgba(0,0,0,.4);} #prog[hidden]{display:none;} #progTrack{height:6px; margin-top:8px; background:rgba(255,255,255,.18); border-radius:3px; overflow:hidden;} #progBar{height:100%; width:0; background:#ffc93c; transition:width .25s;}
+#codeBar{display:flex; align-items:center; gap:8px; padding:6px 8px; border-bottom:1px solid var(--line); flex-wrap:wrap;} #codeBar .tbtn{height:32px;} #codeBar [hidden]{display:none;} #codeNote{font-size:12px; color:#ffb86b;}
+
+.hint{font-size:12px; color:var(--dim); padding:6px 12px; border-top:1px solid var(--line);}
+@media(max-width:900px){
+  .seg{display:inline-flex;}
+  #side{position:absolute; inset:auto 0 0 0; top:0; max-width:none; min-width:0; border-left:0; display:none; z-index:5;}
+  .main{position:relative;}
+  body.v-prev #side, body.v-code #side{display:flex;}
+  .stabs .stab{display:none;}
+}
+@media(max-width:1180px){ .tbtn.rb .lb{display:none;} }
+@media(max-width:960px){ .brand{display:none;} #exBtn .lb,#fileBtn .lb,#dlBtn .lb,#projBtn .lb{display:none;} .top{flex-wrap:wrap; gap:6px;} #projName{flex-basis:140px; min-width:110px;} .langSel{max-width:96px;} }
+@media(max-width:620px){ .brand{display:none;} .tbtn .lb{display:none;} #projName{max-width:none;} .top{flex-wrap:wrap;} .top .sp{display:none;} .seg{order:9; flex:1 1 auto; justify-content:center;} .seg button{flex:1;} [data-lang-slot]{order:10;} .langSel{max-width:96px;} }
+.menu{position:fixed; z-index:60; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:6px; min-width:230px; box-shadow:0 20px 50px rgba(0,0,0,.55); display:none; max-height:80vh; overflow:auto;}
+.menu.open{display:block;}
+.menu button{display:flex; flex-direction:column; align-items:flex-start; width:100%; padding:9px 12px; border:0; background:transparent; border-radius:8px; cursor:pointer; text-align:left;}
+.menu button small{color:var(--dim); font-size:12px;}
+.menu button:hover{background:var(--panel2);}
+.menu button.dang{color:#ff7b7b;}
+.menu hr{border:0; border-top:1px solid var(--line); margin:6px 4px;}
+#shareLink{width:100%; min-height:84px; resize:vertical; background:#0b0d13; color:#cfd5e1; border:1px solid var(--line); border-radius:10px; padding:8px 10px; font:12px/1.4 'JetBrains Mono',monospace; word-break:break-all;}
+#shareInfo{padding:2px 2px 0; color:var(--dim); font-size:13px; line-height:1.5;} #shareInfo.warn{color:#ffd37a;}
+.shareBody{padding:12px 16px; display:flex; flex-direction:column; gap:8px;} .shareFoot{display:flex; gap:8px; justify-content:flex-end; padding:10px 16px 14px;}
+#playView{position:fixed; inset:0; z-index:90; background:var(--bg); display:none; flex-direction:column;} #playView.open{display:flex;}
+.pvTop{display:flex; align-items:center; gap:8px; padding:8px 12px; background:var(--panel); border-bottom:1px solid var(--line);} .pvTop b{font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;} .pvTop .sp{flex:1;}
+.pvTag{font-size:11px; color:var(--fry); border:1px solid var(--fry); border-radius:99px; padding:1px 8px; white-space:nowrap;}
+#playFrame{flex:1; width:100%; border:0; background:#fff;}
+#toast{position:fixed; left:50%; bottom:28px; transform:translateX(-50%); background:#1d2230; border:1px solid var(--line); padding:9px 16px; border-radius:99px; z-index:70; opacity:0; transition:opacity .2s; pointer-events:none; white-space:nowrap;}
+#toast.on{opacity:1;}
+/* Blockly dark touches */
+.blocklyToolboxDiv{border-right:1px solid var(--line);}
+.blocklyTreeRow{height:auto!important; padding:6px 8px!important; margin-bottom:2px!important; border-radius:0 8px 8px 0;}
+.blocklyTreeLabel{font-family:'Noto Sans KR',sans-serif!important; font-size:14px!important; color:#dfe3ec!important;}
+.blocklyTreeSelected .blocklyTreeLabel{color:#fff!important;}
+.blocklyText,.blocklyFlyoutLabelText{font-family:'Noto Sans KR',sans-serif!important;}
+.blocklyMainBackground{stroke:none!important;}
+.blocklyWidgetDiv .blocklyMenu,.blocklyDropDownDiv{font-family:'Noto Sans KR',sans-serif!important;}
+.blocklyFlyoutLabelText{fill:#8a93a6!important; font-size:16px!important; font-weight:700;}
+.blocklyFlyoutButton .blocklyFlyoutButtonBackground,.blocklyFlyoutButtonBackground{fill:#2a3142!important; stroke:#3a4256!important;}
+.blocklyFlyoutButton .blocklyText{fill:#eef0f5!important; font-size:19px!important;}
+/* dialogs */
+.ov{position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:80; display:none; align-items:center; justify-content:center; padding:12px;}
+.ov.open{display:flex;}
+.dlg{background:var(--panel); border:1px solid var(--line); border-radius:16px; width:min(900px,100%); max-height:94vh; display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,.6);}
+.dh{display:flex; align-items:center; gap:8px; padding:10px 12px 10px 16px; border-bottom:1px solid var(--line);}
+.dh h3{margin:0; font-size:16px; flex:1;}
+.x{width:36px; height:36px; border:0; background:transparent; color:var(--dim); font-size:24px; cursor:pointer; border-radius:8px;}
+.x:hover{background:var(--panel2); color:var(--text);}
+.padTools{display:flex; flex-wrap:wrap; gap:8px; align-items:center; padding:10px 12px;}
+.padTools .grp{display:flex; gap:4px; align-items:center;}
+.tl{height:38px; min-width:38px; padding:0 10px; border-radius:9px; border:1px solid var(--line); background:var(--panel2); cursor:pointer; display:inline-flex; align-items:center; gap:5px;}
+.tl.on{border-color:var(--fry); color:var(--fry); background:#2a2410;}
+.sw{width:30px; height:30px; border-radius:50%; border:2px solid #3a4256; cursor:pointer; padding:0; position:relative; flex:0 0 auto;}
+.sw.on{outline:3px solid var(--fry); outline-offset:1px;}
+.sw.pick{background:conic-gradient(#ef4444,#facc15,#22c55e,#38bdf8,#a855f7,#ef4444); overflow:hidden;}
+.sw.pick input{position:absolute; inset:0; opacity:0; width:100%; height:100%; cursor:pointer;}
+#padSw{display:flex; flex-wrap:wrap; gap:6px; align-items:center;}
+#padSize{width:110px;}
+#padDot{display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--text);}
+#padWrap{margin:0 12px; border-radius:12px; overflow:hidden; background:#fff; border:1px solid var(--line); display:flex; justify-content:center; min-height:0; flex:1 1 auto;}
+#padWrap.clear{background-color:#e5e7eb; background-image:linear-gradient(45deg,#cbd0d8 25%,transparent 25%,transparent 75%,#cbd0d8 75%),linear-gradient(45deg,#cbd0d8 25%,transparent 25%,transparent 75%,#cbd0d8 75%); background-size:20px 20px; background-position:0 0,10px 10px;}
+#padCv{display:block; width:100%; max-width:calc((94vh - 230px) * 4 / 3); aspect-ratio:4/3; touch-action:none; cursor:crosshair;}
+.padFoot{display:flex; gap:8px; align-items:center; padding:10px 12px; flex-wrap:wrap;}
+.padFoot input[type=text]{flex:1 1 160px; min-width:0; background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:8px 10px;}
+.padFoot label{display:flex; align-items:center; gap:6px; color:var(--dim); font-size:13px;}
+#mgrList{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; padding:12px; overflow:auto;}
+.pic{border:1px solid var(--line); border-radius:12px; background:var(--panel2); padding:8px; display:flex; flex-direction:column; gap:6px;}
+.pic .th{height:100px; border-radius:8px; background:#fff; display:grid; place-items:center; overflow:hidden;}
+.pic .th.clear{background:#e5e7eb;}
+.pic .th img{max-width:100%; max-height:100%;}
+.padTr{display:inline-flex; align-items:center; gap:6px; cursor:pointer; padding:4px 8px; border:1px solid var(--line); border-radius:8px;}
+.padTr i{width:16px; height:16px; border-radius:3px; border:1px solid #9ca3af; background-color:#e5e7eb; background-image:linear-gradient(45deg,#9ca3af 25%,transparent 25%,transparent 75%,#9ca3af 75%),linear-gradient(45deg,#9ca3af 25%,transparent 25%,transparent 75%,#9ca3af 75%); background-size:8px 8px; background-position:0 0,4px 4px;}
+.padTr:has(input:checked){border-color:var(--fry); color:var(--fry);}
+.pic input{background:var(--bg); border:1px solid var(--line); border-radius:7px; padding:5px 8px; font-size:13px; width:100%;}
+.pa{display:flex; gap:4px;}
+.pa button{flex:1; height:30px; border-radius:7px; border:1px solid var(--line); background:var(--panel); cursor:pointer; font-size:12.5px; padding:0 4px;}
+.pa button.dang{color:#ff7b7b;}
+.empty{color:var(--dim); text-align:center; padding:30px 10px; grid-column:1/-1;}
+/* edit bar */
+.askIn[hidden],#askNo[hidden]{display:none!important}
+.askIn{display:block; width:calc(100% - 32px); margin:0 16px 12px; height:38px; padding:0 10px; border-radius:9px; border:1px solid var(--line); background:var(--panel2); color:var(--text); font-size:15px;}
+#editBar{position:absolute; top:10px; right:12px; z-index:4; display:flex; gap:4px; padding:4px; border-radius:12px; background:rgba(16,19,27,.92); border:1px solid var(--line); box-shadow:0 8px 24px rgba(0,0,0,.4);}
+#editBar button{display:inline-flex; align-items:center; gap:5px; height:36px; padding:0 10px; border-radius:8px; border:0; background:transparent; color:var(--text); cursor:pointer; white-space:nowrap; font-size:13px;}
+#editBar button:hover:not(:disabled){background:var(--panel2);}
+#editBar button:disabled{opacity:.35; cursor:default;}
+#editBar button.dang{color:#ff8b8b;}
+#editBar svg{width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+#editBar .vs{width:1px; background:var(--line); margin:4px 2px;}
+#editBar{flex-wrap:wrap; justify-content:flex-end; max-width:calc(100% - 24px);}
+@media(max-width:1500px){ #editBar .lb{display:none;} #editBar #ebTidy .lb,#editBar #ebSearch .lb{display:inline;} }
+@media(max-width:700px){ #editBar .lb,#editBar #ebTidy .lb,#editBar #ebSearch .lb{display:none;} #editBar button{padding:0 9px;} }
+/* projects, search, ask, log */
+#objDlg .dlg{height:min(720px,94vh);}
+#objSrc{color:var(--dim); font-size:12.5px; text-decoration:underline; padding:8px 6px;}
+.objTop{padding:10px 12px 0;}
+.objTop input{width:100%; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:11px 12px; font-size:16px;}
+#objTabs{display:flex; gap:6px; padding:10px 12px 4px; overflow-x:auto; flex:0 0 auto; scrollbar-width:thin;}
+#objTabs button{flex:0 0 auto; min-height:40px; padding:0 14px; border-radius:20px; border:1px solid var(--line); background:var(--panel2); cursor:pointer; white-space:nowrap; font-size:14px;}
+#objTabs button.on{background:var(--fry); color:#111; border-color:var(--fry); font-weight:700;}
+#objGrid{flex:1 1 auto; min-height:120px; overflow:auto; padding:8px 12px 12px; display:grid; grid-template-columns:repeat(auto-fill,minmax(88px,1fr)); gap:8px; align-content:start;}
+.obj{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; min-height:96px; padding:8px 4px 6px; border-radius:12px; border:1px solid var(--line); background:#f3f4f6; color:#1f2430; cursor:pointer; touch-action:manipulation;}
+.obj:hover,.obj:focus-visible{border-color:var(--fry); outline:2px solid var(--fry); outline-offset:-2px;}
+.obj img{width:72px; height:72px; pointer-events:none;}
+.obj.wait img{visibility:hidden;} .obj.wait{background:linear-gradient(90deg,#f3f4f6,#e5e7eb,#f3f4f6); background-size:200% 100%; animation:objWait 1.2s linear infinite;}
+@keyframes objWait{to{background-position:-200% 0;}}
+.obj span{font-size:12px; line-height:1.2; text-align:center; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.objEmpty{grid-column:1/-1; color:var(--dim); text-align:center; padding:30px 10px;}
+.objEmpty .tbtn{margin-top:10px;}
+/* 모두의 그림 (v43) */
+#objTabs button.shTab{border-style:dashed;} #objTabs button.shTab.on{border-style:solid;}
+.shHead{grid-column:1/-1; color:var(--dim); font-size:13px; padding:2px 2px 4px;}
+.lnkBtn{background:none; border:0; padding:0; color:var(--fry); text-decoration:underline; cursor:pointer; font:inherit;}
+.shW{position:relative; display:flex;} .shW .obj{flex:1; min-width:0;}
+.shMore{position:absolute; top:3px; right:3px; width:28px; height:24px; border-radius:7px; border:1px solid rgba(0,0,0,.15); background:rgba(255,255,255,.92); color:#1f2430; font-size:16px; line-height:1; cursor:pointer; padding:0;}
+.shMore:hover,.shMore:focus-visible{border-color:var(--fry);}
+.shMenu{position:absolute; top:30px; right:3px; z-index:3; min-width:120px; background:var(--panel); border:1px solid var(--line); border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,.45); padding:4px; display:flex; flex-direction:column;}
+.shMenu.l{right:auto; left:3px;}
+.shMenu button{height:36px; border:0; background:transparent; color:var(--text); text-align:left; padding:0 10px; border-radius:7px; cursor:pointer; font-size:13.5px;}
+.shMenu button:hover{background:var(--panel2);} .shMenu button.dang{color:#ff8b8b;}
+.shBy{font-size:12px; color:var(--dim); padding:4px 10px 6px; border-bottom:1px solid var(--line); margin-bottom:2px; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.shMoreRow{grid-column:1/-1; text-align:center; padding:6px 0 4px;}
+.mgrShare{height:30px; border-radius:7px; border:1px dashed var(--fry); background:transparent; color:var(--fry); cursor:pointer; font-size:12.5px;}
+.sdBody{padding:12px 16px; display:flex; flex-direction:column; gap:8px; overflow:auto;}
+.sdTh{height:150px; border-radius:10px; background:#fff; display:grid; place-items:center; overflow:hidden; border:1px solid var(--line);}
+.sdTh.clear{background-color:#e5e7eb;}
+.sdTh img{max-width:100%; max-height:100%;}
+.sdSize{font-size:12px; color:var(--dim); text-align:right; min-height:14px;}
+.sdBody p{margin:0;} .sdWait{color:var(--dim);}
+#sdLogin{display:flex; flex-direction:column; gap:8px; align-items:flex-start;} #sdLogin[hidden],#sdForm[hidden]{display:none;}
+#sdForm{display:flex; flex-direction:column; gap:6px;}
+.sdLab{font-size:13px; color:var(--dim);}
+#sdName{background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:9px 10px; font-size:15px;}
+.sdRule{font-size:13px; line-height:1.5; color:var(--dim); background:var(--panel2); border-radius:8px; padding:8px 10px;}
+#sdGo[hidden]{display:none;} .sdMsg{min-height:18px; font-size:13px;} .sdMsg.bad{color:#ff8b8b;}
+.dlg.narrow{width:min(560px,100%);} .dlg.tiny{width:min(400px,100%);}
+#projList,#srchList{overflow:auto; padding:10px 12px; display:flex; flex-direction:column; gap:8px; min-height:80px;}
+.prow{display:grid; grid-template-columns:1fr auto; gap:4px 10px; align-items:center; border:1px solid var(--line); background:var(--panel2); border-radius:12px; padding:8px 10px;}
+.prow.cur{border-color:var(--fry);}
+.prow input{background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:7px 9px; min-width:0; font-weight:500;}
+.prow .pm{grid-column:1; font-size:12px; color:var(--dim);}
+.prow .pbt{grid-column:2; grid-row:1/3; display:flex; gap:6px;}
+.pbt button{height:38px; min-width:58px; padding:0 12px; border-radius:9px; border:1px solid var(--line); background:var(--panel); cursor:pointer;}
+.pbt button.dang,.tbtn.dang{color:#ff7b7b;}
+.tbtn.dang{background:#2a1416; border-color:#ff7b7b; font-weight:700;}
+.srchTop{padding:10px 12px 0;}
+.srchTop input{width:100%; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:11px 12px; font-size:16px;}
+.srow{display:grid; grid-template-columns:12px 1fr auto; gap:10px; align-items:center; text-align:left; border:1px solid var(--line); background:var(--panel2); border-radius:10px; padding:10px 12px; cursor:pointer; min-height:44px;}
+.srow:hover{border-color:var(--fry);}
+.srow i{width:12px; height:12px; border-radius:4px;}
+.srow small{color:var(--dim); font-size:12px;}
+#srchList{max-height:min(60vh,480px);}
+.askBody{white-space:pre-line;}
+.appBody{padding:12px 16px; display:flex; flex-direction:column; gap:10px;} .appBody label{display:flex; flex-direction:column; gap:4px; font-size:13px; color:var(--dim);} .appBody input[type=text]{height:38px; padding:0 10px; border-radius:9px; border:1px solid var(--line); background:var(--panel2); color:var(--text); font-size:15px;} .appBody input[type=color]{height:38px; width:64px; padding:2px; border-radius:9px; border:1px solid var(--line); background:var(--panel2);} .appRow{display:flex; gap:12px; align-items:flex-end;} #appEmoji{width:90px;} #appPrev{margin-left:auto; border-radius:20px; width:64px; height:64px;} .appHelp{font-size:12.5px; line-height:1.6; color:var(--dim);}
+.recMeter{height:8px; margin:6px 20px 10px; border-radius:6px; background:var(--panel2); overflow:hidden;} .recMeter i{display:block; height:100%; width:0; background:#ef4444;}
+#shareQr{align-self:center; width:220px; height:220px; image-rendering:pixelated; border-radius:8px;} #shareQrNote{text-align:center; font-size:12.5px; color:var(--dim);}
+.askBody{padding:22px 20px 8px; font-size:15px; line-height:1.6;}
+.askFoot{display:flex; justify-content:flex-end; gap:8px; padding:12px 16px 16px;}
+.askFoot .tbtn{height:40px; min-width:80px; justify-content:center;}
+#stepBtn.on{background:#10202b; border-color:#38bdf8; color:#38bdf8;}
+#dbgBar{flex:0 0 auto; border-top:2px solid #38bdf8; background:var(--panel); padding:8px 10px; display:flex; flex-direction:column; gap:6px; max-height:46%; overflow:auto;}
+#dbgBar[hidden]{display:none;}
+.dbgTop{display:flex; align-items:center; gap:6px; flex-wrap:wrap;} .dbgTop b{font-size:13px; color:#38bdf8;} .dbgTop .tbtn{height:30px; padding:0 10px; font-size:13px;}
+.dbgTop .tbtn:disabled{opacity:.4; cursor:default;}
+#dbgCur{font-size:13px; padding:5px 8px; border-radius:8px; background:var(--bg); border-left:5px solid #38bdf8; word-break:break-all;}
+#dbgVars{display:flex; flex-wrap:wrap; gap:5px;}
+#dbgVars span{font-size:12.5px; padding:3px 8px; border-radius:8px; background:var(--panel2); border:1px solid var(--line);} #dbgVars span b{color:var(--dim); font-weight:500;}
+#dbgVars span.ch{border-color:#ffc93c; background:#2a2410; color:#ffc93c;}
+#dbgVars .none{color:var(--dim); border:0; background:none;}
+/* v40: 🔗 연결 보기, 🍎 오브젝트 넣기 under the preview, the block that is running lights up */
+.lnk{height:34px; padding:0 10px; border-radius:8px; border:1px solid var(--line); background:transparent; color:var(--dim); cursor:pointer; font-size:12.5px; font-weight:700; white-space:nowrap;}
+.lnk.on{background:#2b2410; border-color:#ffc93c; color:#ffc93c;}
+#objBar{flex:0 0 auto; display:flex; padding:6px 8px; border-top:1px solid var(--line); background:var(--panel);}
+#objPrevBtn{flex:1; height:44px; min-height:44px; justify-content:center; font-size:15px; font-weight:700; background:#2b2410; border-color:#ffc93c; color:#ffd36b;}
+.ffRun>.blocklyPath{filter:drop-shadow(0 0 5px #fff3a0) drop-shadow(0 0 2px #ffffff); stroke:#fff6c2!important; stroke-width:3px!important;}
+.blocklyDraggable>.blocklyPath{transition:filter .35s ease-out, stroke-width .35s ease-out;}
+#varBar{flex:0 0 auto; display:flex; align-items:flex-start; gap:8px; border-top:2px solid #a55b80; background:var(--panel); padding:6px 10px; max-height:30%; overflow:auto;}
+#varBar[hidden]{display:none;} #varBar>b{font-size:12.5px; color:#e48bb8; padding:3px 0; flex:0 0 auto;}
+#varList{display:flex; flex-wrap:wrap; gap:5px; min-width:0;}
+#varList span{font-size:12.5px; padding:3px 8px; border-radius:8px; background:var(--panel2); border:1px solid var(--line); word-break:break-all; transition:background .4s,border-color .4s;} #varList span b{color:var(--dim); font-weight:500;}
+#varList span.ch{border-color:#ffc93c; background:#2a2410; color:#ffc93c; transition:none;}
+#varList .none{color:var(--dim); border:0; background:none;}
+#varBtn.on{background:#2a1624; border-color:#e48bb8; color:#e48bb8;}
+#logBar{display:flex; align-items:center; gap:6px; padding:3px 8px; border-top:1px solid var(--line); background:var(--panel); flex:0 0 auto;}
+#logBar button{border:0; background:transparent; color:var(--dim); cursor:pointer; padding:6px 8px; border-radius:8px; font-size:12.5px;}
+#logBar button:hover{background:var(--panel2); color:var(--text);}
+#logBar .sp{flex:1;}
+#logN{background:var(--panel2); border-radius:99px; padding:1px 7px; font-weight:500;}
+#logBar.err #logN{background:#7f1d1d; color:#fff;}
+#logBox{display:none; flex:0 0 auto; max-height:34%; min-height:70px; overflow:auto; background:#05060a; border-top:1px solid var(--line); padding:6px 10px; font:12px/1.55 'JetBrains Mono',monospace; user-select:text; -webkit-user-select:text;}
+#pPrev.logOpen #logBox{display:block;}
+.lg{white-space:pre-wrap; word-break:break-all; color:#cfd5e1;} .lg.error{color:#ff9b9b;} .lg.warn{color:#ffd37a;} .lg.go{cursor:pointer; text-decoration:underline dotted;}
+/* AI dialog */
+.tbtn.aib{border-color:#5a4a1c; color:var(--fry);}
+#baiDlg .dlg{width:min(620px,100%);}
+.bai{padding:12px 16px; display:flex; flex-direction:column; gap:10px; overflow:auto;}
+#baiQ{width:100%; min-height:120px; resize:vertical; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:10px 12px; font:inherit; line-height:1.5; color:var(--text);}
+#baiUndo[hidden],#baiStop[hidden]{display:none;}
+#baiLive{margin:0; max-height:220px; overflow:auto; background:#05060a; border:1px solid var(--line); border-radius:10px; padding:10px 12px; font:12px/1.5 "JetBrains Mono",ui-monospace,monospace; color:#9fe3b8; white-space:pre-wrap; word-break:break-all;}
+#baiLive[hidden]{display:none;}
+.baiChips{display:grid; grid-template-columns:repeat(auto-fill,minmax(128px,1fr)); gap:6px;}
+.baiChips button{border:1px solid var(--line); background:var(--panel2); color:var(--text); border-radius:10px; padding:8px 10px; font:inherit; font-size:13px; cursor:pointer; text-align:left; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.baiChips button:hover{border-color:var(--fry); color:var(--fry);}
+.exLab{font-size:12px; color:var(--dim); margin:2px 0 -4px;}
+.bai.busy .exLab,.bai.busy .baiChips,.bai.busy .baiFix,.bai.busy #baiHist,.bai.busy #baiHistClear{display:none;}
+.baiFix{display:flex; flex-direction:column; gap:6px; padding:8px 10px; border:1px solid var(--line); border-radius:10px; background:var(--panel2);}
+.baiFix[hidden],#baiHist[hidden],#baiHistClear[hidden],#baiHistLab[hidden]{display:none;}
+.baiLast{font-size:12.5px; color:var(--dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.baiFixRow{display:flex; gap:6px;} .baiFixRow input{flex:1; min-width:0; background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:7px 10px; font:inherit; color:var(--text);}
+#baiHist{display:flex; flex-direction:column; gap:4px; max-height:150px; overflow:auto;}
+.baiH{display:flex; gap:4px;} .baiH .hq{flex:1; min-width:0; text-align:left; border:1px solid var(--line); background:var(--panel2); color:var(--text); border-radius:8px; padding:6px 9px; font:inherit; font-size:13px; cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.baiH .hq:hover{border-color:var(--fry); color:var(--fry);} .baiH .hq i{font-style:normal; font-size:11px; color:#38bdf8; border:1px solid #38bdf8; border-radius:99px; padding:0 6px; margin-right:7px;}
+.baiH .hx{border:0; background:transparent; color:var(--dim); cursor:pointer; font-size:17px; padding:0 8px; border-radius:8px;} .baiH .hx:hover{background:var(--panel2); color:#ff7b7b;}
+#baiHistClear{align-self:flex-start; height:28px; font-size:12.5px;}
+.baiMsg{min-height:20px; font-size:13.5px; color:var(--dim);}
+.baiMsg.ok{color:#3fe08f;} .baiMsg.bad{color:#ff7b7b;}
+.baiNote{color:var(--dim); font-size:12.5px; margin:0;}
+.baiFoot{display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap; padding:10px 16px; border-top:1px solid var(--line);}
+.baiFoot .sp{flex:1;}
+</style>
+</head>
+<body class="v-blocks">
+<header class="top">
+  <a class="home" href="../" aria-label="도구 목록">🍟</a>
+  <span class="brand" data-notr>BLOCK <b>HTML</b></span>
+  <button class="tbtn" id="projBtn" title="내 프로젝트"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span class="lb">내 프로젝트</span></button>
+  <input id="projName" value="나의 웹페이지" aria-label="프로젝트 이름" spellcheck="false">
+  <span class="sp"></span>
+  <span class="runGrp" id="runGrp">
+    <button class="tbtn rb run" id="runBtn" title="실행하기"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z"/></svg><span class="lb">실행하기</span></button>
+    <button class="tbtn rb" id="pauseBtn" title="멈추기"><svg viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></svg><span class="lb">멈추기</span></button>
+    <button class="tbtn rb" id="stepBtn" title="블록을 한 개씩 실행하며 살펴봐요"><svg viewBox="0 0 24 24"><path d="M5 4.5v15l8-7.5z"/><path d="M17 5v14"/></svg><span class="lb">한 블록씩 실행</span></button>
+    <button class="tbtn rb" id="stopBtn" title="정지하기"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg><span class="lb">정지하기</span></button>
+    <button class="tbtn rb" id="varBtn" title="실행하는 동안 변수 값을 바로바로 보여줘요"><svg viewBox="0 0 24 24"><path d="M8 4c-2 0-3 1-3 3v2c0 1.5-1 3-2 3 1 0 2 1.5 2 3v2c0 2 1 3 3 3"/><path d="M16 4c2 0 3 1 3 3v2c0 1.5 1 3 2 3-1 0-2 1.5-2 3v2c0 2-1 3-3 3"/><path d="M9.5 9.5l5 5M14.5 9.5l-5 5"/></svg><span class="lb">변수 보기</span></button>
+  </span>
+  <span class="seg" id="seg"><button data-v="blocks" class="on">블록</button><button data-v="prev">미리보기</button><button data-v="code">코드</button></span>
+  <button class="tbtn aib" id="aiBtn" title="AI 도우미 (시험 기능)"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/></svg><span class="lb">AI 도우미(시험)</span></button>
+  <button class="tbtn" id="exBtn"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/></svg><span class="lb">예제</span></button>
+  <button class="tbtn" id="fileBtn"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg><span class="lb">파일</span></button>
+  <button class="tbtn pri" id="dlBtn"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg><span class="lb">HTML 받기</span></button>
+  <span data-lang-slot></span>
+</header>
+<div class="main">
+  <div class="wsWrap"><div id="ws" data-notr></div>
+  <div id="editBar">
+    <button id="ebSearch" title="블록 찾기 ( / )"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span class="lb">블록 찾기</span></button>
+    <button id="ebTidy" title="블록 자동 정렬 (페이지는 왼쪽, 나머지 블록은 오른쪽에 줄 세워요)"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="4" rx="1.5"/><rect x="4" y="13" width="7" height="4" rx="1.5"/><rect x="13" y="10" width="7" height="10" rx="1.5"/></svg><span class="lb">자동 정렬</span></button>
+    <button id="ebCenter" title="가운데로"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/></svg></button>
+    <span class="vs"></span>
+    <button id="ebUndo" title="되돌리기"><svg viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button>
+    <button id="ebRedo" title="다시 하기"><svg viewBox="0 0 24 24"><path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></svg></button>
+    <span class="vs"></span>
+    <button id="ebCopy" title="복사"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span class="lb">복사</span></button>
+    <button id="ebPaste" title="붙여넣기"><svg viewBox="0 0 24 24"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V2.5h6V4"/></svg><span class="lb">붙여넣기</span></button>
+    <span class="vs"></span>
+    <button id="ebDel" class="dang" title="전체 삭제"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg><span class="lb">전체 삭제</span></button>
+  </div></div>
+  <aside id="side">
+    <div class="stabs">
+      <button class="stab on" data-p="prev">미리보기</button><button class="stab" data-p="code">HTML 코드</button>
+      <span class="sp"></span>
+      <button class="lnk" id="linkBtn" aria-pressed="true" title="블록을 누르면 미리보기에서 그 요소에 테두리가 생기고, 미리보기에서 요소를 누르면 그 블록을 찾아 줘요">🔗 <span>연결 보기</span></button>
+      <button class="ib" id="rerun" title="처음부터 다시 실행"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v5h-5"/></svg></button>
+      <button class="ib" id="openTab" title="새 탭에서 열기"><svg viewBox="0 0 24 24"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></button>
+      <button class="ib" id="copyCode" title="코드 복사"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+    </div>
+    <div class="pane on" id="pPrev"><div id="veil"><span>⏸ 멈춤 · 이어하려면 멈추기를 다시 눌러요</span></div><iframe id="frame" title="미리보기" allow="autoplay" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe>
+      <div id="objBar"><button class="tbtn" id="objPrevBtn" title="그림 모음에서 골라 페이지에 넣어요">🍎 <span>오브젝트 넣기</span></button></div>
+      <div id="varBar" hidden><b>변수</b><div id="varList" data-notr></div></div>
+      <div id="dbgBar" hidden>
+        <div class="dbgTop"><b id="dbgState"></b><span class="sp"></span><button class="tbtn pri" id="dbgNext">다음 블록 ▶</button><button class="tbtn" id="dbgFree">끝까지 실행</button><button class="tbtn" id="dbgOff">그만하기</button></div>
+        <div id="dbgCur" data-notr></div>
+        <div id="dbgVars" data-notr></div>
+      </div>
+      <div id="logBar"><button id="logToggle">📋 <span>로그</span> <b id="logN">0</b></button><span class="sp"></span><button id="logClear">로그 비우기</button></div><div id="logBox" data-notr></div></div>
+    <div class="pane" id="pCode"><div id="codeBar"><button class="tbtn" id="codeBlocks" hidden>블록으로 바꾸기</button><button class="tbtn" id="codeUndo" hidden>바꾸기 취소</button><button class="tbtn" id="codeReset" hidden>블록 코드로 되돌리기</button><span id="codeNote">여기서 바로 고칠 수 있어요 · 블록을 바꾸면 블록 코드로 돌아와요</span></div><div id="codeWrap"><textarea id="codeEdit" data-notr spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="HTML 코드"></textarea></div></div>
+    <div class="hint" id="hint">블록을 바꾸면 미리보기가 바로 바뀌어요.</div>
+  </aside>
+</div>
+<div class="menu" id="exMenu"></div>
+<div class="menu" id="fileMenu">
+  <button data-f="projects">내 프로젝트<small>여러 개를 만들어 두고 골라 열기, 이름 바꾸기, 삭제</small></button>
+  <button data-f="new">새 프로젝트<small>빈 페이지에서 새로 시작해요. 지금 것은 목록에 남아요</small></button>
+  <hr>
+  <button data-f="save">프로젝트 파일로 저장<small>블록을 .json 파일로 받아요. 나중에 다시 열 수 있어요</small></button>
+  <button data-f="importhtml">HTML 파일 가져오기<small>만들어 둔 .html 파일을 블록으로 바꿔요</small></button>
+  <button data-f="open">프로젝트 파일 열기<small>저장해 둔 .json 파일</small></button>
+  <hr>
+  <button data-f="html">HTML 파일로 받기<small>어디서든 열리는 웹페이지 파일</small></button>
+  <button data-f="app">앱으로 받기<small>이름과 아이콘을 정해서 받아요. 폰·아이패드에서 '홈 화면에 추가'하면 주소창 없이 앱처럼 열려요</small></button>
+  <button data-f="share">링크로 공유하기<small>링크 하나에 블록(과 그림·소리)을 담아요. 받은 사람은 바로 해 보고, 고칠 수도 있어요</small></button>
+</div>
+<div class="ov" id="padDlg"><div class="dlg">
+  <div class="dh"><h3>그림 그리기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="padTools">
+    <span class="grp"><button class="tl on" data-tool="pen">✏️ 펜</button><button class="tl" data-tool="fill">🪣 채우기</button><button class="tl" data-tool="eraser">🧽 지우개</button></span>
+    <span class="grp"><button class="tl" data-tool="line" title="직선 (끌어서 그려요)">╱ 선</button><button class="tl" data-tool="rect" title="사각형 (Shift: 정사각형)">▭ 사각형</button><button class="tl" data-tool="oval" title="원 (Shift: 정원)">◯ 원</button><button class="tl" data-tool="tri" title="삼각형">△ 삼각형</button><button class="tl" data-tool="star" title="별">☆ 별</button><button class="tl" id="padSolid" title="도형 속을 채워요">속 채우기</button></span>
+    <span id="padSw"></span>
+    <span class="grp"><input type="range" id="padSize" min="2" max="60" value="8" aria-label="굵기"><span id="padDot"></span></span>
+    <span class="grp"><button class="tl" id="padUndo">↶ 되돌리기</button><button class="tl" id="padClear">모두 지우기</button></span>
+  </div>
+  <div id="padWrap"><canvas id="padCv" width="800" height="600"></canvas></div>
+  <div class="padFoot"><input type="text" id="padName" aria-label="그림 이름" data-notr><label class="padTr" title="체크하면 배경 없이 그린 부분만 저장돼요 (바둑판 무늬 = 투명)"><input type="checkbox" id="padBg"><i></i> 투명 배경</label><button class="tbtn" data-close>취소</button><button class="tbtn" id="padShare" title="저장하고 '모두의 그림'에 공유해요">🌍 저장하고 공유</button><button class="tbtn pri" id="padSave">저장하고 넣기</button></div>
+</div></div>
+<div class="ov" id="mgrDlg"><div class="dlg">
+  <div class="dh"><h3>내 그림</h3><button class="tbtn" id="mgrDraw">✏️ 그림 그리기</button><button class="tbtn" id="mgrPhoto">📷 사진 넣기</button><button class="tbtn" id="mgrObj">🍎 오브젝트</button><button class="x" data-close aria-label="닫기">×</button></div>
+  <div id="mgrList"></div>
+</div></div>
+<div class="ov" id="objDlg"><div class="dlg">
+  <div class="dh"><h3>오브젝트</h3><a id="objSrc" href="objects-LICENSES.txt" target="_blank" rel="noopener">출처</a><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="objTop"><input type="search" id="objQ" data-notr placeholder="찾기 (예: 사과, car)" autocomplete="off" spellcheck="false" aria-label="오브젝트 찾기"></div>
+  <div id="objTabs" data-notr></div>
+  <div id="objGrid" data-notr></div>
+  <div class="hint">누르면 그림으로 넣고, 페이지에 '내 그림' 블록이 놓여요.</div>
+</div></div>
+<div class="ov" id="sdDlg"><div class="dlg tiny">
+  <div class="dh"><h3>모두에게 공유</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="sdBody">
+    <div class="sdTh" id="sdTh"><img id="sdImg" alt=""></div>
+    <div class="sdSize" id="sdSize" data-notr></div>
+    <p class="sdWait" id="sdWait">확인 중…</p>
+    <div id="sdLogin" hidden><p>Frenchfries777 계정으로 로그인하면 공유할 수 있어요</p><button class="tbtn pri" id="sdLoginBtn">🍟 로그인</button></div>
+    <div id="sdForm" hidden>
+      <label class="sdLab" for="sdName">그림 제목</label>
+      <input type="text" id="sdName" maxlength="30" data-notr spellcheck="false" autocomplete="off">
+      <p class="sdRule">⚠️ 모두가 보는 곳이에요. 이름 · 학교 · 전화번호 같은 개인 정보나 얼굴은 올리지 말고, 친절한 그림만 올려요.</p>
+    </div>
+    <div class="sdMsg" id="sdMsg"></div>
+  </div>
+  <div class="askFoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="sdGo" disabled hidden>공유하기</button></div>
+</div></div>
+<div class="ov" id="baiDlg"><div class="dlg">
+  <div class="dh"><h3>AI 도우미 (시험 기능)</h3><button class="tbtn" id="baiSet">AI 설정</button><button class="x" id="baiClose" aria-label="닫기">×</button></div>
+  <div class="bai" id="baiBody">
+    <p class="baiNote">만들거나 고치고 싶은 것을 글로 써 주세요. AI가 HTML로 페이지를 쓰고, 그걸 블록으로 바꿔 줘요. 블록으로 못 바꾸는 부분은 'HTML·JS 직접 쓰기' 블록에 들어가요. 결과는 거친 초안이에요. 안 돌아가거나 틀릴 수 있으니 미리보기로 확인하고 직접 고쳐 주세요. 작고 단순한 페이지에 더 잘 맞아요.</p>
+    <textarea id="baiQ" data-notr spellcheck="false"></textarea>
+    <div class="baiFix" id="baiFixBox" hidden>
+      <div class="exLab">틀린 곳을 알려 주세요</div>
+      <div class="baiLast" id="baiLast" data-notr></div>
+      <div class="baiFixRow"><input type="text" id="baiFix" data-notr spellcheck="false" placeholder="예: 버튼을 눌러도 소리가 안 나요"><button class="tbtn pri" id="baiFixGo">이 부분만 고치기</button></div>
+    </div>
+    <div class="exLab">예시 (누르면 입력돼요)</div>
+    <div class="baiChips" id="baiChips"></div>
+    <div class="exLab" id="baiHistLab" hidden>내 요청 기록 (누르면 다시 쓸 수 있어요)</div>
+    <div id="baiHist" hidden></div>
+    <button class="tbtn" id="baiHistClear" hidden>기록 지우기</button>
+    <div class="baiMsg" id="baiMsg"></div>
+    <pre id="baiLive" data-notr hidden></pre>
+  </div>
+  <div class="baiFoot"><button class="tbtn" id="baiUndo" hidden>AI 전으로 되돌리기</button><span class="sp"></span><button class="tbtn" id="baiStop" hidden>멈추기</button><button class="tbtn pri" id="baiGo">코드 만들기</button></div>
+</div></div>
+<div class="ov" id="projDlg"><div class="dlg narrow">
+  <div class="dh"><h3>내 프로젝트</h3><button class="tbtn pri" id="projNew">＋ 새 프로젝트</button><button class="x" data-close aria-label="닫기">×</button></div>
+  <div id="projList"></div>
+  <div class="hint">이 브라우저에 자동으로 저장돼요. 다른 기기로 옮기려면 파일 메뉴에서 프로젝트 파일로 저장하세요.</div>
+</div></div>
+<div class="ov" id="srchDlg"><div class="dlg narrow">
+  <div class="dh"><h3>블록 찾기</h3><button class="x" id="srchClose" aria-label="닫기">×</button></div>
+  <div class="srchTop"><input type="search" id="srchQ" data-notr placeholder="예: 소리, 랜덤, 저장" autocomplete="off" spellcheck="false"></div>
+  <div id="srchList"></div>
+  <div class="hint">누르면 지금 보이는 곳에 블록이 놓여요.</div>
+</div></div>
+<div class="ov" id="shareDlg"><div class="dlg narrow">
+  <div class="dh"><h3>링크로 공유하기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="shareBody"><textarea id="shareLink" data-notr readonly spellcheck="false"></textarea><div id="shareInfo"></div><canvas id="shareQr" hidden></canvas><div id="shareQrNote" hidden>폰 카메라로 이 QR을 비추면 바로 열려요</div></div>
+  <div class="shareFoot"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="shareCopy" disabled>링크 복사</button></div>
+</div></div>
+<div id="playView"><div class="pvTop"><span class="pvTag">공유된 프로젝트</span><b id="playName" data-notr></b><span class="sp"></span><button class="tbtn" id="playRerun">처음부터</button><button class="tbtn pri" id="playEdit">편집하기</button><button class="tbtn" id="playClose">닫기</button></div>
+  <iframe id="playFrame" title="공유된 프로젝트" allow="autoplay" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe></div>
+<div class="ov" id="appDlg"><div class="dlg narrow">
+  <div class="dh"><h3>앱으로 받기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="appBody">
+    <label>앱 이름<input type="text" id="appName" maxlength="20" data-notr></label>
+    <div class="appRow"><label>아이콘 그림<input type="text" id="appEmoji" maxlength="4" value="🎮" data-notr></label><label>바탕 색<input type="color" id="appBg" value="#4f46e5"></label><canvas id="appPrev" width="90" height="90"></canvas></div>
+    <div class="appHelp">받은 파일을 폰이나 아이패드의 사파리에서 열고 공유 단추 → '홈 화면에 추가'를 누르면 이 이름과 아이콘으로 앱이 생겨요. 인터넷이 꺼지면 열리지 않아요.</div>
+  </div>
+  <div class="shareFoot"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="appGo">앱 파일 받기</button></div>
+</div></div>
+<div class="ov" id="recDlg"><div class="dlg tiny">
+  <div class="dh"><h3>내 목소리 녹음</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="askBody" id="recMsg">아래 단추를 눌러 녹음을 시작해요. 최대 10초예요.</div>
+  <div class="recMeter"><i id="recBar"></i></div>
+  <div class="askFoot"><button class="tbtn" id="recGo">녹음 시작</button><button class="tbtn" id="recPlay" disabled>들어 보기</button><button class="tbtn pri" id="recUse" disabled>이 소리 쓰기</button></div>
+</div></div>
+<div class="ov" id="askDlg"><div class="dlg tiny">
+  <div class="askBody" id="askMsg"></div>
+  <input type="text" id="askIn" class="askIn" hidden maxlength="60" aria-label="입력" data-notr>
+  <div class="askFoot"><button class="tbtn" id="askNo">취소</button><button class="tbtn pri" id="askOk">확인</button></div>
+</div></div>
+<input type="file" id="photoIn" accept="image/*" hidden>
+<input type="file" id="htmlIn" accept=".html,.htm,text/html" hidden>
+<input type="file" id="fileIn" accept=".json,application/json" hidden>
+<div id="toast"></div><div id="prog" hidden><div id="progTxt"></div><div id="progTrack"><div id="progBar"></div></div></div>
+<script src="sounds.js?v=41"></script>
+<script src="blocks.js?v=53"></script>
+<script src="objects.js?v=44"></script>
+<script src="shared.js?v=43"></script>
+<script src="examples.js?v=44"></script>
+<script src="../slides/qr.js"></script>
+<script src="app.js?v=53"></script>
+<script src="../ai.js?v=ai26"></script>
+<script src="../ai-prompts.js?v=41"></script>
+<script src="lib/acorn.min.js"></script>
+<script src="js2blocks.js?v=52"></script>
+<script src="html2blocks.js?v=52"></script>
+<script src="ai-blocks.js?v=52"></script>
+</body>
+</html>
