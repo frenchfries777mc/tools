@@ -54,7 +54,7 @@ function ask(q){
   if(mode==='set') return runSet(q); if(mode==='find') return runFind(q);
   stopped=false; setBusy(true); var out=$('aiOut'); out.hidden=false; out.innerHTML='<span class="wait"><span class="spin"></span></span>'; out.querySelector('.wait').appendChild(document.createTextNode(T('AI가 생각하는 중…')));
   FFAI.ask({system:system(), prompt:prompt(q), facts:true, prose:true, question:q, maxTokens:local()?600:1400, onText:function(t){ if(!stopped) render(t); }})
-    .then(function(t){ if(!stopped) render(t||''); if(!String(t||'').trim()) out.textContent=T('AI가 답하지 않았어요'); },
+    .then(function(t){ if(!stopped) render(t||''); if(!String(t||'').trim()) out.textContent=T('AI가 답하지 않았어요'); else if(!stopped&&window.FFWrong) FFWrong.attach(out,{tool:'Fry Lab',question:q,answer:t}); },
       function(e){ if(e&&e.kind==='stop'||stopped){ if(!out.textContent.trim()||out.querySelector('.wait')) out.textContent=T('멈췄어요'); return; }
         if(e&&e.kind==='nokey'){ out.hidden=true; return; } out.textContent=(e&&e.message)||T('AI에 연결하지 못했어요'); })
     .then(function(){ setBusy(false); });

@@ -4,6 +4,14 @@
  "notes": [
   {
    "date": "2026-10-18",
+   "build": "v28",
+   "title": "틀렸어요 단추 확대",
+   "items": [
+    "Fry Lab AI 도우미와 Block HTML 블록 설명에도 틀렸어요 단추 추가"
+   ]
+  },
+  {
+   "date": "2026-10-18",
    "build": "v27",
    "title": "틀렸어요 단추",
    "items": [
