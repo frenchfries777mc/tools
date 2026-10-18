@@ -16,6 +16,19 @@ Tools 사이트의 자체 AI(Qwen3)를 블록 HTML과 Fry Sheet에 맞게 학습
 ## 다음 학습용 자료 (2026-10-17)
 Fry Sheet AI 계산(`raw/calc-1`: 말로 쓴 계산 → 수식, 단위 문장 → `{value, from, to}`), Fry Slides 맞춤법 고치기(`raw/spell-1`), 블록 설명(`raw/explain-1`) 예시를 모아 뒀어요. 질문 글은 `ai-prompts.js`의 `calcSys`·`unitSys`·`spellSys`·`explainSys`예요. 아직 `build*.js`에 넣지 않았어요.
 
+## 1.4 학습 (2026-10-18)
+타리우스(basic, Qwen3 1.7B)와 렉투스(smart, Qwen3 4B)를 둘 다 **FF777 1.4**로 맞춰요. 기획: `/mnt/project-files/tools/ff777-1.4-plan.md`.
+- 자료: `data/v14-basic.jsonl`(타리우스), `data/v14-smart.jsonl`(렉투스), `data/v14-test.jsonl`(시험용, 학습에 안 씀). AI 기획 스레드가 만들어 넣어요. 아직 없으면 노트 설정 칸에서 "1.4 자료가 아직 저장소에 없어요"가 나오고 멈춰요.
+- 노트: [train/kaggle.ipynb](https://github.com/frenchfries777mc/tools/blob/main/train/kaggle.ipynb) (Kaggle → File → Import Notebook). `python3 train/make_kaggle.py`가 `colab.ipynb`에서 만들어요.
+- 설정: `MODEL = smart`(렉투스) 또는 `basic`(타리우스), `VERSION = "1.4"`. 1.4는 언제나 바탕 Qwen3에서 처음부터 학습해요 (`CONTINUE`는 1.3 전용). 자료 파일 이름은 `DATA_DIR`·`TRAIN_FILE`·`TEST_FILE`로 바꿀 수 있어요.
+- 학습 설정(기획 D): 렉투스 2바퀴, lr 1.5e-4, r 16. 타리우스 2바퀴, lr 2e-4, r 8 (1.3과 같음).
+- 한 번 돌리면(Save & Run All) 모델 하나만 해요. 렉투스 한 번, 타리우스 한 번, 따로 돌려요.
+- 걸리는 시간 (Kaggle T4, 추정이에요): 렉투스 학습 약 4.5~5.5시간, 모두 약 6~7시간. 타리우스 학습 약 1~2시간, 모두 약 2~3시간. `MAX_TRAIN_HOURS`(6)가 넘으면 학습을 멈추고 그대로 합쳐서 올려요.
+- 순서: 학습 → `Frenchfries777/FF-Tools-<크기>-merged`에 비공개로 올림 → 시험 → "올림 끝". 시험보다 먼저 올려서, 시험 중에 시간이 끝나도 모델은 남아요. 중간 진행은 200걸음마다 HF `FF-Tools-<크기>-ckpt`에 저장돼서 다시 돌리면 이어서 해요.
+- 시험(기획 C): 사이트와 같은 조건(4비트, 글 답변 temperature 0.7 · top_p 0.8 · presence penalty 1.0, JSON·코드는 0.3)으로 `v14-test`와 반복 확인 질문("너가 잘 하는 것" 등 12개)을 봐요. 같은 구절을 3번 넘게 되풀이하거나 한국어 답에 한자가 섞이면 0점, "반복 0개"가 합격 기준이에요. `EVAL_MINUTES`(45분)가 지나면 멈춰요. 답 전체는 `ff-test-<이름>-1.4.json`으로 Output에 남아요.
+- 토큰은 Kaggle **Add-ons → Secrets**의 `HF_TOKEN`에서만 읽고 화면에 쓰지 않아요.
+- 끝나면 브라우저용 변환은 GitHub Actions `convert-model.yml`(workflow_dispatch)로 하고, 사이트 이름표(`ai.js`)는 올린 다음에 따로 바꿔요.
+
 ## 학습시키기 (주인이 하는 일)
 1. [Colab에서 노트 열기](https://colab.research.google.com/github/frenchfries777mc/tools/blob/main/train/colab.ipynb)
 2. 런타임 유형을 **T4 GPU**로 바꾸고, 설정 칸에서 `basic`(기본) 또는 `smart`(똑똑함)을 고르고 Hugging Face 토큰을 넣어요.
