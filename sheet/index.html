@@ -276,6 +276,11 @@ button,input,select{font:inherit; color:inherit;}
 .aiPrev th{color:var(--fry);}
 .aiActs{display:flex; justify-content:flex-end; gap:8px; margin-top:8px;}
 .aiActs:empty{display:none;}
+.aiWrong{text-align:right;} .aiWrong:empty{display:none;}
+.aiRecH{margin-bottom:6px;} .aiRecH b{color:var(--fry);}
+.aiRecAlt{display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:6px;}
+.aiChip{border:1px solid var(--line); background:var(--panel2); color:var(--text); border-radius:999px; padding:3px 10px; font:inherit; font-size:12.5px; cursor:pointer;}
+.aiChip.on{border-color:var(--fry); color:var(--fry);}
 .aiFnBox{margin-top:14px; border-top:1px solid var(--line); padding-top:10px; font-size:13px;}
 .aiFnBox p{color:var(--dim); margin:4px 0 0; line-height:1.55;}
 .aiFnBox .aiRow{justify-content:flex-start;}
@@ -618,6 +623,7 @@ button,input,select{font:inherit; color:inherit;}
     <div class="aiRow"><span class="aiNote"></span><button class="tbtn pri" id="aiGo">보내기</button></div>
     <div id="aiOut" data-notr></div>
     <div class="aiActs" id="aiActs"></div>
+    <div class="aiWrong" id="aiWrong"></div>
     <div class="aiFnBox"><b>AI 함수</b><p>칸에 =AI("할 일", A2) 처럼 쓰면 AI가 답을 칸에 채워요. 한 칸에 쓰고 아래로 끌어 채우면 한 열 전체를 한 번에 처리해요.</p>
       <div class="aiTr"><b>🌐 영어로 번역하기</b><p>A열에 한국어 문장을 쓰고 B2 칸에 <code data-notr>=AI("영어로 번역", A2)</code> 를 쓴 뒤 아래로 끌어 보세요. 열 전체가 영어로 바뀌어요. "일본어로 번역", "한 줄로 요약", "긍정/부정 분류"처럼 할 일만 바꾸면 돼요.</p><div class="aiRow"><button class="tbtn pri" id="aiTrDemo">번역 예시 넣어 보기</button></div>
         <p><code data-notr>=AI("번역", A2)</code> 는 한국어면 영어로, 다른 말이면 한국어로 바꿔요. <code data-notr>=AI("요약", A2)</code> 는 한 문장으로 줄이고, "세 줄 요약"처럼 줄 수도 정할 수 있어요. "맞춤법"은 맞춤법과 띄어쓰기를 고쳐 줘요.</p></div>
@@ -644,7 +650,8 @@ button,input,select{font:inherit; color:inherit;}
 <script src="app.js?v=30"></script>
 <script src="viz.js"></script>
 <script src="../ai.js?v=ai26"></script>
+<script src="../ai-wrong.js?v=1"></script>
 <script src="../ai-prompts.js"></script>
-<script src="ai-sheet.js?v=29"></script>
+<script src="ai-sheet.js?v=30"></script>
 </body>
 </html>
