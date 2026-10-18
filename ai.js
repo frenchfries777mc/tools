@@ -79,10 +79,12 @@ FFT.add({
 'AI가 이 요청에는 답하지 않았어요':['The AI declined this request','La IA rechazó esta solicitud','L’IA a refusé cette demande','Die KI hat abgelehnt','AIがこのリクエストに応答しませんでした'],
 'AI를 쓰려면 먼저 API 키를 넣어 주세요':['Add an API key first to use AI','Añade primero una clave API','Ajoute d’abord une clé API','Zuerst einen API-Schlüssel eintragen','AIを使うには先にAPIキーを入れてください'],
 '보이기':['Show','Mostrar','Afficher','Zeigen','表示'],
-'닫기':['Close','Cerrar','Fermer','Schließen','閉じる']
+'닫기':['Close','Cerrar','Fermer','Schließen','閉じる'],
+'열 때 미리 불러오기':['Preload when a page opens','Precargar al abrir la página','Précharger à l’ouverture de la page','Beim Öffnen der Seite vorladen','ページを開いたときに先に読み込む'],
+'받아 둔 모델을 페이지를 열면 바로 뒤에서 올려 둬요. 첫 질문이 빨라지는 대신 그래픽카드 메모리(VRAM)를 계속 써요.':['The saved model loads in the background as soon as a page opens. The first question is faster, but it keeps graphics memory (VRAM) in use.','El modelo guardado se carga en segundo plano al abrir la página. La primera pregunta es más rápida, pero ocupa memoria gráfica (VRAM).','Le modèle enregistré se charge en arrière-plan à l’ouverture de la page. La première question est plus rapide, mais la mémoire graphique (VRAM) reste occupée.','Das gespeicherte Modell lädt beim Öffnen der Seite im Hintergrund. Die erste Frage geht schneller, belegt aber Grafikspeicher (VRAM).','保存したモデルをページを開くとすぐ裏で読み込みます。最初の質問は速くなりますが、グラフィックメモリ(VRAM)を使い続けます。']
 });
 
-function load(){ var o=null; try{ o=JSON.parse(localStorage.getItem(LS)||'null'); }catch(e){} o=o&&typeof o==='object'?o:{}; o.keys=o.keys||{}; o.models=o.models||{}; if(!PROVIDERS[o.provider]) o.provider='local'; o.local=o.local||{}; return o; }
+function load(){ var o=null; try{ o=JSON.parse(localStorage.getItem(LS)||'null'); }catch(e){} o=o&&typeof o==='object'?o:{}; o.keys=o.keys||{}; o.models=o.models||{}; if(!PROVIDERS[o.provider]) o.provider='local'; o.local=o.local||{}; o.preload=!!o.preload; return o; }
 function store(o){ try{ localStorage.setItem(LS,JSON.stringify(o)); }catch(e){} }
 function cfg(){ var o=load(), p=o.provider; var m=o.models[p]; if(!m||!PROVIDERS[p].models.some(function(x){return x[0]===m;})) m=PROVIDERS[p].models[0][0]; return {provider:p, key:o.keys[p]||'', model:m, local:p==='local', localOk:p==='local'&&!!o.local[m]}; }
 function ready(){ var c=cfg(); return c.local?c.localOk&&gpuOk!==false:!!c.key; }
@@ -190,7 +192,9 @@ function probeTuned(m){
   return fetch(HF+mlcId(m)+'/resolve/main/mlc-chat-config.json',{method:'HEAD'}).then(function(r){ return tunedOk[m]=r.ok; },function(){ return false; });
 }
 var prog=null;
+var quiet=false; // a background preload shows no progress bar
 function progress(p,text){
+  if(quiet) return;
   if(!prog){ addCSS(); prog=document.createElement('div'); prog.className='ffai-prog'; prog.setAttribute('data-notr',''); prog.innerHTML='<b></b><span><i></i></span>'; document.body.appendChild(prog); }
   if(p==null){ prog.classList.remove('on'); return; }
   prog.classList.add('on'); prog.querySelector('b').textContent=text; prog.querySelector('i').style.width=Math.round(p*100)+'%';
@@ -313,6 +317,7 @@ function withFacts(c,o){ // only for our own models, and only for free answers t
 }
 function send(c,o){ return c.local?askLocal(c,o):c.provider==='claude'?askClaude(c,o):c.provider==='openai'?askOpenAI(c,o):askGemini(c,o); }
 function ask(o){
+  quiet=false;
   var c=cfg();
   if(c.local?!c.localOk:!c.key) return new Promise(function(res,rej){ settings(function(){ ask(o).then(res,rej); },function(){ rej(AIError(c.local?T('자체 AI를 쓰려면 AI 설정에서 저장을 눌러 주세요'):T('AI를 쓰려면 먼저 API 키를 넣어 주세요'),'nokey')); }); });
   return withFacts(c,o).then(function(o2){ return send(c,o2); });
@@ -338,6 +343,7 @@ var css='.ffai-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;d
 '.ffai-note{color:var(--dim,#8a93a6);font-size:12.5px;line-height:1.55;margin:8px 0 0}.ffai-msg{min-height:20px;font-size:13px}.ffai-msg.ok{color:#3fe08f}.ffai-msg.bad{color:#ff7b7b}'+
 '.ffai-acts{display:flex;gap:8px;justify-content:flex-end;padding:12px 18px;border-top:1px solid var(--line,#222837);flex-wrap:wrap}'+
 '.ffai-pri{height:38px;padding:0 16px;border-radius:9px;border:0;background:linear-gradient(90deg,var(--fry,#ffc93c),var(--fry2,#ff8a3d));color:#1c1405;font:inherit;font-weight:700;cursor:pointer}'+
+'.ffai-chk{display:flex;align-items:center;gap:8px;margin-top:10px;color:var(--text,#eef0f5)!important;font-size:14px!important;cursor:pointer}.ffai-chk input{flex:none;width:20px;height:20px;padding:0}'+
 '.ffai-dang{color:#ff7b7b}.ffai-hide{display:none!important}'+
 '.ffai-prog{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:210;background:var(--panel,#10131b);color:var(--text,#eef0f5);border:1px solid var(--line,#222837);border-radius:12px;padding:10px 14px;display:none;flex-direction:column;gap:6px;width:min(320px,90vw);box-shadow:0 12px 40px rgba(0,0,0,.5);font-size:13px}'+
 '.ffai-prog.on{display:flex}.ffai-prog b{font-weight:600}.ffai-prog span{height:6px;border-radius:9px;background:var(--panel2,#151925);overflow:hidden}.ffai-prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--fry,#ffc93c),var(--fry2,#ff8a3d));transition:width .2s}';
@@ -351,11 +357,12 @@ function build(){
     '<label class="l-k"></label><div class="ffai-row r-k"><input type="password" class="k" autocomplete="off" spellcheck="false"><button class="ffai-sm show"></button></div>'+
     '<div class="r-l"><a class="ffai-link" target="_blank" rel="noopener"></a><span class="ffai-free"></span></div>'+
     '<label class="l-m"></label><select class="m"></select>'+
+    '<label class="ffai-chk r-pre"><input type="checkbox" class="pre"><span></span></label>'+
     '<p class="ffai-note"></p><div class="ffai-msg"></div></div>'+
     '<div class="ffai-acts"><button class="ffai-sm ffai-dang del"></button><button class="ffai-sm test"></button><button class="ffai-pri save"></button></div></div></div>');
   document.body.appendChild(ov);
   var q=function(s){ return ov.querySelector(s); };
-  q('h3').textContent=T('AI 설정'); q('.ffai-x').setAttribute('aria-label',T('닫기')); q('.l-p').textContent=T('AI 회사'); q('.l-k').textContent=T('API 키'); q('.l-m').textContent=T('모델');
+  q('h3').textContent=T('AI 설정'); q('.ffai-x').setAttribute('aria-label',T('닫기')); q('.l-p').textContent=T('AI 회사'); q('.l-k').textContent=T('API 키'); q('.l-m').textContent=T('모델'); q('.r-pre span').textContent=T('열 때 미리 불러오기');
   q('.show').textContent=T('보이기'); q('.ffai-note').textContent=T('키는 이 브라우저에만 저장되고, 이 사이트가 아니라 고른 AI 회사로만 바로 보내져요. 공용 컴퓨터에서는 다 쓴 뒤 키 지우기를 눌러 주세요.');
   q('.del').textContent=T('키 지우기'); q('.test').textContent=T('연결 확인'); q('.save').textContent=T('저장');
   Object.keys(PROVIDERS).forEach(function(p){ var b=document.createElement('button'); b.textContent=T(PROVIDERS[p].name); b.dataset.p=p; b.onclick=function(){ keep(); cur.provider=p; fill(); }; q('.ffai-seg').appendChild(b); });
@@ -376,7 +383,7 @@ function build(){
     store(cur); close(); var f=onOk; onOk=onCancel=null; if(f) f(); };
 }
 function msg(t,k){ var m=ov.querySelector('.ffai-msg'); m.textContent=t; m.className='ffai-msg'+(k?' '+k:''); }
-function keep(){ var k=ov.querySelector('.k').value.trim(), m=ov.querySelector('.m').value; if(cur.provider!=='local'){ if(k) cur.keys[cur.provider]=k; else delete cur.keys[cur.provider]; } cur.models[cur.provider]=m; }
+function keep(){ var k=ov.querySelector('.k').value.trim(), m=ov.querySelector('.m').value; if(cur.provider!=='local'){ if(k) cur.keys[cur.provider]=k; else delete cur.keys[cur.provider]; } cur.models[cur.provider]=m; if(cur.provider==='local') cur.preload=ov.querySelector('.pre').checked; }
 function fill(){
   var p=PROVIDERS[cur.provider], q=function(s){ return ov.querySelector(s); };
   ov.querySelectorAll('.ffai-seg button').forEach(function(b){ b.classList.toggle('on',b.dataset.p===cur.provider); });
@@ -384,6 +391,7 @@ function fill(){
   var a=q('.ffai-link'); a.href=p.keyUrl; a.textContent=T('키 받는 곳')+' ↗'; q('.ffai-free').textContent=p.free?'· '+T('무료 키 가능'):'';
   q('.m').innerHTML=p.models.map(function(m){ return '<option value="'+m[0]+'">'+(p.local?T(m[1]):m[1])+'</option>'; }).join(''); q('.m').value=cur.models[cur.provider]||p.models[0][0]; if(q('.m').selectedIndex<0) q('.m').value=p.models[0][0];
   ['.l-k','.r-k','.r-l'].forEach(function(s){ q(s).classList.toggle('ffai-hide',!!p.local); });
+  q('.r-pre').classList.toggle('ffai-hide',!p.local); q('.pre').checked=!!cur.preload;
   q('.ffai-note').textContent=p.local?T('자체 AI는 이 기기 안에서 돌아가요. 처음 한 번 모델을 받아 저장하고, 그 뒤로는 키 없이 쓸 수 있어요. 큰 AI보다는 덜 똑똑해요. 더 잘하게 하려면 다른 회사를 골라 API 키를 넣으세요.'):T('키는 이 브라우저에만 저장되고, 이 사이트가 아니라 고른 AI 회사로만 바로 보내져요. 공용 컴퓨터에서는 다 쓴 뒤 키 지우기를 눌러 주세요.');
   q('.del').textContent=p.local?T('모델 지우기'):T('키 지우기'); q('.test').textContent=p.local?T('지금 받아 두기'):T('연결 확인');
   msg('','');
@@ -396,6 +404,16 @@ function fill(){
 function close(){ ov.classList.remove('open'); }
 function cancel(){ close(); var f=onCancel; onOk=onCancel=null; if(f) f(); }
 function settings(ok,no){ if(!ov) build(); cur=load(); onOk=ok||null; onCancel=no||null; fill(); ov.classList.add('open'); setTimeout(function(){ var k=ov.querySelector('.k'); if(!k.value) k.focus(); },50); }
+
+/* preload: with the switch on and the model already saved here, load it in the background when a page opens */
+function warm(){
+  var o=load(), c=cfg(); if(!o.preload||!c.local||!c.localOk) return;
+  quiet=true;
+  (gpuOk==null?checkGPU():Promise.resolve(gpuOk)).then(function(ok){ if(ok===false) throw 0; return TUNED[c.model]?probeTuned(c.model):true; })
+    .then(function(ok){ if(!ok) throw 0; return engine(c.model); }).then(function(){ quiet=false; },function(){ quiet=false; });
+}
+function warmSoon(){ setTimeout(warm,1500); }
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',warmSoon); else warmSoon();
 
 function stop(){ if(stopNow){ var f=stopNow; stopNow=null; try{ f(); }catch(e){} } }
 window.FFAI={facts:facts, ready:ready, isLocal:isLocal, isTuned:isTuned, model:function(){ return cfg().model; }, stop:stop, settings:settings, ask:ask, parseJSON:parseJSON, config:cfg};
