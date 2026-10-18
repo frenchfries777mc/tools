@@ -10,6 +10,10 @@
          FFAI.ask({system, prompt, json, maxTokens}) -> Promise<string> (opens settings first when no key)
          FFAI.ask({…, onText}) streams the answer as it is written; FFAI.stop() stops it
          FFAI.ask({…, facts:true}) for free answers: our own models also get who they are and what the developer taught them (teach/)
+         FFAI.ask({…, prose:true, question}) for plain-text answers: the built-in AI samples more freely (temperature 0.7, top_p 0.8,
+                                 presence_penalty 1), stops at about 400 tokens on a full sentence, cuts a phrase repeated 3 times,
+                                 and for a Korean question cuts Chinese characters and asks once more in Korean only.
+                                 Leave it off for JSON, formulas, code and block XML (calm settings, the XML loop guard)
          FFAI.parseJSON(text)    -> JSON from a reply, tolerating ``` fences
    Load after i18n.js. New tools should reuse this file instead of adding their own AI code. */
 (function(){
@@ -209,34 +213,82 @@ function engine(model){
     throw AIError(/memory|OOM|allocate|device lost/i.test(String(err&&err.message))?T('이 기기에서는 메모리가 부족해요. 더 가벼운 모델을 골라 보세요'):T('자체 AI를 불러오지 못했어요'),'net'); });
   return engP;
 }
+/* prose answers (o.prose: the sheet's ask tab and =AI(), the lab helper, block explanations) get Qwen3's suggested sampling for
+   plain answers, a short length cap and early guards; JSON, code and block XML answers keep the calm settings below */
+var PROSE={temperature:0.7, top_p:0.8, presence_penalty:1.0, maxTokens:400};
+var HAN=/[㐀-䶿一-鿿豈-﫿]/;
+// Korean question and no Hanja in the input or the question: Chinese characters in the answer are the model drifting into Chinese
+function hanGuard(o){
+  var q=String(o.question||o.prompt||''), all=q+'\n'+String(o.prompt||'');
+  var ko=o.ko!=null?!!o.ko:/[가-힣]/.test(q);
+  return ko&&!HAN.test(all)&&!/한자|한문|漢字|중국|일본|chinese|japanese|kanji|hanja|mandarin|cantonese/i.test(all);
+}
+/* prose loop: the tail is one phrase (5+ characters, 3+ different letters) written 3 times in a row.
+   Returns where to cut (after the first copy), or -1 */
+function proseLoop(t){
+  var n=t.length; if(n<150) return -1;
+  for(var p=5;p*3<=n&&p<=1200;p++){
+    if(t.charCodeAt(n-1)!==t.charCodeAt(n-1-p)) continue;
+    var a=t.slice(n-p); if(a!==t.slice(n-2*p,n-p)||a!==t.slice(n-3*p,n-2*p)) continue;
+    var seen={}, k=0; a.replace(/[^\s\d.,:;|\-–—_=*#()\[\]{}'"`~·•]/g,function(ch){ if(!seen[ch]){ seen[ch]=1; k++; } return ch; });
+    if(k<3) continue; // "ㅋㅋㅋㅋㅋ", "| --- | --- |" are not a loop
+    var s=n-3*p; while(s>0&&t.charCodeAt(s-1)===t.charCodeAt(s-1+p)) s--;
+    return s+p;
+  }
+  return -1;
+}
+// end at the last place a list item or sentence ends
+function lastBreak(t){ var m=/^([\s\S]*[.!?。！？,、;\n])/.exec(t); return (m?m[1]:t).replace(/[\s,、;]+$/,''); }
+function lastSentence(t){ var re=/[.!?。！？…]+(?=["'”’)\]]*(\s|$))|\n/g, m, end=-1;
+  while((m=re.exec(t))){ if(m[0]==='.'&&/\d/.test(t.charAt(m.index-1))&&/(^|\n)\s*\d+$/.test(t.slice(0,m.index))) continue; end=m.index+m[0].length; } // "2. " starts a list item
+  return (end>0?t.slice(0,end):t).trim(); }
+var KO_ONLY='\n\n한국어로만 답하세요. 한자나 중국어 글자는 쓰지 마세요.';
 function askLocal(c,o){
   var run=function(){ return engine(c.model).then(function(e){
-    var msgs=(o.system?[{role:'system',content:o.system}]:[]).concat([{role:'user',content:o.prompt}]);
-    var req={messages:msgs, max_tokens:Math.min(o.maxTokens||2048,2560), temperature:o.temperature||0.3, extra_body:{enable_thinking:false}}, stopped=false;
-    if(o.freqPenalty) req.frequency_penalty=o.freqPenalty;
+    var prose=!!o.prose, noHan=prose&&hanGuard(o);
     var clean=function(t){ return t.replace(/<think>[\s\S]*?(<\/think>|$)/g,'').replace(/^\s+/,''); };
     var fail=function(err){ if(err&&err.kind) throw err; console.error(err); var m=String(err&&err.message||'');
       throw AIError(/context|prompt.*(long|length)|exceed/i.test(m)?T('자체 AI에게는 너무 긴 요청이에요. 고를 칸을 줄이거나 API 키를 써 보세요'):T('자체 AI가 답하지 못했어요'),'api'); };
-    if(!o.onText) return e.chat.completions.create(req).then(function(r){
+    var request=function(sys){
+      var msgs=(sys?[{role:'system',content:sys}]:[]).concat([{role:'user',content:o.prompt}]);
+      var req={messages:msgs, max_tokens:Math.min(o.maxTokens||2048,2560), temperature:o.temperature||0.3, extra_body:{enable_thinking:false}};
+      if(prose){ req.max_tokens=Math.min(o.maxTokens||PROSE.maxTokens,PROSE.maxTokens); req.temperature=PROSE.temperature; req.top_p=PROSE.top_p; req.presence_penalty=PROSE.presence_penalty; }
+      else if(o.freqPenalty) req.frequency_penalty=o.freqPenalty;
+      return req; };
+    if(!o.onText&&!prose) return e.chat.completions.create(request(o.system)).then(function(r){
       return clean((r.choices&&r.choices[0]&&r.choices[0].message&&r.choices[0].message.content)||'').trim(); },fail);
-    var looped=false;
     // a small model can get stuck writing the same thing forever: stop it when the tail is one short piece repeated
     var loops=function(t){ var n=t.length; if(n<600) return false; var w=t.slice(-480); // XML blocks repeat in pieces of up to ~160 characters
       for(var p=1;p<=200;p++) if(w.slice(p)===w.slice(0,480-p)) return true;
       // longer pieces (a few whole blocks written again and again): the last three pieces are identical
       for(p=201;p*3<=n&&p<=1200;p++) if(t.charCodeAt(n-1)===t.charCodeAt(n-1-p)&&t.slice(n-p)===t.slice(n-2*p,n-p)&&t.slice(n-2*p,n-p)===t.slice(n-3*p,n-2*p)) return true;
       return false; };
-    var checkedAt=0;
-    req.stream=true; stopNow=function(){ stopped=true; e.interruptGenerate(); };
-    return e.chat.completions.create(req).then(function(it){
-      var out='', ai=it[Symbol.asyncIterator]();
-      function next(){ return ai.next().then(function(r){
-        if(r.done){ if(stopped) throw AIError(looped?T('같은 말을 반복해서 멈췄어요. 다시 보내 보세요'):T('멈췄어요'),'stop'); return clean(out).trim(); }
-        var d=r.value.choices&&r.value.choices[0]&&r.value.choices[0].delta; if(d&&d.content){ out+=d.content; o.onText(clean(out));
-          if(!stopped&&out.length-checkedAt>=60&&(checkedAt=out.length,loops(out))){ looped=true; stopped=true; e.interruptGenerate(); } }
-        return next(); }); }
-      return next();
-    }).then(null,fail);
+    var show=o.onText||function(){};
+    var once=function(sys,retry){
+      var req=request(sys), stopped=false, looped=false, cut=null, han=false, fin='', checkedAt=0;
+      req.stream=true;
+      var halt=function(){ stopped=true; e.interruptGenerate(); };
+      if(o.onText) stopNow=halt;
+      return e.chat.completions.create(req).then(function(it){
+        var out='', ai=it[Symbol.asyncIterator]();
+        function next(){ return ai.next().then(function(r){
+          if(r.done){
+            if(prose&&cut!=null){ if(han&&!retry) return null; show(cut); return cut; } // null: write it again in Korean only
+            if(stopped) throw AIError(looped?T('같은 말을 반복해서 멈췄어요. 다시 보내 보세요'):T('멈췄어요'),'stop');
+            var t=clean(out).trim();
+            if(prose&&fin==='length'){ t=lastSentence(t); show(t); }
+            return t; }
+          var ch=r.value.choices&&r.value.choices[0], d=ch&&ch.delta; if(ch&&ch.finish_reason) fin=ch.finish_reason;
+          if(d&&d.content&&!stopped){ out+=d.content; var t=clean(out), h, at;
+            if(noHan&&(h=t.search(HAN))>=0){ han=true; cut=t.slice(0,h).replace(/[\s(（\[「『"'“‘:：-]+$/,'').trim(); halt(); }
+            else if(prose&&(at=proseLoop(t))>=0){ cut=lastBreak(t.slice(0,at)).trim(); halt(); }
+            else{ show(t);
+              if(!prose&&out.length-checkedAt>=60&&(checkedAt=out.length,loops(out))){ looped=true; halt(); } } }
+          return next(); }); }
+        return next();
+      }).then(null,fail);
+    };
+    return once(o.system,false).then(function(t){ if(t!=null) return t; show(''); return once((o.system||'')+KO_ONLY,true); });
   }); };
   var p=chain.then(run,run); chain=p.then(function(){},function(){}); return p;
 }
