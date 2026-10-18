@@ -35,5 +35,7 @@ var peerNet={
       function(){ if(cb.error) cb.error('lib'); });
     return {send:function(o){ if(c) c.send(o); }, close:function(){ dead=true; try{ if(peer) peer.destroy(); }catch(e){} }}; }
 };
-root.FFLQ={makeCode:makeCode, cleanCode:cleanCode, net:function(){ return root.FFLQ_TRANSPORT||peerNet; }, MAX:40};
+/* audience reactions: a phone sends {t:'rx', e:'<one of RX>'}, the presenter tells the phones {t:'rx', on:true|false} (also inside 'hi'). RX_RATE: most a phone may send per second, RX_FLOAT: most floating at once */
+var RX=['\uD83D\uDC4D','\uD83D\uDC4F','\uD83D\uDE02','\uD83D\uDE2E','\u2764\uFE0F','\uD83D\uDD25'];
+root.FFLQ={makeCode:makeCode, cleanCode:cleanCode, net:function(){ return root.FFLQ_TRANSPORT||peerNet; }, MAX:40, RX:RX, RX_RATE:4, RX_FLOAT:40};
 })(typeof window!=='undefined'?window:globalThis);
