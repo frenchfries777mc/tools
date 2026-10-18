@@ -25,9 +25,18 @@ function pump(){
 /* =AI("주어", B1): a bare word naming a part of the data means "take that part out", spelled out so the small model gets it */
 var PART_KO=/^(주어|서술어|술어|동사|목적어|보어|부사어|관형어|명사|대명사|형용사|부사|조사|감탄사|날짜|시간|요일|이름|사람|장소|숫자|금액|가격|전화번호|이메일|주소|나라|도시|색|색깔|단위|키워드|핵심어|핵심 단어)(만|은|는|이|가)?\s*(찾기|뽑기|골라|골라 줘|알려 줘|알려줘)?\s*\??$/,
     PART_EN=/^(the\s+)?(subject|verb|object|nouns?|adjectives?|adverbs?|dates?|time|names?|places?|numbers?|prices?|emails?|phone( number)?|address|keywords?|country|city|colou?r)\s*\??$/i;
+// a small model mixes up sentence parts: say what each one looks like in a Korean sentence
+var PART_HINT={주어:'주어는 동작이나 상태의 주인으로, 보통 "이/가/은/는/께서"가 붙은 말이에요 (예: "동생이 사과를 먹었다"의 주어는 동생이)',
+  목적어:'목적어는 동작을 받는 대상으로, 보통 "을/를"이 붙은 말이에요 (예: "동생이 사과를 먹었다"의 목적어는 사과를)',
+  보어:'보어는 "되다/아니다" 바로 앞에서 "이/가"가 붙은 말이에요 (예: "물이 얼음이 되었다"의 보어는 얼음이)',
+  서술어:'서술어는 문장 끝에서 주어가 어떠한지, 무엇을 하는지 말하는 부분이에요 (예: "동생이 사과를 먹었다"의 서술어는 먹었다)',
+  술어:'술어는 문장 끝에서 주어가 어떠한지, 무엇을 하는지 말하는 부분이에요 (예: "동생이 사과를 먹었다"의 서술어는 먹었다)',
+  부사어:'부사어는 서술어를 꾸며 언제, 어디서, 어떻게를 말하는 부분이에요 (예: "동생이 어제 빨리 뛰었다"의 부사어는 어제, 빨리)',
+  관형어:'관형어는 뒤에 오는 명사를 꾸미는 말이에요 (예: "예쁜 꽃이 피었다"의 관형어는 예쁜)'};
 function partTask(p){
   var t=String(p==null?'':p).trim(), m;
-  if((m=PART_KO.exec(t))) return '데이터에서 '+m[1]+'만 골라 데이터에 쓰인 그대로 쓰기. 여러 개면 쉼표로 구분';
+  if((m=PART_KO.exec(t))) return '데이터에서 '+m[1]+'만 골라 데이터에 쓰인 그대로 쓰기. 여러 개면 쉼표로 구분'+(PART_HINT[m[1]]?'. '+PART_HINT[m[1]]:'');
+  if((m=/(목적어|주어|보어|서술어|술어|부사어|관형어)(?=인|만|은|는|이|가|를|와|과|\s|$|[,.?!])/.exec(t))) return t+'. '+PART_HINT[m[1]]; // longer tasks that name a sentence part
   if((m=PART_EN.exec(t))) return 'Write only the '+m[2].toLowerCase()+' from the data, exactly as it is written there. If there are several, separate them with commas';
   return p;
 }
