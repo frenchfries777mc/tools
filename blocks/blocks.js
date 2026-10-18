@@ -3,7 +3,10 @@
 (function(){
 'use strict';
 var T=FFT.T, G=javascript.javascriptGenerator, O=javascript.Order;
-var C={page:'#d9822b', el:'#3d7fe0', ev:'#e0a800', act:'#1f9e6e', val:'#2bb39a', draw:'#c2549f', js:'#6b7280'};
+/* one colour per toolbox category; every block takes the colour of the one category it is in (see paint() at the end) */
+var C={ev:'#ad7a00', page:'#cf6a12', img:'#c9402e', draw:'#b8418f', act:'#1d8a57', look:'#0a9488', move:'#0a78b0', game:'#d1264f',
+  clone:'#8a5be0', tile:'#8a5a2b', sound:'#3086d6', time:'#2d3fb0', save:'#7a7a1f',
+  logic:'#607d99', loop:'#4f8f2a', math:'#4c4f8a', text:'#2e6e68', list:'#7350a8', vars:'#a55b80', func:'#a248b4', js:'#5a5f66'};
 var EL=['el_heading','el_text','el_button','el_input','el_picture','el_image','el_link','el_box','el_canvas','el_list'];
 var COLORS=[['빨강','#ef4444'],['주황','#f97316'],['노랑','#facc15'],['초록','#22c55e'],['하늘','#38bdf8'],['파랑','#3b82f6'],['보라','#a855f7'],['분홍','#ec4899'],['갈색','#92400e'],['검정','#111111'],['회색','#9ca3af'],['흰색','#ffffff'],['감자튀김','#ffc93c']];
 function colorOpts(none){ var o=COLORS.map(function(c){ return [T(c[0]),c[1]]; }); if(none) o.unshift([T('없음'),'']); return o; }
@@ -66,8 +69,8 @@ var NEED={};
 function need(n){ NEED[n]=1; }
 
 function def(type,init,gen){ Blockly.Blocks[type]={init:init}; if(gen) G.forBlock[type]=gen; }
-function stmt(b,colour,tip){ b.setPreviousStatement(true,'EL'); b.setNextStatement(true,'EL'); b.setColour(colour); if(tip) b.setTooltip(T(tip)); }
-function act(b,tip){ b.setPreviousStatement(true); b.setNextStatement(true); b.setColour(C.act); if(tip) b.setTooltip(T(tip)); }
+function stmt(b,tip){ b.setPreviousStatement(true,'EL'); b.setNextStatement(true,'EL'); if(tip) b.setTooltip(T(tip)); }
+function act(b,tip){ b.setPreviousStatement(true); b.setNextStatement(true); if(tip) b.setTooltip(T(tip)); }
 function num(b,name,label){ b.appendValueInput(name).setCheck('Number').appendField(label?T(label):''); }
 
 /* ---------- page and elements ---------- */
@@ -76,10 +79,10 @@ def('page_root',function(){
   this.appendDummyInput().appendField(T('배경')).appendField(new Blockly.FieldDropdown(function(){ return [[T('흰색'),'#ffffff'],[T('밤하늘'),'#0f172a'],[T('검정'),'#111111'],[T('연한 노랑'),'#fff8e1'],[T('연한 하늘'),'#e0f2fe'],[T('연한 분홍'),'#fce7f3'],[T('연한 초록'),'#dcfce7']]; }),'BG')
     .appendField(T('가운데 정렬')).appendField(new Blockly.FieldCheckbox('TRUE'),'CENTER');
   this.appendStatementInput('BODY').setCheck('EL').appendField(T('화면'));
-  this.setColour(C.page); this.setTooltip(T('페이지에 보일 것들을 이 안에 차례로 넣어요')); this.setDeletable(true);
+  this.setTooltip(T('페이지에 보일 것들을 이 안에 차례로 넣어요')); this.setDeletable(true);
   this.setStyle&&0;
 });
-function elBlock(type,build,tip){ def(type,function(){ build.call(this); stmt(this,C.el,tip); }); }
+function elBlock(type,build,tip){ def(type,function(){ build.call(this); stmt(this,tip); }); }
 elBlock('el_heading',function(){ this.appendDummyInput().appendField(T('제목')).appendField(new Blockly.FieldDropdown(function(){ return [[T('크게'),'h1'],[T('중간'),'h2'],[T('작게'),'h3']]; }),'SIZE')
   .appendField(new Blockly.FieldTextInput(T('안녕하세요')),'TEXT').appendField(T('이름')).appendField(new Blockly.FieldTextInput(T('제목')+'1'),'NAME'); },'큰 글씨 제목');
 elBlock('el_text',function(){ this.appendDummyInput().appendField(T('글')).appendField(new Blockly.FieldTextInput(T('여기에 글을 써요')),'TEXT').appendField(T('이름')).appendField(new Blockly.FieldTextInput(T('글')+'1'),'NAME'); },'보통 글');
@@ -95,7 +98,7 @@ elBlock('el_link',function(){ this.appendDummyInput().appendField(T('링크')).a
 def('el_box',function(){
   this.appendDummyInput().appendField(T('상자')).appendField(new Blockly.FieldDropdown(function(){ return [[T('세로로'),'col'],[T('가로로'),'row']]; }),'DIR')
     .appendField(T('배경')).appendField(new Blockly.FieldDropdown(function(){ return colorOpts(true); }),'BG').appendField(T('이름')).appendField(new Blockly.FieldTextInput(T('상자')+'1'),'NAME');
-  this.appendStatementInput('BODY').setCheck('EL'); stmt(this,C.el,'안에 넣은 것들을 세로나 가로로 묶어요');
+  this.appendStatementInput('BODY').setCheck('EL'); stmt(this,'안에 넣은 것들을 세로나 가로로 묶어요');
 });
 elBlock('el_canvas',function(){ this.appendDummyInput().appendField(T('그림판')).appendField(T('너비')).appendField(new Blockly.FieldNumber(320,20,2000),'W').appendField(T('높이')).appendField(new Blockly.FieldNumber(220,20,2000),'H')
   .appendField(T('이름')).appendField(new Blockly.FieldTextInput(T('그림판')+'1'),'NAME'); },'그림판 블록으로 도형을 그리는 곳. 게임도 만들 수 있어요');
@@ -112,7 +115,7 @@ function AF(){ return DBG?'async function (':'function ('; }
 function hatBody(b,guard){ var body=G.statementToCode(b,'DO'); if(!DBG) return body;
   var k=guard?lit('g'+(++dbgSeq)):null;
   return (guard?'  if (__dbusy['+k+']) return;\n  __dbusy['+k+'] = 1;\n':'')+'  __dbegin();\n  try {\n'+G.prefixLines(body,'  ')+'  } finally {\n    __dend();\n'+(guard?'    __dbusy['+k+'] = 0;\n':'')+'  }\n'; }
-function hat(b,tip){ b.appendStatementInput('DO'); b.setColour(C.ev); b.setTooltip(T(tip)); b.hat='cap'; }
+function hat(b,tip){ b.appendStatementInput('DO'); b.setTooltip(T(tip)); b.hat='cap'; }
 def('ev_start',function(){ this.appendDummyInput().appendField(T('페이지가 열리면')); hat(this,'페이지가 처음 열릴 때 한 번 해요'); },
   function(b){ if(DBG) return '(async function () {\n'+hatBody(b)+'})();\n'; return G.statementToCode(b,'DO').replace(/^  /gm,''); });
 def('ev_click',function(){ this.appendDummyInput().appendField(elField(null,'hat'),'EL').appendField(T('을(를) 누르면')); hat(this,'버튼이나 그림, 그림판을 눌렀을 때 해요'); },
@@ -189,14 +192,14 @@ def('act_mp3',function(){ this.appendDummyInput().appendField(T('내 소리')).a
   function(b){ var n=b.getFieldValue('SND'); if(!sndOf(n)) return ''; USEDS[n]=1; need('mp3'); return '__mp3('+lit(n)+', '+(b.getFieldValue('LOOP')==='loop')+');\n'; });
 /* logic gates and condition loops */
 var GATES=[['그리고 (AND)','AND'],['또는 (OR)','OR'],['둘 중 하나만 (XOR)','XOR'],['둘 다 아님 (NOR)','NOR'],['둘이 함께는 아님 (NAND)','NAND']];
-def('logic_gate',function(){ this.appendValueInput('A').setCheck('Boolean'); this.appendValueInput('B').setCheck('Boolean').appendField(new Blockly.FieldDropdown(function(){ return GATES.map(function(g){ return [T(g[0]),g[1]]; }); }),'GATE'); this.setInputsInline(true); this.setOutput(true,'Boolean'); this.setColour('#5b80a5'); this.setTooltip(T('두 조건을 합쳐요. AND는 둘 다 참, OR은 하나라도 참, XOR은 정확히 하나만 참, NOR은 둘 다 거짓, NAND는 둘 다 참만 아니면 참이에요')); },
+def('logic_gate',function(){ this.appendValueInput('A').setCheck('Boolean'); this.appendValueInput('B').setCheck('Boolean').appendField(new Blockly.FieldDropdown(function(){ return GATES.map(function(g){ return [T(g[0]),g[1]]; }); }),'GATE'); this.setInputsInline(true); this.setOutput(true,'Boolean'); this.setTooltip(T('두 조건을 합쳐요. AND는 둘 다 참, OR은 하나라도 참, XOR은 정확히 하나만 참, NOR은 둘 다 거짓, NAND는 둘 다 참만 아니면 참이에요')); },
   function(b){ var a=G.valueToCode(b,'A',O.NONE)||'false', c=G.valueToCode(b,'B',O.NONE)||'false', g=b.getFieldValue('GATE');
     var js=g==='AND'?'(('+a+') && ('+c+'))':g==='OR'?'(('+a+') || ('+c+'))':g==='XOR'?'(!!('+a+') !== !!('+c+'))':g==='NOR'?'!(('+a+') || ('+c+'))':'!(('+a+') && ('+c+'))'; return [js,O.ATOMIC]; });
-def('logic_between',function(){ this.appendValueInput('X').setCheck('Number'); this.appendValueInput('LO').setCheck('Number').appendField(T('이(가)')); this.appendValueInput('HI').setCheck('Number').appendField(T('이상')); this.appendDummyInput().appendField(T('이하 사이에 있나?')); this.setInputsInline(true); this.setOutput(true,'Boolean'); this.setColour('#5b80a5'); this.setTooltip(T('숫자가 두 값 사이(같은 것 포함)에 있으면 참이에요')); },
+def('logic_between',function(){ this.appendValueInput('X').setCheck('Number'); this.appendValueInput('LO').setCheck('Number').appendField(T('이(가)')); this.appendValueInput('HI').setCheck('Number').appendField(T('이상')); this.appendDummyInput().appendField(T('이하 사이에 있나?')); this.setInputsInline(true); this.setOutput(true,'Boolean'); this.setTooltip(T('숫자가 두 값 사이(같은 것 포함)에 있으면 참이에요')); },
   function(b){ var x=G.valueToCode(b,'X',O.NONE)||'0', lo=G.valueToCode(b,'LO',O.NONE)||'0', hi=G.valueToCode(b,'HI',O.NONE)||'0'; return ['(('+x+') >= ('+lo+') && ('+x+') <= ('+hi+'))',O.ATOMIC]; });
-def('loop_while',function(){ this.appendValueInput('COND').setCheck('Boolean').appendField(T('조건')); this.appendDummyInput().appendField(T('인 동안 반복')); this.appendStatementInput('DO'); this.setInputsInline(true); this.setPreviousStatement(true,'EL'); this.setNextStatement(true,'EL'); this.setColour('#5ba55b'); this.setTooltip(T('조건이 참인 동안 안의 블록을 계속 해요. 조건이 거짓이 되면 멈춰요')); },
+def('loop_while',function(){ this.appendValueInput('COND').setCheck('Boolean').appendField(T('조건')); this.appendDummyInput().appendField(T('인 동안 반복')); this.appendStatementInput('DO'); this.setInputsInline(true); this.setPreviousStatement(true,'EL'); this.setNextStatement(true,'EL'); this.setTooltip(T('조건이 참인 동안 안의 블록을 계속 해요. 조건이 거짓이 되면 멈춰요')); },
   function(b){ var c=G.valueToCode(b,'COND',O.NONE)||'false', body=G.statementToCode(b,'DO'); body=G.addLoopTrap(body,b); return 'while ('+c+') {\n'+body+'}\n'; });
-def('loop_dowhile',function(){ this.appendDummyInput().appendField(T('먼저 한 번 하고')); this.appendStatementInput('DO'); this.appendValueInput('COND').setCheck('Boolean').appendField(T('조건')); this.appendDummyInput().appendField(T('인 동안 계속 반복')); this.setInputsInline(false); this.setPreviousStatement(true,'EL'); this.setNextStatement(true,'EL'); this.setColour('#5ba55b'); this.setTooltip(T('안의 블록을 먼저 한 번 하고, 조건이 참이면 계속 반복해요')); },
+def('loop_dowhile',function(){ this.appendDummyInput().appendField(T('먼저 한 번 하고')); this.appendStatementInput('DO'); this.appendValueInput('COND').setCheck('Boolean').appendField(T('조건')); this.appendDummyInput().appendField(T('인 동안 계속 반복')); this.setInputsInline(false); this.setPreviousStatement(true,'EL'); this.setNextStatement(true,'EL'); this.setTooltip(T('안의 블록을 먼저 한 번 하고, 조건이 참이면 계속 반복해요')); },
   function(b){ var c=G.valueToCode(b,'COND',O.NONE)||'false', body=G.statementToCode(b,'DO'); body=G.addLoopTrap(body,b); return 'do {\n'+body+'} while ('+c+');\n'; });
 def('act_sound_stop',function(){ this.appendDummyInput().appendField(T('모든 소리 멈추기')); act(this,'나고 있는 소리와 연주할 차례인 음을 모두 멈춰요'); },
   function(){ need('snd'); return '__soundStop();\n'; });
@@ -233,7 +236,7 @@ def('val_score',function(){ this.appendDummyInput().appendField(T('점수')); va
   function(){ need('score'); return ['__score',O.ATOMIC]; });
 
 /* ---------- values ---------- */
-function val(b,check,tip){ b.setOutput(true,check||null); b.setColour(C.val); if(tip) b.setTooltip(T(tip)); }
+function val(b,check,tip){ b.setOutput(true,check||null); if(tip) b.setTooltip(T(tip)); }
 def('val_get',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('의')).appendField(new Blockly.FieldDropdown(function(){ return [[T('내용'),'text'],[T('숫자'),'num'],[T('너비'),'width'],[T('높이'),'height']]; }),'PROP'); val(this,null,'글자나 입력칸에 쓴 값을 가져와요. 숫자로 계산하려면 "숫자"를 골라요'); },
   function(b){ var n=er(b), p=b.getFieldValue('PROP');
     if(p==='text'){ need('get'); return ['__get('+n+')',O.FUNCTION_CALL]; }
@@ -260,7 +263,7 @@ var CV=['el_canvas'];
 function drawB(type,label,inputs,tip,gen){
   def(type,function(){ var self=this; this.appendDummyInput().appendField(elField(CV),'EL').appendField(T(label));
     inputs.forEach(function(i){ var inp=self.appendValueInput(i[0]); if(i[2]) inp.setCheck(i[2]); inp.appendField(T(i[1])); });
-    this.setInputsInline(true); this.setPreviousStatement(true); this.setNextStatement(true); this.setColour(C.draw); this.setTooltip(T(tip)); }, gen);
+    this.setInputsInline(true); this.setPreviousStatement(true); this.setNextStatement(true); this.setTooltip(T(tip)); }, gen);
 }
 function v(b,n,d){ return G.valueToCode(b,n,O.COMMA)||d; }
 drawB('draw_clear','지우기',[],'그림판을 깨끗이 지워요',function(b){ need('draw'); return '__clear('+lit(b.getFieldValue('EL'))+');\n'; });
@@ -292,8 +295,7 @@ def('ev_drag',function(){ this.appendDummyInput().appendField(elField(null,'hat'
     return '$('+n+').style.touchAction = \'none\';\n$('+n+').addEventListener(\'pointermove\', '+AF()+'e) {\n  if (!e.buttons) return;\n  __pos(e, this);\n'+hatBody(b,true)+'});\n'; });
 
 /* ---------- clones: copies of an element that each run their own script ---------- */
-C.clone='#7c5cd6'; C.tile='#a16207';
-function cl(b,tip){ act(b,tip); b.setColour(C.clone); }
+function cl(b,tip){ act(b,tip); }
 def('ev_clone',function(){ this.appendDummyInput().appendField(elField(null,'hat'),'EL').appendField(T('의 복제본으로 시작하면')); hat(this,'복제본이 만들어질 때마다, 그 복제본이 따로 이 안의 블록을 한 번 해요. 안에서 "나(이 복제본)"을 고르면 그 복제본만 움직여요'); },
   function(b){ need('clones'); return '__onClone('+lit(b.getFieldValue('EL'))+', '+AF()+'__me) {\n'+hatBody(b)+'});\n'; });
 def('clone_make',function(){ this.appendDummyInput().appendField(elField(null,'hat'),'EL').appendField(T('의 복제본 만들기')); cl(this,'요소를 똑같이 복사해 새로 만들어요. 처음엔 원래 요소 자리에 겹쳐 있어요. 원본을 숨겨 두고 복제본만 보여 줄 수도 있어요 (복제본은 500개까지)'); },
@@ -312,17 +314,17 @@ def('clone_face',function(){ this.appendValueInput('X').setCheck('Number').appen
   function(b){ need('clones'); return '__face('+er(b)+', '+v(b,'X','0')+', '+v(b,'Y','0')+');\n'; });
 def('clone_setv',function(){ this.appendValueInput('V').appendField(elField(),'EL').appendField(T('의 값')).appendField(new Blockly.FieldTextInput(T('체력')),'K').appendField(T('을(를)')); this.appendDummyInput().appendField(T('(으)로 정하기')); this.setInputsInline(true); cl(this,'요소마다 따로 가지는 값이에요. 복제본마다 값이 달라서 체력이나 속도를 따로 둘 수 있어요'); },
   function(b){ need('clones'); return '__vset('+er(b)+', '+lit(b.getFieldValue('K'))+', '+v(b,'V','0')+');\n'; });
-def('clone_getv',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('의 값')).appendField(new Blockly.FieldTextInput(T('체력')),'K'); val(this,null,'요소마다 따로 가진 값이에요. 정한 적이 없으면 0이에요'); this.setColour(C.clone); },
+def('clone_getv',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('의 값')).appendField(new Blockly.FieldTextInput(T('체력')),'K'); val(this,null,'요소마다 따로 가진 값이에요. 정한 적이 없으면 0이에요'); },
   function(b){ need('clones'); return ['__vget('+er(b)+', '+lit(b.getFieldValue('K'))+')',O.FUNCTION_CALL]; });
-def('clone_getdir',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('의 방향(도)')); val(this,'Number','가는 방향이에요. 0이 오른쪽, 90이 아래'); this.setColour(C.clone); },
+def('clone_getdir',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('의 방향(도)')); val(this,'Number','가는 방향이에요. 0이 오른쪽, 90이 아래'); },
   function(b){ need('clones'); return ['__getdir('+er(b)+')',O.FUNCTION_CALL]; });
-def('clone_count',function(){ this.appendDummyInput().appendField(elField(null,'hat'),'EL').appendField(T('의 복제본 수')); val(this,'Number','지금 있는 복제본이 몇 개인지 알려줘요'); this.setColour(C.clone); },
+def('clone_count',function(){ this.appendDummyInput().appendField(elField(null,'hat'),'EL').appendField(T('의 복제본 수')); val(this,'Number','지금 있는 복제본이 몇 개인지 알려줘요'); },
   function(b){ need('clones'); return ['__ccountOf('+lit(b.getFieldValue('EL'))+')',O.FUNCTION_CALL]; });
-def('clone_out',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('이(가) 화면 밖에 나갔나?')); val(this,'Boolean','요소가 화면 밖으로 나가 보이지 않으면 참이에요. 총알을 지울 때 써요'); this.setColour(C.clone); },
+def('clone_out',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('이(가) 화면 밖에 나갔나?')); val(this,'Boolean','요소가 화면 밖으로 나가 보이지 않으면 참이에요. 총알을 지울 때 써요'); },
   function(b){ need('clones'); return ['__out('+er(b)+')',O.FUNCTION_CALL]; });
 
 /* ---------- time: do something later or again and again, with a name so it can be stopped ---------- */
-function tm(b,tip){ act(b,tip); b.setColour('#3a6fd8'); }
+function tm(b,tip){ act(b,tip); }
 /* a time block inside a "복제본으로 시작하면" script belongs to that clone and stops when the clone is deleted; anywhere else it belongs to the page */
 function owner(b){ var r=b.getRootBlock(); if(r&&r.type==='ev_clone'){ need('me'); return '__me'; } return 'null'; }
 function nameIn(def){ return new Blockly.FieldTextInput(def); }
@@ -336,7 +338,7 @@ def('time_stopall',function(){ this.appendDummyInput().appendField(T('시간 블
   function(){ need('sched'); return '__stopAll();\n'; });
 
 /* ---------- tile map: a grid of cells on a canvas, walls and blocked movement ---------- */
-function tl(b,tip){ act(b,tip); b.setColour(C.tile); }
+function tl(b,tip){ act(b,tip); }
 function mapIn(){ return new Blockly.FieldTextInput(T('지도')+'1'); }
 def('tile_make',function(){ this.appendDummyInput().appendField(elField(CV),'EL').appendField(T('에 타일맵')).appendField(mapIn(),'M').appendField(T('만들기')); this.appendValueInput('C').setCheck('Number').appendField(T('가로 칸')); this.appendValueInput('R').setCheck('Number').appendField(T('세로 칸')); this.appendValueInput('S').setCheck('Number').appendField(T('칸 크기')); this.setInputsInline(true); tl(this,'그림판 위에 칸(타일)으로 된 지도를 만들어요. 처음엔 모든 칸이 0(빈칸)이고, 1번 칸은 벽이에요'); },
   function(b){ need('tile'); return '__tmake('+lit(b.getFieldValue('EL'))+', '+lit(b.getFieldValue('M'))+', '+v(b,'C','10')+', '+v(b,'R','8')+', '+v(b,'S','32')+');\n'; });
@@ -352,7 +354,7 @@ def('tile_draw',function(){ this.appendDummyInput().appendField(mapIn(),'M').app
   function(b){ need('tile'); return '__tdraw('+lit(b.getFieldValue('M'))+');\n'; });
 def('tile_move',function(){ this.appendValueInput('DX').setCheck('Number').appendField(elField(null,'hat'),'EL').appendField(T('을(를)')).appendField(mapIn(),'M').appendField(T('의 벽에 막히며 가로')); this.appendValueInput('DY').setCheck('Number').appendField(T('세로')); this.appendDummyInput().appendField(T('만큼 움직이기')); this.setInputsInline(true); tl(this,'벽이 있으면 그 앞에서 멈추며 움직여요. 움직일 요소는 그림판 위에 놓여 있어야 해요. 거리는 그림판 기준 점(픽셀)이에요'); },
   function(b){ need('tile'); need('nudge'); return '__tmove('+lit(b.getFieldValue('EL'))+', '+lit(b.getFieldValue('M'))+', '+v(b,'DX','0')+', '+v(b,'DY','0')+');\n'; });
-function tv(type,build,tip,out,gen){ def(type,function(){ build.call(this); val(this,out,tip); this.setColour(C.tile); },gen); }
+function tv(type,build,tip,out,gen){ def(type,function(){ build.call(this); val(this,out,tip); },gen); }
 tv('tile_get',function(){ this.appendValueInput('C').setCheck('Number').appendField(mapIn(),'M').appendField(T('의 칸')).appendField(T('가로')); this.appendValueInput('R').setCheck('Number').appendField(T('세로')); this.appendDummyInput().appendField(T('의 타일 번호')); this.setInputsInline(true); },'칸의 번호예요. 지도 밖은 0이에요','Number',
   function(b){ need('tile'); return ['__tget('+lit(b.getFieldValue('M'))+', '+v(b,'C','0')+', '+v(b,'R','0')+')',O.FUNCTION_CALL]; });
 tv('tile_wall',function(){ this.appendValueInput('X').setCheck('Number').appendField(mapIn(),'M').appendField(T('에서 위치')).appendField('x'); this.appendValueInput('Y').setCheck('Number').appendField('y'); this.appendDummyInput().appendField(T('에 벽이 있나?')); this.setInputsInline(true); },'그림판 위의 한 점이 벽 칸 안에 있으면 참이에요. 지도 밖도 벽으로 쳐요','Boolean',
@@ -365,11 +367,11 @@ tv('tile_blocked',function(){ this.appendDummyInput().appendField(T('방금 움�
   function(){ need('tile'); return ['__tbl',O.ATOMIC]; });
 
 /* ---------- best score: kept in the browser, one set per project ---------- */
-function bs(b,tip){ act(b,tip); b.setColour('#8e6bbf'); }
+function bs(b,tip){ act(b,tip); }
 function bestIn(){ return new Blockly.FieldTextInput(T('최고 점수')); }
 def('act_best',function(){ this.appendValueInput('N').setCheck('Number').appendField(bestIn(),'NAME').appendField(T('기록하기 (더 높을 때만 저장) 점수')); this.setInputsInline(true); bs(this,'저장해 둔 값보다 높을 때만 새로 저장해요. 점수판이 보이고 있으면 바로 바뀌어요'); },
   function(b){ need('best'); return '__best('+lit(b.getFieldValue('NAME'))+', '+v(b,'N','0')+');\n'; });
-def('val_best',function(){ this.appendDummyInput().appendField(T('저장된')).appendField(bestIn(),'NAME'); val(this,'Number','저장해 둔 최고 점수예요. 아직 없으면 0이에요'); this.setColour('#8e6bbf'); },
+def('val_best',function(){ this.appendDummyInput().appendField(T('저장된')).appendField(bestIn(),'NAME'); val(this,'Number','저장해 둔 최고 점수예요. 아직 없으면 0이에요'); },
   function(b){ need('best'); return ['__bestOf('+lit(b.getFieldValue('NAME'))+')',O.FUNCTION_CALL]; });
 def('act_bestboard',function(){ this.appendDummyInput().appendField(bestIn(),'NAME').appendField(T('점수판')).appendField(new Blockly.FieldDropdown(function(){ return [[T('보이기'),'show'],[T('숨기기'),'hide']]; }),'MODE'); bs(this,'화면 오른쪽 위 점수판 아래에 저장된 최고 점수를 보여 줘요'); },
   function(b){ need('best'); return '__bestBoardSet('+lit(b.getFieldValue('NAME'))+', '+(b.getFieldValue('MODE')==='show')+');\n'; });
@@ -386,9 +388,9 @@ drawB('draw_ocircle','에 빈 원',[['X','x','Number'],['Y','y','Number'],['R','
   function(b){ need('draw'); return '__ocircle('+[lit(b.getFieldValue('EL')),v(b,'X','0'),v(b,'Y','0'),v(b,'R','10'),v(b,'COLOR',"'#000'")].join(', ')+');\n'; });
 
 /* ---------- raw JavaScript ---------- */
-def('js_raw',function(){ this.appendDummyInput().appendField('JS').appendField(new Blockly.FieldTextInput('console.log("hi");'),'CODE'); this.setPreviousStatement(true); this.setNextStatement(true); this.setColour(C.js); this.setTooltip(T('자바스크립트 한 줄을 직접 써요')); },
+def('js_raw',function(){ this.appendDummyInput().appendField('JS').appendField(new Blockly.FieldTextInput('console.log("hi");'),'CODE'); this.setPreviousStatement(true); this.setNextStatement(true); this.setTooltip(T('자바스크립트 한 줄을 직접 써요')); },
   function(b){ return b.getFieldValue('CODE')+'\n'; });
-def('js_val',function(){ this.appendDummyInput().appendField('JS').appendField(new Blockly.FieldTextInput('Math.PI'),'CODE'); val(this,null,'자바스크립트 식을 직접 써요'); this.setColour(C.js); },
+def('js_val',function(){ this.appendDummyInput().appendField('JS').appendField(new Blockly.FieldTextInput('Math.PI'),'CODE'); val(this,null,'자바스크립트 식을 직접 써요'); },
   function(b){ return ['('+b.getFieldValue('CODE')+')',O.ATOMIC]; });
 
 /* ---------- helpers that go into the page, only the ones used ---------- */
@@ -827,18 +829,19 @@ function shc(c){ return {shadow:{type:'val_color',fields:{COLOR:c}}}; }
 function toolbox(){
   var n=function(v){ return sh('math_number',v); }, lab=function(t){ return {kind:'label',text:T(t)}; };
   var img={shadow:{type:'val_myimg'}};
+  var cat=function(id,name,c){ var o={kind:'category',name:T(name),colour:C[id],toolboxitemid:'cat_'+id}; if(typeof c==='string') o.custom=c; else o.contents=c; return o; };
   return {kind:'categoryToolbox',contents:[
-    {kind:'category',name:T('시작'),colour:C.ev,contents:[
-      {kind:'block',type:'ev_start'},lab('누르거나 쓰면'),{kind:'block',type:'ev_click'},{kind:'block',type:'ev_drag'},{kind:'block',type:'ev_change'},{kind:'block',type:'ev_key'},{kind:'block',type:'ev_keyhold'},{kind:'block',type:'ev_keyup'},lab('닿으면'),{kind:'block',type:'ev_hit'},lab('복제본'),{kind:'block',type:'ev_clone'},lab('시간마다'),{kind:'block',type:'ev_timer'}]},
-    {kind:'category',name:T('화면'),colour:C.page,contents:[
+    cat('ev','시작',[
+      {kind:'block',type:'ev_start'},lab('누르거나 쓰면'),{kind:'block',type:'ev_click'},{kind:'block',type:'ev_drag'},{kind:'block',type:'ev_change'},{kind:'block',type:'ev_key'},{kind:'block',type:'ev_keyhold'},{kind:'block',type:'ev_keyup'}]),
+    cat('page','화면',[
       {kind:'block',type:'page_root'},lab('글'),{kind:'block',type:'el_heading'},{kind:'block',type:'el_text'},{kind:'block',type:'el_list'},{kind:'block',type:'el_link'},
       lab('누르고 쓰기'),{kind:'block',type:'el_button'},{kind:'block',type:'el_input'},
-      lab('묶고 띄우기'),{kind:'block',type:'el_box'},{kind:'block',type:'el_space'},{kind:'block',type:'el_html'}]},
-    {kind:'category',name:T('그림·사진'),colour:'#e0663d',contents:[
+      lab('묶고 띄우기'),{kind:'block',type:'el_box'},{kind:'block',type:'el_space'},{kind:'block',type:'el_html'}]),
+    cat('img','그림·사진',[
       {kind:'button',text:T('✏️ 그림 그리기'),callbackKey:'imgDraw'},{kind:'button',text:T('📷 사진 넣기'),callbackKey:'imgPhoto'},{kind:'button',text:T('🗂 내 그림 관리'),callbackKey:'imgManage'},
       lab('페이지에 넣기'),{kind:'block',type:'el_picture'},{kind:'block',type:'el_image'},
-      lab('바꾸기'),{kind:'block',type:'act_set',inputs:{VALUE:img}},{kind:'block',type:'val_myimg'}]},
-    {kind:'category',name:T('그림판'),colour:C.draw,contents:[
+      lab('그림 고르기'),{kind:'block',type:'val_myimg'}]),
+    cat('draw','그림판',[
       {kind:'block',type:'el_canvas'},lab('그리기'),{kind:'block',type:'draw_clear'},
       {kind:'block',type:'draw_rect',inputs:{X:n(20),Y:n(20),W:n(80),H:n(50),COLOR:shc('#3b82f6')}},
       {kind:'block',type:'draw_circle',inputs:{X:n(160),Y:n(110),R:n(30),COLOR:shc('#ffc93c')}},
@@ -846,81 +849,75 @@ function toolbox(){
       {kind:'block',type:'draw_text',inputs:{TEXT:sh('text',T('안녕')),X:n(20),Y:n(40),COLOR:shc('#111111')}},
       {kind:'block',type:'draw_image',inputs:{IMG:img,X:n(20),Y:n(20),W:n(80)}},
       lab('칠하기와 굵기'),{kind:'block',type:'draw_fill',inputs:{COLOR:shc('#e0f2fe')}},{kind:'block',type:'draw_width',inputs:{N:n(6)}},{kind:'block',type:'draw_fsize',inputs:{N:n(28)}},
-      {kind:'block',type:'draw_orect',inputs:{X:n(30),Y:n(30),W:n(100),H:n(60),COLOR:shc('#ef4444')}},{kind:'block',type:'draw_ocircle',inputs:{X:n(160),Y:n(110),R:n(40),COLOR:shc('#22c55e')}},
-      lab('누른 곳'),{kind:'block',type:'ev_drag'},{kind:'block',type:'val_mouse'},lab('부딪힘'),{kind:'block',type:'val_dist',inputs:{X1:n(0),Y1:n(0),X2:n(50),Y2:n(50)}}]},
-    {kind:'category',name:T('바꾸기'),colour:C.act,contents:[
+      {kind:'block',type:'draw_orect',inputs:{X:n(30),Y:n(30),W:n(100),H:n(60),COLOR:shc('#ef4444')}},{kind:'block',type:'draw_ocircle',inputs:{X:n(160),Y:n(110),R:n(40),COLOR:shc('#22c55e')}}]),
+    cat('act','바꾸기',[
       {kind:'block',type:'act_set',inputs:{VALUE:sh('text',T('안녕!'))}},
       {kind:'block',type:'act_append',inputs:{VALUE:sh('text',T('항목'))}},
       {kind:'block',type:'act_clear'},
-      lab('값 가져오기'),{kind:'block',type:'val_get'},{kind:'block',type:'val_prompt',inputs:{VALUE:sh('text',T('이름이 뭐예요?'))}},{kind:'block',type:'val_key'}]},
-    {kind:'category',name:T('모양'),colour:'#17a589',contents:[
+      lab('값 가져오기'),{kind:'block',type:'val_get'},{kind:'block',type:'val_prompt',inputs:{VALUE:sh('text',T('이름이 뭐예요?'))}},{kind:'block',type:'val_key'}]),
+    cat('look','모양',[
       {kind:'block',type:'act_style',inputs:{VALUE:shc('#ef4444')}},
       {kind:'block',type:'act_size',inputs:{N:n(32)}},
       {kind:'block',type:'act_show'},
-      lab('색'),{kind:'block',type:'val_color'},{kind:'block',type:'val_rcolor'}]},
-    {kind:'category',name:T('움직임'),colour:'#0f8f8f',contents:[
+      lab('색'),{kind:'block',type:'val_color'},{kind:'block',type:'val_rcolor'}]),
+    cat('move','움직임',[
       {kind:'block',type:'act_move',inputs:{X:n(100),Y:n(100)}},
       {kind:'block',type:'act_nudge',inputs:{N:n(10)}},{kind:'block',type:'act_nudge2',inputs:{DX:n(10),DY:n(0)}},{kind:'block',type:'act_stay'},
       lab('커서 따라다니기'),{kind:'block',type:'act_follow'},{kind:'block',type:'val_cursor'},
-      lab('위치와 닿음'),{kind:'block',type:'val_where'},{kind:'block',type:'val_hit'},
-      {kind:'block',type:'act_size',fields:{PROP:'rotate'},inputs:{N:n(45)}},
-      lab('누른 곳'),{kind:'block',type:'val_mouse'}]},
-    {kind:'category',name:T('게임'),colour:'#e8590c',contents:[
+      lab('위치'),{kind:'block',type:'val_where'},
+      lab('누른 곳'),{kind:'block',type:'val_mouse'}]),
+    cat('game','게임',[
       lab('닿으면'),{kind:'block',type:'ev_hit'},{kind:'block',type:'val_hit'},
       lab('점수'),{kind:'block',type:'act_score',inputs:{N:n(1)}},{kind:'block',type:'act_score',fields:{MODE:'set'},inputs:{N:n(0)}},{kind:'block',type:'val_score'},{kind:'block',type:'act_scoreboard'},
-      lab('최고 점수'),{kind:'block',type:'act_best',inputs:{N:{block:{type:'val_score'}}}},{kind:'block',type:'act_bestboard'},lab('위치'),{kind:'block',type:'act_rpos'},{kind:'block',type:'act_stay'},{kind:'block',type:'act_nudge2',inputs:{DX:n(10),DY:n(0)}},
-      lab('소리'),{kind:'block',type:'act_sfx'},{kind:'block',type:'act_restart'}]},
-    {kind:'category',name:T('복제'),colour:C.clone,contents:[
+      lab('위치'),{kind:'block',type:'act_rpos'},lab('다시 시작'),{kind:'block',type:'act_restart'}]),
+    cat('clone','복제',[
       lab('만들고 지우기'),{kind:'block',type:'clone_make'},{kind:'block',type:'clone_make_at',inputs:{X:n(100),Y:n(300)}},{kind:'block',type:'clone_del'},{kind:'block',type:'clone_delall'},
       lab('복제본마다 따로'),{kind:'block',type:'ev_clone'},{kind:'block',type:'clone_setv',inputs:{V:n(3)}},{kind:'block',type:'clone_getv'},
       lab('움직이기'),{kind:'block',type:'clone_fwd',inputs:{N:n(6)}},{kind:'block',type:'clone_dir',inputs:{N:n(270)}},{kind:'block',type:'clone_face',inputs:{X:n(200),Y:n(200)}},{kind:'block',type:'clone_getdir'},
-      {kind:'block',type:'act_nudge2',inputs:{DX:n(0),DY:n(-6)}},{kind:'block',type:'act_move',inputs:{X:n(100),Y:n(100)}},{kind:'block',type:'val_where'},
-      lab('살펴보기'),{kind:'block',type:'clone_count'},{kind:'block',type:'clone_out'},{kind:'block',type:'val_hit'},{kind:'block',type:'ev_hit'},
-      lab('시간'),{kind:'block',type:'time_every',inputs:{SEC:n(0.03)}},{kind:'block',type:'time_after',inputs:{SEC:n(1)}}]},
-    {kind:'category',name:T('타일맵'),colour:C.tile,contents:[
-      lab('만들기'),{kind:'block',type:'el_canvas'},{kind:'block',type:'tile_make',inputs:{C:n(10),R:n(7),S:n(32)}},{kind:'block',type:'tile_fill',inputs:{V:n(1)}},{kind:'block',type:'tile_set',inputs:{C:n(3),R:n(2),V:n(1)}},
+      lab('살펴보기'),{kind:'block',type:'clone_count'},{kind:'block',type:'clone_out'}]),
+    cat('tile','타일맵',[
+      lab('만들기'),{kind:'block',type:'tile_make',inputs:{C:n(10),R:n(7),S:n(32)}},{kind:'block',type:'tile_fill',inputs:{V:n(1)}},{kind:'block',type:'tile_set',inputs:{C:n(3),R:n(2),V:n(1)}},
       {kind:'block',type:'tile_color',inputs:{V:n(1),COLOR:shc('#9ca3af')}},{kind:'block',type:'tile_solid',inputs:{V:n(1)}},{kind:'block',type:'tile_draw'},
       lab('벽 살펴보기'),{kind:'block',type:'tile_get',inputs:{C:n(0),R:n(0)}},{kind:'block',type:'tile_wall',inputs:{X:n(40),Y:n(40)}},{kind:'block',type:'tile_cell',inputs:{N:n(100)}},{kind:'block',type:'tile_touch'},
-      lab('벽에 막히며 움직이기'),{kind:'block',type:'tile_move',inputs:{DX:n(4),DY:n(0)}},{kind:'block',type:'tile_blocked'}]},
-    {kind:'category',name:T('소리·알림'),colour:'#2e9bd6',contents:[
+      lab('벽에 막히며 움직이기'),{kind:'block',type:'tile_move',inputs:{DX:n(4),DY:n(0)}},{kind:'block',type:'tile_blocked'}]),
+    cat('sound','소리·알림',[
       lab('효과음'),{kind:'block',type:'act_sfx'},{kind:'block',type:'act_sfx',fields:{SFX:'win'}},
       lab('음악'),{kind:'block',type:'act_note'},{kind:'block',type:'act_note',fields:{NOTE:'E4',BEAT:'0.5'}},{kind:'block',type:'act_tempo',inputs:{N:n(120)}},{kind:'block',type:'act_mp3'},{kind:'block',type:'act_sound_stop'},
       lab('삐 소리'),{kind:'block',type:'act_beep',inputs:{SEC:n(0.3)}},
-      lab('알림'),{kind:'block',type:'act_alert',inputs:{VALUE:sh('text',T('안녕하세요!'))}}]},
-    {kind:'category',name:T('시간'),colour:'#3a6fd8',contents:[
+      lab('알림'),{kind:'block',type:'act_alert',inputs:{VALUE:sh('text',T('안녕하세요!'))}}]),
+    cat('time','시간',[
       {kind:'block',type:'act_after',inputs:{SEC:n(1)}},{kind:'block',type:'ev_timer'},{kind:'block',type:'act_stop'},
-      lab('이름 붙여 멈출 수 있는'),{kind:'block',type:'time_after',inputs:{SEC:n(2)}},{kind:'block',type:'time_every',inputs:{SEC:n(1)}},{kind:'block',type:'time_stop'},{kind:'block',type:'time_stopall'},lab('그 밖에'),{kind:'block',type:'act_restart'},{kind:'block',type:'val_time'},{kind:'block',type:'val_today'}]},
-    {kind:'category',name:T('저장·로그'),colour:'#8e6bbf',contents:[
+      lab('이름 붙여 멈출 수 있는'),{kind:'block',type:'time_after',inputs:{SEC:n(2)}},{kind:'block',type:'time_every',inputs:{SEC:n(1)}},{kind:'block',type:'time_stop'},{kind:'block',type:'time_stopall'},lab('그 밖에'),{kind:'block',type:'val_time'},{kind:'block',type:'val_today'}]),
+    cat('save','저장·로그',[
       {kind:'block',type:'act_store',inputs:{NAME:sh('text',T('최고점')),VALUE:n(0)}},{kind:'block',type:'val_load',inputs:{NAME:sh('text',T('최고점')),DEF:n(0)}},
       lab('최고 점수 (프로젝트마다 따로 저장)'),{kind:'block',type:'act_best',inputs:{N:{block:{type:'val_score'}}}},{kind:'block',type:'val_best'},{kind:'block',type:'act_bestboard'},{kind:'block',type:'act_bestreset'},
-      lab('기록'),{kind:'block',type:'act_log',inputs:{VALUE:sh('text',T('안녕!'))}}]},
+      lab('기록'),{kind:'block',type:'act_log',inputs:{VALUE:sh('text',T('안녕!'))}}]),
     {kind:'sep'},
-    {kind:'category',name:T('조건'),colour:'#5b80a5',contents:[
+    cat('logic','조건',[
       {kind:'block',type:'controls_if'},{kind:'block',type:'controls_if',extraState:{hasElse:true}},
       lab('비교'),{kind:'block',type:'logic_compare'},{kind:'block',type:'logic_operation'},{kind:'block',type:'logic_negate'},lab('논리 게이트'),{kind:'block',type:'logic_gate',fields:{GATE:'AND'}},{kind:'block',type:'logic_gate',fields:{GATE:'OR'}},{kind:'block',type:'logic_gate',fields:{GATE:'XOR'}},{kind:'block',type:'logic_gate',fields:{GATE:'NOR'}},{kind:'block',type:'logic_gate',fields:{GATE:'NAND'}},{kind:'block',type:'logic_between',inputs:{LO:n(1),HI:n(10)}},lab('기본'),{kind:'block',type:'logic_boolean'},
-      {kind:'block',type:'logic_ternary'}]},
-    {kind:'category',name:T('반복'),colour:'#5ba55b',contents:[
+      {kind:'block',type:'logic_ternary'}]),
+    cat('loop','반복',[
       {kind:'block',type:'controls_repeat_ext',inputs:{TIMES:n(10)}},{kind:'block',type:'controls_whileUntil'},lab('조건 반복'),{kind:'block',type:'loop_while'},{kind:'block',type:'loop_dowhile'},lab('기본'),
-      {kind:'block',type:'controls_for',inputs:{FROM:n(1),TO:n(10),BY:n(1)}},{kind:'block',type:'controls_forEach'},{kind:'block',type:'controls_flow_statements'},
-      lab('시간마다'),{kind:'block',type:'ev_timer'}]},
-    {kind:'category',name:T('계산'),colour:'#5b67a5',contents:[
+      {kind:'block',type:'controls_for',inputs:{FROM:n(1),TO:n(10),BY:n(1)}},{kind:'block',type:'controls_forEach'},{kind:'block',type:'controls_flow_statements'}]),
+    cat('math','계산',[
       {kind:'block',type:'math_number'},{kind:'block',type:'math_arithmetic',inputs:{A:n(1),B:n(1)}},
       {kind:'block',type:'math_random_int',inputs:{FROM:n(1),TO:n(100)}},{kind:'block',type:'math_round',inputs:{NUM:n(3.5)}},
       {kind:'block',type:'math_modulo',inputs:{DIVIDEND:n(10),DIVISOR:n(3)}},{kind:'block',type:'math_single',inputs:{NUM:n(9)}},
       {kind:'block',type:'math_number_property',inputs:{NUMBER_TO_CHECK:n(0)}},{kind:'block',type:'math_constrain',inputs:{VALUE:n(50),LOW:n(0),HIGH:n(100)}},
       {kind:'block',type:'math_random_float'},
-      lab('거리'),{kind:'block',type:'val_dist',inputs:{X1:n(0),Y1:n(0),X2:n(30),Y2:n(40)}}]},
-    {kind:'category',name:T('글자'),colour:'#5ba58c',contents:[
+      lab('거리'),{kind:'block',type:'val_dist',inputs:{X1:n(0),Y1:n(0),X2:n(30),Y2:n(40)}}]),
+    cat('text','글자',[
       {kind:'block',type:'text'},{kind:'block',type:'text_join'},{kind:'block',type:'text_length',inputs:{VALUE:sh('text','abc')}},
       {kind:'block',type:'text_isEmpty',inputs:{VALUE:sh('text','')}},{kind:'block',type:'text_indexOf',inputs:{FIND:sh('text','a')}},
-      {kind:'block',type:'text_charAt'},{kind:'block',type:'text_changeCase',inputs:{TEXT:sh('text','abc')}},{kind:'block',type:'text_trim',inputs:{TEXT:sh('text',' abc ')}}]},
-    {kind:'category',name:T('리스트'),colour:'#745ba5',contents:[
+      {kind:'block',type:'text_charAt'},{kind:'block',type:'text_changeCase',inputs:{TEXT:sh('text','abc')}},{kind:'block',type:'text_trim',inputs:{TEXT:sh('text',' abc ')}}]),
+    cat('list','리스트',[
       {kind:'block',type:'lists_create_with',extraState:{itemCount:0}},{kind:'block',type:'lists_create_with'},
       {kind:'block',type:'lists_repeat',inputs:{NUM:n(5)}},{kind:'block',type:'lists_length'},{kind:'block',type:'lists_isEmpty'},
-      {kind:'block',type:'lists_indexOf'},{kind:'block',type:'lists_getIndex'},{kind:'block',type:'lists_setIndex'},{kind:'block',type:'lists_sort'}]},
-    {kind:'category',name:T('변수'),colour:'#a55b80',custom:'VARIABLE'},
-    {kind:'category',name:T('함수'),colour:'#995ba5',custom:'PROCEDURE'},
-    {kind:'category',name:T('JS 직접 쓰기'),colour:C.js,contents:[{kind:'block',type:'js_raw'},{kind:'block',type:'js_val'}]}
+      {kind:'block',type:'lists_indexOf'},{kind:'block',type:'lists_getIndex'},{kind:'block',type:'lists_setIndex'},{kind:'block',type:'lists_sort'}]),
+    cat('vars','변수','VARIABLE'),
+    cat('func','함수','PROCEDURE'),
+    cat('js','JS 직접 쓰기',[{kind:'block',type:'js_raw'},{kind:'block',type:'js_val'}])
   ]};
 }
 
@@ -931,5 +928,14 @@ function withAssets(imgs,snds,fn){
   try{ return fn(); }
   finally{ Object.keys(IMGS).forEach(function(k){ delete IMGS[k]; }); Object.keys(SNDS).forEach(function(k){ delete SNDS[k]; }); Object.keys(oi).forEach(function(k){ IMGS[k]=oi[k]; }); Object.keys(os).forEach(function(k){ SNDS[k]=os[k]; }); }
 }
-window.BH={withAssets:withAssets, SNDS:SNDS, missingPics:missingPics, markPics:markPics, IMGS:IMGS, build:build, toolbox:toolbox, EL:EL, KNOWN:KNOWN, elNames:elNames, C:C};
+/* ---------- block colours: each block type sits in exactly one toolbox category and takes its colour.
+   Built-in blocks outside the toolbox (variables, functions, mutator parts, converter-only ones) go by their name. ---------- */
+var CAT_OF={}, BY_NAME=[[/^(variables_|math_change$)/,'vars'],[/^procedures_/,'func'],[/^(controls_if|logic_)/,'logic'],[/^controls_/,'loop'],[/^math_/,'math'],[/^text/,'text'],[/^lists_/,'list'],
+  [/^ev_/,'ev'],[/^el_/,'page'],[/^draw_/,'draw'],[/^clone_/,'clone'],[/^tile_/,'tile'],[/^time_/,'time'],[/^js_/,'js']];
+(function walk(list,id){ (list||[]).forEach(function(it){ if(it.kind==='category') walk(it.contents,it.toolboxitemid.slice(4)); else if(it.kind==='block'&&id&&!CAT_OF[it.type]) CAT_OF[it.type]=id; }); })(toolbox().contents);
+function catOf(t){ if(CAT_OF[t]) return CAT_OF[t]; for(var i=0;i<BY_NAME.length;i++) if(BY_NAME[i][0].test(t)) return BY_NAME[i][1]; return null; }
+Object.keys(Blockly.Blocks).forEach(function(t){ var o=Blockly.Blocks[t], id=catOf(t); if(!id||!o||typeof o.init!=='function') return;
+  var init=o.init; o.init=function(){ init.apply(this,arguments); this.setColour(C[id]); }; });
+
+window.BH={withAssets:withAssets, SNDS:SNDS, missingPics:missingPics, markPics:markPics, IMGS:IMGS, build:build, toolbox:toolbox, EL:EL, KNOWN:KNOWN, elNames:elNames, C:C, catOf:catOf};
 })();
