@@ -5,7 +5,7 @@
 'use strict';
 var T=FFT.T, $=function(id){ return document.getElementById(id); };
 var LI=Math.max(0,['ko','en','es','fr','de','ja'].indexOf(FFT.lang));
-var LIB_URL='objects-lib.js?v=39';
+var LIB_URL='objects-lib.js?v=40';
 
 /* toolbox: put the button right after "사진 넣기", wherever that category ends up */
 var baseToolbox=BH.toolbox;
@@ -45,8 +45,8 @@ function renderGrid(){
   var g=$('objGrid');
   if(!list.length){ g.innerHTML='<div class="objEmpty">'+esc(T('찾는 오브젝트가 없어요'))+'</div>'; return; }
   g.innerHTML='';
-  list.forEach(function(o){ var b=document.createElement('button'); b.type='button'; b.className='obj'; b.dataset.id=o.id; b.title=o.name+' · '+SRC[o.src];
-    b.innerHTML='<img alt="" draggable="false" width="56" height="56"><span></span>'; b.querySelector('img').src=dataUrl(o); b.querySelector('span').textContent=o.name; g.appendChild(b); });
+  list.forEach(function(o){ var b=document.createElement('button'); b.type='button'; b.className='obj'; b.dataset.id=o.id; b.title=o.name+' · '+SRC[o.src]; b.setAttribute('aria-label',o.name);
+    b.innerHTML='<img alt="" draggable="false" width="72" height="72">'; b.querySelector('img').src=dataUrl(o); g.appendChild(b); }); // picture only: the name is the tile's title and label (v40)
   g.scrollTop=0;
 }
 /* search: every word must appear; exact names first, then names starting with the words, then word starts, then anywhere */
