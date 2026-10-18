@@ -228,7 +228,7 @@ function saveNow(){ clearTimeout(saveT); if(!P.cur) return; var d=snapshot(), ok
 function save(){ clearTimeout(saveT); saveT=setTimeout(saveNow,300); }
 window.addEventListener('pagehide',function(){ saveNow(); });
 document.addEventListener('visibilitychange',function(){ if(document.hidden) saveNow(); });
-function setSnds(o){ var S=BH.SNDS; Object.keys(S).forEach(function(k){ delete S[k]; }); if(o&&typeof o==='object') Object.keys(o).forEach(function(k){ var m=o[k]; if(m&&typeof m.data==='string'&&/^data:audio\//.test(m.data)) S[k]={name:k,data:m.data}; }); }
+function setSnds(o){ var S=BH.SNDS; Object.keys(S).forEach(function(k){ delete S[k]; }); if(o&&typeof o==='object') Object.keys(o).forEach(function(k){ var m=o[k]; if(m&&typeof m.data==='string'&&/^data:(audio|video)\//.test(m.data)) S[k]={name:k,data:m.data}; }); }
 /* mp3 / sound files for the "내 소리" block: the block's dropdown has a "＋ mp3 파일 넣기" entry that opens this picker */
 var sndIn=document.createElement('input'); sndIn.type='file'; sndIn.accept='audio/*,.mp3,.wav,.ogg,.m4a'; sndIn.hidden=true; document.body.appendChild(sndIn);
 BH.pickSound=function(field){ sndIn.value=''; sndIn.onchange=function(){ var f=sndIn.files&&sndIn.files[0]; if(!f) return;
@@ -237,6 +237,14 @@ BH.pickSound=function(field){ sndIn.value=''; sndIn.onchange=function(){ var f=s
     var base=f.name.replace(/\.[^.]+$/,'').slice(0,24)||T('소리'), name=base, k=2; while(BH.SNDS[name]) name=base+k++;
     BH.SNDS[name]={name:name,data:data}; if(field&&field.setValue) field.setValue(name); save(); toast(T('소리 파일을 넣었어요')); refresh(true); };
   r.readAsDataURL(f); }; sndIn.click(); };
+/* video files for the "내 영상 파일" block (stored with the sounds, as data URLs) */
+var vidIn=document.createElement('input'); vidIn.type='file'; vidIn.accept='video/*,.mp4,.webm,.mov,.m4v'; vidIn.hidden=true; document.body.appendChild(vidIn);
+BH.pickVideo=function(field){ vidIn.value=''; vidIn.onchange=function(){ var f=vidIn.files&&vidIn.files[0]; if(!f) return;
+  if(f.size>8*1024*1024){ toast(T('영상 파일이 너무 커요. 8MB보다 작은 파일을 골라 주세요')); return; }
+  var r=new FileReader(); r.onload=function(){ var data=String(r.result); if(!/^data:video\//.test(data)) data=data.replace(/^data:[^;,]*/,'data:video/mp4');
+    var base=f.name.replace(/\.[^.]+$/,'').slice(0,24)||T('영상'), name=base, k=2; while(BH.SNDS[name]) name=base+k++;
+    BH.SNDS[name]={name:name,data:data}; if(field&&field.setValue) field.setValue(name); save(); toast(T('영상 파일을 넣었어요')); refresh(true); };
+  r.readAsDataURL(f); }; vidIn.click(); };
 /* record the user's own voice (microphone) as a sound for the "내 소리" block */
 var REC={st:null,rec:null,chunks:[],blob:null,timer:0,t0:0,field:null,au:null,raf:0};
 function recStop(){ clearTimeout(REC.timer); cancelAnimationFrame(REC.raf); if(REC.rec&&REC.rec.state!=='inactive'){ try{ REC.rec.stop(); }catch(e){} } }
