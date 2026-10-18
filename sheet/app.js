@@ -1004,7 +1004,7 @@ function renderCharts(){
   sh.charts.forEach(function(ch){
     var d=document.createElement('div'); d.className='chart';
     d.innerHTML='<div class="row"><input class="ct" placeholder="차트 제목" data-notr><select data-notr><option value="bar">'+T('세로 막대')+'</option><option value="hbar">'+T('가로 막대')+'</option><option value="line">'+T('꺾은선')+'</option><option value="pie">'+T('원형')+'</option><option value="scatter">'+T('산점도')+'</option><option value="dual">'+T('두 축')+'</option></select></div>'+
-      '<canvas></canvas><div class="row" style="margin:8px 0 0"><span class="rg" data-notr></span><span style="flex:1"></span><button class="sm" data-a="rg">'+T('범위를 지금 선택으로')+'</button><button class="sm" data-a="png">PNG</button><button class="sm" data-a="del">'+T('지우기')+'</button></div>';
+      '<canvas></canvas><div class="row" style="margin:8px 0 0"><span class="rg" data-notr></span><span style="flex:1"></span><button class="sm" data-a="rg">'+T('범위를 지금 선택으로')+'</button><button class="sm" data-a="sl">'+T('슬라이드로')+'</button><button class="sm" data-a="png">PNG</button><button class="sm" data-a="del">'+T('지우기')+'</button></div>';
     var ti=d.querySelector('.ct'), sl=d.querySelector('select'), cv=d.querySelector('canvas');
     ti.placeholder=T('차트 제목'); ti.value=ch.title||''; sl.value=ch.type; d.querySelector('.rg').textContent=E.rangeStr(ch);
     ti.oninput=function(){ ch.title=ti.value; drawChart(cv,ch); saveSoon(); };
@@ -1013,10 +1013,44 @@ function renderCharts(){
     d.addEventListener('click',function(e){ var a=e.target.dataset.a; if(!a) return;
       if(a==='del'){ pushUndo(); sh.charts=sh.charts.filter(function(x){ return x!==ch; }); saveSoon(); renderCharts(); }
       if(a==='rg'){ if(sel.r1===sel.r2&&sel.c1===sel.c2) return toast(T('차트로 만들 범위를 먼저 고르세요')); pushUndo(); ch.r1=sel.r1; ch.c1=sel.c1; ch.r2=Math.min(sel.r2,sel.r1+500); ch.c2=Math.min(sel.c2,sel.c1+20); delete ch.cols; saveSoon(); renderCharts(); }
+      if(a==='sl') openSlideSend(ch);
       if(a==='png'){ cv.toBlob(function(b){ download(b,(ch.title||doc.name||'chart')+'.png'); }); } });
     body.appendChild(d); drawChart(cv,ch);
   });
 }
+/* send a chart to Fry Slides: adds a chart slide to a deck saved in this browser (localStorage 'ffslides.v1', the store Slides reads),
+   optionally linked to the cells so Slides keeps it in step with this sheet. A slide chart has one series of up to 12 bars. */
+var LSS='ffslides.v1', slCh=null;
+function slStore(){ var o=null; try{ o=JSON.parse(lsGet(LSS)||'null'); }catch(e){}
+  if(Array.isArray(o)) o={v:1,last:null,decks:o}; if(!o||typeof o!=='object'||!Array.isArray(o.decks)) o={v:1,last:null,decks:[]}; return o; }
+function slPlan(ch){
+  if(ch.type==='scatter'||ch.type==='dual') return {err:T('산점도와 두 축 그래프는 슬라이드로 보낼 수 없어요. 막대, 꺾은선, 원형만 돼요')};
+  var d=chartData(ch); if(!d.series.length) return {err:T('숫자가 든 차트만 슬라이드로 보낼 수 있어요')};
+  var se=d.series[0], L=[];
+  d.labels.forEach(function(l,i){ var v=se.vals[i]; if(v==null) return; L.push(String(l).replace(/[:\n\r]+/g,' ').trim()+': '+(+v.toPrecision(12))); });
+  if(!L.length) return {err:T('숫자가 든 차트만 슬라이드로 보낼 수 없어요')};
+  var c1=d.lc>=0?d.lc:se.col, r1=d.hdr?ch.r1:d.r0;
+  return {data:L.slice(0,12).join('\n'), cut:L.length>12, multi:d.series.length>1, title:ch.title||(d.hdr?se.name:''), ctype:ch.type==='line'?'line':ch.type==='pie'?'pie':'bar',
+    rg:E.rangeStr({r1:r1,c1:c1,r2:Math.min(ch.r2,r1+59),c2:se.col})};
+}
+function openSlideSend(ch){
+  var p=slPlan(ch); if(p.err) return toast(p.err); slCh=ch;
+  var st=slStore(), sl=$('slDeck'); sl.innerHTML='<option value="">'+T('새 발표 자료')+'</option>';
+  st.decks.slice().sort(function(a,b){ return (b.t||0)-(a.t||0); }).forEach(function(d){ var o=document.createElement('option'); o.value=d.id; o.textContent=String(d.name||T('새 발표 자료')); sl.appendChild(o); });
+  if(st.last&&st.decks.some(function(d){ return d.id===st.last; })) sl.value=st.last;
+  $('slInfo').textContent=(p.multi?T('계열이 여러 개면 첫 계열만 넣어요')+'. ':'')+(p.cut?T('앞의 12개만 넣어요')+'. ':'')+F('{0} 범위가 슬라이드의 그래프가 돼요',p.rg);
+  openDlg('slDlg');
+}
+function sendSlide(go){
+  var ch=slCh, p=ch&&slPlan(ch); if(!p||p.err) return; saveNow();
+  var st=slStore(), id=$('slDeck').value, d=null; st.decks.forEach(function(x){ if(x.id===id) d=x; });
+  if(!d){ d={id:uid(),name:doc.name||T('새 발표 자료'),theme:'light',slides:[],t:Date.now(),topic:'',aud:'',n:8,nums:false,footer:'',font:'',trans:'fade'}; st.decks.unshift(d); }
+  var s={id:uid(),layout:'chart',title:p.title,data:p.data,ctype:p.ctype}; if($('slLink').checked) s.link={doc:docId,sh:sh.name,rg:p.rg,dn:doc.name||''};
+  d.slides.push(s); d.t=Date.now(); st.last=d.id;
+  if(!lsSet(LSS,JSON.stringify(st))) return toast(T('저장 공간이 부족해서 슬라이드에 넣지 못했어요'));
+  closeDlgs(); if(go) location.href='../slides/index.html'; else toast(F('"{0}"에 슬라이드를 넣었어요',d.name));
+}
+$('slOk').onclick=function(){ sendSlide(false); }; $('slOpen').onclick=function(){ sendSlide(true); };
 window.addEventListener('resize',function(){ if($('drawer').classList.contains('open')) renderCharts(); overlay(); });
 
 /* ---------- files ---------- */
