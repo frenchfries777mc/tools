@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <script src="../i18n.js?v=41"></script>
-<script src="strings.js?v=41"></script>
+<script src="strings.js?v=43"></script>
 <script src="lib/blockly_compressed.js"></script>
 <script src="lib/blocks_compressed.js"></script>
 <script src="lib/javascript_compressed.js"></script>
@@ -167,6 +167,33 @@ button,input,select{font:inherit; color:inherit;}
 @keyframes objWait{to{background-position:-200% 0;}}
 .obj span{font-size:12px; line-height:1.2; text-align:center; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 .objEmpty{grid-column:1/-1; color:var(--dim); text-align:center; padding:30px 10px;}
+.objEmpty .tbtn{margin-top:10px;}
+/* 모두의 그림 (v43) */
+#objTabs button.shTab{border-style:dashed;} #objTabs button.shTab.on{border-style:solid;}
+.shHead{grid-column:1/-1; color:var(--dim); font-size:13px; padding:2px 2px 4px;}
+.lnkBtn{background:none; border:0; padding:0; color:var(--fry); text-decoration:underline; cursor:pointer; font:inherit;}
+.shW{position:relative; display:flex;} .shW .obj{flex:1; min-width:0;}
+.shMore{position:absolute; top:3px; right:3px; width:28px; height:24px; border-radius:7px; border:1px solid rgba(0,0,0,.15); background:rgba(255,255,255,.92); color:#1f2430; font-size:16px; line-height:1; cursor:pointer; padding:0;}
+.shMore:hover,.shMore:focus-visible{border-color:var(--fry);}
+.shMenu{position:absolute; top:30px; right:3px; z-index:3; min-width:120px; background:var(--panel); border:1px solid var(--line); border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,.45); padding:4px; display:flex; flex-direction:column;}
+.shMenu.l{right:auto; left:3px;}
+.shMenu button{height:36px; border:0; background:transparent; color:var(--text); text-align:left; padding:0 10px; border-radius:7px; cursor:pointer; font-size:13.5px;}
+.shMenu button:hover{background:var(--panel2);} .shMenu button.dang{color:#ff8b8b;}
+.shBy{font-size:12px; color:var(--dim); padding:4px 10px 6px; border-bottom:1px solid var(--line); margin-bottom:2px; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.shMoreRow{grid-column:1/-1; text-align:center; padding:6px 0 4px;}
+.mgrShare{height:30px; border-radius:7px; border:1px dashed var(--fry); background:transparent; color:var(--fry); cursor:pointer; font-size:12.5px;}
+.sdBody{padding:12px 16px; display:flex; flex-direction:column; gap:8px; overflow:auto;}
+.sdTh{height:150px; border-radius:10px; background:#fff; display:grid; place-items:center; overflow:hidden; border:1px solid var(--line);}
+.sdTh.clear{background-color:#e5e7eb;}
+.sdTh img{max-width:100%; max-height:100%;}
+.sdSize{font-size:12px; color:var(--dim); text-align:right; min-height:14px;}
+.sdBody p{margin:0;} .sdWait{color:var(--dim);}
+#sdLogin{display:flex; flex-direction:column; gap:8px; align-items:flex-start;} #sdLogin[hidden],#sdForm[hidden]{display:none;}
+#sdForm{display:flex; flex-direction:column; gap:6px;}
+.sdLab{font-size:13px; color:var(--dim);}
+#sdName{background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:9px 10px; font-size:15px;}
+.sdRule{font-size:13px; line-height:1.5; color:var(--dim); background:var(--panel2); border-radius:8px; padding:8px 10px;}
+#sdGo[hidden]{display:none;} .sdMsg{min-height:18px; font-size:13px;} .sdMsg.bad{color:#ff8b8b;}
 .dlg.narrow{width:min(560px,100%);} .dlg.tiny{width:min(400px,100%);}
 #projList,#srchList{overflow:auto; padding:10px 12px; display:flex; flex-direction:column; gap:8px; min-height:80px;}
 .prow{display:grid; grid-template-columns:1fr auto; gap:4px 10px; align-items:center; border:1px solid var(--line); background:var(--panel2); border-radius:12px; padding:8px 10px;}
@@ -327,7 +354,7 @@ button,input,select{font:inherit; color:inherit;}
     <span class="grp"><button class="tl" id="padUndo">↶ 되돌리기</button><button class="tl" id="padClear">모두 지우기</button></span>
   </div>
   <div id="padWrap"><canvas id="padCv" width="800" height="600"></canvas></div>
-  <div class="padFoot"><input type="text" id="padName" aria-label="그림 이름" data-notr><label class="padTr" title="체크하면 배경 없이 그린 부분만 저장돼요 (바둑판 무늬 = 투명)"><input type="checkbox" id="padBg"><i></i> 투명 배경</label><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="padSave">저장하고 넣기</button></div>
+  <div class="padFoot"><input type="text" id="padName" aria-label="그림 이름" data-notr><label class="padTr" title="체크하면 배경 없이 그린 부분만 저장돼요 (바둑판 무늬 = 투명)"><input type="checkbox" id="padBg"><i></i> 투명 배경</label><button class="tbtn" data-close>취소</button><button class="tbtn" id="padShare" title="저장하고 '모두의 그림'에 공유해요">🌍 저장하고 공유</button><button class="tbtn pri" id="padSave">저장하고 넣기</button></div>
 </div></div>
 <div class="ov" id="mgrDlg"><div class="dlg">
   <div class="dh"><h3>내 그림</h3><button class="tbtn" id="mgrDraw">✏️ 그림 그리기</button><button class="tbtn" id="mgrPhoto">📷 사진 넣기</button><button class="tbtn" id="mgrObj">🍎 오브젝트</button><button class="x" data-close aria-label="닫기">×</button></div>
@@ -339,6 +366,22 @@ button,input,select{font:inherit; color:inherit;}
   <div id="objTabs" data-notr></div>
   <div id="objGrid" data-notr></div>
   <div class="hint">누르면 그림으로 넣고, 페이지에 '내 그림' 블록이 놓여요.</div>
+</div></div>
+<div class="ov" id="sdDlg"><div class="dlg tiny">
+  <div class="dh"><h3>모두에게 공유</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="sdBody">
+    <div class="sdTh" id="sdTh"><img id="sdImg" alt=""></div>
+    <div class="sdSize" id="sdSize" data-notr></div>
+    <p class="sdWait" id="sdWait">확인 중…</p>
+    <div id="sdLogin" hidden><p>Frenchfries777 계정으로 로그인하면 공유할 수 있어요</p><button class="tbtn pri" id="sdLoginBtn">🍟 로그인</button></div>
+    <div id="sdForm" hidden>
+      <label class="sdLab" for="sdName">그림 제목</label>
+      <input type="text" id="sdName" maxlength="30" data-notr spellcheck="false" autocomplete="off">
+      <p class="sdRule">⚠️ 모두가 보는 곳이에요. 이름 · 학교 · 전화번호 같은 개인 정보나 얼굴은 올리지 말고, 친절한 그림만 올려요.</p>
+    </div>
+    <div class="sdMsg" id="sdMsg"></div>
+  </div>
+  <div class="askFoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="sdGo" disabled hidden>공유하기</button></div>
 </div></div>
 <div class="ov" id="baiDlg"><div class="dlg">
   <div class="dh"><h3>AI 도우미 (시험 기능)</h3><button class="tbtn" id="baiSet">AI 설정</button><button class="x" id="baiClose" aria-label="닫기">×</button></div>
@@ -387,9 +430,10 @@ button,input,select{font:inherit; color:inherit;}
 <div id="toast"></div><div id="prog" hidden><div id="progTxt"></div><div id="progTrack"><div id="progBar"></div></div></div>
 <script src="sounds.js?v=41"></script>
 <script src="blocks.js?v=41"></script>
-<script src="objects.js?v=41"></script>
+<script src="objects.js?v=43"></script>
+<script src="shared.js?v=43"></script>
 <script src="examples.js?v=41"></script>
-<script src="app.js?v=41"></script>
+<script src="app.js?v=43"></script>
 <script src="../ai.js?v=ai22"></script>
 <script src="../ai-prompts.js?v=41"></script>
 <script src="html2blocks.js?v=41"></script>

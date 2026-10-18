@@ -238,6 +238,7 @@ function deleteProject(id){ var e=entry(id); if(!e) return;
     if(id===P.cur){ P.cur=null; var nx=P.list.slice().sort(function(a,b){ return b.t-a.t; })[0];
       if(nx){ writeIdx(); switchTo(nx.id); } else createProject(T('나의 웹페이지'),blank); }
     writeIdx(); renderProjs(); toast(T('프로젝트를 삭제했어요')); }); }
+window.BHASK=function(m,o,d){ return ask(m,o,d); };
 function ask(msg,okText,danger){ return new Promise(function(res){ var dlg=$('askDlg'), ok=$('askOk'), no=$('askNo'); $('askMsg').textContent=msg; ok.textContent=okText||T('확인'); ok.className='tbtn '+(danger?'dang':'pri'); dlg.classList.add('open');
   function done(v){ dlg.classList.remove('open'); ok.onclick=no.onclick=null; res(v); } ok.onclick=function(){ done(true); }; no.onclick=function(){ done(false); }; setTimeout(function(){ no.focus(); },30); }); }
 function renderProjs(){ var box=$('projList'); if(!$('projDlg').classList.contains('open')) return; box.innerHTML='';
@@ -347,16 +348,20 @@ function openPad(id){
   if(id){ var im=new Image(); im.onload=function(){ var k=Math.min(PW/im.width,PH/im.height,1), w=im.width*k, h=im.height*k; pg.drawImage(im,(PW-w)/2,(PH-h)/2,w,h); }; im.src=I[id].data; $('padBg').checked=!!I[id].clear; $('padWrap').classList.toggle('clear',!!I[id].clear); }
   $('padDlg').classList.add('open');
 }
-$('padSave').onclick=function(){
+function savePad(){
   var clear=$('padBg').checked, d=pg.getImageData(0,0,PW,PH).data, x0=PW, y0=PH, x1=-1, y1=-1;
   for(var y=0;y<PH;y++) for(var x=0;x<PW;x++) if(d[(y*PW+x)*4+3]>8){ if(x<x0) x0=x; if(x>x1) x1=x; if(y<y0) y0=y; if(y>y1) y1=y; }
-  if(x1<0){ toast(T('그림이 비어 있어요')); return; }
+  if(x1<0){ toast(T('그림이 비어 있어요')); return null; }
   if(clear){ x0=Math.max(0,x0-6); y0=Math.max(0,y0-6); x1=Math.min(PW-1,x1+6); y1=Math.min(PH-1,y1+6); } else { x0=0; y0=0; x1=PW-1; y1=PH-1; }
   var w=x1-x0+1, h=y1-y0+1, c=document.createElement('canvas'); c.width=w; c.height=h; var g=c.getContext('2d');
   if(!clear){ g.fillStyle='#ffffff'; g.fillRect(0,0,w,h); } g.drawImage(pad,x0,y0,w,h,0,0,w,h);
-  var isNew=!padId, id=padId||newId(); putImage(id,uniqName($('padName').value,id),c.toDataURL('image/png'),w,h,c); I[id].clear=clear;
+  var isNew=!padId, id=padId||newId(); putImage(id,uniqName($('padName').value,id),c.toDataURL('image/png'),w,h,c); I[id].clear=clear; I[id].drawn=1;
   $('padDlg').classList.remove('open'); if(isNew) addToPage(id); afterImgChange(); renderMgr(); toast(isNew?T('그림을 페이지에 넣었어요'):T('그림을 고쳤어요'));
-};
+  return id;
+}
+$('padSave').onclick=function(){ savePad(); };
+/* 모두의 그림 (v43): save, then open the share dialog (shared.js) */
+$('padShare').onclick=function(){ var id=savePad(); if(id&&window.BHSHARE) BHSHARE.openShare(id); };
 
 /* photos */
 $('photoIn').addEventListener('change',function(){
@@ -366,7 +371,7 @@ $('photoIn').addEventListener('change',function(){
     var k=Math.min(1,1024/Math.max(im.width,im.height)), w=Math.max(1,Math.round(im.width*k)), h=Math.max(1,Math.round(im.height*k)), c=document.createElement('canvas'); c.width=w; c.height=h; var g=c.getContext('2d'); g.drawImage(im,0,0,w,h);
     var alpha=false; if(/png|gif|webp/.test(file.type)){ var d=g.getImageData(0,0,w,h).data; for(var i=3;i<d.length;i+=4*7) if(d[i]<250){ alpha=true; break; } }
     var data=alpha?c.toDataURL('image/png'):c.toDataURL('image/jpeg',0.84), id=newId();
-    putImage(id,uniqName(file.name.replace(/\.[^.]+$/,'')),data,w,h,c); addToPage(id); afterImgChange(); renderMgr(); toast(T('사진을 페이지에 넣었어요')); };
+    putImage(id,uniqName(file.name.replace(/\.[^.]+$/,'')),data,w,h,c); I[id].photo=1; addToPage(id); afterImgChange(); renderMgr(); toast(T('사진을 페이지에 넣었어요')); };
   im.onerror=function(){ URL.revokeObjectURL(url); toast(T('이 사진은 열 수 없어요')); };
   im.src=url;
 });
@@ -376,15 +381,19 @@ function renderMgr(){
   var ids=Object.keys(I), box=$('mgrList');
   if(!ids.length){ box.innerHTML='<div class="empty">'+T('아직 그림이 없어요. 그림을 그리거나 사진을 넣어 보세요.')+'</div>'; return; }
   box.innerHTML=''; ids.forEach(function(id){ var m=I[id], d=document.createElement('div'); d.className='pic';
-    d.innerHTML='<div class="th'+(m.clear?' clear':'')+'"><img alt=""></div><input data-notr spellcheck="false"><div class="pa"><button data-a="add">'+T('넣기')+'</button>'+(/png/.test(m.data.slice(0,15))?'<button data-a="edit">'+T('고치기')+'</button>':'')+'<button data-a="del" class="dang">'+T('삭제')+'</button></div>';
+    d.innerHTML='<div class="th'+(m.clear?' clear':'')+'"><img alt=""></div><input data-notr spellcheck="false"><div class="pa"><button data-a="add">'+T('넣기')+'</button>'+(/png/.test(m.data.slice(0,15))?'<button data-a="edit">'+T('고치기')+'</button>':'')+'<button data-a="del" class="dang">'+T('삭제')+'</button></div>'+(canShare(m)?'<button class="mgrShare" data-a="share">🌍 '+T('모두에게 공유')+'</button>':'');
     d.querySelector('img').src=m.thumb||m.data; var inp=d.querySelector('input'); inp.value=m.name;
     inp.onchange=function(){ m.name=uniqName(this.value,id); this.value=m.name; afterImgChange(); };
-    d.querySelector('.pa').onclick=function(e){ var a=e.target.dataset.a; if(!a) return;
+    d.onclick=function(e){ var a=e.target.dataset&&e.target.dataset.a; if(!a) return;
+      if(a==='share'){ if(window.BHSHARE) BHSHARE.openShare(id); return; }
       if(a==='add'){ addToPage(id); $('mgrDlg').classList.remove('open'); }
       if(a==='edit'){ $('mgrDlg').classList.remove('open'); openPad(id); }
       if(a==='del'){ var u=usedBy(id), go=function(){ delete I[id]; afterImgChange(); renderMgr(); }; if(u.length) ask(F('이 그림을 쓰는 블록이 {0}개 있어요. 그래도 지울까요?',u.length),T('삭제'),true).then(function(ok){ if(ok) go(); }); else go(); } };
     box.appendChild(d); });
 }
+/* only drawings can be shared: not photos (faces, names) and not library objects or pictures that came from '모두의 그림' */
+function canShare(m){ return !!window.BHSHARE&&!m.photo&&!m.shared&&(m.drawn||/^data:image\/png/.test(m.data)); }
+window.BHMGR=function(){ renderMgr(); $('mgrDlg').classList.add('open'); };
 ws.registerButtonCallback('imgDraw',function(){ openPad(null); });
 ws.registerButtonCallback('imgPhoto',function(){ $('photoIn').click(); });
 ws.registerButtonCallback('imgManage',function(){ renderMgr(); $('mgrDlg').classList.add('open'); });
@@ -392,7 +401,7 @@ $('mgrDraw').onclick=function(){ $('mgrDlg').classList.remove('open'); openPad(n
 $('mgrPhoto').onclick=function(){ $('photoIn').click(); };
 /* 오브젝트: a picked library illustration becomes an ordinary picture (SVG data URL, transparent), so every picture block works with it */
 function addObject(o){ var im=new Image();
-  im.onload=function(){ var id=newId(); putImage(id,uniqName(o.name),o.data,128,128,im); I[id].clear=true; addToPage(id,120,String(o.name).replace(/[\s\d]+/g,'').slice(0,20)||null); afterImgChange(); renderMgr(); toast(T('오브젝트를 페이지에 넣었어요')); };
+  im.onload=function(){ var id=newId(); putImage(id,uniqName(o.name),o.data,o.w||128,o.h||128,im); I[id].clear=true; if(o.shared) I[id].shared=1; addToPage(id,120,String(o.name).replace(/[\s\d]+/g,'').slice(0,20)||null); afterImgChange(); renderMgr(); toast(o.shared?T('그림을 페이지에 넣었어요'):T('오브젝트를 페이지에 넣었어요')); };
   im.onerror=function(){ toast(T('오브젝트를 불러오지 못했어요. 다시 눌러 보세요')); }; im.src=o.data; }
 function openObjects(){ $('mgrDlg').classList.remove('open'); BHOBJ.open(addObject); }
 ws.registerButtonCallback('imgObject',openObjects);
