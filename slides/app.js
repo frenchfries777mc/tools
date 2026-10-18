@@ -136,7 +136,7 @@ var MPOS=['tl','tr','bl','br'], APOS=['l','c','r'], LSZ={sm:44, md:68, lg:104};
 function fixMaster(m){ m=m&&typeof m==='object'?m:{}; var lg=typeof m.logo==='string'&&/^data:image\//.test(m.logo)?m.logo:'';
   return {on:m.on!==false, logo:lg, lw:lg?num(m.lw,100,1,4000):0, lh:lg?num(m.lh,100,1,4000):0, lpos:MPOS.indexOf(m.lpos)>=0?m.lpos:'tr', lsz:LSZ[m.lsz]?m.lsz:'md', fpos:APOS.indexOf(m.fpos)>=0?m.fpos:'l', npos:APOS.indexOf(m.npos)>=0?m.npos:'r', ttl:!!m.ttl}; }
 function fixAuto(a){ a=a&&typeof a==='object'?a:{}; return {on:!!a.on, sec:num(a.sec,10,1,600), loop:!!a.loop}; }
-function fixDeck(d){ d.slides=(Array.isArray(d.slides)?d.slides:[]).map(fixSlide); d.theme=themeOf(d.theme).id; d.name=String(d.name||T('새 발표 자료')); d.nums=!!d.nums; d.footer=String(d.footer||''); d.font=FONTS.some(function(f){ return f[0]===d.font; })?d.font:''; d.trans=['fade','slide','zoom','none'].indexOf(d.trans)<0?'fade':d.trans; d.master=fixMaster(d.master); d.auto=fixAuto(d.auto); if(!d.t) d.t=Date.now(); return d; }
+function fixDeck(d){ d.slides=(Array.isArray(d.slides)?d.slides:[]).map(fixSlide); d.theme=themeOf(d.theme).id; d.name=String(d.name||T('새 발표 자료')); d.nums=!!d.nums; d.footer=String(d.footer||''); d.font=FONTS.some(function(f){ return f[0]===d.font; })?d.font:''; d.trans=['fade','slide','zoom','none'].indexOf(d.trans)<0?'fade':d.trans; d.master=fixMaster(d.master); d.auto=fixAuto(d.auto); d.co=d.co&&typeof d.co==='object'&&/^[0-9a-f-]{36}$/i.test(String(d.co.id))?{id:String(d.co.id), rev:num(d.co.rev,0,0,1e9), own:!!d.co.own}:null; if(!d.t) d.t=Date.now(); return d; }
 function loadStore(){ var o=null; try{ o=JSON.parse(localStorage.getItem(LS)||'null'); }catch(e){}
   /* older saves: a single deck object, or a bare array of decks, become the first entries of the list */
   if(Array.isArray(o)) o={v:1, last:null, decks:o};
@@ -147,7 +147,8 @@ var store=loadStore(), deck=null, cur=0, undo=[], redo=[], gen=false, busyOn=fal
 function isDefaultName(n){ return !n||!String(n).trim()||n===T('새 발표 자료')||n==='새 발표 자료'; }
 function saveNow(){ clearTimeout(saveT); saveT=null; if(!deck||MODE) return; deck.t=Date.now(); store.last=deck.id;
   if(store.decks.indexOf(deck)<0) store.decks.unshift(deck);
-  try{ localStorage.setItem(LS,JSON.stringify(store)); $('saved').textContent=T('저장됨'); }catch(e){ $('saved').textContent=''; toast(T('저장 공간이 부족해서 저장하지 못했어요')); } }
+  try{ localStorage.setItem(LS,JSON.stringify(store)); $('saved').textContent=T('저장됨'); }catch(e){ $('saved').textContent=''; toast(T('저장 공간이 부족해서 저장하지 못했어요')); }
+  if(window.FSLX&&FSLX.onSaved) FSLX.onSaved(); }
 function saveSoon(){ $('saved').textContent=''; clearTimeout(saveT); saveT=setTimeout(saveNow,400); }
 function openDeck(d){
   if(deck&&deck!==d&&!deck.slides.length&&isDefaultName(deck.name)&&!deck.topic) store.decks=store.decks.filter(function(x){ return x!==deck; }); // drop an untouched empty deck
@@ -1800,6 +1801,11 @@ var first=null; store.decks.forEach(function(d){ if(d.id===store.last) first=d; 
 if(!first&&store.decks.length) first=store.decks.slice().sort(function(a,b){ return b.t-a.t; })[0];
 if(MODE==='pv') startPV(); else if(MODE==='view') startView(); else openDeck(first||newDeck());
 
+/* used by collab.js (editing the same deck together through a share link; the editor only) */
+window.FSLX={ mode:MODE, get deck(){ return deck; }, get store(){ return store; }, get cur(){ return cur; }, setCur:function(i){ cur=Math.max(0,Math.min(i,deck.slides.length-1)); },
+  fixDeck:fixDeck, fixSlide:fixSlide, uid:uid, toast:toast, confirmDlg:confirmDlg, refresh:refresh, saveSoon:saveSoon, saveNow:saveNow, openDeck:openDeck, onSaved:null,
+  /* remote changes wait while something is being typed or dragged, presenting or generating */
+  quiet:function(){ var a=document.activeElement; return !pr.on&&!drg&&!mq&&!gen&&!busyOn&&!(a&&(a.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)))&&!document.querySelector('.ov.open:not(#shareDlg)'); } };
 /* used by ai-slides.js */
 window.FSL={
   get deck(){ return deck; }, get cur(){ return cur; }, get busy(){ return gen||busyOn; }, LAYS:AILAYS, LAY:LAY, blank:blank, fixSlide:fixSlide, toast:toast, ask:ask, pushUndo:pushUndo, snap:snap,
