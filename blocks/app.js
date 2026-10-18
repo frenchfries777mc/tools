@@ -241,8 +241,16 @@ function deleteProject(id){ var e=entry(id); if(!e) return;
       if(nx){ writeIdx(); switchTo(nx.id); } else createProject(T('나의 웹페이지'),blank); }
     writeIdx(); renderProjs(); toast(T('프로젝트를 삭제했어요')); }); }
 window.BHASK=function(m,o,d){ return ask(m,o,d); };
-function ask(msg,okText,danger){ return new Promise(function(res){ var dlg=$('askDlg'), ok=$('askOk'), no=$('askNo'); $('askMsg').textContent=msg; ok.textContent=okText||T('확인'); ok.className='tbtn '+(danger?'dang':'pri'); dlg.classList.add('open');
-  function done(v){ dlg.classList.remove('open'); ok.onclick=no.onclick=null; res(v); } ok.onclick=function(){ done(true); }; no.onclick=function(){ done(false); }; setTimeout(function(){ no.focus(); },30); }); }
+function ask(msg,okText,danger,opt){ opt=opt||{}; return new Promise(function(res){ var dlg=$('askDlg'), ok=$('askOk'), no=$('askNo'), inp=$('askIn'), text=opt.input!==undefined; $('askMsg').textContent=msg; ok.textContent=okText||T('확인'); ok.className='tbtn '+(danger?'dang':'pri');
+  inp.hidden=!text; no.hidden=!!opt.notice; if(text) inp.value=opt.input||''; dlg.classList.add('open');
+  function done(v){ dlg.classList.remove('open'); ok.onclick=no.onclick=inp.onkeydown=null; res(v); }
+  ok.onclick=function(){ done(text?inp.value:true); }; no.onclick=function(){ done(text?null:false); };
+  if(text) inp.onkeydown=function(e){ if(e.key==='Enter'){ e.preventDefault(); done(inp.value); } else if(e.key==='Escape'){ done(null); } };
+  setTimeout(function(){ if(text){ inp.focus(); inp.select(); } else (opt.notice?ok:no).focus(); },30); }); }
+/* Blockly's own variable / function dialogs would use the browser's pop-ups: show the site's own window instead */
+Blockly.dialog.setPrompt(function(message,def,cb){ ask(message,T('확인'),false,{input:def||''}).then(function(v){ cb(v); }); });
+Blockly.dialog.setConfirm(function(message,cb){ ask(message,T('확인'),true).then(function(v){ cb(v); }); });
+Blockly.dialog.setAlert(function(message,cb){ ask(message,T('확인'),false,{notice:true}).then(function(){ if(cb) cb(); }); });
 function renderProjs(){ var box=$('projList'); if(!$('projDlg').classList.contains('open')) return; box.innerHTML='';
   P.list.slice().sort(function(a,b){ return b.t-a.t; }).forEach(function(e){ var d=document.createElement('div'), cur=e.id===P.cur; d.className='prow'+(cur?' cur':'');
     d.innerHTML='<input data-notr spellcheck="false" aria-label=""><div class="pm"></div><div class="pbt"><button data-a="open"></button><button data-a="del" class="dang"></button></div>';
