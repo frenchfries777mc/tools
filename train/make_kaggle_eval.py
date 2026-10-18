@@ -16,7 +16,7 @@ const HUMOR = eval(ai.match(/var HUMOR=('(?:[^'\\]|\\.)*');/)[1]);
 const ME = eval('(' + ai.match(/var ME=(\{[\s\S]*?\}\});/)[1] + ')');
 const blocks = fs.readFileSync(path.join(root, 'blocks/ai-blocks.js'), 'utf8');
 const SYS_HTML = eval(blocks.match(/var SYS_HTML=(\[[\s\S]*?\])\.join\('\\n'\);/)[1]).join('\n');
-const out = { SYS_HTML, who: { tarius: ME['FF-Tools-1.7B'].who, lectus: ME['FF-Tools-4B'].who } };
+const out = { SYS_HTML, who: { tarius: ME['FF-Tools-1.7B'].who, lectus: ME['FF-Tools-4B'].who, premus: ME['FF-Tools-8B'].who } };
 for (const k of ['tableHead', 'askSys', 'cellSys', 'formulaSys', 'tableSys', 'graphSys', 'calcSys', 'unitSys']) out[k] = P[k];
 process.stdout.write(JSON.stringify(out));
 """
@@ -81,17 +81,21 @@ def build():
 """),
              code('''
 #@title 설정 (여기만 바꿔요)
-MODELS = {            # True = 시험 봄, False = 건너뜀
-    "qwen3-1.7b": True,
+MODELS = {            # True = 시험 봄, False = 건너뜀 (목표 점수가 Qwen3 4B 기준이라 4B는 켜 둬요. 1.7B는 1.3 때 쟀어요: 41.4점)
+    "qwen3-1.7b": False,
     "qwen3-4b": True,
+    "qwen3-8b": True,
     "tarius": True,
     "lectus": True,
+    "premus": True,      # 아직 안 올렸으면 알아서 건너뛰어요
 }
 REPOS = {
     "qwen3-1.7b": "Qwen/Qwen3-1.7B",
     "qwen3-4b": "Qwen/Qwen3-4B",
+    "qwen3-8b": "Qwen/Qwen3-8B",
     "tarius": "Frenchfries777/FF-Tools-1.7B-merged",   # 비공개: HF_TOKEN이 필요해요
     "lectus": "Frenchfries777/FF-Tools-4B-merged",
+    "premus": "Frenchfries777/FF-Tools-8B-merged",
 }
 QUICK = False         # True면 과제마다 2문제만 (노트가 잘 도는지 볼 때)
 SEED = 7

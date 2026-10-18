@@ -916,7 +916,7 @@ def quick_subset(test, n=2):
 
 
 # ---------------------------------------------------------------- what the owner reads
-MODEL_NAMES = {"qwen3-1.7b": "Qwen3 1.7B", "qwen3-4b": "Qwen3 4B", "tarius": "타리우스", "lectus": "렉투스"}
+MODEL_NAMES = {"qwen3-1.7b": "Qwen3 1.7B", "qwen3-4b": "Qwen3 4B", "qwen3-8b": "Qwen3 8B", "tarius": "타리우스", "lectus": "렉투스", "premus": "프레무스"}
 
 
 def cat_rows(summary, test):
@@ -966,7 +966,7 @@ def korean_summary(summary, g, meta, skipped=None):
             rule = f"Qwen3 4B × 3.5 = {lt}점 이상"
         L.append(f"- 렉투스 목표 = {rule}" + (
             f" → 지금 {l['score']}점, " + ("달성" if l["pass"] else f"{-l['gap']}점 모자람") if l else " (렉투스 점수 없음)"))
-        reps = ", ".join(f"{MODEL_NAMES[m]} {summary[m]['repeats']}개" for m in ("tarius", "lectus") if m in summary)
+        reps = ", ".join(f"{MODEL_NAMES[m]} {summary[m]['repeats']}개" for m in ("tarius", "lectus", "premus") if m in summary)
         L.append("- 반복: 목표 0개" + (f" (지금 {reps})" if reps else ""))
     L += ["", "코드 채점: " + ("jsdom에서 실제로 열고 눌러 봄" if meta.get("html_check") == "jsdom" else "정적 검사만 (노드 없음, 다른 실행과 비교하지 마세요)"),
           "4비트: bitsandbytes nf4 (사이트는 MLC q4f16_1이라 점수가 아주 조금 다를 수 있어요)"]
