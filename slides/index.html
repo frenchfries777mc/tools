@@ -214,6 +214,11 @@ button,input,select,textarea{font:inherit; color:inherit;}
 .sl .h-mv{left:50%; top:calc(-30px * var(--hk,1)); width:calc(40px * var(--hk,1)); height:calc(40px * var(--hk,1)); margin:calc(-20px * var(--hk,1)) 0 0 calc(-20px * var(--hk,1)); cursor:move;}
 .sl .selFr.low .h-mv{top:calc(100% + 30px * var(--hk,1));}
 .sl .h-mv::after{width:calc(26px * var(--hk,1)); height:calc(26px * var(--hk,1)); border-radius:50%; background:#3d8bff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3'/%3E%3C/svg%3E") center/70% no-repeat; border-color:#fff;}
+.coSt{border:1px solid var(--line); background:transparent; color:var(--fry); border-radius:999px; padding:3px 10px; font-size:12px; cursor:pointer; white-space:nowrap; max-width:46vw; overflow:hidden; text-overflow:ellipsis;} .coSt.off,.coSt.sql,.coSt.big,.coSt.gone{color:#ff8b8b;} .coSt.wait{color:var(--dim);}
+@media(max-width:760px){ .coSt{display:none;} }
+.coBox{border:1px solid var(--line); border-radius:12px; padding:4px 14px 12px; margin:12px 0;} .coBox h4{margin:10px 0 4px; font-size:15px;} .coBox h4 small{font-weight:400; color:var(--dim); font-size:12px;}
+#coLink{width:100%; box-sizing:border-box; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:8px 10px; font-size:12px; color:inherit; font-family:ui-monospace,Consolas,monospace; margin:6px 0;}
+.coMsg{margin:6px 0 0; font-size:13px; color:var(--fry);} .coMsg.bad{color:#ff8b8b;} .coMsg:empty{display:none;}
 .sl .guide{position:absolute; z-index:29; pointer-events:none; background:#ff3bd4;} .sl .guide.v{top:0; bottom:0; width:calc(1px * var(--hk,1));} .sl .guide.h{left:0; right:0; height:calc(1px * var(--hk,1));}
 .sl .gsp{position:absolute; z-index:29; pointer-events:none; background:#ff3bd4;} .sl .gsp.x{height:calc(2px * var(--hk,1)); margin-top:calc(-1px * var(--hk,1));} .sl .gsp.y{width:calc(2px * var(--hk,1)); margin-left:calc(-1px * var(--hk,1));}
 .sl .gsp::before,.sl .gsp::after{content:''; position:absolute; background:#ff3bd4;} .sl .gsp.x::before,.sl .gsp.x::after{top:calc(-6px * var(--hk,1)); width:calc(2px * var(--hk,1)); height:calc(14px * var(--hk,1));} .sl .gsp.x::before{left:0;} .sl .gsp.x::after{right:0;}
@@ -443,6 +448,7 @@ body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body
   <span class="brand" data-notr>FRY <b>SLIDES</b></span>
   <input id="deckName" aria-label="발표 자료 이름" spellcheck="false" autocomplete="off">
   <span class="saved" id="saved"></span>
+  <button class="coSt" id="coSt" type="button" hidden title="같이 고치기"></button>
   <span class="sp"></span>
   <div class="cmdk" id="cmdk"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg><input id="cmdQ" type="search" placeholder="기능 찾기" aria-label="기능 찾기" title="기능 찾기 (Ctrl+K)" autocomplete="off" spellcheck="false" enterkeyhint="go" role="combobox" aria-expanded="false" aria-autocomplete="list"><kbd>Ctrl K</kbd></div>
   <span data-lang-slot></span>
@@ -580,6 +586,15 @@ body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body
     <div class="csvRow"><button class="tbtn pri" id="shCopy">링크 복사</button><button class="tbtn" id="shOpen">새 탭에서 열어 보기</button><button class="tbtn" id="shShare" hidden>공유하기…</button></div>
     <div class="shQr" id="shQrBox" hidden><canvas id="shQr" aria-label="QR 코드"></canvas><div><p id="shQrMsg"></p><button class="tbtn" id="shQrSave">QR 그림 저장</button></div></div>
     <p class="shWarn" id="shWarn" hidden></p>
+    <div class="coBox" id="coBox">
+      <h4>같이 고치기 <small>(두 사람이 같은 자료를 함께 고쳐요)</small></h4>
+      <div id="coOff"><p>링크를 받은 사람과 같은 발표 자료를 함께 고칠 수 있어요. 위의 읽기 전용 링크와 달리 자료가 서버에 올라가고, 서로 고친 것이 몇 초 안에 합쳐져요.</p>
+        <div class="csvRow"><button class="tbtn" id="coLogin" hidden>로그인</button><button class="tbtn pri" id="coMake" hidden>같이 고치는 링크 만들기</button></div></div>
+      <div id="coOn" hidden><p>이 링크를 열면 누구나 이 자료를 함께 고칠 수 있어요. 고친 것은 몇 초마다 서로에게 합쳐져요.</p>
+        <input id="coLink" data-notr readonly spellcheck="false" aria-label="같이 고치는 링크">
+        <div class="csvRow"><button class="tbtn pri" id="coCopy">링크 복사</button><button class="tbtn dang" id="coStop">같이 고치기 끝내기</button></div></div>
+      <p class="coMsg" id="coMsg"></p>
+    </div>
     <p class="note" style="margin:0">알아 두세요: 보는 사람은 각자 휴대폰에서 직접 넘겨 보는 방식이에요. 발표자가 넘기는 화면과 실시간으로 맞춰지지는 않아요 (그러려면 서버가 필요해요). 그림은 링크에 담기지 않고, 슬라이드가 짧을 때만 QR을 만들 수 있어요.</p>
   </div>
 </div></div>
@@ -677,7 +692,8 @@ body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body
 <script src="qr.js"></script>
 <script src="lq-net.js"></script>
 <script src="ribbon.js"></script>
-<script src="app.js?v=s21"></script>
+<script src="app.js?v=s22"></script>
+<script src="collab.js?v=s22"></script>
 <script src="ai-slides.js"></script>
 </body>
 </html>
