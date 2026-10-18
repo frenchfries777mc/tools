@@ -100,6 +100,22 @@ FFT.add({
   .langSel{background:var(--panel); color:var(--dim); border:1px solid var(--line); border-radius:8px; padding:6px 9px; font:inherit; font-size:14px; cursor:pointer; margin-left:16px;}
   .langSel:hover{color:var(--text); border-color:var(--fry);}
   .swr{margin:0 auto 0 20px;}
+  .swr{display:flex; align-items:center; gap:8px;}
+  .srx-btn{background:var(--panel); color:var(--text); border:1px solid var(--line); border-radius:99px; width:38px; height:38px; display:inline-grid; place-items:center; cursor:pointer; font-size:15px; flex:0 0 auto;}
+  .srx-btn:hover{border-color:var(--fry);}
+  .hn-bg{position:fixed; inset:0; z-index:2147482300; background:rgba(5,6,10,.72); display:none; align-items:center; justify-content:center; padding:16px;}
+  .hn-b{width:100%; max-width:560px; max-height:calc(100vh - 32px); overflow-y:auto; background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:18px 20px; box-sizing:border-box; overscroll-behavior:contain;}
+  .hn-h{display:flex; justify-content:space-between; align-items:center; font-size:19px; margin-bottom:6px;} .hn-x{background:none; border:0; color:var(--dim); font-size:24px; cursor:pointer; line-height:1;}
+  .srx .hn-b{max-width:640px; align-self:flex-start; margin-top:8vh;}
+  .srx input{width:100%; background:var(--bg); color:var(--text); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font:inherit; font-size:17px; box-sizing:border-box;}
+  .srx input:focus{outline:none; border-color:var(--fry);}
+  .srx .sg{margin-top:14px;} .srx .sg h4{margin:0 0 6px; font-size:12.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--dim);}
+  .srx .sr{display:block; text-decoration:none; color:var(--text); background:var(--bg); border:1px solid var(--line); border-radius:11px; padding:9px 12px; margin-bottom:6px; cursor:pointer; text-align:left; width:100%; font:inherit; box-sizing:border-box;}
+  .srx .sr:hover,.srx .sr.sel{border-color:var(--fry);} .srx .sr b{font-weight:700;} .srx .sr small{display:block; color:var(--dim); font-size:13px; margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .srx .sr .gt{font-size:11.5px; font-weight:800; margin-right:7px; color:#6aa8ff;}
+  .srx mark{background:rgba(255,201,60,.35); color:inherit; border-radius:3px;}
+  .srx .se{color:var(--dim); font-size:14px; padding:14px 2px 4px;}
+  html[data-ff-theme=light] .srx input, html[data-ff-theme=light] .srx .sr{background:#faf8f3;} html[data-ff-theme=light] .srx .sr .gt{color:#1f5fbf;}
   .sw{display:inline-flex; padding:3px; border-radius:99px; border:1px solid var(--line); background:var(--panel);}
   .sw a{font-family:'Oswald',sans-serif; font-weight:600; font-size:13.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--dim); text-decoration:none; padding:4px 13px; border-radius:99px; transition:color .15s,background .15s;}
   .sw a:hover{color:var(--text);}
@@ -190,7 +206,7 @@ FFT.add({
 <div class="wrap">
   <header>
     <a class="logo" href="./"><img class="lg" src="logo.svg" alt="" width="36" height="36"><span>FRENCHFRIES<b>777</b></span></a>
-    <div class="swr"><span class="sw" data-notr><a href="https://frenchfries777mc.github.io/games/">Games</a><a href="https://frenchfries777mc.github.io/educations/">Educations</a><a class="on" href="./" aria-current="page">Tools</a></span></div>
+    <div class="swr"><span class="sw" data-notr><a href="https://frenchfries777mc.github.io/games/">Games</a><a href="https://frenchfries777mc.github.io/educations/">Educations</a><a class="on" href="./" aria-current="page">Tools</a></span><button type="button" class="srx-btn" id="srxBtn" aria-label="검색" title="검색">🔍</button></div>
     <div class="right"><nav><a href="#tools">도구</a><a href="patchnotes/">패치노트</a><a href="https://frenchfries777mc.github.io/games/wiki/#tools">위키</a><a href="https://github.com/frenchfries777mc" target="_blank" rel="noopener">GitHub</a><a href="https://frenchfries777mc.github.io/games/settings/">설정</a></nav><div class="tb"><span data-ff-account data-ff-nohub></span></div></div>
   </header>
 
@@ -293,6 +309,50 @@ FFT.add({
 /* the developer-only "AI 가르치기" page link shows only for the developer account */
 (function(){ if(!window.FFAuth) return; var a=document.getElementById('teachLink');
   FFAuth.ready.then(function(sb){ function chk(){ if(!FFAuth.user()){ a.hidden=true; return; } sb.rpc('ff_is_admin').then(function(r){ a.hidden=r.data!==true; }); } chk(); FFAuth.onChange(chk); }); })();
+</script>
+<script>
+/* 통합 검색: 도구 · 기능 · 패치노트 (허브의 돋보기 검색과 같은 모양과 동작) */
+(function(){
+  var PN=['site','sheet','blocks','slides','lab','ai'], SX={pn:null,sel:-1};
+  function esc(t){ return String(t==null?'':t).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function smark(t,q){ var e=esc(t); if(!q) return e; var r=esc(q).replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); try{ return e.replace(new RegExp(r,'gi'),function(x){ return '<mark>'+x+'</mark>'; }); }catch(_){ return e; } }
+  function ssnip(b,q){ var p=String(b||'').replace(/\s+/g,' ').trim(), i=p.toLowerCase().indexOf(q.toLowerCase()); if(i<0) return smark(p.slice(0,90),''); var a=Math.max(0,i-30); return (a?'…':'')+smark(p.slice(a,i+q.length+60),q); }
+  function tools(){ return [].map.call(document.querySelectorAll('#tools .game'),function(a){ var h=a.querySelector('h2'), l=a.querySelector('a.play, .shot');
+    return {name:h?h.textContent.trim():'', href:l?l.getAttribute('href'):'./', text:(a.querySelector('.motto')||{}).textContent+' '+[].map.call(a.querySelectorAll('.tags span'),function(x){ return x.textContent; }).join(' ')+' '+(a.querySelector('.desc')||{textContent:''}).textContent.replace(/\s+/g,' ')}; }); }
+  function feats(){ return [].map.call(document.querySelectorAll('.why > div'),function(d){ var h=d.querySelector('h3'), p=d.querySelector('p'); return {name:h?h.textContent:'', text:p?p.textContent:''}; }); }
+  function load(){ if(SX.pn) return Promise.resolve();
+    return Promise.all(PN.map(function(k){ return fetch('patchnotes/'+k+'.json').then(function(r){ return r.ok?r.json():null; }).catch(function(){ return null; }); })).then(function(a){
+      SX.pn=[]; a.forEach(function(j){ if(!j) return; (j.notes||[]).forEach(function(n){ SX.pn.push({prog:j.name||j.program,build:n.build,date:n.date,title:n.title,text:(n.items||[]).join(' · '),key:j.program}); }); }); }); }
+  function open(){
+    var el=document.getElementById('srxBox');
+    if(!el){ el=document.createElement('div'); el.id='srxBox'; el.className='hn-bg srx'; document.body.appendChild(el);
+      el.innerHTML='<div class="hn-b"><div class="hn-h"><b>🔍 검색</b><button type="button" class="hn-x" aria-label="닫기">×</button></div><input type="search" autocomplete="off" placeholder="도구, 기능, 패치노트 검색"><div class="srs"></div></div>';
+      el.addEventListener('click',function(e){ if(e.target===el||e.target.closest('.hn-x')) close(); else if(e.target.closest('a.sr')) close(); });
+      var inp=el.querySelector('input'), qt=null;
+      inp.addEventListener('input',function(){ clearTimeout(qt); qt=setTimeout(function(){ run(inp.value); },180); });
+      inp.addEventListener('keydown',function(e){ var rs=el.querySelectorAll('.sr'); if(!rs.length) return;
+        if(e.key==='ArrowDown'||e.key==='ArrowUp'){ e.preventDefault(); SX.sel=(SX.sel+(e.key==='ArrowDown'?1:-1)+rs.length)%rs.length; [].forEach.call(rs,function(r,i){ r.classList.toggle('sel',i===SX.sel); }); rs[SX.sel].scrollIntoView({block:'nearest'}); }
+        else if(e.key==='Enter'){ e.preventDefault(); rs[SX.sel<0?0:SX.sel].click(); } }); }
+    el.style.display='flex'; var i=el.querySelector('input'); i.focus(); i.select(); load().then(function(){ if(i.value) run(i.value); });
+  }
+  function close(){ var el=document.getElementById('srxBox'); if(el&&el.style.display!=='none'){ el.style.display='none'; var i=el.querySelector('input'); if(i) i.blur(); } }
+  function run(v){
+    var el=document.getElementById('srxBox'), R=el&&el.querySelector('.srs'); if(!R) return; var q=String(v||'').trim(); SX.sel=-1;
+    if(!q){ R.innerHTML=''; return; } var ql=q.toLowerCase(), h='';
+    var ts=tools().filter(function(t){ return (t.name+' '+t.text).toLowerCase().indexOf(ql)>=0; });
+    if(ts.length) h+='<div class="sg"><h4>도구</h4>'+ts.map(function(t){ return '<a class="sr" href="'+esc(t.href)+'"><b>'+smark(t.name,q)+'</b><small>'+ssnip(t.text,q)+'</small></a>'; }).join('')+'</div>';
+    var fs=feats().filter(function(f){ return (f.name+' '+f.text).toLowerCase().indexOf(ql)>=0; });
+    if(fs.length) h+='<div class="sg"><h4>기능</h4>'+fs.map(function(f){ return '<a class="sr" href="#tools"><b>'+smark(f.name,q)+'</b><small>'+ssnip(f.text,q)+'</small></a>'; }).join('')+'</div>';
+    var ps=(SX.pn||[]).map(function(p){ var sc=0; if(p.title.toLowerCase().indexOf(ql)>=0) sc+=10; if(p.text.toLowerCase().indexOf(ql)>=0) sc+=2; return {p:p,sc:sc}; }).filter(function(x){ return x.sc; }).sort(function(a,b){ return b.sc-a.sc||(a.p.date<b.p.date?1:-1); }).slice(0,8);
+    if(ps.length) h+='<div class="sg"><h4>패치노트</h4>'+ps.map(function(x){ var p=x.p; return '<a class="sr" href="patchnotes/#'+esc(p.key)+'"><span class="gt">'+esc(p.prog)+' '+esc(p.build)+'</span><b>'+smark(p.title,q)+'</b><small>'+ssnip(p.text,q)+'</small></a>'; }).join('')+'</div>';
+    R.innerHTML=h||'<div class="se">검색 결과가 없어요.</div>';
+  }
+  var b=document.getElementById('srxBtn'); if(b) b.onclick=open;
+  document.addEventListener('keydown',function(e){ var t=e.target, typing=t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable);
+    if((e.key==='k'||e.key==='K')&&(e.ctrlKey||e.metaKey)){ e.preventDefault(); open(); }
+    else if(e.key==='/'&&!typing){ e.preventDefault(); open(); }
+    else if(e.key==='Escape') close(); });
+})();
 </script>
 <script src="https://frenchfries777mc.github.io/games/ff-splash.js" defer></script>
 </body>
