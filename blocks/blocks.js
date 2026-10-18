@@ -603,6 +603,43 @@ function src(fn,rep){
   t=lines.map(function(l){ return l.slice(ind); }).join('\n');
   if(rep) Object.keys(rep).forEach(function(k){ t=t.split('@@'+k+'@@').join(String(rep[k]).replace(/\\/g,'\\\\').replace(/'/g,"\\'")); });
   return t; }
+HELP.lang=src(function(){
+  function __lang() {
+    return (navigator.language || '').split('-')[0].toLowerCase();
+  }
+});
+HELP.mlang=src(function(){
+  function __mlang(map) {
+    var l = __lang(), order = ['ko', 'en', 'ja', 'es', 'fr', 'de'];
+    if (map[l]) return map[l];
+    if (map.ko) return map.ko;
+    for (var i = 0; i < order.length; i++) if (map[order[i]]) return map[order[i]];
+    return '';
+  }
+});
+HELP.typing=src(function(){
+  function __type(name, text, sec) {
+    var e = $(name), chars = Array.from(text == null ? '' : String(text));
+    var tok = e.__ty = (e.__ty || 0) + 1;
+    var input = e.tagName === 'INPUT';
+    function put(s) { if (input) e.value = s; else if (e.tagName !== 'IMG' && e.tagName !== 'CANVAS') e.textContent = s; }
+    put('');
+    sec = parseFloat(sec);
+    if (isNaN(sec) || sec < 0) sec = 0;
+    return new Promise(function (done) {
+      var i = 0;
+      function step() {
+        if (e.__ty !== tok) return done();
+        if (i >= chars.length) return done();
+        i = sec > 0 ? i + 1 : chars.length;
+        put(chars.slice(0, i).join(''));
+        if (i >= chars.length) return done();
+        setTimeout(step, sec * 1000);
+      }
+      step();
+    });
+  }
+});
 HELP.say=src(function(){
   var __bubs = [];
   function __say(name, text, sec, think) {
@@ -940,7 +977,7 @@ HELP.store=src(function(){
     return k in __mem ? __mem[k] : d;
   }
 });
-var HELP_DEPS={path:['$','move'],scene:['$'],beep:['snd'],sfx:['snd'],note:['snd'],hit:['$'],touch:['$','clones'],hitev:['$','touch'],rpos:['$'],nudge:['$'],where:['$'],stay:['$'],follow:['$','cursor'],image:['$','draw'],say:['$'],get:['$'],set:['$'],add:['$'],size:['$'],move:['$'],glide:['$','move'],turn:['$'],watch:['$'],phys:['$'],drag:['$'],volume:['snd'],mp3:['snd'],flip:['$'],autoturn:['$','turn'],fx:['$'],tween:['$','size'],lookat:['$','clones'],show:['$'],draw:['$'],clones:['$','me','sched','nudge'],sched:['me'],tile:['$','nudge'],best:['store']};
+var HELP_DEPS={mlang:['lang'],typing:['$'],path:['$','move'],scene:['$'],beep:['snd'],sfx:['snd'],note:['snd'],hit:['$'],touch:['$','clones'],hitev:['$','touch'],rpos:['$'],nudge:['$'],where:['$'],stay:['$'],follow:['$','cursor'],image:['$','draw'],say:['$'],get:['$'],set:['$'],add:['$'],size:['$'],move:['$'],glide:['$','move'],turn:['$'],watch:['$'],phys:['$'],drag:['$'],volume:['snd'],mp3:['snd'],flip:['$'],autoturn:['$','turn'],fx:['$'],tween:['$','size'],lookat:['$','clones'],show:['$'],draw:['$'],clones:['$','me','sched','nudge'],sched:['me'],tile:['$','nudge'],best:['store']};
 
 function dbgHelper(vars){
   return 'var __dq = Promise.resolve(), __dgo = null, __dfree = 0, __drun = 0, __dbusy = {};\n'+
@@ -993,7 +1030,7 @@ function build(ws,opts){
     body+=bodyHTML(b,'  ',true);
   });
   // JavaScript
-  WAITS=ws.getAllBlocks(false).some(function(x){ return (x.type==='act_wait'||x.type==='act_glideto'||x.type==='act_glidexy'||x.type==='act_tween'||x.type==='act_path_go')&&x.isEnabled(); });
+  WAITS=ws.getAllBlocks(false).some(function(x){ return (x.type==='act_wait'||x.type==='act_glideto'||x.type==='act_glidexy'||x.type==='act_tween'||x.type==='act_path_go'||x.type==='act_type')&&x.isEnabled(); });
   NEED={}; USED={}; USEDS={}; G.INFINITE_LOOP_TRAP=opts.trap?'if (--window.__loop < 0) throw new Error("'+T('반복이 끝나지 않아요')+'");\n':null;
   DBG=!!opts.debug; dbgSeq=0; GLW=!!opts.glow&&!DBG; G.STATEMENT_PREFIX=DBG?'await __step(%1);\n':GLW?'__glow(%1);\n':null;
   var js, dbgVars=[];
@@ -1067,6 +1104,15 @@ def('val_myvideo',function(){ this.appendDummyInput().appendField(T('내 영상 
   function(b){ var n=b.getFieldValue('SND'); if(!isVid(n)) return ["''",O.ATOMIC]; USEDS[n]=1; need('mp3'); return ['__mp3s['+lit(n)+']',O.MEMBER]; });
 def('act_video',function(){ this.appendDummyInput().appendField(T('영상')); this.appendValueInput('SRC').setCheck('String'); this.appendDummyInput().appendField(T('을(를) x')); this.appendValueInput('X').setCheck('Number'); this.appendDummyInput().appendField('y'); this.appendValueInput('Y').setCheck('Number'); this.appendDummyInput().appendField(T('너비')); this.appendValueInput('W').setCheck('Number'); this.appendDummyInput().appendField(T('로 보이기')); this.setInputsInline(true); act(this,'영상 주소(https://…)나 내 영상 파일을 페이지에 보여요. 페이지에는 영상이 하나만 있고, 다시 쓰면 영상이 바뀌어요. 아직 재생은 안 해요'); },
   function(b){ need('video'); return '__video('+(G.valueToCode(b,'SRC',O.COMMA)||"''")+', '+(G.valueToCode(b,'X',O.COMMA)||'0')+', '+(G.valueToCode(b,'Y',O.COMMA)||'0')+', '+(G.valueToCode(b,'W',O.COMMA)||'320')+');\n'; });
+def('val_mlang',function(){ var L=[['ko','한국어'],['en','영어'],['ja','일본어'],['es','스페인어'],['fr','프랑스어'],['de','독일어']];
+    this.appendDummyInput().appendField(T('여러 나라 말 글자'));
+    L.forEach(function(x){ this.appendDummyInput().setAlign(Blockly.inputs.Align.RIGHT).appendField(T(x[1])).appendField(new Blockly.FieldTextInput(x[0]==='ko'?T('안녕하세요'):x[0]==='en'?'Hello':''),'L_'+x[0]); },this);
+    val(this,'String','같은 글자를 여러 나라 말로 적어 두면 페이지를 보는 사람의 언어에 맞는 글자가 나와요. 그 언어 칸이 비어 있으면 한국어 글자가 나와요. 글자가 들어가는 곳에 끼워 써요'); },
+  function(b){ need('mlang'); var parts=[]; ['ko','en','ja','es','fr','de'].forEach(function(k){ var v=b.getFieldValue('L_'+k); if(v) parts.push(k+': '+lit(v)); }); return ['__mlang({ '+parts.join(', ')+' })',O.FUNCTION_CALL]; });
+def('val_curlang',function(){ this.appendDummyInput().appendField(T('사용자의 언어')); val(this,'String','페이지를 보는 사람의 브라우저 언어 글자예요. 한국어는 ko, 영어는 en, 일본어는 ja예요'); },
+  function(b){ need('lang'); return ['__lang()',O.FUNCTION_CALL]; });
+def('act_type',function(){ this.appendDummyInput().appendField(T('타자 치듯')); this.appendValueInput('TEXT').setCheck('String'); this.appendDummyInput().appendField(T('을(를)')).appendField(elField(),'EL').appendField(T('에 한 글자씩')); this.appendValueInput('SEC').setCheck('Number'); this.appendDummyInput().appendField(T('초마다 쓰기')); this.setInputsInline(true); act(this,'글자를 한 글자씩 차례로 나타내요. 다 쓸 때까지 기다렸다가 다음 블록으로 가요. 같은 요소에 새로 쓰면 먼저 쓰던 것은 멈춰요'); },
+  function(b){ need('typing'); return 'await __type('+er(b)+', '+(G.valueToCode(b,'TEXT',O.COMMA)||"''")+', '+(G.valueToCode(b,'SEC',O.COMMA)||'0.05')+');\n'; });
 def('act_video_ctl',function(){ this.appendDummyInput().appendField(T('영상')).appendField(new Blockly.FieldDropdown(function(){ return [[T('재생하기'),'play'],[T('잠깐 멈추기'),'pause'],[T('멈추고 처음으로'),'stop'],[T('지우기'),'remove']]; }),'ACT'); act(this,'영상을 재생하거나 멈춰요. 폰에서는 버튼을 누른 뒤에만 소리와 함께 재생될 수 있어요'); },
   function(b){ need('video'); return '__videoDo('+lit(b.getFieldValue('ACT'))+');\n'; });
 def('act_video_vol',function(){ this.appendDummyInput().appendField(T('영상 소리 크기를')); this.appendValueInput('N').setCheck('Number'); this.appendDummyInput().appendField(T('%로 정하기')); this.setInputsInline(true); act(this,'영상 소리를 0~100 사이로 정해요'); },
@@ -1313,7 +1359,7 @@ function toolbox(){
       lab('묶고 띄우기'),bk('el_box'),bk('el_space'),bk('el_html')])),
     cat('look','모양·바꾸기',[
       lab('말풍선'),bk('act_say',{inputs:{VALUE:sh('text',T('안녕!'))}}),bk('act_sayfor',{inputs:{VALUE:sh('text',T('안녕!')),SEC:n(2)}}),bk('act_say',{fields:{KIND:'think'},inputs:{VALUE:sh('text',T('음…'))}}),
-      lab('내용 바꾸기'),bk('act_set',{inputs:{VALUE:sh('text',T('안녕!'))}}),bk('act_append',{inputs:{VALUE:sh('text',T('항목'))}}),bk('act_clear'),
+      lab('내용 바꾸기'),bk('act_set',{inputs:{VALUE:sh('text',T('안녕!'))}}),bk('act_type',{inputs:{TEXT:sh('text',T('안녕하세요!')),SEC:n(0.1)}}),bk('act_append',{inputs:{VALUE:sh('text',T('항목'))}}),bk('act_clear'),
       lab('색과 크기'),bk('act_style',{inputs:{VALUE:shc('#ef4444')}}),bk('act_size',{inputs:{N:n(32)}}),bk('act_hide'),bk('act_unhide'),bk('act_show'),
       lab('돌리기와 뒤집기'),bk('act_turn',{inputs:{N:n(90)}}),bk('act_flip'),bk('act_autoturn'),
       lab('효과'),bk('act_shake',{inputs:{SEC:n(0.4)}}),bk('act_flash'),
@@ -1369,7 +1415,7 @@ function toolbox(){
     {kind:'sep'},
     cat('logic','조건',[
       bk('controls_if'),bk('controls_if',{extraState:{hasElse:true}}),
-      lab('비교'),bk('logic_compare'),bk('logic_operation'),bk('val_keyheld'),bk('val_lang'),bk('val_device'),bk('logic_negate'),bk('logic_between',{inputs:{LO:n(1),HI:n(10)}}),
+      lab('비교'),bk('logic_compare'),bk('logic_operation'),bk('val_keyheld'),bk('val_lang'),bk('val_curlang'),bk('val_device'),bk('logic_negate'),bk('logic_between',{inputs:{LO:n(1),HI:n(10)}}),
       lab('논리 게이트'),bk('logic_gate',{fields:{GATE:'AND'}}),bk('logic_gate',{fields:{GATE:'OR'}}),bk('logic_gate',{fields:{GATE:'XOR'}}),bk('logic_gate',{fields:{GATE:'NOR'}}),bk('logic_gate',{fields:{GATE:'NAND'}}),
       lab('기본'),bk('logic_boolean'),bk('logic_ternary')]),
     cat('loop','반복',[
@@ -1381,7 +1427,7 @@ function toolbox(){
       bk('math_modulo',{inputs:{DIVIDEND:n(10),DIVISOR:n(3)}}),bk('math_single',{inputs:{NUM:n(9)}}),
       bk('math_number_property',{inputs:{NUMBER_TO_CHECK:n(0)}}),bk('math_constrain',{inputs:{VALUE:n(50),LOW:n(0),HIGH:n(100)}}),
       bk('math_random_float'),bk('val_dist',{inputs:{X1:n(0),Y1:n(0),X2:n(30),Y2:n(40)}}),
-      lab('글자'),bk('text'),bk('text_join'),bk('text_length',{inputs:{VALUE:sh('text','abc')}}),
+      lab('글자'),bk('text'),bk('val_mlang'),bk('text_join'),bk('text_length',{inputs:{VALUE:sh('text','abc')}}),
       bk('text_isEmpty',{inputs:{VALUE:sh('text','')}}),bk('text_indexOf',{inputs:{FIND:sh('text','a')}}),
       bk('text_charAt'),bk('text_changeCase',{inputs:{TEXT:sh('text','abc')}}),bk('text_trim',{inputs:{TEXT:sh('text',' abc ')}}),
       lab('리스트'),bk('lists_create_with',{extraState:{itemCount:0}}),bk('lists_create_with'),
