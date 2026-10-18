@@ -561,10 +561,10 @@ def run_html(html, checks, runner=None, timeout=40):
 
 # ---------------------------------------------------------------- grading
 UNKNOWN = re.compile("|".join([
-    r"모르겠", r"모릅", r"몰라", r"잘 모르", r"모르는 (말|단어|표현|이름|낱말|용어)", r"처음 듣", r"처음 들어", r"처음 보", r"들어 ?본 적(이)? ?없", r"알 수 ?없", r"알 수가 없", r"확인할 수 ?없", r"확인이 어렵",
+    r"모르겠", r"모릅", r"몰라", r"잘 모르", r"모르는 (말|단어|표현|이름|낱말|용어)", r"처음 듣", r"처음 들어", r"처음 (보|봐|봤|봅|봄)", r"모르는 (부분|내용)(이|은|입)", r"들어 ?본 적(이)? ?없", r"알 수 ?없", r"알 수가 없", r"확인할 수 ?없", r"확인이 어렵",
     r"찾을 수 ?없", r"정보가 없", r"정보를 찾", r"없는 (단어|말|표현)", r"(무슨|어떤) (뜻|의미|말)인지", r"무엇을 (말|뜻|의미)하는지",
     r"뭘 (말|뜻)하는지", r"뭔지 (잘|모르)", r"확실하지 않", r"명확하지 않", r"정확히 알지 못", r"익숙하지 않",
-    r"not sure", r"don'?t know", r"do not know", r"unfamiliar", r"no information", r"not familiar",
+    r"not sure", r"don'?t know", r"do not know", r"unfamiliar", r"no information", r"not familiar", r"(don'?t|do not) have (any )?(specific )?information",
 ]), re.I)
 
 
