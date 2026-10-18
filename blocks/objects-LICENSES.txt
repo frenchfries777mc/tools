@@ -1,8 +1,9 @@
 Block HTML object library ("Objects" picker) - sources and licenses
 ===================================================================
 
-The pictures in objects-lib.js come from two sources. Each item in that file
-names its source ("own" or "fluent").
+The pictures in objects/*.js come from two sources: objects/index.js lists every
+object with its source ("own" or "fluent") and names, and objects/<tab>.js holds
+the pictures of one tab.
 
 1. "own" - original illustrations
 ---------------------------------
@@ -15,7 +16,8 @@ Source: Microsoft Fluent UI Emoji, https://github.com/microsoft/fluentui-emoji
 Taken from the npm package @iconify-json/fluent-emoji-flat version 1.2.6
 (package.json "license": "MIT"; info.json: author Microsoft Corporation,
 license MIT, https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE).
-A selection of 152 icons is included unchanged, each wrapped in an <svg> tag.
+A selection of 474 icons is included unchanged, each wrapped in an <svg> tag
+(no flags, no skin-tone variants).
 
 MIT License
 
