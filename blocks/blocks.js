@@ -54,7 +54,7 @@ if(KO) (function(m){ for(var k in m) Blockly.Msg[k]=m[k]; })({
   LISTS_SET_INDEX_SET:'에서 바꾸기', LISTS_SET_INDEX_INSERT:'에 끼워 넣기', LISTS_SET_INDEX_INPUT_TO:'값',
   LISTS_SORT_TITLE:'%3 을(를) %1 %2 (으)로 정렬하기', LISTS_SORT_ORDER_ASCENDING:'작은 순서', LISTS_SORT_ORDER_DESCENDING:'큰 순서', LISTS_SORT_TYPE_NUMERIC:'숫자', LISTS_SORT_TYPE_TEXT:'글자', LISTS_SORT_TYPE_IGNORECASE:'글자 (대소문자 상관없이)'
 });
-var EL=['el_heading','el_text','el_button','el_input','el_picture','el_image','el_link','el_box','el_canvas','el_list'];
+var EL=['el_heading','el_text','el_button','el_input','el_picture','el_image','el_link','el_box','el_canvas','el_list','el_slider','el_switch','el_select','el_progress','el_table'];
 var COLORS=[['빨강','#ef4444'],['주황','#f97316'],['노랑','#facc15'],['초록','#22c55e'],['하늘','#38bdf8'],['파랑','#3b82f6'],['보라','#a855f7'],['분홍','#ec4899'],['갈색','#92400e'],['검정','#111111'],['회색','#9ca3af'],['흰색','#ffffff'],['감자튀김','#ffc93c']];
 function colorOpts(none){ var o=COLORS.map(function(c){ return [T(c[0]),c[1]]; }); if(none) o.unshift([T('없음'),'']); return o; }
 var NOTES=[['도','261.63'],['레','293.66'],['미','329.63'],['파','349.23'],['솔','392.00'],['라','440.00'],['시','493.88'],['높은 도','523.25']];
@@ -556,8 +556,8 @@ def('js_has',function(){ this.appendValueInput('LIST'); this.appendDummyInput().
 /* ---------- helpers that go into the page, only the ones used ---------- */
 var HELP={
   '$':"function $(name) {\n  if (name && name.nodeType) return name;\n  var el = document.getElementById(name);\n  if (!el) throw new Error('\"' + name + '\" "+T('요소가 없어요').replace(/'/g,"\\'")+"');\n  return el;\n}",
-  get:"function __get(name) {\n  var el = $(name);\n  return el.tagName === 'INPUT' ? el.value : el.textContent;\n}\nfunction __num(x) {\n  var n = parseFloat(x);\n  return isNaN(n) ? 0 : n;\n}",
-  set:"function __set(name, value) {\n  var el = $(name);\n  if (el.tagName === 'INPUT') el.value = value;\n  else if (el.tagName === 'IMG') el.src = value;\n  else if (el.tagName === 'CANVAS') el.getContext('2d').clearRect(0, 0, el.width, el.height);\n  else el.textContent = value;\n}",
+  get:"function __get(name) {\n  var el = $(name);\n  return el.tagName === 'INPUT' || el.tagName === 'SELECT' ? el.value : el.textContent;\n}\nfunction __num(x) {\n  var n = parseFloat(x);\n  return isNaN(n) ? 0 : n;\n}",
+  set:"function __set(name, value) {\n  var el = $(name);\n  if (el.tagName === 'INPUT' || el.tagName === 'SELECT') el.value = value;\n  else if (el.tagName === 'IMG') el.src = value;\n  else if (el.tagName === 'CANVAS') el.getContext('2d').clearRect(0, 0, el.width, el.height);\n  else el.textContent = value;\n}",
   add:"function __add(name, value) {\n  var el = $(name);\n  if (el.tagName === 'UL') {\n    var li = document.createElement('li');\n    li.textContent = value;\n    el.appendChild(li);\n  } else if (el.tagName === 'INPUT') el.value += value;\n  else el.textContent += value;\n}",
   size:"function __size(name, prop, v) {\n  var e = $(name), s = e.style;\n  if (prop === 'opacity') s.opacity = v / 100;\n  else if (prop === 'rotate') { e.__rot = parseFloat(v) || 0; s.transform = 'rotate(' + e.__rot + 'deg)'; }\n  else s[prop] = v + 'px';\n}",
   move:"function __move(name, x, y) {\n  var s = $(name).style;\n  s.position = 'absolute';\n  s.left = x + 'px';\n  s.top = y + 'px';\n}",
@@ -1064,6 +1064,131 @@ HELP.store=src(function(){
 });
 var HELP_DEPS={mlang:['lang'],typing:['$'],path:['$','move'],scene:['$'],beep:['snd'],sfx:['snd'],note:['snd'],hit:['$'],touch:['$','clones'],hitev:['$','touch'],rpos:['$'],nudge:['$'],where:['$'],stay:['$'],follow:['$','cursor'],image:['$','draw'],say:['$'],get:['$'],set:['$'],add:['$'],size:['$'],move:['$'],glide:['$','move'],turn:['$'],watch:['$'],phys:['$'],drag:['$'],volume:['snd'],mp3:['snd'],flip:['$'],autoturn:['$','turn'],fx:['$'],tween:['$','size'],lookat:['$','clones'],show:['$'],draw:['$'],clones:['$','me','sched','nudge'],sched:['me'],tile:['$','nudge'],best:['store'],speak:['lang','ltag'],voice:['lang','ltag'],ltag:['lang']};
 
+/* ---------- v58: slider, switch, choice box, progress bar, table ----------
+   Page elements with their events, values and actions. The HTML of each one is made by ELH (used by bodyHTML), the CSS only goes into pages that use it. */
+var CHOICE_SPLIT=/[,，]/; // a comma-separated text ("사과, 배, 포도"); the full-width comma works too
+function choiceList(s){ return String(s==null?'':s).split(CHOICE_SPLIT).map(function(x){ return x.trim(); }).filter(function(x){ return x; }); }
+var ELH={
+  el_slider:function(b,i){ var lo=+b.getFieldValue('MIN'), hi=+b.getFieldValue('MAX'), v=+b.getFieldValue('VAL'); if(lo>hi){ var t=lo; lo=hi; hi=t; }
+    var dec=[lo,hi,v].some(function(x){ return x%1!==0; });
+    return i+'<input'+idAttr(b)+' type="range" min="'+lo+'" max="'+hi+'" value="'+Math.max(lo,Math.min(hi,v))+'"'+(dec?' step="any"':'')+'>\n'; },
+  el_switch:function(b,i){ return i+'<label class="switch"><input'+idAttr(b)+' type="checkbox"'+(b.getFieldValue('INIT')==='on'?' checked':'')+'><span class="track"></span><span>'+esc(b.getFieldValue('TEXT'))+'</span></label>\n'; },
+  el_select:function(b,i){ var o=choiceList(b.getFieldValue('CHOICES')).map(function(x){ return '<option>'+esc(x)+'</option>'; }).join('');
+    return i+'<select'+idAttr(b)+'>'+o+'</select>\n'; },
+  el_progress:function(b,i){ var v=Math.max(0,Math.min(100,+b.getFieldValue('VAL')||0));
+    return i+'<div'+idAttr(b)+' class="progress'+(b.getFieldValue('SMOOTH')==='TRUE'?' smooth':'')+'"><div class="fill" style="width:'+v+'%;background:'+b.getFieldValue('COLOR')+'"></div><span class="ptext">'+Math.round(v)+'%</span></div>\n'; },
+  el_table:function(b,i){ var R=Math.max(1,Math.min(20,+b.getFieldValue('ROWS')||1)), C=Math.max(1,Math.min(20,+b.getFieldValue('COLS')||1)), head=b.getFieldValue('HEAD')==='TRUE', out=i+'<table'+idAttr(b)+'>\n';
+    for(var r=0;r<R;r++){ var c=head&&r===0?'th':'td'; out+=i+'  <tr>'+('<'+c+'></'+c+'>').repeat(C)+'</tr>\n'; }
+    return out+i+'</table>\n'; }
+};
+function elCss(body,center){
+  var out=[];
+  if(body.indexOf('type="range"')>=0) out.push('input[type=range] { width: min(260px, 90%); padding: 0; border: 0; accent-color: #ffc93c; vertical-align: middle; }');
+  if(body.indexOf('class="switch"')>=0) out.push('.switch { display: inline-flex; align-items: center; gap: 10px; margin: 6px; cursor: pointer; }',
+    '.switch input { position: absolute; opacity: 0; width: 0; height: 0; margin: 0; padding: 0; border: 0; }',
+    '.switch .track { position: relative; width: 46px; height: 26px; border-radius: 13px; background: #d1d5db; transition: background .2s; flex: none; }',
+    '.switch .track::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .35); transition: transform .2s; }',
+    '.switch input:checked + .track { background: #ffc93c; }',
+    '.switch input:checked + .track::after { transform: translateX(20px); }',
+    '.switch input:focus-visible + .track { outline: 3px solid #38bdf8; outline-offset: 2px; }');
+  if(body.indexOf('<select')>=0) out.push('select { font: inherit; padding: 9px 12px; margin: 4px; border: 1px solid #9ca3af; border-radius: 9px; background: #ffffff; color: #1f2937; }');
+  if(body.indexOf('class="progress')>=0) out.push('.progress { position: relative; width: min(320px, 90%); height: 28px; margin: '+(center?'8px auto':'8px 0')+'; border-radius: 14px; background: #e5e7eb; overflow: hidden; display: block; }',
+    '.progress .fill { height: 100%; width: 0; }',
+    '.progress.smooth .fill { transition: width .4s ease; }',
+    '.progress .ptext { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; color: #1f2937; text-shadow: 0 0 3px #fff, 0 0 3px #fff; }');
+  if(body.indexOf('<table')>=0) out.push('table { border-collapse: collapse; margin: '+(center?'8px auto':'8px 0')+'; }',
+    'td, th { border: 1px solid #d1d5db; padding: 8px 14px; min-width: 40px; height: 1.5em; }',
+    'th { background: rgba(128, 128, 128, .18); font-weight: 700; }');
+  return out.length?'\n    '+out.join('\n    '):'';
+}
+Object.assign(HELP,{
+  choices:src(function(){
+    function __choices(name, items) {
+      var el = $(name), old = el.value;
+      if (!Array.isArray(items)) items = String(items == null ? '' : items).split(/[,，]/);
+      el.textContent = '';
+      items.forEach(function (x) {
+        x = String(x).trim();
+        if (!x) return;
+        var o = document.createElement('option');
+        o.textContent = x;
+        el.appendChild(o);
+      });
+      for (var i = 0; i < el.options.length; i++) if (el.options[i].value === old) el.selectedIndex = i;
+    }
+  }),
+  progress:src(function(){
+    function __progress(name, v) {
+      var el = $(name), n = parseFloat(v);
+      if (isNaN(n)) n = 0;
+      n = Math.max(0, Math.min(100, n));
+      el.querySelector('.fill').style.width = n + '%';
+      el.querySelector('.ptext').textContent = Math.round(n) + '%';
+    }
+  }),
+  table:src(function(){
+    function __tcell(name, r, c) {
+      var row = $(name).rows[Math.floor(parseFloat(r)) - 1];
+      return row ? row.cells[Math.floor(parseFloat(c)) - 1] || null : null;
+    }
+    function __tset(name, r, c, v) {
+      var td = __tcell(name, r, c);
+      if (td) td.textContent = v;
+    }
+    function __tget(name, r, c) {
+      var td = __tcell(name, r, c);
+      return td ? td.textContent : '';
+    }
+    function __tadd(name, cells) {
+      var t = $(name), n = t.rows[0].cells.length, row = t.insertRow(-1);
+      if (!Array.isArray(cells)) cells = String(cells == null ? '' : cells).split(/[,，]/);
+      for (var i = 0; i < n; i++) row.insertCell(-1).textContent = i < cells.length ? String(cells[i]).trim() : '';
+    }
+  })
+});
+Object.assign(HELP_DEPS,{choices:['$'],progress:['$'],table:['$']});
+var SLIDER_TIP='움직여서 숫자를 고르는 막대';
+elBlock('el_slider',function(){ this.appendDummyInput().appendField(T('슬라이더 넣기')).appendField(T('· 최소')).appendField(new Blockly.FieldNumber(0),'MIN').appendField(T('최대')).appendField(new Blockly.FieldNumber(100),'MAX')
+  .appendField(T('처음 값')).appendField(new Blockly.FieldNumber(50),'VAL').appendField(T('· 이름')).appendField(new Blockly.FieldTextInput(T('슬라이더')+'1'),'NAME'); },SLIDER_TIP);
+elBlock('el_switch',function(){ this.appendDummyInput().appendField(T('스위치 넣기')).appendField(T('· 글')).appendField(new Blockly.FieldTextInput(T('소리 켜기')),'TEXT')
+  .appendField(T('처음엔')).appendField(new Blockly.FieldDropdown(function(){ return [[T('꺼짐'),'off'],[T('켜짐'),'on']]; }),'INIT').appendField(T('· 이름')).appendField(new Blockly.FieldTextInput(T('스위치')+'1'),'NAME'); },'켜고 끄는 스위치');
+elBlock('el_select',function(){ this.appendDummyInput().appendField(T('고르기 상자 넣기')).appendField(T('· 고를 것 (쉼표로 나눠요)')).appendField(new Blockly.FieldTextInput(T('사과, 배, 포도')),'CHOICES')
+  .appendField(T('· 이름')).appendField(new Blockly.FieldTextInput(T('고르기')+'1'),'NAME'); },'목록에서 하나를 고르는 상자');
+elBlock('el_progress',function(){ this.appendDummyInput().appendField(T('진행 막대 넣기')).appendField(T('· 처음')).appendField(new Blockly.FieldNumber(0,0,100),'VAL').appendField('%')
+  .appendField(T('· 색')).appendField(new Blockly.FieldDropdown(function(){ return colorOpts(false); }),'COLOR').appendField(T('부드럽게')).appendField(new Blockly.FieldCheckbox('TRUE'),'SMOOTH')
+  .appendField(T('· 이름')).appendField(new Blockly.FieldTextInput(T('막대')+'1'),'NAME'); this.setFieldValue('#ffc93c','COLOR'); },'0~100%를 채워 보여 주는 막대');
+elBlock('el_table',function(){ this.appendDummyInput().appendField(T('표 넣기')).appendField(T('· 줄')).appendField(new Blockly.FieldNumber(3,1,20,1),'ROWS').appendField(T('칸')).appendField(new Blockly.FieldNumber(3,1,20,1),'COLS')
+  .appendField(T('첫 줄은 제목')).appendField(new Blockly.FieldCheckbox('TRUE'),'HEAD').appendField(T('· 이름')).appendField(new Blockly.FieldTextInput(T('표')+'1'),'NAME'); },'줄과 칸이 있는 표. 칸 글은 블록으로 채워요');
+['el_slider','el_switch','el_select','el_progress','el_table'].forEach(function(t){ G.forBlock[t]=function(){ return ''; }; });
+
+def('ev_slider',function(){ this.appendDummyInput().appendField(elField(['el_slider']),'EL').appendField(T('의 값이 바뀌면')); hat(this,'슬라이더를 움직이는 동안 계속 해요'); },
+  function(b){ need('$'); return '$('+lit(b.getFieldValue('EL'))+').addEventListener(\'input\', '+AF()+') {\n'+hatBody(b)+'});\n'; });
+def('val_slider',function(){ this.appendDummyInput().appendField(elField(['el_slider']),'EL').appendField(T('의 값')); val(this,'Number','슬라이더가 가리키는 숫자예요'); },
+  function(b){ need('get'); return ['__num(__get('+er(b)+'))',O.FUNCTION_CALL]; });
+def('act_slider_set',function(){ this.appendValueInput('N').setCheck('Number').appendField(elField(['el_slider']),'EL').appendField(T('의 값을')); this.appendDummyInput().appendField(T('(으)로 하기')); this.setInputsInline(true); act(this,'슬라이더를 그 숫자 자리로 옮겨요. "값이 바뀌면"은 실행되지 않아요'); },
+  function(b){ need('set'); return '__set('+er(b)+', '+(G.valueToCode(b,'N',O.COMMA)||'0')+');\n'; });
+def('ev_switch',function(){ this.appendDummyInput().appendField(elField(['el_switch']),'EL').appendField(T('이(가) 바뀌면')); hat(this,'스위치를 켜거나 끌 때마다 해요'); },
+  function(b){ need('$'); return '$('+lit(b.getFieldValue('EL'))+').addEventListener(\'change\', '+AF()+') {\n'+hatBody(b)+'});\n'; });
+def('val_switch',function(){ this.appendDummyInput().appendField(elField(['el_switch']),'EL').appendField(T('이(가) 켜져 있나요?')); val(this,'Boolean','켜져 있으면 참, 꺼져 있으면 거짓이에요'); },
+  function(b){ need('$'); return ['$('+er(b)+').checked',O.MEMBER]; });
+def('act_switch_set',function(){ this.appendDummyInput().appendField(elField(['el_switch']),'EL').appendField(T('을(를)')).appendField(new Blockly.FieldDropdown(function(){ return [[T('켜기'),'on'],[T('끄기'),'off'],[T('반대로 바꾸기'),'flip']]; }),'MODE'); act(this,'스위치를 켜거나 꺼요. "바뀌면"은 실행되지 않아요'); },
+  function(b){ need('$'); var m=b.getFieldValue('MODE'); return '$('+er(b)+').checked = '+(m==='flip'?'!$('+er(b)+').checked':String(m==='on'))+';\n'; });
+def('ev_select',function(){ this.appendDummyInput().appendField(elField(['el_select']),'EL').appendField(T('에서 고르면')); hat(this,'상자에서 다른 것을 고를 때마다 해요'); },
+  function(b){ need('$'); return '$('+lit(b.getFieldValue('EL'))+').addEventListener(\'change\', '+AF()+') {\n'+hatBody(b)+'});\n'; });
+def('val_select',function(){ this.appendDummyInput().appendField(elField(['el_select']),'EL').appendField(T('에서 고른 것')); val(this,'String','지금 고른 글자예요'); },
+  function(b){ need('get'); return ['__get('+er(b)+')',O.FUNCTION_CALL]; });
+def('act_select_set',function(){ this.appendValueInput('V').appendField(elField(['el_select']),'EL').appendField(T('의 고를 것을')); this.appendDummyInput().appendField(T('(으)로 바꾸기')); this.setInputsInline(true); act(this,'리스트나 쉼표로 나눈 글(사과, 배)로 고를 것을 새로 정해요'); },
+  function(b){ need('choices'); return '__choices('+er(b)+', '+(G.valueToCode(b,'V',O.COMMA)||"''")+');\n'; });
+def('act_progress',function(){ this.appendValueInput('N').setCheck('Number').appendField(elField(['el_progress']),'EL').appendField(T('을(를)')); this.appendDummyInput().appendField(T('%로 하기')); this.setInputsInline(true); act(this,'진행 막대를 0~100% 사이로 채워요. 넘으면 0이나 100으로 맞춰요'); },
+  function(b){ need('progress'); return '__progress('+er(b)+', '+(G.valueToCode(b,'N',O.COMMA)||'0')+');\n'; });
+def('act_table_set',function(){ this.appendValueInput('R').setCheck('Number').appendField(elField(['el_table']),'EL').appendField(T('의')); this.appendValueInput('C').setCheck('Number').appendField(T('줄')); this.appendValueInput('V').appendField(T('칸을')); this.appendDummyInput().appendField(T('(으)로 하기'));
+  this.setInputsInline(true); act(this,'표의 한 칸에 글을 써요. 1부터 세고, 표 밖이면 아무 일도 안 해요'); },
+  function(b){ need('table'); return '__tset('+[er(b),G.valueToCode(b,'R',O.COMMA)||'1',G.valueToCode(b,'C',O.COMMA)||'1',G.valueToCode(b,'V',O.COMMA)||"''"].join(', ')+');\n'; });
+def('val_table_get',function(){ this.appendValueInput('R').setCheck('Number').appendField(elField(['el_table']),'EL').appendField(T('의')); this.appendValueInput('C').setCheck('Number').appendField(T('줄')); this.appendDummyInput().appendField(T('칸의 글')); this.setInputsInline(true); val(this,'String','표의 한 칸에 쓰인 글이에요. 1부터 세고, 표 밖이면 빈 글자예요'); },
+  function(b){ need('table'); return ['__tget('+[er(b),G.valueToCode(b,'R',O.COMMA)||'1',G.valueToCode(b,'C',O.COMMA)||'1'].join(', ')+')',O.FUNCTION_CALL]; });
+def('act_table_add_row',function(){ this.appendDummyInput().appendField(elField(['el_table']),'EL').appendField(T('에 줄 더하기')); this.appendValueInput('V'); this.setInputsInline(true); act(this,'맨 아래에 새 줄을 더해요. 칸 글은 리스트나 쉼표로 나눈 글(철수, 90, 80)로 줘요'); },
+  function(b){ need('table'); return '__tadd('+er(b)+', '+(G.valueToCode(b,'V',O.COMMA)||"''")+');\n'; });
+
 function dbgHelper(vars){
   return 'var __dq = Promise.resolve(), __dgo = null, __dfree = 0, __drun = 0, __dbusy = {};\n'+
   'function __dvars() {\n  var o = [];\n'+vars.map(function(v){ return '  try { o.push([ '+lit(v[0])+', typeof '+v[1]+" === 'undefined' ? '' : __dshow("+v[1]+') ]); } catch (e) {}\n'; }).join('')+'  return o;\n}\n'+
@@ -1098,6 +1223,7 @@ function bodyHTML(first,ind,one){
     else if(t==='el_list') out+=i+'<ul'+idAttr(b)+'></ul>\n';
     else if(t==='el_space') out+=i+'<div class="space"></div>\n';
     else if(t==='el_html') out+=i+b.getFieldValue('CODE')+'\n';
+    else if(ELH[t]) out+=ELH[t](b,i);
     else if(t==='el_box'){ var bg=b.getFieldValue('BG'); out+=i+'<div'+idAttr(b)+' class="box'+(b.getFieldValue('DIR')==='row'?' row':'')+'"'+(bg?' style="background:'+bg+'"':'')+'>\n'+bodyHTML(b.getInputTargetBlock('BODY'),ind+'  ')+i+'</div>\n'; }
   }
   return out;
@@ -1159,7 +1285,7 @@ function build(ws,opts){
     '.box { display: flex; flex-direction: column; gap: 8px; padding: 12px; margin: 8px 0; border-radius: 12px;'+(center?' align-items: center;':'')+' }',
     '.box.row { flex-direction: row; flex-wrap: wrap; align-items: center;'+(center?' justify-content: center;':'')+' }',
     '.space { height: 24px; }'
-  ].join('\n    ');
+  ].join('\n    ')+elCss(body,center);
   var logPre='<script>(function(){function s(l,a){var t=[].map.call(a,function(x){try{return typeof x===\'object\'?JSON.stringify(x):String(x);}catch(e){return String(x);}}).join(\' \');try{parent.postMessage({ffbhLog:[l,t]},\'*\');}catch(e){}}[\'log\',\'info\',\'warn\',\'error\'].forEach(function(k){var o=console[k];console[k]=function(){s(k,arguments);if(o)o.apply(console,arguments);};});var oe=window.onerror;window.onerror=function(m){s(\'error\',[m]);return oe?oe.apply(this,arguments):false;};addEventListener(\'unhandledrejection\',function(e){s(\'error\',[e.reason&&e.reason.message||e.reason]);});})();<\/script>\n';
   var pre=opts.trap?'<script>window.__loop=1e6;setInterval(function(){window.__loop=1e6;},200);(function(){var P=0,Q=[],sT=setTimeout,sI=setInterval,rA=window.requestAnimationFrame&&window.requestAnimationFrame.bind(window),st=null,AX=[],AC=window.AudioContext||window.webkitAudioContext;if(AC)window.AudioContext=window.webkitAudioContext=function(){var c=new AC();AX.push(c);return c;};window.setTimeout=function(f,ms){var a=[].slice.call(arguments,2);if(typeof f!==\'function\')return sT(f,ms);return sT(function(){if(P)Q.push(function(){f.apply(window,a);});else f.apply(window,a);},ms);};window.setInterval=function(f,ms){var a=[].slice.call(arguments,2);if(typeof f!==\'function\')return sI(f,ms);return sI(function(){if(!P)f.apply(window,a);},ms);};if(rA)window.requestAnimationFrame=function(f){return rA(function(t){if(P)Q.push(function(){rA(f);});else f(t);});};addEventListener(\'message\',function(e){var d=e.data;if(!d||d.ffbh===undefined)return;if(d.ffbh===\'pause\'&&!P){P=1;AX.forEach(function(c){try{c.suspend();}catch(e){}});st=document.createElement(\'style\');st.textContent=\'*,*::before,*::after{animation-play-state:paused!important;transition:none!important}\';document.head.appendChild(st);document.querySelectorAll(\'audio,video\').forEach(function(m){if(!m.paused){m.pause();m.__ffp=1;}});}else if(d.ffbh===\'resume\'&&P){P=0;AX.forEach(function(c){try{c.resume();}catch(e){}});if(st)st.remove();var q=Q;Q=[];q.forEach(function(f){f();});document.querySelectorAll(\'audio,video\').forEach(function(m){if(m.__ffp){m.__ffp=0;m.play();}});}});})();window.onerror=function(m){var d=document.getElementById("__err")||document.body.appendChild(Object.assign(document.createElement("div"),{id:"__err"}));d.style.cssText="position:fixed;left:8px;right:8px;bottom:8px;padding:10px 14px;border-radius:10px;background:#7f1d1d;color:#fff;font:14px sans-serif;text-align:left;z-index:99999";d.textContent="⚠ "+m;};<\/script>\n':'';
   if(opts.glow&&!opts.debug) pre+=GLOW_JS; if(opts.link) pre+=LINK_JS;
@@ -1449,11 +1575,15 @@ function toolbox(){
   var picBtns=function(){ return [lab('그림·사진'),{kind:'button',text:T('✏️ 그림 그리기'),callbackKey:'imgDraw'},{kind:'button',text:T('📷 사진 넣기'),callbackKey:'imgPhoto'},{kind:'button',text:T('🗂 내 그림 관리'),callbackKey:'imgManage'}]; }; // shown at the top of 화면 and 그림판
   return {kind:'categoryToolbox',contents:[
     cat('ev','시작',[
-      bk('ev_start'),lab('누르거나 쓰면'),bk('ev_click'),bk('ev_drag'),bk('ev_change'),lab('키보드'),bk('ev_key'),bk('ev_keyhold'),bk('ev_keyup'),
+      bk('ev_start'),lab('누르거나 쓰면'),bk('ev_click'),bk('ev_drag'),bk('ev_change'),bk('ev_slider'),bk('ev_switch'),bk('ev_select'),lab('키보드'),bk('ev_key'),bk('ev_keyhold'),bk('ev_keyup'),
       lab('화면 조이스틱 (폰)'),bk('act_joy'),bk('ev_joy'),bk('val_joydir')]),
     cat('page','화면',picBtns().concat([
       bk('page_root'),lab('글'),bk('el_heading'),bk('el_text'),bk('el_list'),bk('el_link'),
       lab('누르고 쓰기'),bk('el_button'),bk('el_input'),
+      lab('슬라이더·스위치·고르기'),bk('el_slider'),bk('val_slider'),bk('act_slider_set',{inputs:{N:n(50)}}),bk('el_switch'),bk('val_switch'),bk('act_switch_set'),
+      bk('el_select'),bk('val_select'),bk('act_select_set',{inputs:{V:sh('text',T('귤, 감, 딸기'))}}),
+      lab('진행 막대·표'),bk('el_progress'),bk('act_progress',{inputs:{N:n(50)}}),bk('el_table'),bk('act_table_set',{inputs:{R:n(1),C:n(1),V:sh('text',T('안녕!'))}}),bk('val_table_get',{inputs:{R:n(1),C:n(1)}}),
+      bk('act_table_add_row',{inputs:{V:sh('text',T('철수, 90, 80'))}}),
       bk('el_picture'),bk('el_image'),bk('val_myimg'),
       lab('장면 나누기'),bk('act_scene_show',{inputs:{NAME:sh('text',T('시작'))}}),bk('act_scene_put',{inputs:{NAME:sh('text',T('시작'))}}),bk('val_scene_is',{inputs:{NAME:sh('text',T('시작'))}}),
       lab('묶고 띄우기'),bk('el_box'),bk('el_space'),bk('el_html')])),

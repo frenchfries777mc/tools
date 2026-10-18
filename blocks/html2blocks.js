@@ -82,6 +82,11 @@ function convert(html,opts){
     if(tag==='button'&&!hasKids(el)&&onlyAttrs(el,['id','type'])) return mk('el_button',fld('TEXT',text)+fld('NAME',nameFor(el,'버튼')));
     if(tag==='input'){ var ty=(el.getAttribute('type')||'text').toLowerCase();
       if((ty==='text'||ty==='number')&&onlyAttrs(el,['id','type','placeholder'])) return mk('el_input',fld('KIND',ty)+fld('TEXT',el.getAttribute('placeholder')||'')+fld('NAME',nameFor(el,'입력'))); }
+    if(tag==='input'&&(el.getAttribute('type')||'').toLowerCase()==='range'&&onlyAttrs(el,['id','type','min','max','value'])){ var lo=parseFloat(el.getAttribute('min')), hi=parseFloat(el.getAttribute('max')), vv=parseFloat(el.getAttribute('value'));
+      if(isNaN(lo)) lo=0; if(isNaN(hi)) hi=100; if(isNaN(vv)) vv=(lo+hi)/2;
+      return mk('el_slider',fld('MIN',lo)+fld('MAX',hi)+fld('VAL',vv)+fld('NAME',nameFor(el,'슬라이더'))); }
+    if(tag==='select'&&onlyAttrs(el,['id'])&&el.children.length&&Array.prototype.every.call(el.children,function(o){ return o.tagName==='OPTION'&&onlyAttrs(o,[])&&o.textContent.indexOf(',')<0; }))
+      return mk('el_select',fld('CHOICES',Array.prototype.map.call(el.children,function(o){ return o.textContent.trim(); }).join(', '))+fld('NAME',nameFor(el,'고르기')));
     if(tag==='img'&&el.getAttribute('src')&&onlyAttrs(el,['id','src','width','alt'])) return mk('el_image',fld('SRC',el.getAttribute('src'))+fld('W',numAttr(el,'width',240))+fld('NAME',nameFor(el,'그림')));
     if(tag==='a'&&!hasKids(el)&&onlyAttrs(el,['id','href','target'])) return mk('el_link',fld('TEXT',text)+fld('HREF',el.getAttribute('href')||'')+fld('NAME',nameFor(el,'링크')));
     if(tag==='canvas'&&onlyAttrs(el,['id','width','height'])) return mk('el_canvas',fld('W',numAttr(el,'width',320))+fld('H',numAttr(el,'height',220))+fld('NAME',nameFor(el,'그림판')));
