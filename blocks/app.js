@@ -291,15 +291,15 @@ function regenThumbs(){ var todo=Object.keys(I).filter(function(k){ return !I[k]
   todo.forEach(function(k){ var m=I[k], im=new Image(); im.onload=function(){ try{ m.thumb=thumbOf(im,m.w||im.width,m.h||im.height); m.ol=1; }catch(e){} if(!--left) afterImgChange(); }; im.onerror=function(){ m.ol=1; if(!--left) afterImgChange(); }; im.src=m.data; }); }
 function usedBy(id){ return ws.getAllBlocks(false).filter(function(b){ return b.getField&&b.getField('IMG')&&b.getFieldValue('IMG')===id; }); }
 function afterImgChange(){ ws.getAllBlocks(false).forEach(function(b){ var f=b.getField&&b.getField('IMG'); if(f){ var v=f.getValue(); if(f.getOptions) f.getOptions(false); f.setValue(v); if(f.forceRerender) f.forceRerender(); } }); var tb=ws.getToolbox(); if(tb&&tb.refreshSelection) tb.refreshSelection(); refresh(true); save(); }
-function addToPage(id){
+function addToPage(id,w,nm){
   Blockly.Events.setGroup(true);
   try{
-    var b=ws.newBlock('el_picture'); b.setFieldValue(id,'IMG'); b.initSvg(); b.render();
+    var b=ws.newBlock('el_picture'); b.setFieldValue(id,'IMG'); if(w) b.setFieldValue(w,'W'); if(nm) b.setFieldValue(nm,'NAME'); b.initSvg(); b.render();
     var page=ws.getTopBlocks(false).filter(function(x){ return x.type==='page_root'; })[0];
     if(page){ var inp=page.getInput('BODY'), last=inp.connection.targetBlock();
       if(!last) inp.connection.connect(b.previousConnection); else { while(last.getNextBlock()) last=last.getNextBlock(); last.nextConnection.connect(b.previousConnection); } }
     else b.moveBy(40,40);
-    b.select&&b.select(); ws.centerOnBlock&&ws.centerOnBlock(b.id);
+    if(Blockly.common&&Blockly.common.setSelected) Blockly.common.setSelected(b); else if(b.select) b.select(); ws.centerOnBlock&&ws.centerOnBlock(b.id);
   }finally{ Blockly.Events.setGroup(false); }
 }
 function newId(){ return 'img'+Date.now().toString(36)+Math.floor(Math.random()*1e3); }
@@ -385,6 +385,13 @@ ws.registerButtonCallback('imgPhoto',function(){ $('photoIn').click(); });
 ws.registerButtonCallback('imgManage',function(){ renderMgr(); $('mgrDlg').classList.add('open'); });
 $('mgrDraw').onclick=function(){ $('mgrDlg').classList.remove('open'); openPad(null); };
 $('mgrPhoto').onclick=function(){ $('photoIn').click(); };
+/* 오브젝트: a picked library illustration becomes an ordinary picture (SVG data URL, transparent), so every picture block works with it */
+function addObject(o){ var im=new Image();
+  im.onload=function(){ var id=newId(); putImage(id,uniqName(o.name),o.data,128,128,im); I[id].clear=true; addToPage(id,120,String(o.name).replace(/[\s\d]+/g,'').slice(0,20)||null); afterImgChange(); renderMgr(); toast(T('오브젝트를 페이지에 넣었어요')); };
+  im.onerror=function(){ toast(T('오브젝트를 불러오지 못했어요. 다시 눌러 보세요')); }; im.src=o.data; }
+function openObjects(){ $('mgrDlg').classList.remove('open'); BHOBJ.open(addObject); }
+ws.registerButtonCallback('imgObject',openObjects);
+$('mgrObj').onclick=openObjects;
 /* ---------- edit bar: copy, paste, undo, redo, delete all ---------- */
 var CLIP='ffblocks.clip';
 function copyBlock(b){ b=b||Blockly.getSelected(); if(!b||!b.isDeletable||b.isShadow()){ toast(T('먼저 복사할 블록을 눌러 고르세요')); return; }
