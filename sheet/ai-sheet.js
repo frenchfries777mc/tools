@@ -15,7 +15,7 @@ function pump(){
   while(running<MAXRUN&&queue.length){
     var job=queue.shift(); running++;
     (function(job){
-      FFAI.ask({system:CELL_SYS, prompt:job.prompt, maxTokens:1024}).then(function(t){
+      FFAI.ask({prose:true, system:CELL_SYS, prompt:job.prompt, maxTokens:1024}).then(function(t){
         t=String(t||'').trim().replace(/^["'“”]+|["'“”]+$/g,''); store()[job.h]=t.length>2000?t.slice(0,2000):t; delete errs[job.h];
       },function(e){ errs[job.h]=e.message||'AI'; if(e.kind==='nokey'||e.kind==='auth') queue.forEach(function(j){ errs[j.h]=e.message; delete pending[j.h]; }), queue=[]; if(!pump.told){ pump.told=1; A.toast(e.message); setTimeout(function(){ pump.told=0; },4000); } })
       .then(function(){ delete pending[job.h]; running--; repaint(); A.saveSoon(); pump(); });
@@ -111,7 +111,7 @@ function go(){
   if(mode==='calc') return calcGo(q,A.act());
   busy(true); out(''); $('aiActs').innerHTML='';
   var t=mode==='table'?null:tableText(), a=A.act(), lang=FFT.lang||'ko', p;
-  if(mode==='ask') p=FFAI.ask({onText:liveOut, facts:true, system:FFP.askSys, prompt:FFP.askPrompt(t&&t.text,q)})
+  if(mode==='ask') p=FFAI.ask({onText:liveOut, facts:true, prose:true, question:q, system:FFP.askSys, prompt:FFP.askPrompt(t&&t.text,q)})
     .then(function(r){ lastAnswer=r.trim(); out('<div class="aiAns">'+esc(lastAnswer).replace(/\n/g,'<br>')+'</div>');
       $('aiActs').innerHTML='<button class="tbtn" id="aiPut">'+T('답을 칸에 넣기')+'</button>';
       $('aiPut').onclick=function(){ var g=t?t.g:null, r0=g?g.r2+2:a.r, c0=g?g.c1:a.c; A.pushUndo(); lastAnswer.split('\n').forEach(function(l,i){ A.setRaw(r0+i,c0,l); }); A.changed(); A.select(r0,c0); close(); }; });
