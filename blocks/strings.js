@@ -809,3 +809,15 @@ FFT.add({
 "그 밖에":["Other", "Otros", "Autres", "Weitere", "そのほか"],
 "기본":["Basics", "Básicos", "Bases", "Grundlagen", "基本"],
 });
+FFT.add({
+'🍎 오브젝트':['🍎 Objects','🍎 Objetos','🍎 Objets','🍎 Objekte','🍎 オブジェクト'],
+'오브젝트':['Objects','Objetos','Objets','Objekte','オブジェクト'],
+'출처':['Credits','Créditos','Crédits','Quellen','出典'],
+'찾기 (예: 사과, car)':['Search (e.g. apple, 사과)','Buscar (p. ej. manzana, apple)','Rechercher (ex. pomme, apple)','Suchen (z. B. Apfel, apple)','さがす (例: りんご, apple)'],
+'오브젝트 찾기':['Search objects','Buscar objetos','Rechercher des objets','Objekte suchen','オブジェクトをさがす'],
+'찾는 오브젝트가 없어요':['No objects found','No hay objetos','Aucun objet trouvé','Keine Objekte gefunden','見つかりませんでした'],
+'오브젝트를 불러오는 중…':['Loading objects…','Cargando objetos…','Chargement des objets…','Objekte werden geladen…','オブジェクトを読み込み中…'],
+'오브젝트를 불러오지 못했어요. 다시 눌러 보세요':['Could not load the objects. Try again','No se pudieron cargar los objetos. Inténtalo de nuevo','Impossible de charger les objets. Réessayez','Objekte konnten nicht geladen werden. Versuch es noch mal','オブジェクトを読み込めませんでした。もう一度押してください'],
+'오브젝트를 페이지에 넣었어요':['Object added to the page','Objeto añadido a la página','Objet ajouté à la page','Objekt zur Seite hinzugefügt','オブジェクトをページに入れました'],
+"누르면 그림으로 넣고, 페이지에 '내 그림' 블록이 놓여요.":["Tap one to add it as a picture with a 'My picture' block on the page.","Toca uno para añadirlo como imagen con un bloque 'Mi imagen' en la página.","Touchez-en un pour l’ajouter comme image avec un bloc « Mon image » sur la page.","Tippe eins an, um es als Bild mit einem Block „Mein Bild“ auf die Seite zu setzen.","押すと絵として入り、ページに「わたしの絵」ブロックが置かれます。"]
+});
