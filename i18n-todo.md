@@ -7,3 +7,7 @@ blocks/index.html | 만들어 둔 .html 파일을 블록으로 바꿔요 | Block
 blocks/blocks.js | 새 JS 블록 툴팁·라벨 (js_el, js_prop, js_propset, js_idx, js_idxset, js_mcall, js_mcalls, js_call, js_calls, js_new, js_num, js_bool, js_return, js_push, js_has, time_running, 'JS 식과 호출') | Blocks v44 | 2026-10-18
 blocks/blocks.js | 키를 누르고 있나? / 그 키를 지금 누르고 있으면 참이에요. 아무로 두면 어떤 키든 누르고 있을 때 참이에요 | Blocks v44 | 2026-10-18
 blocks/ai-blocks.js | ⚡ 반응 속도 / 화면이 초록색으로 바뀌면 빨리 누르는 반응 속도 게임 | AI v26 | 2026-10-18
+blocks/blocks.js | 지금 있는 곳에서 가로(x)나 세로(y)로 얼마만큼 옮겨요. 가로는 +이면 오른쪽, 세로는 +이면 위쪽으로 가요. 마이너스 값이면 반대쪽이에요 | Blocks v44 | 2026-10-18
+blocks/blocks.js | 가로와 세로로 한꺼번에 옮겨요. 세로는 +이면 위쪽, 마이너스이면 아래쪽이에요 | Blocks v44 | 2026-10-18
+slides/app.js | (없음: 살아있는 화면 지우기만) | | 
+blocks/index.html | ╱ 선 / ▭ 사각형 / ◯ 원 / △ 삼각형 / ☆ 별 / 속 채우기 (그림판 도형 단추와 설명) | Blocks v44 | 2026-10-18
