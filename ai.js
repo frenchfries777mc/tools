@@ -22,10 +22,10 @@ var T=FFT.T, F=FFT.F;
 var LS='ffai.v1';
 var BASE=(function(){ var s=document.currentScript&&document.currentScript.src; return s?s.replace(/[^\/]*$/,''):'../'; })();
 var PROVIDERS={
-  local:{name:'자체 AI', local:true, models:[['FF-Tools-1.7B','FF777 1.4 tarius'],['FF-Tools-4B','FF777 1.4 lectus'],['FF-Tools-8B','FF777 1.4 premus']]},
-  claude:{name:'Claude', models:[['claude-opus-5-5','Claude Opus 5.5'],['claude-sonnet-5-5','Claude Sonnet 5.5'],['claude-haiku-5-5','Claude Haiku 5.5']], keyUrl:'https://console.anthropic.com/settings/keys', ph:'sk-ant-...'},
-  gemini:{name:'Gemini', models:[['gemini-2.5-flash','Gemini 2.5 Flash'],['gemini-2.5-pro','Gemini 2.5 Pro']], keyUrl:'https://aistudio.google.com/apikey', ph:'AIza...', free:true},
-  openai:{name:'OpenAI', models:[['gpt-4.1-mini','GPT-4.1 mini'],['gpt-4.1','GPT-4.1']], keyUrl:'https://platform.openai.com/api-keys', ph:'sk-...'}
+  local:{name:'자체 AI', local:true, models:[['FF-Tools-1.7B','FF777 1.4 tarius','약 1GB','가장 가볍고 빨라요. 태블릿이나 오래된 컴퓨터에서도 돌아가요.'],['FF-Tools-4B','FF777 1.4 lectus','약 2.5GB','속도와 똑똑함이 균형 잡힌 기본 모델이에요.'],['FF-Tools-8B','FF777 1.4 premus','약 5GB','가장 똑똑해요. 그래픽카드 메모리 8GB 이상인 컴퓨터용이에요.']]},
+  claude:{name:'Claude', models:[['claude-opus-5-5','Claude Opus 5.5','','가장 똑똑한 모델이에요. 어려운 일에 알맞고 답이 조금 느려요.'],['claude-sonnet-5-5','Claude Sonnet 5.5','','속도와 똑똑함이 균형 잡힌 모델이에요.'],['claude-haiku-5-5','Claude Haiku 5.5','','가장 빠른 모델이에요. 간단한 일에 알맞아요.']], keyUrl:'https://console.anthropic.com/settings/keys', ph:'sk-ant-...'},
+  gemini:{name:'Gemini', models:[['gemini-2.5-flash','Gemini 2.5 Flash','','빠르고 가벼운 모델이에요. 무료 키로도 쓸 수 있어요.'],['gemini-2.5-pro','Gemini 2.5 Pro','','더 똑똑한 모델이에요. 답이 조금 느려요.']], keyUrl:'https://aistudio.google.com/apikey', ph:'AIza...', free:true},
+  openai:{name:'OpenAI', models:[['gpt-4.1-mini','GPT-4.1 mini','','빠르고 가벼운 모델이에요.'],['gpt-4.1','GPT-4.1','','더 똑똑한 모델이에요.']], keyUrl:'https://platform.openai.com/api-keys', ph:'sk-...'}
 };
 /* the Tools-trained models (train/colab.ipynb): same Qwen3 model code, our own weights on Hugging Face */
 var HF='https://huggingface.co/Frenchfries777/';
@@ -395,17 +395,19 @@ function fill(){
   ov.querySelectorAll('.ffai-seg button').forEach(function(b){ b.classList.toggle('on',b.dataset.p===cur.provider); });
   q('.k').value=cur.keys[cur.provider]||''; q('.k').placeholder=p.ph; q('.k').type='password';
   var a=q('.ffai-link'); a.href=p.keyUrl; a.textContent=T('키 받는 곳')+' ↗'; q('.ffai-free').textContent=p.free?'· '+T('무료 키 가능'):'';
-  q('.m').innerHTML=p.models.map(function(m){ return '<option value="'+m[0]+'">'+(p.local?T(m[1]):m[1])+'</option>'; }).join(''); q('.m').value=cur.models[cur.provider]||p.models[0][0]; if(q('.m').selectedIndex<0) q('.m').value=p.models[0][0];
+  q('.m').innerHTML=p.models.map(function(m){ return '<option value="'+m[0]+'">'+(p.local?T(m[1]):m[1])+(m[2]?' · '+T(m[2]):'')+'</option>'; }).join(''); q('.m').value=cur.models[cur.provider]||p.models[0][0]; if(q('.m').selectedIndex<0) q('.m').value=p.models[0][0];
   ['.l-k','.r-k','.r-l'].forEach(function(s){ q(s).classList.toggle('ffai-hide',!!p.local); });
   q('.r-pre').classList.toggle('ffai-hide',!p.local); q('.pre').checked=!!cur.preload;
-  q('.ffai-note').textContent=p.local?T('자체 AI는 이 기기 안에서 돌아가요. 처음 한 번 모델을 받아 저장하고, 그 뒤로는 키 없이 쓸 수 있어요. 큰 AI보다는 덜 똑똑해요. 더 잘하게 하려면 다른 회사를 골라 API 키를 넣으세요.'):T('키는 이 브라우저에만 저장되고, 이 사이트가 아니라 고른 AI 회사로만 바로 보내져요. 공용 컴퓨터에서는 다 쓴 뒤 키 지우기를 눌러 주세요.');
+  var one=function(){ var m=p.models.filter(function(x){ return x[0]===q('.m').value; })[0]; return m&&m[3]?T(m[3])+' ':''; };
+  q('.ffai-note').textContent=p.local?T('자체 AI는 이 기기 안에서 돌아가요. 처음 한 번 모델을 받아 저장하고, 그 뒤로는 키 없이 쓸 수 있어요. 큰 AI보다는 덜 똑똑해요. 더 잘하게 하려면 다른 회사를 골라 API 키를 넣으세요.'):one()+T('키는 이 브라우저에만 저장되고, 이 사이트가 아니라 고른 AI 회사로만 바로 보내져요. 공용 컴퓨터에서는 다 쓴 뒤 키 지우기를 눌러 주세요.');
+  if(!p.local) q('.m').onchange=function(){ q('.ffai-note').textContent=one()+T('키는 이 브라우저에만 저장되고, 이 사이트가 아니라 고른 AI 회사로만 바로 보내져요. 공용 컴퓨터에서는 다 쓴 뒤 키 지우기를 눌러 주세요.'); };
   q('.del').textContent=p.local?T('모델 지우기'):T('키 지우기'); q('.test').textContent=p.local?T('지금 받아 두기'):T('연결 확인');
   msg('','');
   if(p.local){ Object.keys(TUNED).forEach(function(m){ var op=q('.m').querySelector('option[value="'+m+'"]');
       probeTuned(m).then(function(ok){ if(!ok&&op){ op.disabled=true; op.textContent+=' · '+T('준비 중'); } }); });
-    var showLocal=function(){ var t=TUNED[q('.m').value]; q('.ffai-note').textContent=t?T(t.about):T('자체 AI는 이 기기 안에서 돌아가요. 처음 한 번 모델을 받아 저장하고, 그 뒤로는 키 없이 쓸 수 있어요. 큰 AI보다는 덜 똑똑해요. 더 잘하게 하려면 다른 회사를 골라 API 키를 넣으세요.');
+    var showLocal=function(){ var t=TUNED[q('.m').value]; q('.ffai-note').textContent=t?one()+T(t.about):T('자체 AI는 이 기기 안에서 돌아가요. 처음 한 번 모델을 받아 저장하고, 그 뒤로는 키 없이 쓸 수 있어요. 큰 AI보다는 덜 똑똑해요. 더 잘하게 하려면 다른 회사를 골라 API 키를 넣으세요.');
       if(t&&tunedOk[q('.m').value]===false) msg(T('아직 준비 중인 모델이에요'),'bad'); else if(gpuOk===false) msg(T('이 기기나 브라우저에서는 자체 AI를 쓸 수 없어요. AI 설정에서 API 키를 넣어 주세요'),'bad'); else if(cur.local[q('.m').value]) msg(T('이 모델은 쓸 준비가 됐어요'),'ok'); else msg(T('저장하면 처음 쓸 때 모델을 받아요'),''); };
-    q('.m').onchange=showLocal; (gpuOk==null?checkGPU():Promise.resolve()).then(showLocal); } else q('.m').onchange=null;
+    q('.m').onchange=showLocal; (gpuOk==null?checkGPU():Promise.resolve()).then(showLocal); }
 }
 function close(){ ov.classList.remove('open'); }
 function cancel(){ close(); var f=onCancel; onOk=onCancel=null; if(f) f(); }
