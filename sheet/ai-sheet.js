@@ -100,8 +100,9 @@ function trDemo(){
 }
 function setMode(m){ mode=m; chips(m); document.querySelectorAll('.atab').forEach(function(b){ b.classList.toggle('on',b.dataset.m===m); });
   var ph={ask:T('예: 평균이 가장 높은 과목은? / 이 표를 세 줄로 요약해 줘'),formula:T('예: B열에서 80점 이상인 사람 수'),table:T('예: 우리 반 6명의 이름, 키, 좋아하는 과일 표'),graph:T('예: 이름별 수학 점수를 막대 그래프로'),calc:T('예: 3500원짜리 7개에 10% 할인 / 170cm는 몇 인치')}[m];
-  $('aiQ').placeholder=ph; $('aiOut').innerHTML=''; $('aiActs').innerHTML='';
+  $('aiQ').placeholder=ph; $('aiOut').innerHTML=''; $('aiActs').innerHTML=''; wrongFor();
   $('aiCtx').textContent=m==='calc'?T('숫자 계산과 단위 변환은 AI 없이 바로 해요. 칸이 들어간 계산은 AI가 수식으로 바꿔요'):m==='table'?F('{0} 칸부터 표를 넣어요',E.addr(A.act().r,A.act().c)):(function(){ var t=tableText(); return t?F('{0} 표를 AI에게 보여 줘요',E.rangeStr(t.g)):T('표를 고르면 AI가 그 내용을 보고 답해요'); })();
+  if(m==='graph') recShow(); else rec=null;
 }
 var running=false;
 function busy(on){ running=on; $('aiGo').textContent=on?T('멈추기'):T('보내기'); $('aiGo').classList.toggle('stopBtn',on); }
@@ -124,7 +125,7 @@ function go(){
   var q=$('aiQ').value.trim(); if(!q) return $('aiQ').focus();
   A.commitEdit();
   if(mode==='calc') return calcGo(q,A.act());
-  busy(true); out(''); $('aiActs').innerHTML='';
+  busy(true); out(''); $('aiActs').innerHTML=''; wrongFor(); rec=null;
   var t=mode==='table'?null:tableText(), a=A.act(), lang=FFT.lang||'ko', p;
   if(mode==='ask') p=FFAI.ask({onText:liveOut, facts:true, prose:true, question:q, system:FFP.askSys, prompt:FFP.askPrompt(t&&t.text,q)})
     .then(function(r){ lastAnswer=r.trim(); out('<div class="aiAns">'+esc(lastAnswer).replace(/\n/g,'<br>')+'</div>');
@@ -134,7 +135,7 @@ function go(){
     var tr=translateFormula(q,a);
     if(tr){ busy(false); lastFormula=tr.f; out('<code class="aiF">'+esc(tr.f)+'</code><div class="aiEx">'+esc(T('번역은 수식 함수가 없어서 AI() 함수로 해요. 칸마다 AI가 번역해서 채워요.'))+'</div>');
       $('aiActs').innerHTML='<button class="tbtn pri" id="aiPut">'+F('{0}에 넣기',E.addr(a.r,a.c))+'</button>';
-      $('aiPut').onclick=function(){ A.pushUndo(); A.setRaw(a.r,a.c,lastFormula); A.changed(); close(); }; return; }
+      $('aiPut').onclick=function(){ A.pushUndo(); A.setRaw(a.r,a.c,lastFormula); A.changed(); close(); }; wrongFor('sheet-formula',q,lastFormula); return; }
     p=FFAI.ask({onText:liveOut, json:true, system:FFAI.isTuned()?FFP.formulaSys:FFP.formulaSys+' Use only these functions: '+fnList()+'. For translating, summarizing or classifying text use =AI("instruction", cell). If no formula can do the request, reply {"formula":"","explain":"why not, in one short sentence"}.',
       prompt:FFP.formulaPrompt(t&&t.text,E.addr(a.r,a.c),q)})
     .then(function(r){ var j=FFAI.parseJSON(r), f=String(j.formula||'').trim(); if(f&&f[0]!=='=') f='='+f;
@@ -159,15 +160,16 @@ function go(){
       out('<div class="aiPrev"><table>'+rows.slice(0,8).map(function(row,i){ return '<tr>'+row.map(function(v){ return (i?'<td>':'<th>')+esc(v)+(i?'</td>':'</th>'); }).join('')+'</tr>'; }).join('')+'</table>'+(rows.length>8?'<div class="aiEx">'+F('외 {0}줄',rows.length-8)+'</div>':'')+'</div>');
       $('aiActs').innerHTML='<button class="tbtn pri" id="aiPut">'+F('{0} 칸부터 넣기',E.addr(a.r,a.c))+'</button>';
       $('aiPut').onclick=function(){ A.pasteText(lastTable.map(function(r){ return r.join('\t'); }).join('\n')); A.forSel(function(r,c){ if(r===A.act().r){ var cell=A.sheet.cells[E.K(r,c)]; if(cell) cell.b=1; } }); A.changed(); close(); }; });
-  p.then(null,function(e){ if(e.kind!=='nokey') out('<div class="aiErr">'+esc(e.message||T('AI에 연결하지 못했어요'))+'</div>'); }).then(function(){ busy(false); });
+  p.then(function(){ wrongFor('sheet-'+mode,q,$('aiOut').innerText); }).then(null,function(e){ if(e.kind!=='nokey') out('<div class="aiErr">'+esc(e.message||T('AI에 연결하지 못했어요'))+'</div>'); }).then(function(){ busy(false); });
 }
 /* ---------- "AI 계산": words -> one formula. calc.js reads most phrases without AI; the engine computes and checks. ---------- */
 function calcVal(f){ if(/\bAI\s*\(/i.test(f)) return null; try{ E.parse(f.slice(1)); }catch(e){ return null; } var v=A.eng.calc(A.doc.active,f); return E.isErr(v)?null:v; }
-function calcShow(f,v,a,note){
+function calcShow(f,v,a,note,viaAI){
   lastFormula=f;
   out('<code class="aiF">'+esc(f)+'</code><div class="aiCalc">= <b>'+esc(E.formatValue(v))+'</b></div><div class="aiEx">'+esc(note)+'</div>');
   $('aiActs').innerHTML='<button class="tbtn pri" id="aiPut">'+F('{0} 칸에 넣기',E.addr(a.r,a.c))+'</button>';
   $('aiPut').onclick=function(){ A.pushUndo(); A.setRaw(a.r,a.c,lastFormula); A.changed(); close(); };
+  if(viaAI) wrongFor('sheet-calc',$('aiQ').value.trim(),f+' = '+E.formatValue(v));
 }
 function colsText(){ // "A=이름, B=점수": the header row, so the AI can match column words
   var out=[]; for(var c=0;c<26&&out.length<12;c++){ var v=A.eng.value(A.doc.active,0,c); if(typeof v==='string'&&v.trim()) out.push(E.colName(c)+'='+v.trim().slice(0,20)); } return out.join(', '); }
@@ -184,7 +186,7 @@ function calcRead(r,unit){
   return null;
 }
 function calcGo(q,a){
-  $('aiActs').innerHTML='';
+  $('aiActs').innerHTML=''; wrongFor();
   var fx=FSCalc.fast(q), v=fx&&calcVal(fx.formula);
   if(fx&&v!=null) return calcShow(fx.formula,v,a,fx.kind==='unit'?T('단위 변환이에요. AI 없이 바로 계산했어요'):T('AI 없이 바로 계산했어요'));
   if(!window.FFAI||!FFAI.ready()){
@@ -202,7 +204,7 @@ function calcGo(q,a){
   busy(true); out('<div class="aiEx">'+esc(T('생각하는 중…'))+'</div>');
   once(false).then(function(f){
     var v=f&&calcVal(f);
-    if(f&&v!=null) calcShow(f,v,a,T('AI가 만든 수식이에요. 결과를 확인하고 넣으세요'));
+    if(f&&v!=null) calcShow(f,v,a,T('AI가 만든 수식이에요. 결과를 확인하고 넣으세요'),true);
     else out('<div class="aiErr">'+esc(T('AI가 알맞은 수식을 만들지 못했어요. 숫자와 칸 이름(A열, B2)을 넣어 더 짧게 써 보세요'))+'</div>');
   },function(e){ out(e&&e.kind==='nokey'?'':'<div class="aiErr">'+esc(e&&e.message||T('AI에 연결하지 못했어요'))+'</div>'); }).then(function(){ busy(false); });
 }
@@ -219,6 +221,119 @@ function chartFrom(j,g){
 }
 function chartLabel(ch){ var n={bar:T('세로 막대'),hbar:T('가로 막대'),line:T('꺾은선'),pie:T('원형'),scatter:T('산점도')}[ch.type];
   return n+' · '+E.rangeStr(ch)+(ch.cols?' · '+ch.cols.map(E.colName).join(', '):''); }
+/* ---------- 그래프 추천: which chart fits the table. Rules first (works offline), the AI only words the reason. ---------- */
+var CT={bar:'세로 막대',hbar:'가로 막대',line:'꺾은선',pie:'원형',scatter:'산점도'};
+var CT_EN={bar:'bar (compare items)',hbar:'horizontal bar (ranking, long names)',line:'line (change over time)',pie:'pie (shares of a whole)',scatter:'scatter (relation of two numbers)'};
+var H_DATE=/(날짜|일자|일시|연도|년도|월별|요일|주차|분기|시간|시각|기간|date|time|year|month|week|day|quarter)/i, H_SHARE=/(비율|비중|점유|구성|퍼센트|백분율|%|share|ratio|percent)/i;
+var V_DATE=/^(\d{4}[-./]\d{1,2}([-./]\d{1,2})?|\d{1,2}월|\d{4}년.*|\d{1,2}[./]\d{1,2}|Q[1-4]|[1-4]분기|[월화수목금토일]요?일?|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)$/i;
+function recGrid(){
+  var s=A.sel(), a=A.act(), g=(s.r1===s.r2&&s.c1===s.c2)?A.region(a.r,a.c):Object.assign({},s);
+  if(!g) return null;
+  if(g.r1===0&&g.r2===A.sheet.rows-1||g.c1===0&&g.c2===A.sheet.cols-1){ var rg=A.region(a.r,a.c); if(rg) g=rg; }
+  return {r1:g.r1,c1:g.c1,r2:Math.min(g.r2,g.r1+500),c2:Math.min(g.c2,g.c1+20)};
+}
+/* read the table: [{name, kind:'num'|'text', vals, disp, nf}] for the non-empty columns */
+function recCols(g){
+  var si=A.doc.active, hdr=A.hasHeader(g), r0=g.r1+(hdr?1:0), cols=[];
+  for(var c=g.c1;c<=g.c2;c++){
+    var vals=[], disp=[], n=0, t=0, nf=''; 
+    for(var r=r0;r<=g.r2;r++){ var v=A.eng.value(si,r,c), cell=A.sheet.cells[E.K(r,c)]; if(E.isErr(v)) v=null;
+      if(typeof v==='number') n++; else if(typeof v==='string'&&v!=='') t++; else if(typeof v==='boolean') v=null; else if(v!=null&&v!=='') v=null;
+      vals.push(v); disp.push(v==null?'':E.formatValue(v,cell&&cell.nf)); if(cell&&cell.nf&&!nf) nf=String(cell.nf); }
+    if(!n&&!t) continue;
+    var name=hdr?String(A.eng.value(si,g.r1,c)==null?'':E.formatValue(A.eng.value(si,g.r1,c))):'';
+    cols.push({c:c, name:name||E.colName(c), named:!!name, kind:n>=t?'num':'text', vals:vals, disp:disp, nf:nf});
+  }
+  return {cols:cols, hdr:hdr, rows:g.r2-r0+1};
+}
+function isDateCol(k){
+  if(H_DATE.test(k.name)&&k.named) return true;
+  if(k.kind==='text'){ var d=k.disp.filter(Boolean); return d.length>1&&d.filter(function(x){ return V_DATE.test(x.trim()); }).length>=d.length*.7; }
+  return false;
+}
+function isSeqCol(k){ // 1,2,3… or 2021,2022,… : numbers that only say "which row"
+  var v=k.vals.filter(function(x){ return x!=null; }); if(v.length<3||v.length!==k.vals.length) return false;
+  var st=v[1]-v[0]; if(!(st>0)) return false; for(var i=1;i<v.length;i++) if(v[i]-v[i-1]!==st) return false;
+  return v.every(function(x){ return x===Math.floor(x); })&&((v[0]>=1900&&v[v.length-1]<=2100)||(st===1&&v[0]<=1)||(H_DATE.test(k.name)&&k.named));
+}
+function recAnalyze(g){
+  var d=recCols(g), nums=d.cols.filter(function(k){ return k.kind==='num'; }), texts=d.cols.filter(function(k){ return k.kind==='text'; });
+  if(g.r2<=g.r1||!nums.length||d.rows<2) return {ok:false, why:T('숫자가 든 열이 둘 이상의 줄에 있어야 차트를 추천할 수 있어요')};
+  var lab=null, seq=null;
+  if(texts.length&&texts[0].c<nums[0].c) lab=texts[texts.length-1].c<nums[0].c?texts[texts.length-1]:texts[0];
+  if(!lab&&nums.length>1&&isSeqCol(nums[0])){ seq=nums[0]; nums=nums.slice(1); }
+  var info={g:g, rows:d.rows, lab:lab, seq:seq, nums:nums.slice(0,6), hdr:d.hdr, date:!!(lab&&isDateCol(lab))||!!seq};
+  var one=info.nums.length===1, nn=info.nums[0], nonneg=nn.vals.every(function(x){ return x==null||x>=0; }),
+      sum=nn.vals.reduce(function(a,b){ return a+(b||0); },0), shareH=H_SHARE.test(nn.name)&&nn.named||/%|p/i.test(nn.nf)&&/%/.test(nn.nf);
+  info.canPie=one&&nonneg&&lab&&info.rows>=2&&info.rows<=12;
+  info.canScatter=(!lab&&!seq?info.nums.length:info.nums.length)>=2;
+  var type;
+  if(info.date) type='line';
+  else if(lab){
+    var avg=lab.disp.reduce(function(a,b){ return a+b.length; },0)/Math.max(1,lab.disp.length);
+    if(info.canPie&&info.rows<=8&&(shareH||Math.abs(sum-100)<=1||Math.abs(sum-1)<=.01)) type='pie';
+    else if(one&&(info.rows>8||avg>=7)) type='hbar'; else type='bar';
+  } else if(seq) type='line';
+  else if(info.nums.length>=2) type='scatter';
+  else type=info.rows>12?'line':'bar';
+  info.type=type; info.alts=['bar','hbar','line'].concat(info.canPie?['pie']:[]).concat(info.canScatter?['scatter']:[]);
+  return Object.assign({ok:true},info);
+}
+function recNames(info){ var n=info.nums.slice(0,3).map(function(k){ return k.name; }).join(', '); return n+(info.nums.length>3?'…':''); }
+function recWhy(info,type){
+  var lab=info.lab?info.lab.name:(info.seq?info.seq.name:T('줄 번호')), nm=recNames(info);
+  return type==='pie'?F('「{0}」 값이 전체에서 각각 차지하는 몫이라 원형이 잘 맞아요',nm)
+    :type==='line'?F('「{0}」 순서대로 「{1}」 값이 어떻게 달라지는지 보기 좋아요',lab,nm)
+    :type==='scatter'?F('「{0}」와 「{1}」 두 숫자가 서로 어떤 관계인지 점으로 볼 수 있어요',info.nums[0].name,info.nums[1].name)
+    :type==='hbar'?F('「{0}」 항목이 많거나 이름이 길어서 가로 막대로 순서를 견주기 좋아요',lab)
+    :F('「{0}」 항목마다 「{1}」 값을 나란히 견주기 좋아요',lab,nm);
+}
+/* chart object for the charts drawer: pie takes one number column, scatter the first two (x, y) */
+function recChart(info,type){
+  var cols=info.nums.map(function(k){ return k.c; }); if(type==='pie') cols=cols.slice(0,1); if(type==='scatter') cols=cols.slice(0,2);
+  var g=info.g, ch={id:A.uid(), r1:g.r1, c1:g.c1, r2:g.r2, c2:g.c2, type:type, title:info.nums.length===1?info.nums[0].name.slice(0,60):'', cols:cols};
+  if(!info.lab&&!info.seq&&type!=='scatter'&&cols.length===info.nums.length&&cols[0]===g.c1&&cols.length===g.c2-g.c1+1) delete ch.cols;
+  return ch;
+}
+var rec=null;
+function recPaint(){
+  var o=$('aiOut'), cv=o.querySelector('.aiChart canvas'); if(!rec||!cv) return;
+  try{ A.drawChart(cv,rec.chart); }catch(e){}
+}
+function recShow(){
+  rec=null; var o=$('aiOut'), acts=$('aiActs');
+  var g=recGrid(); if(!g){ return; }
+  var info=recAnalyze(g);
+  if(!info.ok){ out('<div class="aiEx">'+esc(info.why)+'</div>'); return; }
+  rec={info:info, type:info.type, why:recWhy(info,info.type), ai:''}; rec.chart=recChart(info,rec.type);
+  recRender();
+}
+function recRender(){
+  var info=rec.info, alts=info.alts.map(function(t){ return '<button class="aiChip'+(t===rec.type?' on':'')+'" data-t="'+t+'">'+esc(T(CT[t]))+'</button>'; }).join('');
+  out('<div class="aiRec"><div class="aiRecH">'+esc(T('이 표에는 이 차트를 추천해요'))+': <b>'+esc(T(CT[rec.type]))+'</b></div><div class="aiChart"><canvas></canvas></div><div class="aiEx" id="aiRecWhy"></div><div class="aiRecAlt"><span class="aiEx">'+esc(T('다른 모양'))+'</span> '+alts+'</div></div>');
+  $('aiRecWhy').textContent=rec.ai||rec.why;
+  $('aiOut').querySelectorAll('.aiRecAlt .aiChip').forEach(function(b){ b.onclick=function(){ rec.type=b.dataset.t; rec.why=recWhy(rec.info,rec.type); rec.ai=''; rec.chart=recChart(rec.info,rec.type); recRender(); }; });
+  var acts='<button class="tbtn pri" id="aiMake">'+esc(T('이 차트 만들기'))+'</button>';
+  if(window.FFAI&&FFAI.ready()) acts='<button class="tbtn" id="aiRecAI">'+esc(T('AI로 설명 다듬기'))+'</button>'+acts;
+  $('aiActs').innerHTML=acts;
+  $('aiMake').onclick=function(){ A.pushUndo(); A.sheet.charts.push(Object.assign({},rec.chart,{id:A.uid()})); A.saveSoon(); close(); A.openDrawer(); };
+  var ab=$('aiRecAI'); if(ab) ab.onclick=recAsk;
+  if(rec.ai) wrongFor('sheet-graph-recommend',T('이 표에 맞는 차트는?')+' '+CT[rec.type],rec.ai);
+  recPaint();
+}
+function recAsk(){
+  var info=rec.info, type=rec.type, btn=$('aiRecAI'); btn.disabled=true; btn.textContent=T('생각하는 중…');
+  var cols=info.nums.map(function(k){ return k.name+' (number)'; }); if(info.lab) cols.unshift(info.lab.name+' (text)'); if(info.seq) cols.unshift(info.seq.name+' (sequence)');
+  var prompt='Table columns: '+cols.join(', ')+'; '+info.rows+' rows.\nChart: '+CT_EN[type]+'\nIn Korean, say in one or two short sentences why this chart fits this table.';
+  FFAI.ask({prose:true, maxTokens:140, system:'You explain a chart choice to a spreadsheet user. Keep it to one or two short sentences, in Korean, plain text, no markdown. Do not suggest another chart.', prompt:prompt})
+    .then(function(t){ t=String(t||'').trim().replace(/\s*\n+\s*/g,' '); if(!t||!rec||rec.type!==type) throw new Error(''); rec.ai=t.slice(0,300); recRender(); },
+      function(e){ if(!rec||rec.type!==type) return; recRender(); if(e&&e.kind!=='nokey'&&e.kind!=='stop'&&e.message) A.toast(e.message); })
+    .then(null,function(){ if(rec&&$('aiRecAI')){ $('aiRecAI').disabled=false; $('aiRecAI').textContent=T('AI로 설명 다듬기'); } });
+}
+function wrongFor(tool,question,answer){
+  var h=$('aiWrong'); if(!h) return; h.innerHTML='';
+  if(window.FFWrong&&String(answer||'').trim()) FFWrong.attach(h,{tool:tool, question:question, answer:answer});
+}
 function open(){ A.commitEdit(); setMode(mode); $('aiDlg').classList.add('open'); setTimeout(function(){ $('aiQ').focus(); },60); }
 function close(){ $('aiDlg').classList.remove('open'); }
 document.querySelectorAll('.atab').forEach(function(b){ b.onclick=function(){ setMode(b.dataset.m); }; });
@@ -229,5 +344,6 @@ $('aiSet').onclick=function(){ FFAI.settings(); };
 $('aiFn').onclick=function(){ close(); var a=A.act(); A.select(a.r,a.c); A.toast(T('칸에 =AI("할 일", A2) 처럼 써 보세요')); };
 $('aiRerun').onclick=function(){ close(); rerunSel(); };
 $('aiTrDemo').onclick=trDemo;
+if(window.FFWrong) FFWrong.toast=function(t){ A.toast(t); };
 window.FSAI={open:open, rerun:rerunSel};
 })();
