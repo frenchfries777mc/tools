@@ -1,0 +1,167 @@
+{
+ "built": "2026-10-18T08:49:41.080Z",
+ "pool": {
+  "memo-chip": 106,
+  "code": 1075,
+  "formula": 460,
+  "und": 811,
+  "graph": 711,
+  "tr": 1053,
+  "fun": 58,
+  "table": 307,
+  "ask": 219,
+  "gen": 556,
+  "slides": 215,
+  "memo-ex": 58,
+  "ask4": 228,
+  "cell": 221,
+  "joke": 260,
+  "gen14": 62,
+  "calc": 16,
+  "spell": 10,
+  "explain": 8
+ },
+ "droppedOldJokes": 1096,
+ "blocked": 37,
+ "test": 170,
+ "variants": {
+  "smart": {
+   "total": 4759,
+   "newRows": 854,
+   "newPct": 17.9,
+   "pct": {
+    "code": 23.1,
+    "chat": 10.6,
+    "tr": 15.8,
+    "und": 13.7,
+    "graph": 10.5,
+    "formula": 10,
+    "table": 5.3,
+    "slides": 4.2,
+    "joke": 5.5,
+    "spellexplain": 0.4,
+    "self": 1.1
+   },
+   "take": {
+    "code": {
+     "rows": 1100,
+     "new": 62
+    },
+    "chat": {
+     "rows": 505,
+     "new": 228
+    },
+    "tr": {
+     "rows": 750,
+     "new": 221
+    },
+    "und": {
+     "rows": 650,
+     "new": 0
+    },
+    "graph": {
+     "rows": 500,
+     "new": 0
+    },
+    "formula": {
+     "rows": 476,
+     "new": 16
+    },
+    "table": {
+     "rows": 250,
+     "new": 0
+    },
+    "slides": {
+     "rows": 200,
+     "new": 0
+    },
+    "joke": {
+     "rows": 260,
+     "new": 260
+    },
+    "spellexplain": {
+     "rows": 18,
+     "new": 18
+    },
+    "self": {
+     "rows": 50,
+     "new": 49
+    }
+   },
+   "short": {
+    "chat": 245,
+    "formula": 24,
+    "spellexplain": 82
+   },
+   "repeatedRows": 164
+  },
+  "basic": {
+   "total": 3146,
+   "newRows": 853,
+   "newPct": 27.1,
+   "pct": {
+    "code": 21,
+    "chat": 14.3,
+    "tr": 14.3,
+    "und": 12.4,
+    "graph": 9.5,
+    "formula": 9.5,
+    "table": 4.8,
+    "slides": 3.8,
+    "joke": 8.3,
+    "spellexplain": 0.6,
+    "self": 1.6
+   },
+   "take": {
+    "code": {
+     "rows": 660,
+     "new": 62
+    },
+    "chat": {
+     "rows": 450,
+     "new": 228
+    },
+    "tr": {
+     "rows": 450,
+     "new": 221
+    },
+    "und": {
+     "rows": 390,
+     "new": 0
+    },
+    "graph": {
+     "rows": 300,
+     "new": 0
+    },
+    "formula": {
+     "rows": 300,
+     "new": 16
+    },
+    "table": {
+     "rows": 150,
+     "new": 0
+    },
+    "slides": {
+     "rows": 120,
+     "new": 0
+    },
+    "joke": {
+     "rows": 260,
+     "new": 260
+    },
+    "spellexplain": {
+     "rows": 18,
+     "new": 18
+    },
+    "self": {
+     "rows": 49,
+     "new": 49
+    }
+   },
+   "short": {
+    "spellexplain": 42
+   },
+   "repeatedRows": 164
+  }
+ }
+}
