@@ -340,6 +340,7 @@ button,input,select{font:inherit; color:inherit;}
   <button data-f="new">새 프로젝트<small>빈 페이지에서 새로 시작해요. 지금 것은 목록에 남아요</small></button>
   <hr>
   <button data-f="save">프로젝트 파일로 저장<small>블록을 .json 파일로 받아요. 나중에 다시 열 수 있어요</small></button>
+  <button data-f="importhtml">HTML 파일 가져오기<small>만들어 둔 .html 파일을 블록으로 바꿔요</small></button>
   <button data-f="open">프로젝트 파일 열기<small>저장해 둔 .json 파일</small></button>
   <hr>
   <button data-f="html">HTML 파일로 받기<small>어디서든 열리는 웹페이지 파일</small></button>
@@ -426,17 +427,20 @@ button,input,select{font:inherit; color:inherit;}
   <div class="askFoot"><button class="tbtn" id="askNo">취소</button><button class="tbtn pri" id="askOk">확인</button></div>
 </div></div>
 <input type="file" id="photoIn" accept="image/*" hidden>
+<input type="file" id="htmlIn" accept=".html,.htm,text/html" hidden>
 <input type="file" id="fileIn" accept=".json,application/json" hidden>
 <div id="toast"></div><div id="prog" hidden><div id="progTxt"></div><div id="progTrack"><div id="progBar"></div></div></div>
 <script src="sounds.js?v=41"></script>
-<script src="blocks.js?v=41"></script>
+<script src="blocks.js?v=44"></script>
 <script src="objects.js?v=43"></script>
 <script src="shared.js?v=43"></script>
 <script src="examples.js?v=41"></script>
-<script src="app.js?v=43"></script>
-<script src="../ai.js?v=ai25"></script>
+<script src="app.js?v=44"></script>
+<script src="../ai.js?v=ai26"></script>
 <script src="../ai-prompts.js?v=41"></script>
-<script src="html2blocks.js?v=41"></script>
-<script src="ai-blocks.js?v=42"></script>
+<script src="lib/acorn.min.js"></script>
+<script src="js2blocks.js?v=44"></script>
+<script src="html2blocks.js?v=44"></script>
+<script src="ai-blocks.js?v=44"></script>
 </body>
 </html>

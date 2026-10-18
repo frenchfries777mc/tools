@@ -88,7 +88,7 @@ FFT.add({
 
 function load(){ var o=null; try{ o=JSON.parse(localStorage.getItem(LS)||'null'); }catch(e){} o=o&&typeof o==='object'?o:{}; o.keys=o.keys||{}; o.models=o.models||{}; if(!PROVIDERS[o.provider]) o.provider='local'; o.local=o.local||{}; o.preload=!!o.preload; return o; }
 function store(o){ try{ localStorage.setItem(LS,JSON.stringify(o)); }catch(e){} }
-function cfg(){ var o=load(), p=o.provider; var m=o.models[p]; if(!m||!PROVIDERS[p].models.some(function(x){return x[0]===m;})) m=PROVIDERS[p].models[0][0]; return {provider:p, key:o.keys[p]||'', model:m, local:p==='local', localOk:p==='local'&&!!o.local[m]}; }
+function cfg(){ var o=load(), p=o.provider; var m=o.models[p]; if(!m||!PROVIDERS[p].models.some(function(x){return x[0]===m;})) m=p==='local'?'FF-Tools-4B':PROVIDERS[p].models[0][0]; return {provider:p, key:o.keys[p]||'', model:m, local:p==='local', localOk:p==='local'&&!!o.local[m]}; }
 function ready(){ var c=cfg(); return c.local?c.localOk&&gpuOk!==false:!!c.key; }
 function isLocal(){ return cfg().local; }
 function isTuned(){ var c=cfg(); return c.local&&/^FF-/.test(c.model); } // the Tools-trained models answer the short prompts in ai-prompts.js
@@ -272,7 +272,7 @@ function askLocal(c,o){
       return false; };
     var show=o.onText||function(){};
     var once=function(sys,retry){
-      var req=request(sys), stopped=false, looped=false, cut=null, han=false, fin='', checkedAt=0;
+      var req=request(sys), stopped=false, finished=false, looped=false, cut=null, han=false, fin='', checkedAt=0;
       req.stream=true;
       var halt=function(){ stopped=true; e.interruptGenerate(); };
       if(o.onText) stopNow=halt;
@@ -281,6 +281,7 @@ function askLocal(c,o){
         function next(){ return ai.next().then(function(r){
           if(r.done){
             if(prose&&cut!=null){ if(han&&!retry) return null; show(cut); return cut; } // null: write it again in Korean only
+            if(finished){ var tf=clean(out).trim(); tf=tf.slice(0,tf.toLowerCase().lastIndexOf(o.stopAt.toLowerCase())+o.stopAt.length)+(/```/.test(tf)?'\n```':''); show(tf); return tf; } // the page is complete: stop writing here
             if(stopped) throw AIError(looped?T('같은 말을 반복해서 멈췄어요. 다시 보내 보세요'):T('멈췄어요'),'stop');
             var t=clean(out).trim();
             if(prose&&fin==='length'){ t=lastSentence(t); show(t); }
@@ -290,6 +291,7 @@ function askLocal(c,o){
             if(noHan&&(h=t.search(HAN))>=0){ han=true; cut=t.slice(0,h).replace(/[\s(（\[「『"'“‘:：-]+$/,'').trim(); halt(); }
             else if(prose&&(at=proseLoop(t))>=0){ cut=lastBreak(t.slice(0,at)).trim(); halt(); }
             else{ show(t);
+              if(o.stopAt&&!prose&&t.toLowerCase().indexOf(o.stopAt.toLowerCase())>=0){ finished=true; halt(); }
               if(!prose&&out.length-checkedAt>=60&&(checkedAt=out.length,loops(out))){ looped=true; halt(); } } }
           return next(); }); }
         return next();
