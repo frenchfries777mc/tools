@@ -29,8 +29,22 @@ var THEMES=[
 function hx(c){ c=String(c).replace('#',''); if(c.length===3) c=c.replace(/./g,'$&$&'); return [parseInt(c.slice(0,2),16)||0,parseInt(c.slice(2,4),16)||0,parseInt(c.slice(4,6),16)||0]; }
 function lum(c){ var a=hx(c).map(function(v){ v/=255; return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4); }); return .2126*a[0]+.7152*a[1]+.0722*a[2]; }
 function mix(a,b,t){ var x=hx(a), y=hx(b); return '#'+x.map(function(v,i){ return ('0'+Math.round(v+(y[i]-v)*t).toString(16)).slice(-2); }).join(''); }
-var FONTS=[['','테마 기본'],['sans','고딕'],['serif','명조'],['mono','고정폭']];
-function withFont(t,f){ if(!f) return t; var o={}; for(var k in t) o[k]=t[k]; o.f=f; o.serif=f==='serif'?1:0; o.mono=f==='mono'?1:0; if(f==='sans') o.pfh='Arial'; if(f==='serif') o.pfh='Georgia'; if(f==='mono') o.pfh=o.pfb='Courier New'; return o; }
+/* font sets: one pick changes the title font and the body font together. hf / bf: CSS stacks, hw: title weight (display fonts have one weight), g: Google Fonts families loaded the first time they are needed */
+var FSETS={
+  book:{n:'명조 제목 + 명조 본문', hf:SERIF, bf:SERIF, hw:700, pfh:'Georgia', pfb:'Georgia', sh:1, sb:1},
+  black:{n:'굵은 제목(블랙 한 산스) + 고딕 본문', hf:"'Black Han Sans','Noto Sans KR',sans-serif", bf:SANS, hw:400, pfh:'Arial Black', pfb:'Arial', g:'Black+Han+Sans'},
+  jua:{n:'둥근 제목(주아) + 부드러운 본문(고운 돋움)', hf:"'Jua','Noto Sans KR',sans-serif", bf:"'Gowun Dodum','Noto Sans KR',sans-serif", hw:400, pfh:'Trebuchet MS', pfb:'Trebuchet MS', g:'Jua|Gowun+Dodum'},
+  pen:{n:'손글씨 제목(개구) + 부드러운 본문(고운 돋움)', hf:"'Gaegu','Noto Sans KR',sans-serif", bf:"'Gowun Dodum','Noto Sans KR',sans-serif", hw:700, pfh:'Trebuchet MS', pfb:'Trebuchet MS', g:'Gaegu:wght@400;700|Gowun+Dodum'}
+};
+var FONTS=[['','테마 기본'],['sans','고딕 (제목·본문)'],['serif','명조 제목 + 고딕 본문'],['book',FSETS.book.n],['black',FSETS.black.n],['jua',FSETS.jua.n],['pen',FSETS.pen.n],['mono','고정폭 (제목·본문)']];
+function withFont(t,f){ if(!f) return t; var o={}, fs=FSETS[f]; for(var k in t) o[k]=t[k]; o.f=f; o.serif=f==='serif'?1:0; o.mono=f==='mono'?1:0; if(f==='sans') o.pfh='Arial'; if(f==='serif') o.pfh='Georgia'; if(f==='mono') o.pfh=o.pfb='Courier New';
+  if(fs){ o.serif=fs.sh?1:0; o.bserif=fs.sb?1:0; o.hf=fs.hf; o.bf=fs.bf; o.hw=fs.hw; o.pfh=fs.pfh; o.pfb=fs.pfb; } return o; }
+/* the web fonts of a set are asked for the first time it is used (or its menu entry is shown), then the slides are fitted again */
+var fontsAsked={};
+function askFonts(f){ var fs=FSETS[f]; if(!fs||!fs.g||fontsAsked[f]) return; fontsAsked[f]=1;
+  var l=document.createElement('link'); l.rel='stylesheet'; l.href='https://fonts.googleapis.com/css2?family='+fs.g.split('|').join('&family=')+'&display=swap';
+  l.onload=function(){ requestAnimationFrame(function(){ if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){ fitCache.clear(); if(!MODE&&deck&&deck.slides.length&&!pr.on){ drawList(); drawMain(); } }); }); };
+  document.head.appendChild(l); }
 function parseTime(t){ var m=/(\d+):(\d{1,2})(?::(\d{1,2}))?/.exec(String(t||'')), n; if(m) return m[3]!=null?(+m[1]*3600+ +m[2]*60+ +m[3]):(+m[1]*60+ +m[2]); m=/(\d+)/.exec(String(t||'')); return m?+m[1]*60:null; }
 function fmtTime(n){ n=Math.max(0,n|0); var h=Math.floor(n/3600), m=Math.floor(n%3600/60), x=n%60; return (h?h+':'+('0'+m).slice(-2):m)+':'+('0'+x).slice(-2); }
 function eth(s,t){ if(!s||!s.bg) return t; var o={}, k, dk=lum(s.bg)<.4; for(k in t) o[k]=t[k]; o.bg=s.bg; o.fg=dk?'#f4f5f8':'#1d2330'; o.sub=dk?'#c3c8d6':'#5d6678';
@@ -90,10 +104,10 @@ function deco(th,lay){
 
 /* ---------- deck data ---------- */
 function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
-/* sec: seconds before auto-advance when presenting (0 = the deck's, -1 = stay), ish/ibc/ibw: the picture's shape (rect | round | ell), border colour and width. g (on a shape): group id
-   pos: boxes moved or resized by hand ({field: {x,y,w,h}}), els: shapes, build: what appears one by one when presenting ([{k,a}] in order), tr: this slide's transition ('' = the deck's) */
+/* sec: seconds before auto-advance when presenting (0 = the deck's, -1 = stay), ish/ibc/ibw: the picture's shape (rect | round | ell | heart | star | diamond | hex | tri | arch), border colour and width. g (on a shape): group id
+   pos: boxes moved or resized by hand ({field: {x,y,w,h}}), els: shapes, build: what appears one by one when presenting ([{k,a,l}] in order; l: a list shows one line per press), tr: this slide's transition ('' = the deck's) */
 function blank(lay){ return {id:uid(), layout:lay||'bullets', title:'', subtitle:'', bullets:[], left:[], right:[], leftTitle:'', rightTitle:'', stat:'', caption:'', quote:'', by:'', notes:'', img:'', iw:0, ih:0, data:'', ctype:'bar', bg:'', live:'', hide:false, pos:{}, els:[], build:[], tr:'', sec:0, ish:'rect', ibc:'', ibw:0, link:null, choices:[], qok:-1}; }
-var SHK=['rect','round','ell','tri','star','line','arrow'], ISH=['rect','round','ell'], ANIMS=['fade','fly'], TRS=['fade','slide','zoom','none'];
+var SHK=['rect','round','ell','tri','star','line','arrow'], ISH=['rect','round','ell','heart','star','diamond','hex','tri','arch'], ANIMS=['fade','fly'], TRS=['fade','slide','zoom','none'];
 function num(v,d,lo,hi){ v=+v; return isFinite(v)?Math.max(lo,Math.min(hi,Math.round(v))):d; }
 function fixCol(v,d){ v=v==null?d:String(v); return v===''||v==='ac'||v==='fg'||/^#[0-9a-f]{6}$/i.test(v)?v:d; }
 function isLine(e){ return e.k==='line'||e.k==='arrow'; }
@@ -112,7 +126,7 @@ function fixSlide(s){ var b=blank(); s=s&&typeof s==='object'?s:{};
   s.pos=fixPos(s.pos); var ids={}; s.els=(Array.isArray(s.els)?s.els:[]).slice(0,80).map(fixEl).filter(function(e){ if(!e||ids[e.id]) return false; ids[e.id]=1; return true; });
   var gc={}; s.els.forEach(function(e){ if(e.g) gc[e.g]=(gc[e.g]||0)+1; }); s.els.forEach(function(e){ if(e.g&&gc[e.g]<2) e.g=''; }); // a group needs two shapes
   s.sec=num(s.sec,0,-1,3600); if(ISH.indexOf(s.ish)<0) s.ish='rect'; s.ibc=fixCol(s.ibc,''); s.ibw=num(s.ibw,0,0,40);
-  var seen={}; s.build=(Array.isArray(s.build)?s.build:[]).filter(function(b){ if(!b||typeof b.k!=='string'||ANIMS.indexOf(b.a)<0||seen[b.k]) return false; seen[b.k]=1; return true; }).slice(0,80).map(function(b){ return {k:b.k, a:b.a}; });
+  var seen={}; s.build=(Array.isArray(s.build)?s.build:[]).filter(function(b){ if(!b||typeof b.k!=='string'||ANIMS.indexOf(b.a)<0||seen[b.k]) return false; seen[b.k]=1; return true; }).slice(0,80).map(function(b){ var o={k:b.k, a:b.a}; if(b.l&&LISTS.indexOf(b.k)>=0) o.l=1; return o; });
   if(TRS.indexOf(s.tr)<0) s.tr='';
   s.link=fixLink(s.link); s.choices=(Array.isArray(s.choices)?s.choices:[]).map(function(x){ return String(x==null?'':x).replace(/\s+/g,' ').trim().slice(0,80); }).filter(Boolean).slice(0,6); s.qok=num(s.qok,-1,-1,5);
   return s; }
@@ -153,7 +167,7 @@ function updUR(){ $('undoBtn').disabled=!undo.length||gen||busyOn; $('redoBtn').
 var CE=(function(){ var d=document.createElement('div'); try{ d.contentEditable='plaintext-only'; if(d.contentEditable==='plaintext-only') return 'plaintext-only'; }catch(e){} return 'true'; })();
 function empty(s,f){ var v=s[f]; return Array.isArray(v)?!v.length:!String(v||'').trim(); }
 var MONO="'D2Coding','Consolas','Courier New',monospace";
-function cssVars(th){ return '--s-bg:'+th.bg+';--s-fg:'+th.fg+';--s-sub:'+th.sub+';--s-ac:'+th.ac+';--s-card:'+mix(th.bg,th.fg,.08)+';--s-on:'+onAc(th)+';--s-head:'+(th.mono?MONO:th.serif?SERIF:SANS)+';--s-body:'+(th.mono?MONO:SANS)+';--s-hw:'+(th.serif?700:800); }
+function cssVars(th){ return '--s-bg:'+th.bg+';--s-fg:'+th.fg+';--s-sub:'+th.sub+';--s-ac:'+th.ac+';--s-card:'+mix(th.bg,th.fg,.08)+';--s-on:'+onAc(th)+';--s-head:'+(th.hf||(th.mono?MONO:th.serif?SERIF:SANS))+';--s-body:'+(th.bf||(th.mono?MONO:SANS))+';--s-hw:'+(th.hw||(th.serif?700:800)); }
 function onAc(th){ return lum(th.ac)>.4?'#111111':'#ffffff'; }
 function fillList(ul,items){ ul.innerHTML=''; (items.length?items:['']).forEach(function(t){ var li=document.createElement('li'); if(t) li.textContent=t; else li.appendChild(document.createElement('br')); ul.appendChild(li); }); ul.classList.toggle('ph',!items.length); }
 function slideEl(s,th,edit,opt){
@@ -172,6 +186,8 @@ function slideEl(s,th,edit,opt){
     if(b.f==='img'){ var pc=document.createElement('div'); pc.className='pic'+(em?' empty':''); pc.dataset.f='img'; pc.dataset.bk='img';
       pc.style.cssText='left:'+b.x+'px;top:'+b.y+'px;width:'+b.w+'px;height:'+b.h+'px;';
       if(em) pc.textContent='🖼  '+T('그림 넣기'); else { var im=new Image(); im.src=s.img; im.draggable=false; im.alt=''; picStyle(im,s,b,th); pc.classList.toggle('shaped',s.ish!=='rect'); pc.appendChild(im);
+        /* the clip would cut a border off, so a frame's outline is drawn around the cut picture */
+        if(PICP[s.ish]&&s.ibw&&s.ibc){ var oc=colOf(s.ibc,th), ow=s.ibw; pc.style.filter=[[ow,0],[-ow,0],[0,ow],[0,-ow]].map(function(q){ return 'drop-shadow('+q[0]+'px '+q[1]+'px 0 '+oc+')'; }).join(' '); }
         if(edit){ var rm=document.createElement('button'); rm.className='rm'; rm.dataset.rm='1'; rm.textContent='×'; rm.title=T('그림 빼기'); pc.appendChild(rm); } }
       el.appendChild(pc); return; }
     if(b.view==='live'){ el.appendChild(liveView(s,b,th,edit,opt)).dataset.bk='live'; return; }
@@ -186,7 +202,13 @@ function slideEl(s,th,edit,opt){
   });
   shp(false);
   /* builds: in the editor a small number shows the order; when presenting (opt.step) the ones not reached yet are hidden */
-  var nb=0; s.build.forEach(function(bd){ var e=el.querySelector('[data-bk="'+bd.k+'"]'); if(!e) return; e.dataset.bi=nb; e.dataset.ba=bd.a;
+  var nb=0; s.build.forEach(function(bd){ var e=el.querySelector('[data-bk="'+bd.k+'"]'); if(!e) return;
+    /* a list built line by line: every line is its own step, the box itself stays */
+    var lis=bd.l&&LISTS.indexOf(bd.k)>=0&&!empty(s,bd.k)?e.querySelectorAll('li'):[];
+    if(lis.length){ [].forEach.call(lis,function(li,j){ li.dataset.bi=nb+j; li.dataset.ba=bd.a; if(!edit&&opt.step!=null&&nb+j>=opt.step) li.classList.add('bh'); });
+      if(edit){ var n2=document.createElement('span'); n2.className='bn'; n2.textContent=(nb+1)+(lis.length>1?'–'+(nb+lis.length):''); n2.title=T('줄마다 한 번씩 눌러서 나타나요'); e.appendChild(n2); }
+      nb+=lis.length; return; }
+    e.dataset.bi=nb; e.dataset.ba=bd.a;
     if(edit){ var n=document.createElement('span'); n.className='bn'; n.textContent=nb+1; n.title=T(bd.a==='fly'?'날아 들어오기':'서서히 나타나기'); e.appendChild(n); }
     else if(opt.step!=null&&nb>=opt.step) e.classList.add('bh');
     nb++; }); el.dataset.nb=nb;
@@ -195,9 +217,15 @@ function slideEl(s,th,edit,opt){
     e.style.cssText='left:'+f.x+'px;top:'+f.y+'px;width:'+f.w+'px;height:'+f.h+'px;'+(f.logo?'':'font-size:'+f.fs+'px;color:'+f.c+';text-align:'+f.al+';'); el.appendChild(e); });
   return el;
 }
-/* a picture can be cropped into a shape (round | ell: fills the box, the rest is cut off) and have a border */
+/* photo frames: shapes drawn in a 1 x 1 box (SVG path text), used as a CSS clip-path (<clipPath id="ffslp-..."> kept in the page) and as the canvas clip for the .pptx */
+function starUnit(){ var o=[]; for(var i=0;i<10;i++){ var a=(-90+36*i)*Math.PI/180, r=i%2?.382:1; o.push((.5+Math.cos(a)*r/1.902).toFixed(3)+' '+((1+Math.sin(a)*r)/1.809).toFixed(3)); } return 'M'+o.join('L')+'Z'; }
+var PICP={heart:'M.5 .95C.12 .66 0 .46 0 .29C0 .13 .12 .03 .27 .03C.38 .03 .46 .09 .5 .18C.54 .09 .62 .03 .73 .03C.88 .03 1 .13 1 .29C1 .46 .88 .66 .5 .95Z', star:starUnit(), diamond:'M.5 0L1 .5L.5 1L0 .5Z', hex:'M.25 .03L.75 .03L1 .5L.75 .97L.25 .97L0 .5Z', tri:'M.5 0L1 1L0 1Z', arch:'M0 1V.5A.5 .5 0 0 1 1 .5V1Z'};
+var PICN=[['rect','네모 (그대로)'],['round','둥근 네모'],['ell','원'],['heart','하트'],['star','별'],['diamond','마름모'],['hex','육각형'],['tri','세모'],['arch','아치']];
+(function(){ var d=document.createElement('div'); d.style.cssText='position:absolute;width:0;height:0;overflow:hidden'; d.setAttribute('aria-hidden','true'); d.setAttribute('data-notr','');
+  d.innerHTML='<svg width="0" height="0"><defs>'+Object.keys(PICP).map(function(k){ return '<clipPath id="ffslp-'+k+'" clipPathUnits="objectBoundingBox"><path d="'+PICP[k]+'"/></clipPath>'; }).join('')+'</defs></svg>'; document.body.appendChild(d); })();
+/* a picture can be cropped into a shape (round | ell | a frame from PICP: fills the box, the rest is cut off) and have a border */
 function picRadius(s,b){ return s.ish==='ell'?'50%':s.ish==='round'?Math.round(Math.min(b.w,b.h)*.16667)+'px':'8px'; }
-function picStyle(im,s,b,th){ var st='border-radius:'+picRadius(s,b)+';'; if(s.ish!=='rect') st+='width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;'; if(s.ibw&&s.ibc) st+='box-sizing:border-box;border:'+s.ibw+'px solid '+colOf(s.ibc,th)+';'; im.style.cssText=st; }
+function picStyle(im,s,b,th){ var st='border-radius:'+(PICP[s.ish]?'0':picRadius(s,b))+';'; if(s.ish!=='rect') st+='width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;'; if(PICP[s.ish]) st+='clip-path:url(#ffslp-'+s.ish+');'; else if(s.ibw&&s.ibc) st+='box-sizing:border-box;border:'+s.ibw+'px solid '+colOf(s.ibc,th)+';'; im.style.cssText=st; }
 /* tables and charts from pasted text (HTML/SVG on screen, native table and chart in the .pptx) */
 function esc(t){ return String(t).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 function parseTable(t){ var L=String(t||'').replace(/\r/g,'').split('\n').filter(function(x){ return x.trim(); }).slice(0,9); if(!L.length) return [];
@@ -307,7 +335,7 @@ function boxDef(s,f){ var L=LAY[s.layout]||LAY.bullets; for(var i=0;i<L.length;i
 /* shrink the font until the text fits its box (results cached by content) */
 var fitCache=new Map();
 function fitBox(box,b,th,lay,fresh){
-  var inn=box.firstChild, txt=inn.classList.contains('ph')?'\u0000'+inn.getAttribute('data-ph'):inn.innerText, key=th.id+(th.f||'')+'|'+lay+'|'+b.f+'|'+b.w+'x'+b.h+'|'+txt;
+  var inn=box.firstChild, txt=inn.classList.contains('ph')?'\u0000'+inn.getAttribute('data-ph'):inn.innerText+'\u0001'+inn.textContent.length, key=th.id+(th.f||'')+'|'+lay+'|'+b.f+'|'+b.w+'x'+b.h+'|'+txt;
   fitIn(inn,box,b.fs,b.min,key,fresh); }
 function fitIn(inn,box,hi,lo,key,fresh){
   var set=function(v){ inn.style.fontSize=v+'px'; };
@@ -326,7 +354,7 @@ function measure(s,th){ var m=$('measure'); m.innerHTML=''; var el=slideEl(s,th,
   el.querySelectorAll('.stx').forEach(function(x){ o['e:'+x.parentNode.dataset.e]=parseFloat(x.firstChild.style.fontSize)||SH_FS; }); m.innerHTML=''; return o; }
 
 /* ---------- screen ---------- */
-function th(){ return withFont(themeOf(deck.theme),deck.font); }
+function th(){ askFonts(deck.font); return withFont(themeOf(deck.theme),deck.font); }
 function refresh(){
   var start=!deck.slides.length&&!gen;
   $('start').hidden=!start; $('editor').hidden=start;
@@ -451,14 +479,36 @@ function drawSel(){
   /* right after a tap picks a box, the handles let the tap's own click through (on touch it lands after the frame is drawn) */
   if(selNew){ selNew=false; f.classList.add('fresh'); setTimeout(function(){ f.classList.remove('fresh'); },450); } }
 function setSel(k,force){ if(selK===k&&!force) return; selK=k; if(k!=='m') selM=[]; if(!k) multiOn=false; selNew=true; closeMenus(); drawSel(); }
-/* snapping while moving: the slide's centre lines and the layout margins (90 px), with a guide line */
-function snapMove(r,el){ var G=[], d=8, c;
-  [[r.x,0],[r.x+r.w/2,r.w/2],[r.x+r.w,r.w]].some(function(q){ return [90,W/2,W-90].some(function(v){ if(Math.abs(q[0]-v)<d){ r.x=v-q[1]; G.push(['v',v]); return true; } }); });
-  [[r.y,0],[r.y+r.h/2,r.h/2],[r.y+r.h,r.h]].some(function(q){ return [H/2].some(function(v){ if(Math.abs(q[0]-v)<d){ r.y=v-q[1]; G.push(['h',v]); return true; } }); });
-  [].forEach.call(el.querySelectorAll('.guide'),function(x){ x.remove(); });
-  G.forEach(function(g){ c=document.createElement('div'); c.className='guide '+g[0]; if(g[0]==='v') c.style.left=g[1]+'px'; else c.style.top=g[1]+'px'; el.appendChild(c); }); }
+/* smart guides while moving: the box snaps (within 8 px) to the slide's centre lines and margins, to the edges and centres of the other boxes and shapes
+   (a pink line), and to equal gaps between neighbours (pink bars between them). k = what is dragged; it and the members of its group are left out. */
+function snapOthers(s,k){ var o=[], skip={}; selEls(s,k).forEach(function(e){ skip[e.id]=1; });
+  (LAY[s.layout]||[]).forEach(function(b0){ if(b0.f===k) return; var b=boxOf(s,b0); if(b.w>0&&b.h>0) o.push({x:b.x,y:b.y,w:b.w,h:b.h}); });
+  s.els.forEach(function(e){ if(!skip[e.id]) o.push(unionBox([e])); }); return o; }
+/* line up edges / centres: the pairs (mine, theirs) closer than d give the move; every line that ends up on the same place is shown */
+function alignAxis(p,sz,T0,d){ var mine=[p,p+sz/2,p+sz], best=null, G=[];
+  mine.forEach(function(m){ T0.forEach(function(t){ var dl=t-m; if(Math.abs(dl)<d&&(!best||Math.abs(dl)<Math.abs(best.dl))) best={dl:dl}; }); });
+  if(!best) return null; mine.forEach(function(m){ T0.forEach(function(t){ if(Math.abs(t-(m+best.dl))<.5&&G.indexOf(t)<0) G.push(t); }); }); best.g=G; return best; }
+/* equal gaps along one axis (a = 'x' or 'y'): the same gap as between two neighbours, or the middle between two of them. Only boxes sharing the other axis are neighbours. */
+function spaceAxis(r,O,a,d){ var b=a==='x'?'y':'x', sa=a==='x'?'w':'h', sb=b==='x'?'w':'h', best=null;
+  var P=O.filter(function(o){ return o[b]<r[b]+r[sb]&&o[b]+o[sb]>r[b]; }).sort(function(u,v){ return u[a]-v[a]; });
+  var cross=function(){ var lo=r[b], hi=r[b]+r[sb]; P.forEach(function(o){ lo=Math.max(lo,o[b]); hi=Math.min(hi,o[b]+o[sb]); }); return (lo+hi)/2; };
+  var cand=function(pos,segs){ var dl=pos-r[a]; if(Math.abs(dl)<d&&(!best||Math.abs(dl)<Math.abs(best.dl))) best={dl:dl, segs:segs}; };
+  for(var i=0;i<P.length;i++) for(var j=i+1;j<P.length;j++){ var A=P[i], B=P[j], ae=A[a]+A[sa], g=B[a]-ae; if(g<6) continue;
+    cand(B[a]+B[sa]+g,[[ae,B[a]],[B[a]+B[sa],B[a]+B[sa]+g]]); cand(A[a]-g-r[sa],[[A[a]-g,A[a]],[ae,B[a]]]);
+    var g2=(g-r[sa])/2; if(g2>=6) cand(ae+g2,[[ae,ae+g2],[ae+g2+r[sa],B[a]]]); }
+  if(!best) return null; best.cross=cross(); best.a=a; return best; }
+function snapMove(r,el,k){ var s=deck.slides[cur], O=s?snapOthers(s,k):[], d=8, G=[], S=[], c, ay, ax, sy, sx;
+  var TX=[90,W/2,W-90], TY=[H/2]; O.forEach(function(o){ TX.push(o.x,o.x+o.w/2,o.x+o.w); TY.push(o.y,o.y+o.h/2,o.y+o.h); });
+  ay=alignAxis(r.y,r.h,TY,d); sy=spaceAxis(r,O,'y',d); if(sy&&(!ay||Math.abs(sy.dl)<Math.abs(ay.dl)-.5)){ ay=null; } else sy=null;
+  if(ay){ r.y+=ay.dl; ay.g.forEach(function(v){ G.push(['h',v]); }); } else if(sy){ r.y+=sy.dl; S.push(sy); }
+  ax=alignAxis(r.x,r.w,TX,d); sx=spaceAxis(r,O,'x',d); if(sx&&(!ax||Math.abs(sx.dl)<Math.abs(ax.dl)-.5)){ ax=null; } else sx=null;
+  if(ax){ r.x+=ax.dl; ax.g.forEach(function(v){ G.push(['v',v]); }); } else if(sx){ r.x+=sx.dl; S.push(sx); }
+  [].forEach.call(el.querySelectorAll('.guide,.gsp'),function(x){ x.remove(); });
+  G.forEach(function(g){ c=document.createElement('div'); c.className='guide '+g[0]; if(g[0]==='v') c.style.left=g[1]+'px'; else c.style.top=g[1]+'px'; el.appendChild(c); });
+  S.forEach(function(q){ q.segs.forEach(function(sg){ c=document.createElement('div'); c.className='gsp '+(q.a==='x'?'x':'y'); c.dataset.gap=Math.round(sg[1]-sg[0]);
+    if(q.a==='x'){ c.style.left=sg[0]+'px'; c.style.width=(sg[1]-sg[0])+'px'; c.style.top=q.cross+'px'; } else { c.style.top=sg[0]+'px'; c.style.height=(sg[1]-sg[0])+'px'; c.style.left=q.cross+'px'; } el.appendChild(c); }); }); }
 function dragRect(d,dx,dy,shift,el){ var r0=d.r0, r={x:r0.x,y:r0.y,w:r0.w,h:r0.h,ln:r0.ln}, h=d.h, M=24, a, L, q;
-  if(h==='mv'){ r.x=r0.x+dx; r.y=r0.y+dy; if(!r.ln) snapMove(r,el); }
+  if(h==='mv'){ r.x=r0.x+dx; r.y=r0.y+dy; if(!r.ln) snapMove(r,el,d.k); }
   else if(h==='p0'||h==='p1'){ /* one end of a line moves, the other stays */
     if(h==='p0'){ r.x=r0.x+dx; r.y=r0.y+dy; r.w=r0.w-dx; r.h=r0.h-dy; } else { r.w=r0.w+dx; r.h=r0.h+dy; }
     if(shift){ a=Math.atan2(r.h,r.w); L=Math.hypot(r.w,r.h); q=Math.round(a/(Math.PI/4))*(Math.PI/4); r.w=L*Math.cos(q); r.h=L*Math.sin(q); }
@@ -551,7 +601,7 @@ function addEmoji(ch){ var s=deck.slides[cur]; if(!s||gen||busyOn) return; blurE
   var e=fixEl({id:uid(), k:'rect', x:520+n, y:240+n, w:240, h:240, fill:'', line:'', sw:0, text:ch, fs:200}); s.els.push(e); selK='e:'+e.id; changed(); }
 /* crop the picture into a shape; a circle starts as a square in the middle of the picture's box */
 function setPicShape(v){ var s=deck.slides[cur]; if(!s||!s.img||s.ish===v) return; blurEdit(); pushUndo(); s.ish=v; var b=boxDef(s,'img');
-  if(v==='ell'&&b&&Math.abs(b.w-b.h)>2){ var q=Math.min(b.w,b.h); s.pos.img={x:Math.round(b.x+(b.w-q)/2), y:Math.round(b.y+(b.h-q)/2), w:q, h:q}; } changed(); }
+  if(v!=='rect'&&v!=='round'&&b&&Math.abs(b.w-b.h)>2){ var q=Math.min(b.w,b.h); s.pos.img={x:Math.round(b.x+(b.w-q)/2), y:Math.round(b.y+(b.h-q)/2), w:q, h:q}; } changed(); }
 /* line things up on the slide (picked box, picture or shape) */
 function alignSel(m){ var s=deck.slides[cur], r=s&&selK&&keyBox(s,selK); if(!r) return; var M=48, bx=r.ln?Math.min(r.x,r.x+r.w):r.x, by=r.ln?Math.min(r.y,r.y+r.h):r.y, bw=Math.abs(r.w), bh=Math.abs(r.h), dx=0, dy=0;
   if(m==='l') dx=M-bx; else if(m==='ch') dx=Math.round((W-bw)/2)-bx; else if(m==='r') dx=W-M-bw-bx; else if(m==='t') dy=M-by; else if(m==='cv') dy=Math.round((H-bh)/2)-by; else if(m==='b') dy=H-M-bh-by; else return;
@@ -600,6 +650,8 @@ function buildIx(s,k){ for(var i=0;i<s.build.length;i++) if(s.build[i].k===k) re
 function selKeys(s){ var a=selEls(s); return a.length?a.map(function(e){ return 'e:'+e.id; }):selK?[selK]:[]; }
 function setAnim(a){ var s=deck.slides[cur]; if(!s||!selK) return; var ks=selKeys(s), i=buildIx(s,ks[0]); if(a==='none'&&ks.every(function(k){ return buildIx(s,k)<0; })||ks.length===1&&i>=0&&s.build[i].a===a) return; pushUndo();
   ks.forEach(function(k){ var j=buildIx(s,k); if(a==='none'){ if(j>=0) s.build.splice(j,1); } else if(j>=0) s.build[j].a=a; else s.build.push({k:k, a:a}); }); changed(); }
+/* a list (bullets, left, right) can show one line per press instead of the whole box at once */
+function setLines(){ var s=deck.slides[cur]; if(!s||!selK||LISTS.indexOf(selK)<0) return; pushUndo(); var i=buildIx(s,selK); if(i<0) s.build.push({k:selK, a:'fade', l:1}); else if(s.build[i].l) delete s.build[i].l; else s.build[i].l=1; changed(); }
 function moveBuild(d){ var s=deck.slides[cur], i=s?buildIx(s,selKeys(s)[0]):-1, j=i+d; if(i<0||j<0||j>=s.build.length) return; pushUndo(); var x=s.build.splice(i,1)[0]; s.build.splice(j,0,x); changed(); }
 function selBar(){ selBar0(); if(window.FRB) FRB.sync(); }
 function selBar0(){ var b=$('selBar'), s=deck&&deck.slides[cur]; b.innerHTML=''; b.hidden=!s||gen||busyOn;
@@ -622,7 +674,9 @@ function drawElMenu(kind){ var m=$('elMenu'), s=deck.slides[cur], e=selShape(), 
   if(kind==='shape'){ hd('도형 넣기'); var g=document.createElement('div'); g.className='shg'; m.appendChild(g);
     SHAPES.forEach(function(q){ var b=document.createElement('button'); b.dataset.o='sh:'+q[0]; b.innerHTML='<svg viewBox="0 0 24 24">'+SHI[q[0]]+'</svg><span></span>'; b.lastChild.textContent=T(q[1]); g.appendChild(b); }); return; }
   if(kind==='layer'){ hd('겹치는 순서'); add('ly:front','맨 앞으로'); add('ly:fwd','앞으로'); add('ly:bwd','뒤로'); add('ly:back','맨 뒤로'); m.appendChild(document.createElement('hr')); hd('맨 뒤로 보낸 도형은 글 뒤에 놓여요'); return; }
-  if(kind==='pshape'){ hd('그림을 이 모양으로 자르기'); [['rect','네모 (그대로)'],['round','둥근 네모'],['ell','원']].forEach(function(q){ add('ps:'+q[0],q[1],s.ish===q[0]); }); return; }
+  if(kind==='pshape'){ hd('그림을 이 모양으로 자르기'); var pg=document.createElement('div'); pg.className='shg'; m.appendChild(pg);
+    var PI={rect:'M0 .12H1V.88H0Z', round:'M.2 .12H.8A.2 .2 0 0 1 1 .32V.68A.2 .2 0 0 1 .8 .88H.2A.2 .2 0 0 1 0 .68V.32A.2 .2 0 0 1 .2 .12Z', ell:'M.5 0A.5 .5 0 1 1 .5 1A.5 .5 0 1 1 .5 0Z'};
+    PICN.forEach(function(q){ var b=document.createElement('button'); b.dataset.o='ps:'+q[0]; if(s.ish===q[0]) b.classList.add('on'); b.innerHTML='<svg viewBox="0 0 24 24"><path transform="translate(1 1) scale(22)" vector-effect="non-scaling-stroke" d="'+(PICP[q[0]]||PI[q[0]])+'"/></svg><span></span>'; b.lastChild.textContent=(s.ish===q[0]?'✓ ':'')+T(q[1]); pg.appendChild(b); }); return; }
   if(kind==='pborder'){ hd('그림 테두리 색'); var rw=document.createElement('div'); rw.className='swr'; m.appendChild(rw);
     var sw0=function(v,bg,label){ var b=document.createElement('button'); b.className='sw'+(s.ibc===v?' on':'')+(v===''?' none':''); b.dataset.o='pc:'+v; b.style.background=bg; b.title=T(label||v); b.setAttribute('aria-label',T(label||v)); rw.appendChild(b); };
     sw0('','transparent','없음'); sw0('ac',t.ac,'테마 강조색'); sw0('fg',t.fg,'테마 글자색'); SWC.forEach(function(c){ sw0(c,c); });
@@ -633,6 +687,7 @@ function drawElMenu(kind){ var m=$('elMenu'), s=deck.slides[cur], e=selShape(), 
     m.appendChild(document.createElement('hr')); hd('굵기'); [0,3,6,10,16].forEach(function(w){ add('pw:'+w,w?F('{0}px',w):'없음',s.ibw===w&&(w===0||!!s.ibc)); }); return; }
   if(kind==='anim'){ var i=buildIx(s,selKeys(s)[0]), a=i>=0?s.build[i].a:'none'; hd('발표할 때 누를 때마다 하나씩 나타나요');
     add('an:none','효과 없음 (처음부터 보이기)',a==='none'); add('an:fade','서서히 나타나기',a==='fade'); add('an:fly','날아 들어오기',a==='fly');
+    if(selKeys(s).length===1&&LISTS.indexOf(selKeys(s)[0])>=0){ m.appendChild(document.createElement('hr')); add('an:lines','줄마다 한 번씩 누르기',i>=0&&!!s.build[i].l); }
     if(i>=0&&selKeys(s).length===1){ m.appendChild(document.createElement('hr')); hd(F('{0}번째로 나타나요 (모두 {1}개)',i+1,s.build.length)); add('an:up','더 먼저 나타나기',0,i===0); add('an:down','더 나중에 나타나기',0,i===s.build.length-1); }
     return; }
   if(kind==='align'){ hd('슬라이드에서 맞추기'); [['l','왼쪽'],['ch','가로 가운데'],['r','오른쪽'],['t','위쪽'],['cv','세로 가운데'],['b','아래쪽']].forEach(function(q){ add('al2:'+q[0],q[1]); }); return; }
@@ -670,6 +725,7 @@ $('elMenu').addEventListener('click',function(ev){ var b=ev.target.closest('[dat
   if(k.indexOf('pc:')===0){ closeMenus(); if(s.ibc===k.slice(3)) return; pushUndo(); s.ibc=k.slice(3); if(s.ibc&&!s.ibw) s.ibw=6; changed(); return; }
   if(k.indexOf('pw:')===0){ closeMenus(); var w=+k.slice(3); pushUndo(); s.ibw=w; if(w&&!s.ibc) s.ibc='fg'; changed(); return; }
   if(k==='an:up'||k==='an:down'){ moveBuild(k==='an:up'?-1:1); drawElMenu('anim'); return; }
+  if(k==='an:lines'){ closeMenus(); return setLines(); }
   if(k.indexOf('an:')===0){ closeMenus(); return setAnim(k.slice(3)); }
   if(!e||!s) return; closeMenus(); pushUndo();
   if(k.indexOf('c:')===0){ var key=$('elMenu')._k; e[key]=k.slice(2); if(key==='line'&&e[key]&&!e.sw) e.sw=4; }
@@ -723,8 +779,8 @@ function drawOptMenu(part){ var m=$('optMenu'), s=deck.slides[cur]; m.innerHTML=
   BGS.forEach(function(c){ var b=document.createElement('button'); b.className='sw'+(s.bg===c?' on':''); b.dataset.o='bg:'+c; b.style.background=c; b.setAttribute('aria-label',c); row.appendChild(b); });
   ci.type='color'; ci.id='bgIn'; ci.value=s.bg||'#ffffff'; ci.title=T('직접 고르기'); ci.setAttribute('aria-label',T('직접 고르기')); row.appendChild(ci);
   m.appendChild(row); add('bg:','테마 배경으로 되돌리기',0,!s.bg); }
-  if(!part||part==='font'){ hr(); hd('글꼴 (모든 슬라이드)');
-  FONTS.forEach(function(f){ add('font:'+f[0],f[1],deck.font===f[0]); }); }
+  if(!part||part==='font'){ hr(); hd('글꼴 세트: 제목 + 본문 (모든 슬라이드)');
+  FONTS.forEach(function(f){ var b=add('font:'+f[0],f[1],deck.font===f[0]), fs=FSETS[f[0]]; askFonts(f[0]); if(fs) b.style.fontFamily=fs.hf; else if(f[0]==='sans') b.style.fontFamily=SANS; else if(f[0]==='serif') b.style.fontFamily=SERIF; else if(f[0]==='mono') b.style.fontFamily=MONO; }); }
   if(!part||part==='tr'){ hr(); hd('넘어가는 효과 (이 슬라이드)');
   TRANS.forEach(function(t){ add('tr:'+t[0],t[1],tr===t[0]); });
   add('trAll','모든 슬라이드에 같은 효과',0,deck.trans===tr&&deck.slides.every(function(x){ return !x.tr; })); }
@@ -1609,11 +1665,12 @@ function needPPTX(){ if(window.PptxGenJS) return Promise.resolve(window.PptxGenJ
   pptxP=new Promise(function(res,rej){ var s=document.createElement('script'); s.src='lib/pptxgen.bundle.js'; s.onload=function(){ res(window.PptxGenJS); }; s.onerror=function(){ pptxP=null; rej(); }; document.head.appendChild(s); }); return pptxP; }
 function fileName(n){ return String(n||'').replace(/[\\\/:*?"<>|\u0000-\u001f]+/g,' ').replace(/\s+/g,' ').trim().slice(0,80)||'slides'; }
 function deckText(){ return deck.name+' '+deck.slides.map(function(s){ return [s.title,s.subtitle,s.bullets.join(' '),s.left.join(' '),s.right.join(' '),s.leftTitle,s.rightTitle,s.stat,s.caption,s.quote,s.by].concat(s.els.map(function(e){ return e.text; })).join(' '); }).join(' '); }
-function pptxFace(t,head,txt){ if(/[぀-ヿ]/.test(txt)) return t.serif&&head?'Yu Mincho':'Yu Gothic'; if(/[가-힣]/.test(txt)) return t.serif&&head?'Batang':'Malgun Gothic'; if(/[一-鿿]/.test(txt)) return 'Microsoft YaHei'; return head?t.pfh:t.pfb; }
+function pptxFace(t,head,txt){ if(/[぀-ヿ]/.test(txt)) return t.serif&&head?'Yu Mincho':'Yu Gothic'; if(/[가-힣]/.test(txt)) return (head?t.serif:t.bserif)?'Batang':'Malgun Gothic'; if(/[一-鿿]/.test(txt)) return 'Microsoft YaHei'; return head?t.pfh:t.pfb; }
 /* pictures cropped into a round shape or a circle are cut on a canvas (the image fills the box, the rest is cropped; PNG keeps the cut corners clear), because PowerPoint's own picture crop cannot be written by the library */
 var picCache={};
 function cropPic(s,b){ return new Promise(function(res){ var im=new Image(); im.onerror=function(){ res(''); }; im.onload=function(){ var k=Math.min(2,1600/Math.max(b.w,b.h)), cw=Math.max(1,Math.round(b.w*k)), ch=Math.max(1,Math.round(b.h*k)), c=document.createElement('canvas'); c.width=cw; c.height=ch; var x=c.getContext('2d');
-    x.beginPath(); if(s.ish==='ell') x.ellipse(cw/2,ch/2,cw/2,ch/2,0,0,Math.PI*2); else { var r=Math.min(cw,ch)*.16667; x.moveTo(r,0); x.arcTo(cw,0,cw,ch,r); x.arcTo(cw,ch,0,ch,r); x.arcTo(0,ch,0,0,r); x.arcTo(0,0,cw,0,r); x.closePath(); } x.clip();
+    if(PICP[s.ish]){ var pp=new Path2D(); pp.addPath(new Path2D(PICP[s.ish]),new DOMMatrix([cw,0,0,ch,0,0])); x.clip(pp); }
+    else { x.beginPath(); if(s.ish==='ell') x.ellipse(cw/2,ch/2,cw/2,ch/2,0,0,Math.PI*2); else { var r=Math.min(cw,ch)*.16667; x.moveTo(r,0); x.arcTo(cw,0,cw,ch,r); x.arcTo(cw,ch,0,ch,r); x.arcTo(0,ch,0,0,r); x.arcTo(0,0,cw,0,r); x.closePath(); } x.clip(); }
     var q=Math.max(cw/im.width,ch/im.height), w=im.width*q, h=im.height*q; x.drawImage(im,(cw-w)/2,(ch-h)/2,w,h); var d=''; try{ d=c.toDataURL('image/png'); }catch(e){} res(d); }; im.src=s.img; }); }
 function prepPics(){ picCache={}; return Promise.all(deck.slides.map(function(s){ var b=s.img&&s.ish!=='rect'&&boxDef(s,'img'); return b?cropPic(s,b).then(function(d){ if(d) picCache[s.id]=d; }):null; })); }
 function buildPPTX(P){
@@ -1657,7 +1714,7 @@ function buildPPTX(P){
       if(b.f==='img'){ if(s.img&&s.iw&&s.ih){ var bd=s.ibw&&s.ibc?{color:C(colOf(s.ibc,t)), width:PT(s.ibw)}:null, h2=bd?s.ibw/2:0;
           /* round | ell: the picture was cropped into the shape on a canvas first (prepPics), PowerPoint gets that PNG with its corners cut away */
           if(s.ish!=='rect'&&picCache[s.id]){ sl.addImage({data:picCache[s.id].replace(/^data:/,''), x:I(b.x), y:I(b.y), w:I(b.w), h:I(b.h)});
-            if(bd) sl.addShape(s.ish==='ell'?p.ShapeType.ellipse:p.ShapeType.roundRect,{x:I(b.x+h2), y:I(b.y+h2), w:I(b.w-2*h2), h:I(b.h-2*h2), fill:{type:'none'}, line:bd, rectRadius:I(Math.min(b.w,b.h)*.16667)}); return; }
+            if(bd&&!PICP[s.ish]) sl.addShape(s.ish==='ell'?p.ShapeType.ellipse:p.ShapeType.roundRect,{x:I(b.x+h2), y:I(b.y+h2), w:I(b.w-2*h2), h:I(b.h-2*h2), fill:{type:'none'}, line:bd, rectRadius:I(Math.min(b.w,b.h)*.16667)}); return; }
           var k=Math.min(b.w/s.iw,b.h/s.ih), w=s.iw*k, h=s.ih*k; sl.addImage({data:s.img.replace(/^data:/,''), x:I(b.x+(b.w-w)/2), y:I(b.y+(b.h-h)/2), w:I(w), h:I(h)});
           if(bd) sl.addShape(p.ShapeType.rect,{x:I(b.x+(b.w-w)/2+h2), y:I(b.y+(b.h-h)/2+h2), w:I(w-2*h2), h:I(h-2*h2), fill:{type:'none'}, line:bd}); } return; }
       if(empty(s,b.f)) return; var r=role(t,b.k), pt=PT(fs[b.f]||b.fs);
