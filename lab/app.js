@@ -1,7 +1,7 @@
 /* Fry Lab: science and math experiments that run in the browser (canvas, no server).
    app.js is the shell: experiment list, controls, readouts, play/pause loop, records table, graph with a
    least-squares line, CSV copy/download, auto record, sending the records to Fry Sheet and saving (localStorage 'fflab.v1').
-   The experiments are in experiments.js (LAB.add), the AI helper in ai-lab.js (uses ../ai.js).
+   The experiments are in experiments.js (LAB.add), the AI helper in ai-lab.js (uses ../ai.js), the report and the share link window in report.js.
    An experiment is an object:
      id, cat ('math'|'sci'), icon, name, desc, info, tries[], hint,
      params:[{id, l, min, max, step, val, u, d, pre:[[v,label]]} | {id, l, type:'seg', opts:[[v,label]], val} | {id, l, type:'check', val}]
@@ -278,13 +278,15 @@ function linfit(P){ var n=P.length; if(n<2) return null; var sx=0,sy=0,sxx=0,sxy
   var d=n*sxx-sx*sx; if(Math.abs(d)<1e-12) return null; var m=(n*sxy-sx*sy)/d, b=(sy-m*sx)/n, ssr=0, sst=0, my=sy/n;
   P.forEach(function(p){ var e=p[1]-(m*p[0]+b); ssr+=e*e; sst+=(p[1]-my)*(p[1]-my); }); return {m:m, b:b, r2:sst>1e-15?1-ssr/sst:1}; }
 var lastFit=null;
-function drawGraph(){
-  var c=$('gcv'); if(!c||$('paneData').hidden) return; var r=c.getBoundingClientRect(); if(r.width<10) return;
-  var w=Math.floor(r.width), h=Math.floor(r.height), d=Math.min(window.devicePixelRatio||1,2.5); c.width=Math.round(w*d); c.height=Math.round(h*d);
+/* cc, ww, hh: draw into another canvas of that size (the report picture) instead of the one in the data tab; the trend line is always drawn there */
+function drawGraph(cc,ww,hh){
+  var c=cc||$('gcv'); if(!c||(!cc&&$('paneData').hidden)) return; var w, h, d;
+  if(cc){ w=ww; h=hh; d=2; } else { var r=c.getBoundingClientRect(); if(r.width<10) return; w=Math.floor(r.width); h=Math.floor(r.height); d=Math.min(window.devicePixelRatio||1,2.5); }
+  c.width=Math.round(w*d); c.height=Math.round(h*d);
   var q=c.getContext('2d'); q.setTransform(d,0,0,d,0,0); q.clearRect(0,0,w,h);
   var o=graphCfg(), ix=cur.cols.map(function(x){ return x.k; }), xi=ix.indexOf(o.x), yi=ix.indexOf(o.y), cx=cur.cols[xi], cy=cur.cols[yi];
   var P=rows().map(function(r){ return [r[xi],r[yi]]; }).filter(function(p){ return p[0]!=null&&p[1]!=null; });
-  lastFit=null; $('fitTxt').innerHTML='';
+  if(!cc){ lastFit=null; $('fitTxt').innerHTML=''; }
   if(!P.length){ text(q,T('기록한 값이 여기에 점으로 찍혀요'),w/2,h/2,{al:'center',c:TH.dim,size:13}); return; }
   var x0=Math.min.apply(null,P.map(function(p){ return p[0]; })), x1=Math.max.apply(null,P.map(function(p){ return p[0]; }));
   var y0=Math.min.apply(null,P.map(function(p){ return p[1]; })), y1=Math.max.apply(null,P.map(function(p){ return p[1]; }));
@@ -294,16 +296,16 @@ function drawGraph(){
   q.font=font(11); var lw=Math.max(q.measureText(tick(y1,nice(y1-y0,4))).width,q.measureText(tick(y0,nice(y1-y0,4))).width)+12;
   var v=view({l:Math.max(34,lw),t:12,w:w-Math.max(34,lw)-12,h:h-48},x0,x1,y0,y1);
   axes(q,v,{box:true,xl:colTitle(cx),yl:colTitle(cy)});
-  var fit=o.fit?linfit(P):null;
+  var fit=(o.fit||cc)?linfit(P):null, cDot=cc?'#e0701a':COL.fry, cFit=cc?'#3b6fd8':COL.or;
   q.save(); q.beginPath(); q.rect(v.l,v.t,v.w,v.h); q.clip();
-  if(fit){ seg(q,v.sx(x0),v.sy(fit.m*x0+fit.b),v.sx(x1),v.sy(fit.m*x1+fit.b),COL.or,2,[6,4]); }
+  if(fit){ seg(q,v.sx(x0),v.sy(fit.m*x0+fit.b),v.sx(x1),v.sy(fit.m*x1+fit.b),cFit,2,[6,4]); }
   else if(P.length>1&&cur.join){ var S=P.slice().sort(function(a,b){ return a[0]-b[0]; }); line(q,S.map(function(p){ return [v.sx(p[0]),v.sy(p[1])]; }),'rgba(167,139,250,.6)',1.5); }
-  P.forEach(function(p){ dot(q,v.sx(p[0]),v.sy(p[1]),4.5,COL.fry,TH.stage); });
+  P.forEach(function(p){ dot(q,v.sx(p[0]),v.sy(p[1]),4.5,cDot,TH.stage); });
   q.restore();
-  if(fit){ lastFit=fit; var s=F('기울기 {0} · y절편 {1} · R² {2}','<b>'+sigf(fit.m)+'</b>',sigf(fit.b),fmt(fit.r2,4)), hint='';
+  if(fit&&!cc){ lastFit=fit; var s=F('기울기 {0} · y절편 {1} · R² {2}','<b>'+sigf(fit.m)+'</b>',sigf(fit.b),fmt(fit.r2,4)), hint='';
     if(cur.fitHint){ try{ hint=cur.fitHint(fit.m,fit.b,o.x,o.y)||''; }catch(e){} }
     $('fitTxt').innerHTML=s+(hint?'<br>'+esc(hint):''); }
-  else if(o.fit&&P.length<2) $('fitTxt').textContent=T('추세선은 점이 두 개 이상일 때 그려요');
+  else if(!cc&&o.fit&&P.length<2) $('fitTxt').textContent=T('추세선은 점이 두 개 이상일 때 그려요');
 }
 function sigf(v){ if(!isFinite(v)) return '—'; var a=Math.abs(v); var d=a>=100?1:a>=10?2:a>=1?3:a>=0.01?4:6; return fmt(v,d); }
 function esc(s){ return String(s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
@@ -320,7 +322,7 @@ $('csvSave').onclick=function(){ var b=new Blob(['﻿'+csv()],{type:'text/csv;ch
   a.href=u; a.download='fry-lab-'+cur.id+'.csv'; a.style.display='none'; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(u); a.remove(); },4000); toast(T('CSV 파일을 받았어요')); };
 /* the graph's own table (x, y; and the trend line when it is on), as a CSV, and an .xlsx with both tables (reuses Fry Sheet's xlsx library, loaded only when asked) */
 function graphPts(){ var o=graphCfg(), ix=cur.cols.map(function(x){ return x.k; }), xi=ix.indexOf(o.x), yi=ix.indexOf(o.y);
-  return {xl:colTitle(cur.cols[xi]), yl:colTitle(cur.cols[yi]), P:rows().map(function(r){ return [r[xi],r[yi]]; }).filter(function(p){ return p[0]!=null&&p[1]!=null; }), fit:graphCfg().fit};
+  return {xk:o.x, yk:o.y, xl:colTitle(cur.cols[xi]), yl:colTitle(cur.cols[yi]), P:rows().map(function(r){ return [r[xi],r[yi]]; }).filter(function(p){ return p[0]!=null&&p[1]!=null; }), fit:graphCfg().fit};
 }
 function saveBlob(b,name){ var u=URL.createObjectURL(b), a=document.createElement('a'); a.href=u; a.download=name; a.style.display='none'; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(u); a.remove(); },4000); }
 $('gcsvSave').onclick=function(){ var g=graphPts(); if(!g.P.length) return toast(T('그래프에 찍힌 점이 없어요'));
@@ -343,6 +345,51 @@ $('xlsxSave').onclick=function(){ if(!rows().length) return; var b=this; b.disab
     function(){ toast(T('엑셀 도구를 불러오지 못했어요. CSV 받기를 써 주세요')); }).then(function(){ b.disabled=!rows().length; }); };
 var clrT=0;
 $('recClear').onclick=function(){ if(Date.now()-clrT>3000){ clrT=Date.now(); toast(T('한 번 더 누르면 기록을 모두 지워요')); return; } clrT=0; st.rec[cur.id]=[]; saveSoon(); drawData(); toast(T('기록을 지웠어요')); };
+
+/* ---------- values from outside (share link, AI): unknown ids are ignored, numbers are clamped to min/max and snapped to step ---------- */
+function findP(k){ return cur.params.filter(function(x){ return x.id===k; })[0]; }
+function cleanVal(q,v){
+  if(q.type==='check'){ if(typeof v==='boolean') return {v:v}; if(v===1||v===0) return {v:v===1}; if(v==='true'||v==='false') return {v:v==='true'}; return null; }
+  if(q.type==='text'){ return typeof v==='string'?{v:v.slice(0,q.max||40)}:null; }
+  if(q.type==='seg'){ var o=q.opts.filter(function(x){ return x[0]===v||String(x[0])===String(v)||T(x[1])===v||x[1]===v; })[0]; return o?{v:o[0]}:null; }
+  if(typeof v==='string'&&/^\s*-?\d*[.,]?\d+(e[+-]?\d+)?\s*$/i.test(v)) v=parseFloat(v.replace(',','.'));
+  if(typeof v!=='number'||!isFinite(v)) return null;
+  var c=clamp(v,q.min,q.max), st0=q.step||0;
+  if(st0>0){ c=q.min+Math.round((c-q.min)/st0)*st0; c=clamp(+c.toFixed(decimals(st0)+2),q.min,q.max); }
+  return {v:c, clamped:Math.abs(c-v)>Math.max(st0,1e-9)}; }
+function valText(q,v){ if(q.type==='check') return T(v?'켬':'끔'); if(q.type==='text') return String(v);
+  if(q.type==='seg'){ var o=q.opts.filter(function(x){ return x[0]===v; })[0]; return o?T(o[1]):String(v); }
+  return fmt(v,pdef(q))+(q.u?' '+q.u:''); }
+/* set: {paramId: value} -> the open experiment, through setP like a slider. Returns [{id, label, from, to, clamped}] for the values that changed */
+function applySet(set){ var out=[]; if(!cur||!set||typeof set!=='object') return out;
+  Object.keys(set).forEach(function(k){ var q=findP(k); if(!q) return; var c=cleanVal(q,set[k]); if(!c) return; var old=cur.p[k];
+    if(old===c.v) return; setP(k,c.v); out.push({id:k, label:T(q.l), from:valText(q,old), to:valText(q,c.v), clamped:!!c.clamped}); });
+  return out; }
+
+/* ---------- share link: #share=<base64url of {v:1, i:id, p:{...}, r:[rows]}> ---------- */
+function b64enc(s){ var b=new TextEncoder().encode(s), t=''; for(var i=0;i<b.length;i++) t+=String.fromCharCode(b[i]); return btoa(t).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
+function b64dec(s){ var t=atob(String(s).replace(/-/g,'+').replace(/_/g,'/')), b=new Uint8Array(t.length); for(var i=0;i<t.length;i++) b[i]=t.charCodeAt(i); return new TextDecoder().decode(b); }
+function shareCode(withRows){ if(!cur) return ''; var o={v:1, i:cur.id, p:{}};
+  cur.params.forEach(function(q){ var v=cur.p[q.id]; if(typeof v==='number') v=+v.toPrecision(8); o.p[q.id]=v; });
+  if(withRows&&rows().length) o.r=rows().slice(-100).map(function(r){ return r.map(function(v){ return v==null?null:+v.toPrecision(6); }); });
+  return b64enc(JSON.stringify(o)); }
+function shareURL(withRows){ return location.origin+location.pathname+'#share='+shareCode(withRows); }
+/* read a code: null when it is not a valid link. Only a known experiment id is accepted; values are checked later by applySet */
+function readShare(code){ var o; try{ if(String(code).length>40000) return null; o=JSON.parse(b64dec(code)); }catch(e){ return null; }
+  if(!o||typeof o!=='object'||typeof o.i!=='string'||!Object.prototype.hasOwnProperty.call(byId,o.i)) return null;
+  var e=byId[o.i], r=null;
+  if(Array.isArray(o.r)&&o.r.length<=100) r=o.r.filter(function(x){ return Array.isArray(x)&&x.length===e.cols.length&&x.every(function(v){ return v===null||(typeof v==='number'&&isFinite(v)); }); });
+  return {id:o.i, p:o.p&&typeof o.p==='object'&&!Array.isArray(o.p)?o.p:{}, r:r&&r.length?r:null}; }
+/* open the experiment of a link and set its values (reset like loading a saved version); recorded rows come along only when this one has none yet */
+function openShare(code){ var o=readShare(code); if(!o){ toast(T('이 공유 링크를 열 수 없어요')); return false; }
+  open(o.id); var n=applySet(o.p).length; cur.reset(); setRunning(!!cur.autoRun); readKey=''; dirty=true; drawReads(); var msg=T('공유 링크로 실험을 열었어요');
+  if(o.r){ if(rows().length) msg+=T(' · 이미 기록이 있어서 링크의 기록은 가져오지 않았어요'); else { st.rec[cur.id]=o.r; drawData(); msg+=F(' · 기록 {0}줄을 가져왔어요',o.r.length); } }
+  saveNow(); toast(msg); return true; }
+/* the graph as a light picture (data URL) for the report */
+function graphImage(w,h){ var P=graphPts().P; if(!cur||!P.length) return ''; var cv2=document.createElement('canvas'), bak={}; ['text','dim','grid','stage'].forEach(function(k){ bak[k]=TH[k]; });
+  TH.text='#1a1d26'; TH.dim='#5b6475'; TH.grid='rgba(80,90,110,.18)'; TH.stage='#ffffff';
+  try{ drawGraph(cv2,w||640,h||340); var x=cv2.getContext('2d'); x.globalCompositeOperation='destination-over'; x.fillStyle='#ffffff'; x.fillRect(0,0,cv2.width,cv2.height); return cv2.toDataURL('image/png'); }
+  catch(e){ console.error(e); return ''; } finally{ ['text','dim','grid','stage'].forEach(function(k){ TH[k]=bak[k]; }); } }
 
 /* ---------- tabs ---------- */
 function tab(which){ var d=which==='data'; $('tabSet').classList.toggle('on',!d); $('tabData').classList.toggle('on',d); $('paneSet').hidden=d; $('paneData').hidden=!d;
@@ -384,7 +431,7 @@ function open(id){
 /* ---------- views: gallery (template picker) and lab (one experiment) ---------- */
 var curView='lab';
 function show(v){ if(v===curView&&!(v==='lab'&&$('labMain').hidden)&&!(v==='gallery'&&$('gallery').hidden)) return; curView=v; var gal=v==='gallery';
-  $('gallery').hidden=!gal; $('labMain').hidden=gal; $('galBtn').hidden=gal; $('aiBtn').hidden=gal; $('subTxt').textContent=T(gal?'교과 단원별 템플릿':'과학·수학 실험실');
+  $('gallery').hidden=!gal; $('labMain').hidden=gal; $('galBtn').hidden=gal; $('aiBtn').hidden=gal; $('repBtn').hidden=gal; $('shareBtn').hidden=gal; $('subTxt').textContent=T(gal?'교과 단원별 템플릿':'과학·수학 실험실');
   if(gal){ if(running) setRunning(false); if(autoT) setAuto(false,true); saveNow(); if(window.LABAI&&LABAI.close) LABAI.close(); document.title=T('템플릿 갤러리')+' · Fry Lab'; try{ history.replaceState(null,'',location.pathname+location.search); }catch(er){} if(window.LABGAL) LABGAL.refresh(); }
   else { if(cur) document.title=T(cur.name)+' · Fry Lab'; setTimeout(function(){ resize(); dirty=true; },0); } }
 $('galBtn').onclick=function(){ show('gallery'); };
@@ -439,9 +486,9 @@ function start(){
   if(window.ResizeObserver) new ResizeObserver(function(){ resize(); if(!$('paneData').hidden) drawGraph(); }).observe($('cvWrap'));
   window.addEventListener('resize',function(){ resize(); drawGraph(); });
   new MutationObserver(function(){ readTheme(); dirty=true; drawGraph(); }).observe(document.documentElement,{attributes:true,attributeFilter:['data-ff-theme']});
-  var h=(location.hash||'').slice(1); if(byId[h]) open(h); else show('gallery');
+  var h=(location.hash||'').slice(1); if(h.indexOf('share=')===0){ if(!openShare(h.slice(6))) show('gallery'); } else if(byId[h]) open(h); else show('gallery');
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){ dirty=true; drawGraph(); });
-  window.addEventListener('hashchange',function(){ var k=(location.hash||'').slice(1); if(byId[k]) open(k); else if(!k) show('gallery'); });
+  window.addEventListener('hashchange',function(){ var k=(location.hash||'').slice(1); if(k.indexOf('share=')===0) openShare(k.slice(6)); else if(byId[k]) open(k); else if(!k) show('gallery'); });
   window.addEventListener('beforeunload',saveNow); document.addEventListener('visibilitychange',function(){ if(document.hidden) saveNow(); });
   requestAnimationFrame(frame);
 }
@@ -449,5 +496,6 @@ document.addEventListener('DOMContentLoaded',start);
 
 window.LAB={add:add, show:show, vcount:vcount, get view(){ return curView; }, versions:function(){ return cur?vlist():[]; }, loadVersion:loadVer, saveVersion:saveVer, get last(){ return st.last; }, H:H, open:open, record:record, toast:toast,
   get cur(){ return cur; }, get list(){ return EXPS; }, get rows(){ return cur?rows():[]; }, get running(){ return running; }, get speed(){ return speed; },
-  colTitle:colTitle, csv:csv, setAuto:setAuto, get auto(){ return !!autoT; }, sheetDoc:function(){ return cur?sheetDoc():null; }, xlsxBook:xlsxBook, needXLSX:needXLSX, graphPts:graphPts, toSheet:toSheet, linfit:linfit, get fit(){ return lastFit; }, setP:setP, tab:tab, saveNow:saveNow};
+  colTitle:colTitle, csv:csv, setAuto:setAuto, get auto(){ return !!autoT; }, sheetDoc:function(){ return cur?sheetDoc():null; }, xlsxBook:xlsxBook, needXLSX:needXLSX, graphPts:graphPts, toSheet:toSheet, linfit:linfit, get fit(){ return lastFit; }, setP:setP, tab:tab, saveNow:saveNow,
+  valText:valText, applySet:applySet, shareCode:shareCode, shareURL:shareURL, readShare:readShare, openShare:openShare, graphImage:graphImage};
 })();
