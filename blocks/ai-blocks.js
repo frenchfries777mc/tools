@@ -319,7 +319,7 @@ function explainBlock(b){
   if(!window.FFAI||!FFAI.ready()){ exShow(b,plain,T('블록 이름으로 만든 설명이에요. AI를 켜면 더 자연스럽게 설명해요'),function(){ FFAI.settings(function(){ if(FFAI.ready()) explainBlock(b); }); }); return; }
   exShow(b,T('생각하는 중…'),'');
   var lines=outlineOf(b,0,[]).join('\n').slice(0,2400);
-  function once(extra){ return FFAI.ask({system:FFP.explainSys(lang), prompt:FFP.explainPrompt(lines)+(extra||''), maxTokens:200, temperature:0.2}).then(function(t){ return cleanExplain(t,lang); }); }
+  function once(extra){ return FFAI.ask({system:FFP.explainSys(lang), prompt:FFP.explainPrompt(lines)+(extra||''), maxTokens:200, prose:true, ko:lang==='ko'}).then(function(t){ return cleanExplain(t,lang); }); }
   once().then(function(t){ return t||once('\n\nReply with one or two short plain sentences only.'); }).then(function(t){
     if(id!==exRun) return;
     if(t) exShow(b,t,T('AI 설명이에요. 틀릴 수 있어요'));
