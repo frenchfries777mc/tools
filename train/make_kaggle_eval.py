@@ -116,6 +116,8 @@ if not HF_TOKEN:
         print("Secrets에서 HF_TOKEN을 못 읽었어요:", type(e).__name__)
 if HF_TOKEN:
     print("HF_TOKEN을 읽었어요 (값은 보여 주지 않아요).")
+    os.environ["HF_TOKEN"] = HF_TOKEN               # 모델을 내려받는 모든 단계가 이 토큰을 쓰게 해요
+    os.environ["HUGGING_FACE_HUB_TOKEN"] = HF_TOKEN
 else:
     print("[주의] HF_TOKEN이 없어요. Add-ons → Secrets에 HF_TOKEN을 넣고 이 노트에 체크해 주세요.")
     print("       지금은 기본 Qwen만 시험하고, 비공개인 타리우스·렉투스는 건너뛰어요.")
