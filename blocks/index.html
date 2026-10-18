@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<script src="../i18n.js?v=40"></script>
-<script src="strings.js?v=40"></script>
+<script src="../i18n.js?v=41"></script>
+<script src="strings.js?v=41"></script>
 <script src="lib/blockly_compressed.js"></script>
 <script src="lib/blocks_compressed.js"></script>
 <script src="lib/javascript_compressed.js"></script>
@@ -163,6 +163,8 @@ button,input,select{font:inherit; color:inherit;}
 .obj{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; min-height:96px; padding:8px 4px 6px; border-radius:12px; border:1px solid var(--line); background:#f3f4f6; color:#1f2430; cursor:pointer; touch-action:manipulation;}
 .obj:hover,.obj:focus-visible{border-color:var(--fry); outline:2px solid var(--fry); outline-offset:-2px;}
 .obj img{width:72px; height:72px; pointer-events:none;}
+.obj.wait img{visibility:hidden;} .obj.wait{background:linear-gradient(90deg,#f3f4f6,#e5e7eb,#f3f4f6); background-size:200% 100%; animation:objWait 1.2s linear infinite;}
+@keyframes objWait{to{background-position:-200% 0;}}
 .obj span{font-size:12px; line-height:1.2; text-align:center; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 .objEmpty{grid-column:1/-1; color:var(--dim); text-align:center; padding:30px 10px;}
 .dlg.narrow{width:min(560px,100%);} .dlg.tiny{width:min(400px,100%);}
@@ -383,14 +385,14 @@ button,input,select{font:inherit; color:inherit;}
 <input type="file" id="photoIn" accept="image/*" hidden>
 <input type="file" id="fileIn" accept=".json,application/json" hidden>
 <div id="toast"></div><div id="prog" hidden><div id="progTxt"></div><div id="progTrack"><div id="progBar"></div></div></div>
-<script src="sounds.js?v=40"></script>
-<script src="blocks.js?v=40"></script>
-<script src="objects.js?v=40"></script>
-<script src="examples.js?v=40"></script>
-<script src="app.js?v=40"></script>
-<script src="../ai.js?v=40"></script>
-<script src="../ai-prompts.js?v=40"></script>
-<script src="html2blocks.js?v=40"></script>
-<script src="ai-blocks.js?v=40"></script>
+<script src="sounds.js?v=41"></script>
+<script src="blocks.js?v=41"></script>
+<script src="objects.js?v=41"></script>
+<script src="examples.js?v=41"></script>
+<script src="app.js?v=41"></script>
+<script src="../ai.js?v=ai22"></script>
+<script src="../ai-prompts.js?v=41"></script>
+<script src="html2blocks.js?v=41"></script>
+<script src="ai-blocks.js?v=42"></script>
 </body>
 </html>
