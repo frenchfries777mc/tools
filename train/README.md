@@ -39,6 +39,16 @@ Fry Sheet AI 계산(`raw/calc-1`: 말로 쓴 계산 → 수식, 단위 문장 �
 | 바탕 모델 | Qwen3 1.7B | Qwen3 4B |
 | 학습 | `data/basic.jsonl` 1,000개, 1바퀴 | `data/full.jsonl` 2,600개, 3바퀴 |
 
+## 기준 시험 (Kaggle, 1.4 목표 재기)
+기본 Qwen3 1.7B·4B와 타리우스·렉투스에게 같은 시험 140문제(`eval/baseline-v1.jsonl`)를 4비트, 사이트 설정으로 내고 점수를 비교해요. 목표: 타리우스 = Qwen3 4B 점수, 렉투스 = Qwen3 4B × 3.5 (100을 넘으면 틀린 비율 ÷ 3.5).
+1. Kaggle에서 **File → Import Notebook** 으로 `train/kaggle-eval.ipynb`를 열어요 (GitHub 주소 https://github.com/frenchfries777mc/tools/blob/main/train/kaggle-eval.ipynb 또는 파일 올리기).
+2. 오른쪽 **Session options**: **Accelerator = GPU T4** (T4 x2도 돼요), **Internet = On**.
+3. **Add-ons → Secrets** 에 `HF_TOKEN`(Hugging Face 토큰)을 넣고 이 노트에 체크해요. 없으면 기본 Qwen만 시험해요.
+4. **Run All**. 약 40~60분 (추정). 맨 아래 요약 칸을 캡처해서 보내 주세요. Output에 `baseline-results.json`(점수)과 `baseline-answers.jsonl`(모든 답, 다음 학습 자료 찾기용)이 남아요.
+- 채점: 코드는 jsdom에서 페이지를 열고 눌러 봐요(노드가 없으면 정적 검사만), 계산·수식은 값을 계산해서 비교, 그래프·표는 JSON 값, 단어·모르는 말은 뜻 또는 "모른다/되묻기", 같은 구절 3번 반복이나 한자 섞임은 0점.
+- 사이트는 MLC q4f16_1, 노트는 bitsandbytes nf4라서 점수가 아주 똑같지는 않아요.
+- 고칠 때: `eval/ffeval.py`(채점), `eval/html_run.js`(페이지 실행), `eval/baseline-v1.jsonl`(문제)을 고치고 `python3 train/make_kaggle_eval.py`로 노트를 다시 만들어요. 검사: `python3 -m unittest train/eval/test_ffeval.py` (`FF_NODE_PATH`에 jsdom이 있는 node_modules를 주면 페이지 검사까지).
+
 ## 자료 비율
 코딩 30%, 요청 이해 20%, 번역 15%, 그래프 15%, 수식 10%, 표 10%. 시험용 160개(`data/test.jsonl`)는 학습에 쓰지 않아요.
 
