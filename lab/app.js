@@ -264,7 +264,7 @@ function drawData(){
       var dl=document.createElement('td'), b=document.createElement('button'); b.className='del'; b.textContent='×'; b.setAttribute('aria-label',T('이 줄 지우기')); b.title=T('이 줄 지우기');
       b.onclick=function(){ R.splice(i,1); saveSoon(); drawData(); }; dl.appendChild(b); tr.appendChild(dl); tb.appendChild(tr); });
     t.appendChild(tb); w.appendChild(t); w.scrollTop=w.scrollHeight; }
-  ['csvCopy','csvSave','recClear','toSheet'].forEach(function(id){ $(id).disabled=!R.length; });
+  ['csvCopy','csvSave','xlsxSave','gcsvSave','recClear','toSheet'].forEach(function(id){ $(id).disabled=!R.length; });
   drawGraph();
 }
 function graphCfg(){ var o=st.g[cur.id]&&typeof st.g[cur.id]==='object'?st.g[cur.id]:{}; var ks=cur.cols.map(function(c){ return c.k; });
@@ -318,6 +318,29 @@ $('csvCopy').onclick=function(){ var s=csv(), ok=function(){ toast(T('CSV를 복
   if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(s).then(ok,fb); else fb(); };
 $('csvSave').onclick=function(){ var b=new Blob(['﻿'+csv()],{type:'text/csv;charset=utf-8'}), u=URL.createObjectURL(b), a=document.createElement('a');
   a.href=u; a.download='fry-lab-'+cur.id+'.csv'; a.style.display='none'; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(u); a.remove(); },4000); toast(T('CSV 파일을 받았어요')); };
+/* the graph's own table (x, y; and the trend line when it is on), as a CSV, and an .xlsx with both tables (reuses Fry Sheet's xlsx library, loaded only when asked) */
+function graphPts(){ var o=graphCfg(), ix=cur.cols.map(function(x){ return x.k; }), xi=ix.indexOf(o.x), yi=ix.indexOf(o.y);
+  return {xl:colTitle(cur.cols[xi]), yl:colTitle(cur.cols[yi]), P:rows().map(function(r){ return [r[xi],r[yi]]; }).filter(function(p){ return p[0]!=null&&p[1]!=null; }), fit:graphCfg().fit};
+}
+function saveBlob(b,name){ var u=URL.createObjectURL(b), a=document.createElement('a'); a.href=u; a.download=name; a.style.display='none'; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(u); a.remove(); },4000); }
+$('gcsvSave').onclick=function(){ var g=graphPts(); if(!g.P.length) return toast(T('그래프에 찍힌 점이 없어요'));
+  var q=function(s){ s=String(s); return /[",\r\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s; };
+  saveBlob(new Blob(['\ufeff'+[q(g.xl)+','+q(g.yl)].concat(g.P.map(function(p){ return +p[0].toPrecision(10)+','+ +p[1].toPrecision(10); })).join('\r\n')+'\r\n'],{type:'text/csv;charset=utf-8'}),'fry-lab-'+cur.id+'-graph.csv'); toast(T('그래프 데이터 CSV를 받았어요')); };
+var xlsxP=null;
+function needXLSX(){ if(window.XLSX) return Promise.resolve(window.XLSX); if(xlsxP) return xlsxP;
+  xlsxP=new Promise(function(res,rej){ var s=document.createElement('script'); s.src='../sheet/xlsx.full.min.js'; s.onload=function(){ res(window.XLSX); }; s.onerror=function(){ xlsxP=null; rej(); }; document.head.appendChild(s); }); return xlsxP; }
+function xlsxBook(X){
+  var wb=X.utils.book_new(), g=graphPts(), ws=X.utils.aoa_to_sheet([cur.cols.map(colTitle)].concat(rows().map(function(r){ return r.map(function(v){ return v==null?null:+v.toPrecision(12); }); })));
+  ws['!cols']=cur.cols.map(function(c){ return {wch:Math.max(10,colTitle(c).length*2+2)}; }); X.utils.book_append_sheet(wb,ws,T('실험 기록'));
+  var A=[[g.xl,g.yl]].concat(g.P.map(function(p){ return [+p[0].toPrecision(12),+p[1].toPrecision(12)]; })), f=g.fit?linfit(g.P):null;
+  if(f) A.push([],[T('기울기'),f.m],[T('y절편'),f.b],['R²',f.r2]);
+  var w2=X.utils.aoa_to_sheet(A); w2['!cols']=[{wch:Math.max(12,g.xl.length*2+2)},{wch:Math.max(12,g.yl.length*2+2)}]; X.utils.book_append_sheet(wb,w2,T('그래프 데이터'));
+  return wb;
+}
+$('xlsxSave').onclick=function(){ if(!rows().length) return; var b=this; b.disabled=true;
+  needXLSX().then(function(X){ var out=X.write(xlsxBook(X),{bookType:'xlsx',type:'array'});
+    saveBlob(new Blob([out],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),'fry-lab-'+cur.id+'.xlsx'); toast(T('엑셀 파일을 받았어요')); },
+    function(){ toast(T('엑셀 도구를 불러오지 못했어요. CSV 받기를 써 주세요')); }).then(function(){ b.disabled=!rows().length; }); };
 var clrT=0;
 $('recClear').onclick=function(){ if(Date.now()-clrT>3000){ clrT=Date.now(); toast(T('한 번 더 누르면 기록을 모두 지워요')); return; } clrT=0; st.rec[cur.id]=[]; saveSoon(); drawData(); toast(T('기록을 지웠어요')); };
 
@@ -426,5 +449,5 @@ document.addEventListener('DOMContentLoaded',start);
 
 window.LAB={add:add, show:show, vcount:vcount, get view(){ return curView; }, versions:function(){ return cur?vlist():[]; }, loadVersion:loadVer, saveVersion:saveVer, get last(){ return st.last; }, H:H, open:open, record:record, toast:toast,
   get cur(){ return cur; }, get list(){ return EXPS; }, get rows(){ return cur?rows():[]; }, get running(){ return running; }, get speed(){ return speed; },
-  colTitle:colTitle, csv:csv, setAuto:setAuto, get auto(){ return !!autoT; }, sheetDoc:function(){ return cur?sheetDoc():null; }, toSheet:toSheet, linfit:linfit, get fit(){ return lastFit; }, setP:setP, tab:tab, saveNow:saveNow};
+  colTitle:colTitle, csv:csv, setAuto:setAuto, get auto(){ return !!autoT; }, sheetDoc:function(){ return cur?sheetDoc():null; }, xlsxBook:xlsxBook, needXLSX:needXLSX, graphPts:graphPts, toSheet:toSheet, linfit:linfit, get fit(){ return lastFit; }, setP:setP, tab:tab, saveNow:saveNow};
 })();

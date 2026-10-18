@@ -26,7 +26,7 @@
   var ATTRS=['placeholder','title','aria-label','alt'], seen=new WeakMap();
   function skip(n){ for(var e=n.nodeType===1?n:n.parentNode;e&&e.nodeType===1;e=e.parentNode){ if(e.nodeName==='SCRIPT'||e.nodeName==='STYLE'||e.nodeName==='TEXTAREA'||e.hasAttribute('data-notr')) return true; } return false; }
   function doText(n){ var v=n.nodeValue; if(!HAN.test(v)||seen.get(n)===v||skip(n)) return; var o=T(v); seen.set(n,o); if(o!==v) n.nodeValue=o; }
-  function doAttr(el){ for(var i=0;i<ATTRS.length;i++){ var a=ATTRS[i], v=el.getAttribute&&el.getAttribute(a); if(v&&HAN.test(v)&&!skip(el)) el.setAttribute(a,T(v)); } }
+  function doAttr(el){ for(var i=0;i<ATTRS.length;i++){ var a=ATTRS[i], v=el.getAttribute&&el.getAttribute(a); if(v&&HAN.test(v)&&!skip(el)){ var o=T(v); if(o!==v) el.setAttribute(a,o); } } } // only when it changed: an untranslated title would otherwise re-trigger the attribute observer forever
   function walk(root){
     if(!root||lang==='ko') return; if(root.nodeType===3){ doText(root); return; } if(root.nodeType!==1) return;
     doAttr(root); var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT|NodeFilter.SHOW_ELEMENT,null), n;
