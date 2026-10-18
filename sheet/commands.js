@@ -58,6 +58,7 @@ var I={
   fzCol:SV('<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18" stroke-width="3"/>'),
   fzHere:SV('<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18" stroke-width="3"/>'),
   fzOff:SV('<rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="3 2"/><path d="M3 9h18M9 3v18"/>'),
+  tstyle:SV('<rect x="3" y="4" width="18" height="16" rx="2"/><rect x="3" y="4" width="18" height="4.5" fill="currentColor" stroke="none"/><path d="M3 12.5h18M3 16.5h18" stroke-width="1.5"/><rect x="3.8" y="12.8" width="16.4" height="3.4" fill="currentColor" stroke="none" opacity=".35"/>'),
   chart:SV('<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>'),
   viz:SV('<circle cx="12" cy="12" r="3"/><circle cx="4.5" cy="5" r="2"/><circle cx="19.5" cy="5" r="2"/><circle cx="4.5" cy="19" r="2"/><circle cx="19.5" cy="19" r="2"/><path d="M6 6.5l3.8 3.8M18 6.5l-3.8 3.8M6 17.5l3.8-3.8M18 17.5l-3.8-3.8"/>'),
   scale:SV('<rect x="3" y="4" width="5" height="16" rx="1" fill="#ff6b6b" stroke="none"/><rect x="9.5" y="4" width="5" height="16" rx="1" fill="#ffc93c" stroke="none"/><rect x="16" y="4" width="5" height="16" rx="1" fill="#3fe08f" stroke="none"/>'),
@@ -93,6 +94,7 @@ var C=[
   {id:'decUp',tab:'home',g:5,ic:I.decUp,lb:'소수점 +',tt:'소수점 늘리기',kw:'decimal 소수 자릿수 늘리기',sel:1},
   {id:'border',tab:'home',g:6,ic:I.border,lb:'테두리',kw:'border lines 선 칸 선',sel:1},
   {id:'borderdlg',tab:'home',g:6,ic:I.borderdlg,lb:'테두리 설정',tt:'테두리 설정 (칸마다 쪽, 색)',kw:'border style color 선 색 굵기'},
+  {id:'tstyle',tab:'home',g:6,ic:I.tstyle,lb:'표 스타일',tt:'표 스타일 (줄무늬, 머리글 색)',kw:'table style stripe banded header color 표 스타일 줄무늬 머리글 색 꾸미기 디자인',sel:1},
   {id:'merge',tab:'home',g:6,ic:I.merge,lb:'병합',tt:'칸 병합 / 병합 풀기',kw:'merge cells 합치기 셀 병합',sel:1,el:'bMerge'},
   {id:'r.unmerge',tab:'home',g:6,ic:I.unmerge,lb:'병합 풀기',tt:'선택 범위 병합 풀기',kw:'unmerge 병합 해제',sel:1},
   {id:'clearfmt',tab:'home',g:6,ic:I.clearfmt,lb:'서식 지우기',kw:'clear format 서식 없애기 초기화',sel:1},
@@ -128,10 +130,14 @@ var C=[
   {id:'d.lockSheet',tab:'data',g:4,ic:I.lockS,lb:'시트 잠그기',tt:'시트 전체 잠그기',kw:'lock protect sheet 잠금 잠그기 시트 보호'},
   {id:'d.unlockSheet',tab:'data',g:4,ic:I.unlockS,lb:'시트 잠금 풀기',tt:'시트 잠금 모두 풀기',kw:'unlock sheet 잠금 해제 풀기 잠금'},
   {id:'r.fitCol',tab:'data',g:5,ic:I.fit,lb:'열 너비 맞춤',tt:'선택한 열 너비 자동 맞춤',kw:'autofit column width 너비 폭 맞춤 자동',sel:1},
-  {id:'r.fzRow',tab:'data',g:5,ic:I.fzRow,lb:'행 고정',tt:'여기까지 행 고정',kw:'freeze rows 고정 틀 머리글',sel:1},
-  {id:'r.fzCol',tab:'data',g:5,ic:I.fzCol,lb:'열 고정',tt:'여기까지 열 고정',kw:'freeze columns 고정 틀',sel:1},
-  {id:'r.fzHere',tab:'data',g:5,ic:I.fzHere,lb:'틀 고정',tt:'이 칸의 위·왼쪽 고정 (틀 고정)',kw:'freeze panes 고정 틀',sel:1},
-  {id:'r.fzOff',tab:'data',g:5,ic:I.fzOff,lb:'고정 풀기',kw:'unfreeze 고정 해제 틀 풀기'},
+  {id:'r.fzMenu',tab:'data',g:5,ic:I.fzHere,lb:'틀 고정',tt:'틀 고정 (첫 행, 첫 열 고르기)',kw:'freeze panes 고정 틀 머리글 행 열 스크롤'},
+  {id:'r.fzTop',nobtn:1,tab:'data',g:5,ic:I.fzRow,lb:'첫 행 고정',tt:'맨 위 1행을 고정',kw:'freeze top row 고정 틀 머리글 첫 행 맨 위'},
+  {id:'r.fzLeft',nobtn:1,tab:'data',g:5,ic:I.fzCol,lb:'첫 열 고정',tt:'맨 왼쪽 1열을 고정',kw:'freeze first column 고정 틀 첫 열 맨 왼쪽'},
+  {id:'r.fzBoth',nobtn:1,tab:'data',g:5,ic:I.fzHere,lb:'첫 행과 첫 열 고정',kw:'freeze top row and first column 고정 틀 첫 행 첫 열'},
+  {id:'r.fzRow',nobtn:1,tab:'data',g:5,ic:I.fzRow,lb:'행 고정',tt:'여기까지 행 고정',kw:'freeze rows 고정 틀 머리글'},
+  {id:'r.fzCol',nobtn:1,tab:'data',g:5,ic:I.fzCol,lb:'열 고정',tt:'여기까지 열 고정',kw:'freeze columns 고정 틀'},
+  {id:'r.fzHere',nobtn:1,tab:'data',g:5,ic:I.fzHere,lb:'이 칸 기준 고정',tt:'이 칸의 위·왼쪽 고정 (틀 고정)',kw:'freeze panes 고정 틀'},
+  {id:'r.fzOff',nobtn:1,tab:'data',g:5,ic:I.fzOff,lb:'고정 풀기',kw:'unfreeze 고정 해제 틀 풀기'},
 
   {id:'chart',tab:'chart',g:1,ic:I.chart,lb:'차트',tt:'차트 만들기',kw:'chart graph 차트 그래프 막대 꺾은선 원'},
   {id:'viz',tab:'chart',g:1,ic:I.viz,lb:'시각화',kw:'visualize diagram mind map 시각화 다이어그램 마인드맵 그래프 차트'},
@@ -174,7 +180,7 @@ try{ var sv=localStorage.getItem(LS); if(TABS.some(function(t){ return t[0]===sv
 rtabs.innerHTML=TABS.map(function(t){ return '<button class="rtab'+(t[0]==='ai'?' aib':'')+'" role="tab" data-tab="'+t[0]+'">'+(t[0]==='ai'?'<span aria-hidden="true">✨</span> ':'')+t[1]+'</button>'; }).join('');
 var html='', last={};
 C.forEach(function(c){
-  if(!TABS.some(function(t){ return t[0]===c.tab; })) return;
+  if(c.nobtn||!TABS.some(function(t){ return t[0]===c.tab; })) return;
   if(last[c.tab]!=null&&last[c.tab]!==c.g) html+='<span class="sepv" data-tab="'+c.tab+'"></span>';
   last[c.tab]=c.g;
   var tt=esc(c.tt||c.lb)+(c.key?' ('+keyText(c.key)+')':''), cls='rb'+(c.tab==='ai'?' aib':'');
