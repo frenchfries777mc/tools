@@ -1,12 +1,13 @@
 /* Block HTML: "오브젝트" picker. Adds a toolbox button next to "사진 넣기" and a dialog with category tabs, search and a grid.
    The library is loaded only when the picker is first opened: objects/index.js (names of every object, about 50 KB) first,
    then the pictures of one tab at a time (objects/<tab>.js, 25-120 KB each) as tabs are opened or search results need them (v41).
-   Picking calls the handler given to BHOBJ.open with {id, name, svg, src, data}; app.js turns it into a normal picture (SVG data URL). */
+   Picking calls the handler given to BHOBJ.open with {id, name, svg, src, data}; app.js turns it into a normal picture (SVG data URL).
+   The last tab, '모두의 그림' (v43), is drawn by shared.js: drawings people shared, loaded from the server; its search matches their titles. */
 (function(){
 'use strict';
 var T=FFT.T, $=function(id){ return document.getElementById(id); };
 var LI=Math.max(0,['ko','en','es','fr','de','ja'].indexOf(FFT.lang));
-var V='41', INDEX_URL='objects/index.js?v='+V;
+var V='41', SHARED='@shared', INDEX_URL='objects/index.js?v='+V;
 
 /* toolbox: put the button right after "사진 넣기", wherever that category ends up */
 var baseToolbox=BH.toolbox;
@@ -44,10 +45,13 @@ var SRC={own:'Block HTML', fluent:'Fluent Emoji (Microsoft, MIT)'};
 function norm(s){ return String(s||'').toLowerCase().normalize('NFC').trim(); }
 function renderTabs(){
   var q=norm($('objQ').value);
-  $('objTabs').innerHTML=LIB.cats.map(function(c){ return '<button type="button" data-c="'+c.id+'" class="'+(!q&&c.id===cat?'on':'')+'">'+esc(c.name[LI]||c.name[0])+'</button>'; }).join('');
+  $('objTabs').innerHTML=LIB.cats.map(function(c){ return '<button type="button" data-c="'+c.id+'" class="'+(!q&&c.id===cat?'on':'')+'">'+esc(c.name[LI]||c.name[0])+'</button>'; }).join('')+
+    (window.BHSHARE?'<button type="button" data-c="'+SHARED+'" class="shTab'+(cat===SHARED?' on':'')+'">🌍 '+esc(T('모두의 그림'))+'</button>':'');
+  $('objQ').placeholder=cat===SHARED?T('그림 제목으로 찾기'):T('찾기 (예: 사과, car)');
 }
 function esc(s){ return String(s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
-function renderGrid(){
+function renderGrid(typing){
+  if(cat===SHARED&&window.BHSHARE){ BHSHARE.show($('objQ').value,typing); return; }
   var q=norm($('objQ').value), words=q.split(/\s+/).filter(Boolean);
   var list=words.length?rank(LIB.items,q,words):LIB.items.filter(function(o){ return o.cat===cat; });
   var g=$('objGrid');
@@ -78,7 +82,7 @@ function rank(items,q,words){
 function fill(){ var by={}; LIB.items.forEach(function(o){ by[o.id]=o; });
   Array.prototype.forEach.call($('objGrid').querySelectorAll('.obj.wait'),function(b){ var o=by[b.dataset.id];
     if(o&&svgOf(o)){ b.querySelector('img').src=dataUrl(o); b.classList.remove('wait'); } }); }
-function render(){ renderTabs(); renderGrid(); }
+function render(typing){ renderTabs(); renderGrid(typing); }
 
 function open(handler){
   onPick=handler; var dlg=$('objDlg'); dlg.classList.add('open');
@@ -88,11 +92,13 @@ function open(handler){
 }
 $('objQ').placeholder=T('찾기 (예: 사과, car)'); $('objQ').setAttribute('aria-label',T('오브젝트 찾기')); // the box is data-notr, so translate these here
 $('objTabs').addEventListener('click',function(e){ var b=e.target.closest('[data-c]'); if(!b) return; cat=b.dataset.c; $('objQ').value=''; render(); });
-$('objQ').addEventListener('input',function(){ if(LIB) render(); });
-$('objGrid').addEventListener('click',function(e){ var b=e.target.closest('.obj'); if(!b||!LIB) return;
+$('objQ').addEventListener('input',function(){ if(LIB) render(true); });
+$('objGrid').addEventListener('click',function(e){ var b=e.target.closest('.obj'); if(!b||!LIB||b.dataset.sid) return;
   var o=LIB.items.filter(function(x){ return x.id===b.dataset.id; })[0]; if(!o) return;
   loadTab(o.cat).then(function(){ if(!svgOf(o)||!$('objDlg').classList.contains('open')) return;
     $('objDlg').classList.remove('open'); if(onPick) onPick({id:o.id,name:o.name,svg:svgOf(o),src:o.src,data:dataUrl(o)}); }, function(){}); });
 
-window.BHOBJ={open:open, load:load, loadTab:loadTab};
+/* shared.js: a '모두의 그림' tile was picked */
+function pick(o){ if(!$('objDlg').classList.contains('open')) return; $('objDlg').classList.remove('open'); if(onPick) onPick(o); }
+window.BHOBJ={open:open, load:load, loadTab:loadTab, pick:pick, isShared:function(){ return cat===SHARED; }};
 })();
