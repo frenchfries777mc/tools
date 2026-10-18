@@ -148,6 +148,14 @@ class TestGraders(unittest.TestCase):
         self.assertEqual(F.grade(u, "잘 모르는 말이에요. 무슨 뜻인지 알려 주세요.", True)[0], 1)
         self.assertEqual(F.grade(u, "에엑따는 기쁠 때 쓰는 감탄사예요. 더 궁금한 게 있으면 알려 주세요!", True)[0], 0)
         self.assertEqual(F.grade(u, "에엑따는 감탄사예요. 모르는 게 있으면 물어보세요.", True)[0], 0)
+        # honest "never seen it" answers in the polite forms the FF models write (2026-10-18: these were marked as made up)
+        for ok in ("'쿠마롱티'라는 말은 처음 봅니다. 어디서 보셨는지 알려 주세요.", "'쿠마롱티'라는 말은 처음 봐요.", "' 냐뮤뮤 '라는 말은 제가 모르는 부분이에요.", "I don't have any information about the question."):
+            self.assertEqual(F.grade(u, ok, True)[0], 1, ok)
+
+    def test_translation_with_todays(self):
+        e = self.item("e03")
+        self.assertEqual(F.grade(e, "Today's weather is good.", True)[0], 1)
+        self.assertEqual(F.grade(e, "Today is a nice weather boat", True)[0], 0)
 
     def test_known_or_ask(self):
         w = self.item("w02")
