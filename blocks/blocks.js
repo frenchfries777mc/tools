@@ -214,6 +214,10 @@ def('act_move',function(){ this.appendValueInput('X').setCheck('Number').appendF
   function(b){ need('move'); return '__move('+er(b)+', '+(G.valueToCode(b,'X',O.COMMA)||'0')+', '+(G.valueToCode(b,'Y',O.COMMA)||'0')+');\n'; });
 def('act_show',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('을(를)')).appendField(new Blockly.FieldDropdown(function(){ return [[T('보이기'),'show'],[T('숨기기'),'hide'],[T('보이기/숨기기 바꾸기'),'toggle']]; }),'MODE'); act(this,'보이거나 숨겨요'); },
   function(b){ need('show'); return '__show('+er(b)+', '+lit(b.getFieldValue('MODE'))+');\n'; });
+def('act_hide',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('모양 숨기기')); act(this,'요소의 모양을 화면에서 숨겨요. 요소는 그대로 있어요'); },
+  function(b){ need('show'); return '__show('+er(b)+', "hide");\n'; });
+def('act_unhide',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('모양 보이기')); act(this,'숨겨 둔 요소의 모양을 다시 보여요'); },
+  function(b){ need('show'); return '__show('+er(b)+', "show");\n'; });
 /* speech bubbles: a rounded box with a tail above the element (any element, picture or clone); it follows the element and goes away with it */
 function sayKind(){ return new Blockly.FieldDropdown(function(){ return [[T('말하기'),'say'],[T('생각하기'),'think']]; }); }
 def('act_say',function(){ this.appendValueInput('VALUE').appendField(elField(),'EL').appendField(T('이(가)')); this.appendDummyInput().appendField(T('(이)라고')).appendField(sayKind(),'KIND'); this.setInputsInline(true);
@@ -1028,7 +1032,7 @@ function toolbox(){
     cat('look','모양·바꾸기',[
       lab('말풍선'),bk('act_say',{inputs:{VALUE:sh('text',T('안녕!'))}}),bk('act_sayfor',{inputs:{VALUE:sh('text',T('안녕!')),SEC:n(2)}}),bk('act_say',{fields:{KIND:'think'},inputs:{VALUE:sh('text',T('음…'))}}),
       lab('내용 바꾸기'),bk('act_set',{inputs:{VALUE:sh('text',T('안녕!'))}}),bk('act_append',{inputs:{VALUE:sh('text',T('항목'))}}),bk('act_clear'),
-      lab('색과 크기'),bk('act_style',{inputs:{VALUE:shc('#ef4444')}}),bk('act_size',{inputs:{N:n(32)}}),bk('act_show'),
+      lab('색과 크기'),bk('act_style',{inputs:{VALUE:shc('#ef4444')}}),bk('act_size',{inputs:{N:n(32)}}),bk('act_hide'),bk('act_unhide'),bk('act_show'),
       lab('색'),bk('val_color'),bk('val_rcolor'),
       lab('값 가져오기'),bk('val_get'),bk('val_prompt',{inputs:{VALUE:sh('text',T('이름이 뭐예요?'))}}),bk('val_key')]),
     cat('move','움직임',[
