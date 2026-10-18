@@ -295,7 +295,7 @@ def('act_tempo',function(){ this.appendValueInput('N').setCheck('Number').append
   function(b){ need('note'); return '__bpm = Math.max(20, Math.min(400, '+(G.valueToCode(b,'N',O.COMMA)||'120')+'));\n'; });
 var SNDS={}, BUILTIN=window.BH_BUILTIN_SNDS||{};
 function sndOf(n){ return SNDS[n]||BUILTIN[n]; }
-function sndField(){ var f=new Blockly.FieldDropdown(function(){ var o=Object.keys(BUILTIN).map(function(n){ return [T(n),n]; }); Object.keys(SNDS).forEach(function(n){ if(!BUILTIN[n]) o.push([n,n]); }); o.push([T('＋ mp3 파일 넣기'),'+']); o.push([T('＋ 내 목소리 녹음'),'*']); return o; });
+function sndField(){ var f=new Blockly.FieldDropdown(function(){ var o=Object.keys(BUILTIN).map(function(n){ return [T(n),n]; }); Object.keys(SNDS).forEach(function(n){ if(!BUILTIN[n]&&!/^data:video\//.test(SNDS[n].data)) o.push([n,n]); }); o.push([T('＋ mp3 파일 넣기'),'+']); o.push([T('＋ 내 목소리 녹음'),'*']); return o; });
   f.setValidator(function(v){ if(v==='+'){ var me=this; setTimeout(function(){ if(window.BH&&BH.pickSound) BH.pickSound(me); },0); return null; } if(v==='*'){ var me2=this; setTimeout(function(){ if(window.BH&&BH.recordSound) BH.recordSound(me2); },0); return null; } return v; }); return f; }
 def('act_mp3',function(){ this.appendDummyInput().appendField(T('내 소리')).appendField(sndField(),'SND').appendField(T('을(를)')).appendField(new Blockly.FieldDropdown(function(){ return [[T('한 번 재생하기'),'once'],[T('반복해서 재생하기'),'loop']]; }),'LOOP'); this.setFieldValue('기본 노래','SND'); act(this,'소리를 재생해요. 처음엔 기본 노래가 골라져 있고, 목록 맨 아래 mp3 파일 넣기로 내 파일을 골라도 돼요'); },
   function(b){ var n=b.getFieldValue('SND'); if(!sndOf(n)) return ''; USEDS[n]=1; need('mp3'); return '__mp3('+lit(n)+', '+(b.getFieldValue('LOOP')==='loop')+');\n'; });
@@ -940,7 +940,7 @@ HELP.store=src(function(){
     return k in __mem ? __mem[k] : d;
   }
 });
-var HELP_DEPS={beep:['snd'],sfx:['snd'],note:['snd'],hit:['$'],touch:['$','clones'],hitev:['$','touch'],rpos:['$'],nudge:['$'],where:['$'],stay:['$'],follow:['$','cursor'],image:['$','draw'],say:['$'],get:['$'],set:['$'],add:['$'],size:['$'],move:['$'],glide:['$','move'],turn:['$'],watch:['$'],phys:['$'],drag:['$'],volume:['snd'],mp3:['snd'],flip:['$'],autoturn:['$','turn'],fx:['$'],tween:['$','size'],lookat:['$','clones'],show:['$'],draw:['$'],clones:['$','me','sched','nudge'],sched:['me'],tile:['$','nudge'],best:['store']};
+var HELP_DEPS={path:['$','move'],scene:['$'],beep:['snd'],sfx:['snd'],note:['snd'],hit:['$'],touch:['$','clones'],hitev:['$','touch'],rpos:['$'],nudge:['$'],where:['$'],stay:['$'],follow:['$','cursor'],image:['$','draw'],say:['$'],get:['$'],set:['$'],add:['$'],size:['$'],move:['$'],glide:['$','move'],turn:['$'],watch:['$'],phys:['$'],drag:['$'],volume:['snd'],mp3:['snd'],flip:['$'],autoturn:['$','turn'],fx:['$'],tween:['$','size'],lookat:['$','clones'],show:['$'],draw:['$'],clones:['$','me','sched','nudge'],sched:['me'],tile:['$','nudge'],best:['store']};
 
 function dbgHelper(vars){
   return 'var __dq = Promise.resolve(), __dgo = null, __dfree = 0, __drun = 0, __dbusy = {};\n'+
@@ -993,7 +993,7 @@ function build(ws,opts){
     body+=bodyHTML(b,'  ',true);
   });
   // JavaScript
-  WAITS=ws.getAllBlocks(false).some(function(x){ return (x.type==='act_wait'||x.type==='act_glideto'||x.type==='act_glidexy'||x.type==='act_tween')&&x.isEnabled(); });
+  WAITS=ws.getAllBlocks(false).some(function(x){ return (x.type==='act_wait'||x.type==='act_glideto'||x.type==='act_glidexy'||x.type==='act_tween'||x.type==='act_path_go')&&x.isEnabled(); });
   NEED={}; USED={}; USEDS={}; G.INFINITE_LOOP_TRAP=opts.trap?'if (--window.__loop < 0) throw new Error("'+T('반복이 끝나지 않아요')+'");\n':null;
   DBG=!!opts.debug; dbgSeq=0; GLW=!!opts.glow&&!DBG; G.STATEMENT_PREFIX=DBG?'await __step(%1);\n':GLW?'__glow(%1);\n':null;
   var js, dbgVars=[];
@@ -1059,6 +1059,238 @@ var LINK_JS='<script>(function(){var on=0,names=[],boxes=[],raf=0;'+
   'document.addEventListener("click",function(e){if(!on)return;var n=base(e.target);if(n)try{parent.postMessage({ffbhPick:n},"*");}catch(x){}},true);'+
   'try{parent.postMessage({ffbhLinkReady:1},"*");}catch(x){}})();<\/script>\n';
 
+/* ---------- v54: video, path, scenes, on-screen joystick, countdown, language/device conditions ---------- */
+function isVid(n){ var s=SNDS[n]; return !!(s&&/^data:video\//.test(s.data)); }
+function vidField(){ var f=new Blockly.FieldDropdown(function(){ var o=[[T('(영상 파일)'),'']]; Object.keys(SNDS).forEach(function(n){ if(isVid(n)) o.push([n,n]); }); o.push([T('＋ 영상 파일 넣기'),'+']); return o; });
+  f.setValidator(function(v){ if(v==='+'){ var me=this; setTimeout(function(){ if(window.BH&&BH.pickVideo) BH.pickVideo(me); },0); return null; } return v; }); return f; }
+def('val_myvideo',function(){ this.appendDummyInput().appendField(T('내 영상 파일')).appendField(vidField(),'SND'); val(this,'String','컴퓨터나 폰에 있는 영상 파일을 페이지에 넣어요. 영상 보이기 블록의 주소 칸에 끼워 써요. 파일이 크면 페이지도 커져요 (8MB까지)'); },
+  function(b){ var n=b.getFieldValue('SND'); if(!isVid(n)) return ["''",O.ATOMIC]; USEDS[n]=1; need('mp3'); return ['__mp3s['+lit(n)+']',O.MEMBER]; });
+def('act_video',function(){ this.appendDummyInput().appendField(T('영상')); this.appendValueInput('SRC').setCheck('String'); this.appendDummyInput().appendField(T('을(를) x')); this.appendValueInput('X').setCheck('Number'); this.appendDummyInput().appendField('y'); this.appendValueInput('Y').setCheck('Number'); this.appendDummyInput().appendField(T('너비')); this.appendValueInput('W').setCheck('Number'); this.appendDummyInput().appendField(T('로 보이기')); this.setInputsInline(true); act(this,'영상 주소(https://…)나 내 영상 파일을 페이지에 보여요. 페이지에는 영상이 하나만 있고, 다시 쓰면 영상이 바뀌어요. 아직 재생은 안 해요'); },
+  function(b){ need('video'); return '__video('+(G.valueToCode(b,'SRC',O.COMMA)||"''")+', '+(G.valueToCode(b,'X',O.COMMA)||'0')+', '+(G.valueToCode(b,'Y',O.COMMA)||'0')+', '+(G.valueToCode(b,'W',O.COMMA)||'320')+');\n'; });
+def('act_video_ctl',function(){ this.appendDummyInput().appendField(T('영상')).appendField(new Blockly.FieldDropdown(function(){ return [[T('재생하기'),'play'],[T('잠깐 멈추기'),'pause'],[T('멈추고 처음으로'),'stop'],[T('지우기'),'remove']]; }),'ACT'); act(this,'영상을 재생하거나 멈춰요. 폰에서는 버튼을 누른 뒤에만 소리와 함께 재생될 수 있어요'); },
+  function(b){ need('video'); return '__videoDo('+lit(b.getFieldValue('ACT'))+');\n'; });
+def('act_video_vol',function(){ this.appendDummyInput().appendField(T('영상 소리 크기를')); this.appendValueInput('N').setCheck('Number'); this.appendDummyInput().appendField(T('%로 정하기')); this.setInputsInline(true); act(this,'영상 소리를 0~100 사이로 정해요'); },
+  function(b){ need('video'); return '__videoVol('+(G.valueToCode(b,'N',O.COMMA)||'100')+');\n'; });
+def('act_video_loop',function(){ this.appendDummyInput().appendField(T('영상 반복')).appendField(new Blockly.FieldDropdown(function(){ return [[T('켜기'),'on'],[T('끄기'),'off']]; }),'MODE'); act(this,'켜면 영상이 끝나도 처음부터 다시 재생해요'); },
+  function(b){ need('video'); return '__videoLoop('+(b.getFieldValue('MODE')==='on')+');\n'; });
+
+def('act_path_add',function(){ this.appendDummyInput().appendField(T('경로에 점 더하기 x')); this.appendValueInput('X').setCheck('Number'); this.appendDummyInput().appendField('y'); this.appendValueInput('Y').setCheck('Number'); this.setInputsInline(true); act(this,'움직일 길에 점을 하나 더해요. 점을 여러 개 더한 뒤 "경로 따라 움직이기"를 쓰면 점을 차례로 지나가요. 위치는 페이지 왼쪽 위에서부터예요'); },
+  function(b){ need('path'); return '__pathAdd('+(G.valueToCode(b,'X',O.COMMA)||'0')+', '+(G.valueToCode(b,'Y',O.COMMA)||'0')+');\n'; });
+def('act_path_clear',function(){ this.appendDummyInput().appendField(T('경로 비우기')); act(this,'더해 둔 경로의 점을 모두 지워요'); },
+  function(){ need('path'); return '__pathClear();\n'; });
+def('act_path_go',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('이(가) 경로를 따라')); this.appendValueInput('SEC').setCheck('Number'); this.appendDummyInput().appendField(T('초 동안 움직이기')); this.setInputsInline(true); act(this,'지금 있는 곳에서 시작해 더해 둔 점들을 차례로 지나가요. 다 갈 때까지 기다렸다가 다음 블록으로 가요'); },
+  function(b){ need('path'); return 'await __pathGo('+er(b)+', '+(G.valueToCode(b,'SEC',O.COMMA)||'1')+');\n'; });
+
+def('act_scene_show',function(){ this.appendDummyInput().appendField(T('장면')); this.appendValueInput('NAME').setCheck('String'); this.appendDummyInput().appendField(T('보이기')); this.setInputsInline(true); act(this,'이 이름의 장면을 보여 줘요. 다른 장면에 넣어 둔 요소는 숨겨져요. 장면에 넣지 않은 요소는 늘 보여요'); },
+  function(b){ need('scene'); return '__sceneShow('+(G.valueToCode(b,'NAME',O.COMMA)||"''")+');\n'; });
+def('act_scene_put',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('을(를) 장면')); this.appendValueInput('NAME').setCheck('String'); this.appendDummyInput().appendField(T('에 넣기')); this.setInputsInline(true); act(this,'요소를 그 이름의 장면에 넣어요. 그 장면이 보일 때만 보여요'); },
+  function(b){ need('scene'); return '__scenePut('+er(b)+', '+(G.valueToCode(b,'NAME',O.COMMA)||"''")+');\n'; });
+def('val_scene_is',function(){ this.appendDummyInput().appendField(T('지금 장면이')); this.appendValueInput('NAME').setCheck('String'); this.appendDummyInput().appendField(T('인가?')); this.setInputsInline(true); val(this,'Boolean','보이는 장면의 이름이 같으면 참이에요'); },
+  function(b){ need('scene'); return ['(__scene === String('+(G.valueToCode(b,'NAME',O.NONE)||"''")+'))',O.ATOMIC]; });
+
+def('act_joy',function(){ this.appendDummyInput().appendField(T('화면에')).appendField(new Blockly.FieldDropdown(function(){ return [[T('화살표 버튼 보이기'),'arrows'],[T('조이스틱 보이기'),'stick'],[T('방향 조작 숨기기'),'off']]; }),'MODE'); act(this,'폰에서 키보드 없이 쓰도록 화면 왼쪽 아래에 화살표 버튼이나 조이스틱을 보여요. 누르면 화살표 키를 누른 것처럼 되어서 "키를 누르고 있는 동안" 같은 블록이 그대로 움직여요'); },
+  function(b){ need('joy'); return '__joy('+lit(b.getFieldValue('MODE'))+');\n'; });
+def('ev_joy',function(){ this.appendDummyInput().appendField(T('화면 조작에서')).appendField(new Blockly.FieldDropdown(function(){ return [[T('아무 방향'),'any'],[T('위'),'위'],[T('아래'),'아래'],[T('왼쪽'),'왼쪽'],[T('오른쪽'),'오른쪽']]; }),'DIR').appendField(T('을 누르면')); hat(this,'화면의 화살표 버튼이나 조이스틱을 그 방향으로 누를 때 해요'); },
+  function(b){ var d=b.getFieldValue('DIR'); need('joy'); return 'document.addEventListener(\'bhjoy\', '+AF()+'e) {\n'+(d==='any'?'':'  if (e.detail !== '+lit(d)+') return;\n')+hatBody(b)+'});\n'; });
+def('val_joydir',function(){ this.appendDummyInput().appendField(T('화면 조작 방향')); val(this,'String','지금 누르고 있는 방향이에요 (위, 아래, 왼쪽, 오른쪽). 아무것도 안 누르면 빈 글자예요'); },
+  function(){ need('joy'); return ['__joyDir',O.ATOMIC]; });
+
+def('act_cd_start',function(){ this.appendDummyInput().appendField(T('카운트다운')); this.appendValueInput('SEC').setCheck('Number'); this.appendDummyInput().appendField(T('초 시작')).appendField(new Blockly.FieldCheckbox('TRUE'),'SHOW').appendField(T('화면에 보이기')); this.setInputsInline(true); act(this,'남은 초를 세기 시작해요. 체크하면 화면 위쪽에 큰 숫자로 보여 줘요. 0이 되면 "카운트다운이 끝나면" 블록이 실행돼요'); },
+  function(b){ need('cd'); return '__cdStart('+(G.valueToCode(b,'SEC',O.COMMA)||'10')+', '+(b.getFieldValue('SHOW')==='TRUE')+');\n'; });
+def('val_cd_left',function(){ this.appendDummyInput().appendField(T('카운트다운 남은 초')); val(this,'Number','남은 시간을 올림한 초로 알려 줘요. 시작하지 않았으면 0이에요'); },
+  function(){ need('cd'); return ['__cdLeft()',O.FUNCTION_CALL]; });
+def('ev_cd_end',function(){ this.appendDummyInput().appendField(T('카운트다운이 끝나면')); hat(this,'카운트다운이 0이 될 때 한 번 해요'); },
+  function(b){ need('cd'); return 'document.addEventListener(\'bhcdend\', '+AF()+') {\n'+hatBody(b)+'});\n'; });
+
+def('val_lang',function(){ this.appendDummyInput().appendField(T('만약 사용자의 언어가')).appendField(new Blockly.FieldDropdown(function(){ return [[T('한국어'),'ko'],[T('영어'),'en'],[T('일본어'),'ja'],[T('스페인어'),'es'],[T('프랑스어'),'fr'],[T('독일어'),'de']]; }),'LANG').appendField(T('인가?')); val(this,'Boolean','페이지를 보는 사람의 브라우저 언어가 같으면 참이에요. 만약 블록 안에 끼워 써요'); },
+  function(b){ return ['((navigator.language || \'\').split(\'-\')[0].toLowerCase() === '+lit(b.getFieldValue('LANG'))+')',O.EQUALITY]; });
+def('val_device',function(){ this.appendDummyInput().appendField(T('만약 사용자의 기기가')).appendField(new Blockly.FieldDropdown(function(){ return [[T('모바일'),'mobile'],[T('컴퓨터'),'desktop']]; }),'DEV').appendField(T('인가?')); val(this,'Boolean','폰이나 태블릿이면 "모바일", 아니면 "컴퓨터"예요. 만약 블록 안에 끼워 써요'); },
+  function(b){ need('device'); return ['(__isMobile() === '+(b.getFieldValue('DEV')==='mobile')+')',O.EQUALITY]; });
+
+Object.assign(HELP,{
+  video:[
+    "var __vvol = 100, __vloop = false;",
+    "function __video(src, x, y, w) {",
+    "  var v = document.getElementById('__video');",
+    "  if (!v) {",
+    "    v = document.createElement('video');",
+    "    v.id = '__video';",
+    "    v.setAttribute('playsinline', '');",
+    "    document.body.appendChild(v);",
+    "  }",
+    "  v.src = src;",
+    "  v.loop = __vloop;",
+    "  v.volume = __vvol / 100;",
+    "  v.style.cssText = 'position:absolute;left:' + x + 'px;top:' + y + 'px;width:' + w + 'px;max-width:none;border-radius:8px;background:#000';",
+    "}",
+    "function __videoDo(act) {",
+    "  var v = document.getElementById('__video');",
+    "  if (!v) return;",
+    "  if (act === 'play') { var p = v.play(); if (p && p.catch) p.catch(function () {}); }",
+    "  else if (act === 'pause') v.pause();",
+    "  else if (act === 'stop') { v.pause(); v.currentTime = 0; }",
+    "  else if (act === 'remove') { v.pause(); v.remove(); }",
+    "}",
+    "function __videoVol(n) {",
+    "  __vvol = Math.max(0, Math.min(100, parseFloat(n) || 0));",
+    "  var v = document.getElementById('__video');",
+    "  if (v) v.volume = __vvol / 100;",
+    "}",
+    "function __videoLoop(on) {",
+    "  __vloop = on;",
+    "  var v = document.getElementById('__video');",
+    "  if (v) v.loop = on;",
+    "}"].join('\n'),
+  path:[
+    "var __pts = [];",
+    "function __pathAdd(x, y) { __pts.push([parseFloat(x) || 0, parseFloat(y) || 0]); }",
+    "function __pathClear() { __pts = []; }",
+    "function __pathGo(name, sec) {",
+    "  var e = $(name), q = e.getBoundingClientRect(), x0 = parseFloat(e.style.left), y0 = parseFloat(e.style.top);",
+    "  if (isNaN(x0) || isNaN(y0)) { x0 = q.left + window.pageXOffset; y0 = q.top + window.pageYOffset; }",
+    "  var P = [[x0, y0]].concat(__pts), L = [0], i;",
+    "  for (i = 1; i < P.length; i++) L.push(L[i - 1] + Math.hypot(P[i][0] - P[i - 1][0], P[i][1] - P[i - 1][1]));",
+    "  var total = L[L.length - 1];",
+    "  sec = parseFloat(sec) || 0;",
+    "  var tok = e.__gl = (e.__gl || 0) + 1;",
+    "  return new Promise(function (done) {",
+    "    var t0 = performance.now();",
+    "    function step(now) {",
+    "      if (e.__gl !== tok) return done();",
+    "      var k = sec > 0 ? Math.min(1, (now - t0) / (sec * 1000)) : 1, d = k * total, j = 1;",
+    "      while (j < P.length - 1 && L[j] < d) j++;",
+    "      if (P.length < 2) return done();",
+    "      var seg = L[j] - L[j - 1], f = seg > 0 ? (d - L[j - 1]) / seg : 1;",
+    "      __move(e, P[j - 1][0] + (P[j][0] - P[j - 1][0]) * f, P[j - 1][1] + (P[j][1] - P[j - 1][1]) * f);",
+    "      if (k < 1) requestAnimationFrame(step); else done();",
+    "    }",
+    "    requestAnimationFrame(step);",
+    "  });",
+    "}"].join('\n'),
+  scene:[
+    "var __scene = '';",
+    "var __sceneCss = document.createElement('style');",
+    "__sceneCss.textContent = '[data-scene-off]{display:none!important}';",
+    "document.head.appendChild(__sceneCss);",
+    "function __sceneApply(e) {",
+    "  var s = e.getAttribute('data-scene');",
+    "  if (s !== null && __scene !== '' && s !== __scene) e.setAttribute('data-scene-off', '');",
+    "  else e.removeAttribute('data-scene-off');",
+    "}",
+    "function __sceneShow(name) {",
+    "  __scene = String(name);",
+    "  Array.prototype.forEach.call(document.querySelectorAll('[data-scene]'), __sceneApply);",
+    "}",
+    "function __scenePut(el, name) {",
+    "  var e = $(el);",
+    "  e.setAttribute('data-scene', String(name));",
+    "  __sceneApply(e);",
+    "}"].join('\n'),
+  joy:[
+    "var __joyKeys = {}, __joyDir = '', __joyBox = null, __joyPress = {};",
+    "var __JK = { '위': 'ArrowUp', '아래': 'ArrowDown', '왼쪽': 'ArrowLeft', '오른쪽': 'ArrowRight' };",
+    "function __joySet(want, dir) {",
+    "  Object.keys(__JK).forEach(function (n) {",
+    "    var k = __JK[n], on = !!want[k];",
+    "    if (on && !__joyKeys[k]) { __joyKeys[k] = 1; document.dispatchEvent(new KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true })); }",
+    "    else if (!on && __joyKeys[k]) { delete __joyKeys[k]; document.dispatchEvent(new KeyboardEvent('keyup', { key: k, bubbles: true })); }",
+    "  });",
+    "  if (dir !== __joyDir) {",
+    "    __joyDir = dir;",
+    "    if (dir) document.dispatchEvent(new CustomEvent('bhjoy', { detail: dir }));",
+    "  }",
+    "}",
+    "function __joyOff() {",
+    "  if (__joyBox) { __joyBox.remove(); __joyBox = null; }",
+    "  __joyPress = {};",
+    "  __joySet({}, '');",
+    "}",
+    "function __joy(mode) {",
+    "  __joyOff();",
+    "  if (mode === 'off') return;",
+    "  var box = __joyBox = document.createElement('div');",
+    "  box.style.cssText = 'position:fixed;left:16px;bottom:16px;z-index:99997;pointer-events:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none';",
+    "  box.addEventListener('contextmenu', function (e) { e.preventDefault(); });",
+    "  if (mode === 'stick') {",
+    "    var base = document.createElement('div'), knob = document.createElement('div');",
+    "    base.style.cssText = 'position:relative;width:120px;height:120px;border-radius:50%;background:rgba(0,0,0,.25);border:2px solid rgba(255,255,255,.6);pointer-events:auto;touch-action:none';",
+    "    knob.style.cssText = 'position:absolute;left:35px;top:35px;width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.85);box-shadow:0 2px 6px rgba(0,0,0,.4)';",
+    "    base.appendChild(knob);",
+    "    var drag = null;",
+    "    var move = function (e) {",
+    "      if (drag !== e.pointerId) return;",
+    "      var r = base.getBoundingClientRect(), dx = e.clientX - (r.left + 60), dy = e.clientY - (r.top + 60), d = Math.hypot(dx, dy), c = Math.min(d, 40), want = {}, dir = '';",
+    "      var kx = d ? dx / d * c : 0, ky = d ? dy / d * c : 0;",
+    "      knob.style.transform = 'translate(' + kx + 'px,' + ky + 'px)';",
+    "      if (d > 14) {",
+    "        var ax = Math.abs(dx), ay = Math.abs(dy);",
+    "        if (ay > ax * 0.5) want[dy < 0 ? 'ArrowUp' : 'ArrowDown'] = 1;",
+    "        if (ax > ay * 0.5) want[dx < 0 ? 'ArrowLeft' : 'ArrowRight'] = 1;",
+    "        dir = ax >= ay ? (dx < 0 ? '왼쪽' : '오른쪽') : (dy < 0 ? '위' : '아래');",
+    "      }",
+    "      __joySet(want, dir);",
+    "    };",
+    "    var end = function (e) { if (drag !== e.pointerId) return; drag = null; knob.style.transform = ''; __joySet({}, ''); };",
+    "    base.addEventListener('pointerdown', function (e) { e.preventDefault(); drag = e.pointerId; try { base.setPointerCapture(e.pointerId); } catch (x) {} move(e); });",
+    "    base.addEventListener('pointermove', move);",
+    "    base.addEventListener('pointerup', end);",
+    "    base.addEventListener('pointercancel', end);",
+    "    box.appendChild(base);",
+    "  } else {",
+    "    box.style.display = 'grid';",
+    "    box.style.gridTemplateColumns = 'repeat(3,56px)';",
+    "    box.style.gap = '4px';",
+    "    var upd = function () {",
+    "      var want = {}, dir = '';",
+    "      Object.keys(__joyPress).forEach(function (n) { want[__JK[n]] = 1; dir = n; });",
+    "      __joySet(want, dir);",
+    "    };",
+    "    [['', ''], ['위', '▲'], ['', ''], ['왼쪽', '◀'], ['', ''], ['오른쪽', '▶'], ['', ''], ['아래', '▼'], ['', '']].forEach(function (b) {",
+    "      var el = document.createElement('div');",
+    "      if (b[0]) {",
+    "        el.textContent = b[1];",
+    "        el.style.cssText = 'width:56px;height:56px;border-radius:12px;background:rgba(0,0,0,.35);border:2px solid rgba(255,255,255,.7);color:#fff;font:700 24px/52px sans-serif;text-align:center;pointer-events:auto;touch-action:none';",
+    "        var off = function () { delete __joyPress[b[0]]; upd(); };",
+    "        el.addEventListener('pointerdown', function (e) { e.preventDefault(); try { el.setPointerCapture(e.pointerId); } catch (x) {} __joyPress[b[0]] = 1; upd(); });",
+    "        el.addEventListener('pointerup', off);",
+    "        el.addEventListener('pointercancel', off);",
+    "        el.addEventListener('lostpointercapture', off);",
+    "      }",
+    "      box.appendChild(el);",
+    "    });",
+    "  }",
+    "  document.body.appendChild(box);",
+    "}"].join('\n'),
+  cd:[
+    "var __cdEnd = 0, __cdT = 0, __cdBox = null;",
+    "function __cdLeft() { return __cdEnd ? Math.max(0, Math.ceil((__cdEnd - performance.now()) / 1000)) : 0; }",
+    "function __cdDraw() { if (__cdBox) __cdBox.textContent = __cdLeft(); }",
+    "function __cdStart(sec, show) {",
+    "  clearInterval(__cdT);",
+    "  __cdEnd = performance.now() + (parseFloat(sec) || 0) * 1000;",
+    "  if (__cdBox) { __cdBox.remove(); __cdBox = null; }",
+    "  if (show) {",
+    "    __cdBox = document.createElement('div');",
+    "    __cdBox.style.cssText = 'position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:99996;pointer-events:none;font:800 48px/1.2 sans-serif;color:#fff;background:rgba(0,0,0,.65);padding:4px 24px;border-radius:12px';",
+    "    document.body.appendChild(__cdBox);",
+    "  }",
+    "  __cdDraw();",
+    "  __cdT = setInterval(function () {",
+    "    __cdDraw();",
+    "    if (performance.now() >= __cdEnd) { clearInterval(__cdT); __cdEnd = 0; __cdDraw(); document.dispatchEvent(new CustomEvent('bhcdend')); }",
+    "  }, 100);",
+    "}"].join('\n'),
+  device:[
+    "function __isMobile() {",
+    "  var u = navigator.userAgentData;",
+    "  if (u && typeof u.mobile === 'boolean' && u.mobile) return true;",
+    "  var ua = navigator.userAgent || '';",
+    "  if (/Android|iPhone|iPad|iPod|Mobile/i.test(ua)) return true;",
+    "  if (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1) return true;",
+    "  return !!(window.matchMedia && matchMedia('(pointer: coarse)').matches);",
+    "}"].join('\n')
+});
+
 /* ---------- toolbox ---------- */
 function sh(type,val){ return {shadow:{type:type,fields:type==='math_number'?{NUM:val}:{TEXT:val}}}; }
 function shc(c){ return {shadow:{type:'val_color',fields:{COLOR:c}}}; }
@@ -1071,11 +1303,13 @@ function toolbox(){
   var picBtns=function(){ return [lab('그림·사진'),{kind:'button',text:T('✏️ 그림 그리기'),callbackKey:'imgDraw'},{kind:'button',text:T('📷 사진 넣기'),callbackKey:'imgPhoto'},{kind:'button',text:T('🗂 내 그림 관리'),callbackKey:'imgManage'}]; }; // shown at the top of 화면 and 그림판
   return {kind:'categoryToolbox',contents:[
     cat('ev','시작',[
-      bk('ev_start'),lab('누르거나 쓰면'),bk('ev_click'),bk('ev_drag'),bk('ev_change'),lab('키보드'),bk('ev_key'),bk('ev_keyhold'),bk('ev_keyup')]),
+      bk('ev_start'),lab('누르거나 쓰면'),bk('ev_click'),bk('ev_drag'),bk('ev_change'),lab('키보드'),bk('ev_key'),bk('ev_keyhold'),bk('ev_keyup'),
+      lab('화면 조이스틱 (폰)'),bk('act_joy'),bk('ev_joy'),bk('val_joydir')]),
     cat('page','화면',picBtns().concat([
       bk('page_root'),lab('글'),bk('el_heading'),bk('el_text'),bk('el_list'),bk('el_link'),
       lab('누르고 쓰기'),bk('el_button'),bk('el_input'),
       bk('el_picture'),bk('el_image'),bk('val_myimg'),
+      lab('장면 나누기'),bk('act_scene_show',{inputs:{NAME:sh('text',T('시작'))}}),bk('act_scene_put',{inputs:{NAME:sh('text',T('시작'))}}),bk('val_scene_is',{inputs:{NAME:sh('text',T('시작'))}}),
       lab('묶고 띄우기'),bk('el_box'),bk('el_space'),bk('el_html')])),
     cat('look','모양·바꾸기',[
       lab('말풍선'),bk('act_say',{inputs:{VALUE:sh('text',T('안녕!'))}}),bk('act_sayfor',{inputs:{VALUE:sh('text',T('안녕!')),SEC:n(2)}}),bk('act_say',{fields:{KIND:'think'},inputs:{VALUE:sh('text',T('음…'))}}),
@@ -1091,6 +1325,7 @@ function toolbox(){
       bk('act_move',{inputs:{X:n(100),Y:n(100)}}),
       bk('act_nudge',{inputs:{N:n(10)}}),bk('act_nudge2',{inputs:{DX:n(10),DY:n(0)}}),bk('act_stay'),
       lab('천천히 움직이기'),bk('act_glideto',{inputs:{SEC:n(1)}}),bk('act_glidexy',{inputs:{SEC:n(1),X:n(200),Y:n(200)}}),bk('act_lookat'),
+      lab('경로 따라 움직이기'),bk('act_path_add',{inputs:{X:n(100),Y:n(100)}}),bk('act_path_clear'),bk('act_path_go',{inputs:{SEC:n(2)}}),
       lab('커서 따라다니기'),bk('act_follow'),bk('val_cursor'),
       lab('위치'),bk('val_where'),
       lab('누른 곳'),bk('val_mouse')]),
@@ -1120,10 +1355,12 @@ function toolbox(){
     cat('sound','소리·시간',[
       lab('효과음'),bk('act_sfx'),bk('act_sfx',{fields:{SFX:'win'}}),
       lab('음악'),bk('act_note'),bk('act_note',{fields:{NOTE:'E4',BEAT:'0.5'}}),bk('act_tempo',{inputs:{N:n(120)}}),bk('act_mp3'),bk('act_mp3stop'),bk('act_sound_stop'),lab('소리 크기'),bk('act_volume',{inputs:{N:n(50)}}),
+      lab('영상'),bk('act_video',{inputs:{SRC:sh('text','https://'),X:n(20),Y:n(20),W:n(320)}}),bk('val_myvideo'),bk('act_video_ctl'),bk('act_video_vol',{inputs:{N:n(50)}}),bk('act_video_loop'),
       lab('삐 소리'),bk('act_beep',{inputs:{SEC:n(0.3)}}),
       lab('알림'),bk('act_alert',{inputs:{VALUE:sh('text',T('안녕하세요!'))}}),
       lab('시간'),bk('act_wait',{inputs:{SEC:n(1)}}),bk('act_stop'),
       lab('이름 붙여 멈출 수 있는 시간'),bk('time_after',{inputs:{SEC:n(2)}}),bk('time_every',{inputs:{SEC:n(1)}}),bk('time_stop'),bk('time_running'),bk('time_stopall'),
+      lab('카운트다운'),bk('act_cd_start',{inputs:{SEC:n(10)}}),bk('val_cd_left'),bk('ev_cd_end'),
       lab('시계와 달력'),bk('val_time'),bk('val_today')]),
     cat('save','저장',[
       bk('act_store',{inputs:{NAME:sh('text',T('최고점')),VALUE:n(0)}}),bk('val_load',{inputs:{NAME:sh('text',T('최고점')),DEF:n(0)}}),
@@ -1132,7 +1369,7 @@ function toolbox(){
     {kind:'sep'},
     cat('logic','조건',[
       bk('controls_if'),bk('controls_if',{extraState:{hasElse:true}}),
-      lab('비교'),bk('logic_compare'),bk('logic_operation'),bk('val_keyheld'),bk('logic_negate'),bk('logic_between',{inputs:{LO:n(1),HI:n(10)}}),
+      lab('비교'),bk('logic_compare'),bk('logic_operation'),bk('val_keyheld'),bk('val_lang'),bk('val_device'),bk('logic_negate'),bk('logic_between',{inputs:{LO:n(1),HI:n(10)}}),
       lab('논리 게이트'),bk('logic_gate',{fields:{GATE:'AND'}}),bk('logic_gate',{fields:{GATE:'OR'}}),bk('logic_gate',{fields:{GATE:'XOR'}}),bk('logic_gate',{fields:{GATE:'NOR'}}),bk('logic_gate',{fields:{GATE:'NAND'}}),
       lab('기본'),bk('logic_boolean'),bk('logic_ternary')]),
     cat('loop','반복',[
