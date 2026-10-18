@@ -206,7 +206,7 @@ FFT.add({
 });
 /* [category, name, syntax, Korean description, English description] */
 window.FNDOC=[
-['AI','AI','AI("할 일", 칸, …)','AI가 칸 내용을 보고 답을 채워요. 예: =AI("영어로 번역", A2)','AI fills in the answer from the cells. e.g. =AI("translate to English", A2)'],
+['AI','AI','AI("할 일", 칸, …)','AI가 칸 내용을 보고 답을 채워요. 예: =AI("영어로 번역", A2), =AI("요약", A2)','AI fills in the answer from the cells. e.g. =AI("translate to English", A2)'],
 ['수학과 통계','SUM','SUM(범위, …)','숫자를 모두 더해요','Adds numbers'],
 ['수학과 통계','AVERAGE','AVERAGE(범위, …)','평균을 구해요','Average of numbers'],
 ['수학과 통계','MIN','MIN(범위, …)','가장 작은 수','Smallest number'],

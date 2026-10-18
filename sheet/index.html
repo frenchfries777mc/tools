@@ -166,6 +166,7 @@ button,input,select{font:inherit; color:inherit;}
 .menu button:hover{background:var(--panel2);}
 .menu button.dang{color:#ff7b7b;}
 .menu hr{border:0; border-top:1px solid var(--line); margin:6px 4px;}
+.menu .tsw{display:inline-block; width:14px; height:14px; border-radius:4px; flex:0 0 auto;}
 .menu .mh{color:var(--dim); font-size:12px; padding:6px 12px 2px;}
 .menu .doc{justify-content:space-between;}
 .menu .doc small{color:var(--dim);}
@@ -370,6 +371,26 @@ button,input,select{font:inherit; color:inherit;}
   <button data-r="sortD">이 열 내림차순 정렬</button>
   <button data-r="filter">이 열 필터</button>
   <button data-r="clr" class="dang">선택한 내용 지우기</button>
+</div>
+<div class="menu" id="fzMenu">
+  <div class="mh" id="fzNow"></div>
+  <button data-r="fzTop">첫 행 고정</button>
+  <button data-r="fzLeft">첫 열 고정</button>
+  <button data-r="fzBoth">첫 행과 첫 열 고정</button>
+  <button data-r="fzHere">이 칸 기준 고정</button>
+  <hr>
+  <button data-r="fzOff">고정 풀기</button>
+</div>
+<div class="menu" id="tsMenu">
+  <div class="mh">고른 범위에 입혀요. 첫 줄은 머리글이에요</div>
+  <button data-ts="blue"><i class="tsw" style="background:#2f6fdb"></i>파랑 줄무늬</button>
+  <button data-ts="green"><i class="tsw" style="background:#2e9e5e"></i>초록 줄무늬</button>
+  <button data-ts="orange"><i class="tsw" style="background:#e8832a"></i>주황 줄무늬</button>
+  <button data-ts="gray"><i class="tsw" style="background:#4a5160"></i>회색 줄무늬</button>
+  <button data-ts="dark"><i class="tsw" style="background:#ffc93c"></i>어두운 줄무늬</button>
+  <hr>
+  <button data-ts="head"><i class="tsw" style="background:#2f6fdb"></i>머리글만 칠하기</button>
+  <button data-ts="off" class="dang">표 스타일 지우기</button>
 </div>
 <div class="menu" id="dvMenu"></div>
 <div class="cmdList" id="cmdList" role="listbox"></div>
@@ -592,7 +613,8 @@ button,input,select{font:inherit; color:inherit;}
     <div id="aiOut" data-notr></div>
     <div class="aiActs" id="aiActs"></div>
     <div class="aiFnBox"><b>AI 함수</b><p>칸에 =AI("할 일", A2) 처럼 쓰면 AI가 답을 칸에 채워요. 한 칸에 쓰고 아래로 끌어 채우면 한 열 전체를 한 번에 처리해요.</p>
-      <div class="aiTr"><b>🌐 영어로 번역하기</b><p>A열에 한국어 문장을 쓰고 B2 칸에 <code data-notr>=AI("영어로 번역", A2)</code> 를 쓴 뒤 아래로 끌어 보세요. 열 전체가 영어로 바뀌어요. "일본어로 번역", "한 줄로 요약", "긍정/부정 분류"처럼 할 일만 바꾸면 돼요.</p><div class="aiRow"><button class="tbtn pri" id="aiTrDemo">번역 예시 넣어 보기</button></div></div>
+      <div class="aiTr"><b>🌐 영어로 번역하기</b><p>A열에 한국어 문장을 쓰고 B2 칸에 <code data-notr>=AI("영어로 번역", A2)</code> 를 쓴 뒤 아래로 끌어 보세요. 열 전체가 영어로 바뀌어요. "일본어로 번역", "한 줄로 요약", "긍정/부정 분류"처럼 할 일만 바꾸면 돼요.</p><div class="aiRow"><button class="tbtn pri" id="aiTrDemo">번역 예시 넣어 보기</button></div>
+        <p><code data-notr>=AI("번역", A2)</code> 는 한국어면 영어로, 다른 말이면 한국어로 바꿔요. <code data-notr>=AI("요약", A2)</code> 는 한 문장으로 줄이고, "세 줄 요약"처럼 줄 수도 정할 수 있어요. "맞춤법"은 맞춤법과 띄어쓰기를 고쳐 줘요.</p></div>
       <div class="aiRow"><button class="tbtn" id="aiFn">AI 함수 쓰는 법</button><button class="tbtn" id="aiRerun">선택한 AI 칸 다시 묻기</button></div></div>
   </div>
 </div></div>
@@ -612,11 +634,11 @@ button,input,select{font:inherit; color:inherit;}
 
 <script src="engine.js"></script>
 <script src="calc.js"></script>
-<script src="commands.js"></script>
-<script src="app.js"></script>
+<script src="commands.js?v=29"></script>
+<script src="app.js?v=29"></script>
 <script src="viz.js"></script>
 <script src="../ai.js?v=ai26"></script>
 <script src="../ai-prompts.js"></script>
-<script src="ai-sheet.js?v=28"></script>
+<script src="ai-sheet.js?v=29"></script>
 </body>
 </html>

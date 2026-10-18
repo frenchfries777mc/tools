@@ -593,12 +593,15 @@ function cmd(n){
     case 'note': return editNote();
     case 'merge': return mergeCmd();
     case 'borderdlg': return openBorder();
+    case 'tstyle': return openMenu($('tsMenu'),menuAnchor('tstyle'));
   }
 }
 /* every ribbon button and command-search entry (commands.js) runs through here: plain ids are cmd() names,
    r.* the row/column menu, d.* the data tools, f.* the file menu, t.* the sheet tab menu, ai.* the AI window */
+function menuAnchor(id){ var b=document.querySelector('#ribbon [data-k="'+id+'"]'); return b&&!b.hidden?b:$('ribbon'); }
 function runCmd(id){
   id=String(id||''); var p=id.indexOf('.'), ns=p>0?id.slice(0,p):'', n=p>0?id.slice(p+1):id;
+  if(ns==='r'&&n==='fzMenu'){ commitEdit(); $('fzNow').textContent=sh.fr||sh.fc?F('{0}행·{1}열 고정 중',sh.fr,sh.fc):T('고정 안 함'); return openMenu($('fzMenu'),menuAnchor(id)); }
   if(ns==='r'){ if(n==='clr'){ closeMenus(); commitEdit(); return clearSel(); } return rowCmd(n); }
   if(ns==='d'){ closeMenus(); return dataCmd(n); }
   if(ns==='f'){ closeMenus(); commitEdit(); return fileCmd(n); }
@@ -728,6 +731,9 @@ function rowCmd(n){
   else if(n==='fitCol'){ fitCols(sel.c1,sel.c2); return; }
   else if(n==='fzRow'){ sh.fr=act.r+1; buildGrid(); toast(F('{0}행까지 고정했어요',act.r+1)); }
   else if(n==='fzCol'){ sh.fc=act.c+1; buildGrid(); toast(F('{0}열까지 고정했어요',E.colName(act.c))); }
+  else if(n==='fzTop'){ sh.fr=1; buildGrid(); toast(F('{0}행까지 고정했어요',1)); }
+  else if(n==='fzLeft'){ sh.fc=1; buildGrid(); toast(F('{0}열까지 고정했어요','A')); }
+  else if(n==='fzBoth'){ sh.fr=1; sh.fc=1; buildGrid(); toast(F('{0}행과 {1}열까지 고정했어요',1,'A')); }
   else if(n==='fzOff'){ sh.fr=0; sh.fc=0; buildGrid(); toast(T('고정을 풀었어요')); }
   else if(n==='fzHere'){ if(!act.r&&!act.c){ toast(T('A1이 아닌 칸을 고르세요. 그 칸의 위쪽 행과 왼쪽 열이 고정돼요')); return; } sh.fr=act.r; sh.fc=act.c; buildGrid();
     toast(act.r&&act.c?F('{0}행과 {1}열까지 고정했어요',act.r,E.colName(act.c-1)):act.r?F('{0}행까지 고정했어요',act.r):F('{0}열까지 고정했어요',E.colName(act.c-1))); }
@@ -736,6 +742,26 @@ function rowCmd(n){
   sel={r1:Math.min(sel.r1,sh.rows-1),c1:Math.min(sel.c1,sh.cols-1),r2:Math.min(sel.r2,sh.rows-1),c2:Math.min(sel.c2,sh.cols-1)}; act={r:sel.r1,c:sel.c1};
   changed();
 }
+$('fzMenu').addEventListener('click',function(e){ var b=e.target.closest('[data-r]'); if(b) rowCmd(b.dataset.r); });
+/* table style presets: header row h/hf + two banded row colors b1/b2 (f = text color, kept dark on the light bands) */
+var TSTY={blue:{h:'#2f6fdb',hf:'#ffffff',b1:'#e6eefc',b2:'#ffffff',f:'#1a1a1a'}, green:{h:'#2e9e5e',hf:'#ffffff',b1:'#e4f5ea',b2:'#ffffff',f:'#1a1a1a'},
+  orange:{h:'#e8832a',hf:'#ffffff',b1:'#fdeede',b2:'#ffffff',f:'#1a1a1a'}, gray:{h:'#4a5160',hf:'#ffffff',b1:'#eceef2',b2:'#ffffff',f:'#1a1a1a'},
+  dark:{h:'#ffc93c',hf:'#1c1405',b1:'#1d2230',b2:'#151925'}, head:{h:'#2f6fdb',hf:'#ffffff'}};
+function tableStyle(id){
+  commitEdit(); closeMenus();
+  var g=sel; if(g.r1===g.r2&&g.c1===g.c2) g=region(act.r,act.c)||g;
+  if(g.r1===g.r2&&g.c1===g.c2&&id!=='off'){ var x0=sh.cells[K(g.r1,g.c1)]; if(!x0||x0.v==null||x0.v==='') return toast(T('표 스타일을 입힐 범위를 먼저 고르세요')); }
+  if(guard(g)) return; pushUndo();
+  var p=TSTY[id], hd=p&&g.r2>g.r1||p&&id==='head';
+  for(var r=g.r1;r<=g.r2;r++) for(var c=g.c1;c<=g.c2;c++){
+    var k=K(r,c), x=sh.cells[k]||(sh.cells[k]={});
+    delete x.bg; delete x.fc; delete x.b;
+    if(p){ if(r===g.r1&&hd){ x.bg=p.h; x.fc=p.hf; x.b=1; } else if(p.b1){ var odd=(r-g.r1-(hd?1:0))%2===0; x.bg=odd?p.b1:p.b2; if(p.f) x.fc=p.f; } }
+    if(x.v==null&&!hasFmt(x)) delete sh.cells[k];
+  }
+  changed(); toast(p?T('표 스타일을 입혔어요'):T('표 스타일을 지웠어요'));
+}
+$('tsMenu').addEventListener('click',function(e){ var b=e.target.closest('[data-ts]'); if(b) tableStyle(b.dataset.ts); });
 $('rowMenu').addEventListener('click',function(e){ var b=e.target.closest('[data-r]'); if(!b) return; var r=b.dataset.r;
   if(r==='sortA'||r==='sortD'||r==='filter'){ closeMenus(); return cmd(r); }
   if(r==='clr'){ closeMenus(); commitEdit(); return clearSel(); }
