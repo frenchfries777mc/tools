@@ -155,14 +155,15 @@ G.forBlock.page_root=function(){ return ''; };
 
 /* ---------- events ---------- */
 /* step-by-step debugging ("한 블록씩 실행"): the build puts "await __step(id)" before every block of the event scripts, and each script runs as an async function */
+var WAITS=false; // the page uses 초 기다리기: every handler and function is made async so the wait can pause it
 var DBG=false, dbgSeq=0, GLW=false; // GLW: the preview lights up each block as it runs ("__glow(id)" before every block, see build)
-function AF(){ return DBG?'async function (':'function ('; }
-function hatBody(b,guard){ var body=G.statementToCode(b,'DO'); if(GLW) body='  __glow('+lit(b.id)+');\n'+body; if(!DBG) return body;
+function AF(){ return DBG||WAITS?'async function (':'function ('; }
+function hatBody(b,guard){ var body=G.statementToCode(b,'DO'); if(GLW) body='  __glow('+lit(b.id)+');\n'+body; if(!DBG){ if(WAITS&&guard){ need('wb'); var wk=lit('w'+(++dbgSeq)); return '  if (__wb['+wk+']) return;\n  __wb['+wk+'] = 1;\n  try {\n'+G.prefixLines(body,'  ')+'  } finally {\n    __wb['+wk+'] = 0;\n  }\n'; } return body; }
   var k=guard?lit('g'+(++dbgSeq)):null;
   return (guard?'  if (__dbusy['+k+']) return;\n  __dbusy['+k+'] = 1;\n':'')+'  __dbegin();\n  try {\n'+G.prefixLines(body,'  ')+'  } finally {\n    __dend();\n'+(guard?'    __dbusy['+k+'] = 0;\n':'')+'  }\n'; }
 function hat(b,tip){ b.appendStatementInput('DO'); b.setTooltip(T(tip)); b.hat='cap'; }
 def('ev_start',function(){ this.appendDummyInput().appendField(T('페이지가 열리면')); hat(this,'페이지가 처음 열릴 때 한 번 해요'); },
-  function(b){ if(DBG) return '(async function () {\n'+hatBody(b)+'})();\n'; return hatBody(b).replace(/^  /gm,''); });
+  function(b){ if(DBG||WAITS) return '(async function () {\n'+hatBody(b)+'})();\n'; return hatBody(b).replace(/^  /gm,''); });
 def('ev_click',function(){ this.appendDummyInput().appendField(elField(null,'hat'),'EL').appendField(T('을(를) 누르면')); hat(this,'버튼이나 그림, 그림판을 눌렀을 때 해요'); },
   function(b){ var n=b.getFieldValue('EL'), mouse=b.getDescendants(false).some(function(d){ return d.type==='val_mouse'; }); need('$'); if(mouse) need('pos');
     return '$('+lit(n)+').addEventListener(\'click\', '+AF()+(mouse?'e':'')+') {\n'+(mouse?'  __pos(e, this);\n':'')+hatBody(b)+'});\n'; });
@@ -225,6 +226,12 @@ def('act_alert',function(){ this.appendValueInput('VALUE').appendField(T('알림
   function(b){ return 'alert('+(G.valueToCode(b,'VALUE',O.NONE)||"''")+');\n'; });
 def('act_after',function(){ this.appendValueInput('SEC').setCheck('Number'); this.appendDummyInput().appendField(T('초 기다린 다음')); this.appendStatementInput('DO'); this.setInputsInline(true); act(this,'정한 시간이 지난 뒤에 한 번 해요'); },
   function(b){ return 'setTimeout('+AF()+') {\n'+G.statementToCode(b,'DO')+'}, ('+(G.valueToCode(b,'SEC',O.MULTIPLICATION)||'1')+') * 1000);\n'; });
+/* with a wait on the page, functions are async and every call waits for them */
+['procedures_defnoreturn','procedures_defreturn'].forEach(function(t){ var o=G.forBlock[t]; if(!o) return;
+  G.forBlock[t]=function(b,g){ var r=o.call(this,b,g); if(WAITS){ var d=g.definitions_||G.definitions_; Object.keys(d||{}).forEach(function(k){ if(k.charAt(0)==='%'&&/(^|\n)function /.test(d[k])) d[k]=d[k].replace(/(^|\n)function /,'$1async function '); }); } return r; }; });
+var oCallR=G.forBlock.procedures_callreturn; if(oCallR) G.forBlock.procedures_callreturn=function(b,g){ var r=oCallR.call(this,b,g); return WAITS&&Array.isArray(r)?['(await '+r[0]+')',O.ATOMIC]:r; };
+def('act_wait',function(){ this.appendValueInput('SEC').setCheck('Number'); this.appendDummyInput().appendField(T('초 기다리기')); this.setInputsInline(true); act(this,'정한 시간 동안 여기서 기다렸다가 다음 블록으로 가요. 반복 안에서도 기다려요'); },
+  function(b){ need('sleep'); return 'await __sleep('+(G.valueToCode(b,'SEC',O.NONE)||'1')+');\n'; });
 def('act_stop',function(){ this.appendDummyInput().appendField(T('"초마다"를 모두 멈추기')); act(this,'초마다 반복을 모두 멈춰요. 이름 붙은 시간 블록도 함께 멈춰요'); },
   function(){ need('timers'); return '__timers.forEach(clearInterval);\nif (typeof __stopAll === \'function\') __stopAll();\n'; });
 def('act_restart',function(){ this.appendDummyInput().appendField(T('처음부터 다시 시작하기')); act(this,'페이지를 처음 상태로 되돌려 처음부터 다시 해요'); },
@@ -524,6 +531,8 @@ var HELP={
   follow:"var __fol = {}, __folOn = false, __moved = false;\ndocument.addEventListener('pointermove', function () { __moved = true; });\ndocument.addEventListener('pointerdown', function () { __moved = true; });\nfunction __folLoop() {\n  for (var n in __fol) {\n    var el = document.getElementById(n);\n    if (!el) { delete __fol[n]; continue; }\n    if (!__moved) continue;\n    var s = el.style, tx = __cx - el.offsetWidth / 2, ty = __cy - el.offsetHeight / 2;\n    if (s.position !== 'absolute') {\n      var r = el.getBoundingClientRect();\n      s.position = 'absolute';\n      s.left = (r.left + window.pageXOffset) + 'px';\n      s.top = (r.top + window.pageYOffset) + 'px';\n    }\n    var x = parseFloat(s.left) || 0, y = parseFloat(s.top) || 0, k = __fol[n] === 'soft' ? 0.15 : 1;\n    s.left = (x + (tx - x) * k) + 'px';\n    s.top = (y + (ty - y) * k) + 'px';\n    s.pointerEvents = 'none';\n  }\n  requestAnimationFrame(__folLoop);\n}\nfunction __follow(name, mode) {\n  if (mode === 'stop') {\n    delete __fol[name];\n    var e = document.getElementById(name);\n    if (e) e.style.pointerEvents = '';\n    return;\n  }\n  $(name);\n  __fol[name] = mode;\n  document.body.style.touchAction = 'none';\n  if (!__folOn) { __folOn = true; __folLoop(); }\n}",
   key:"var __key = '';",
   keyheld:"var __held = {};\ndocument.addEventListener('keydown', function (e) { __held[e.key.toLowerCase()] = true; });\ndocument.addEventListener('keyup', function (e) { delete __held[e.key.toLowerCase()]; });\nwindow.addEventListener('blur', function () { __held = {}; });",
+  sleep:"function __sleep(sec) { return new Promise(function (done) { setTimeout(done, sec * 1000); }); }",
+  wb:"var __wb = {};",
   keyhold:"var __down = {};\nfunction __keyHold(match, fn) {\n  var id = null;\n  function stop() { if (id) { clearInterval(id); id = null; } }\n  document.addEventListener('keydown', function (e) {\n    __key = e.key;\n    __down[e.key.toLowerCase()] = e;\n    if (e.repeat || id || !match(e)) return;\n    fn(e);\n    id = setInterval(function () { fn(e); }, 30);\n  });\n  document.addEventListener('keyup', function (e) {\n    delete __down[e.key.toLowerCase()];\n    if (id && !Object.keys(__down).some(function (k) { return match(__down[k]); })) stop();\n  });\n  window.addEventListener('blur', function () { __down = {}; stop(); });\n}",
   mp3:"var __auds = [];\nfunction __mp3(name, loop) {\n  var a = new Audio(__mp3s[name]);\n  a.loop = !!loop;\n  __auds.push(a);\n  a.addEventListener('ended', function () { var i = __auds.indexOf(a); if (i >= 0) __auds.splice(i, 1); });\n  var p = a.play();\n  if (p && p.catch) p.catch(function () {});\n}",
   timers:"var __timers = [];",
@@ -932,6 +941,7 @@ function build(ws,opts){
     body+=bodyHTML(b,'  ',true);
   });
   // JavaScript
+  WAITS=ws.getAllBlocks(false).some(function(x){ return x.type==='act_wait'&&x.isEnabled(); });
   NEED={}; USED={}; USEDS={}; G.INFINITE_LOOP_TRAP=opts.trap?'if (--window.__loop < 0) throw new Error("'+T('반복이 끝나지 않아요')+'");\n':null;
   DBG=!!opts.debug; dbgSeq=0; GLW=!!opts.glow&&!DBG; G.STATEMENT_PREFIX=DBG?'await __step(%1);\n':GLW?'__glow(%1);\n':null;
   var js, dbgVars=[];
@@ -949,7 +959,7 @@ function build(ws,opts){
     } finally{ if(isProc&&DBG) G.STATEMENT_PREFIX='await __step(%1);\n'; if(GLW) b.suppressPrefixSuffix=false; }
   });
   js=G.finish(handlers+(starts?(handlers?'\n':'')+starts:''));
-  } finally{ G.STATEMENT_PREFIX=null; DBG=false; GLW=false; }
+  } finally{ G.STATEMENT_PREFIX=null; DBG=false; GLW=false; WAITS=false; }
   if(NEED.clones) dbgVars.push([T('복제본 수'),'__ccount']);
   if(opts.debug) js='// '+T('한 블록씩 실행')+'\n'+dbgHelper(dbgVars)+'\n\n'+js;
   Object.keys(HELP_DEPS).forEach(function(k){ if(NEED[k]) HELP_DEPS[k].forEach(need); });
@@ -1053,7 +1063,7 @@ function toolbox(){
       lab('음악'),bk('act_note'),bk('act_note',{fields:{NOTE:'E4',BEAT:'0.5'}}),bk('act_tempo',{inputs:{N:n(120)}}),bk('act_mp3'),bk('act_sound_stop'),
       lab('삐 소리'),bk('act_beep',{inputs:{SEC:n(0.3)}}),
       lab('알림'),bk('act_alert',{inputs:{VALUE:sh('text',T('안녕하세요!'))}}),
-      lab('시간'),bk('act_after',{inputs:{SEC:n(1)}}),bk('ev_timer'),bk('act_stop'),
+      lab('시간'),bk('act_wait',{inputs:{SEC:n(1)}}),bk('ev_timer'),bk('act_stop'),
       lab('이름 붙여 멈출 수 있는 시간'),bk('time_after',{inputs:{SEC:n(2)}}),bk('time_every',{inputs:{SEC:n(1)}}),bk('time_stop'),bk('time_running'),bk('time_stopall'),
       lab('시계와 달력'),bk('val_time'),bk('val_today')]),
     cat('save','저장',[
