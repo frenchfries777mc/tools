@@ -587,7 +587,8 @@ function editShapeText(k){ if(selK!==k) setSel(k); var e=selShape(), inn=host.qu
 function nudge(dx,dy){ var s=deck.slides[cur], r=s&&selK&&keyBox(s,selK); if(!r) return; if(Date.now()-nudgeT>900) pushUndo(); nudgeT=Date.now(); r.x+=dx; r.y+=dy; putBox(s,selK,r); saveSoon(); thumbSoon(cur); drawMain(); }
 function delSel(){ var s=deck.slides[cur], a=selEls(s); if(!s||!selK) return;
   if(a.length){ pushUndo(); var ks=a.map(function(e){ return 'e:'+e.id; }); s.els=s.els.filter(function(e){ return a.indexOf(e)<0; }); s.build=s.build.filter(function(b){ return ks.indexOf(b.k)<0; }); selK=null; selM=[]; changed(); toast(T('도형을 지웠어요')); }
-  else if(selK==='img'&&s.img){ pushUndo(); s.img=''; s.iw=s.ih=0; changed(true); } }
+  else if(selK==='img'&&s.img){ pushUndo(); s.img=''; s.iw=s.ih=0; changed(true); }
+  else if(selK==='live'&&liveCfg(s)){ pushUndo(); s.live=''; selK=null; changed(true); toast(T('살아있는 화면을 지웠어요')); } }
 
 /* ---------- shapes, builds and the bar of the picked box ---------- */
 var SWC=['#ffffff','#111111','#3d7fe0','#ff8a3d','#2fb27a','#e0526b','#8a5ce0','#ffc93c'];
@@ -1643,6 +1644,7 @@ document.addEventListener('keydown',function(e){
   else if(!$('editor').hidden&&!gen&&!busyOn&&e.altKey&&!mod&&(e.key==='ArrowUp'||e.key==='ArrowDown')){ e.preventDefault(); moveSlide(cur,cur+(e.key==='ArrowUp'?-1:1)); }
   else if(!$('editor').hidden&&!gen&&!busyOn&&mod&&e.key==='Enter'){ e.preventDefault(); addSlide('bullets'); }
   else if(!$('editor').hidden&&!gen&&!busyOn&&!mod&&!e.altKey&&(e.key==='h'||e.key==='H')){ e.preventDefault(); toggleHide(); }
+  else if(!$('editor').hidden&&!gen&&!busyOn&&!mod&&e.key==='Delete'&&deck.slides[cur]&&deck.slides[cur].layout==='live'&&liveCfg(deck.slides[cur])){ e.preventDefault(); selK='live'; delSel(); }
   else if(!$('editor').hidden&&!gen&&!busyOn&&!mod&&e.key==='Delete'){ e.preventDefault(); delSlide(); }
   else if(!$('editor').hidden&&!mod&&e.key==='Home'){ e.preventDefault(); select(0); }
   else if(!$('editor').hidden&&!mod&&e.key==='End'){ e.preventDefault(); select(deck.slides.length-1); }
