@@ -216,6 +216,18 @@ td .del:hover{color:#ff8b8b; background:var(--panel2);}
 .gpkls{overflow-y:auto; -webkit-overflow-scrolling:touch; padding:4px 8px 12px;}
 .gpkls .ex{align-items:center; min-height:48px; padding:10px; border-color:var(--line); margin-bottom:6px; color:var(--text);}
 .gpkls .ex:hover,.gpkls .ex:focus-visible{border-color:var(--lab); background:var(--panel2);}
+.cardBox{width:min(560px,100%);} .cardTabs{padding:0 16px 6px;} .cardBody{padding:6px 16px 16px;}
+.cardBody .seg{margin:4px 0 10px;} .cardRow{display:flex; gap:6px; align-items:center; flex-wrap:wrap;}
+.cardNum{flex:1 1 110px; min-width:0; height:38px; padding:0 10px; border:1px solid var(--line); border-radius:9px; background:var(--bg); font-size:16px;}
+.cardSel{height:38px; flex:1 1 110px; min-width:0; padding:0 8px; border:1px solid var(--line); border-radius:9px; background:var(--panel2);}
+.cardRes{margin:12px 0 8px; padding:12px; border-radius:10px; background:var(--panel2); border:1px solid var(--line); font-size:17px; font-weight:800; overflow-wrap:anywhere;}
+.cardAll{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:6px;} .cardAr{display:flex; justify-content:space-between; gap:8px; padding:7px 10px; border:1px solid var(--line); border-radius:8px; font-size:13px;}
+.cardAr span{color:var(--dim);} .cardAr b{overflow-wrap:anywhere; text-align:right;} .cardAr.on{border-color:var(--lab);}
+.cardNote{color:var(--dim); font-size:12.5px; margin:8px 0 0;}
+.cardSearch{width:100%; height:38px; padding:0 10px; border:1px solid var(--line); border-radius:9px; background:var(--bg); margin-bottom:6px;}
+.cardH{margin:12px 0 6px; font-size:13px; color:var(--lab);} .fcard{padding:10px 12px; border:1px solid var(--line); border-radius:10px; margin-bottom:6px; background:var(--panel2);}
+.fcard .fn{font-weight:700; font-size:14px;} .fcard .ff{margin:4px 0; font-size:16px; color:var(--fry); font-family:'JetBrains Mono','Noto Sans KR',monospace; overflow-wrap:anywhere;} .fcard .fv{color:var(--dim); font-size:12.5px;}
+.fcard .tbtn{margin-top:8px; height:30px; font-size:12.5px;}
 .gpkls .ex .ds{display:block;} .gpkls .gtag{margin-left:auto;}
 .gempty{color:var(--dim); text-align:center; padding:40px 10px; line-height:1.7;}
 .gnote{color:var(--dim); font-size:12.5px; line-height:1.6; margin:26px 0 0;}
@@ -277,6 +289,7 @@ td .del:hover{color:#ff8b8b; background:var(--panel2);}
   <span class="sub" id="subTxt">과학·수학 실험실</span>
   <span class="sp"></span>
   <button class="tbtn" id="galBtn" title="템플릿 갤러리" aria-label="템플릿 갤러리"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg><span class="lb">갤러리</span></button>
+  <button class="tbtn" id="cardBtn" title="단위 변환과 공식 카드"><svg viewBox="0 0 24 24"><rect x="4" y="3.5" width="16" height="17" rx="2"/><path d="M8 8h8M8 12h8M8 16h4"/></svg><span class="lb">단위·공식</span></button>
   <button class="tbtn aib" id="aiBtn" title="AI 도우미"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/></svg><span class="lb">AI 도우미</span></button>
   <span data-lang-slot></span>
 </header>
@@ -338,6 +351,8 @@ td .del:hover{color:#ff8b8b; background:var(--panel2);}
         <button class="tbtn" id="recBtn2"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>기록하기</button>
         <button class="tbtn" id="csvCopy"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>CSV 복사</button>
         <button class="tbtn" id="csvSave"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg>CSV 받기</button>
+        <button class="tbtn" id="xlsxSave" title="기록 표와 그래프 데이터를 엑셀 파일 하나로 받아요"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg>엑셀 받기</button>
+        <button class="tbtn" id="gcsvSave" title="그래프에 찍힌 점의 가로·세로 값만 CSV로 받아요"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg>그래프 CSV</button>
         <button class="tbtn dang" id="recClear">모두 지우기</button>
       </div>
       <div class="dacts auto"><button class="tbtn" id="autoBtn" aria-pressed="false" title="정해 둔 간격마다 지금 값을 기록해요"><span class="adot"></span>자동 기록</button>
@@ -366,7 +381,7 @@ td .del:hover{color:#ff8b8b; background:var(--panel2);}
 </div>
 <div id="toast" role="status"></div>
 <script src="../ai.js?v=ai26"></script>
-<script src="app.js"></script>
+<script src="app.js?v=13"></script>
 <script src="curriculum.js"></script>
 <script src="experiments.js"></script>
 <script src="templates.js"></script>
@@ -375,6 +390,7 @@ td .del:hover{color:#ff8b8b; background:var(--panel2);}
 <script src="tpl-s1.js"></script>
 <script src="tpl-s2.js"></script>
 <script src="gallery.js"></script>
+<script src="cards.js?v=13"></script>
 <script src="ai-lab.js?v=12"></script>
 </body>
 </html>
