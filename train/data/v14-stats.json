@@ -1,5 +1,5 @@
 {
- "built": "2026-10-18T03:01:30.009Z",
+ "built": "2026-10-18T08:49:41.080Z",
  "pool": {
   "memo-chip": 106,
   "code": 1075,
@@ -16,7 +16,7 @@
   "ask4": 228,
   "cell": 221,
   "joke": 260,
-  "gen14": 45,
+  "gen14": 62,
   "calc": 16,
   "spell": 10,
   "explain": 8
@@ -27,8 +27,8 @@
  "variants": {
   "smart": {
    "total": 4759,
-   "newRows": 837,
-   "newPct": 17.6,
+   "newRows": 854,
+   "newPct": 17.9,
    "pct": {
     "code": 23.1,
     "chat": 10.6,
@@ -45,7 +45,7 @@
    "take": {
     "code": {
      "rows": 1100,
-     "new": 45
+     "new": 62
     },
     "chat": {
      "rows": 505,
@@ -97,8 +97,8 @@
   },
   "basic": {
    "total": 3146,
-   "newRows": 836,
-   "newPct": 26.6,
+   "newRows": 853,
+   "newPct": 27.1,
    "pct": {
     "code": 21,
     "chat": 14.3,
@@ -115,7 +115,7 @@
    "take": {
     "code": {
      "rows": 660,
-     "new": 45
+     "new": 62
     },
     "chat": {
      "rows": 450,

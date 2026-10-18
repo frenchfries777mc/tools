@@ -194,7 +194,7 @@ var EX=[
     B('ev_clone',{f:{EL:fr},c:'과일 복제본마다 따로 그림과 속도를 정하고 떨어져요',s:{DO:[
       ME('act_set',{v:{VALUE:X(B('lists_getIndex',{m:'<mutation statement="false" at="false"></mutation>',f:{MODE:'GET',WHERE:'RANDOM'},v:{VALUE:X(B('lists_create_with',{m:'<mutation items="3"></mutation>',v:{ADD0:IMG(pid('apple')),ADD1:IMG(pid('banana')),ADD2:IMG(pid('cherries'))}}))}}))}}),
       ME('clone_setv',{f:{K:T('속도')},v:{V:RND(3,6)}}),
-      EVERY(T('떨어지기'),0.03,[ME('act_nudge',{f:{AXIS:'y'},v:{N:X(ME('clone_getv',{f:{K:T('속도')}}))}}),
+      EVERY(T('떨어지기'),0.03,[ME('act_nudge',{f:{AXIS:'y'},v:{N:X(B('math_single',{f:{OP:'NEG'},v:{NUM:X(ME('clone_getv',{f:{K:T('속도')}}))}}))}}),
         B('controls_if',{m:'<mutation elseif="1"></mutation>',v:{IF0:X(B('val_hit',{f:{A:'@me',B:bk,MODE:'box'}})),IF1:CMP('GT',WHERE('@me','y'),OP('ADD',G(cy),NUMB(360)))},s:{
           DO0:[B('act_score',{f:{MODE:'add'},v:{N:N(1)}}),SFX('coin'),B('clone_del',{f:{EL:'@me'}})],DO1:[B('clone_del',{f:{EL:'@me'}})]},c:'바구니에 닿으면 1점, 땅에 닿으면 그냥 사라져요'})])]}}),
     B('ev_keyhold',{f:{KEY:'ArrowLeft'},s:{DO:[bx(OP('MINUS',WHERE(bk,'x'),NUMB(8)))]}}),
@@ -227,12 +227,12 @@ var EX=[
     B('procedures_defnoreturn',{m:'<mutation></mutation>',f:{NAME:T('게임 오버')},c:'모두 멈추고 복제본을 지운 다음 다시 하기 버튼을 보여 줘요',s:{STACK:[
       SET(on,NUMB(0)),B('time_stopall'),B('clone_delall',{f:{EL:foe}}),B('clone_delall',{f:{EL:bul}}),B('act_best',{f:{NAME:best},v:{N:X(B('val_score'))}}),SFX('boom'),
       SETT(stat,JOIN([TX('💥 '+T('게임 오버! 점수 ')),X(B('val_score'))])),SAY(ship,T('한 번 더 해 볼까?'),3),SETT(go,'🔄 '+T('다시 하기')),SHOW(go,'show')]}}),
-    B('ev_clone',{f:{EL:foe},s:{DO:[EVERY(T('내려오기'),0.03,[ME('act_nudge',{f:{AXIS:'y'},v:{N:N(2)}}),
+    B('ev_clone',{f:{EL:foe},s:{DO:[EVERY(T('내려오기'),0.03,[ME('act_nudge',{f:{AXIS:'y'},v:{N:N(-2)}}),
       B('controls_if',{m:'<mutation elseif="1"></mutation>',v:{IF0:X(B('val_hit',{f:{A:'@me',B:ship,MODE:'circle'}})),IF1:CMP('GT',WHERE('@me','y'),OP('ADD',G(cy),NUMB(390)))},s:{
         DO0:[over],
         DO1:[B('clone_del',{f:{EL:'@me'}}),IF(CMP('GT',G(lives),NUMB(0)),[CHG(lives,-1),hearts(),SFX('lose')]),IF(AND(CMP('LTE',G(lives),NUMB(0)),CMP('EQ',G(on),NUMB(1))),[over])]},
         c:'로켓에 닿으면 게임 오버, 아래로 지나가면 생명 1개를 잃어요 (0보다 작아지지 않아요)'})])]}}),
-    B('ev_clone',{f:{EL:bul},s:{DO:[EVERY(T('날아가기'),0.02,[ME('act_nudge',{f:{AXIS:'y'},v:{N:N(-9)}}),IF(CMP('LT',WHERE('@me','y'),G(cy)),[B('clone_del',{f:{EL:'@me'}})])])]}}),
+    B('ev_clone',{f:{EL:bul},s:{DO:[EVERY(T('날아가기'),0.02,[ME('act_nudge',{f:{AXIS:'y'},v:{N:N(9)}}),IF(CMP('LT',WHERE('@me','y'),G(cy)),[B('clone_del',{f:{EL:'@me'}})])])]}}),
     B('ev_hit',{f:{A:bul+'*',B:foe+'*',MODE:'box'},c:'총알과 외계인이 닿으면 둘 다 지우고 1점',s:{DO:[B('clone_del',{f:{EL:'@other'}}),B('clone_del',{f:{EL:'@me'}}),B('act_score',{f:{MODE:'add'},v:{N:N(1)}}),SFX('pop')]}}),
     B('ev_keyhold',{f:{KEY:'ArrowLeft'},s:{DO:[sx(OP('MINUS',WHERE(ship,'x'),NUMB(7)))]}}),
     B('ev_keyhold',{f:{KEY:'ArrowRight'},s:{DO:[sx(OP('ADD',WHERE(ship,'x'),NUMB(7)))]}}),

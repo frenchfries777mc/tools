@@ -108,7 +108,7 @@ function selfRows(file,variant){ // {NAME}... filled per model; asked with and w
 for(const x of checked('ask','ask-4')) if(!blocked(x.messages[1].content)) put('ask4',x.messages);
 for(const x of checked('tr','parts-1')) if(!blocked(x.messages[1].content)) put('cell',x.messages);
 for(const x of checked('self','joke-1')) put('joke',x.messages);
-for(const it of jl(path.join(RAW,'html-gen-14.jsonl'))) if(!blocked(it.q)) put('gen14',[{role:'system',content:SYS_HTML},{role:'user',content:'Request: '+it.q},{role:'assistant',content:'```html\n'+it.html.trim()+'\n```'}]);
+for(const it of jl(path.join(RAW,'html-gen-14.jsonl')).concat(fs.existsSync(path.join(RAW,'html-chips-14.jsonl'))?jl(path.join(RAW,'html-chips-14.jsonl')):[])) if(!blocked(it.q)) put('gen14',[{role:'system',content:SYS_HTML},{role:'user',content:'Request: '+it.q},{role:'assistant',content:'```html\n'+it.html.trim()+'\n```'}]);
 for(const it of jl(path.join(RAW,'calc-1.jsonl'))) put('calc',[{role:'system',content:P.calcSys},{role:'user',content:P.calcPrompt(it.cols,it.q)},{role:'assistant',content:JSON.stringify({formula:it.formula})}]);
 for(const it of jl(path.join(RAW,'spell-1.jsonl'))) put('spell',[{role:'system',content:P.spellSys},{role:'user',content:P.spellPrompt(JSON.stringify(it.in))},{role:'assistant',content:JSON.stringify(it.out)}]);
 for(const it of jl(path.join(RAW,'explain-1.jsonl'))) put('explain',[{role:'system',content:P.explainSys(it.lang)},{role:'user',content:P.explainPrompt(it.outline)},{role:'assistant',content:it.explain}]);
