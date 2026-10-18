@@ -642,6 +642,89 @@ HELP.typing=src(function(){
     });
   }
 });
+HELP.ltag=src(function(){
+  function __ltag(l) {
+    var m = { ko: 'ko-KR', en: 'en-US', ja: 'ja-JP', es: 'es-ES', fr: 'fr-FR', de: 'de-DE' };
+    if (!l || l === 'auto') return m[__lang()] || navigator.language || 'ko-KR';
+    return m[l] || l;
+  }
+});
+HELP.speak=src(function(){
+  var __spTok = 0, __spKeep = [];
+  function __speak(text, lang, speed) {
+    return new Promise(function (done) {
+      try {
+        var ss = window.speechSynthesis;
+        if (!ss || typeof SpeechSynthesisUtterance === 'undefined') return done();
+        var tok = __spTok, tag = __ltag(lang), base = tag.split('-')[0].toLowerCase(), once = false, t = 0;
+        var go = function () {
+          if (once) return;
+          once = true;
+          clearTimeout(t);
+          if (ss.removeEventListener) ss.removeEventListener('voiceschanged', go);
+          if (tok !== __spTok) return done();
+          try {
+            var u = new SpeechSynthesisUtterance(text == null ? '' : String(text)), vs = ss.getVoices() || [], v = null, i;
+            for (i = 0; i < vs.length && !v; i++) if (String(vs[i].lang).replace('_', '-').toLowerCase() === tag.toLowerCase()) v = vs[i];
+            for (i = 0; i < vs.length && !v; i++) if (String(vs[i].lang).toLowerCase().split(/[-_]/)[0] === base) v = vs[i];
+            if (v) u.voice = v;
+            u.lang = v ? v.lang : tag;
+            u.rate = speed === 'slow' ? 0.7 : speed === 'fast' ? 1.4 : 1;
+            u.onend = u.onerror = function () { __spKeep = __spKeep.filter(function (k) { return k !== u; }); done(); };
+            __spKeep.push(u);
+            ss.speak(u);
+          } catch (e) { done(); }
+        };
+        if ((ss.getVoices() || []).length || !ss.addEventListener) return go();
+        t = setTimeout(go, 600);
+        ss.addEventListener('voiceschanged', go);
+      } catch (e) { done(); }
+    });
+  }
+  function __speakStop() {
+    __spTok++;
+    try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {}
+  }
+});
+HELP.voice=src(function(){
+  var __vOn = false, __vRec = null, __vHeard = '', __vWarned = false;
+  function __vHas(heard, word) {
+    var a = String(heard == null ? '' : heard).replace(/\s+/g, '').toLowerCase(), b = String(word == null ? '' : word).replace(/\s+/g, '').toLowerCase();
+    return b !== '' && a.indexOf(b) >= 0;
+  }
+  function __voice(on) {
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) {
+      if (on && !__vWarned) { __vWarned = true; console.warn('@@NOSR@@'); }
+      return;
+    }
+    __vOn = on;
+    if (!on) {
+      try { if (__vRec) __vRec.stop(); } catch (e) {}
+      return;
+    }
+    if (__vRec) return;
+    try {
+      var r = __vRec = new SR();
+      r.lang = __ltag('auto');
+      r.continuous = true;
+      r.interimResults = false;
+      r.onresult = function (e) {
+        for (var i = e.resultIndex || 0; i < e.results.length; i++) {
+          if (!e.results[i].isFinal) continue;
+          __vHeard = String(e.results[i][0].transcript || '');
+          document.dispatchEvent(new CustomEvent('bhvoice', { detail: __vHeard }));
+        }
+      };
+      r.onerror = function (e) { if (e.error === 'not-allowed' || e.error === 'service-not-allowed') __vOn = false; };
+      r.onend = function () {
+        if (__vRec === r) __vRec = null;
+        if (__vOn) setTimeout(function () { if (__vOn && !__vRec) __voice(true); }, 300);
+      };
+      r.start();
+    } catch (e) { __vRec = null; }
+  }
+},{NOSR:T('이 브라우저는 음성 인식을 지원하지 않아요')});
 HELP.say=src(function(){
   var __bubs = [];
   function __say(name, text, sec, think) {
@@ -979,7 +1062,7 @@ HELP.store=src(function(){
     return k in __mem ? __mem[k] : d;
   }
 });
-var HELP_DEPS={mlang:['lang'],typing:['$'],path:['$','move'],scene:['$'],beep:['snd'],sfx:['snd'],note:['snd'],hit:['$'],touch:['$','clones'],hitev:['$','touch'],rpos:['$'],nudge:['$'],where:['$'],stay:['$'],follow:['$','cursor'],image:['$','draw'],say:['$'],get:['$'],set:['$'],add:['$'],size:['$'],move:['$'],glide:['$','move'],turn:['$'],watch:['$'],phys:['$'],drag:['$'],volume:['snd'],mp3:['snd'],flip:['$'],autoturn:['$','turn'],fx:['$'],tween:['$','size'],lookat:['$','clones'],show:['$'],draw:['$'],clones:['$','me','sched','nudge'],sched:['me'],tile:['$','nudge'],best:['store']};
+var HELP_DEPS={mlang:['lang'],typing:['$'],path:['$','move'],scene:['$'],beep:['snd'],sfx:['snd'],note:['snd'],hit:['$'],touch:['$','clones'],hitev:['$','touch'],rpos:['$'],nudge:['$'],where:['$'],stay:['$'],follow:['$','cursor'],image:['$','draw'],say:['$'],get:['$'],set:['$'],add:['$'],size:['$'],move:['$'],glide:['$','move'],turn:['$'],watch:['$'],phys:['$'],drag:['$'],volume:['snd'],mp3:['snd'],flip:['$'],autoturn:['$','turn'],fx:['$'],tween:['$','size'],lookat:['$','clones'],show:['$'],draw:['$'],clones:['$','me','sched','nudge'],sched:['me'],tile:['$','nudge'],best:['store'],speak:['lang','ltag'],voice:['lang','ltag'],ltag:['lang']};
 
 function dbgHelper(vars){
   return 'var __dq = Promise.resolve(), __dgo = null, __dfree = 0, __drun = 0, __dbusy = {};\n'+
@@ -1032,7 +1115,7 @@ function build(ws,opts){
     body+=bodyHTML(b,'  ',true);
   });
   // JavaScript
-  WAITS=ws.getAllBlocks(false).some(function(x){ return (x.type==='act_wait'||x.type==='act_glideto'||x.type==='act_glidexy'||x.type==='act_tween'||x.type==='act_path_go'||x.type==='act_type')&&x.isEnabled(); });
+  WAITS=ws.getAllBlocks(false).some(function(x){ return (x.type==='act_wait'||x.type==='act_glideto'||x.type==='act_glidexy'||x.type==='act_tween'||x.type==='act_path_go'||x.type==='act_type'||x.type==='act_speak_wait')&&x.isEnabled(); });
   NEED={}; USED={}; USEDS={}; G.INFINITE_LOOP_TRAP=opts.trap?'if (--window.__loop < 0) throw new Error("'+T('반복이 끝나지 않아요')+'");\n':null;
   DBG=!!opts.debug; dbgSeq=0; GLW=!!opts.glow&&!DBG; G.STATEMENT_PREFIX=DBG?'await __step(%1);\n':GLW?'__glow(%1);\n':null;
   var js, dbgVars=[];
@@ -1154,6 +1237,21 @@ def('val_lang',function(){ this.appendDummyInput().appendField(T('만약 사용�
   function(b){ return ['((navigator.language || \'\').split(\'-\')[0].toLowerCase() === '+lit(b.getFieldValue('LANG'))+')',O.EQUALITY]; });
 def('val_device',function(){ this.appendDummyInput().appendField(T('만약 사용자의 기기가')).appendField(new Blockly.FieldDropdown(function(){ return [[T('모바일'),'mobile'],[T('컴퓨터'),'desktop']]; }),'DEV').appendField(T('인가?')); val(this,'Boolean','폰이나 태블릿이면 "모바일", 아니면 "컴퓨터"예요. 만약 블록 안에 끼워 써요'); },
   function(b){ need('device'); return ['(__isMobile() === '+(b.getFieldValue('DEV')==='mobile')+')',O.EQUALITY]; });
+
+function speakLang(){ return new Blockly.FieldDropdown(function(){ return [[T('사용자의 언어'),'auto'],[T('한국어'),'ko'],['English','en'],['日本語','ja'],['Español','es'],['Français','fr'],['Deutsch','de']]; }); }
+function speakRate(){ var f=new Blockly.FieldDropdown(function(){ return [[T('느리게'),'slow'],[T('보통'),'normal'],[T('빠르게'),'fast']]; }); f.setValue('normal'); return f; }
+def('act_speak_text',function(){ this.appendValueInput('TEXT').setCheck('String'); this.appendDummyInput().appendField(T('을(를) 소리 내어 읽기')).appendField(T('· 언어')).appendField(speakLang(),'LANG').appendField(T('· 속도')).appendField(speakRate(),'RATE'); this.setInputsInline(true); act(this,'글자를 소리 내어 읽어 줘요. 바로 다음 블록으로 넘어가요. 소리가 안 나는 브라우저에서는 아무 일도 없어요'); },
+  function(b){ need('speak'); return '__speak('+(G.valueToCode(b,'TEXT',O.COMMA)||"''")+', '+lit(b.getFieldValue('LANG'))+', '+lit(b.getFieldValue('RATE'))+');\n'; });
+def('act_speak_wait',function(){ this.appendValueInput('TEXT').setCheck('String'); this.appendDummyInput().appendField(T('을(를) 소리 내어 읽고 끝날 때까지 기다리기')).appendField(T('· 언어')).appendField(speakLang(),'LANG').appendField(T('· 속도')).appendField(speakRate(),'RATE'); this.setInputsInline(true); act(this,'글자를 소리 내어 읽고, 다 읽을 때까지 기다렸다가 다음 블록으로 가요'); },
+  function(b){ need('speak'); return 'await __speak('+(G.valueToCode(b,'TEXT',O.COMMA)||"''")+', '+lit(b.getFieldValue('LANG'))+', '+lit(b.getFieldValue('RATE'))+');\n'; });
+def('act_speak_stop',function(){ this.appendDummyInput().appendField(T('읽기 멈추기')); act(this,'소리 내어 읽던 것을 멈춰요'); },
+  function(){ need('speak'); return '__speakStop();\n'; });
+def('ev_voice',function(){ this.appendDummyInput().appendField(T('말로')).appendField(new Blockly.FieldTextInput(T('점프')),'WORD').appendField(T('(이)라고 하면')); hat(this,'"말 듣기 시작"을 한 뒤에, 마이크로 이 말이 들리면 해요. 띄어쓰기와 대소문자는 따지지 않고, 말 속에 들어 있기만 해도 돼요'); },
+  function(b){ var w=b.getFieldValue('WORD'); need('voice'); return 'document.addEventListener(\'bhvoice\', '+AF()+'e) {\n  if (!__vHas(e.detail, '+lit(w)+')) return;\n'+hatBody(b)+'});\n'; });
+def('act_voice_listen',function(){ this.appendDummyInput().appendField(new Blockly.FieldDropdown(function(){ return [[T('듣기 시작'),'on'],[T('듣기 멈추기'),'off']]; }),'MODE'); act(this,'마이크로 말을 듣기 시작하거나 멈춰요. 시작할 때 브라우저가 마이크를 써도 되는지 물어봐요'); },
+  function(b){ need('voice'); return '__voice('+(b.getFieldValue('MODE')==='on')+');\n'; });
+def('val_voice_heard',function(){ this.appendDummyInput().appendField(T('방금 들은 말')); val(this,'String','마이크로 가장 나중에 들은 말이에요. 아직 못 들었으면 빈 글자예요'); },
+  function(){ need('voice'); return ['__vHeard',O.ATOMIC]; });
 
 Object.assign(HELP,{
   video:[
@@ -1405,6 +1503,8 @@ function toolbox(){
       lab('음악'),bk('act_note'),bk('act_note',{fields:{NOTE:'E4',BEAT:'0.5'}}),bk('act_tempo',{inputs:{N:n(120)}}),bk('act_mp3'),bk('act_mp3stop'),bk('act_sound_stop'),lab('소리 크기'),bk('act_volume',{inputs:{N:n(50)}}),
       lab('영상'),bk('act_video',{inputs:{SRC:sh('text','https://'),X:n(20),Y:n(20),W:n(320)}}),bk('val_myvideo'),bk('act_video_ctl'),bk('act_video_vol',{inputs:{N:n(50)}}),bk('act_video_loop'),
       lab('삐 소리'),bk('act_beep',{inputs:{SEC:n(0.3)}}),
+      lab('소리 내어 읽기'),bk('act_speak_text',{inputs:{TEXT:sh('text',T('안녕하세요!'))}}),bk('act_speak_wait',{inputs:{TEXT:sh('text',T('안녕하세요!'))}}),bk('act_speak_stop'),
+      lab('말로 시키기'),bk('ev_voice'),bk('act_voice_listen'),bk('val_voice_heard'),
       lab('알림'),bk('act_alert',{inputs:{VALUE:sh('text',T('안녕하세요!'))}}),
       lab('시간'),bk('act_wait',{inputs:{SEC:n(1)}}),bk('act_stop'),
       lab('이름 붙여 멈출 수 있는 시간'),bk('time_after',{inputs:{SEC:n(2)}}),bk('time_every',{inputs:{SEC:n(1)}}),bk('time_stop'),bk('time_running'),bk('time_stopall'),
