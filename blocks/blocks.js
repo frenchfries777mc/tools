@@ -234,6 +234,12 @@ def('act_after',function(){ this.appendValueInput('SEC').setCheck('Number'); thi
 ['procedures_defnoreturn','procedures_defreturn'].forEach(function(t){ var o=G.forBlock[t]; if(!o) return;
   G.forBlock[t]=function(b,g){ var r=o.call(this,b,g); if(WAITS){ var d=g.definitions_||G.definitions_; Object.keys(d||{}).forEach(function(k){ if(k.charAt(0)==='%'&&/(^|\n)function /.test(d[k])) d[k]=d[k].replace(/(^|\n)function /,'$1async function '); }); } return r; }; });
 var oCallR=G.forBlock.procedures_callreturn; if(oCallR) G.forBlock.procedures_callreturn=function(b,g){ var r=oCallR.call(this,b,g); return WAITS&&Array.isArray(r)?['(await '+r[0]+')',O.ATOMIC]:r; };
+def('act_glideto',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('이(가)')); this.appendValueInput('SEC').setCheck('Number'); this.appendDummyInput().appendField(T('초 동안')).appendField(elField(),'TO').appendField(T('의 위치로 가기')); this.setInputsInline(true); act(this,'정한 시간 동안 천천히 움직여서 다른 요소가 있는 곳으로 가요. 다 갈 때까지 기다렸다가 다음 블록으로 가요'); },
+  function(b){ need('glide'); need('where'); var t=er(b,'TO'); return 'await __glide('+er(b)+', '+(G.valueToCode(b,'SEC',O.COMMA)||'1')+', __where('+t+", 'x'), __where("+t+", 'y'));\n"; });
+def('act_glidexy',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('이(가)')); this.appendValueInput('SEC').setCheck('Number'); this.appendDummyInput().appendField(T('초 동안 x')); this.appendValueInput('X').setCheck('Number'); this.appendDummyInput().appendField('y'); this.appendValueInput('Y').setCheck('Number'); this.appendDummyInput().appendField(T('위치로 가기')); this.setInputsInline(true); act(this,'정한 시간 동안 천천히 움직여서 페이지 왼쪽 위에서부터 x, y만큼 떨어진 곳으로 가요. 다 갈 때까지 기다렸다가 다음 블록으로 가요'); },
+  function(b){ need('glide'); return 'await __glide('+er(b)+', '+(G.valueToCode(b,'SEC',O.COMMA)||'1')+', '+(G.valueToCode(b,'X',O.COMMA)||'0')+', '+(G.valueToCode(b,'Y',O.COMMA)||'0')+');\n'; });
+def('act_lookat',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('이(가)')).appendField(elField(),'TO').appendField(T('바라보기')); act(this,'다른 요소가 있는 쪽으로 가는 방향을 정해요 (눈에 보이는 모양은 그대로예요). 방향대로 가려면 앞으로 가기 블록을 써요'); },
+  function(b){ need('lookat'); return '__faceEl('+er(b)+', '+er(b,'TO')+');\n'; });
 def('act_wait',function(){ this.appendValueInput('SEC').setCheck('Number'); this.appendDummyInput().appendField(T('초 기다리기')); this.setInputsInline(true); act(this,'정한 시간 동안 여기서 기다렸다가 다음 블록으로 가요. 반복 안에서도 기다려요'); },
   function(b){ need('sleep'); return 'await __sleep('+(G.valueToCode(b,'SEC',O.NONE)||'1')+');\n'; });
 def('act_stop',function(){ this.appendDummyInput().appendField(T('"초마다"를 모두 멈추기')); act(this,'초마다 반복을 모두 멈춰요. 이름 붙은 시간 블록도 함께 멈춰요'); },
@@ -535,6 +541,8 @@ var HELP={
   follow:"var __fol = {}, __folOn = false, __moved = false;\ndocument.addEventListener('pointermove', function () { __moved = true; });\ndocument.addEventListener('pointerdown', function () { __moved = true; });\nfunction __folLoop() {\n  for (var n in __fol) {\n    var el = document.getElementById(n);\n    if (!el) { delete __fol[n]; continue; }\n    if (!__moved) continue;\n    var s = el.style, tx = __cx - el.offsetWidth / 2, ty = __cy - el.offsetHeight / 2;\n    if (s.position !== 'absolute') {\n      var r = el.getBoundingClientRect();\n      s.position = 'absolute';\n      s.left = (r.left + window.pageXOffset) + 'px';\n      s.top = (r.top + window.pageYOffset) + 'px';\n    }\n    var x = parseFloat(s.left) || 0, y = parseFloat(s.top) || 0, k = __fol[n] === 'soft' ? 0.15 : 1;\n    s.left = (x + (tx - x) * k) + 'px';\n    s.top = (y + (ty - y) * k) + 'px';\n    s.pointerEvents = 'none';\n  }\n  requestAnimationFrame(__folLoop);\n}\nfunction __follow(name, mode) {\n  if (mode === 'stop') {\n    delete __fol[name];\n    var e = document.getElementById(name);\n    if (e) e.style.pointerEvents = '';\n    return;\n  }\n  $(name);\n  __fol[name] = mode;\n  document.body.style.touchAction = 'none';\n  if (!__folOn) { __folOn = true; __folLoop(); }\n}",
   key:"var __key = '';",
   keyheld:"var __held = {};\ndocument.addEventListener('keydown', function (e) { __held[e.key.toLowerCase()] = true; });\ndocument.addEventListener('keyup', function (e) { delete __held[e.key.toLowerCase()]; });\nwindow.addEventListener('blur', function () { __held = {}; });",
+  glide:"function __glide(name, sec, x, y) {\n  var e = $(name), q = e.getBoundingClientRect(), x0 = parseFloat(e.style.left), y0 = parseFloat(e.style.top);\n  if (isNaN(x0) || isNaN(y0)) { x0 = q.left + window.pageXOffset; y0 = q.top + window.pageYOffset; }\n  sec = parseFloat(sec) || 0;\n  var tok = e.__gl = (e.__gl || 0) + 1;\n  return new Promise(function (done) {\n    var t0 = performance.now();\n    function step(now) {\n      if (e.__gl !== tok) return done();\n      var k = sec > 0 ? Math.min(1, (now - t0) / (sec * 1000)) : 1;\n      __move(e, x0 + (x - x0) * k, y0 + (y - y0) * k);\n      if (k < 1) requestAnimationFrame(step); else done();\n    }\n    requestAnimationFrame(step);\n  });\n}",
+  lookat:"function __faceEl(r, t) {\n  var q = $(t).getBoundingClientRect();\n  __face(r, q.left + window.pageXOffset + q.width / 2, q.top + window.pageYOffset + q.height / 2);\n}",
   sleep:"function __sleep(sec) { return new Promise(function (done) { setTimeout(done, sec * 1000); }); }",
   wb:"var __wb = {};",
   keyhold:"var __down = {};\nfunction __keyHold(match, fn) {\n  var id = null;\n  function stop() { if (id) { clearInterval(id); id = null; } }\n  document.addEventListener('keydown', function (e) {\n    __key = e.key;\n    __down[e.key.toLowerCase()] = e;\n    if (e.repeat || id || !match(e)) return;\n    fn(e);\n    id = setInterval(function () { fn(e); }, 30);\n  });\n  document.addEventListener('keyup', function (e) {\n    delete __down[e.key.toLowerCase()];\n    if (id && !Object.keys(__down).some(function (k) { return match(__down[k]); })) stop();\n  });\n  window.addEventListener('blur', function () { __down = {}; stop(); });\n}",
@@ -892,7 +900,7 @@ HELP.store=src(function(){
     return k in __mem ? __mem[k] : d;
   }
 });
-var HELP_DEPS={beep:['snd'],sfx:['snd'],note:['snd'],hit:['$'],touch:['$','clones'],hitev:['$','touch'],rpos:['$'],nudge:['$'],where:['$'],stay:['$'],follow:['$','cursor'],image:['$','draw'],say:['$'],get:['$'],set:['$'],add:['$'],size:['$'],move:['$'],show:['$'],draw:['$'],clones:['$','me','sched','nudge'],sched:['me'],tile:['$','nudge'],best:['store']};
+var HELP_DEPS={beep:['snd'],sfx:['snd'],note:['snd'],hit:['$'],touch:['$','clones'],hitev:['$','touch'],rpos:['$'],nudge:['$'],where:['$'],stay:['$'],follow:['$','cursor'],image:['$','draw'],say:['$'],get:['$'],set:['$'],add:['$'],size:['$'],move:['$'],glide:['$','move'],lookat:['$','clones'],show:['$'],draw:['$'],clones:['$','me','sched','nudge'],sched:['me'],tile:['$','nudge'],best:['store']};
 
 function dbgHelper(vars){
   return 'var __dq = Promise.resolve(), __dgo = null, __dfree = 0, __drun = 0, __dbusy = {};\n'+
@@ -945,7 +953,7 @@ function build(ws,opts){
     body+=bodyHTML(b,'  ',true);
   });
   // JavaScript
-  WAITS=ws.getAllBlocks(false).some(function(x){ return x.type==='act_wait'&&x.isEnabled(); });
+  WAITS=ws.getAllBlocks(false).some(function(x){ return (x.type==='act_wait'||x.type==='act_glideto'||x.type==='act_glidexy')&&x.isEnabled(); });
   NEED={}; USED={}; USEDS={}; G.INFINITE_LOOP_TRAP=opts.trap?'if (--window.__loop < 0) throw new Error("'+T('반복이 끝나지 않아요')+'");\n':null;
   DBG=!!opts.debug; dbgSeq=0; GLW=!!opts.glow&&!DBG; G.STATEMENT_PREFIX=DBG?'await __step(%1);\n':GLW?'__glow(%1);\n':null;
   var js, dbgVars=[];
@@ -1038,6 +1046,7 @@ function toolbox(){
     cat('move','움직임',[
       bk('act_move',{inputs:{X:n(100),Y:n(100)}}),
       bk('act_nudge',{inputs:{N:n(10)}}),bk('act_nudge2',{inputs:{DX:n(10),DY:n(0)}}),bk('act_stay'),
+      lab('천천히 움직이기'),bk('act_glideto',{inputs:{SEC:n(1)}}),bk('act_glidexy',{inputs:{SEC:n(1),X:n(200),Y:n(200)}}),bk('act_lookat'),
       lab('커서 따라다니기'),bk('act_follow'),bk('val_cursor'),
       lab('위치'),bk('val_where'),
       lab('누른 곳'),bk('val_mouse')]),
