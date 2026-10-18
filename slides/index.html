@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fry Slides · Frenchfries777 Tools</title>
+<meta name="description" content="발표 자료를 만들고 바로 고치고, 발표하고, 파워포인트 파일로 받는 도구. AI 초안 만들기는 시험 기능이에요.">
+<meta name="theme-color" content="#08090d">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@600;700&display=swap" rel="stylesheet">
+<script src="../i18n.js"></script>
+<script src="strings.js"></script>
+<style>
+:root{ --bg:#08090d; --panel:#10131b; --panel2:#151925; --line:#222837; --text:#eef0f5; --dim:#8a93a6; --fry:#ffc93c; --fry2:#ff8a3d; --stage:#0b0d13; --ts:.13; }
+html[data-ff-theme=light]{ --bg:#f6f3ec; --panel:#ffffff; --panel2:#f1ede4; --line:#e2dccf; --text:#1f1b14; --dim:#6d6658; --stage:#ece8df; }
+*{box-sizing:border-box;}
+html,body{margin:0; height:100%; background:var(--bg); color:var(--text); overscroll-behavior:none;}
+body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif; font-size:14px; display:flex; flex-direction:column; height:100vh; height:100dvh; overflow:hidden;
+  padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0); -webkit-tap-highlight-color:transparent;}
+button,input,select,textarea{font:inherit; color:inherit;}
+[hidden]{display:none!important;}
+/* header (same as the other tools) */
+.top{display:flex; align-items:center; gap:8px; padding:8px 12px; border-bottom:1px solid var(--line); background:var(--panel); flex:0 0 auto;}
+.home{display:grid; place-items:center; width:34px; height:34px; border-radius:9px; background:linear-gradient(135deg,var(--fry),var(--fry2)); text-decoration:none; font-size:18px; flex:0 0 auto;}
+.brand{font-family:'Oswald',sans-serif; font-weight:700; font-size:18px; letter-spacing:.04em; white-space:nowrap;}
+.brand b{color:var(--fry);}
+#deckName{flex:1 1 120px; min-width:60px; max-width:320px; background:transparent; border:1px solid transparent; border-radius:8px; padding:6px 8px; font-size:15px; font-weight:500;}
+#deckName:hover,#deckName:focus{border-color:var(--line); background:var(--bg); outline:none;}
+.saved{color:var(--dim); font-size:12px; white-space:nowrap;}
+.sp{flex:1;}
+.tbtn{display:inline-flex; align-items:center; justify-content:center; gap:6px; height:34px; padding:0 12px; border-radius:8px; border:1px solid var(--line); background:var(--panel2); cursor:pointer; white-space:nowrap;}
+.tbtn:hover:not(:disabled){border-color:#3a4256;} .tbtn:disabled{opacity:.4; cursor:default;}
+.tbtn.pri{background:linear-gradient(90deg,var(--fry),var(--fry2)); color:#1c1405; border:0; font-weight:700;}
+.tbtn.aib{border-color:#5a4a1c; color:var(--fry);}
+.aiWarn{margin:8px 0 0; color:var(--dim); font-size:12.5px; line-height:1.5;}
+.tbtn svg{width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; flex:0 0 auto;}
+.tbtn.play svg{fill:currentColor; stroke:none;}
+.langSel{background:var(--panel2); color:var(--dim); border:1px solid var(--line); border-radius:8px; padding:6px 8px; font-size:13px;}
+@media(max-width:1100px){ .saved{display:none;} }
+@media(max-width:960px){ .brand{display:none;} .top{gap:6px;} #deckName{flex-basis:70px;} .langSel{max-width:96px;} }
+@media(max-width:620px){ .tbtn .lb{display:none;} #deckName{max-width:none;} .langSel{max-width:84px;} .top{padding:6px 8px;} }
+/* command search (기능 찾기) */
+.cmdk{position:relative; display:flex; align-items:center; height:40px; width:clamp(190px,22vw,280px); flex:0 1 auto; border:1px solid var(--line); border-radius:10px; background:var(--bg);}
+.cmdk:focus-within{border-color:var(--fry);}
+.cmdk svg{position:absolute; left:11px; top:50%; width:17px; height:17px; margin-top:-8.5px; fill:none; stroke:var(--dim); stroke-width:2.2; stroke-linecap:round; pointer-events:none;}
+.cmdk input{flex:1; min-width:0; width:100%; height:100%; background:transparent; border:0; outline:none; padding:0 6px 0 36px; font-size:16px; -webkit-appearance:none; appearance:none;}
+.cmdk input::-webkit-search-cancel-button{display:none;}
+.cmdk input::placeholder{color:var(--dim); font-size:14px;}
+.cmdk kbd{flex:0 0 auto; margin-right:8px; font:600 11px/1 system-ui,sans-serif; color:var(--dim); border:1px solid var(--line); border-radius:5px; padding:4px 5px; background:var(--panel2); pointer-events:none;}
+.cmdk.open kbd{display:none;}
+@media(max-width:1100px){ .cmdk kbd{display:none;} .cmdk{width:clamp(170px,24vw,240px);} }
+@media(max-width:620px){
+  .cmdk{width:40px; flex:0 0 40px;} .cmdk input{padding:0; color:transparent; cursor:pointer;} .cmdk input::placeholder{color:transparent;} .cmdk kbd{display:none;}
+  .cmdk.open{position:fixed; left:8px; right:8px; top:calc(8px + env(safe-area-inset-top,0px)); width:auto; z-index:76; background:var(--panel); box-shadow:0 10px 30px rgba(0,0,0,.5);}
+  .cmdk.open input{padding:0 10px 0 36px; color:var(--text); cursor:text;} .cmdk.open input::placeholder{color:var(--dim);} }
+.cmdRes{position:fixed; z-index:75; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:6px; box-shadow:0 20px 50px rgba(0,0,0,.55); overflow:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain;}
+.cr{display:flex; align-items:center; gap:10px; width:100%; min-height:44px; padding:6px 10px; border:0; background:transparent; border-radius:8px; cursor:pointer; text-align:left;}
+.cr.on{background:var(--panel2); box-shadow:inset 0 0 0 1px var(--line);}
+.cr svg{width:18px; height:18px; flex:0 0 auto; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+.cr.aib svg,.cr.aib b{color:var(--fry);}
+.cr.dim{opacity:.55;}
+.crl{flex:1; min-width:0; display:flex; flex-direction:column;} .crl b{font-weight:600; font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.crl small{color:var(--dim); font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;} .crl small:empty{display:none;}
+.crt{flex:0 0 auto; font-size:11.5px; color:var(--dim); border:1px solid var(--line); border-radius:99px; padding:2px 8px;}
+.cr kbd{flex:0 0 auto; font:600 11px/1 system-ui,sans-serif; color:var(--dim); background:var(--panel2); border:1px solid var(--line); border-radius:5px; padding:4px 6px;}
+.crNone{color:var(--dim); padding:14px 12px; font-size:13.5px;}
+@media(max-width:480px){ .cr kbd{display:none;} }
+/* ribbon: tabs and the buttons of the open tab */
+.rbar{flex:0 0 auto; background:var(--panel); border-bottom:1px solid var(--line);}
+.rtabs{display:flex; gap:2px; padding:0 8px; overflow-x:auto; overflow-y:hidden; scrollbar-width:none; border-bottom:1px solid var(--line);}
+.rtabs::-webkit-scrollbar,.rpan::-webkit-scrollbar{display:none;}
+.rtab{flex:0 0 auto; height:40px; min-width:56px; padding:0 16px; border:0; border-bottom:2.5px solid transparent; background:transparent; color:var(--dim); cursor:pointer; font-weight:600; font-size:14px; white-space:nowrap;}
+.rtab:hover{color:var(--text);} .rtab.on{color:var(--text); border-bottom-color:var(--fry);}
+.rtab.aib{color:#c9a440;} .rtab.aib.on{color:var(--fry);}
+.rtab:focus-visible,.rb:focus-visible{outline:2px solid var(--fry); outline-offset:-2px;}
+.rpan{display:flex; align-items:center; gap:2px; padding:5px 8px; overflow-x:auto; overflow-y:hidden; scrollbar-width:none; -webkit-overflow-scrolling:touch;}
+.rb{position:relative; flex:0 0 auto; display:inline-flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; min-width:54px; height:50px; padding:4px 8px; border-radius:9px; border:1px solid transparent; background:transparent; color:var(--text); cursor:pointer; white-space:nowrap;}
+.rb svg{width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex:0 0 auto;}
+.rb .lb{font-size:12px; line-height:1.15;}
+.rb:hover:not(:disabled):not(.off){background:var(--panel2); border-color:var(--line);}
+.rb:disabled{opacity:.35; cursor:default;} .rb.off{opacity:.42;}
+.rb.on{background:rgba(255,201,60,.13); border-color:rgba(255,201,60,.45); color:var(--fry);}
+.rb.dang{color:#ff8b8b;}
+.rb.pri{background:linear-gradient(90deg,var(--fry),var(--fry2)); color:#1c1405; border:0; font-weight:700;}
+.rb.play svg{fill:currentColor; stroke:none;} .rb.play{color:#5fd39a;}
+.rb.aib{color:var(--fry); border-color:#5a4a1c; background:rgba(255,201,60,.06);}
+.rb.aib:hover:not(:disabled):not(.off){background:rgba(255,201,60,.14); border-color:#7a6424;}
+.rpan .rb.aib{margin:0 2px;}
+.rb.flash{animation:rbf 1.5s ease-out;}
+@keyframes rbf{0%,40%{box-shadow:0 0 0 3px var(--fry); background:rgba(255,201,60,.22);} 100%{box-shadow:0 0 0 0 rgba(255,201,60,0);}}
+.rsel{cursor:default;} .rsel select{height:28px; max-width:140px; border-radius:7px; border:1px solid var(--line); background:var(--panel2); padding:0 6px; font-size:13px; cursor:pointer;}
+.rpan.fr{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent); mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent);}
+.rpan.fl{-webkit-mask-image:linear-gradient(90deg,transparent,#000 36px); mask-image:linear-gradient(90deg,transparent,#000 36px);}
+.rpan.fl.fr{-webkit-mask-image:linear-gradient(90deg,transparent,#000 36px,#000 calc(100% - 36px),transparent); mask-image:linear-gradient(90deg,transparent,#000 36px,#000 calc(100% - 36px),transparent);}
+.rsep{flex:0 0 1px; align-self:stretch; margin:6px 5px; background:var(--line);}
+@media(max-width:640px){ .rtab{padding:0 13px;} .rb{min-width:50px; padding:4px 6px;} .rsep{margin:6px 3px;} }
+.main{flex:1; display:flex; min-height:0; position:relative;}
+/* start screen */
+#start{flex:1; overflow:auto; padding:34px 18px 60px; -webkit-overflow-scrolling:touch;}
+.startIn{max-width:780px; margin:0 auto;}
+#start h1{font-size:30px; margin:0; line-height:1.25; font-weight:800;}
+#start .lead{color:var(--dim); margin:8px 0 20px; font-size:15px;}
+#topic{width:100%; min-height:104px; resize:vertical; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:16px; line-height:1.5;}
+#topic:focus,.fieldIn:focus{outline:none; border-color:var(--fry);}
+.chips{display:flex; flex-wrap:wrap; gap:6px; margin:10px 0 0;}
+.chips button{border:1px solid var(--line); background:var(--panel2); border-radius:99px; padding:6px 12px; cursor:pointer; font-size:13px;}
+.chips button:hover{border-color:var(--fry); color:var(--fry);}
+.opts{display:grid; grid-template-columns:minmax(220px,1fr) 2fr; gap:14px; margin:20px 0 0;}
+.lab{display:block; color:var(--dim); font-size:13px; margin:0 0 6px;}
+.cnt{display:flex; align-items:center; gap:10px; height:44px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:0 12px;}
+.cnt input{flex:1; accent-color:var(--fry); min-width:0;}
+.cnt b{min-width:26px; text-align:right; font-size:16px;}
+.fieldIn{width:100%; height:44px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:0 12px; font-size:15px;}
+.themes{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px;}
+.thc{border:2px solid transparent; background:transparent; padding:0; border-radius:12px; cursor:pointer; text-align:left;}
+.thc .tv{position:relative; width:100%; aspect-ratio:16/9; border-radius:10px; overflow:hidden; outline:1px solid var(--line);}
+.thc span{display:block; font-size:13px; padding:5px 4px 2px; color:var(--dim);}
+.thc.on{border-color:var(--fry);} .thc.on span{color:var(--fry); font-weight:700;}
+.startActs{display:flex; flex-wrap:wrap; gap:10px; margin:24px 0 0; align-items:center;}
+.startActs .tbtn{height:48px; padding:0 20px; font-size:15.5px; border-radius:11px;}
+.startActs .tbtn.pri{flex:1 1 260px;}
+.startActs .tbtn svg{width:18px; height:18px;}
+.note{color:var(--dim); font-size:12.5px; margin:12px 0 0; line-height:1.55;}
+@media(max-width:620px){ .opts{grid-template-columns:1fr;} #start{padding:22px 16px 50px;} #start h1{font-size:24px;} .startActs .tbtn{flex:1 1 100%;} }
+/* editor */
+#editor{flex:1; display:flex; min-height:0; min-width:0;}
+#list{flex:0 0 auto; width:calc(1280px * var(--ts) + 50px); overflow-y:auto; overflow-x:hidden; border-right:1px solid var(--line); background:var(--panel); padding:10px 8px 40px 4px; position:relative; -webkit-overflow-scrolling:touch;}
+.thumb{position:relative; display:flex; gap:4px; align-items:flex-start; padding:5px 4px; border-radius:10px; cursor:pointer; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none;}
+.thumb:hover{background:var(--panel2);}
+.thumb .no{flex:0 0 22px; display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--dim); font-size:12px; padding-top:2px;}
+.grip{display:grid; place-items:center; width:22px; height:30px; border-radius:6px; color:var(--dim); cursor:grab; touch-action:none; font-size:13px; letter-spacing:-2px;}
+.grip:hover{background:var(--line); color:var(--text);}
+.thumb .tv{position:relative; width:calc(1280px * var(--ts)); height:calc(720px * var(--ts)); border-radius:6px; overflow:hidden; outline:1px solid var(--line); flex:0 0 auto; pointer-events:none;}
+.thumb .tv .sl{transform:scale(var(--ts));}
+.thumb.on .tv{outline:2.5px solid var(--fry);}
+.thumb.drag{opacity:.35;}
+.mv{position:absolute; right:8px; bottom:9px; display:flex; gap:3px;}
+.mv button{width:26px; height:24px; border-radius:6px; border:1px solid rgba(0,0,0,.25); background:rgba(16,19,27,.85); color:#eef0f5; cursor:pointer; font-size:12px; line-height:1; padding:0; display:grid; place-items:center;}
+.mv button:disabled{opacity:.3;}
+.drop{position:absolute; left:28px; right:8px; height:3px; border-radius:3px; background:var(--fry); pointer-events:none; z-index:3; box-shadow:0 0 8px rgba(255,201,60,.6);}
+.addSl{display:flex; align-items:center; justify-content:center; gap:6px; margin:6px 4px 0 30px; width:calc(1280px * var(--ts)); height:40px; border:1.5px dashed var(--line); border-radius:8px; background:transparent; color:var(--dim); cursor:pointer;}
+.addSl:hover{border-color:var(--fry); color:var(--fry);}
+#stage{flex:1; min-width:0; display:flex; flex-direction:column; background:var(--stage);}
+.ib{width:34px; height:34px; display:grid; place-items:center; border-radius:8px; border:1px solid var(--line); background:var(--panel2); color:var(--text); cursor:pointer; padding:0;}
+.ib:disabled{opacity:.35; cursor:default;}
+.ib svg{width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+.ib.dang{color:#ff8b8b;}
+#genBar{display:flex; align-items:center; gap:10px; padding:8px 14px; background:#2a2410; color:var(--fry); border-bottom:1px solid #5a4a1c; font-size:13.5px;}
+#genBar .gb{flex:1; height:6px; border-radius:9px; background:rgba(255,201,60,.18); overflow:hidden; min-width:60px;}
+#genBar .gb i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--fry),var(--fry2)); transition:width .3s;}
+#genBar .tbtn{height:30px;}
+#canvasWrap{flex:1; min-height:0; position:relative;}
+#slideHost{position:absolute; border-radius:6px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,.45); background:#fff;}
+#slideHost .sl{transform-origin:0 0;}
+#waitMsg{position:absolute; inset:0; display:grid; place-items:center; color:var(--dim); font-size:15px; text-align:center; padding:20px;}
+#busy{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(5,6,10,.45); z-index:4;}
+#busy .bx{display:flex; align-items:center; gap:12px; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:12px 14px 12px 18px; box-shadow:0 12px 40px rgba(0,0,0,.5);}
+.spin{width:18px; height:18px; border-radius:50%; border:2.5px solid rgba(255,201,60,.25); border-top-color:var(--fry); animation:sp 0.8s linear infinite; flex:0 0 auto;}
+@keyframes sp{to{transform:rotate(360deg);}}
+.notesWrap{flex:0 0 auto; padding:0 12px 12px;}
+#notes{width:100%; height:92px; min-height:48px; resize:vertical; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:9px 12px; font-size:14px; line-height:1.5; display:block;}
+#notes:focus{outline:none; border-color:var(--fry);}
+@media(max-width:1100px){ :root{--ts:.11;} }
+@media(max-width:860px){ :root{--ts:.095;} #notes{height:76px;} }
+@media(max-width:640px){
+  :root{--ts:.085;}
+  #editor{flex-direction:column-reverse;}
+  #list{width:auto; height:calc(720px * var(--ts) + 22px); border-right:0; border-top:1px solid var(--line); display:flex; overflow-x:auto; overflow-y:hidden; padding:6px 6px; flex:0 0 auto;}
+  .thumb{flex-direction:column; padding:4px; flex:0 0 auto;} .thumb .no{flex-direction:row; position:absolute; left:6px; top:6px; z-index:2; flex:0 0 auto;}
+  .thumb .no > span{display:none;} .grip{width:24px; height:22px; background:rgba(16,19,27,.7); color:#eef0f5;}
+  .mv{right:8px; bottom:8px;} .addSl{margin:4px; height:calc(720px * var(--ts)); width:60px; flex:0 0 auto;}
+  .drop{top:6px!important; bottom:6px; width:3px; height:auto; left:auto; right:auto;}
+}
+/* slide rendering (1280 x 720, scaled) */
+.sl{position:absolute; left:0; top:0; width:1280px; height:720px; overflow:hidden; transform-origin:0 0; background:var(--s-bg); color:var(--s-fg); font-family:var(--s-body); text-align:left; line-height:1.35; -webkit-text-size-adjust:none; text-size-adjust:none;}
+.sl .dc{position:absolute; pointer-events:none;}
+.sl .fld{position:absolute; display:flex; flex-direction:column; overflow:hidden;}
+.sl .in{outline:none; white-space:pre-wrap; word-break:keep-all; overflow-wrap:break-word; margin:0; min-width:0;}
+.sl .k-h .in{font-family:var(--s-head); font-weight:var(--s-hw); line-height:1.15; letter-spacing:-.01em;}
+.sl .k-h .in,.sl .k-s .in,.sl .k-q .in,.sl .k-b div.in{text-wrap:balance;}
+.sl .k-s .in{color:var(--s-sub); line-height:1.35;}
+.sl .k-b .in{line-height:1.38;}
+.sl .k-a .in{font-family:var(--s-head); font-weight:800; color:var(--s-ac); line-height:1.05; letter-spacing:-.02em;}
+.sl .k-a2 .in{font-family:var(--s-head); font-weight:700; color:var(--s-ac); line-height:1.2;}
+.sl .k-q .in{font-family:var(--s-head); font-weight:600; line-height:1.35;}
+.sl ul.in{list-style:none; padding:0 0 0 1.15em; position:relative;}
+.sl ul.in li{position:relative; margin:0 0 .5em;}
+.sl ul.in li:last-child{margin-bottom:0;}
+.sl ul.in li::before{content:''; position:absolute; left:-1.05em; top:.5em; width:.38em; height:.38em; border-radius:50%; background:var(--s-ac);}
+.sl.edit .fld{cursor:text;}
+.sl.edit .fld:hover{box-shadow:inset 0 0 0 2px rgba(127,140,170,.35); border-radius:4px;}
+.sl.edit .fld:focus-within{box-shadow:inset 0 0 0 2px var(--s-ac); border-radius:4px;}
+.sl.edit .in.ph::before{content:attr(data-ph); opacity:.38; pointer-events:none;}
+.sl.edit ul.in.ph::before{position:absolute; left:1.15em; top:0;}
+.sl.edit ul.in.ph li::before{opacity:.38;}
+/* free placement: the frame and handles of the picked box (sizes times --hk so they look the same at any zoom), shapes, builds */
+.sl.edit [data-bk]{touch-action:none;}
+.sl.edit .pic:not(.empty),.sl.edit .shp{cursor:move;}
+.sl .shp{position:absolute;} .sl .shp svg{position:absolute; left:0; top:0; overflow:visible; pointer-events:none;}
+.sl .shp.ln{pointer-events:none;} .sl .shp.ln svg .hit{pointer-events:stroke;}
+.sl .stx{position:absolute; display:flex; flex-direction:column; justify-content:center; overflow:hidden; text-align:center;}
+.emg{display:grid; grid-template-columns:repeat(8,1fr); gap:2px; padding:4px;} .emg button{font-size:22px; line-height:1; padding:6px 0; border-radius:8px;} .emg button:hover{background:var(--hov,rgba(255,255,255,.1));}
+.sl .stx .in{line-height:1.25; text-wrap:balance;}
+.sl.edit .stx .in.ph::before{display:none;} .sl.edit .stx .in.ph:focus::before{display:inline;}
+.sl.edit .stx .in[contenteditable=true],.sl.edit .stx .in[contenteditable=plaintext-only]{cursor:text;}
+.sl.edit .isSel.fld,.sl.edit .isSel.fld:hover{box-shadow:none;}
+.sl .selFr{position:absolute; z-index:30; pointer-events:none; outline:calc(2px * var(--hk,1)) solid #3d8bff; outline-offset:0;}
+.sl .selFr.ln{outline:0;} .sl .selFr.fresh .hd{pointer-events:none;}
+.sl .hd{position:absolute; width:calc(34px * var(--hk,1)); height:calc(34px * var(--hk,1)); margin:calc(-17px * var(--hk,1)) 0 0 calc(-17px * var(--hk,1)); pointer-events:auto; touch-action:none; display:grid; place-items:center; z-index:31;}
+.sl .hd::after{content:''; width:calc(13px * var(--hk,1)); height:calc(13px * var(--hk,1)); border-radius:calc(3px * var(--hk,1)); background:#fff; border:calc(2px * var(--hk,1)) solid #3d8bff; box-shadow:0 0 calc(3px * var(--hk,1)) rgba(0,0,0,.4);}
+.sl .h-nw,.sl .h-se{cursor:nwse-resize;} .sl .h-ne,.sl .h-sw{cursor:nesw-resize;} .sl .h-n,.sl .h-s{cursor:ns-resize;} .sl .h-e,.sl .h-w{cursor:ew-resize;} .sl .h-p0,.sl .h-p1{cursor:crosshair;}
+.sl .h-p0::after,.sl .h-p1::after{border-radius:50%;}
+.sl .h-mv{left:50%; top:calc(-30px * var(--hk,1)); width:calc(40px * var(--hk,1)); height:calc(40px * var(--hk,1)); margin:calc(-20px * var(--hk,1)) 0 0 calc(-20px * var(--hk,1)); cursor:move;}
+.sl .selFr.low .h-mv{top:calc(100% + 30px * var(--hk,1));}
+.sl .h-mv::after{width:calc(26px * var(--hk,1)); height:calc(26px * var(--hk,1)); border-radius:50%; background:#3d8bff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3'/%3E%3C/svg%3E") center/70% no-repeat; border-color:#fff;}
+.coSt{border:1px solid var(--line); background:transparent; color:var(--fry); border-radius:999px; padding:3px 10px; font-size:12px; cursor:pointer; white-space:nowrap; max-width:46vw; overflow:hidden; text-overflow:ellipsis;} .coSt.off,.coSt.sql,.coSt.big,.coSt.gone{color:#ff8b8b;} .coSt.wait{color:var(--dim);}
+@media(max-width:760px){ .coSt{display:none;} }
+.coBox{border:1px solid var(--line); border-radius:12px; padding:4px 14px 12px; margin:12px 0;} .coBox h4{margin:10px 0 4px; font-size:15px;} .coBox h4 small{font-weight:400; color:var(--dim); font-size:12px;}
+#coLink{width:100%; box-sizing:border-box; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:8px 10px; font-size:12px; color:inherit; font-family:ui-monospace,Consolas,monospace; margin:6px 0;}
+.coMsg{margin:6px 0 0; font-size:13px; color:var(--fry);} .coMsg.bad{color:#ff8b8b;} .coMsg:empty{display:none;}
+.sl .guide{position:absolute; z-index:29; pointer-events:none; background:#ff3bd4;} .sl .guide.v{top:0; bottom:0; width:calc(1px * var(--hk,1));} .sl .guide.h{left:0; right:0; height:calc(1px * var(--hk,1));}
+.sl .gsp{position:absolute; z-index:29; pointer-events:none; background:#ff3bd4;} .sl .gsp.x{height:calc(2px * var(--hk,1)); margin-top:calc(-1px * var(--hk,1));} .sl .gsp.y{width:calc(2px * var(--hk,1)); margin-left:calc(-1px * var(--hk,1));}
+.sl .gsp::before,.sl .gsp::after{content:''; position:absolute; background:#ff3bd4;} .sl .gsp.x::before,.sl .gsp.x::after{top:calc(-6px * var(--hk,1)); width:calc(2px * var(--hk,1)); height:calc(14px * var(--hk,1));} .sl .gsp.x::before{left:0;} .sl .gsp.x::after{right:0;}
+.sl .gsp.y::before,.sl .gsp.y::after{left:calc(-6px * var(--hk,1)); height:calc(2px * var(--hk,1)); width:calc(14px * var(--hk,1));} .sl .gsp.y::before{top:0;} .sl .gsp.y::after{bottom:0;}
+#slideHost.dragging{cursor:grabbing;} #slideHost.dragging .sl.edit .fld:hover{box-shadow:none;}
+.sl .bn{position:absolute; left:0; top:0; z-index:5; min-width:calc(22px * var(--hk,1)); height:calc(22px * var(--hk,1)); padding:0 calc(5px * var(--hk,1)); border-radius:calc(11px * var(--hk,1)); background:#8a5ce0; color:#fff; font:700 calc(13px * var(--hk,1))/calc(22px * var(--hk,1)) system-ui,sans-serif; text-align:center; pointer-events:none;}
+.sl .bh{visibility:hidden;}
+.sl .b-fade{animation:bfade .5s ease both;} .sl .b-fly{animation:bfly .55s cubic-bezier(.2,.8,.25,1) both;}
+@keyframes bfade{from{opacity:0;}} @keyframes bfly{from{opacity:0; transform:translateY(90px);}}
+.selBar{position:absolute; left:8px; right:8px; bottom:6px; height:36px; display:flex; align-items:center; justify-content:center; gap:6px; overflow-x:auto; overflow-y:hidden; scrollbar-width:none; z-index:3;}
+.selBar::-webkit-scrollbar{display:none;}
+.selBar .tbtn{height:32px; padding:0 11px; font-size:13px; flex:0 0 auto;} .selBar .tbtn.on{border-color:#8a5ce0; color:#c9b3ff;} .selBar .tbtn.dang{color:#ff8b8b;}
+.selBar.hint{color:var(--dim); font-size:12.5px; white-space:nowrap; justify-content:center;}
+@media(max-width:640px){ .selBar{justify-content:flex-start;} .selBar.hint{font-size:11.5px; justify-content:flex-start;} }
+.menu .shg{display:grid; grid-template-columns:repeat(4,1fr); gap:4px; padding:4px;}
+.menu .shg button{flex-direction:column; gap:4px; padding:10px 4px; justify-content:center; text-align:center; font-size:12.5px; white-space:normal;}
+.menu .shg svg{width:30px; height:30px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linejoin:round; stroke-linecap:round;}
+.menu .sw.none{background:linear-gradient(135deg,transparent 45%,#ff6b6b 45%,#ff6b6b 55%,transparent 55%)!important;}
+/* menus and dialogs */
+.menu{position:fixed; z-index:60; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:6px; min-width:230px; box-shadow:0 20px 50px rgba(0,0,0,.55); display:none; max-height:80vh; overflow:auto; -webkit-overflow-scrolling:touch;}
+.menu.open{display:block;}
+.menu button{display:flex; align-items:center; gap:10px; width:100%; padding:9px 12px; border:0; background:transparent; border-radius:8px; cursor:pointer; text-align:left; white-space:nowrap;}
+.menu button:hover:not(:disabled){background:var(--panel2);}
+.menu button:disabled{opacity:.4; cursor:default;}
+.menu button.dang{color:#ff7b7b;}
+.menu hr{border:0; border-top:1px solid var(--line); margin:6px 4px;}
+.menu .mh{color:var(--dim); font-size:12px; padding:6px 12px 2px;}
+.menu .doc{justify-content:space-between;}
+.menu .doc span{overflow:hidden; text-overflow:ellipsis; max-width:220px;}
+.menu .doc small{color:var(--dim);}
+.menu .doc.on span{color:var(--fry); font-weight:700;}
+#themeMenu{min-width:0; width:min(360px,94vw);}
+#themeMenu .themes{grid-template-columns:repeat(2,1fr); padding:4px;}
+#themeMenu .thc{display:block; width:100%; padding:0; border-radius:12px; white-space:normal;}
+#themeMenu .thc:hover{background:transparent;} #themeMenu .thc:hover .tv{outline-color:var(--fry);}
+.ov{position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:80; display:none; align-items:center; justify-content:center; padding:12px;}
+.ov.open{display:flex;}
+.dlg{background:var(--panel); border:1px solid var(--line); border-radius:16px; width:min(520px,100%); max-height:94vh; display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,.6);}
+.dh{display:flex; align-items:center; gap:8px; padding:10px 12px 10px 16px; border-bottom:1px solid var(--line);}
+.dh h3{margin:0; font-size:16px; flex:1;}
+.x{width:36px; height:36px; border:0; background:transparent; color:var(--dim); font-size:24px; cursor:pointer; border-radius:8px;}
+.x:hover{background:var(--panel2); color:var(--text);}
+.dbody{padding:14px 16px; display:flex; flex-direction:column; gap:8px;}
+.dbody p{margin:0; color:var(--dim); font-size:13.5px; line-height:1.55;}
+#askIn{width:100%; min-height:92px; resize:vertical; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:15px; line-height:1.5;}
+#askIn:focus{outline:none; border-color:var(--fry);}
+.dfoot{display:flex; gap:8px; justify-content:flex-end; padding:10px 16px; border-top:1px solid var(--line);}
+#toast{position:fixed; left:50%; bottom:28px; transform:translateX(-50%); background:#1d2230; color:#eef0f5; border:1px solid var(--line); padding:9px 16px; border-radius:99px; z-index:300; opacity:0; transition:opacity .2s; pointer-events:none; max-width:92vw; text-align:center;}
+#toast.on{opacity:1;}
+/* new layouts, tools */
+.sl ul.in.agenda{counter-reset:ag; padding-left:0;}
+.sl ul.in.agenda li{counter-increment:ag; padding:.28em .6em .28em 1.7em; margin:0 0 .35em; background:var(--s-card); border-radius:.4em; position:relative;}
+.sl ul.in.agenda li::before{content:counter(ag); left:.45em; top:.3em; width:auto; height:auto; border-radius:0; background:none; color:var(--s-ac); font-weight:800;}
+.sl ul.in.timeline{padding-left:1.7em; border-left:0;}
+.sl ul.in.timeline::after{content:''; position:absolute; left:.45em; top:.4em; bottom:.4em; width:4px; border-radius:2px; background:var(--s-ac); opacity:.4;}
+.sl ul.in.timeline li::before{left:-1.55em; top:.3em; width:.62em; height:.62em; border:3px solid var(--s-bg); box-shadow:0 0 0 3px var(--s-ac); z-index:1;}
+.sl .ans .in{padding:.3em .7em; border-left:8px solid var(--s-ac); background:var(--s-card); border-radius:.3em; font-weight:700; color:var(--s-ac);}
+.sl.edit .ans .in.ph::before{content:attr(data-ph);}
+.sl .dv{position:absolute; display:flex; align-items:center; justify-content:center; overflow:hidden;}
+.sl .dv.empty{border:3px dashed rgba(127,140,170,.55); border-radius:14px; color:var(--s-sub); font-size:34px;}
+.sl.edit .dv{cursor:pointer;} .sl.edit .dv:hover{box-shadow:inset 0 0 0 2px var(--s-ac); border-radius:6px;}
+.sl .dv table{border-radius:8px;}
+.sl .dv.live{border-radius:8px;} .sl .dv.live.ph{border-radius:14px;} .sl.edit .dv.live:not(.empty):hover{box-shadow:none;}
+.sl .lvf{width:100%; height:100%; border:0; background:#fff; border-radius:8px; display:block;}
+.sl .lv{display:flex; flex-direction:column; gap:14px; align-items:center; text-align:center; padding:0 40px;} .sl .lv b{font-size:44px;} .sl .lv span{font-size:30px; opacity:.75;}
+.sl .lvEdit{position:absolute; right:8px; top:8px; font-size:22px; padding:6px 14px; border-radius:8px; border:0; background:rgba(0,0,0,.65); color:#fff; cursor:pointer; opacity:.0; transition:opacity .15s;}
+.sl .dv.live:hover .lvEdit,.sl .lvEdit:focus{opacity:1;}
+.sl .lvSize{position:absolute; left:8px; top:8px; font-size:22px; padding:6px 14px; border-radius:8px; border:0; background:rgba(0,0,0,.65); color:#fff; cursor:move; opacity:0; transition:opacity .15s; touch-action:none;}
+.sl .dv.live:hover .lvSize,.sl .dv.live.isSel .lvSize,.sl .dv.live.isSel .lvEdit,.sl .lvSize:focus{opacity:1;}
+@media (hover:none){ .sl .lvSize,.sl .lvEdit{opacity:1;} }
+.sl .dv.live.isSel .lvf,#slideHost.dragging .lvf{pointer-events:none;}
+.sl .liveHint{position:absolute; left:90px; top:630px; width:1100px; height:30px; text-align:center; font-size:20px; color:var(--s-sub); line-height:30px;}
+.sl .liveHint .h2{display:none;} #present.inLive .liveHint .h1{display:none;} #present.inLive .liveHint .h2{display:inline; color:var(--s-ac); font-weight:700;}
+.liveSrcRow{display:flex; flex-wrap:wrap; gap:6px 16px; margin:0 0 4px;} .liveSrcRow label{display:flex; gap:6px; align-items:center; cursor:pointer;} .liveSrcRow input{accent-color:var(--fry);}
+.liveLs{margin-top:8px; max-height:min(46vh,380px); overflow-y:auto; -webkit-overflow-scrolling:touch; border:1px solid var(--line); border-radius:10px; background:var(--bg); padding:2px 6px 6px;}
+.liveLs .lvg{position:sticky; top:0; background:var(--bg); color:var(--dim); font-size:12px; font-weight:700; padding:8px 4px 4px; z-index:1;}
+.liveLs .lvu{color:var(--dim); font-size:11.5px; padding:4px 6px 0;}
+.liveLs .lvi{display:flex; align-items:center; gap:8px; width:100%; min-height:40px; text-align:left; padding:6px 8px; margin:1px 0; border-radius:8px; border:1px solid transparent; background:transparent; cursor:pointer; font-size:13.5px;}
+.liveLs .lvi:hover{background:var(--panel2);} .liveLs .lvi.on{background:var(--panel2); border-color:var(--fry); font-weight:700;}
+.liveLs .lvi .ic{flex:0 0 24px; text-align:center;} .liveLs .empty{padding:14px 6px; color:var(--dim);}
+.liveSel{height:38px; width:100%; border-radius:8px; border:1px solid var(--line); background:var(--panel2); padding:0 8px;}
+.liveMsg{color:var(--fry); min-height:1.4em; margin:0;}
+.thumb.hid .tv{opacity:.45;} .thumb .hb{position:absolute; right:3px; top:2px; z-index:2; font-style:normal; font-size:34px; line-height:1; color:#ff7b7b; text-shadow:0 0 4px #000; pointer-events:none;}
+.swr{display:flex; gap:6px; align-items:center; padding:4px 10px 6px; flex-wrap:wrap;}
+.menu .sw{width:26px; height:26px; padding:0; border-radius:50%; border:2px solid var(--line); display:block; flex:0 0 auto;} .menu .sw.on{border-color:var(--fry);}
+.swr input[type=color]{width:30px; height:28px; padding:0; border:0; background:none; cursor:pointer;}
+.seg{display:flex; gap:4px; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:3px;}
+.seg button{flex:1; border:0; background:transparent; border-radius:8px; padding:8px 6px; cursor:pointer; font-size:13.5px;} .seg button.on{background:var(--fry); color:#1c1405; font-weight:700;}
+#pStage.tf-fade{animation:tf .32s ease;} #pStage.tf-slide{animation:tfs .32s ease;} #pStage.tf-zoom{animation:tfz .32s ease;}
+@keyframes tfs{from{opacity:0; transform:translateX(7%);} to{opacity:1; transform:none;}} @keyframes tfz{from{opacity:0; transform:scale(.92);} to{opacity:1; transform:none;}}
+@media(max-width:1200px){ #newDeckBtn .lb,#mgrBtn .lb{display:none;} }
+/* slide sorter */
+.sortDlg{width:min(1100px,100%); height:min(92vh,880px);}
+.sortDlg .dh .saved{white-space:nowrap;}
+.sortBar{display:flex; flex-wrap:wrap; align-items:center; gap:6px; padding:8px 12px; border-bottom:1px solid var(--line);}
+.sortBar .vs{width:1px; height:24px; background:var(--line); margin:0 2px;}
+.sortBar .sPos{display:flex; align-items:center; gap:6px; color:var(--dim); font-size:13px;}
+.sortBar #sPos{width:64px; height:34px; border-radius:8px; border:1px solid var(--line); background:var(--bg); padding:0 8px;}
+.sortGrid{flex:1; min-height:0; overflow:auto; display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:12px; padding:14px; align-content:start; -webkit-overflow-scrolling:touch;}
+.sc{position:relative; cursor:pointer; border-radius:10px; padding:6px 6px 4px; border:2px solid transparent; -webkit-user-select:none; user-select:none;}
+.sc:hover{background:var(--panel2);}
+.sc.on{border-color:var(--fry); background:var(--panel2);}
+.sc .tv{position:relative; width:100%; aspect-ratio:16/9; overflow:hidden; border-radius:6px; outline:1px solid var(--line); pointer-events:none;}
+.sc.hid .tv{opacity:.45;}
+.sc .sn{display:flex; align-items:center; justify-content:space-between; padding:5px 2px 0; font-size:13px; color:var(--dim);}
+.sc.on .sn{color:var(--fry); font-weight:700;}
+.sc .ck{width:20px; height:20px; border-radius:6px; border:2px solid var(--line); display:grid; place-items:center; font-size:13px; line-height:1; color:transparent;}
+.sc.on .ck{background:var(--fry); border-color:var(--fry); color:#1c1405;}
+.sc.cur .sn b::after{content:' •'; color:var(--fry);}
+.sortHint{margin:0; padding:8px 14px 12px; color:var(--dim); font-size:12.5px; border-top:1px solid var(--line);}
+@media(max-width:640px){ .sortGrid{grid-template-columns:repeat(2,1fr); gap:8px; padding:8px;} .sortBar .tbtn{padding:0 9px;} }
+/* presenter view (second window) */
+body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body.mode-view .main,body.mode-view .rbar{display:none!important;}
+#pv{flex:1; min-height:0; display:flex; flex-direction:column; background:var(--bg);}
+.pvTop{display:flex; align-items:center; gap:10px; padding:8px 14px; border-bottom:1px solid var(--line); background:var(--panel);}
+.pvTop b{max-width:40vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.pvSt{color:var(--dim); font-size:13px;} .pvClock{font-variant-numeric:tabular-nums; color:var(--dim);}
+.pvBody{flex:1; min-height:0; display:grid; grid-template-columns:minmax(0,1.7fr) minmax(280px,1fr); gap:14px; padding:14px; overflow:auto;}
+.pvCurBox,.pvSide{display:flex; flex-direction:column; gap:8px; min-width:0; min-height:0;}
+.pvLab{color:var(--dim); font-size:12.5px; margin-top:2px;}
+.pvFrame{position:relative; width:100%; aspect-ratio:16/9; overflow:hidden; border-radius:8px; outline:1px solid var(--line); background:#000; flex:0 0 auto;}
+.pvFrame .pvMsg{position:absolute; inset:0; display:grid; place-items:center; color:#9aa3b5; text-align:center; padding:16px; font-size:16px;}
+.pvCtl{display:flex; flex-wrap:wrap; align-items:center; gap:8px;} .pvCtl .tbtn{height:44px; padding:0 18px; font-size:15px;} #pvNum{min-width:70px; text-align:center; font-variant-numeric:tabular-nums; font-size:16px;}
+.pvTimer{display:flex; align-items:center; gap:8px; flex-wrap:wrap;} .pvTimer b{font-size:34px; font-variant-numeric:tabular-nums; font-family:'Oswald',sans-serif; letter-spacing:.03em; color:var(--fry);}
+#pvNotes{flex:1; min-height:120px; overflow:auto; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:12px 14px; font-size:22px; line-height:1.55; white-space:pre-wrap;}
+@media(max-width:820px){ .pvBody{grid-template-columns:1fr;} #pvNotes{min-height:160px;} }
+/* paste a spreadsheet */
+.csvRow{display:flex; flex-wrap:wrap; gap:12px; align-items:center; color:var(--dim); font-size:13px;}
+.csvRow select{height:34px; border-radius:8px; border:1px solid var(--line); background:var(--panel2); padding:0 8px; margin-left:4px; max-width:190px;}
+.csvChk{display:flex; align-items:center; gap:6px; cursor:pointer;} .csvChk input{accent-color:var(--fry); width:16px; height:16px;}
+.csvPrev{max-height:190px; overflow:auto; border:1px solid var(--line); border-radius:10px; background:var(--bg);}
+.csvPrev:empty{display:none;}
+.csvPrev table{border-collapse:collapse; width:100%; font-size:13px;} .csvPrev th,.csvPrev td{border:1px solid var(--line); padding:4px 8px; text-align:left; white-space:nowrap; max-width:200px; overflow:hidden; text-overflow:ellipsis;} .csvPrev th{background:var(--panel2);}
+.csvPrev td.n{text-align:right; color:var(--fry);} .csvPrev tr.cut td{color:var(--dim); text-align:center;}
+/* share by link / QR, and the read-only viewer that opens it */
+.shQr{display:flex; gap:14px; align-items:center; flex-wrap:wrap;} .shQr canvas{width:min(100%,300px); height:auto; image-rendering:pixelated; border-radius:8px; background:#fff;} .shQr > div{flex:1 1 180px; display:flex; flex-direction:column; gap:8px; align-items:flex-start;} .shQr p{margin:0; color:var(--dim); font-size:13px;}
+.shWarn{color:#ffb86b!important;}
+#viewer{flex:1; min-height:0; display:flex; flex-direction:column; background:var(--stage);}
+.vTop{display:flex; align-items:center; gap:10px; padding:8px 12px; background:var(--panel); border-bottom:1px solid var(--line);} .vTop b{overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0;}
+.vBadge{flex:0 0 auto; font-size:12px; color:var(--dim); border:1px solid var(--line); border-radius:99px; padding:2px 9px;}
+#vWrap{flex:1; min-height:0; position:relative; display:flex; align-items:center; justify-content:center; padding:10px; touch-action:pan-y;}
+#vStage{position:relative; overflow:hidden; border-radius:6px; box-shadow:0 10px 40px rgba(0,0,0,.45); background:#fff; flex:0 0 auto;} #vStage .sl{transform-origin:0 0;}
+#vMsg{position:absolute; inset:0; display:grid; place-items:center; text-align:center; padding:24px; color:var(--dim); pointer-events:none;} #vMsg:empty{display:none;}
+.vNav{display:flex; align-items:center; justify-content:center; gap:14px; padding:8px 12px calc(10px + env(safe-area-inset-bottom,0)); background:var(--panel); border-top:1px solid var(--line);} .vNav .tbtn{height:46px; min-width:76px; font-size:24px;} #vNum{min-width:80px; text-align:center; font-variant-numeric:tabular-nums;}
+#vProg{height:3px; background:var(--line);} #vProg i{display:block; height:100%; width:0; background:var(--fry); transition:width .25s;}
+/* presenting */
+#present{position:fixed; inset:0; z-index:200; background:#000; display:none; align-items:center; justify-content:center; touch-action:none; -webkit-user-select:none; user-select:none; cursor:pointer;}
+#present.on{display:flex;}
+#pStage{position:relative; overflow:hidden;}
+#pStage .sl{transform-origin:0 0;}
+#pEnd{color:#9aa3b5; font-size:18px; text-align:center; padding:20px;}
+.pbar{position:absolute; right:14px; bottom:12px; display:flex; align-items:center; gap:6px; opacity:.35; transition:opacity .2s; z-index:2;}
+#present:hover .pbar,.pbar:focus-within{opacity:1;}
+.pbar button{width:40px; height:40px; border-radius:10px; border:0; background:rgba(30,34,46,.85); color:#eef0f5; font-size:20px; cursor:pointer; display:grid; place-items:center; padding:0;}
+#pNum{color:#eef0f5; background:rgba(30,34,46,.85); border-radius:10px; padding:0 12px; height:40px; display:flex; align-items:center; font-size:14px; font-variant-numeric:tabular-nums;}
+#pClock,#pNum{color:#eef0f5; background:rgba(30,34,46,.85); border-radius:10px; padding:0 12px; height:40px; display:flex; align-items:center; font-size:14px; font-variant-numeric:tabular-nums;}
+.pbar button.on{background:#ffc93c; color:#111;}
+#pStage.tf{animation:tf .32s ease;} @keyframes tf{from{opacity:0;} to{opacity:1;}}
+#pProg{position:absolute; left:0; right:0; bottom:0; height:4px; background:rgba(255,255,255,.12); z-index:2;} #pProg i{display:block; height:100%; width:0; background:var(--fry); transition:width .3s;}
+#pNotes{position:absolute; left:0; right:0; bottom:0; max-height:42%; overflow:auto; padding:16px 24px 64px; background:rgba(0,0,0,.82); color:#fff; font-size:clamp(16px,2.4vw,26px); line-height:1.5; white-space:pre-wrap; pointer-events:none; z-index:1;}
+#pInk{position:absolute; left:0; top:0; width:100%; height:100%; z-index:1; pointer-events:none; touch-action:none;}
+#present.ink #pInk{pointer-events:auto; cursor:crosshair;} #present.ink{cursor:crosshair;}
+#pInkCols{display:none; align-items:center; gap:5px; background:rgba(30,34,46,.85); border-radius:10px; padding:0 8px; height:40px;} #present.ink #pInkCols{display:flex;}
+.pbar .ink-c{width:26px; height:26px; border-radius:50%; border:2px solid rgba(255,255,255,.55); padding:0; flex:0 0 auto;} .pbar .ink-c.on{border-color:#fff; box-shadow:0 0 0 2px #ffc93c;}
+#pBoard{position:absolute; inset:0; display:none; background:radial-gradient(ellipse at 30% 20%,#2f5a44,#1f3b2d 70%); box-shadow:inset 0 0 0 14px #8a6a45, inset 0 0 60px rgba(0,0,0,.45); z-index:1;} #present.bb #pBoard{display:block;}
+#present.er #pInk{cursor:cell;} #present.er{cursor:cell;}
+.pbar .ink-w{width:26px; height:26px; border-radius:8px; background:rgba(255,255,255,.12); display:grid; place-items:center; padding:0; flex:0 0 auto;} .pbar .ink-w i{display:block; border-radius:50%; background:#eef0f5;} .pbar .ink-w.on{background:#ffc93c;} .pbar .ink-w.on i{background:#111;}
+#pAuto{position:absolute; left:0; right:0; top:0; height:6px; background:rgba(255,255,255,.14); z-index:2; pointer-events:none;} #pAuto i{display:block; height:100%; width:0; background:#4fd1c5; transition:width .1s linear;} #pAuto.paused i{background:#9aa3b5;}
+#pDot{position:fixed; width:26px; height:26px; margin:-13px 0 0 -13px; border-radius:50%; background:radial-gradient(circle,#ff3b3b 0 35%,rgba(255,59,59,.45) 60%,rgba(255,59,59,0) 72%); pointer-events:none; z-index:3;}
+#present.laser{cursor:none;}
+/* live quiz panel (presenting) */
+.pbar #pLqB{width:auto; min-width:40px; padding:0 8px; font-size:17px; gap:3px; white-space:nowrap;}
+#lq{position:absolute; top:14px; right:14px; z-index:4; width:min(440px,44vw); max-height:calc(100% - 80px); overflow:auto; background:rgba(16,19,27,.94); color:#eef0f5; border:1px solid rgba(255,255,255,.14); border-radius:16px; padding:12px 14px; box-shadow:0 20px 60px rgba(0,0,0,.5); cursor:default; font-size:14px;}
+#lq button{height:30px; border-radius:8px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.08); color:#eef0f5; padding:0 10px; cursor:pointer; font-size:13px;} #lq button.dang{color:#ff9b9b;}
+#lq .sp{flex:1;} .lqHd{display:flex; align-items:center; gap:8px;} .lqHd b{font-size:15px;} #lqPpl{color:#ffc93c; font-weight:700; font-variant-numeric:tabular-nums;}
+#lqJoin{display:flex; gap:12px; align-items:center; margin-top:10px;} #lqQr{width:132px; height:132px; border-radius:8px; flex:0 0 auto; image-rendering:pixelated;}
+.lqJi{min-width:0;} .lqCode{font:700 34px/1.1 'Oswald',ui-monospace,monospace; letter-spacing:.12em; color:#ffc93c;} .lqUrl{font-size:12px; color:#aab2c4; word-break:break-all; margin-top:4px;}
+#lqMsg{margin:6px 0 0; font-size:12.5px; color:#aab2c4; line-height:1.45;} #lqMsg.bad{color:#ff9b9b;}
+#lqBars{margin-top:12px; display:flex; flex-direction:column; gap:7px;} .lqTip{margin:0; color:#aab2c4; font-size:13px; line-height:1.5;}
+.lqBar{display:grid; grid-template-columns:minmax(0,1fr) 40px; gap:2px 10px; align-items:center;} .lqBar .lb{grid-column:1/3; font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.lqBar .tr{grid-column:1/2; height:16px; background:rgba(255,255,255,.08); border-radius:6px; overflow:hidden; grid-row:2;} .lqBar .tr i{display:block; height:100%; width:0; background:#3d8bff; border-radius:6px; transition:width .3s;}
+.lqBar b{grid-row:2; grid-column:2/3; font-variant-numeric:tabular-nums;}
+.lqBar.ok .tr i{background:#2fb27a;} .lqBar.ok .lb{color:#7ee2b0; font-weight:700;} .lqBar.ok .lb::after{content:'  ✓';} .lqBar.dim{opacity:.5;}
+.lqFt{display:flex; align-items:center; gap:8px; margin-top:10px; font-size:13px; color:#cfd5e2;} #lq #lqRev{background:#ffc93c; color:#1c1405; border:0; font-weight:700; height:34px; padding:0 14px;}
+@media(max-width:700px){ #lq{width:calc(100% - 28px); max-height:60%;} #lqQr{width:96px; height:96px;} .lqCode{font-size:26px;} }
+/* sheet link */
+.sl .lnkB{position:absolute; right:8px; top:8px; font-size:20px; padding:6px 12px; border-radius:8px; border:0; background:rgba(16,19,27,.72); color:#fff; cursor:pointer; max-width:70%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; z-index:2;}
+.sl .lnkB.miss{background:rgba(120,90,20,.78);}
+.lnkRow{display:flex; flex-wrap:wrap; align-items:center; gap:8px;} #dataLinkTxt{flex:1 1 100%; color:var(--fry); font-size:13px; overflow-wrap:anywhere;} .lnkMiss{color:#e6b45a!important;}
+#dataIn.ro{opacity:.75;} .lkRg{height:34px; width:110px; border-radius:8px; border:1px solid var(--line); background:var(--bg); padding:0 8px; margin-left:4px; font-family:ui-monospace,Consolas,monospace; text-transform:uppercase;}
+.lkPrev td.use{background:rgba(255,201,60,.14);} .lkPrev th:first-child{width:34px; text-align:center;}
+.sl .ft.logo{opacity:1; object-fit:contain; display:block;}
+.sl .mq{position:absolute; z-index:28; pointer-events:none; border:calc(1.5px * var(--hk,1)) dashed #3d8bff; background:rgba(61,139,255,.12);}
+.sl .selFr.grp{outline-style:dashed;}
+.maBody{margin-top:12px; display:flex; flex-direction:column; gap:12px;} .maBody.off{opacity:.45; pointer-events:none;}
+.maRow{display:flex; align-items:center; gap:10px; flex-wrap:wrap;} .maRow b{min-width:52px;} .maRow label{display:flex; align-items:center; gap:6px; color:var(--text);} .maRow select{height:34px; border-radius:8px; border:1px solid var(--line); background:var(--panel2); padding:0 8px;}
+#maLogoPrev{max-height:40px; max-width:140px; object-fit:contain; border:1px solid var(--line); border-radius:6px; background:repeating-conic-gradient(#8885 0 25%,#0000 0 50%) 50%/12px 12px;}
+.sl .ft{position:absolute; line-height:20px; white-space:nowrap; overflow:hidden; opacity:.85; pointer-events:none;}
+.sl .pic{position:absolute; display:flex; align-items:center; justify-content:center;}
+.sl .pic img{max-width:100%; max-height:100%; object-fit:contain; border-radius:8px; display:block; -webkit-user-drag:none;}
+.sl .pic.empty{border:3px dashed rgba(127,140,170,.55); border-radius:14px; color:var(--s-sub); font-size:34px; cursor:pointer;}
+.sl .pic .rm{position:absolute; right:6px; top:6px; width:44px; height:44px; border-radius:50%; border:0; background:rgba(16,19,27,.8); color:#fff; font-size:30px; line-height:1; cursor:pointer; display:grid; place-items:center; padding:0;}
+.mrow{display:flex; align-items:center; gap:6px; padding:6px 0; border-top:1px solid var(--line);}
+.mrow:first-child{border-top:0;}
+.mrow .mo{flex:1; min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:2px; border:0; background:transparent; padding:6px 8px; border-radius:8px; cursor:pointer; text-align:left;}
+.mrow .mo:hover{background:var(--panel2);} .mrow .mo b{max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:500;} .mrow .mo small{color:var(--dim);}
+.mrow.on .mo b{color:var(--fry);}
+.kr{display:flex; gap:12px; align-items:center; padding:4px 0;} .kr kbd{flex:0 0 190px; font-family:inherit; font-size:12.5px; background:var(--panel2); border:1px solid var(--line); border-radius:6px; padding:3px 8px; text-align:center;} .kr span{font-size:14px;}
+@media(max-width:480px){ .kr{flex-direction:column; align-items:flex-start; gap:2px;} .kr kbd{flex:none;} }
+#measure{position:fixed; left:-30000px; top:0; width:1280px; height:720px; visibility:hidden; pointer-events:none;}
+#printRoot{position:fixed; left:-30000px; top:0; visibility:hidden; pointer-events:none;}
+.pp{position:relative; width:1280px; height:720px; overflow:hidden;}
+@media print{
+  @page{size:13.333in 7.5in; margin:0;}
+  html,body{height:auto!important; overflow:visible!important; display:block!important; background:#fff!important; padding:0!important;}
+  body > *:not(#printRoot){display:none!important;}
+  #printRoot{position:static; visibility:visible; left:auto;}
+  .pp{break-after:page; page-break-after:always;}
+  .pp:last-child{break-after:auto; page-break-after:auto;}
+  *{-webkit-print-color-adjust:exact!important; print-color-adjust:exact!important;}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="home" href="../" aria-label="도구 목록">🍟</a>
+  <span class="brand" data-notr>FRY <b>SLIDES</b></span>
+  <input id="deckName" aria-label="발표 자료 이름" spellcheck="false" autocomplete="off">
+  <span class="saved" id="saved"></span>
+  <button class="coSt" id="coSt" type="button" hidden title="같이 고치기"></button>
+  <span class="sp"></span>
+  <div class="cmdk" id="cmdk"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg><input id="cmdQ" type="search" placeholder="기능 찾기" aria-label="기능 찾기" title="기능 찾기 (Ctrl+K)" autocomplete="off" spellcheck="false" enterkeyhint="go" role="combobox" aria-expanded="false" aria-autocomplete="list"><kbd>Ctrl K</kbd></div>
+  <span data-lang-slot></span>
+</header>
+<nav class="rbar" id="rbar" aria-label="도구"></nav>
+<div class="main">
+  <section id="start" hidden>
+    <div class="startIn">
+      <h1>어떤 발표를 만들까요?</h1>
+      <p class="lead">주제를 쓰면 AI가 슬라이드 초안을 만들어 줘요. 거친 초안이라 내용과 사실은 직접 확인하고, 글자를 눌러 고쳐 쓰세요.</p>
+      <label class="lab" for="topic">발표 주제</label>
+      <textarea id="topic" data-notr spellcheck="false" placeholder="예: 우리 동네 환경 문제와 해결 방법"></textarea>
+      <div class="chips" id="topicChips"></div>
+      <div class="opts">
+        <div><span class="lab">슬라이드 수</span><div class="cnt"><input type="range" id="count" min="3" max="15" value="8" aria-label="슬라이드 수"><b id="countV">8</b></div></div>
+        <div><label class="lab" for="aud">듣는 사람과 목적 (선택)</label><input class="fieldIn" id="aud" data-notr placeholder="예: 5학년 친구들에게 수업 시간에 발표" autocomplete="off"></div>
+      </div>
+      <div style="margin-top:20px"><span class="lab">테마</span><div class="themes" id="themePick"></div></div>
+      <div style="margin-top:20px"><span class="lab">템플릿으로 시작 (AI 없이)</span><div class="chips" id="tplChips" style="margin:0"></div></div>
+      <div class="startActs">
+        <button class="tbtn" id="blankBtn">빈 발표 자료로 시작</button>
+        <button class="tbtn" id="genBtn"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/></svg>AI로 초안 만들기 (시험 기능)</button>
+      </div>
+      <p class="note" id="aiNote"></p>
+    </div>
+  </section>
+  <section id="editor" hidden>
+    <aside id="list" aria-label="슬라이드 목록"></aside>
+    <div id="stage">
+      <div id="genBar" hidden><div class="spin"></div><span id="genTxt"></span><span class="gb"><i id="genFill"></i></span><button class="tbtn" id="genStop">멈추기</button></div>
+      <div id="canvasWrap"><div id="slideHost"></div><div id="waitMsg" hidden></div><div class="selBar hint" id="selBar" hidden></div>
+        <div id="busy" hidden><div class="bx"><div class="spin"></div><span id="busyTxt">AI가 쓰는 중…</span><button class="tbtn" id="busyStop">멈추기</button></div></div>
+      </div>
+      <div class="notesWrap"><textarea id="notes" data-notr spellcheck="false" placeholder="발표자 메모 (발표할 때 할 말을 적어 두세요)" aria-label="발표자 메모"></textarea></div>
+    </div>
+  </section>
+</div>
+<div class="menu" id="deckMenu">
+  <div class="mh">내 발표 자료</div>
+  <div id="deckList"></div>
+  <hr>
+  <button data-d="mgr">발표 자료 관리</button>
+</div>
+<div class="menu" id="aiMenu">
+  <button data-a="rewrite">✍️ 다시 쓰기</button>
+  <button data-a="shorter">✂️ 더 짧게</button>
+  <button data-a="longer">📝 더 자세히</button>
+  <hr>
+  <button data-a="dlg">🆕 새로 만들기 · 고치기 · 추가…</button>
+</div>
+<div class="menu" id="optMenu"></div>
+<div class="menu" id="elMenu"></div>
+<div class="menu" id="themeMenu"><div class="themes" id="themeList"></div></div>
+<div class="ov" id="mgrDlg"><div class="dlg" style="width:min(620px,100%)">
+  <div class="dh"><h3>발표 자료 관리</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody" style="overflow:auto"><button class="tbtn pri" id="mgrNew" style="height:42px">＋ 새로 만들기</button><div id="mgrList"></div></div>
+</div></div>
+<div class="ov" id="frDlg"><div class="dlg" style="width:min(460px,100%)">
+  <div class="dh"><h3>찾아 바꾸기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><label class="lab" for="frQ">찾을 글</label><input class="fieldIn" id="frQ" data-notr spellcheck="false" autocomplete="off"><label class="lab" for="frR" style="margin-top:12px">바꿀 글</label><input class="fieldIn" id="frR" data-notr spellcheck="false" autocomplete="off">
+    <label class="csvChk" style="margin-top:12px"><input type="checkbox" id="frCase"> 대문자·소문자 구분</label><p id="frInfo" style="color:var(--fry);min-height:1.4em"></p></div>
+  <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="frOk">모두 바꾸기</button></div>
+</div></div>
+<div class="ov" id="impDlg"><div class="dlg" style="width:min(620px,100%)">
+  <div class="dh"><h3>글에서 슬라이드 만들기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><p>제목은 # 로, 슬라이드는 ## 로 시작하고 내용은 - 로 적어요. 줄만 나눠 써도 돼요. > 로 시작하는 줄은 발표자 메모가 돼요.</p><textarea id="impIn" data-notr spellcheck="false" style="min-height:220px;width:100%;resize:vertical;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px;line-height:1.5" placeholder="# 발표 제목&#10;## 첫 슬라이드&#10;- 내용 하나&#10;- 내용 둘"></textarea></div>
+  <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="impOk">슬라이드 만들기</button></div>
+</div></div>
+<div class="ov" id="maDlg"><div class="dlg" style="width:min(520px,100%)">
+  <div class="dh"><h3>마스터 슬라이드</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody" style="overflow:auto"><p>모든 슬라이드에 똑같이 들어가는 로고, 바닥글, 슬라이드 번호를 정해요. 발표, PDF, PPTX에도 들어가요.</p>
+    <label class="csvChk"><input type="checkbox" id="maOn"> 마스터 켜기</label>
+    <div id="maBody" class="maBody">
+      <div class="maRow"><b>로고 그림</b><button class="tbtn" id="maLogoPick">로고 그림 고르기</button><button class="tbtn dang" id="maLogoDel" hidden>로고 빼기</button><img id="maLogoPrev" alt="" hidden></div>
+      <div class="maRow" id="maLrow"><label>로고 위치 <select id="maLpos"><option value="tl">왼쪽 위</option><option value="tr">오른쪽 위</option><option value="bl">왼쪽 아래</option><option value="br">오른쪽 아래</option></select></label>
+        <label>로고 크기 <select id="maLsz"><option value="sm">작은 로고</option><option value="md">보통 로고</option><option value="lg">큰 로고</option></select></label></div>
+      <div class="maRow"><b>바닥글</b><input class="fieldIn" id="maFoot" data-notr spellcheck="false" autocomplete="off" placeholder="예: 3학년 2반 · 김하늘" style="flex:1;min-width:0"></div>
+      <div class="maRow"><label>바닥글 위치 <select id="maFpos"><option value="l">왼쪽</option><option value="c">가운데</option><option value="r">오른쪽</option></select></label></div>
+      <div class="maRow"><label class="csvChk"><input type="checkbox" id="maNum"> 슬라이드 번호 넣기</label>
+        <label>번호 위치 <select id="maNpos"><option value="l">왼쪽</option><option value="c">가운데</option><option value="r">오른쪽</option></select></label></div>
+      <div class="maRow"><label class="csvChk"><input type="checkbox" id="maTtl"> 제목·마무리 슬라이드에도 넣기</label></div>
+    </div></div>
+  <div class="dfoot"><button class="tbtn pri" data-close>닫기</button></div>
+</div></div>
+<div class="ov" id="auDlg"><div class="dlg" style="width:min(460px,100%)">
+  <div class="dh"><h3>자동 넘기기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><p>정한 시간이 지나면 발표 화면이 저절로 다음으로 넘어가요. 위쪽 막대가 남은 시간을 보여 주고, ⏸ 단추나 K 키로 멈췄다가 이어갈 수 있어요. 직접 넘기면 시간이 처음부터 다시 가요.</p>
+    <label class="csvChk"><input type="checkbox" id="auOn"> 자동 넘기기 켜기</label>
+    <label class="lab" for="auSec" style="margin-top:12px">슬라이드마다 기다리는 시간 (초)</label><input class="fieldIn" id="auSec" type="number" min="1" max="600" inputmode="numeric" data-notr>
+    <label class="csvChk" style="margin-top:12px"><input type="checkbox" id="auLoop"> 끝나면 처음부터 다시 (반복)</label>
+    <label class="lab" for="auOne" style="margin-top:14px"><span id="auNo" data-notr></span> (초, 비우면 위의 시간 · 0이면 여기서 멈춤)</label><input class="fieldIn" id="auOne" type="number" min="0" max="3600" inputmode="numeric" data-notr>
+    <p style="margin-top:10px;font-size:13px">나타나는 효과(차례로 나타나기)나 퀴즈 정답이 있으면 그 시간을 나눠서 하나씩 보여 줘요. 타이머·살아있는 화면 슬라이드는 따로 시간을 정하기 전에는 멈춰 있어요.</p></div>
+  <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="auOk">확인</button></div>
+</div></div>
+<div class="ov" id="keysDlg"><div class="dlg">
+  <div class="dh"><h3>단축키</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody" id="keysBody" style="overflow:auto"></div>
+</div></div>
+<div class="ov" id="sortDlg"><div class="dlg sortDlg">
+  <div class="dh"><h3>슬라이드 모아보기</h3><span class="saved" id="sortInfo"></span><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="sortBar">
+    <button class="tbtn" id="sAll">전체 선택</button><button class="tbtn" id="sNone">선택 해제</button><span class="vs"></span>
+    <button class="ib" id="sFirst" title="맨 앞으로" aria-label="맨 앞으로">⇤</button><button class="ib" id="sLeft" title="한 칸 앞으로" aria-label="한 칸 앞으로">←</button><button class="ib" id="sRight" title="한 칸 뒤로" aria-label="한 칸 뒤로">→</button><button class="ib" id="sLast" title="맨 뒤로" aria-label="맨 뒤로">⇥</button>
+    <label class="sPos"><input type="number" id="sPos" min="1" value="1" aria-label="이동할 번호"><span>번 자리로</span></label><button class="tbtn" id="sMoveTo">옮기기</button><span class="vs"></span>
+    <button class="tbtn" id="sCopy">복사하기</button><button class="tbtn" id="sDel" style="color:#ff8b8b">지우기</button><button class="ib" id="sUndo" title="되돌리기" aria-label="되돌리기"><svg viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button>
+  </div>
+  <div class="sortGrid" id="sortGrid"></div>
+  <p class="sortHint">누르면 선택되고, Shift를 누르고 누르면 그 사이가 모두 선택돼요. 두 번 누르면 그 슬라이드를 열어요.</p>
+</div></div>
+<div class="ov" id="csvDlg"><div class="dlg" style="width:min(720px,100%)">
+  <div class="dh"><h3>표·그래프 붙여넣기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody" style="overflow:auto">
+    <p>엑셀·구글 시트에서 복사한 칸이나 CSV 글을 붙여 넣으면 표 슬라이드와 그래프 슬라이드로 만들어 줘요.</p>
+    <textarea id="csvIn" data-notr spellcheck="false" style="min-height:120px;width:100%;resize:vertical;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.5;font-family:ui-monospace,Consolas,monospace;white-space:pre" placeholder="월&#9;방문자&#9;매출&#10;1월&#9;120&#9;3,400&#10;2월&#9;98&#9;2,900"></textarea>
+    <div class="csvRow"><label>칸 나누는 글자 <select id="csvSep"><option value="">자동 감지</option><option value="&#9;">탭</option><option value=",">쉼표 ,</option><option value=";">세미콜론 ;</option><option value="|">세로줄 |</option></select></label>
+      <label class="csvChk"><input type="checkbox" id="csvHead" checked> 첫 줄은 제목 줄</label></div>
+    <div class="csvPrev" id="csvPrev"></div>
+    <div class="seg" id="csvKind"><button data-k="table" class="on">표 슬라이드</button><button data-k="chart">그래프 슬라이드</button><button data-k="both">둘 다 만들기</button></div>
+    <div class="csvRow" id="csvChartOpts"><label>이름 칸 <select id="csvLab"></select></label><label>숫자 칸 <select id="csvVal"></select></label>
+      <label>모양 <select id="csvType"><option value="bar">막대</option><option value="line">꺾은선</option><option value="pie">원</option></select></label></div>
+    <label class="csvRow" style="gap:8px;align-items:center"><span class="lab" style="margin:0;white-space:nowrap">슬라이드 제목 (선택)</span><input class="fieldIn" id="csvTitle" data-notr style="height:38px" autocomplete="off"></label>
+    <p id="csvNote" style="color:var(--fry)"></p>
+  </div>
+  <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="csvOk">슬라이드 만들기</button></div>
+</div></div>
+<div class="ov" id="shareDlg"><div class="dlg" style="width:min(640px,100%)">
+  <div class="dh"><h3>링크·QR로 공유</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody" style="overflow:auto">
+    <p>이 링크를 열면 이 발표 자료를 읽기 전용으로 볼 수 있어요. 슬라이드 내용이 링크 안에 모두 들어 있어서 어느 서버에도 올리지 않아요.</p>
+    <label class="csvChk"><input type="checkbox" id="shNotes"> 발표자 메모도 넣기</label>
+    <label class="csvChk"><input type="checkbox" id="shAns"> 퀴즈 정답도 넣기</label>
+    <label class="csvChk"><input type="checkbox" id="shCur"> 지금 슬라이드부터 열기</label>
+    <textarea id="shLink" data-notr readonly spellcheck="false" aria-label="공유 링크" style="min-height:74px;width:100%;resize:vertical;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12px;line-height:1.4;font-family:ui-monospace,Consolas,monospace;word-break:break-all"></textarea>
+    <p id="shInfo" style="color:var(--fry)"></p>
+    <div class="csvRow"><button class="tbtn pri" id="shCopy">링크 복사</button><button class="tbtn" id="shOpen">새 탭에서 열어 보기</button><button class="tbtn" id="shShare" hidden>공유하기…</button></div>
+    <div class="shQr" id="shQrBox" hidden><canvas id="shQr" aria-label="QR 코드"></canvas><div><p id="shQrMsg"></p><button class="tbtn" id="shQrSave">QR 그림 저장</button></div></div>
+    <p class="shWarn" id="shWarn" hidden></p>
+    <div class="coBox" id="coBox">
+      <h4>같이 고치기 <small>(두 사람이 같은 자료를 함께 고쳐요)</small></h4>
+      <div id="coOff"><p>링크를 받은 사람과 같은 발표 자료를 함께 고칠 수 있어요. 위의 읽기 전용 링크와 달리 자료가 서버에 올라가고, 서로 고친 것이 몇 초 안에 합쳐져요.</p>
+        <div class="csvRow"><button class="tbtn" id="coLogin" hidden>로그인</button><button class="tbtn pri" id="coMake" hidden>같이 고치는 링크 만들기</button></div></div>
+      <div id="coOn" hidden><p>이 링크를 열면 누구나 이 자료를 함께 고칠 수 있어요. 고친 것은 몇 초마다 서로에게 합쳐져요.</p>
+        <input id="coLink" data-notr readonly spellcheck="false" aria-label="같이 고치는 링크">
+        <div class="csvRow"><button class="tbtn pri" id="coCopy">링크 복사</button><button class="tbtn dang" id="coStop">같이 고치기 끝내기</button></div></div>
+      <p class="coMsg" id="coMsg"></p>
+    </div>
+    <p class="note" style="margin:0">알아 두세요: 보는 사람은 각자 휴대폰에서 직접 넘겨 보는 방식이에요. 발표자가 넘기는 화면과 실시간으로 맞춰지지는 않아요 (그러려면 서버가 필요해요). 그림은 링크에 담기지 않고, 슬라이드가 짧을 때만 QR을 만들 수 있어요.</p>
+  </div>
+</div></div>
+<div class="ov" id="dataDlg"><div class="dlg">
+  <div class="dh"><h3 id="dataTitle"></h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><p id="dataNote"></p>
+    <label id="dataTypeRow" class="lab" style="margin:0">그래프 모양 <select id="dataType" style="height:34px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);padding:0 8px;margin-left:6px"><option value="bar">막대</option><option value="line">꺾은선</option><option value="pie">원</option></select></label>
+    <textarea id="dataIn" data-notr spellcheck="false" style="min-height:170px;width:100%;resize:vertical;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px;line-height:1.5"></textarea>
+    <div class="lnkRow"><span id="dataLinkTxt" data-notr hidden></span><button class="tbtn" id="dataLinkBtn">프라이 시트에서 가져오기 (연결)</button><button class="tbtn" id="dataRefresh" hidden>지금 새로 고침</button><button class="tbtn" id="dataUnlink" hidden>연결 끊기</button></div>
+    <p id="dataLinkMiss" class="lnkMiss" hidden></p></div>
+  <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="dataOk">확인</button></div>
+</div></div>
+<div class="ov" id="liveDlg"><div class="dlg" style="width:min(560px,100%)">
+  <div class="dh"><h3>살아있는 화면 고르기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody" style="overflow:auto"><p class="lab" style="margin:0">화면으로 쓸 것</p>
+    <div class="liveSrcRow"><label><input type="radio" name="liveK" value="block"> Block HTML 프로젝트</label><label><input type="radio" name="liveK" value="lab"> Fry Lab 실험</label><label><input type="radio" name="liveK" value="html"> HTML 붙여넣기 (고급)</label></div>
+    <div id="livePan_block"><p>프로젝트를 고르면 지금 모습을 복사해서 슬라이드에 담아요. 나중에 Block HTML에서 고쳐도 슬라이드는 바뀌지 않아요. 다시 고르면 새로 가져와요.</p>
+      <select id="liveBlk" class="liveSel" aria-label="Block HTML 프로젝트"></select><p id="liveBlkNone" hidden>Block HTML에 저장된 프로젝트가 없어요</p></div>
+    <div id="livePan_lab" hidden><p>Fry Lab 화면을 그대로 열어요. 발표 중에 값을 직접 움직일 수 있어요.</p><input id="liveFind" class="liveSel" type="search" autocomplete="off" aria-label="실험·템플릿 검색" placeholder="실험·템플릿·단원 검색"><div id="liveLs" class="liveLs" role="listbox" aria-label="Fry Lab 실험"></div><p id="liveCnt" class="liveMsg"></p></div>
+    <div id="livePan_html" hidden><p>HTML 전체를 붙여 넣어요. 믿을 수 있는 코드만 쓰세요. 슬라이드 안의 격리된 칸에서 실행되고, 이 사이트의 저장 정보에는 닿지 못해요.</p>
+      <textarea id="liveHtml" data-notr spellcheck="false" style="min-height:170px;width:100%;resize:vertical;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.45;font-family:ui-monospace,Consolas,monospace"></textarea></div>
+    <p id="liveBlkMsg" class="liveMsg"></p>
+    <p class="note" style="margin:0">알아 두세요: 링크·QR 공유에서는 이 슬라이드를 건너뛰어요. PPTX에는 자리표시 상자만 들어가요.</p></div>
+  <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="liveOk">확인</button></div>
+</div></div>
+<div class="ov" id="linkDlg"><div class="dlg" style="width:min(680px,100%)">
+  <div class="dh"><h3>프라이 시트에서 가져오기 (연결)</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody" style="overflow:auto">
+    <p>Fry Sheet 문서의 칸을 골라 이 슬라이드와 연결해요. 시트에서 숫자를 바꾸면 슬라이드도 따라 바뀌어요. 수식은 계산한 값으로 들어가요.</p>
+    <p id="lkNone" hidden>이 브라우저의 Fry Sheet에 저장된 문서가 없어요. 먼저 <a href="../sheet/" target="_blank" rel="noopener" style="color:var(--fry)">Fry Sheet</a>에서 표를 만들어 주세요.</p>
+    <div id="lkForm"><div class="csvRow"><label>문서 <select id="lkDoc" data-notr></select></label><label>시트 <select id="lkSh" data-notr></select></label>
+      <label>범위 <input id="lkRg" class="lkRg" data-notr autocomplete="off" spellcheck="false" placeholder="A1:C6"></label><button class="tbtn" id="lkAllB">쓴 칸 모두</button></div></div>
+    <div class="csvPrev lkPrev" id="lkPrev" data-notr></div>
+    <p id="lkNote" style="color:var(--fry)"></p>
+    <p class="note" style="margin:0">알아 두세요: 같은 브라우저에 저장된 Fry Sheet 문서만 연결돼요. 문서를 지우면 마지막으로 가져온 값이 그대로 남아요. 링크 공유·PDF·PPTX에는 그때의 값이 들어가요.</p>
+  </div>
+  <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="lkOk">연결하기</button></div>
+</div></div>
+<div class="ov" id="qzDlg"><div class="dlg" style="width:min(520px,100%)">
+  <div class="dh"><h3>실시간 퀴즈 보기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><p>발표 중 실시간 퀴즈를 열면 휴대폰에 이 보기가 나와요. 한 줄에 하나씩, 6개까지 써요. 비워 두면 문제 안의 "1) …", "① …" 줄을 보기로 써요.</p>
+    <textarea id="qzIn" data-notr spellcheck="false" style="min-height:140px;width:100%;resize:vertical;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px;line-height:1.5" placeholder="서울&#10;부산&#10;대구&#10;인천"></textarea>
+    <label class="csvRow">정답 <select id="qzOkSel" data-notr></select></label></div>
+  <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="qzOk">확인</button></div>
+</div></div>
+<div class="ov" id="aiDlg" data-xonly><div class="dlg">
+  <div class="dh"><h3>AI 도우미 (시험 기능)</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><div class="seg" id="aiMode"><button data-m="new" class="on">새로 만들기</button><button data-m="fix">지금 슬라이드 고치기</button><button data-m="add">뒤에 추가</button></div>
+    <p id="aiModeNote"></p><p class="aiWarn">AI가 쓴 슬라이드는 거친 초안이에요. 사실이나 숫자가 틀릴 수 있고, 디자인을 세밀하게 맞추지는 못해요. 내용을 직접 확인하고 고쳐 쓰세요.</p><textarea id="aiIn" data-notr spellcheck="false" style="min-height:96px;width:100%;resize:vertical;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px;line-height:1.5"></textarea></div>
+  <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="aiOk">만들기</button></div>
+</div></div>
+<div class="ov" id="askDlg" data-xonly><div class="dlg">
+  <div class="dh"><h3 id="askTitle"></h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><p id="askNote"></p><textarea id="askIn" data-notr spellcheck="false"></textarea></div>
+  <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="askOk">확인</button></div>
+</div></div>
+<div class="ov" id="cfmDlg"><div class="dlg">
+  <div class="dbody" style="padding-top:18px"><p id="cfmTxt" data-notr style="color:var(--text);font-size:15px"></p></div>
+  <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="cfmOk">지우기</button></div>
+</div></div>
+<div id="present" aria-label="발표 화면">
+  <div id="pStage"></div><div id="pEnd" hidden>발표가 끝났어요. 나가려면 Esc를 누르거나 ×를 눌러요.</div>
+  <div id="pBoard"></div><canvas id="pInk" aria-hidden="true"></canvas><div id="pAuto" hidden><i></i></div><div id="pNotes" data-notr hidden></div><div id="pProg"><i></i></div><div id="pDot" hidden></div>
+  <div id="lq" hidden><div class="lqHd"><b>📲 실시간 퀴즈</b><span id="lqPpl"></span><span class="sp"></span><button id="lqQrB">QR 접기</button><button id="lqHide" aria-label="숨기기" title="숨기기 (Q)">–</button><button id="lqEnd" class="dang">끝내기</button></div>
+    <div id="lqJoin"><canvas id="lqQr" aria-label="QR 코드"></canvas><div class="lqJi"><div class="lqCode" id="lqCode" data-notr></div><div class="lqUrl" id="lqUrl" data-notr></div><p id="lqMsg"></p></div></div>
+    <div id="lqBars"></div><div class="lqFt"><span id="lqStat"></span><span class="sp"></span><button id="lqRev" hidden>정답 공개</button></div></div>
+  <div class="pbar"><span id="pClock"></span><button id="pNotesB" aria-label="발표자 메모" title="발표자 메모 (S)">📝</button><button id="pLaserB" aria-label="레이저 포인터" title="레이저 포인터 (L)">🔴</button><button id="pPvB" aria-label="발표자 화면" title="발표자 화면 열기 (V)">🖥️</button><button id="pLqB" aria-label="실시간 퀴즈" title="실시간 퀴즈 (Q)" hidden>📲</button><button id="pPenB" aria-label="펜" title="펜 (D)">✏️</button><button id="pHiB" aria-label="형광펜" title="형광펜 (M)">🖍️</button><button id="pErB" aria-label="지우개" title="지우개 (X)">🧽</button><button id="pBbB" aria-label="칠판" title="칠판 (W)">🟩</button><span id="pInkCols" role="group" aria-label="색"></span><button id="pClrB" aria-label="낙서 지우기" title="낙서 지우기 (E)" hidden>🧹</button><button id="pAutoB" aria-label="자동 넘기기" title="자동 넘기기 (K)" hidden>⏸</button><button id="pPrev" aria-label="이전 슬라이드">‹</button><span id="pNum"></span><button id="pNext" aria-label="다음 슬라이드">›</button><button id="pExit" aria-label="발표 끝내기">×</button></div>
+</div>
+<div id="pv" hidden>
+  <div class="pvTop"><b id="pvName" data-notr></b><span class="pvSt" id="pvStatus"></span><span class="sp"></span><span class="pvClock" id="pvWall" data-notr></span>
+    <button class="tbtn" id="pvExit" style="color:#ff8b8b">발표 끝내기</button></div>
+  <div class="pvBody">
+    <div class="pvCurBox"><div class="pvLab">지금 슬라이드</div><div class="pvFrame" id="pvCur"></div>
+      <div class="pvCtl"><button class="tbtn" id="pvPrev" aria-label="이전 슬라이드">‹ 이전</button><span id="pvNum" data-notr></span><button class="tbtn pri" id="pvNext" aria-label="다음 슬라이드">다음 ›</button><button class="tbtn" id="pvBlack" title="화면 끄기 (B)">화면 끄기</button><button class="tbtn" id="pvAns" title="퀴즈 정답 보기 (A)">정답 보기</button></div></div>
+    <div class="pvSide">
+      <div class="pvTimer"><span class="pvLab" style="margin:0">발표 시간</span><b id="pvTime" data-notr>00:00</b><button class="tbtn" id="pvPause">멈춤</button><button class="tbtn" id="pvReset">처음부터</button></div>
+      <div class="pvLab">다음 슬라이드</div><div class="pvFrame" id="pvNextFr"></div>
+      <div class="pvLab" style="display:flex;align-items:center;gap:6px">발표자 메모<span class="sp"></span><button class="ib" id="pvFsM" aria-label="글자 작게" title="글자 작게" style="width:30px;height:28px">A−</button><button class="ib" id="pvFsP" aria-label="글자 크게" title="글자 크게" style="width:30px;height:28px">A+</button></div>
+      <div id="pvNotes" data-notr></div>
+    </div>
+  </div>
+</div>
+<div id="viewer" hidden>
+  <div class="vTop"><b id="vName" data-notr></b><span class="vBadge">읽기 전용</span><span class="sp"></span><button class="tbtn" id="vImport">내 슬라이드로 가져오기</button></div>
+  <div id="vWrap"><div id="vStage"></div><div id="vMsg"></div></div>
+  <div class="vNav"><button class="tbtn" id="vPrev" aria-label="이전 슬라이드">‹</button><span id="vNum" data-notr></span><button class="tbtn pri" id="vNext" aria-label="다음 슬라이드">›</button></div>
+  <div id="vProg"><i></i></div>
+</div>
+<div id="measure" aria-hidden="true"></div>
+<div id="printRoot" aria-hidden="true"></div>
+<div id="toast" role="status"></div>
+<div class="cmdRes" id="cmdRes" role="listbox" aria-label="기능 찾기" hidden></div>
+<script src="../ai.js?v=ai26"></script>
+<script src="../ai-prompts.js"></script>
+<script src="qr.js"></script>
+<script src="lq-net.js"></script>
+<script src="ribbon.js"></script>
+<script src="app.js?v=s22"></script>
+<script src="collab.js?v=s22"></script>
+<script src="ai-slides.js"></script>
+</body>
+</html>
