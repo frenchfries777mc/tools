@@ -240,6 +240,20 @@ def('act_glidexy',function(){ this.appendDummyInput().appendField(elField(),'EL'
   function(b){ need('glide'); return 'await __glide('+er(b)+', '+(G.valueToCode(b,'SEC',O.COMMA)||'1')+', '+(G.valueToCode(b,'X',O.COMMA)||'0')+', '+(G.valueToCode(b,'Y',O.COMMA)||'0')+');\n'; });
 def('act_lookat',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('이(가)')).appendField(elField(),'TO').appendField(T('바라보기')); act(this,'다른 요소가 있는 쪽으로 가는 방향을 정해요 (눈에 보이는 모양은 그대로예요). 방향대로 가려면 앞으로 가기 블록을 써요'); },
   function(b){ need('lookat'); return '__faceEl('+er(b)+', '+er(b,'TO')+');\n'; });
+/* looks: turn, flip, shake, flash, smooth change */
+function fxField(){ var ef=elField(); return new Blockly.FieldDropdown(function(){ return [[T('화면 전체'),'@screen']].concat(ef.getOptions(false)); }); }
+def('act_turn',function(){ this.appendValueInput('N').setCheck('Number').appendField(elField(),'EL').appendField(T('을(를)')); this.appendDummyInput().appendField(T('도')).appendField(new Blockly.FieldDropdown(function(){ return [[T('만큼 돌리기'),'turn'],[T('로 정하기'),'set']]; }),'MODE'); this.setInputsInline(true); act(this,'눈에 보이는 모양을 돌려요. 양수는 시계 방향이에요. 방향(가는 길)은 바뀌지 않아요'); },
+  function(b){ need('turn'); return '__turn('+er(b)+', '+(G.valueToCode(b,'N',O.COMMA)||'0')+', '+(b.getFieldValue('MODE')==='turn')+');\n'; });
+def('act_flip',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('을(를)')).appendField(new Blockly.FieldDropdown(function(){ return [[T('좌우로 뒤집기'),'x'],[T('위아래로 뒤집기'),'y'],[T('원래대로'),'none']]; }),'AXIS'); act(this,'모양을 거울처럼 뒤집어요. 한 번 더 하면 원래대로 돌아와요'); },
+  function(b){ need('flip'); return '__flip('+er(b)+', '+lit(b.getFieldValue('AXIS'))+');\n'; });
+def('act_autoturn',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('의 모양을')).appendField(new Blockly.FieldDropdown(function(){ return [[T('가는 방향으로 맞추기'),'on'],[T('방향과 따로 두기'),'off']]; }),'MODE'); act(this,'켜 두면 방향을 바꿀 때마다(바라보기, 방향 정하기) 모양도 같이 돌아가요'); },
+  function(b){ need('autoturn'); return '__autoturn('+er(b)+', '+(b.getFieldValue('MODE')==='on')+');\n'; });
+def('act_shake',function(){ this.appendDummyInput().appendField(fxField(),'EL').appendField(T('을(를)')); this.appendValueInput('SEC').setCheck('Number'); this.appendDummyInput().appendField(T('초 동안 흔들기')); this.setInputsInline(true); act(this,'화면이나 요소를 좌우로 떨게 해요. 기다리지 않고 바로 다음 블록으로 가요'); },
+  function(b){ need('fx'); return '__shake('+er(b)+', '+(G.valueToCode(b,'SEC',O.COMMA)||'0.4')+');\n'; });
+def('act_flash',function(){ this.appendDummyInput().appendField(fxField(),'EL').appendField(T('을(를) 번쩍이기')); act(this,'화면이나 요소가 한 번 번쩍여요. 기다리지 않고 바로 다음 블록으로 가요'); },
+  function(b){ need('fx'); return '__flash('+er(b)+');\n'; });
+def('act_tween',function(){ this.appendDummyInput().appendField(elField(),'EL').appendField(T('의')).appendField(new Blockly.FieldDropdown(function(){ return [[T('글자 크기'),'fontSize'],[T('너비'),'width'],[T('높이'),'height'],[T('투명도 %'),'opacity'],[T('회전 각도'),'rotate']]; }),'PROP').appendField(T('을(를)')); this.appendValueInput('SEC').setCheck('Number'); this.appendDummyInput().appendField(T('초 동안')); this.appendValueInput('N').setCheck('Number'); this.appendDummyInput().appendField(T('(으)로 천천히 바꾸기')); this.setInputsInline(true); act(this,'정한 시간 동안 값을 조금씩 바꿔요. 다 바뀔 때까지 기다렸다가 다음 블록으로 가요'); },
+  function(b){ need('tween'); return 'await __tween('+er(b)+', '+lit(b.getFieldValue('PROP'))+', '+(G.valueToCode(b,'N',O.COMMA)||'0')+', '+(G.valueToCode(b,'SEC',O.COMMA)||'1')+');\n'; });
 def('act_wait',function(){ this.appendValueInput('SEC').setCheck('Number'); this.appendDummyInput().appendField(T('초 기다리기')); this.setInputsInline(true); act(this,'정한 시간 동안 여기서 기다렸다가 다음 블록으로 가요. 반복 안에서도 기다려요'); },
   function(b){ need('sleep'); return 'await __sleep('+(G.valueToCode(b,'SEC',O.NONE)||'1')+');\n'; });
 def('act_stop',function(){ this.appendDummyInput().appendField(T('"초마다"를 모두 멈추기')); act(this,'초마다 반복을 모두 멈춰요. 이름 붙은 시간 블록도 함께 멈춰요'); },
@@ -528,7 +542,7 @@ var HELP={
   get:"function __get(name) {\n  var el = $(name);\n  return el.tagName === 'INPUT' ? el.value : el.textContent;\n}\nfunction __num(x) {\n  var n = parseFloat(x);\n  return isNaN(n) ? 0 : n;\n}",
   set:"function __set(name, value) {\n  var el = $(name);\n  if (el.tagName === 'INPUT') el.value = value;\n  else if (el.tagName === 'IMG') el.src = value;\n  else if (el.tagName === 'CANVAS') el.getContext('2d').clearRect(0, 0, el.width, el.height);\n  else el.textContent = value;\n}",
   add:"function __add(name, value) {\n  var el = $(name);\n  if (el.tagName === 'UL') {\n    var li = document.createElement('li');\n    li.textContent = value;\n    el.appendChild(li);\n  } else if (el.tagName === 'INPUT') el.value += value;\n  else el.textContent += value;\n}",
-  size:"function __size(name, prop, v) {\n  var s = $(name).style;\n  if (prop === 'opacity') s.opacity = v / 100;\n  else if (prop === 'rotate') s.transform = 'rotate(' + v + 'deg)';\n  else s[prop] = v + 'px';\n}",
+  size:"function __size(name, prop, v) {\n  var e = $(name), s = e.style;\n  if (prop === 'opacity') s.opacity = v / 100;\n  else if (prop === 'rotate') { e.__rot = parseFloat(v) || 0; s.transform = 'rotate(' + e.__rot + 'deg)'; }\n  else s[prop] = v + 'px';\n}",
   move:"function __move(name, x, y) {\n  var s = $(name).style;\n  s.position = 'absolute';\n  s.left = x + 'px';\n  s.top = y + 'px';\n}",
   show:"function __show(name, mode) {\n  var el = $(name);\n  if (mode === 'toggle') mode = el.style.display === 'none' ? 'show' : 'hide';\n  el.style.display = mode === 'hide' ? 'none' : '';\n}",
   pos:"var __mx = 0, __my = 0;\nfunction __pos(e, el) {\n  var r = el.getBoundingClientRect();\n  __mx = Math.round((e.clientX - r.left) * (el.width ? el.width / r.width : 1));\n  __my = Math.round((e.clientY - r.top) * (el.height ? el.height / r.height : 1));\n}",
@@ -543,6 +557,11 @@ var HELP={
   keyheld:"var __held = {};\ndocument.addEventListener('keydown', function (e) { __held[e.key.toLowerCase()] = true; });\ndocument.addEventListener('keyup', function (e) { delete __held[e.key.toLowerCase()]; });\nwindow.addEventListener('blur', function () { __held = {}; });",
   glide:"function __glide(name, sec, x, y) {\n  var e = $(name), q = e.getBoundingClientRect(), x0 = parseFloat(e.style.left), y0 = parseFloat(e.style.top);\n  if (isNaN(x0) || isNaN(y0)) { x0 = q.left + window.pageXOffset; y0 = q.top + window.pageYOffset; }\n  sec = parseFloat(sec) || 0;\n  var tok = e.__gl = (e.__gl || 0) + 1;\n  return new Promise(function (done) {\n    var t0 = performance.now();\n    function step(now) {\n      if (e.__gl !== tok) return done();\n      var k = sec > 0 ? Math.min(1, (now - t0) / (sec * 1000)) : 1;\n      __move(e, x0 + (x - x0) * k, y0 + (y - y0) * k);\n      if (k < 1) requestAnimationFrame(step); else done();\n    }\n    requestAnimationFrame(step);\n  });\n}",
   lookat:"function __faceEl(r, t) {\n  var q = $(t).getBoundingClientRect();\n  __face(r, q.left + window.pageXOffset + q.width / 2, q.top + window.pageYOffset + q.height / 2);\n}",
+  turn:"function __turn(name, d, add) {\n  var e = $(name);\n  e.__rot = (add ? (e.__rot || 0) : 0) + (parseFloat(d) || 0);\n  e.style.transform = 'rotate(' + e.__rot + 'deg)';\n}",
+  flip:"function __flip(name, axis) {\n  var e = $(name), f = e.__flip || (e.__flip = { x: 1, y: 1 });\n  if (axis === 'none') f.x = f.y = 1; else f[axis] = -f[axis];\n  e.style.scale = f.x + ' ' + f.y;\n}",
+  autoturn:"function __autoturn(name, on) {\n  var e = $(name);\n  e.__ar = on;\n  if (on) __turn(e, e.__dir || 0, false);\n}",
+  fx:"function __fxTarget(t) { return t === '@screen' ? document.body : $(t); }\nfunction __shake(t, sec) {\n  var e = __fxTarget(t), ms = Math.max(0.05, parseFloat(sec) || 0.4) * 1000, n = Math.max(2, Math.round(ms / 50)), k = [];\n  for (var i = 0; i < n; i++) k.push({ translate: (i % 2 ? 6 : -6) + 'px 0' });\n  k.push({ translate: '0 0' });\n  e.animate(k, { duration: ms, easing: 'linear' });\n}\nfunction __flash(t) {\n  if (t === '@screen') {\n    var o = document.createElement('div');\n    o.style.cssText = 'position:fixed;inset:0;background:#fff;pointer-events:none;z-index:99999';\n    document.body.appendChild(o);\n    o.animate([{ opacity: 0.85 }, { opacity: 0 }], { duration: 300 }).onfinish = function () { o.remove(); };\n  } else $(t).animate([{ filter: 'brightness(2.5)' }, { filter: 'none' }], { duration: 300 });\n}",
+  tween:"function __tween(name, prop, v, sec) {\n  var e = $(name), s = e.style, c = getComputedStyle(e);\n  v = parseFloat(v) || 0; sec = parseFloat(sec) || 0;\n  var from = prop === 'opacity' ? (parseFloat(c.opacity) * 100) : prop === 'rotate' ? (e.__rot || 0) : parseFloat(prop === 'fontSize' ? c.fontSize : prop === 'width' ? c.width : c.height) || 0;\n  var tok = e['__tw' + prop] = (e['__tw' + prop] || 0) + 1;\n  return new Promise(function (done) {\n    var t0 = performance.now();\n    function step(now) {\n      if (e['__tw' + prop] !== tok) return done();\n      var k = sec > 0 ? Math.min(1, (now - t0) / (sec * 1000)) : 1;\n      __size(e, prop, from + (v - from) * k);\n      if (k < 1) requestAnimationFrame(step); else done();\n    }\n    requestAnimationFrame(step);\n  });\n}",
   sleep:"function __sleep(sec) { return new Promise(function (done) { setTimeout(done, sec * 1000); }); }",
   wb:"var __wb = {};",
   keyhold:"var __down = {};\nfunction __keyHold(match, fn) {\n  var id = null;\n  function stop() { if (id) { clearInterval(id); id = null; } }\n  document.addEventListener('keydown', function (e) {\n    __key = e.key;\n    __down[e.key.toLowerCase()] = e;\n    if (e.repeat || id || !match(e)) return;\n    fn(e);\n    id = setInterval(function () { fn(e); }, 30);\n  });\n  document.addEventListener('keyup', function (e) {\n    delete __down[e.key.toLowerCase()];\n    if (id && !Object.keys(__down).some(function (k) { return match(__down[k]); })) stop();\n  });\n  window.addEventListener('blur', function () { __down = {}; stop(); });\n}",
@@ -692,11 +711,13 @@ HELP.clones=src(function(){
     var e = $(r);
     d = parseFloat(d) || 0;
     e.__dir = ((turn ? (e.__dir || 0) + d : d) % 360 + 360) % 360;
+    if (e.__ar) __turn(e, e.__dir, false);
   }
   function __getdir(r) { return Math.round(($(r).__dir || 0) * 100) / 100; }
   function __face(r, x, y) {
     var e = $(r), q = e.getBoundingClientRect();
     e.__dir = (Math.atan2(y - (q.top + window.pageYOffset + q.height / 2), x - (q.left + window.pageXOffset + q.width / 2)) * 180 / Math.PI + 360) % 360;
+    if (e.__ar) __turn(e, e.__dir, false);
   }
   function __vset(r, k, v) { var e = $(r); (e.__v || (e.__v = {}))[k] = v; }
   function __vget(r, k) { var v = ($(r).__v || {})[k]; return v === undefined ? 0 : v; }
@@ -900,7 +921,7 @@ HELP.store=src(function(){
     return k in __mem ? __mem[k] : d;
   }
 });
-var HELP_DEPS={beep:['snd'],sfx:['snd'],note:['snd'],hit:['$'],touch:['$','clones'],hitev:['$','touch'],rpos:['$'],nudge:['$'],where:['$'],stay:['$'],follow:['$','cursor'],image:['$','draw'],say:['$'],get:['$'],set:['$'],add:['$'],size:['$'],move:['$'],glide:['$','move'],lookat:['$','clones'],show:['$'],draw:['$'],clones:['$','me','sched','nudge'],sched:['me'],tile:['$','nudge'],best:['store']};
+var HELP_DEPS={beep:['snd'],sfx:['snd'],note:['snd'],hit:['$'],touch:['$','clones'],hitev:['$','touch'],rpos:['$'],nudge:['$'],where:['$'],stay:['$'],follow:['$','cursor'],image:['$','draw'],say:['$'],get:['$'],set:['$'],add:['$'],size:['$'],move:['$'],glide:['$','move'],turn:['$'],flip:['$'],autoturn:['$','turn'],fx:['$'],tween:['$','size'],lookat:['$','clones'],show:['$'],draw:['$'],clones:['$','me','sched','nudge'],sched:['me'],tile:['$','nudge'],best:['store']};
 
 function dbgHelper(vars){
   return 'var __dq = Promise.resolve(), __dgo = null, __dfree = 0, __drun = 0, __dbusy = {};\n'+
@@ -953,7 +974,7 @@ function build(ws,opts){
     body+=bodyHTML(b,'  ',true);
   });
   // JavaScript
-  WAITS=ws.getAllBlocks(false).some(function(x){ return (x.type==='act_wait'||x.type==='act_glideto'||x.type==='act_glidexy')&&x.isEnabled(); });
+  WAITS=ws.getAllBlocks(false).some(function(x){ return (x.type==='act_wait'||x.type==='act_glideto'||x.type==='act_glidexy'||x.type==='act_tween')&&x.isEnabled(); });
   NEED={}; USED={}; USEDS={}; G.INFINITE_LOOP_TRAP=opts.trap?'if (--window.__loop < 0) throw new Error("'+T('반복이 끝나지 않아요')+'");\n':null;
   DBG=!!opts.debug; dbgSeq=0; GLW=!!opts.glow&&!DBG; G.STATEMENT_PREFIX=DBG?'await __step(%1);\n':GLW?'__glow(%1);\n':null;
   var js, dbgVars=[];
@@ -1041,6 +1062,9 @@ function toolbox(){
       lab('말풍선'),bk('act_say',{inputs:{VALUE:sh('text',T('안녕!'))}}),bk('act_sayfor',{inputs:{VALUE:sh('text',T('안녕!')),SEC:n(2)}}),bk('act_say',{fields:{KIND:'think'},inputs:{VALUE:sh('text',T('음…'))}}),
       lab('내용 바꾸기'),bk('act_set',{inputs:{VALUE:sh('text',T('안녕!'))}}),bk('act_append',{inputs:{VALUE:sh('text',T('항목'))}}),bk('act_clear'),
       lab('색과 크기'),bk('act_style',{inputs:{VALUE:shc('#ef4444')}}),bk('act_size',{inputs:{N:n(32)}}),bk('act_hide'),bk('act_unhide'),bk('act_show'),
+      lab('돌리기와 뒤집기'),bk('act_turn',{inputs:{N:n(90)}}),bk('act_flip'),bk('act_autoturn'),
+      lab('효과'),bk('act_shake',{inputs:{SEC:n(0.4)}}),bk('act_flash'),
+      lab('천천히 바꾸기'),bk('act_tween',{inputs:{SEC:n(1),N:n(100)}}),
       lab('색'),bk('val_color'),bk('val_rcolor'),
       lab('값 가져오기'),bk('val_get'),bk('val_prompt',{inputs:{VALUE:sh('text',T('이름이 뭐예요?'))}}),bk('val_key')]),
     cat('move','움직임',[
