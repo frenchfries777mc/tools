@@ -21,7 +21,7 @@ var IC={
   dup:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>', grid:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
   hide:'<path d="M3 3l18 18"/><path d="M10.6 6.1A10 10 0 0 1 12 6c5 0 9 6 9 6a17 17 0 0 1-3.2 3.6M6.5 7.6C4.3 9.2 3 12 3 12s4 6 9 6a9 9 0 0 0 4-.9"/>',
   dots:'<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>', copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',
-  paste:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6"/>', group:'<rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="3 3"/><rect x="7" y="7" width="6" height="6"/><rect x="11" y="11" width="6" height="6"/>',
+  brush:'<path d="M18 3l3 3-8.5 8.5-3-3z"/><path d="M9.5 11.5c-2.6 0-4 1.6-4 3.8 0 1.4-.8 2.6-2 3.2 3.4 1.4 8 .4 8.5-3.2"/>', paste:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6"/>', group:'<rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="3 3"/><rect x="7" y="7" width="6" height="6"/><rect x="11" y="11" width="6" height="6"/>',
   ungroup:'<rect x="3" y="3" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/>', layer:'<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>',
   align:'<path d="M4 3v18"/><rect x="8" y="6" width="12" height="4" rx="1"/><rect x="8" y="14" width="7" height="4" rx="1"/>', find:'<circle cx="10" cy="10" r="6"/><path d="M14.5 14.5L20 20"/>',
   keys:'<rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/>', pic:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 9"/>',
@@ -87,6 +87,7 @@ var CMDS=[
  {g:1},
  {id:'copy', tab:'home', ic:'copy', lb:'복사', t:'고른 도형 복사', sc:'Ctrl+C', k:'도형 복사하기', need:nEl, run:function(){ C().copy(); }},
  {id:'paste', tab:'home', ic:'paste', lb:'붙여넣기', t:'붙여넣기', sc:'Ctrl+V', k:'도형 붙이기', need:function(st){ return nSlide(st)||(!st.clip?'clip':''); }, run:function(){ C().paste(); }},
+ {id:'fpaint', tab:'home', ic:'brush', lb:'서식 복사', t:'서식 복사 (한 번 누르면 한 번, 두 번 누르면 Esc까지 계속)', sc:'Ctrl+Alt+C / V', k:'서식 복사 서식 붙이기 모양 복사 스타일 복사 색 복사 포맷 브러시 페인터', dbl:1, need:function(st){ return st.fp?'':nSel(st); }, on:function(st){ return st.fp; }, run:function(){ C().fpaint(false); }},
  {id:'group', tab:'home', ic:'group', lb:'묶기', t:'그룹으로 묶기', sc:'Ctrl+G', k:'그룹 묶음 합치기', need:function(st){ return nSlide(st)||(!st.group?'many':''); }, run:function(){ C().group(); }},
  {id:'ungroup', tab:'home', ic:'ungroup', lb:'풀기', t:'그룹 풀기', sc:'Ctrl+Shift+G', k:'그룹 해제 묶음 풀기', need:function(st){ return nSlide(st)||(!st.ungroup?'grp':''); }, run:function(){ C().ungroup(); }},
  {id:'layer', tab:'home', ic:'layer', lb:'겹침 순서', t:'겹치는 순서', sc:'Ctrl+]', menu:1, k:'순서 맨 앞 맨 뒤 앞으로 뒤로 레이어 위로 아래로', need:nEl, run:function(b){ C().elMenu('layer',b); }},
@@ -163,6 +164,7 @@ CMDS.forEach(function(c){
   var b=document.createElement('button'); b.type='button'; b.className='rb'+(c.cls?' '+c.cls:''); if(c.el) b.id=c.el; b.dataset.cmd=c.id; if(c.menu) b.dataset.menu='1';
   b.title=c.t+(c.sc?' ('+sc(c.sc)+')':''); b.innerHTML=svg(c.ic)+'<span class="lb"></span>'; b.lastChild.textContent=c.lb;
   if(!c.el) b.onclick=function(){ press(c,b); };
+  if(c.dbl) b.ondblclick=function(){ if(!needOf(c,S())) { C().fpaint(true); sync(); } };
   p.appendChild(b); c.b=b; });
 LCMDS.forEach(function(c){ c.b=BY.lay.b; });
 
