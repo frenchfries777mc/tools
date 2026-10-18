@@ -141,6 +141,8 @@ button,input,select{font:inherit; color:inherit;}
 .pa button.dang{color:#ff7b7b;}
 .empty{color:var(--dim); text-align:center; padding:30px 10px; grid-column:1/-1;}
 /* edit bar */
+.askIn[hidden],#askNo[hidden]{display:none!important}
+.askIn{display:block; width:calc(100% - 32px); margin:0 16px 12px; height:38px; padding:0 10px; border-radius:9px; border:1px solid var(--line); background:var(--panel2); color:var(--text); font-size:15px;}
 #editBar{position:absolute; top:10px; right:12px; z-index:4; display:flex; gap:4px; padding:4px; border-radius:12px; background:rgba(16,19,27,.92); border:1px solid var(--line); box-shadow:0 8px 24px rgba(0,0,0,.4);}
 #editBar button{display:inline-flex; align-items:center; gap:5px; height:36px; padding:0 10px; border-radius:8px; border:0; background:transparent; color:var(--text); cursor:pointer; white-space:nowrap; font-size:13px;}
 #editBar button:hover:not(:disabled){background:var(--panel2);}
@@ -425,6 +427,7 @@ button,input,select{font:inherit; color:inherit;}
   <iframe id="playFrame" title="공유된 프로젝트" allow="autoplay" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe></div>
 <div class="ov" id="askDlg"><div class="dlg tiny">
   <div class="askBody" id="askMsg"></div>
+  <input type="text" id="askIn" class="askIn" hidden maxlength="60" aria-label="입력" data-notr>
   <div class="askFoot"><button class="tbtn" id="askNo">취소</button><button class="tbtn pri" id="askOk">확인</button></div>
 </div></div>
 <input type="file" id="photoIn" accept="image/*" hidden>
@@ -436,7 +439,7 @@ button,input,select{font:inherit; color:inherit;}
 <script src="objects.js?v=44"></script>
 <script src="shared.js?v=43"></script>
 <script src="examples.js?v=44"></script>
-<script src="app.js?v=47"></script>
+<script src="app.js?v=48"></script>
 <script src="../ai.js?v=ai26"></script>
 <script src="../ai-prompts.js?v=41"></script>
 <script src="lib/acorn.min.js"></script>
