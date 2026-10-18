@@ -147,7 +147,7 @@ function pushUndo(s){ undo.push(s||snap()); if(undo.length>100) undo.shift(); re
 function restore(j){ var o=JSON.parse(j); deck.name=o.n; deck.theme=o.th; deck.footer=o.f||''; deck.nums=!!o.nm; deck.font=o.fo||''; deck.trans=o.tr||'fade'; deck.master=fixMaster(o.ma); deck.auto=fixAuto(o.au); deck.slides=o.s.map(fixSlide); cur=Math.max(0,Math.min(o.c,deck.slides.length-1)); $('deckName').value=deck.name; refresh(); saveSoon(); }
 function doUndo(){ blurEdit(); if(!undo.length||gen||busyOn) return; redo.push(snap()); restore(undo.pop()); updUR(); }
 function doRedo(){ blurEdit(); if(!redo.length||gen||busyOn) return; undo.push(snap()); restore(redo.pop()); updUR(); }
-function updUR(){ $('undoBtn').disabled=!undo.length||gen||busyOn; $('redoBtn').disabled=!redo.length||gen||busyOn; }
+function updUR(){ $('undoBtn').disabled=!undo.length||gen||busyOn; $('redoBtn').disabled=!redo.length||gen||busyOn; if(window.FRB) FRB.sync(); }
 
 /* ---------- drawing a slide ---------- */
 var CE=(function(){ var d=document.createElement('div'); try{ d.contentEditable='plaintext-only'; if(d.contentEditable==='plaintext-only') return 'plaintext-only'; }catch(e){} return 'true'; })();
@@ -350,7 +350,7 @@ function drawMain(){
   var host=$('slideHost'), s=deck.slides[cur], t=th(); host.innerHTML='';
   $('waitMsg').hidden=!!s; $('waitMsg').textContent=gen?T('AI가 발표 자료를 쓰고 있어요…'):'';
   host.hidden=!s;
-  ['dupBtn','delBtn','laySel','aiBtn','addBtn','themeBtn','notes','picBtn','shapeBtn','optBtn','sortBtn'].forEach(function(id){ $(id).disabled=!s||gen||busyOn||(id==='aiBtn'&&AILAYS.indexOf(s.layout)<0); });
+  ['dupBtn','delBtn','laySel','addBtn','themeBtn','notes','picBtn','shapeBtn','optBtn','sortBtn'].forEach(function(id){ $(id).disabled=!s||gen||busyOn; });
   if(!s){ $('notes').value=''; selK=null; selBar(); return; }
   var el=slideEl(s,t,!gen&&!busyOn,{live:1}); host.appendChild(el); scaleMain(); fitAll(el,s,t,true);
   $('laySel').value=s.layout; if(document.activeElement!==$('notes')) $('notes').value=s.notes||''; drawSel();
@@ -601,7 +601,8 @@ function selKeys(s){ var a=selEls(s); return a.length?a.map(function(e){ return 
 function setAnim(a){ var s=deck.slides[cur]; if(!s||!selK) return; var ks=selKeys(s), i=buildIx(s,ks[0]); if(a==='none'&&ks.every(function(k){ return buildIx(s,k)<0; })||ks.length===1&&i>=0&&s.build[i].a===a) return; pushUndo();
   ks.forEach(function(k){ var j=buildIx(s,k); if(a==='none'){ if(j>=0) s.build.splice(j,1); } else if(j>=0) s.build[j].a=a; else s.build.push({k:k, a:a}); }); changed(); }
 function moveBuild(d){ var s=deck.slides[cur], i=s?buildIx(s,selKeys(s)[0]):-1, j=i+d; if(i<0||j<0||j>=s.build.length) return; pushUndo(); var x=s.build.splice(i,1)[0]; s.build.splice(j,0,x); changed(); }
-function selBar(){ var b=$('selBar'), s=deck&&deck.slides[cur]; b.innerHTML=''; b.hidden=!s||gen||busyOn;
+function selBar(){ selBar0(); if(window.FRB) FRB.sync(); }
+function selBar0(){ var b=$('selBar'), s=deck&&deck.slides[cur]; b.innerHTML=''; b.hidden=!s||gen||busyOn;
   if(!selK){ b.className='selBar hint'; b.textContent=T('글상자·그림·도형을 누르면 끌어서 옮기고 모서리로 크기를 바꿀 수 있어요. 빈 곳을 끌거나 Shift를 누르고 누르면 여러 개를 고를 수 있어요'); if(readClip()){ var pb=document.createElement('button'); pb.className='tbtn'; pb.dataset.sb='paste'; pb.textContent=T('붙여넣기'); b.appendChild(pb); } return; }
   b.className='selBar'; var e=selShape(), mem=selEls(s), bi=mem.length?buildIx(s,'e:'+mem[0].id):buildIx(s,selK), many=isMany(selK);
   var add=function(k,txt,dis){ var x=document.createElement('button'); x.className='tbtn'; x.dataset.sb=k; x.textContent=T(txt); if(dis) x.disabled=true; b.appendChild(x); return x; };
@@ -706,33 +707,36 @@ function setFont(f){ if(deck.font===f) return; blurEdit(); pushUndo(); deck.font
 function trOf(s){ return s&&s.tr||deck.trans; }
 function setTrans(t){ var s=deck.slides[cur]; if(!s) return; var v=t===deck.trans?'':t; if(s.tr===v) return; pushUndo(); s.tr=v; saveSoon(); }
 function setTransAll(){ var t=trOf(deck.slides[cur]); pushUndo(); deck.trans=t; deck.slides.forEach(function(x){ x.tr=''; }); saveSoon(); }
-function drawOptMenu(){ var m=$('optMenu'), s=deck.slides[cur]; m.innerHTML=''; if(!s) return;
+/* part: '' = the whole menu, 'bg' / 'font' / 'tr' = only that section (the Design and Present tabs open those) */
+function drawOptMenu(part){ var m=$('optMenu'), s=deck.slides[cur]; m.innerHTML=''; if(!s) return; part=part||'';
   var add=function(k,txt,on,dis){ var b=document.createElement('button'); b.dataset.o=k; b.textContent=(on?'✓ ':'')+T(txt); if(dis) b.disabled=true; m.appendChild(b); return b; };
   var hd=function(txt){ var d=document.createElement('div'); d.className='mh'; d.textContent=T(txt); m.appendChild(d); };
-  add('hide',s.hide?'숨긴 슬라이드 보이기 (H)':'발표할 때 건너뛰기 (H)');
+  var ci=document.createElement('input'), tr=trOf(s), hr=function(){ if(m.firstChild) m.appendChild(document.createElement('hr')); };
+  if(!part){ add('hide',s.hide?'숨긴 슬라이드 보이기 (H)':'발표할 때 건너뛰기 (H)');
   if(s.layout==='table'||s.layout==='chart'){ add('data',s.layout==='chart'?'그래프 내용 고치기':'표 내용 고치기'); add('link',s.link?'시트 연결 바꾸기':'프라이 시트에서 가져오기 (연결)'); if(s.link){ add('relink','지금 새로 고침'); add('unlink','연결 끊기'); } }
   if(s.layout==='quiz') add('choices','실시간 퀴즈 보기 고치기…');
   if(s.layout==='live') add('live','살아있는 화면 고치기');
   add('auto',s.sec?(s.sec<0?'자동 넘기기: 이 슬라이드에서 멈춤':F('자동 넘기기: 이 슬라이드 {0}초',s.sec)):'자동 넘기기 시간…');
-  add('first','맨 앞으로 보내기',0,cur===0); add('last','맨 뒤로 보내기',0,cur===deck.slides.length-1);
-  m.appendChild(document.createElement('hr')); hd('이 슬라이드 배경색');
+  add('first','맨 앞으로 보내기',0,cur===0); add('last','맨 뒤로 보내기',0,cur===deck.slides.length-1); }
+  if(!part||part==='bg'){ hr(); hd('이 슬라이드 배경색');
   var row=document.createElement('div'); row.className='swr';
   BGS.forEach(function(c){ var b=document.createElement('button'); b.className='sw'+(s.bg===c?' on':''); b.dataset.o='bg:'+c; b.style.background=c; b.setAttribute('aria-label',c); row.appendChild(b); });
-  var ci=document.createElement('input'); ci.type='color'; ci.id='bgIn'; ci.value=s.bg||'#ffffff'; ci.title=T('직접 고르기'); ci.setAttribute('aria-label',T('직접 고르기')); row.appendChild(ci);
-  m.appendChild(row); add('bg:','테마 배경으로 되돌리기',0,!s.bg);
-  m.appendChild(document.createElement('hr')); hd('글꼴 (모든 슬라이드)');
-  FONTS.forEach(function(f){ add('font:'+f[0],f[1],deck.font===f[0]); });
-  m.appendChild(document.createElement('hr')); hd('넘어가는 효과 (이 슬라이드)');
-  var tr=trOf(s); TRANS.forEach(function(t){ add('tr:'+t[0],t[1],tr===t[0]); });
-  add('trAll','모든 슬라이드에 같은 효과',0,deck.trans===tr&&deck.slides.every(function(x){ return !x.tr; }));
+  ci.type='color'; ci.id='bgIn'; ci.value=s.bg||'#ffffff'; ci.title=T('직접 고르기'); ci.setAttribute('aria-label',T('직접 고르기')); row.appendChild(ci);
+  m.appendChild(row); add('bg:','테마 배경으로 되돌리기',0,!s.bg); }
+  if(!part||part==='font'){ hr(); hd('글꼴 (모든 슬라이드)');
+  FONTS.forEach(function(f){ add('font:'+f[0],f[1],deck.font===f[0]); }); }
+  if(!part||part==='tr'){ hr(); hd('넘어가는 효과 (이 슬라이드)');
+  TRANS.forEach(function(t){ add('tr:'+t[0],t[1],tr===t[0]); });
+  add('trAll','모든 슬라이드에 같은 효과',0,deck.trans===tr&&deck.slides.every(function(x){ return !x.tr; })); }
   ci.addEventListener('input',function(){ var s=deck.slides[cur]; if(s){ s.bg=ci.value; updateThumb(cur); drawMain(); saveSoon(); } });
   ci.addEventListener('change',function(){ closeMenus(); });
   ci.addEventListener('pointerdown',function(){ if(!ci._u){ ci._u=1; pushUndo(); } });
 }
 $('optBtn').onclick=function(){ if(!deck.slides.length) return; blurEdit(); drawOptMenu(); openMenu($('optMenu'),this); };
-$('optMenu').addEventListener('click',function(e){ var b=e.target.closest('[data-o]'); if(!b||b.disabled) return; var k=b.dataset.o; closeMenus();
+$('optMenu').addEventListener('click',function(e){ var b=e.target.closest('[data-o]'); if(!b||b.disabled) return; closeMenus(); optAct(b.dataset.o); });
+function optAct(k){
   if(k==='hide') toggleHide(); else if(k==='data') openData(); else if(k==='link') openLink(); else if(k==='relink') refreshSlideLink(); else if(k==='unlink') unlinkSlide(); else if(k==='choices') openChoices(); else if(k==='live') openLive(); else if(k==='auto') openAuto(); else if(k==='first') moveSlide(cur,0); else if(k==='last') moveSlide(cur,deck.slides.length-1);
-  else if(k.indexOf('bg:')===0) setBg(k.slice(3)); else if(k.indexOf('font:')===0) setFont(k.slice(5)); else if(k.indexOf('tr:')===0){ setTrans(k.slice(3)); toast(T('저장했어요')); } else if(k==='trAll'){ setTransAll(); toast(T('모든 슬라이드에 같은 효과를 넣었어요')); } });
+  else if(k.indexOf('bg:')===0) setBg(k.slice(3)); else if(k.indexOf('font:')===0) setFont(k.slice(5)); else if(k.indexOf('tr:')===0){ setTrans(k.slice(3)); toast(T('저장했어요')); } else if(k==='trAll'){ setTransAll(); toast(T('모든 슬라이드에 같은 효과를 넣었어요')); } }
 
 /* table and chart data: one text box, the slide draws it */
 function openData(){ var s=deck.slides[cur]; if(!s||(s.layout!=='table'&&s.layout!=='chart')||gen||busyOn) return; var ch=s.layout==='chart'; blurEdit();
@@ -961,7 +965,7 @@ function openMenu(m,btn){ closeMenus(); var r=btn.getBoundingClientRect(); m.cla
   var w=m.offsetWidth, h=m.offsetHeight, x=Math.min(r.left,innerWidth-w-8), y=r.bottom+6; if(y+h>innerHeight-8) y=Math.max(8,r.top-h-6);
   m.style.left=Math.max(8,x)+'px'; m.style.top=y+'px'; }
 function closeMenus(){ document.querySelectorAll('.menu.open').forEach(function(m){ m.classList.remove('open'); }); }
-document.addEventListener('pointerdown',function(e){ if(!e.target.closest('.menu')&&!e.target.closest('#deckBtn,#aiBtn,#themeBtn,#optBtn')) closeMenus(); },true);
+document.addEventListener('pointerdown',function(e){ if(!e.target.closest('.menu')&&!e.target.closest('.rb[data-menu]')) closeMenus(); },true);
 $('deckBtn').onclick=function(){ blurEdit(); drawDeckList(); drawDeckMenu(); openMenu($('deckMenu'),this); };
 $('themeBtn').onclick=function(){ blurEdit(); openMenu($('themeMenu'),this); themeCards($('themeList'),function(id){ setTheme(id); },.1); };
 function when(t){ var d=new Date(t); return (d.getMonth()+1)+'/'+d.getDate()+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2); }
@@ -970,7 +974,7 @@ function drawDeckList(){ var l=$('deckList'); l.innerHTML='';
     var b=document.createElement('button'); b.className='doc'+(d===deck?' on':''); b.setAttribute('data-notr','');
     b.innerHTML='<span></span><small></small>'; b.firstChild.textContent=(d===deck?'● ':'')+(d.name||T('이름 없음')); b.lastChild.textContent=F('{0}장',d.slides.length)+' · '+when(d.t);
     b.onclick=function(){ closeMenus(); if(d===deck||gen) return; saveNow(); openDeck(d); }; l.appendChild(b); }); }
-function drawDeckMenu(){ var m=$('deckMenu'); m.querySelector('[data-d="nums"]').textContent=deck.nums?T('슬라이드 번호 끄기'):T('슬라이드 번호 켜기'); m.querySelector('[data-d="footer"]').textContent=deck.footer?T('바닥글 고치기'):T('바닥글 쓰기'); }
+function drawDeckMenu(){}
 function newDeckAction(){ saveNow(); if(!deck.slides.length&&isDefaultName(deck.name)){ deck.topic=''; deck.aud=''; refresh(); } else openDeck(newDeck()); $('topic').focus(); }
 function renameDeck(d){ ask(T('이름 바꾸기'),'',T('발표 자료 이름'),T('확인'),d.name).then(function(v){ if(!v) return; d.name=v; if(d===deck) $('deckName').value=v; saveNow(); drawMgr(); }); }
 function deleteDeck(d){ confirmDlg(F('"{0}" 발표 자료를 지울까요? 되돌릴 수 없어요.',d.name||T('이름 없음'))).then(function(ok){ if(!ok) return;
@@ -993,7 +997,9 @@ $('mgrBtn').onclick=function(){ if(gen) return toast(T('AI가 다 만들 때까�
 $('delDeckBtn').onclick=function(){ if(gen) return toast(T('AI가 다 만들 때까지 기다려 주세요')); blurEdit(); deleteDeck(deck); };
 $('mgrNew').onclick=function(){ if(gen) return toast(T('AI가 다 만들 때까지 기다려 주세요')); closeDlg('mgrDlg',null); newDeckAction(); };
 $('deckMenu').addEventListener('click',function(e){
-  var b=e.target.closest('[data-d]'); if(!b) return; closeMenus(); var k=b.dataset.d;
+  var b=e.target.closest('[data-d]'); if(!b) return; closeMenus(); deckAct(b.dataset.d); });
+/* the deck commands (the ribbon's File, Insert and Design tabs and the command search use them too) */
+function deckAct(k){
   if(k==='keys') return showKeys();
   if(gen&&k!=='print'&&k!=='md') return toast(T('AI가 다 만들 때까지 기다려 주세요'));
   if(k==='new') newDeckAction();
@@ -1010,7 +1016,7 @@ $('deckMenu').addEventListener('click',function(e){
   else if(k==='csv') openCsv();
   else if(k==='md') exportMD();
   else if(k==='del') deleteDeck(deck);
-});
+}
 var dlgRes=null;
 function openDlg(id){ $(id).classList.add('open'); }
 function closeDlg(id,v){ $(id).classList.remove('open'); var f=dlgRes; dlgRes=null; if(f) f(v); }
@@ -1223,7 +1229,7 @@ TPLS.forEach(function(tp){ var b=document.createElement('button'); b.textContent
   if(isDefaultName(deck.name)) deck.name=T(tp.title); $('deckName').value=deck.name; cur=0; refresh(); saveNow(); }; $('tplChips').appendChild(b); });
 
 /* ---------- shortcut sheet ---------- */
-var KEYS=[['Ctrl+Z / Ctrl+Shift+Z','되돌리기 · 다시 하기'],['↑ ↓ ← →','슬라이드 이동'],['Ctrl+D','슬라이드 복제'],['Ctrl+Enter','새 슬라이드 넣기'],['Ctrl+C · Ctrl+V','고른 도형 복사 · 붙여넣기'],['Ctrl+G · Ctrl+Shift+G','고른 도형 묶기 · 풀기'],['Ctrl+] · Ctrl+[','도형을 한 칸 앞으로 · 뒤로 (Shift: 맨 앞 · 맨 뒤)'],['Ctrl+A','도형 모두 고르기'],['Shift + Click · Drag','여러 도형 고르기 (Shift+누르기 · 빈 곳 끌기)'],['Alt+↑ Alt+↓','슬라이드 순서 바꾸기'],['H','발표할 때 건너뛰기 켜고 끄기'],['Delete','슬라이드 지우기'],['Home End','첫·마지막 슬라이드'],['Ctrl+Alt+N','새 슬라이드 쇼 만들기'],['F5','처음부터 발표'],['Shift+F5','지금 슬라이드부터 발표'],['?','이 단축키 목록'],['← ↑ → ↓','(고른 상자) 조금씩 옮기기 · Shift는 크게'],['Delete','(고른 도형·그림) 지우기'],['Shift + 끌기','(도형) 비율 지키기 · 선은 45도씩'],
+var KEYS=[['Ctrl+Z / Ctrl+Shift+Z','되돌리기 · 다시 하기'],['↑ ↓ ← →','슬라이드 이동'],['Ctrl+D','슬라이드 복제'],['Ctrl+Enter','새 슬라이드 넣기'],['Ctrl+C · Ctrl+V','고른 도형 복사 · 붙여넣기'],['Ctrl+G · Ctrl+Shift+G','고른 도형 묶기 · 풀기'],['Ctrl+] · Ctrl+[','도형을 한 칸 앞으로 · 뒤로 (Shift: 맨 앞 · 맨 뒤)'],['Ctrl+A','도형 모두 고르기'],['Shift + Click · Drag','여러 도형 고르기 (Shift+누르기 · 빈 곳 끌기)'],['Alt+↑ Alt+↓','슬라이드 순서 바꾸기'],['H','발표할 때 건너뛰기 켜고 끄기'],['Delete','슬라이드 지우기'],['Home End','첫·마지막 슬라이드'],['Ctrl+Alt+N','새 슬라이드 쇼 만들기'],['F5','처음부터 발표'],['Shift+F5','지금 슬라이드부터 발표'],['?','이 단축키 목록'],['Ctrl+K','기능 찾기'],['← ↑ → ↓','(고른 상자) 조금씩 옮기기 · Shift는 크게'],['Delete','(고른 도형·그림) 지우기'],['Shift + 끌기','(도형) 비율 지키기 · 선은 45도씩'],
   ['→ Space Enter','(발표) 다음'],['← Backspace','(발표) 이전'],['Home End','(발표) 처음 · 끝'],['S','(발표) 발표자 메모 보기'],['V','(발표) 발표자 화면 새 창으로 열기'],['L','(발표) 레이저 포인터'],['D · M · E','(발표) 펜 · 형광펜 · 낙서 지우기'],['X','(발표) 지우개 (닿은 줄을 지워요)'],['W','(발표) 칠판 켜고 끄기'],['K','(발표) 자동 넘기기 멈춤 · 이어가기'],['B','(발표) 화면 끄기'],['숫자 + Enter','(발표) 그 번호 슬라이드로'],['A','(발표) 퀴즈 정답 보기'],['Q','(발표) 실시간 퀴즈 열기 · 숨기기'],['T','(발표) 타이머 멈춤·다시'],['Esc','(발표) 나가기']];
 function showKeys(){ var b=$('keysBody'); b.innerHTML=''; KEYS.forEach(function(k){ var r=document.createElement('div'); r.className='kr'; var a=document.createElement('kbd'); a.textContent=k[0]; var t=document.createElement('span'); t.textContent=T(k[1]); r.appendChild(a); r.appendChild(t); b.appendChild(r); }); openDlg('keysDlg'); }
 
@@ -1748,6 +1754,19 @@ window.FSL={
   pushSlide:function(s){ deck.slides.push(fixSlide(s)); cur=deck.slides.length-1; refresh(); saveSoon(); },
   putSlide:function(i,s){ var o=deck.slides[i]; if(!o) return; s=fixSlide(s); s.id=o.id; s.img=o.img; s.iw=o.iw; s.ih=o.ih; s.hide=o.hide; s.bg=o.bg; s.data=o.data; s.ctype=o.ctype; s.pos=o.pos; s.els=o.els; s.build=o.build; s.tr=o.tr; s.sec=o.sec; s.ish=o.ish; s.ibc=o.ibc; s.ibw=o.ibw; deck.slides[i]=s; if(i===cur) drawMain(); updateThumb(i); saveSoon(); },
   insertSlide:function(i,s){ deck.slides.splice(i,0,fixSlide(s)); cur=i; refresh(); saveSoon(); }
+};
+/* used by ribbon.js (the tabs and the command search) */
+window.FSLC={
+  state:function(){ var s=deck&&deck.slides[cur], sh=selShape(), n=s?selEls(s).length:0, busy=gen||busyOn;
+    return {slide:!!s, busy:busy, gen:gen, editor:!$('editor').hidden, pres:pr.on, lay:s?s.layout:'', ai:!!s&&AILAYS.indexOf(s.layout)>=0, hide:!!(s&&s.hide), link:!!(s&&s.link),
+      sel:!!(s&&selK), nSel:n, group:selK==='m'&&n>=2, ungroup:isMany(selK)&&selK!=='m'&&n>0, shape:!!sh, line:!!(sh&&isLine(sh)), clip:!!readClip(), nums:!!(deck&&deck.nums), footer:!!(deck&&deck.footer), master:!!(deck&&deck.master&&deck.master.on), auto:!!(deck&&deck.auto&&deck.auto.on)}; },
+  deck:deckAct, opt:optAct,
+  optMenu:function(part,btn){ if(!deck.slides.length||gen||busyOn) return; blurEdit(); drawOptMenu(part); openMenu($('optMenu'),btn); },
+  elMenu:function(kind,btn){ if(!deck.slides[cur]||gen||busyOn) return; blurEdit(); drawElMenu(kind); openMenu($('elMenu'),btn); },
+  addShape:addShape, group:groupSel, ungroup:ungroupSel, copy:copySel, paste:function(){ pasteEl(); }, present:function(here){ present(here?cur:0); },
+  live:function(){ var s=deck.slides[cur]; if(!s||gen||busyOn) return; if(s.layout==='live') openLive(); else { addSlide('live'); openLive(); } },
+  setLayout:function(l){ setLayout(l); $('laySel').value=deck.slides[cur]?deck.slides[cur].layout:l; },
+  rename:function(){ var n=$('deckName'); n.focus(); n.select(); }
 };
 window.__fsl={get lq(){ return lq; }, quizChoices:quizChoices, quizOk:quizOk, syncLinks:syncLinks, gridData:gridData, shareEncode:shareEncode, shareDecode:shareDecode, shareJSON:shareJSON, get deck(){ return deck; }, get store(){ return store; }, get cur(){ return cur; }, select:select, present:present, exitPresent:exitPresent, get pr(){ return pr; }, buildPPTX:buildPPTX, prepPics:prepPics, needPPTX:needPPTX, measure:measure, undo:doUndo, redo:doRedo, moveSlide:moveSlide};
 })();
