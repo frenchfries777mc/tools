@@ -226,8 +226,8 @@ button,input,select,textarea{font:inherit; color:inherit;}
 #slideHost.dragging{cursor:grabbing;} #slideHost.dragging .sl.edit .fld:hover{box-shadow:none;}
 .sl .bn{position:absolute; left:0; top:0; z-index:5; min-width:calc(22px * var(--hk,1)); height:calc(22px * var(--hk,1)); padding:0 calc(5px * var(--hk,1)); border-radius:calc(11px * var(--hk,1)); background:#8a5ce0; color:#fff; font:700 calc(13px * var(--hk,1))/calc(22px * var(--hk,1)) system-ui,sans-serif; text-align:center; pointer-events:none;}
 .sl .bh{visibility:hidden;}
-.sl .b-fade{animation:bfade .5s ease both;} .sl .b-fly{animation:bfly .55s cubic-bezier(.2,.8,.25,1) both;}
-@keyframes bfade{from{opacity:0;}} @keyframes bfly{from{opacity:0; transform:translateY(90px);}}
+.animGrid{display:grid; grid-template-columns:1fr 1fr; gap:6px 12px;} .animGrid label.lab{margin-top:10px;} .animGrid .full{grid-column:1/-1;} .animPv{margin-top:14px;}
+@media(max-width:520px){ .animGrid{grid-template-columns:1fr;} }
 .selBar{position:absolute; left:8px; right:8px; bottom:6px; height:36px; display:flex; align-items:center; justify-content:center; gap:6px; overflow-x:auto; overflow-y:hidden; scrollbar-width:none; z-index:3;}
 .selBar::-webkit-scrollbar{display:none;}
 .selBar .tbtn{height:32px; padding:0 11px; font-size:13px; flex:0 0 auto;} .selBar .tbtn.on{border-color:#8a5ce0; color:#c9b3ff;} .selBar .tbtn.dang{color:#ff8b8b;}
@@ -533,12 +533,28 @@ body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body
     </div></div>
   <div class="dfoot"><button class="tbtn pri" data-close>닫기</button></div>
 </div></div>
+<div class="ov" id="animDlg"><div class="dlg" style="width:min(500px,100%)">
+  <div class="dh"><h3>나타나는 효과</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><p>발표할 때 고른 것이 어떻게 나타날지 정해요. 시작을 '앞의 것 다음에 저절로'로 하면 누르지 않아도 순서대로 나타나요.</p>
+    <div class="animGrid">
+      <div class="full"><label class="lab" for="animEf">효과</label><select class="fieldIn" id="animEf"></select></div>
+      <div><label class="lab" for="animDir">어느 쪽에서</label><select class="fieldIn" id="animDir"><option value="l">왼쪽에서</option><option value="r">오른쪽에서</option><option value="t">위에서</option><option value="b">아래에서</option></select></div>
+      <div><label class="lab" for="animM">시작</label><select class="fieldIn" id="animM"><option value="c">누를 때</option><option value="w">앞의 것과 함께</option><option value="a">앞의 것 다음에 저절로</option></select></div>
+      <div><label class="lab" for="animT">걸리는 시간 (초)</label><input class="fieldIn" id="animT" type="number" min="0.1" max="20" step="0.1" inputmode="decimal" data-notr></div>
+      <div><label class="lab" for="animW">기다렸다 시작 (초)</label><input class="fieldIn" id="animW" type="number" min="0" max="20" step="0.1" inputmode="decimal" data-notr placeholder="0"></div>
+    </div>
+    <p id="animHint" style="margin-top:10px;font-size:13px"></p>
+    <button class="tbtn animPv" id="animPv">▶ 미리 보기</button></div>
+  <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="animOk">확인</button></div>
+</div></div>
 <div class="ov" id="auDlg"><div class="dlg" style="width:min(460px,100%)">
   <div class="dh"><h3>자동 넘기기</h3><button class="x" data-close aria-label="닫기">×</button></div>
   <div class="dbody"><p>정한 시간이 지나면 발표 화면이 저절로 다음으로 넘어가요. 위쪽 막대가 남은 시간을 보여 주고, ⏸ 단추나 K 키로 멈췄다가 이어갈 수 있어요. 직접 넘기면 시간이 처음부터 다시 가요.</p>
     <label class="csvChk"><input type="checkbox" id="auOn"> 자동 넘기기 켜기</label>
     <label class="lab" for="auSec" style="margin-top:12px">슬라이드마다 기다리는 시간 (초)</label><input class="fieldIn" id="auSec" type="number" min="1" max="600" inputmode="numeric" data-notr>
     <label class="csvChk" style="margin-top:12px"><input type="checkbox" id="auLoop"> 끝나면 처음부터 다시 (반복)</label>
+    <label class="csvChk" style="margin-top:12px"><input type="checkbox" id="auBld"> 나타나는 효과도 저절로 (누르지 않아도 차례로 나타나요)</label>
+    <label class="lab" for="auBldOne" style="margin-top:14px"><span id="auBn" data-notr></span> 나타나는 효과</label><select class="fieldIn" id="auBldOne"><option value="0">덱 설정 따르기</option><option value="1">이 슬라이드는 저절로</option><option value="-1">이 슬라이드는 눌러서</option></select>
     <label class="lab" for="auOne" style="margin-top:14px"><span id="auNo" data-notr></span> (초, 비우면 위의 시간 · 0이면 여기서 멈춤)</label><input class="fieldIn" id="auOne" type="number" min="0" max="3600" inputmode="numeric" data-notr>
     <p style="margin-top:10px;font-size:13px">나타나는 효과(차례로 나타나기)나 퀴즈 정답이 있으면 그 시간을 나눠서 하나씩 보여 줘요. 타이머·살아있는 화면 슬라이드는 따로 시간을 정하기 전에는 멈춰 있어요.</p></div>
   <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="auOk">확인</button></div>
@@ -692,7 +708,7 @@ body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body
 <script src="qr.js"></script>
 <script src="lq-net.js"></script>
 <script src="ribbon.js"></script>
-<script src="app.js?v=s22"></script>
+<script src="app.js?v=s24"></script>
 <script src="collab.js?v=s22"></script>
 <script src="ai-slides.js"></script>
 </body>

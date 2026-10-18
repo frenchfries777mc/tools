@@ -105,9 +105,12 @@ function deco(th,lay){
 /* ---------- deck data ---------- */
 function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
 /* sec: seconds before auto-advance when presenting (0 = the deck's, -1 = stay), ish/ibc/ibw: the picture's shape (rect | round | ell | heart | star | diamond | hex | tri | arch), border colour and width. g (on a shape): group id
-   pos: boxes moved or resized by hand ({field: {x,y,w,h}}), els: shapes, build: what appears one by one when presenting ([{k,a,l}] in order; l: a list shows one line per press), tr: this slide's transition ('' = the deck's) */
+   pos: boxes moved or resized by hand ({field: {x,y,w,h}}), els: shapes, build: what appears one by one when presenting ([{k,a,l,d,t,w,m}] in order; l: a list shows one line per press; d t w m: direction, seconds, delay, start mode), bld: 1/-1 = this slide's appear effects play by themselves / not (0 = the deck's), tr: this slide's transition ('' = the deck's) */
 function blank(lay){ return {id:uid(), layout:lay||'bullets', title:'', subtitle:'', bullets:[], left:[], right:[], leftTitle:'', rightTitle:'', stat:'', caption:'', quote:'', by:'', notes:'', img:'', iw:0, ih:0, data:'', ctype:'bar', bg:'', live:'', hide:false, pos:{}, els:[], build:[], tr:'', sec:0, ish:'rect', ibc:'', ibw:0, link:null, choices:[], qok:-1}; }
-var SHK=['rect','round','ell','tri','star','line','arrow'], ISH=['rect','round','ell','heart','star','diamond','hex','tri','arch'], ANIMS=['fade','fly'], TRS=['fade','slide','zoom','none'];
+var SHK=['rect','round','ell','tri','star','line','arrow'], ISH=['rect','round','ell','heart','star','diamond','hex','tri','arch'], ANIMS=['fade','fly','zoom','shrink','spin','bounce','shake','wipe','blur','flip','unfold','type','pulse','drop'], TRS=['fade','slide','zoom','none'];
+/* appear effects: [id, label, has a direction, default seconds, default direction]; a build item is {k,a,l, d: direction it comes from (l r t b), t: seconds, w: delay seconds, m: 'w' with the one before / 'a' right after it (self-starting), none = on press} */
+var FX=[['fade','서서히 나타나기',0,.9,''],['fly','날아 들어오기',1,.9,'b'],['zoom','확대하며 나타나기',0,.8,''],['shrink','축소하며 나타나기',0,.8,''],['spin','회전하며 나타나기',0,1.1,''],['bounce','튀어 오르기',1,1.3,'b'],['shake','흔들며 나타나기',0,1,''],['wipe','닦아내기',1,.9,'l'],['blur','흐림에서 선명하게',0,1.1,''],['flip','뒤집기',1,.9,'l'],['unfold','펼치기',1,.9,'t'],['type','글자 하나씩',0,0,''],['pulse','번쩍이며 강조',0,1,''],['drop','위에서 떨어지기',0,1.1,'']], BDIRS=['l','r','t','b'];
+function fxOf(a){ for(var i=0;i<FX.length;i++) if(FX[i][0]===a) return FX[i]; return FX[0]; }
 function num(v,d,lo,hi){ v=+v; return isFinite(v)?Math.max(lo,Math.min(hi,Math.round(v))):d; }
 function fixCol(v,d){ v=v==null?d:String(v); return v===''||v==='ac'||v==='fg'||/^#[0-9a-f]{6}$/i.test(v)?v:d; }
 function isLine(e){ return e.k==='line'||e.k==='arrow'; }
@@ -126,7 +129,8 @@ function fixSlide(s){ var b=blank(); s=s&&typeof s==='object'?s:{};
   s.pos=fixPos(s.pos); var ids={}; s.els=(Array.isArray(s.els)?s.els:[]).slice(0,80).map(fixEl).filter(function(e){ if(!e||ids[e.id]) return false; ids[e.id]=1; return true; });
   var gc={}; s.els.forEach(function(e){ if(e.g) gc[e.g]=(gc[e.g]||0)+1; }); s.els.forEach(function(e){ if(e.g&&gc[e.g]<2) e.g=''; }); // a group needs two shapes
   s.sec=num(s.sec,0,-1,3600); if(ISH.indexOf(s.ish)<0) s.ish='rect'; s.ibc=fixCol(s.ibc,''); s.ibw=num(s.ibw,0,0,40);
-  var seen={}; s.build=(Array.isArray(s.build)?s.build:[]).filter(function(b){ if(!b||typeof b.k!=='string'||ANIMS.indexOf(b.a)<0||seen[b.k]) return false; seen[b.k]=1; return true; }).slice(0,80).map(function(b){ var o={k:b.k, a:b.a}; if(b.l&&LISTS.indexOf(b.k)>=0) o.l=1; return o; });
+  var seen={}; s.build=(Array.isArray(s.build)?s.build:[]).filter(function(b){ if(!b||typeof b.k!=='string'||ANIMS.indexOf(b.a)<0||seen[b.k]) return false; seen[b.k]=1; return true; }).slice(0,80).map(function(b){ var o={k:b.k, a:b.a}; if(b.l&&LISTS.indexOf(b.k)>=0) o.l=1; if(BDIRS.indexOf(b.d)>=0) o.d=b.d; var bt=+b.t, bw=+b.w; if(bt>0) o.t=Math.round(Math.min(20,Math.max(.1,bt))*10)/10; if(bw>0) o.w=Math.round(Math.min(20,bw)*10)/10; if(b.m==='w'||b.m==='a') o.m=b.m; return o; });
+  s.bld=s.bld===1||s.bld===-1?s.bld:0;
   if(TRS.indexOf(s.tr)<0) s.tr='';
   s.link=fixLink(s.link); s.choices=(Array.isArray(s.choices)?s.choices:[]).map(function(x){ return String(x==null?'':x).replace(/\s+/g,' ').trim().slice(0,80); }).filter(Boolean).slice(0,6); s.qok=num(s.qok,-1,-1,5);
   return s; }
@@ -135,7 +139,7 @@ function newDeck(){ return {id:uid(), name:T('새 발표 자료'), theme:'light'
 var MPOS=['tl','tr','bl','br'], APOS=['l','c','r'], LSZ={sm:44, md:68, lg:104};
 function fixMaster(m){ m=m&&typeof m==='object'?m:{}; var lg=typeof m.logo==='string'&&/^data:image\//.test(m.logo)?m.logo:'';
   return {on:m.on!==false, logo:lg, lw:lg?num(m.lw,100,1,4000):0, lh:lg?num(m.lh,100,1,4000):0, lpos:MPOS.indexOf(m.lpos)>=0?m.lpos:'tr', lsz:LSZ[m.lsz]?m.lsz:'md', fpos:APOS.indexOf(m.fpos)>=0?m.fpos:'l', npos:APOS.indexOf(m.npos)>=0?m.npos:'r', ttl:!!m.ttl}; }
-function fixAuto(a){ a=a&&typeof a==='object'?a:{}; return {on:!!a.on, sec:num(a.sec,10,1,600), loop:!!a.loop}; }
+function fixAuto(a){ a=a&&typeof a==='object'?a:{}; return {on:!!a.on, sec:num(a.sec,10,1,600), loop:!!a.loop, bld:!!a.bld}; }
 function fixDeck(d){ d.slides=(Array.isArray(d.slides)?d.slides:[]).map(fixSlide); d.theme=themeOf(d.theme).id; d.name=String(d.name||T('새 발표 자료')); d.nums=!!d.nums; d.footer=String(d.footer||''); d.font=FONTS.some(function(f){ return f[0]===d.font; })?d.font:''; d.trans=['fade','slide','zoom','none'].indexOf(d.trans)<0?'fade':d.trans; d.master=fixMaster(d.master); d.auto=fixAuto(d.auto); d.co=d.co&&typeof d.co==='object'&&/^[0-9a-f-]{36}$/i.test(String(d.co.id))?{id:String(d.co.id), rev:num(d.co.rev,0,0,1e9), own:!!d.co.own}:null; if(!d.t) d.t=Date.now(); return d; }
 function loadStore(){ var o=null; try{ o=JSON.parse(localStorage.getItem(LS)||'null'); }catch(e){}
   /* older saves: a single deck object, or a bare array of decks, become the first entries of the list */
@@ -203,14 +207,15 @@ function slideEl(s,th,edit,opt){
   });
   shp(false);
   /* builds: in the editor a small number shows the order; when presenting (opt.step) the ones not reached yet are hidden */
-  var nb=0; s.build.forEach(function(bd){ var e=el.querySelector('[data-bk="'+bd.k+'"]'); if(!e) return;
+  var nb=0, bauto=s.bld===1||(s.bld!==-1&&deck.auto&&deck.auto.bld), bset=function(e,bd,j){ e.dataset.ba=bd.a; e.dataset.bdr=bd.d||fxOf(bd.a)[4]; e.dataset.bt=bd.t||0; e.dataset.bw=bd.w||0; e.dataset.bm=bauto?'a':j?(bd.m?'a':'c'):(bd.m||'c'); };
+  s.build.forEach(function(bd){ var e=el.querySelector('[data-bk="'+bd.k+'"]'); if(!e) return;
     /* a list built line by line: every line is its own step, the box itself stays */
     var lis=bd.l&&LISTS.indexOf(bd.k)>=0&&!empty(s,bd.k)?e.querySelectorAll('li'):[];
-    if(lis.length){ [].forEach.call(lis,function(li,j){ li.dataset.bi=nb+j; li.dataset.ba=bd.a; if(!edit&&opt.step!=null&&nb+j>=opt.step) li.classList.add('bh'); });
+    if(lis.length){ [].forEach.call(lis,function(li,j){ li.dataset.bi=nb+j; bset(li,bd,j); if(!edit&&opt.step!=null&&nb+j>=opt.step) li.classList.add('bh'); });
       if(edit){ var n2=document.createElement('span'); n2.className='bn'; n2.textContent=(nb+1)+(lis.length>1?'–'+(nb+lis.length):''); n2.title=T('줄마다 한 번씩 눌러서 나타나요'); e.appendChild(n2); }
       nb+=lis.length; return; }
-    e.dataset.bi=nb; e.dataset.ba=bd.a;
-    if(edit){ var n=document.createElement('span'); n.className='bn'; n.textContent=nb+1; n.title=T(bd.a==='fly'?'날아 들어오기':'서서히 나타나기'); e.appendChild(n); }
+    e.dataset.bi=nb; bset(e,bd,0);
+    if(edit){ var n=document.createElement('span'); n.className='bn'; n.textContent=nb+1; n.title=T(fxOf(bd.a)[1]); e.appendChild(n); }
     else if(opt.step!=null&&nb>=opt.step) e.classList.add('bh');
     nb++; }); el.dataset.nb=nb;
   if(opt.hint&&s.layout==='live'&&liveCfg(s)){ var hn=document.createElement('div'); hn.className='liveHint'; hn.innerHTML='<span class="h1"></span><span class="h2"></span>'; hn.firstChild.textContent='👆 '+T('iframe 안에서 누르기 / Esc'); hn.lastChild.textContent=T('Esc: 슬라이드 넘기기로 돌아가기'); el.appendChild(hn); }
@@ -587,7 +592,8 @@ function editShapeText(k){ if(selK!==k) setSel(k); var e=selShape(), inn=host.qu
 function nudge(dx,dy){ var s=deck.slides[cur], r=s&&selK&&keyBox(s,selK); if(!r) return; if(Date.now()-nudgeT>900) pushUndo(); nudgeT=Date.now(); r.x+=dx; r.y+=dy; putBox(s,selK,r); saveSoon(); thumbSoon(cur); drawMain(); }
 function delSel(){ var s=deck.slides[cur], a=selEls(s); if(!s||!selK) return;
   if(a.length){ pushUndo(); var ks=a.map(function(e){ return 'e:'+e.id; }); s.els=s.els.filter(function(e){ return a.indexOf(e)<0; }); s.build=s.build.filter(function(b){ return ks.indexOf(b.k)<0; }); selK=null; selM=[]; changed(); toast(T('도형을 지웠어요')); }
-  else if(selK==='img'&&s.img){ pushUndo(); s.img=''; s.iw=s.ih=0; changed(true); } }
+  else if(selK==='img'&&s.img){ pushUndo(); s.img=''; s.iw=s.ih=0; changed(true); }
+  else if(selK==='live'&&liveCfg(s)){ pushUndo(); s.live=''; selK=null; changed(true); toast(T('살아있는 화면을 지웠어요')); } }
 
 /* ---------- shapes, builds and the bar of the picked box ---------- */
 var SWC=['#ffffff','#111111','#3d7fe0','#ff8a3d','#2fb27a','#e0526b','#8a5ce0','#ffc93c'];
@@ -687,7 +693,7 @@ function drawElMenu(kind){ var m=$('elMenu'), s=deck.slides[cur], e=selShape(), 
     pc.addEventListener('change',function(){ closeMenus(); });
     m.appendChild(document.createElement('hr')); hd('굵기'); [0,3,6,10,16].forEach(function(w){ add('pw:'+w,w?F('{0}px',w):'없음',s.ibw===w&&(w===0||!!s.ibc)); }); return; }
   if(kind==='anim'){ var i=buildIx(s,selKeys(s)[0]), a=i>=0?s.build[i].a:'none'; hd('발표할 때 누를 때마다 하나씩 나타나요');
-    add('an:none','효과 없음 (처음부터 보이기)',a==='none'); add('an:fade','서서히 나타나기',a==='fade'); add('an:fly','날아 들어오기',a==='fly');
+    add('an:none','효과 없음 (처음부터 보이기)',a==='none'); add('an:fade','서서히 나타나기',a==='fade'); add('an:fly','날아 들어오기',a==='fly'); add('an:set',a==='none'||a==='fade'||a==='fly'?'더 많은 효과 · 방향 · 시간 · 자동 재생 설정…':F('{0} · 방향 · 시간 · 자동 재생 설정…',fxOf(a)[1]));
     if(selKeys(s).length===1&&LISTS.indexOf(selKeys(s)[0])>=0){ m.appendChild(document.createElement('hr')); add('an:lines','줄마다 한 번씩 누르기',i>=0&&!!s.build[i].l); }
     if(i>=0&&selKeys(s).length===1){ m.appendChild(document.createElement('hr')); hd(F('{0}번째로 나타나요 (모두 {1}개)',i+1,s.build.length)); add('an:up','더 먼저 나타나기',0,i===0); add('an:down','더 나중에 나타나기',0,i===s.build.length-1); }
     return; }
@@ -726,6 +732,7 @@ $('elMenu').addEventListener('click',function(ev){ var b=ev.target.closest('[dat
   if(k.indexOf('pc:')===0){ closeMenus(); if(s.ibc===k.slice(3)) return; pushUndo(); s.ibc=k.slice(3); if(s.ibc&&!s.ibw) s.ibw=6; changed(); return; }
   if(k.indexOf('pw:')===0){ closeMenus(); var w=+k.slice(3); pushUndo(); s.ibw=w; if(w&&!s.ibc) s.ibc='fg'; changed(); return; }
   if(k==='an:up'||k==='an:down'){ moveBuild(k==='an:up'?-1:1); drawElMenu('anim'); return; }
+  if(k==='an:set'){ closeMenus(); return openAnim(); }
   if(k==='an:lines'){ closeMenus(); return setLines(); }
   if(k.indexOf('an:')===0){ closeMenus(); return setAnim(k.slice(3)); }
   if(!e||!s) return; closeMenus(); pushUndo();
@@ -1107,9 +1114,26 @@ $('maNum').onchange=function(){ maPush(); deck.nums=this.checked; maApply(); }; 
 var maT=null; $('maFoot').addEventListener('input',function(){ maPush(); deck.footer=this.value; drawMain(); saveSoon(); clearTimeout(maT); maT=setTimeout(drawList,300); });
 $('maFoot').addEventListener('keydown',function(e){ e.stopPropagation(); if(e.key==='Enter'||e.key==='Escape'){ e.preventDefault(); closeDlg('maDlg',null); } });
 /* ---------- auto-advance: per deck (on, seconds, loop) and per slide (s.sec) ---------- */
-function openAuto(){ if(!deck.slides.length||gen||busyOn) return; blurEdit(); closeMenus(); var a=deck.auto, s=deck.slides[cur]; $('auOn').checked=a.on; $('auSec').value=a.sec; $('auLoop').checked=a.loop; $('auOne').value=s.sec>0?s.sec:s.sec<0?0:'';
+/* the appear-effect box: effect, direction, time, delay and start mode of the picked items */
+var animKs=[];
+function animSync(){ var f=fxOf($('animEf').value), hasD=!!f[2]; $('animDir').disabled=!hasD; $('animT').placeholder=f[0]==='type'?T('글자 수에 맞춰요'):String(f[3]);
+  $('animHint').textContent=T(f[0]==='type'?'글자가 하나씩 나타나요. 글이 없는 것은 닦아내기로 나타나요.':hasD?'':'이 효과는 방향이 없어요'); }
+function openAnim(){ var s=deck.slides[cur]; if(!s||!selK||gen||busyOn) return; blurEdit(); animKs=selKeys(s); if(!animKs.length) return;
+  var i=buildIx(s,animKs[0]), b=i>=0?s.build[i]:{a:'fade'}, ef=$('animEf');
+  if(!ef.options.length) FX.forEach(function(f){ var o=document.createElement('option'); o.value=f[0]; o.textContent=T(f[1]); ef.appendChild(o); });
+  ef.value=b.a; $('animDir').value=b.d||fxOf(b.a)[4]||'b'; $('animT').value=b.t||''; $('animW').value=b.w||''; $('animM').value=b.m||'c'; animSync(); openDlg('animDlg'); }
+function animRead(){ var a=$('animEf').value, f=fxOf(a), t=parseFloat($('animT').value), w=parseFloat($('animW').value); return {a:a, d:f[2]?$('animDir').value:'', t:t>0?Math.round(Math.min(20,Math.max(.1,t))*10)/10:0, w:w>0?Math.round(Math.min(20,w)*10)/10:0, m:$('animM').value}; }
+$('animEf').addEventListener('change',function(){ var f=fxOf($('animEf').value); if(f[2]&&f[4]) $('animDir').value=f[4]; animSync(); });
+$('animPv').onclick=function(){ var s=deck.slides[cur], node=s&&animKs[0]&&host.querySelector('[data-bk="'+animKs[0]+'"]'); if(!node) return; var o=animRead(); o.d=o.d||'b'; o.t=o.t||null; var r=fxPlay(node,0,{a:o.a,d:o.d,t:o.t,w:o.w});
+  if(o.a==='type') setTimeout(function(){ if(!$('present').classList.contains('on')) drawMain(); },r.end+150); };
+['animT','animW'].forEach(function(id){ $(id).addEventListener('keydown',function(e){ e.stopPropagation(); if(e.key==='Enter'){ e.preventDefault(); $('animOk').click(); } if(e.key==='Escape') closeDlg('animDlg',null); }); });
+$('animOk').onclick=function(){ var s=deck.slides[cur]; if(!s) return closeDlg('animDlg',null); var o=animRead(); pushUndo();
+  animKs.forEach(function(k){ var j=buildIx(s,k), b=j>=0?s.build[j]:null; if(!b){ b={k:k, a:o.a}; s.build.push(b); } b.a=o.a;
+    if(o.d) b.d=o.d; else delete b.d; if(o.t) b.t=o.t; else delete b.t; if(o.w) b.w=o.w; else delete b.w; if(o.m!=='c') b.m=o.m; else delete b.m; });
+  closeDlg('animDlg',null); changed(); };
+function openAuto(){ if(!deck.slides.length||gen||busyOn) return; blurEdit(); closeMenus(); var a=deck.auto, s=deck.slides[cur]; $('auOn').checked=a.on; $('auSec').value=a.sec; $('auLoop').checked=a.loop; $('auBld').checked=a.bld; $('auBldOne').value=String(s.bld||0); $('auBn').textContent=F('{0}번 슬라이드의',cur+1); $('auOne').value=s.sec>0?s.sec:s.sec<0?0:'';
   $('auNo').textContent=F('{0}번 슬라이드만 다르게',cur+1); openDlg('auDlg'); setTimeout(function(){ $('auSec').focus(); },60); }
-$('auOk').onclick=function(){ var s=deck.slides[cur]; pushUndo(); deck.auto={on:$('auOn').checked, sec:num($('auSec').value,10,1,600), loop:$('auLoop').checked};
+$('auOk').onclick=function(){ var s=deck.slides[cur]; pushUndo(); deck.auto={on:$('auOn').checked, sec:num($('auSec').value,10,1,600), loop:$('auLoop').checked, bld:$('auBld').checked}; s.bld=+$('auBldOne').value||0;
   var v=$('auOne').value.trim(); if(s) s.sec=v===''?0:+v===0?-1:num(v,0,1,3600); closeDlg('auDlg',null); saveSoon(); drawList(); toast(T(deck.auto.on?'발표할 때 저절로 넘어가요':'자동 넘기기를 껐어요')); };
 ['auSec','auOne'].forEach(function(id){ $(id).addEventListener('keydown',function(e){ e.stopPropagation(); if(e.key==='Enter'){ e.preventDefault(); $('auOk').click(); } if(e.key==='Escape') closeDlg('auDlg',null); }); });
 /* ---------- pictures from the device (shrunk to 1600 px, kept inside the deck and the .pptx) ---------- */
@@ -1291,7 +1315,7 @@ var KEYS=[['Ctrl+Z / Ctrl+Shift+Z','되돌리기 · 다시 하기'],['↑ ↓ �
 function showKeys(){ var b=$('keysBody'); b.innerHTML=''; KEYS.forEach(function(k){ var r=document.createElement('div'); r.className='kr'; var a=document.createElement('kbd'); a.textContent=k[0]; var t=document.createElement('span'); t.textContent=T(k[1]); r.appendChild(a); r.appendChild(t); b.appendChild(r); }); openDlg('keysDlg'); }
 
 /* ---------- presenting ---------- */
-var pr={on:false, i:0, step:0, nb:0, end:false, fs:false, notes:false, laser:false, black:false, t0:0, tm:null, cd:null, shown:-1, rev:-1, go:'', goT:null, au:{dur:0, left:0, last:0, paused:false, tm:null}, bb:false};
+var pr={on:false, i:0, step:0, nb:0, busy:0, end:false, fs:false, notes:false, laser:false, black:false, t0:0, tm:null, cd:null, shown:-1, rev:-1, go:'', goT:null, au:{dur:0, left:0, last:0, paused:false, tm:null}, bb:false};
 function beep(){ try{ var C=window.AudioContext||window.webkitAudioContext, c=new C(), o=c.createOscillator(), g=c.createGain(); o.connect(g); g.connect(c.destination); g.gain.value=.15; o.frequency.value=880; o.start(); o.stop(c.currentTime+.5); setTimeout(function(){ c.close(); },900); }catch(e){} }
 function cdPaint(){ if(!pr.cd) return; var f=$('pStage').querySelector('.fld[data-f="stat"] .in'); if(f){ f.textContent=fmtTime(pr.cd.left); f.style.color=pr.cd.left===0?'#ff5a5a':''; } }
 function tick(){ var t=Math.floor((Date.now()-pr.t0)/1000), m=Math.floor(t/60); $('pClock').textContent='⏱ '+(m<10?'0':'')+m+':'+('0'+(t%60)).slice(-2);
@@ -1317,7 +1341,8 @@ function drawPresent0(){
   if(moved){ var tm=sl.layout==='timer'?parseTime(sl.stat):null; pr.cd=tm==null?null:{left:tm,total:tm,run:true}; }
   var opt={hideAns:sl.layout==='quiz'&&pr.rev!==pr.i}; if(pr.cd&&sl.layout==='timer') opt.over={stat:fmtTime(pr.cd.left)};
   opt.live=1; opt.hint=1; opt.step=pr.step; var el=slideEl(sl,t,false,opt); st.appendChild(el); fitAll(el,sl,t); scalePresent(); inkFit(); cdPaint();
-  pr.nb=+el.dataset.nb||0; pr.step=Math.min(pr.step,pr.nb);
+  pr.nb=+el.dataset.nb||0; pr.step=Math.min(pr.step,pr.nb); pr.busy=0;
+  if(moved&&pr.step===0&&pr.nb>0&&!pr.black&&bmAt(0)!=='c') playGroup(trOf(sl)==='none'?0:450); /* self-starting effects wait for the slide change */
   var tr=trOf(sl); if(moved&&tr!=='none'){ st.className='tf-'+tr; void st.offsetWidth; } else st.className='';
   pr.shown=pr.i;
 }
@@ -1326,13 +1351,48 @@ function setNotesView(on){ pr.notes=on; drawPresent(); }
 function setBlack(on){ pr.black=on; drawPresent(); }
 function scalePresent(){ var st=$('pStage'), k=Math.min(innerWidth/W,innerHeight/H); st.style.width=W*k+'px'; st.style.height=H*k+'px'; var el=st.firstChild; if(el) el.style.transform='scale('+k+')'; }
 /* builds: the next press shows the next element (or hides the last one going back) without redrawing the slide */
-function buildShow(i,on){ var e=$('pStage').querySelector('[data-bi="'+i+'"]'); if(!e) return; e.classList.remove('b-fade','b-fly');
-  if(on){ e.classList.remove('bh'); void e.offsetWidth; e.classList.add('b-'+(e.dataset.ba||'fade')); } else e.classList.add('bh'); }
+function buildShow(i,on){ var e=$('pStage').querySelector('[data-bi="'+i+'"]'); if(!e) return; fxStop(e);
+  if(on){ e.classList.remove('bh'); fxPlay(e,0); } else e.classList.add('bh'); }
+function fxStop(e){ try{ e.getAnimations({subtree:true}).forEach(function(a){ a.cancel(); }); }catch(x){} }
+/* the frames of one effect; dir = where it comes from (l r t b) */
+function fxFrames(a,dir){ var X=dir==='l'?-1:dir==='r'?1:0, Y=dir==='t'?-1:dir==='b'?1:0, hz=!!X, K=hz?620:380, tx=function(k){ return (X*k)+'px '+(Y*k)+'px'; }, z='0px 0px', o,
+    org=dir==='l'?'left center':dir==='r'?'right center':dir==='t'?'center top':'center bottom', glow='drop-shadow(0 0 0 rgba(255,214,64,0))';
+  if(a==='fade') return {f:[{opacity:0,translate:'0px 36px'},{opacity:1,translate:z}], e:'cubic-bezier(.2,.7,.3,1)'};
+  if(a==='fly') return {f:[{opacity:0,translate:tx(K)},{opacity:1,translate:z}], e:'cubic-bezier(.16,.84,.3,1)'};
+  if(a==='zoom') return {f:[{opacity:0,scale:'.05'},{opacity:1,scale:'1'}], e:'cubic-bezier(.2,1.25,.4,1)'};
+  if(a==='shrink') return {f:[{opacity:0,scale:'3.4'},{opacity:1,scale:'1'}], e:'cubic-bezier(.2,.8,.3,1)'};
+  if(a==='spin') return {f:[{opacity:0,rotate:'-540deg',scale:'.1'},{opacity:1,rotate:'0deg',scale:'1'}], e:'cubic-bezier(.2,.75,.25,1)'};
+  if(a==='bounce') return {f:[{opacity:0,translate:tx(K),easing:'cubic-bezier(.55,0,.9,.6)'},{offset:.4,opacity:1,translate:z,easing:'ease-out'},{offset:.58,translate:tx(-110),easing:'ease-in'},{offset:.74,translate:z,easing:'ease-out'},{offset:.86,translate:tx(-38),easing:'ease-in'},{translate:z}], e:'linear'};
+  if(a==='shake') return {f:[{opacity:0,translate:'-90px 0px',rotate:'-14deg'},{offset:.18,opacity:1,translate:'70px 0px',rotate:'9deg'},{offset:.38,translate:'-52px 0px',rotate:'-7deg'},{offset:.58,translate:'34px 0px',rotate:'4deg'},{offset:.78,translate:'-16px 0px',rotate:'-2deg'},{opacity:1,translate:z,rotate:'0deg'}], e:'ease-out'};
+  if(a==='wipe'){ var m=60, from=X<0?'inset(-'+m+'px 100% -'+m+'px -'+m+'px)':X>0?'inset(-'+m+'px -'+m+'px -'+m+'px 100%)':Y<0?'inset(-'+m+'px -'+m+'px 100% -'+m+'px)':'inset(100% -'+m+'px -'+m+'px -'+m+'px)'; return {f:[{opacity:1,clipPath:from},{opacity:1,clipPath:'inset(-'+m+'px -'+m+'px -'+m+'px -'+m+'px)'}], e:'cubic-bezier(.4,0,.2,1)'}; }
+  if(a==='blur') return {f:[{opacity:0,filter:'blur(34px)',scale:'1.18'},{opacity:1,filter:'blur(0px)',scale:'1'}], e:'ease-out'};
+  if(a==='flip'){ var f0=hz?'-1 1':'1 -1'; return {f:[{opacity:0,scale:f0},{offset:.5,opacity:1},{opacity:1,scale:'1 1'}], e:'cubic-bezier(.3,0,.2,1)'}; }
+  if(a==='unfold') return {f:[{opacity:0,scale:hz?'0 1':'1 0',transformOrigin:org},{offset:.15,opacity:1},{opacity:1,scale:'1 1',transformOrigin:org}], e:'cubic-bezier(.25,1.2,.4,1)'};
+  if(a==='pulse') return {f:[{opacity:0,scale:'.2',filter:'brightness(2.2) '+glow},{offset:.45,opacity:1,scale:'1.4',filter:'brightness(1.5) drop-shadow(0 0 44px rgba(255,214,64,.95))'},{offset:.72,scale:'.92',filter:'brightness(1.2) drop-shadow(0 0 20px rgba(255,214,64,.6))'},{opacity:1,scale:'1',filter:'brightness(1) '+glow}], e:'ease-in-out'};
+  if(a==='drop') return {f:[{opacity:0,translate:'0px -620px',scale:'1 1',easing:'cubic-bezier(.55,0,.95,.55)'},{offset:.62,opacity:1,translate:z,scale:'1 1'},{offset:.76,scale:'1.1 .82',translate:z},{offset:.9,scale:'.97 1.05'},{scale:'1 1',translate:z}], e:'ease-out'};
+  return {f:[{opacity:0},{opacity:1}], e:'ease-out'}; }
+/* plays one appear effect on element e after startMs; returns when it ends (ms from now). Settings come from the element unless o says otherwise */
+function fxPlay(e,startMs,o){ o=o||{}; var a=o.a||e.dataset.ba||'fade', def=fxOf(a), dir=o.d||e.dataset.bdr||def[4]||'b', dt=o.t!=null?o.t:+e.dataset.bt, dw=o.w!=null?o.w:+e.dataset.bw, dur, delay=Math.round((startMs||0)+(dw||0)*1000);
+  if(!window.Element||!e.animate) return {end:delay};
+  fxStop(e);
+  if(a==='type'){ var sp=e._ty; if(!sp||!sp.length||!e.contains(sp[0])){ sp=[]; var wk=document.createTreeWalker(e,NodeFilter.SHOW_TEXT,null), nodes=[], n0; while((n0=wk.nextNode())) if(n0.nodeValue&&!(n0.parentNode.closest&&n0.parentNode.closest('.bn'))&&n0.nodeValue.trim()) nodes.push(n0);
+      nodes.forEach(function(nd){ var f=document.createDocumentFragment(); Array.from(nd.nodeValue).forEach(function(ch){ var c=document.createElement('span'); c.textContent=ch; f.appendChild(c); if(ch.trim()) sp.push(c); }); nd.parentNode.replaceChild(f,nd); }); e._ty=sp; }
+    if(sp.length){ var n=sp.length; dur=Math.round((dt>0?dt:Math.min(4,Math.max(1.2,n*.06)))*1000); var per=Math.min(dur,Math.max(160,Math.round(dur*.22))), gap=n>1?(dur-per)/(n-1):0;
+      sp.forEach(function(c,i){ c.animate([{opacity:0,translate:'0px .35em'},{opacity:1,translate:'0px 0px'}],{duration:per,delay:Math.round(delay+i*gap),fill:'backwards',easing:'ease-out'}); });
+      return {end:delay+dur}; }
+    a='wipe'; dir='l'; }
+  dur=Math.round((dt>0?dt:def[3]||.9)*1000); var q=fxFrames(a,dir); e.animate(q.f,{duration:dur,delay:delay,easing:q.e,fill:'backwards'}); return {end:delay+dur}; }
+/* one press: the item and the ones that follow it with 'with previous' / 'after previous' (self-starting) */
+function playGroup(base){ var prevS=0, prevE=0, first=true, maxE=0;
+  while(pr.step<pr.nb){ var e=$('pStage').querySelector('[data-bi="'+pr.step+'"]'); if(!e){ pr.step++; continue; } var m=e.dataset.bm||'c'; if(!first&&m==='c') break;
+    e.classList.remove('bh'); var st=first||m==='c'?(base||0):m==='w'?prevS:prevE, r=fxPlay(e,st); prevS=st; prevE=r.end; maxE=Math.max(maxE,r.end); first=false; pr.step++; }
+  pr.busy=Date.now()+maxE; }
+function bmAt(i){ var e=$('pStage').querySelector('[data-bi="'+i+'"]'); return e&&e.dataset.bm||'c'; }
 function pNext0(){ if(pr.end) return exitPresent(); var cs=deck.slides[pr.i];
-  if(!pr.black&&pr.step<pr.nb){ buildShow(pr.step,true); pr.step++; pvState(); return; }
+  if(!pr.black&&pr.step<pr.nb){ playGroup(0); pvState(); return; }
   if(cs&&cs.layout==='quiz'&&pr.rev!==pr.i&&cs.caption.trim()){ pr.rev=pr.i; drawPresent(); return; }
   var j=nextVis(pr.i,1); if(j>=0){ pr.i=j; pr.step=0; } else pr.end=true; drawPresent(); }
-function pPrev0(){ if(!pr.end&&!pr.black&&pr.step>0){ pr.step--; buildShow(pr.step,false); pvState(); return; }
+function pPrev0(){ if(!pr.end&&!pr.black&&pr.step>0){ do{ pr.step--; buildShow(pr.step,false); }while(pr.step>0&&bmAt(pr.step)!=='c'); pr.busy=0; pvState(); return; }
   if(pr.end){ pr.end=false; pr.shown=-1; pr.step=999; } else { var j=nextVis(pr.i,-1); if(j>=0){ pr.i=j; pr.step=999; } } drawPresent(); }
 function pHome0(){ pr.end=false; pr.step=0; var f=vis(0)?0:nextVis(0,1); pr.i=f<0?0:f; drawPresent(); }
 function pLast0(){ pr.end=false; pr.step=0; var L=deck.slides.length-1, la=vis(L)?L:nextVis(L,-1); pr.i=la<0?L:la; drawPresent(); }
@@ -1343,8 +1403,9 @@ function pNext(){ pNext0(); armAuto(); } function pPrev(){ pPrev0(); armAuto(); 
 /* auto-advance: each slide waits its time (the slide's own, else the deck's; none on timer and live slides unless set); builds and a quiz answer share that time evenly. Pen, black screen and the pause button stop the clock. */
 function autoSecs(s){ var a=deck.auto; if(!a.on||!s||s.sec<0) return 0; if(s.sec>0) return s.sec; return s.layout==='timer'||s.layout==='live'?0:a.sec; }
 function armAuto(){ var u=pr.au, s=pr.end?null:deck.slides[pr.i], sec=autoSecs(s); if(!sec){ u.dur=u.left=0; auPaint(); return; }
-  var quiz=s.layout==='quiz'&&pr.rev!==pr.i&&s.caption.trim()?1:0; u.dur=u.left=Math.round(sec*1000/(pr.nb+quiz+1)); u.last=Date.now(); auPaint(); }
-function auTick(){ var u=pr.au; if(!pr.on) return; var now=Date.now(), dt=Math.min(now-u.last,500); u.last=now; if(u.dur<=0||u.paused||ink.tool||pr.black||pr.end||document.hidden) return auPaint();
+  var quiz=s.layout==='quiz'&&pr.rev!==pr.i&&s.caption.trim()?1:0; var nc=0; [].forEach.call($('pStage').querySelectorAll('[data-bi]'),function(x){ if((x.dataset.bm||'c')==='c') nc++; }); /* the self-starting ones need no share of the time */
+  u.dur=u.left=Math.round(sec*1000/(nc+quiz+1)); u.last=Date.now(); auPaint(); }
+function auTick(){ var u=pr.au; if(!pr.on) return; var now=Date.now(), dt=Math.min(now-u.last,500); u.last=now; if(u.dur<=0||u.paused||ink.tool||pr.black||pr.end||document.hidden||Date.now()<pr.busy) return auPaint();
   u.left-=dt; if(u.left<=0){ var s=deck.slides[pr.i], last=s&&pr.step>=pr.nb&&nextVis(pr.i,1)<0&&!(s.layout==='quiz'&&pr.rev!==pr.i&&s.caption.trim()); if(last&&deck.auto.loop) pHome(); else pNext(); return; } auPaint(); }
 function auPaint(){ var u=pr.au, b=$('pAutoB'), on=deck.auto.on&&pr.on; b.hidden=!on; $('pAuto').hidden=!on||u.dur<=0; $('pAuto').firstChild.style.width=u.dur>0?Math.round((1-u.left/u.dur)*1000)/10+'%':'0';
   $('pAuto').classList.toggle('paused',u.paused||!!ink.tool||pr.black); b.classList.toggle('on',u.paused); b.textContent=u.paused?'▶':'⏸'; b.title=T(u.paused?'자동 넘기기 이어가기 (K)':'자동 넘기기 멈추기 (K)')+(u.dur>0&&!u.paused?' · '+F('{0}초 남음',Math.ceil(u.left/1000)):''); }
@@ -1643,6 +1704,7 @@ document.addEventListener('keydown',function(e){
   else if(!$('editor').hidden&&!gen&&!busyOn&&e.altKey&&!mod&&(e.key==='ArrowUp'||e.key==='ArrowDown')){ e.preventDefault(); moveSlide(cur,cur+(e.key==='ArrowUp'?-1:1)); }
   else if(!$('editor').hidden&&!gen&&!busyOn&&mod&&e.key==='Enter'){ e.preventDefault(); addSlide('bullets'); }
   else if(!$('editor').hidden&&!gen&&!busyOn&&!mod&&!e.altKey&&(e.key==='h'||e.key==='H')){ e.preventDefault(); toggleHide(); }
+  else if(!$('editor').hidden&&!gen&&!busyOn&&!mod&&e.key==='Delete'&&deck.slides[cur]&&deck.slides[cur].layout==='live'&&liveCfg(deck.slides[cur])){ e.preventDefault(); selK='live'; delSel(); }
   else if(!$('editor').hidden&&!gen&&!busyOn&&!mod&&e.key==='Delete'){ e.preventDefault(); delSlide(); }
   else if(!$('editor').hidden&&!mod&&e.key==='Home'){ e.preventDefault(); select(0); }
   else if(!$('editor').hidden&&!mod&&e.key==='End'){ e.preventDefault(); select(deck.slides.length-1); }
