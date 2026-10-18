@@ -203,6 +203,18 @@ function fname(ext){ return (($('projName').value||'').trim()||'page').replace(/
 function download(blob,name){ var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },4000); }
 function downloadHTML(){ download(new Blob([finalHTML()],{type:'text/html;charset=utf-8'}),fname('.html')); toast(T('HTML 파일을 만들었어요')); }
 $('dlBtn').onclick=downloadHTML;
+/* "앱으로 받기": the page gets a name, an icon and the "open full screen from the home screen" tags, so 'add to home screen' on a phone / iPad makes an app */
+function appIcon(){ var c=document.createElement('canvas'); c.width=c.height=180; var g=c.getContext('2d'); g.fillStyle=$('appBg').value||'#4f46e5'; g.fillRect(0,0,180,180);
+  g.font='110px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; g.textAlign='center'; g.textBaseline='middle'; g.fillText(($('appEmoji').value||'🎮').trim()||'🎮',90,98); return c; }
+function appPrev(){ var c=appIcon(), p=$('appPrev'), g=p.getContext('2d'); g.clearRect(0,0,90,90); g.drawImage(c,0,0,90,90); }
+['appBg','appEmoji'].forEach(function(id){ $(id).addEventListener('input',appPrev); });
+function appHTML(name){
+  var ic=appIcon().toDataURL('image/png'), nm=String(name).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'), html=finalHTML();
+  var tags='<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="'+nm+'"><meta name="theme-color" content="'+($('appBg').value||'#4f46e5')+'"><link rel="apple-touch-icon" href="'+ic+'"><link rel="icon" href="'+ic+'">';
+  html=/<title>[\s\S]*?<\/title>/i.test(html)?html.replace(/<title>[\s\S]*?<\/title>/i,'<title>'+nm+'</title>'):html.replace(/<head>/i,'<head><title>'+nm+'</title>');
+  return /<head>/i.test(html)?html.replace(/<head>/i,'<head>'+tags):tags+html; }
+function openApp(){ $('appName').value=($('projName').value||'').trim()||T('나의 앱'); appPrev(); $('appDlg').classList.add('open'); }
+$('appGo').onclick=function(){ var nm=($('appName').value||'').trim().slice(0,20)||T('나의 앱'); download(new Blob([appHTML(nm)],{type:'text/html;charset=utf-8'}),nm.replace(/[\\/:*?"<>|]/g,'_')+'.html'); $('appDlg').classList.remove('open'); toast(T('앱 파일을 만들었어요')); };
 /* ---------- projects: several saved projects in the browser ---------- */
 var PIDX='ffblocks.projects', PK='ffblocks.p.', P={cur:null,list:[]}, saveT=null, fullWarned=false;
 function readIdx(){ try{ var o=JSON.parse(lsGet(PIDX)||'null'); if(o&&Array.isArray(o.list)) return o; }catch(e){} return null; }
@@ -225,6 +237,33 @@ BH.pickSound=function(field){ sndIn.value=''; sndIn.onchange=function(){ var f=s
     var base=f.name.replace(/\.[^.]+$/,'').slice(0,24)||T('소리'), name=base, k=2; while(BH.SNDS[name]) name=base+k++;
     BH.SNDS[name]={name:name,data:data}; if(field&&field.setValue) field.setValue(name); save(); toast(T('소리 파일을 넣었어요')); refresh(true); };
   r.readAsDataURL(f); }; sndIn.click(); };
+/* record the user's own voice (microphone) as a sound for the "내 소리" block */
+var REC={st:null,rec:null,chunks:[],blob:null,timer:0,t0:0,field:null,au:null,raf:0};
+function recStop(){ clearTimeout(REC.timer); cancelAnimationFrame(REC.raf); if(REC.rec&&REC.rec.state!=='inactive'){ try{ REC.rec.stop(); }catch(e){} } }
+function recClose(){ recStop(); if(REC.st){ REC.st.getTracks().forEach(function(t){ t.stop(); }); REC.st=null; } if(REC.au){ REC.au.pause(); REC.au=null; } $('recDlg').classList.remove('open'); }
+function recTick(){ var p=Math.min(1,(Date.now()-REC.t0)/10000); $('recBar').style.width=(p*100)+'%'; if(REC.rec&&REC.rec.state==='recording') REC.raf=requestAnimationFrame(recTick); }
+BH.recordSound=function(field){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||!window.MediaRecorder){ toast(T('이 브라우저에서는 녹음을 할 수 없어요')); return; }
+  REC.field=field; REC.blob=null; REC.chunks=[]; $('recMsg').textContent=T('아래 단추를 눌러 녹음을 시작해요. 최대 10초예요.'); $('recBar').style.width='0'; $('recGo').textContent=T('녹음 시작'); $('recPlay').disabled=$('recUse').disabled=true; $('recDlg').classList.add('open'); };
+$('recGo').onclick=function(){
+  if(REC.rec&&REC.rec.state==='recording'){ recStop(); return; }
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(st){
+    REC.st=st; REC.chunks=[]; REC.blob=null; $('recPlay').disabled=$('recUse').disabled=true;
+    var mt=['audio/webm;codecs=opus','audio/webm','audio/mp4'].filter(function(m){ return MediaRecorder.isTypeSupported(m); })[0];
+    REC.rec=mt?new MediaRecorder(st,{mimeType:mt}):new MediaRecorder(st);
+    REC.rec.ondataavailable=function(e){ if(e.data&&e.data.size) REC.chunks.push(e.data); };
+    REC.rec.onstop=function(){ REC.blob=new Blob(REC.chunks,{type:REC.rec.mimeType||'audio/webm'}); if(REC.st){ REC.st.getTracks().forEach(function(t){ t.stop(); }); REC.st=null; }
+      $('recGo').textContent=T('다시 녹음'); $('recMsg').textContent=T('녹음했어요. 들어 보고 마음에 들면 쓰세요.'); $('recBar').style.width='0'; $('recPlay').disabled=$('recUse').disabled=!REC.blob.size; };
+    REC.t0=Date.now(); REC.rec.start(); $('recGo').textContent=T('녹음 끝내기'); $('recMsg').textContent=T('녹음하는 중이에요…'); recTick(); REC.timer=setTimeout(recStop,10000);
+  },function(){ $('recMsg').textContent=T('마이크를 쓸 수 없어요. 마이크 사용을 허락했는지 확인해 주세요.'); });
+};
+$('recPlay').onclick=function(){ if(!REC.blob) return; if(REC.au) REC.au.pause(); REC.au=new Audio(URL.createObjectURL(REC.blob)); REC.au.play().catch(function(){}); };
+$('recUse').onclick=function(){ if(!REC.blob) return; var r=new FileReader(), field=REC.field;
+  r.onload=function(){ var data=String(r.result); if(!/^data:audio\//.test(data)) data=data.replace(/^data:[^;,]*/,'data:audio/'+(/mp4/.test(REC.blob.type)?'mp4':'webm'));
+    var base=T('내 목소리'), name=base, k=2; while(BH.SNDS[name]) name=base+k++;
+    BH.SNDS[name]={name:name,data:data}; recClose(); if(field&&field.setValue) field.setValue(name); save(); toast(T('녹음한 소리를 넣었어요')); refresh(true); };
+  r.readAsDataURL(REC.blob); };
+document.querySelectorAll('#recDlg [data-close]').forEach(function(b){ b.addEventListener('click',recClose); });
 function setImgs(o){ var I=BH.IMGS; Object.keys(I).forEach(function(k){ delete I[k]; }); if(o&&typeof o==='object') Object.keys(o).forEach(function(k){ var m=o[k]; if(m&&typeof m.data==='string'&&/^data:image\//.test(m.data)) I[k]=m; }); setTimeout(regenThumbs,0); }
 $('projName').addEventListener('input',save);
 $('projName').addEventListener('keydown',function(e){ if(e.key==='Enter') this.blur(); });
@@ -272,6 +311,7 @@ $('fileMenu').addEventListener('click',function(e){
   else if(f==='importhtml') $('htmlIn').click();
   else if(f==='open') $('fileIn').click();
   else if(f==='html') downloadHTML();
+  else if(f==='app') openApp();
   else if(f==='share') openShare();
 });
 $('htmlIn').addEventListener('change',function(){
@@ -478,6 +518,10 @@ var REG=Blockly.ContextMenuRegistry.registry;
 ['blockCopyToStorage','blockPasteFromStorage'].forEach(function(id){ try{ REG.unregister(id); }catch(e){} });
 REG.register({id:'ffCopy',scopeType:Blockly.ContextMenuRegistry.ScopeType.BLOCK,weight:-1,displayText:function(){ return T('복사'); },
   preconditionFn:function(sc){ return sc.block&&!sc.block.isShadow()?'enabled':'hidden'; },callback:function(sc){ copyBlock(sc.block); }});
+REG.register({id:'ffHelp',scopeType:Blockly.ContextMenuRegistry.ScopeType.BLOCK,weight:-0.5,displayText:function(){ return T('이 블록 설명'); },
+  preconditionFn:function(sc){ return sc.block&&!sc.block.isShadow()?'enabled':'hidden'; },
+  callback:function(sc){ var b=sc.block, t=b.tooltip; if(typeof t==='function'){ try{ t=t.call(b); }catch(e){ t=''; } } var name=''; try{ name=b.toString(60); }catch(e){}
+    ask((name?'['+name+']\n\n':'')+(t&&typeof t==='string'?T(t):T('이 블록은 아직 설명이 없어요')),T('확인'),false,{notice:true}); }});
 REG.register({id:'ffPaste',scopeType:Blockly.ContextMenuRegistry.ScopeType.WORKSPACE,weight:-1,displayText:function(){ return T('붙여넣기'); },
   preconditionFn:function(){ return window.__clip||lsGet(CLIP)?'enabled':'disabled'; },callback:pasteBlock});
 REG.register({id:'ffDelAll',scopeType:Blockly.ContextMenuRegistry.ScopeType.WORKSPACE,weight:20,displayText:function(){ return T('전체 삭제'); },
@@ -566,10 +610,12 @@ function makeShare(){
   return next(); }
 function shareURL(code){ return location.origin+location.pathname+'#share='+code; }
 var shareLink='';
-function openShare(){ var dlg=$('shareDlg'), box=$('shareLink'), info=$('shareInfo'), cp=$('shareCopy'); box.value=''; shareLink=''; cp.disabled=true; info.textContent=T('링크를 만드는 중…'); info.className=''; dlg.classList.add('open');
+function drawQr(url){ var cv=$('shareQr'), nt=$('shareQrNote'), q=null; try{ q=window.FFQR&&FFQR.make(url); }catch(e){} cv.hidden=!q; nt.hidden=false; if(q){ FFQR.draw(cv,q,Math.max(2,Math.floor(440/(q.size+8)))); nt.textContent=T('폰 카메라로 이 QR을 비추면 바로 열려요'); } else nt.textContent=T('링크가 길어서 QR은 만들 수 없어요. 링크를 복사해서 보내 주세요'); }
+function openShare(){ var dlg=$('shareDlg'), box=$('shareLink'), info=$('shareInfo'), cp=$('shareCopy'); box.value=''; $('shareQr').hidden=true; $('shareQrNote').hidden=true; shareLink=''; cp.disabled=true; info.textContent=T('링크를 만드는 중…'); info.className=''; dlg.classList.add('open');
   makeShare().then(function(r){
     if(r.fail){ info.textContent=F('블록만으로도 링크가 너무 길어요 ({0}KB). 프로젝트 파일(.json)로 보내 주세요',Math.round(r.size/1024)); info.className='warn'; return; }
     shareLink=shareURL(r.code); box.value=shareLink; cp.disabled=false;
+    drawQr(shareLink);
     var msg=F('링크 길이 {0}KB',Math.max(1,Math.round(shareLink.length/1024))), warn=[];
     if(r.dropped.length) warn.push(F('링크가 너무 길어서 {0}은(는) 빼고 만들었어요. 받는 사람에게는 보이지 않거나 들리지 않아요',r.dropped.map(function(x){ return x==='pictures'?T('그림'):T('소리'); }).join(', ')));
     if(r.big) warn.push(T('링크가 길어요. 메신저에서 잘릴 수 있으니 받는 사람이 열리는지 꼭 확인하거나 프로젝트 파일(.json)로 보내 주세요'));
