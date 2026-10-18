@@ -8,6 +8,16 @@
 'use strict';
 var LS='ffai.wrong.v1', CAP=200;
 var T=(window.FFT&&FFT.T)||function(s){ return s; };
+if(window.FFT) FFT.add({
+"틀렸어요":["Wrong","Incorrecto","Faux","Falsch","間違い"],
+"이 답이 틀렸다고 알려요":["Report this answer as wrong","Indicar que esta respuesta es incorrecta","Signaler cette réponse comme fausse","Diese Antwort als falsch melden","この答えが間違っていると知らせる"],
+"이 답이 틀렸어요":["This answer is wrong","Esta respuesta es incorrecta","Cette réponse est fausse","Diese Antwort ist falsch","この答えは間違っています"],
+"맞는 답이나 사실을 알면 적어 주세요 (안 적어도 돼요). 개발자가 AI를 가르칠 때 참고해요.":["If you know the right answer or fact, write it here (optional). The developer uses it when teaching the AI.","Si sabes la respuesta o el dato correcto, escríbelo (opcional). El desarrollador lo usa al enseñar a la IA.","Si tu connais la bonne réponse ou le bon fait, écris-le (facultatif). Le développeur s’en sert pour former l’IA.","Wenn du die richtige Antwort oder Tatsache kennst, schreib sie hier hin (optional). Der Entwickler nutzt das, um der KI etwas beizubringen.","正しい答えや事実を知っていれば書いてください（書かなくても大丈夫です）。開発者がAIに教えるときの参考にします。"],
+"예: 정답은 이거예요":["e.g. The right answer is …","p. ej. La respuesta correcta es…","ex. La bonne réponse est…","z. B. Die richtige Antwort ist …","例: 正解はこれです"],
+"알려 주셔서 고마워요":["Thanks for letting us know","Gracias por avisar","Merci de nous l’avoir signalé","Danke für den Hinweis","教えてくれてありがとうございます"],
+"알려 주셔서 고마워요. 더 나아지게 참고할게요":["Thanks for letting us know. We’ll use it to improve","Gracias por avisar. Lo tendremos en cuenta para mejorar","Merci de nous l’avoir signalé. On s’en servira pour s’améliorer","Danke für den Hinweis. Wir nutzen ihn, um besser zu werden","教えてくれてありがとうございます。改善の参考にします"],
+"저장하지 못했어요":["Could not save","No se pudo guardar","Impossible d’enregistrer","Speichern fehlgeschlagen","保存できませんでした"]
+});
 var css='.ffw-btn{display:inline-flex;align-items:center;gap:4px;margin:8px 0 0;padding:3px 10px;font:inherit;font-size:12px;color:var(--dim,#8a93a6);background:transparent;border:1px solid var(--line,#222837);border-radius:999px;cursor:pointer}'+
   '.ffw-btn:hover{color:var(--text,#eef0f5);border-color:#3a4256}.ffw-btn[disabled]{opacity:.55;cursor:default}'+
   '.ffw-ov{position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.55)}.ffw-ov.open{display:flex}'+
