@@ -35,15 +35,28 @@ var PART_HINT={주어:'주어는 동작이나 상태의 주인으로, 보통 "�
   관형어:'관형어는 뒤에 오는 명사를 꾸미는 말이에요 (예: "예쁜 꽃이 피었다"의 관형어는 예쁜)',
   명사:'명사는 사람, 사물, 장소, 시간 같은 것의 이름을 나타내는 말이에요. 문장에 있는 명사를 하나도 빠뜨리지 말고 모두 골라요. 시간을 나타내는 오늘, 어제, 내일도 명사예요 (예: "오늘 나는 점심을 먹었다"의 명사는 오늘, 점심)',
   대명사:'대명사는 이름 대신 쓰는 말이에요 (예: 나, 너, 우리, 그, 이것). 문장에 있는 대명사를 모두 골라요 (예: "오늘 나는 점심을 먹었다"의 대명사는 나)'};
-function partTask(p){
-  var t=String(p==null?'':p).trim(), m;
+/* =AI("번역", 칸) / =AI("요약", 칸) / =AI("맞춤법", 칸): short fixed Korean tasks so a small model does exactly one thing.
+   "번역" alone picks the direction from the data: Korean goes to English, anything else goes to Korean. */
+var LANG_NUM={한:1,두:2,세:3,네:4,다섯:5};
+function textTask(t,parts){
+  var m, hasKo=/[가-힣]/.test((parts||[]).join(' '));
+  if((m=/^(?:이\s*)?(?:글|문장)?\s*(번역|translate)(?:해\s*줘|하기)?\s*\??$/i.exec(t))) return (hasKo?'데이터를 영어로':'데이터를 한국어로')+' 번역하기. 번역한 글만 쓰기. 설명 없이';
+  if((m=/^(영어|한국어|일본어|중국어|스페인어|프랑스어|독일어|러시아어|이탈리아어|포르투갈어)(?:로|으로)\s*(?:번역|통역)(?:해\s*줘|하기)?\s*\??$/.exec(t))) return '데이터를 '+m[1]+'로 번역하기. 번역한 글만 쓰기. 설명 없이';
+  if((m=/^(?:(짧게|간단히|간단하게)\s*)?(?:(한|두|세|네|다섯|[1-5])\s*(?:줄|문장)(?:로|으로)?\s*)?요약(?:해\s*줘|하기)?\s*\??$/.exec(t))){
+    var n=m[2]?(LANG_NUM[m[2]]||+m[2]):1; return '데이터를 '+n+'문장으로 요약하기. 중요한 내용만 쓰고 새 내용은 덧붙이지 않기. 요약한 글만 쓰기';
+  }
+  if(/^(맞춤법|맞춤법\s*(고치기|검사|교정)|교정)\s*\??$/.test(t)) return '데이터의 맞춤법과 띄어쓰기를 바로잡은 글만 쓰기. 뜻은 바꾸지 않기';
+  return null;
+}
+function partTask(p,parts){
+  var t=String(p==null?'':p).trim(), m, x=textTask(t,parts); if(x) return x;
   if((m=PART_KO.exec(t))) return '데이터에서 '+m[1]+'만 골라 데이터에 쓰인 그대로 쓰기. 여러 개면 쉼표로 구분'+(PART_HINT[m[1]]?'. '+PART_HINT[m[1]]:'');
   if((m=/(목적어|주어|보어|서술어|술어|부사어|관형어|대명사|명사)(?=인|만|은|는|이|가|를|와|과|\s|$|[,.?!])/.exec(t))) return t+'. '+PART_HINT[m[1]]; // longer tasks that name a sentence part
   if((m=PART_EN.exec(t))) return 'Write only the '+m[2].toLowerCase()+' from the data, exactly as it is written there. If there are several, separate them with commas';
   return p;
 }
 E.aiHook=function(prompt,parts){
-  prompt=partTask(prompt);
+  prompt=partTask(prompt,parts);
   var full=FFP.cellPrompt(prompt,parts), h=hash(full), st=store();
   if(force){ delete st[h]; delete errs[h]; }
   if(st[h]!=null) return st[h];
