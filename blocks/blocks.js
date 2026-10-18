@@ -262,6 +262,8 @@ def('logic_between',function(){ this.appendValueInput('X').setCheck('Number'); t
   function(b){ var x=G.valueToCode(b,'X',O.NONE)||'0', lo=G.valueToCode(b,'LO',O.NONE)||'0', hi=G.valueToCode(b,'HI',O.NONE)||'0'; return ['(('+x+') >= ('+lo+') && ('+x+') <= ('+hi+'))',O.ATOMIC]; });
 def('loop_while',function(){ this.appendValueInput('COND').setCheck('Boolean').appendField(T('조건')); this.appendDummyInput().appendField(T('이(가) 맞는 동안 반복하기')); this.appendStatementInput('DO'); this.setInputsInline(true); this.setPreviousStatement(true,'EL'); this.setNextStatement(true,'EL'); this.setTooltip(T('조건이 참인 동안 안의 블록을 계속 해요. 조건이 거짓이 되면 멈춰요')); },
   function(b){ var c=G.valueToCode(b,'COND',O.NONE)||'false', body=G.statementToCode(b,'DO'); body=G.addLoopTrap(body,b); return 'while ('+c+') {\n'+body+'}\n'; });
+def('loop_forever',function(){ this.appendDummyInput().appendField(T('계속 반복하기')); this.appendStatementInput('DO'); this.setPreviousStatement(true,'EL'); this.setNextStatement(true,'EL'); this.setTooltip(T('안의 블록을 멈추지 않고 계속 되풀이해요 (0.03초마다 한 번씩). 화면이 멈추지 않아요. 멈추려면 \'"초마다"를 모두 멈추기\' 블록을 써요')); },
+  function(b){ need('timers'); return '__timers.push(setInterval('+AF()+') {\n'+hatBody(b,true)+'}, 30));\n'; });
 def('loop_dowhile',function(){ this.appendDummyInput().appendField(T('먼저 한 번 하고')); this.appendStatementInput('DO'); this.appendValueInput('COND').setCheck('Boolean').appendField(T('조건')); this.appendDummyInput().appendField(T('이(가) 맞으면 또 하기')); this.setInputsInline(false); this.setPreviousStatement(true,'EL'); this.setNextStatement(true,'EL'); this.setTooltip(T('안의 블록을 먼저 한 번 하고, 조건이 참이면 계속 반복해요')); },
   function(b){ var c=G.valueToCode(b,'COND',O.NONE)||'false', body=G.statementToCode(b,'DO'); body=G.addLoopTrap(body,b); return 'do {\n'+body+'} while ('+c+');\n'; });
 def('act_sound_stop',function(){ this.appendDummyInput().appendField(T('소리를 모두 멈추기')); act(this,'나고 있는 소리와 연주할 차례인 음을 모두 멈춰요'); },
@@ -1065,7 +1067,7 @@ function toolbox(){
       lab('논리 게이트'),bk('logic_gate',{fields:{GATE:'AND'}}),bk('logic_gate',{fields:{GATE:'OR'}}),bk('logic_gate',{fields:{GATE:'XOR'}}),bk('logic_gate',{fields:{GATE:'NOR'}}),bk('logic_gate',{fields:{GATE:'NAND'}}),
       lab('기본'),bk('logic_boolean'),bk('logic_ternary')]),
     cat('loop','반복',[
-      bk('controls_repeat_ext',{inputs:{TIMES:n(10)}}),bk('controls_whileUntil'),lab('조건 반복'),bk('loop_while'),bk('loop_dowhile'),lab('기본'),
+      bk('controls_repeat_ext',{inputs:{TIMES:n(10)}}),bk('controls_whileUntil'),lab('조건 반복'),bk('loop_while'),bk('loop_dowhile'),lab('계속'),bk('loop_forever'),lab('기본'),
       bk('controls_for',{inputs:{FROM:n(1),TO:n(10),BY:n(1)}}),bk('controls_forEach'),bk('controls_flow_statements')]),
     cat('math','계산',[
       lab('숫자'),bk('math_number'),bk('math_arithmetic',{inputs:{A:n(1),B:n(1)}}),
