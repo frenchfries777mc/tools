@@ -163,7 +163,6 @@ function slideAct(kind,q){
 
 $('genBtn').onclick=generate;
 $('genStop').onclick=stop; $('busyStop').onclick=stop;
-$('aiBtn').onclick=function(){ A.blurEdit(); A.openMenu($('aiMenu'),this); };
 var aiMode='new', MODE_NOTE={new:'주제를 쓰면 새 발표 자료를 만들어요. 지금 발표 자료는 목록에 그대로 남아요.', fix:'지금 슬라이드를 어떻게 고칠지 써 주세요. 되돌리기로 되돌릴 수 있어요.', add:'새 슬라이드에 무엇을 넣을지 써 주세요. 지금 슬라이드 뒤에 들어가요.'},
   MODE_PH={new:'예: 우리 동네 환경 문제와 해결 방법', fix:'예: 더 쉬운 말로, 예시를 하나 넣어서', add:'예: 우리가 할 수 있는 일 세 가지'}, MODE_OK={new:'새로 만들기', fix:'고치기', add:'추가하기'};
 function setMode(m){ aiMode=m; document.querySelectorAll('#aiMode button').forEach(function(b){ b.classList.toggle('on',b.dataset.m===m); });
@@ -177,10 +176,10 @@ $('aiIn').addEventListener('keydown',function(e){ e.stopPropagation(); if(e.key=
 $('aiOk').onclick=function(){ var v=$('aiIn').value.trim(); if(!v) return $('aiIn').focus(); closeAiDlg();
   if(aiMode==='new') A.newDeckWith(v).then(generate); else slideAct(aiMode==='fix'?'fix':'add',v); };
 window.addEventListener('keydown',function(e){ if(e.key==='Escape'&&$('aiDlg').classList.contains('open')){ closeAiDlg(); e.stopPropagation(); } },true);
-$('aiBtn').onclick=function(){ A.blurEdit(); A.openMenu($('aiMenu'),this); };
+/* the AI tab of the ribbon (ribbon.js) runs these; the old menu stays as the same list of commands */
+function aiAct(k){ if(k==='dlg') openAiDlg('new'); else if(k==='spell') spell(); else slideAct(k); }
 $('aiMenu').addEventListener('click',function(e){
-  var b=e.target.closest('[data-a]'); if(!b) return; A.closeMenus(); var k=b.dataset.a;
-  if(k==='dlg') openAiDlg('new'); else if(k==='spell') spell(); else slideAct(k);
+  var b=e.target.closest('[data-a]'); if(!b) return; A.closeMenus(); aiAct(b.dataset.a);
 });
 
 /* ---------- "맞춤법 고치기": the AI returns the slide's text with only the mistakes fixed; each change is shown as a word diff
@@ -276,5 +275,5 @@ function spell(){
   .then(function(){ run=null; A.setBusy(false); });
 }
 (function(){ var m=$('aiMenu'), hr=m&&m.querySelector('hr'); if(!m) return; var b=document.createElement('button'); b.dataset.a='spell'; b.textContent='🔤 '+T('맞춤법 고치기'); m.insertBefore(b,hr); })();
-window.FSLAI={spell:spell, wdiff:wdiff, sane:sane, extract:extract, readAll:readAll, norm:norm, generate:generate, slideAct:slideAct, stop:stop};
+window.FSLAI={act:aiAct, spell:spell, wdiff:wdiff, sane:sane, extract:extract, readAll:readAll, norm:norm, generate:generate, slideAct:slideAct, stop:stop};
 })();
