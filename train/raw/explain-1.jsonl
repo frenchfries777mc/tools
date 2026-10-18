@@ -1,8 +1,0 @@
-{"lang": "ko", "outline": "페이지가 열리면\n  횟수 를 (0) 로 설정", "explain": "페이지가 처음 열릴 때 '횟수' 변수를 0으로 정해 둬요."}
-{"lang": "ko", "outline": "버튼1 을 클릭하면\n  횟수 를 (1) 만큼 바꾸기\n  점수 의 글자 를 (횟수) 로 바꾸기", "explain": "버튼1을 누를 때마다 횟수를 1 올리고, 점수 글자에 그 숫자를 보여 줘요."}
-{"lang": "ko", "outline": "만약 (횟수 = 10)\n  알림창 띄우기 (10번 눌렀어요!)", "explain": "횟수가 10이 되면 '10번 눌렀어요!' 알림창을 띄워요."}
-{"lang": "en", "outline": "when key ArrowRight is pressed\n  move player by (10) x", "explain": "Each time the right arrow key is pressed, the player moves 10 pixels to the right."}
-{"lang": "ko", "outline": "(1) 초마다\n  남은시간 를 (-1) 만큼 바꾸기\n  만약 (남은시간 = 0)\n    게임 멈추기", "explain": "1초마다 남은 시간을 1씩 줄이고, 0이 되면 게임을 멈춰요."}
-{"lang": "ja", "outline": "ページが開いたら\n  点数 を (0) にする", "explain": "ページが開いたときに点数を0にします。"}
-{"lang": "ko", "outline": "공 와 벽 이 닿으면\n  효과음 (삑) 재생\n  점수 (1) 올리기", "explain": "공이 벽에 닿을 때마다 효과음을 내고 점수를 1점 올려요."}
-{"lang": "es", "outline": "al hacer clic en boton1\n  cambiar color de fondo a (azul)", "explain": "Al hacer clic en boton1, el fondo de la página se vuelve azul."}
