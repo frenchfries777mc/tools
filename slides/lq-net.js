@@ -37,5 +37,6 @@ var peerNet={
 };
 /* audience reactions: a phone sends {t:'rx', e:'<one of RX>'}, the presenter tells the phones {t:'rx', on:true|false} (also inside 'hi'). RX_RATE: most a phone may send per second, RX_FLOAT: most floating at once */
 var RX=['\uD83D\uDC4D','\uD83D\uDC4F','\uD83D\uDE02','\uD83D\uDE2E','\u2764\uFE0F','\uD83D\uDD25'];
-root.FFLQ={makeCode:makeCode, cleanCode:cleanCode, net:function(){ return root.FFLQ_TRANSPORT||peerNet; }, MAX:40, RX:RX, RX_RATE:4, RX_FLOAT:40};
+/* audience questions: a phone sends {t:'qa', q:'<text>'}, the presenter tells the phones {t:'qa', on:true|false} (also inside 'hi'). QA_LEN: longest text, QA_GAP: least ms between two from one phone, QA_MAX: most per phone per session */
+root.FFLQ={makeCode:makeCode, cleanCode:cleanCode, net:function(){ return root.FFLQ_TRANSPORT||peerNet; }, MAX:40, RX:RX, RX_RATE:4, RX_FLOAT:40, QA_LEN:80, QA_GAP:10000, QA_MAX:5};
 })(typeof window!=='undefined'?window:globalThis);
