@@ -112,22 +112,38 @@ function convert(html,opts){
   if(styleCss.trim()){ stats.rawHtml++; items.push({xml:function(next){ return '<block type="el_html">'+fld('CODE','<style>'+styleCss.trim().replace(/\n\s*/g,' ')+'</style>')+(next?'<next>'+next+'</next>':'')+'</block>'; }}); }
   items=items.concat(bodyItems(bodyEl));
 
-  /* script */
-  var code=''; Array.prototype.forEach.call(doc.querySelectorAll('script'),function(s){ if(!s.src) code+=s.textContent+'\n'; });
-  var tops=[], statements=splitStatements(code), starts=[], rawBuf='';
+  /* libraries the page loads from outside (script src, stylesheet links) stay as they are, at the top of the page */
+  var libs=[]; Array.prototype.forEach.call(doc.querySelectorAll('script[src],link[rel~="stylesheet"][href]'),function(el){ libs.push({xml:function(next){ return '<block type="el_html">'+fld('CODE',el.outerHTML.replace(/\s*\n\s*/g,' ').trim())+(next?'<next>'+next+'</next>':'')+'</block>'; }}); stats.rawHtml++; });
+  items=libs.concat(items);
+
+  /* script: real blocks where possible (JS2B), JS blocks for the rest */
+  var code=''; Array.prototype.forEach.call(doc.querySelectorAll('script'),function(s){ if(!s.src&&!/module|json|template/i.test(s.type||'')) code+=s.textContent+'\n'; });
+  var tops=[], starts=[], viaNew=null;
+  if(!big&&code.trim()&&window.JS2B){
+    try{ viaNew=JS2B.convertScript(code,{
+      tag:function(id){ var e=doc.getElementById(id); return e?e.tagName:''; },
+      hasEl:function(id){ return !!doc.getElementById(id); },
+      canvasSize:function(id){ var e=doc.getElementById(id); return {w:e?numAttr(e,'width',300):300,h:e?numAttr(e,'height',150):150}; }}); }
+    catch(e){ console.error(e); viaNew=null; } }
+  if(viaNew){
+    tops=viaNew.tops.slice(); starts=viaNew.starts.slice(); stats.raw+=viaNew.rawCount;
+  } else {
+  var statements=splitStatements(code), rawBuf='';
   statements.forEach(function(st){
     var h=parseHandler(st);
-    if(h&&h.kind==='click'&&names[h.id]){ stats.blocks++; tops.push('<block type="ev_click">'+fld('EL',h.id)+'<statement name="DO"><block type="js_raw">'+fld('CODE',h.body.trim())+'</block></statement></block>'); return; }
-    if(h&&h.kind==='timer'&&h.ms>=20){ stats.blocks++; tops.push('<block type="ev_timer">'+fld('SEC',+(h.ms/1000).toFixed(3))+'<statement name="DO"><block type="js_raw">'+fld('CODE',h.body.trim())+'</block></statement></block>'); return; }
+    if(h&&h.kind==='click'&&names[h.id]){ tops.push('<block type="ev_click">'+fld('EL',h.id)+'<statement name="DO"><block type="js_raw">'+fld('CODE',h.body.trim())+'</block></statement></block>'); return; }
+    if(h&&h.kind==='timer'&&h.ms>=20){ tops.push('<block type="ev_timer">'+fld('SEC',+(h.ms/1000).toFixed(3))+'<statement name="DO"><block type="js_raw">'+fld('CODE',h.body.trim())+'</block></statement></block>'); return; }
     if(big){ rawBuf+=st+'\n'; if(rawBuf.length>20000){ stats.raw++; starts.push('<block type="js_raw">'+fld('CODE',rawBuf.trim())+'</block>'); rawBuf=''; } return; }
     stats.raw++; starts.push('<block type="js_raw">'+fld('CODE',st)+'</block>');
   });
   if(rawBuf.trim()){ stats.raw++; starts.push('<block type="js_raw">'+fld('CODE',rawBuf.trim())+'</block>'); }
-  if(starts.length){ var s=starts.reduceRight(function(acc,x){ return acc?x.replace(/<\/block>$/,'<next>'+acc+'</next></block>'):x; },''); tops.unshift('<block type="ev_start"><statement name="DO">'+s+'</statement></block>'); }
+  }
+  if(starts.length){ var s=starts.reduceRight(function(acc,x){ return acc?x.replace(/<\/block>$/,function(){ return '<next>'+acc+'</next></block>'; }):x; },''); tops.push('<block type="ev_start"><statement name="DO">'+s+'</statement></block>'); }
 
   var x=20, y=20;
   var xml='<xml xmlns="https://developers.google.com/blockly/xml"><block type="page_root" x="20" y="20">'+fld('TITLE',title)+fld('BG','#ffffff')+fld('CENTER','FALSE')+(items.length?'<statement name="BODY">'+chain(items)+'</statement>':'')+'</block>'+tops.map(function(t,i){ return t.replace('<block ','<block x="440" y="'+(20+i*200)+'" '); }).join('')+'</xml>';
-  return {xml:xml, title:title, stats:stats};
+  stats.blocks=Math.max(0,(xml.match(/<block /g)||[]).length-stats.raw-stats.rawHtml);
+  return {xml:xml, title:title, stats:stats, lib:!!viaNew};
 }
 
 /* last resort: the whole page as one HTML block and the whole script as one JS block (keeps working, just not friendly blocks) */
