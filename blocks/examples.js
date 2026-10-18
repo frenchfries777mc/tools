@@ -278,6 +278,27 @@ var EX=[
     B('ev_click',{f:{EL:lf},c:'버튼을 한 번 누르면 한 칸(32)만큼 가요. 벽이 있으면 멈춰요',s:{DO:[step(-32,0)]}}),B('ev_click',{f:{EL:rt},s:{DO:[step(32,0)]}}),
     B('ev_click',{f:{EL:up},s:{DO:[step(0,-32)]}}),B('ev_click',{f:{EL:dn},s:{DO:[step(0,32)]}})
   ]); }}
+,
+/* 9. a stopwatch: red -> (2~5 s) -> green + start, press to stop; pressing early ends the round */
+{name:'반응 속도 재기',desc:'시작을 누르면 빨강, 잠시 뒤 초록이 돼요. 초록이 되면 바로 눌러서 몇 초 걸렸는지 재요. 너무 일찍 누르면 실패예요',xml:function(){
+  var st=T('상태'), pad=T('반응판'), start=T('시작버튼'), info=T('안내'), sig=T('신호');
+  function IS(c){ return CMP('EQ',G(st),NUMB(c)); }
+  function PAD(txt,bg){ return [SETT(pad,txt),COLOR(pad,'background',bg)]; }
+  return wrap([
+    page(T('반응 속도 재기'),'#0f172a',[H('h1','⏱ '+T('반응 속도 재기'),T('제목')),P(T('시작을 누르고, 판이 초록색이 되면 바로 누르세요!'),info),
+      BTN('▶ '+T('시작'),start),BTN(T('준비'),pad)]),
+    B('ev_start',{c:'상태 0: 시작 전, 1: 빨강(기다리기), 2: 초록(지금 누르기), 3: 끝',s:{DO:[SET(st,NUMB(0)),
+      B('act_size',{f:{EL:pad,PROP:'width'},v:{N:N(300)}}),B('act_size',{f:{EL:pad,PROP:'height'},v:{N:N(180)}}),B('act_size',{f:{EL:pad,PROP:'fontSize'},v:{N:N(26)}}),COLOR(pad,'color','#ffffff'),
+      B('act_stopwatch',{f:{MODE:'reset'}})].concat(PAD(T('시작을 눌러요'),'#3b82f6'))}}),
+    B('ev_click',{f:{EL:start},s:{DO:[B('time_stop',{f:{NAME:sig}}),B('act_stopwatch',{f:{MODE:'reset'}}),SET(st,NUMB(1),'빨강으로 바꾸고, 2~5초 뒤 아무 때나 초록이 돼요')]
+      .concat(PAD('✋ '+T('기다려요…'),'#ef4444')).concat([SETT(info,T('초록색이 될 때까지 누르지 마세요!')),
+      B('time_after',{f:{NAME:sig},v:{SEC:RND(2,5)},s:{DO:[SET(st,NUMB(2)),B('act_stopwatch',{f:{MODE:'start'},c:'초록이 되는 순간 스톱워치를 시작해요'})].concat(PAD('🟢 '+T('지금 눌러요!'),'#22c55e'))}})])}}),
+    B('ev_click',{f:{EL:pad},s:{DO:[
+      B('controls_if',{m:'<mutation elseif="1"></mutation>',c:'빨강일 때 누르면 너무 빠른 거예요. 초록일 때 누르면 시간을 보여 줘요',v:{IF0:IS(1),IF1:IS(2)},s:{
+        DO0:[B('time_stop',{f:{NAME:sig}}),SET(st,NUMB(3))].concat(PAD('😅 '+T('너무 빨라요!'),'#f97316')).concat([SETT(info,T('초록색이 되기 전에 눌렀어요. 시작을 다시 눌러요')),SFX('lose')]),
+        DO1:[B('act_stopwatch',{f:{MODE:'stop'}}),SET(st,NUMB(3))].concat([COLOR(pad,'background','#3b82f6')]).concat([
+          SETT(pad,JOIN([TX('⚡ '),X(B('val_stopwatch')),TX(T(' 초'))])),SETT(info,T('시작을 눌러 다시 도전해요')),SFX('win')])}})]}})
+  ]); }}
 ];
 window.BH_EXAMPLES=EX;
 })();
