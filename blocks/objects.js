@@ -1,11 +1,12 @@
 /* Block HTML: "오브젝트" picker. Adds a toolbox button next to "사진 넣기" and a dialog with category tabs, search and a grid.
-   The library itself (objects-lib.js, about 330 KB of small SVGs) is loaded only when the picker is first opened.
-   Picking calls the handler given to BHOBJ.open with {id, name, svg, src}; app.js turns it into a normal picture (SVG data URL). */
+   The library is loaded only when the picker is first opened: objects/index.js (names of every object, about 50 KB) first,
+   then the pictures of one tab at a time (objects/<tab>.js, 25-120 KB each) as tabs are opened or search results need them (v41).
+   Picking calls the handler given to BHOBJ.open with {id, name, svg, src, data}; app.js turns it into a normal picture (SVG data URL). */
 (function(){
 'use strict';
 var T=FFT.T, $=function(id){ return document.getElementById(id); };
 var LI=Math.max(0,['ko','en','es','fr','de','ja'].indexOf(FFT.lang));
-var LIB_URL='objects-lib.js?v=40';
+var V='41', INDEX_URL='objects/index.js?v='+V;
 
 /* toolbox: put the button right after "사진 넣기", wherever that category ends up */
 var baseToolbox=BH.toolbox;
@@ -17,20 +18,27 @@ BH.toolbox=function(){
   return tb;
 };
 
-var LIB=null, loading=null, cat=null, onPick=null, URLS={};
+var LIB=null, loading=null, cat=null, onPick=null, URLS={}, SVG={}, TABS={}, gen=0;
+function script(src){ return new Promise(function(ok,no){ var s=document.createElement('script'); s.src=src;
+  s.onload=function(){ ok(); }; s.onerror=function(){ s.remove(); no(new Error('load failed')); }; document.head.appendChild(s); }); }
 function load(){
   if(LIB) return Promise.resolve(LIB);
   if(loading) return loading;
-  loading=new Promise(function(ok,no){ var s=document.createElement('script'); s.src=LIB_URL;
-    s.onload=function(){ var d=window.BH_OBJECTS; if(!d||!d.items){ loading=null; no(new Error('no data')); return; }
+  loading=script(INDEX_URL).then(function(){ var d=window.BH_OBJECTS; if(!d||!d.items) throw new Error('no data');
       LIB={cats:d.cats.map(function(c){ return {id:c[0],name:c[1].split('|')}; }),
-        items:d.items.map(function(r){ var n=r[3].split('|'); return {id:r[0],cat:r[1],src:r[2],names:n,name:n[LI]||n[0],svg:r[4],key:(n.join(' ')+' '+r[0]).toLowerCase()}; })};
-      ok(LIB); };
-    s.onerror=function(){ loading=null; s.remove(); no(new Error('load failed')); };
-    document.head.appendChild(s); });
+        items:d.items.map(function(r){ var n=r[3].split('|'); return {id:r[0],cat:r[1],src:r[2],names:n,name:n[LI]||n[0],key:(n.join(' ')+' '+r[0]).toLowerCase()}; })};
+      return LIB; });
+  loading.catch(function(){ loading=null; });
   return loading;
 }
-function dataUrl(o){ return URLS[o.id]||(URLS[o.id]='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(o.svg)))); }
+/* objects/<tab>.js calls this with that tab's pictures */
+window.BHOBJ_SVG=function(c,map){ for(var k in map) SVG[k]=map[k]; };
+function loadTab(c){
+  if(!TABS[c]){ TABS[c]=script('objects/'+encodeURIComponent(c)+'.js?v='+V); TABS[c].catch(function(){ delete TABS[c]; }); }
+  return TABS[c];
+}
+function svgOf(o){ return SVG[o.id]; }
+function dataUrl(o){ return URLS[o.id]||(URLS[o.id]='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(svgOf(o))))); }
 var SRC={own:'Block HTML', fluent:'Fluent Emoji (Microsoft, MIT)'};
 
 function norm(s){ return String(s||'').toLowerCase().normalize('NFC').trim(); }
@@ -45,8 +53,14 @@ function renderGrid(){
   var g=$('objGrid');
   if(!list.length){ g.innerHTML='<div class="objEmpty">'+esc(T('찾는 오브젝트가 없어요'))+'</div>'; return; }
   g.innerHTML='';
+  var my=++gen, need={};
   list.forEach(function(o){ var b=document.createElement('button'); b.type='button'; b.className='obj'; b.dataset.id=o.id; b.title=o.name+' · '+SRC[o.src]; b.setAttribute('aria-label',o.name);
-    b.innerHTML='<img alt="" draggable="false" width="72" height="72">'; b.querySelector('img').src=dataUrl(o); g.appendChild(b); }); // picture only: the name is the tile's title and label (v40)
+    b.innerHTML='<img alt="" draggable="false" width="72" height="72">'; // picture only: the name is the tile's title and label (v40)
+    if(svgOf(o)) b.querySelector('img').src=dataUrl(o); else { b.classList.add('wait'); need[o.cat]=1; }
+    g.appendChild(b); });
+  /* pictures of tabs not loaded yet: fetch them and fill the tiles in, unless the grid has been redrawn meanwhile */
+  Object.keys(need).forEach(function(c){ loadTab(c).then(function(){ if(my===gen) fill(); }, function(){ if(my!==gen) return;
+    if(!g.querySelector('.objErr')){ var d=document.createElement('div'); d.className='objEmpty objErr'; d.textContent=T('오브젝트를 불러오지 못했어요. 다시 눌러 보세요'); g.insertBefore(d,g.firstChild); } }); });
   g.scrollTop=0;
 }
 /* search: every word must appear; exact names first, then names starting with the words, then word starts, then anywhere */
@@ -61,6 +75,9 @@ function rank(items,q,words){
   out.sort(function(a,b){ return a.s-b.s||a.i-b.i; });
   return out.map(function(x){ return x.o; });
 }
+function fill(){ var by={}; LIB.items.forEach(function(o){ by[o.id]=o; });
+  Array.prototype.forEach.call($('objGrid').querySelectorAll('.obj.wait'),function(b){ var o=by[b.dataset.id];
+    if(o&&svgOf(o)){ b.querySelector('img').src=dataUrl(o); b.classList.remove('wait'); } }); }
 function render(){ renderTabs(); renderGrid(); }
 
 function open(handler){
@@ -74,7 +91,8 @@ $('objTabs').addEventListener('click',function(e){ var b=e.target.closest('[data
 $('objQ').addEventListener('input',function(){ if(LIB) render(); });
 $('objGrid').addEventListener('click',function(e){ var b=e.target.closest('.obj'); if(!b||!LIB) return;
   var o=LIB.items.filter(function(x){ return x.id===b.dataset.id; })[0]; if(!o) return;
-  $('objDlg').classList.remove('open'); if(onPick) onPick({id:o.id,name:o.name,svg:o.svg,src:o.src,data:dataUrl(o)}); });
+  loadTab(o.cat).then(function(){ if(!svgOf(o)||!$('objDlg').classList.contains('open')) return;
+    $('objDlg').classList.remove('open'); if(onPick) onPick({id:o.id,name:o.name,svg:svgOf(o),src:o.src,data:dataUrl(o)}); }, function(){}); });
 
-window.BHOBJ={open:open, load:load};
+window.BHOBJ={open:open, load:load, loadTab:loadTab};
 })();
