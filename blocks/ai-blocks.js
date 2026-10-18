@@ -359,7 +359,7 @@ function explainBlock(b){
   function once(extra){ return FFAI.ask({system:FFP.explainSys(lang), prompt:FFP.explainPrompt(lines)+(extra||''), maxTokens:200, prose:true, ko:lang==='ko'}).then(function(t){ return cleanExplain(t,lang); }); }
   once().then(function(t){ return t||once('\n\nReply with one or two short plain sentences only.'); }).then(function(t){
     if(id!==exRun) return;
-    if(t) exShow(b,t,T('AI 설명이에요. 틀릴 수 있어요'));
+    if(t){ exShow(b,t,T('AI 설명이에요. 틀릴 수 있어요')); if(window.FFWrong) FFWrong.attach(exUI().querySelector('.et'),{tool:'Block HTML 블록 설명',question:lines,answer:t}); }
     else exShow(b,plain,T('AI 답이 알맞지 않아 블록 이름으로 설명했어요'));
   },function(e){ if(id!==exRun) return; exShow(b,plain,e&&e.kind==='nokey'?T('블록 이름으로 만든 설명이에요. AI를 켜면 더 자연스럽게 설명해요'):(e&&e.message||T('AI에 연결하지 못했어요'))); });
 }
