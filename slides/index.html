@@ -215,6 +215,9 @@ button,input,select,textarea{font:inherit; color:inherit;}
 .sl .selFr.low .h-mv{top:calc(100% + 30px * var(--hk,1));}
 .sl .h-mv::after{width:calc(26px * var(--hk,1)); height:calc(26px * var(--hk,1)); border-radius:50%; background:#3d8bff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3'/%3E%3C/svg%3E") center/70% no-repeat; border-color:#fff;}
 .sl .guide{position:absolute; z-index:29; pointer-events:none; background:#ff3bd4;} .sl .guide.v{top:0; bottom:0; width:calc(1px * var(--hk,1));} .sl .guide.h{left:0; right:0; height:calc(1px * var(--hk,1));}
+.sl .gsp{position:absolute; z-index:29; pointer-events:none; background:#ff3bd4;} .sl .gsp.x{height:calc(2px * var(--hk,1)); margin-top:calc(-1px * var(--hk,1));} .sl .gsp.y{width:calc(2px * var(--hk,1)); margin-left:calc(-1px * var(--hk,1));}
+.sl .gsp::before,.sl .gsp::after{content:''; position:absolute; background:#ff3bd4;} .sl .gsp.x::before,.sl .gsp.x::after{top:calc(-6px * var(--hk,1)); width:calc(2px * var(--hk,1)); height:calc(14px * var(--hk,1));} .sl .gsp.x::before{left:0;} .sl .gsp.x::after{right:0;}
+.sl .gsp.y::before,.sl .gsp.y::after{left:calc(-6px * var(--hk,1)); height:calc(2px * var(--hk,1)); width:calc(14px * var(--hk,1));} .sl .gsp.y::before{top:0;} .sl .gsp.y::after{bottom:0;}
 #slideHost.dragging{cursor:grabbing;} #slideHost.dragging .sl.edit .fld:hover{box-shadow:none;}
 .sl .bn{position:absolute; left:0; top:0; z-index:5; min-width:calc(22px * var(--hk,1)); height:calc(22px * var(--hk,1)); padding:0 calc(5px * var(--hk,1)); border-radius:calc(11px * var(--hk,1)); background:#8a5ce0; color:#fff; font:700 calc(13px * var(--hk,1))/calc(22px * var(--hk,1)) system-ui,sans-serif; text-align:center; pointer-events:none;}
 .sl .bh{visibility:hidden;}
@@ -674,7 +677,7 @@ body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body
 <script src="qr.js"></script>
 <script src="lq-net.js"></script>
 <script src="ribbon.js"></script>
-<script src="app.js"></script>
+<script src="app.js?v=s21"></script>
 <script src="ai-slides.js"></script>
 </body>
 </html>
