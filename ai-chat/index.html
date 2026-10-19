@@ -53,34 +53,58 @@ button,input,textarea{font:inherit; color:inherit;}
 .brand{font-family:'Oswald',sans-serif; font-weight:700; font-size:18px; letter-spacing:.04em; white-space:nowrap;}
 .brand b{color:var(--fry);}
 .sp{flex:1;}
-main{max-width:760px; margin:0 auto; padding:24px 16px 40px;}
-h1{font-size:22px; margin:0 0 8px;}
-.lead{color:var(--dim); line-height:1.6; margin:0 0 20px;}
-.models{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px;}
-.mc{text-align:left; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px; cursor:pointer; display:grid; gap:4px;}
-.mc:hover:not([disabled]){border-color:var(--fry);}
+main{max-width:760px; margin:0 auto; padding:8px 16px 40px;}
+.bar{margin-top:14px;}
+.hero[hidden]{display:none;}
+.hero{display:flex; align-items:center; justify-content:space-between; gap:20px; padding:34px 0 22px;}
+.hero .eyebrow{display:inline-block; font-size:13px; font-weight:700; letter-spacing:.14em; color:var(--fry); text-transform:uppercase;}
+h1{font-family:'Oswald','Noto Sans KR',sans-serif; font-weight:700; font-size:clamp(34px,7vw,56px); line-height:1.04; margin:8px 0 0; text-transform:uppercase; letter-spacing:.01em;}
+h1 span{background:linear-gradient(90deg,var(--fry),var(--fry2)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+.hero-lg{flex:0 0 auto; width:clamp(84px,18vw,150px); height:auto; filter:drop-shadow(0 14px 36px rgba(255,150,40,.28)); transform:rotate(4deg);}
+.lead{color:var(--dim); line-height:1.65; margin:14px 0 0; max-width:46ch; font-size:16px;}
+.models{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:12px; margin-top:8px;}
+.mc{--bgc:var(--panel); --bd:var(--line); --ac:var(--fry); text-align:left; background:var(--bgc); border:1px solid var(--bd); border-radius:16px; padding:16px; cursor:pointer; display:grid; gap:6px; align-content:start; transition:transform .12s,border-color .12s;}
+.mc[data-id="FF-Tools-1.7B"]{--bgc:#0c1310; --bd:#1d3a2b; --ac:#5fd38d;}
+.mc[data-id="FF-Tools-4B"]{--bgc:#0b111b; --bd:#1d3346; --ac:#6db3ff;}
+.mc[data-id="FF-Tools-8B"]{--bgc:#110f1a; --bd:#2e2648; --ac:#b79bff;}
+html[data-ff-theme=light] .mc[data-id]{--bgc:var(--panel); --bd:var(--line);}
+.mc:hover:not([disabled]){border-color:var(--ac); transform:translateY(-2px);}
+.mc:focus-visible{outline:2px solid var(--ac); outline-offset:2px;}
 .mc[disabled]{opacity:.5; cursor:default;}
-.mc .n{font-weight:700; font-size:17px;} .mc .d{color:var(--dim); font-size:13px;} .mc .s{font-size:12px; color:var(--fry);}
+.mc .ico{width:38px; height:38px; border-radius:10px; display:grid; place-items:center; font-size:18px; color:#111; background:var(--ac); margin-bottom:4px;}
+.mc .n{font-family:'Oswald','Noto Sans KR',sans-serif; font-weight:700; font-size:22px; letter-spacing:.02em; text-transform:uppercase;} .mc .n small{font-size:12px; font-weight:500; color:var(--dim); letter-spacing:0; text-transform:none; margin-left:6px;}
+.mc .d{color:var(--dim); font-size:14px; line-height:1.5;} .mc .s{margin-top:4px; font-size:12px; font-weight:700; color:var(--ac);}
 .err{margin-top:14px; padding:12px 14px; border:1px solid var(--bad); border-radius:12px; color:var(--bad); font-size:14px; line-height:1.55;}
-.chat{display:grid; gap:12px;}
-.bar{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
-.bar .cur{font-weight:700;}
+.chat{display:grid; gap:12px; margin-top:6px;}
+.bar{display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:10px 12px; background:var(--panel); border:1px solid var(--line); border-radius:14px;}
+.bar .cur{font-family:'Oswald','Noto Sans KR',sans-serif; font-weight:700; letter-spacing:.03em; display:flex; align-items:center; gap:8px;}
+.bar .cur i{width:10px; height:10px; border-radius:50%; background:var(--ac,var(--fry)); box-shadow:0 0 0 4px color-mix(in srgb,var(--ac,var(--fry)) 22%,transparent);}
+.sp{flex:1;}
 .btn{border:0; border-radius:10px; padding:10px 18px; font-weight:700; cursor:pointer; background:linear-gradient(135deg,var(--fry),var(--fry2)); color:#1a1205;}
 .btn:disabled{opacity:.5; cursor:default;}
 .ghost{background:transparent; border:1px solid var(--line); color:var(--text); font-weight:500; padding:6px 12px; border-radius:10px; cursor:pointer;}
-.log{display:grid; gap:10px; min-height:220px; max-height:58vh; overflow:auto; padding:4px 2px;}
-.m{max-width:88%; border-radius:14px; padding:10px 14px; line-height:1.6; overflow-wrap:anywhere; white-space:pre-wrap;}
-.m.u{justify-self:end; background:linear-gradient(135deg,var(--fry),var(--fry2)); color:#1a1205;}
-.m.a{justify-self:start; background:var(--panel); border:1px solid var(--line);}
+.ghost:hover{border-color:var(--fry);}
+.log{display:grid; gap:14px; min-height:240px; max-height:56vh; overflow:auto; padding:6px 2px; align-content:start;}
+.row{display:flex; gap:10px; align-items:flex-start; max-width:92%;}
+.row.u{justify-self:end; flex-direction:row-reverse;}
+.av{flex:0 0 auto; width:32px; height:32px; border-radius:10px; display:grid; place-items:center; font-size:16px; background:linear-gradient(135deg,var(--fry),var(--fry2)); box-shadow:0 4px 12px rgba(255,160,60,.2);}
+.m{border-radius:14px; padding:10px 14px; line-height:1.65; overflow-wrap:anywhere; white-space:pre-wrap; min-width:0;}
+.m.u{background:var(--panel2); border:1px solid var(--line); border-top-right-radius:4px;}
+.m.a{background:var(--panel); border:1px solid var(--line); border-top-left-radius:4px;}
 .m.a.bad{border-color:var(--bad); color:var(--bad);}
-.m .ffw-btn{display:flex;width:fit-content;white-space:normal}
-.chips{display:flex; gap:8px; flex-wrap:wrap;}
-.chips button{background:var(--panel); border:1px solid var(--line); border-radius:999px; padding:6px 12px; cursor:pointer; font-size:13px;}
+.m .ffw-btn{display:flex; width:fit-content; white-space:normal;}
+.dots{display:inline-flex; gap:5px; padding:4px 0;} .dots i{width:7px; height:7px; border-radius:50%; background:var(--dim); animation:dt 1s infinite ease-in-out;} .dots i:nth-child(2){animation-delay:.15s;} .dots i:nth-child(3){animation-delay:.3s;}
+@keyframes dt{0%,80%,100%{opacity:.25; transform:translateY(0);}40%{opacity:1; transform:translateY(-3px);}}
+@media(prefers-reduced-motion:reduce){ .dots i{animation:none; opacity:.6;} .mc{transition:none;} }
+.hi{text-align:center; padding:28px 8px 8px; color:var(--dim);} .hi img{width:64px; height:64px; display:block; margin:0 auto 10px; opacity:.95;} .hi b{display:block; color:var(--text); font-size:17px; margin-bottom:4px;}
+.chips{display:flex; gap:8px; flex-wrap:wrap; justify-content:center;}
+.chips button{background:var(--panel); border:1px solid var(--line); border-radius:999px; padding:7px 14px; cursor:pointer; font-size:13px;}
 .chips button:hover{border-color:var(--fry);}
-form.in{display:flex; gap:8px; align-items:flex-end;}
-form.in textarea{flex:1; min-height:44px; max-height:140px; resize:none; background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:10px 12px;}
-form.in textarea:focus{outline:2px solid var(--fry); outline-offset:-1px;}
-.hint{font-size:12px; color:var(--dim); line-height:1.6; margin:4px 0 0;}
+form.in{display:flex; gap:8px; align-items:flex-end; padding:8px; background:var(--panel); border:1px solid var(--line); border-radius:16px;}
+form.in:focus-within{border-color:var(--fry);}
+form.in textarea{flex:1; min-height:44px; max-height:140px; resize:none; background:transparent; border:0; border-radius:10px; padding:10px 8px;}
+form.in textarea:focus{outline:none;}
+.hint{font-size:12px; color:var(--dim); line-height:1.6; margin:10px 0 0; text-align:center;}
 .ov{position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; padding:16px; background:rgba(0,0,0,.55);}
 .dlg{width:min(420px,100%); background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px;}
 .dlg p{margin:0 0 14px; line-height:1.6;}
@@ -95,16 +119,20 @@ form.in textarea:focus{outline:2px solid var(--fry); outline-offset:-1px;}
   <span data-ff-account></span>
 </header>
 <main>
-  <h1>AI 체험</h1>
-  <p class="lead">사이트의 자체 AI와 이야기해 봐요. 내 기기 안에서 돌아가서 대화가 밖으로 나가지 않아요. 틀린 답에는 👎 틀렸어요를 눌러 알려 주세요.</p>
+  <section class="hero" id="hero">
+    <div><span class="eyebrow" data-notr>AI Chat</span><h1><span>AI 체험</span></h1>
+    <p class="lead">사이트의 자체 AI와 이야기해 봐요. 내 기기 안에서 돌아가서 대화가 밖으로 나가지 않아요. 틀린 답에는 👎 틀렸어요를 눌러 알려 주세요.</p></div>
+    <img class="hero-lg" src="../logo.svg" alt="" width="150" height="150">
+  </section>
   <section id="pick">
     <div class="models" id="models"></div>
     <div class="err" id="gpuErr" hidden>이 기기나 브라우저에서는 쓸 수 없어요. 최신 크롬이나 엣지, 또는 최신 사파리에서 열어 주세요.</div>
   </section>
   <section class="chat" id="chat" hidden>
-    <div class="bar"><span class="cur" id="cur" data-notr></span><span class="sp"></span><button class="ghost" id="clear" type="button">대화 지우기</button><button class="ghost" id="change" type="button">모델 바꾸기</button></div>
+    <div class="bar"><span class="cur"><i></i><span id="cur" data-notr></span></span><span class="sp"></span><button class="ghost" id="clear" type="button">대화 지우기</button><button class="ghost" id="change" type="button">모델 바꾸기</button></div>
     <div class="log" id="log" aria-live="polite"></div>
     <div class="chips" id="chips" aria-label="예시 질문"></div>
+    
     <form class="in" id="form"><textarea id="q" rows="1" maxlength="600" placeholder="궁금한 걸 물어보세요"></textarea><button class="btn" id="send" type="submit">보내기</button></form>
   </section>
   <p class="hint">작은 AI라서 틀릴 수 있어요. 중요한 일은 꼭 다시 확인해 주세요.</p>
@@ -120,6 +148,8 @@ form.in textarea:focus{outline:2px solid var(--fry); outline-offset:-1px;}
 'use strict';
 var T=FFT.T, $=function(id){ return document.getElementById(id); };
 var DESC={'FF-Tools-1.7B':'가볍고 빨라요','FF-Tools-4B':'똑똑해요','FF-Tools-8B':'가장 똑똑해요'};
+var ACC={'FF-Tools-1.7B':'#5fd38d','FF-Tools-4B':'#6db3ff','FF-Tools-8B':'#b79bff'};
+var ICON={'FF-Tools-1.7B':'⚡','FF-Tools-4B':'💡','FF-Tools-8B':'🧠'};
 var EXTRA={'FF-Tools-8B':'PC 추천 (그래픽 메모리 8GB 이상)'};
 var cur=null, hist=[], busy=false, models=[];
 function seen(id){ try{ return localStorage.getItem('ffchat.dl.'+id)==='1'; }catch(e){ return false; } }
@@ -139,7 +169,8 @@ function renderModels(){
   var box=$('models'); box.innerHTML='';
   models.forEach(function(m){
     var b=document.createElement('button'); b.type='button'; b.className='mc'; b.disabled=!m.ready; b.setAttribute('data-id',m.id);
-    var n=document.createElement('span'); n.className='n'; n.textContent=m.name; n.setAttribute('data-notr','');
+    var ic=document.createElement('span'); ic.className='ico'; ic.textContent=ICON[m.id]||'✦'; ic.setAttribute('aria-hidden','true'); b.appendChild(ic);
+    var n=document.createElement('span'); n.className='n'; n.setAttribute('data-notr',''); var nm=String(m.name).replace(/^FF777\s*/,'').split(' '); n.textContent=nm[nm.length-1]; var v=document.createElement('small'); v.textContent=nm.slice(0,-1).join(' '); n.appendChild(v);
     var d=document.createElement('span'); d.className='d'; d.textContent=T(DESC[m.id]||'')+(EXTRA[m.id]?' · '+T(EXTRA[m.id]):'');
     var s=document.createElement('span'); s.className='s'; s.setAttribute('data-notr',''); s.textContent=m.ready?m.size:T('준비 중');
     b.appendChild(n); b.appendChild(d); b.appendChild(s);
@@ -152,17 +183,27 @@ function choose(m){
   var go=seen(m.id)?Promise.resolve(true):ask(T('처음 한 번만 {0} 크기의 파일을 내려받아요. 와이파이에서 쓰는 걸 추천해요. 계속할까요?').replace('{0}',m.size));
   go.then(function(ok){
     if(!ok) return;
-    markSeen(m.id); cur=m; hist=[]; $('log').innerHTML=''; $('cur').textContent=m.name;
-    $('pick').hidden=true; $('chat').hidden=false; $('q').focus();
+    markSeen(m.id); cur=m; hist=[]; $('cur').textContent=m.name; $('chat').style.setProperty('--ac',ACC[m.id]||'#ffc93c'); $('chips').hidden=false; greet();
+    $('pick').hidden=true; $('hero').hidden=true; $('chat').hidden=false; $('q').focus();
   });
 }
-function add(cls,text){ var d=document.createElement('div'); d.className='m '+cls; d.setAttribute('data-notr',''); d.textContent=text; $('log').appendChild(d); $('log').scrollTop=$('log').scrollHeight; return d; }
+function add(cls,text){
+  var hi=$('log').querySelector('.hi'); if(hi) hi.remove();
+  var row=document.createElement('div'); row.className='row '+cls;
+  if(cls==='a'){ var av=document.createElement('span'); av.className='av'; av.setAttribute('aria-hidden','true'); av.textContent='🍟'; row.appendChild(av); }
+  var d=document.createElement('div'); d.className='m '+cls; d.setAttribute('data-notr',''); d.textContent=text; row.appendChild(d);
+  $('log').appendChild(row); $('log').scrollTop=$('log').scrollHeight; return d; }
+function greet(){
+  $('log').innerHTML=''; var h=document.createElement('div'); h.className='hi'; h.setAttribute('data-notr','');
+  h.innerHTML='<img src="../logo.svg" alt="" width="64" height="64"><b></b><span></span>'; h.querySelector('b').textContent=cur?cur.name:''; h.querySelector('span').textContent=T('궁금한 걸 물어보세요');
+  $('log').appendChild(h); }
+function dots(d){ d.innerHTML='<span class="dots" aria-label="…"><i></i><i></i><i></i></span>'; }
 function trim(){ var n=0, i=hist.length; while(i>0){ n+=hist[i-1].content.length; if(n>1500) break; i--; } hist=hist.slice(i); if(hist.length&&hist[0].role==='assistant') hist.shift(); }
 function setBusy(b){ busy=b; $('send').textContent=T(b?'멈추기':'보내기'); $('send').type=b?'button':'submit'; }
 function send(q){
   q=String(q||'').trim(); if(!q||busy||!cur) return;
   $('q').value=''; $('chips').hidden=true; add('u',q);
-  var out=add('a',''), got=''; setBusy(true);
+  var out=add('a',''), got=''; dots(out); setBusy(true);
   trim();
   FFAI.ask({model:cur.id, prose:true, facts:true, question:q, history:hist.slice(), system:FFP.askSys, prompt:FFP.askPrompt(null,q),
     onText:function(t){ got=t; out.textContent=t; $('log').scrollTop=$('log').scrollHeight; }}).then(function(r){
@@ -178,8 +219,8 @@ function send(q){
 $('form').onsubmit=function(e){ e.preventDefault(); send($('q').value); };
 $('send').onclick=function(){ if(busy){ FFAI.stop(); } };
 $('q').onkeydown=function(e){ if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){ e.preventDefault(); if(!busy) send($('q').value); } };
-$('clear').onclick=function(){ if(busy) FFAI.stop(); hist=[]; $('log').innerHTML=''; $('chips').hidden=false; };
-$('change').onclick=function(){ if(busy) FFAI.stop(); cur=null; hist=[]; $('chat').hidden=true; $('pick').hidden=false; };
+$('clear').onclick=function(){ if(busy) FFAI.stop(); hist=[]; greet(); $('chips').hidden=false; };
+$('change').onclick=function(){ if(busy) FFAI.stop(); cur=null; hist=[]; $('chat').hidden=true; $('pick').hidden=false; $('hero').hidden=false; };
 ['너는 누구야?','파이썬이 뭐야?','광합성을 쉽게 설명해 줘'].forEach(function(t){
   var b=document.createElement('button'); b.type='button'; b.textContent=T(t); b.onclick=function(){ send(T(t)); }; $('chips').appendChild(b);
 });
