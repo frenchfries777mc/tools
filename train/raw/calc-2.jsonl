@@ -1,0 +1,584 @@
+{"task":"calc","cols":"","q":"오천구백사의 제곱","formula":"=5904^2"}
+{"task":"calc","cols":"","q":"824 제곱","formula":"=824^2"}
+{"task":"calc","cols":"","q":"7693 제곱","formula":"=7693^2"}
+{"task":"calc","cols":"","q":"구십의 이제곱","formula":"=90^2"}
+{"task":"calc","cols":"","q":"백의 세제곱","formula":"=100^3"}
+{"task":"calc","cols":"","q":"삼십팔의 사제곱","formula":"=38^4"}
+{"task":"calc","cols":"","q":"616의 세제곱","formula":"=616^3"}
+{"task":"calc","cols":"","q":"9137를 제곱한 값","formula":"=9137^2"}
+{"task":"calc","cols":"","q":"90의 제곱근","formula":"=SQRT(90)"}
+{"task":"calc","cols":"","q":"구백이십의 삼제곱","formula":"=920^3"}
+{"task":"calc","cols":"","q":"1156의 세제곱","formula":"=1156^3"}
+{"task":"calc","cols":"","q":"삼천칠백칠십칠의 제곱","formula":"=3777^2"}
+{"task":"calc","cols":"","q":"구백육십칠를 제곱한 값","formula":"=967^2"}
+{"task":"calc","cols":"","q":"삼십팔의 구제곱","formula":"=38^9"}
+{"task":"calc","cols":"","q":"삼백삼십의 칠제곱","formula":"=330^7"}
+{"task":"calc","cols":"","q":"95의 제곱근","formula":"=SQRT(95)"}
+{"task":"calc","cols":"","q":"973의 제곱근","formula":"=SQRT(973)"}
+{"task":"calc","cols":"","q":"칠백사십이 제곱","formula":"=742^2"}
+{"task":"calc","cols":"","q":"칠십육의 제곱","formula":"=76^2"}
+{"task":"calc","cols":"","q":"삼백육십삼의 육제곱","formula":"=363^6"}
+{"task":"calc","cols":"","q":"구백이십사 제곱","formula":"=924^2"}
+{"task":"calc","cols":"","q":"사십일의 제곱","formula":"=41^2"}
+{"task":"calc","cols":"","q":"6276의 세제곱","formula":"=6276^3"}
+{"task":"calc","cols":"","q":"오백이십일 제곱","formula":"=521^2"}
+{"task":"calc","cols":"","q":"7290 제곱","formula":"=7290^2"}
+{"task":"calc","cols":"","q":"110의 육제곱","formula":"=110^6"}
+{"task":"calc","cols":"","q":"718 제곱","formula":"=718^2"}
+{"task":"calc","cols":"","q":"53의 제곱근","formula":"=SQRT(53)"}
+{"task":"calc","cols":"","q":"칠십오를 제곱한 값","formula":"=75^2"}
+{"task":"calc","cols":"","q":"칠십삼 제곱","formula":"=73^2"}
+{"task":"calc","cols":"","q":"오백삼십삼의 세제곱","formula":"=533^3"}
+{"task":"calc","cols":"","q":"664의 세제곱","formula":"=664^3"}
+{"task":"calc","cols":"","q":"46의 세제곱","formula":"=46^3"}
+{"task":"calc","cols":"","q":"오천이백이 제곱","formula":"=5202^2"}
+{"task":"calc","cols":"","q":"이십팔의 이제곱","formula":"=28^2"}
+{"task":"calc","cols":"","q":"812의 제곱근","formula":"=SQRT(812)"}
+{"task":"calc","cols":"","q":"삼천백구십의 제곱","formula":"=3190^2"}
+{"task":"calc","cols":"","q":"39의 제곱","formula":"=39^2"}
+{"task":"calc","cols":"","q":"오백삼십팔의 세제곱","formula":"=538^3"}
+{"task":"calc","cols":"","q":"백팔십일의 오제곱","formula":"=181^5"}
+{"task":"calc","cols":"","q":"797를 제곱한 값","formula":"=797^2"}
+{"task":"calc","cols":"","q":"29의 세제곱","formula":"=29^3"}
+{"task":"calc","cols":"","q":"육백육십사를 제곱한 값","formula":"=664^2"}
+{"task":"calc","cols":"","q":"팔십일의 제곱","formula":"=81^2"}
+{"task":"calc","cols":"","q":"273의 제곱","formula":"=273^2"}
+{"task":"calc","cols":"","q":"육십칠의 제곱","formula":"=67^2"}
+{"task":"calc","cols":"","q":"43의 세제곱","formula":"=43^3"}
+{"task":"calc","cols":"","q":"379의 세제곱","formula":"=379^3"}
+{"task":"calc","cols":"","q":"114의 제곱근","formula":"=SQRT(114)"}
+{"task":"calc","cols":"","q":"897의 제곱","formula":"=897^2"}
+{"task":"calc","cols":"","q":"6490의 제곱근","formula":"=SQRT(6490)"}
+{"task":"calc","cols":"","q":"29의 제곱","formula":"=29^2"}
+{"task":"calc","cols":"","q":"320의 삼제곱","formula":"=320^3"}
+{"task":"calc","cols":"","q":"오십오의 제곱","formula":"=55^2"}
+{"task":"calc","cols":"","q":"구백오십오를 제곱한 값","formula":"=955^2"}
+{"task":"calc","cols":"","q":"사백칠십의 오제곱","formula":"=470^5"}
+{"task":"calc","cols":"","q":"82의 세제곱","formula":"=82^3"}
+{"task":"calc","cols":"","q":"20의 구제곱","formula":"=20^9"}
+{"task":"calc","cols":"","q":"구천백이십일 제곱","formula":"=9121^2"}
+{"task":"calc","cols":"","q":"622의 제곱근","formula":"=SQRT(622)"}
+{"task":"calc","cols":"","q":"팔십오를 제곱한 값","formula":"=85^2"}
+{"task":"calc","cols":"","q":"이백육십일를 제곱한 값","formula":"=261^2"}
+{"task":"calc","cols":"","q":"3778의 제곱근","formula":"=SQRT(3778)"}
+{"task":"calc","cols":"","q":"16를 제곱한 값","formula":"=16^2"}
+{"task":"calc","cols":"","q":"583의 제곱근","formula":"=SQRT(583)"}
+{"task":"calc","cols":"","q":"육천육백육십팔의 제곱","formula":"=6668^2"}
+{"task":"calc","cols":"","q":"966의 제곱근","formula":"=SQRT(966)"}
+{"task":"calc","cols":"","q":"691 제곱","formula":"=691^2"}
+{"task":"calc","cols":"","q":"칠백십육의 칠제곱","formula":"=716^7"}
+{"task":"calc","cols":"","q":"오백삼십구의 세제곱","formula":"=539^3"}
+{"task":"calc","cols":"","q":"팔백십의 세제곱","formula":"=810^3"}
+{"task":"calc","cols":"","q":"639의 오제곱","formula":"=639^5"}
+{"task":"calc","cols":"","q":"이백십육의 세제곱","formula":"=216^3"}
+{"task":"calc","cols":"","q":"427의 제곱","formula":"=427^2"}
+{"task":"calc","cols":"","q":"871의 사제곱","formula":"=871^4"}
+{"task":"calc","cols":"","q":"568의 제곱근","formula":"=SQRT(568)"}
+{"task":"calc","cols":"","q":"이백삼십삼를 제곱한 값","formula":"=233^2"}
+{"task":"calc","cols":"","q":"오백일 제곱","formula":"=501^2"}
+{"task":"calc","cols":"","q":"189의 제곱근","formula":"=SQRT(189)"}
+{"task":"calc","cols":"","q":"7697의 사제곱","formula":"=7697^4"}
+{"task":"calc","cols":"","q":"78의 구제곱","formula":"=78^9"}
+{"task":"calc","cols":"","q":"구백오십오 제곱","formula":"=955^2"}
+{"task":"calc","cols":"","q":"사백팔십삼의 팔제곱","formula":"=483^8"}
+{"task":"calc","cols":"","q":"419의 이제곱","formula":"=419^2"}
+{"task":"calc","cols":"","q":"51의 오제곱","formula":"=51^5"}
+{"task":"calc","cols":"","q":"806의 제곱근","formula":"=SQRT(806)"}
+{"task":"calc","cols":"","q":"삼십삼의 제곱","formula":"=33^2"}
+{"task":"calc","cols":"","q":"72를 제곱한 값","formula":"=72^2"}
+{"task":"calc","cols":"","q":"이천백팔십오를 제곱한 값","formula":"=2185^2"}
+{"task":"calc","cols":"","q":"칠천칠백팔십육의 제곱","formula":"=7786^2"}
+{"task":"calc","cols":"","q":"992의 세제곱","formula":"=992^3"}
+{"task":"calc","cols":"","q":"이천육백삼십의 사제곱","formula":"=2630^4"}
+{"task":"calc","cols":"","q":"820의 제곱","formula":"=820^2"}
+{"task":"calc","cols":"","q":"29의 제곱근","formula":"=SQRT(29)"}
+{"task":"calc","cols":"","q":"325를 제곱한 값","formula":"=325^2"}
+{"task":"calc","cols":"","q":"13의 세제곱","formula":"=13^3"}
+{"task":"calc","cols":"","q":"칠천오백삼십오를 제곱한 값","formula":"=7535^2"}
+{"task":"calc","cols":"","q":"육백삼십육의 칠제곱","formula":"=636^7"}
+{"task":"calc","cols":"","q":"4767의 제곱근","formula":"=SQRT(4767)"}
+{"task":"calc","cols":"","q":"252의 제곱근","formula":"=SQRT(252)"}
+{"task":"calc","cols":"","q":"259의 제곱근","formula":"=SQRT(259)"}
+{"task":"calc","cols":"","q":"오백삼십팔를 제곱한 값","formula":"=538^2"}
+{"task":"calc","cols":"","q":"삼백칠 제곱","formula":"=307^2"}
+{"task":"calc","cols":"","q":"백오십사 제곱","formula":"=154^2"}
+{"task":"calc","cols":"","q":"853의 제곱근","formula":"=SQRT(853)"}
+{"task":"calc","cols":"","q":"743의 제곱","formula":"=743^2"}
+{"task":"calc","cols":"","q":"319의 제곱","formula":"=319^2"}
+{"task":"calc","cols":"","q":"407의 세제곱","formula":"=407^3"}
+{"task":"calc","cols":"","q":"육천오백오십칠의 육제곱","formula":"=6557^6"}
+{"task":"calc","cols":"","q":"사백구십오의 삼제곱","formula":"=495^3"}
+{"task":"calc","cols":"","q":"59의 제곱근","formula":"=SQRT(59)"}
+{"task":"calc","cols":"","q":"388의 칠제곱","formula":"=388^7"}
+{"task":"calc","cols":"","q":"632를 제곱한 값","formula":"=632^2"}
+{"task":"calc","cols":"","q":"칠백삼십삼의 제곱","formula":"=733^2"}
+{"task":"calc","cols":"","q":"삼백십삼의 세제곱","formula":"=313^3"}
+{"task":"calc","cols":"","q":"23를 제곱한 값","formula":"=23^2"}
+{"task":"calc","cols":"","q":"구백육십일의 삼제곱","formula":"=961^3"}
+{"task":"calc","cols":"","q":"93의 제곱","formula":"=93^2"}
+{"task":"calc","cols":"","q":"26의 오제곱","formula":"=26^5"}
+{"task":"calc","cols":"","q":"1420를 제곱한 값","formula":"=1420^2"}
+{"task":"calc","cols":"","q":"이십의 이제곱","formula":"=20^2"}
+{"task":"calc","cols":"","q":"팔백팔십구의 세제곱","formula":"=889^3"}
+{"task":"calc","cols":"","q":"팔천칠십의 오제곱","formula":"=8070^5"}
+{"task":"calc","cols":"","q":"191의 제곱근","formula":"=SQRT(191)"}
+{"task":"calc","cols":"","q":"사백십삼의 제곱","formula":"=413^2"}
+{"task":"calc","cols":"","q":"오백팔십육의 세제곱","formula":"=586^3"}
+{"task":"calc","cols":"","q":"90 제곱","formula":"=90^2"}
+{"task":"calc","cols":"","q":"318의 제곱근","formula":"=SQRT(318)"}
+{"task":"calc","cols":"","q":"이백육십육의 사제곱","formula":"=266^4"}
+{"task":"calc","cols":"","q":"884의 제곱근","formula":"=SQRT(884)"}
+{"task":"calc","cols":"","q":"14의 제곱근","formula":"=SQRT(14)"}
+{"task":"calc","cols":"","q":"15의 제곱","formula":"=15^2"}
+{"task":"calc","cols":"","q":"오십육의 세제곱","formula":"=56^3"}
+{"task":"calc","cols":"","q":"2239를 제곱한 값","formula":"=2239^2"}
+{"task":"calc","cols":"","q":"십팔를 제곱한 값","formula":"=18^2"}
+{"task":"calc","cols":"","q":"이천팔백이십칠의 오제곱","formula":"=2827^5"}
+{"task":"calc","cols":"","q":"609의 삼제곱","formula":"=609^3"}
+{"task":"calc","cols":"","q":"9828의 제곱근","formula":"=SQRT(9828)"}
+{"task":"calc","cols":"","q":"구백구십팔의 제곱","formula":"=998^2"}
+{"task":"calc","cols":"","q":"오백삼십구의 제곱","formula":"=539^2"}
+{"task":"calc","cols":"","q":"이십팔 제곱","formula":"=28^2"}
+{"task":"calc","cols":"","q":"774의 제곱","formula":"=774^2"}
+{"task":"calc","cols":"","q":"사십삼를 제곱한 값","formula":"=43^2"}
+{"task":"calc","cols":"","q":"구백오십육를 제곱한 값","formula":"=956^2"}
+{"task":"calc","cols":"","q":"이백육십를 제곱한 값","formula":"=260^2"}
+{"task":"calc","cols":"","q":"330 제곱","formula":"=330^2"}
+{"task":"calc","cols":"","q":"이십육의 제곱","formula":"=26^2"}
+{"task":"calc","cols":"","q":"3660 제곱","formula":"=3660^2"}
+{"task":"calc","cols":"","q":"72의 제곱","formula":"=72^2"}
+{"task":"calc","cols":"","q":"906 제곱","formula":"=906^2"}
+{"task":"calc","cols":"","q":"331의 제곱근","formula":"=SQRT(331)"}
+{"task":"calc","cols":"","q":"팔백이십삼의 세제곱","formula":"=823^3"}
+{"task":"calc","cols":"","q":"십오를 제곱한 값","formula":"=15^2"}
+{"task":"calc","cols":"","q":"312의 세제곱","formula":"=312^3"}
+{"task":"calc","cols":"","q":"980의 칠제곱","formula":"=980^7"}
+{"task":"calc","cols":"","q":"389의 세제곱","formula":"=389^3"}
+{"task":"calc","cols":"","q":"6747의 육제곱","formula":"=6747^6"}
+{"task":"calc","cols":"","q":"180의 제곱","formula":"=180^2"}
+{"task":"calc","cols":"","q":"칠십육의 세제곱","formula":"=76^3"}
+{"task":"calc","cols":"","q":"8788의 제곱근","formula":"=SQRT(8788)"}
+{"task":"calc","cols":"","q":"칠천백칠십일를 제곱한 값","formula":"=7171^2"}
+{"task":"calc","cols":"","q":"982 제곱","formula":"=982^2"}
+{"task":"calc","cols":"","q":"칠백팔십육의 제곱","formula":"=786^2"}
+{"task":"calc","cols":"","q":"12의 제곱근","formula":"=SQRT(12)"}
+{"task":"calc","cols":"","q":"984 제곱","formula":"=984^2"}
+{"task":"calc","cols":"","q":"이천사백삼십사의 팔제곱","formula":"=2434^8"}
+{"task":"calc","cols":"","q":"86의 세제곱","formula":"=86^3"}
+{"task":"calc","cols":"","q":"구십삼 제곱","formula":"=93^2"}
+{"task":"calc","cols":"","q":"919의 세제곱","formula":"=919^3"}
+{"task":"calc","cols":"","q":"51의 제곱근","formula":"=SQRT(51)"}
+{"task":"calc","cols":"","q":"팔천육백삼십오의 세제곱","formula":"=8635^3"}
+{"task":"calc","cols":"","q":"81의 제곱근","formula":"=SQRT(81)"}
+{"task":"calc","cols":"","q":"346의 제곱근","formula":"=SQRT(346)"}
+{"task":"calc","cols":"","q":"백십육를 제곱한 값","formula":"=116^2"}
+{"task":"calc","cols":"","q":"64의 제곱","formula":"=64^2"}
+{"task":"calc","cols":"","q":"오십삼를 제곱한 값","formula":"=53^2"}
+{"task":"calc","cols":"","q":"950의 제곱","formula":"=950^2"}
+{"task":"calc","cols":"","q":"천삼백팔십팔의 제곱","formula":"=1388^2"}
+{"task":"calc","cols":"","q":"628 제곱","formula":"=628^2"}
+{"task":"calc","cols":"","q":"천팔백육십삼의 칠제곱","formula":"=1863^7"}
+{"task":"calc","cols":"","q":"863의 오제곱","formula":"=863^5"}
+{"task":"calc","cols":"","q":"천오십의 구제곱","formula":"=1050^9"}
+{"task":"calc","cols":"","q":"20의 세제곱","formula":"=20^3"}
+{"task":"calc","cols":"","q":"구십사의 세제곱","formula":"=94^3"}
+{"task":"calc","cols":"","q":"81 제곱","formula":"=81^2"}
+{"task":"calc","cols":"","q":"3004의 삼제곱","formula":"=3004^3"}
+{"task":"calc","cols":"","q":"84를 제곱한 값","formula":"=84^2"}
+{"task":"calc","cols":"","q":"17의 제곱","formula":"=17^2"}
+{"task":"calc","cols":"","q":"197를 제곱한 값","formula":"=197^2"}
+{"task":"calc","cols":"","q":"404의 제곱","formula":"=404^2"}
+{"task":"calc","cols":"","q":"구백오십구과 이백십이의 합","formula":"=959+212"}
+{"task":"calc","cols":"","q":"572 더하기 사십삼","formula":"=572+43"}
+{"task":"calc","cols":"","q":"5464에 6를 더하고 육를 곱하기","formula":"=(5464+6)*6"}
+{"task":"calc","cols":"","q":"오백구십오 곱하기 팔백이","formula":"=595*802"}
+{"task":"calc","cols":"","q":"479 곱하기 이십","formula":"=479*20"}
+{"task":"calc","cols":"","q":"791와 오백이십사의 차","formula":"=ABS(791-524)"}
+{"task":"calc","cols":"","q":"116278877 나누기 1811","formula":"=116278877/1811"}
+{"task":"calc","cols":"","q":"9246과 십의 곱","formula":"=9246*10"}
+{"task":"calc","cols":"","q":"이십이과 847의 곱","formula":"=22*847"}
+{"task":"calc","cols":"","q":"344 곱하기 833","formula":"=344*833"}
+{"task":"calc","cols":"","q":"372과 843의 합","formula":"=372+843"}
+{"task":"calc","cols":"","q":"칠백육십일 빼기 구십이","formula":"=761-92"}
+{"task":"calc","cols":"","q":"56566 더하기 사백오십구","formula":"=56566+459"}
+{"task":"calc","cols":"","q":"60102에 327를 더하고 사를 곱하기","formula":"=(60102+327)*4"}
+{"task":"calc","cols":"","q":"이천이백십 더하기 8860","formula":"=2210+8860"}
+{"task":"calc","cols":"","q":"이백오 더하기 108","formula":"=205+108"}
+{"task":"calc","cols":"","q":"삼만칠천구백구십과 963의 곱","formula":"=37990*963"}
+{"task":"calc","cols":"","q":"오천삼백십칠를 사로 나눈 나머지","formula":"=MOD(5317,4)"}
+{"task":"calc","cols":"","q":"71380를 삼로 나눈 나머지","formula":"=MOD(71380,3)"}
+{"task":"calc","cols":"","q":"오백삼십사에 사백육십삼를 더하고 삼를 곱하기","formula":"=(534+463)*3"}
+{"task":"calc","cols":"","q":"41077과 칠백사십일의 곱","formula":"=41077*741"}
+{"task":"calc","cols":"","q":"324와 550의 차","formula":"=ABS(324-550)"}
+{"task":"calc","cols":"","q":"445 더하기 52","formula":"=445+52"}
+{"task":"calc","cols":"","q":"24를 육로 나눈 나머지","formula":"=MOD(24,6)"}
+{"task":"calc","cols":"","q":"십일 곱하기 38","formula":"=11*38"}
+{"task":"calc","cols":"","q":"팔만이천백구과 882의 합","formula":"=82109+882"}
+{"task":"calc","cols":"","q":"백구십구만팔천이백삼십팔 나누기 22","formula":"=1998238/22"}
+{"task":"calc","cols":"","q":"2335에 652를 더하고 삼를 곱하기","formula":"=(2335+652)*3"}
+{"task":"calc","cols":"","q":"이천이백십칠 곱하기 이백사십팔","formula":"=2217*248"}
+{"task":"calc","cols":"","q":"육백육십구과 삼천팔십칠의 곱","formula":"=669*3087"}
+{"task":"calc","cols":"","q":"육십육에서 510를 뺀 값","formula":"=66-510"}
+{"task":"calc","cols":"","q":"49를 칠로 나눈 나머지","formula":"=MOD(49,7)"}
+{"task":"calc","cols":"","q":"칠백칠십육만구천구백오십이 나누기 828","formula":"=7769952/828"}
+{"task":"calc","cols":"","q":"31333를 팔로 나눈 나머지","formula":"=MOD(31333,8)"}
+{"task":"calc","cols":"","q":"삼천육백사십칠를 구로 나눈 나머지","formula":"=MOD(3647,9)"}
+{"task":"calc","cols":"","q":"백삼십팔과 738의 곱","formula":"=138*738"}
+{"task":"calc","cols":"","q":"구백구 빼기 칠천이백십삼","formula":"=909-7213"}
+{"task":"calc","cols":"","q":"사십이 빼기 이","formula":"=42-2"}
+{"task":"calc","cols":"","q":"24와 칠백구십의 차","formula":"=ABS(24-790)"}
+{"task":"calc","cols":"","q":"23604 더하기 삼십삼","formula":"=23604+33"}
+{"task":"calc","cols":"","q":"723에서 5953를 뺀 값","formula":"=723-5953"}
+{"task":"calc","cols":"","q":"구백삼십팔 빼기 354","formula":"=938-354"}
+{"task":"calc","cols":"","q":"596에서 오백칠십칠를 뺀 값","formula":"=596-577"}
+{"task":"calc","cols":"","q":"68과 팔십구의 합","formula":"=68+89"}
+{"task":"calc","cols":"","q":"사만이천삼백칠십이에서 칠백삼십구를 뺀 값","formula":"=42372-739"}
+{"task":"calc","cols":"","q":"5775 곱하기 구백구십일","formula":"=5775*991"}
+{"task":"calc","cols":"","q":"사만삼천팔백십이과 칠백이의 합","formula":"=43812+702"}
+{"task":"calc","cols":"","q":"3628 더하기 39","formula":"=3628+39"}
+{"task":"calc","cols":"","q":"93 더하기 이백육십사","formula":"=93+264"}
+{"task":"calc","cols":"","q":"419와 183의 차","formula":"=ABS(419-183)"}
+{"task":"calc","cols":"","q":"만사천육백오십팔 빼기 구백삼","formula":"=14658-903"}
+{"task":"calc","cols":"","q":"이십구에서 십육를 뺀 값","formula":"=29-16"}
+{"task":"calc","cols":"","q":"오만구천백십육에 5373를 더하고 사를 곱하기","formula":"=(59116+5373)*4"}
+{"task":"calc","cols":"","q":"2920864 나누기 776","formula":"=2920864/776"}
+{"task":"calc","cols":"","q":"이백삼십이과 삼백오십칠의 곱","formula":"=232*357"}
+{"task":"calc","cols":"","q":"사백구십오과 오십육의 곱","formula":"=495*56"}
+{"task":"calc","cols":"","q":"18와 53의 차","formula":"=ABS(18-53)"}
+{"task":"calc","cols":"","q":"27 곱하기 5299","formula":"=27*5299"}
+{"task":"calc","cols":"","q":"사만삼천구백이십구 더하기 148","formula":"=43929+148"}
+{"task":"calc","cols":"","q":"백이십구 더하기 육백사십구","formula":"=129+649"}
+{"task":"calc","cols":"","q":"17496과 팔천이백구십팔의 합","formula":"=17496+8298"}
+{"task":"calc","cols":"","q":"12029와 오십칠의 차","formula":"=ABS(12029-57)"}
+{"task":"calc","cols":"","q":"278 빼기 99","formula":"=278-99"}
+{"task":"calc","cols":"","q":"십를 육로 나눈 나머지","formula":"=MOD(10,6)"}
+{"task":"calc","cols":"","q":"육천칠백구십이과 칠천백삼십의 곱","formula":"=6792*7130"}
+{"task":"calc","cols":"","q":"육천구백팔십육에 675를 더하고 이를 곱하기","formula":"=(6986+675)*2"}
+{"task":"calc","cols":"","q":"5868 빼기 팔백오십칠","formula":"=5868-857"}
+{"task":"calc","cols":"","q":"백십육 더하기 팔십삼","formula":"=116+83"}
+{"task":"calc","cols":"","q":"구십과 514의 곱","formula":"=90*514"}
+{"task":"calc","cols":"","q":"사천사백십일 빼기 육백일","formula":"=4411-601"}
+{"task":"calc","cols":"","q":"사백십삼과 칠천사백사십오의 합","formula":"=413+7445"}
+{"task":"calc","cols":"","q":"이만천구백사십구과 이천육십육의 합","formula":"=21949+2066"}
+{"task":"calc","cols":"","q":"4886과 삼백오십사의 곱","formula":"=4886*354"}
+{"task":"calc","cols":"","q":"2261와 팔십육의 차","formula":"=ABS(2261-86)"}
+{"task":"calc","cols":"","q":"671175 나누기 15","formula":"=671175/15"}
+{"task":"calc","cols":"","q":"9987와 칠백십팔의 차","formula":"=ABS(9987-718)"}
+{"task":"calc","cols":"","q":"3371에 칠백이십를 더하고 육를 곱하기","formula":"=(3371+720)*6"}
+{"task":"calc","cols":"","q":"622를 구로 나눈 나머지","formula":"=MOD(622,9)"}
+{"task":"calc","cols":"","q":"오백칠십삼 곱하기 5532","formula":"=573*5532"}
+{"task":"calc","cols":"","q":"삼백육십사 빼기 사백육십일","formula":"=364-461"}
+{"task":"calc","cols":"","q":"470 곱하기 이십이","formula":"=470*22"}
+{"task":"calc","cols":"","q":"이백팔십오를 구로 나눈 나머지","formula":"=MOD(285,9)"}
+{"task":"calc","cols":"","q":"177에 칠십구를 더하고 이를 곱하기","formula":"=(177+79)*2"}
+{"task":"calc","cols":"","q":"52235 빼기 구백십사","formula":"=52235-914"}
+{"task":"calc","cols":"","q":"팔만칠천사를 이로 나눈 나머지","formula":"=MOD(87004,2)"}
+{"task":"calc","cols":"","q":"이천구백칠십팔과 이백팔의 곱","formula":"=2978*208"}
+{"task":"calc","cols":"","q":"삼만팔천삼백육십구과 60의 곱","formula":"=38369*60"}
+{"task":"calc","cols":"","q":"45711와 사천팔백육십삼의 차","formula":"=ABS(45711-4863)"}
+{"task":"calc","cols":"","q":"사천팔백이십사과 천백삼십삼의 합","formula":"=4824+1133"}
+{"task":"calc","cols":"","q":"팔백삼십팔에서 2를 뺀 값","formula":"=838-2"}
+{"task":"calc","cols":"","q":"팔과 구백십칠의 합","formula":"=8+917"}
+{"task":"calc","cols":"","q":"430 빼기 5957","formula":"=430-5957"}
+{"task":"calc","cols":"","q":"구백사와 362의 차","formula":"=ABS(904-362)"}
+{"task":"calc","cols":"","q":"백구십와 9800의 차","formula":"=ABS(190-9800)"}
+{"task":"calc","cols":"","q":"22과 589의 합","formula":"=22+589"}
+{"task":"calc","cols":"","q":"155를 사로 나눈 나머지","formula":"=MOD(155,4)"}
+{"task":"calc","cols":"","q":"이십오만오천구백오십사 나누기 87","formula":"=255954/87"}
+{"task":"calc","cols":"","q":"4478를 팔로 나눈 나머지","formula":"=MOD(4478,8)"}
+{"task":"calc","cols":"","q":"삼만삼천이백사십오과 구천백이십일의 합","formula":"=33245+9121"}
+{"task":"calc","cols":"","q":"5243에서 삼천이백삼십오를 뺀 값","formula":"=5243-3235"}
+{"task":"calc","cols":"","q":"칠백오십이만팔천 나누기 8000","formula":"=7528000/8000"}
+{"task":"calc","cols":"","q":"사천육백구십구과 삼천사백칠십칠의 곱","formula":"=4699*3477"}
+{"task":"calc","cols":"","q":"70309와 구십구의 차","formula":"=ABS(70309-99)"}
+{"task":"calc","cols":"","q":"785 빼기 529","formula":"=785-529"}
+{"task":"calc","cols":"","q":"94와 386의 차","formula":"=ABS(94-386)"}
+{"task":"calc","cols":"","q":"천오십이과 천삼백사십일의 곱","formula":"=1052*1341"}
+{"task":"calc","cols":"","q":"오천육백이십사 곱하기 사백육십구","formula":"=5624*469"}
+{"task":"calc","cols":"","q":"759 곱하기 백육십","formula":"=759*160"}
+{"task":"calc","cols":"","q":"오백십구를 팔로 나눈 나머지","formula":"=MOD(519,8)"}
+{"task":"calc","cols":"","q":"728과 오백칠의 합","formula":"=728+507"}
+{"task":"calc","cols":"","q":"77에서 9962를 뺀 값","formula":"=77-9962"}
+{"task":"calc","cols":"","q":"498483 나누기 오백칠십일","formula":"=498483/571"}
+{"task":"calc","cols":"","q":"팔천오백이십칠 더하기 이백구십구","formula":"=8527+299"}
+{"task":"calc","cols":"","q":"사백사십이에서 91를 뺀 값","formula":"=442-91"}
+{"task":"calc","cols":"","q":"이만천육백오십오 더하기 195","formula":"=21655+195"}
+{"task":"calc","cols":"","q":"칠십이에 칠천삼백오십팔를 더하고 삼를 곱하기","formula":"=(72+7358)*3"}
+{"task":"calc","cols":"","q":"85811 빼기 6549","formula":"=85811-6549"}
+{"task":"calc","cols":"","q":"167 빼기 육백십","formula":"=167-610"}
+{"task":"calc","cols":"","q":"995 빼기 팔천구백삼","formula":"=995-8903"}
+{"task":"calc","cols":"","q":"구십팔와 14의 차","formula":"=ABS(98-14)"}
+{"task":"calc","cols":"","q":"칠만사천이십오 곱하기 841","formula":"=74025*841"}
+{"task":"calc","cols":"","q":"24455 빼기 육백십육","formula":"=24455-616"}
+{"task":"calc","cols":"","q":"35과 670의 곱","formula":"=35*670"}
+{"task":"calc","cols":"","q":"72837과 구천육백칠십사의 합","formula":"=72837+9674"}
+{"task":"calc","cols":"","q":"칠백구십일 빼기 육천백이십사","formula":"=791-6124"}
+{"task":"calc","cols":"","q":"54과 사십오의 합","formula":"=54+45"}
+{"task":"calc","cols":"","q":"만칠천이십칠에서 720를 뺀 값","formula":"=17027-720"}
+{"task":"calc","cols":"","q":"삼백구십삼 더하기 사십칠","formula":"=393+47"}
+{"task":"calc","cols":"","q":"육백칠십이를 사로 나눈 나머지","formula":"=MOD(672,4)"}
+{"task":"calc","cols":"","q":"2483에 이백십오를 더하고 칠를 곱하기","formula":"=(2483+215)*7"}
+{"task":"calc","cols":"","q":"사천오백십일만천팔백팔 나누기 오백칠십사","formula":"=45111808/574"}
+{"task":"calc","cols":"","q":"오십과 사백의 곱","formula":"=50*400"}
+{"task":"calc","cols":"","q":"팔백삼십사와 십일의 차","formula":"=ABS(834-11)"}
+{"task":"calc","cols":"","q":"백팔에 오백삼십이를 더하고 오를 곱하기","formula":"=(108+532)*5"}
+{"task":"calc","cols":"","q":"6927를 삼로 나눈 나머지","formula":"=MOD(6927,3)"}
+{"task":"calc","cols":"","q":"400에서 870를 뺀 값","formula":"=400-870"}
+{"task":"calc","cols":"","q":"육천팔백칠십육 나누기 구","formula":"=6876/9"}
+{"task":"calc","cols":"","q":"57과 칠의 합","formula":"=57+7"}
+{"task":"calc","cols":"","q":"천이백오십팔 나누기 십칠","formula":"=1258/17"}
+{"task":"calc","cols":"","q":"육십오과 육백팔십팔의 곱","formula":"=65*688"}
+{"task":"calc","cols":"","q":"만팔천사백구십육과 육천칠백오십삼의 합","formula":"=18496+6753"}
+{"task":"calc","cols":"","q":"오만팔천사백구십육를 사로 나눈 나머지","formula":"=MOD(58496,4)"}
+{"task":"calc","cols":"","q":"이백구에 747를 더하고 오를 곱하기","formula":"=(209+747)*5"}
+{"task":"calc","cols":"","q":"65089과 610의 곱","formula":"=65089*610"}
+{"task":"calc","cols":"","q":"6842 더하기 467","formula":"=6842+467"}
+{"task":"calc","cols":"","q":"49와 346의 차","formula":"=ABS(49-346)"}
+{"task":"calc","cols":"","q":"53983 곱하기 722","formula":"=53983*722"}
+{"task":"calc","cols":"","q":"이백십만구천오백오십 나누기 육십이","formula":"=2109550/62"}
+{"task":"calc","cols":"","q":"6507에서 134를 뺀 값","formula":"=6507-134"}
+{"task":"calc","cols":"","q":"백구십오 곱하기 팔천육백구","formula":"=195*8609"}
+{"task":"calc","cols":"","q":"팔십일 곱하기 구십삼","formula":"=81*93"}
+{"task":"calc","cols":"","q":"1286472 나누기 4873","formula":"=1286472/4873"}
+{"task":"calc","cols":"","q":"사백이십사과 59의 곱","formula":"=424*59"}
+{"task":"calc","cols":"","q":"팔천삼백육십오에 오천사백육십이를 더하고 육를 곱하기","formula":"=(8365+5462)*6"}
+{"task":"calc","cols":"","q":"418 곱하기 오십이","formula":"=418*52"}
+{"task":"calc","cols":"","q":"십오에 329를 더하고 칠를 곱하기","formula":"=(15+329)*7"}
+{"task":"calc","cols":"","q":"6879과 8811의 합","formula":"=6879+8811"}
+{"task":"calc","cols":"","q":"오만구천육백칠십과 팔천칠백팔십구의 합","formula":"=59670+8789"}
+{"task":"calc","cols":"","q":"사천이백십일에 2011를 더하고 칠를 곱하기","formula":"=(4211+2011)*7"}
+{"task":"calc","cols":"","q":"삼천삼백이십과 8658의 합","formula":"=3320+8658"}
+{"task":"calc","cols":"","q":"419 더하기 2787","formula":"=419+2787"}
+{"task":"calc","cols":"","q":"삼만칠천팔백육십육 빼기 7130","formula":"=37866-7130"}
+{"task":"calc","cols":"","q":"8967 나누기 21","formula":"=8967/21"}
+{"task":"calc","cols":"","q":"76 더하기 90","formula":"=76+90"}
+{"task":"calc","cols":"","q":"97258과 오천구십의 곱","formula":"=97258*5090"}
+{"task":"calc","cols":"","q":"412 더하기 사십팔","formula":"=412+48"}
+{"task":"calc","cols":"","q":"이만이천사백십칠과 4012의 합","formula":"=22417+4012"}
+{"task":"calc","cols":"","q":"99813를 오로 나눈 나머지","formula":"=MOD(99813,5)"}
+{"task":"calc","cols":"","q":"12 곱하기 283","formula":"=12*283"}
+{"task":"calc","cols":"","q":"88259를 삼로 나눈 나머지","formula":"=MOD(88259,3)"}
+{"task":"calc","cols":"","q":"오백육 더하기 595","formula":"=506+595"}
+{"task":"calc","cols":"","q":"88442에 육십이를 더하고 삼를 곱하기","formula":"=(88442+62)*3"}
+{"task":"calc","cols":"","q":"99과 십팔의 곱","formula":"=99*18"}
+{"task":"calc","cols":"","q":"6344 빼기 팔백사십삼","formula":"=6344-843"}
+{"task":"calc","cols":"","q":"육백구십오에 55를 더하고 오를 곱하기","formula":"=(695+55)*5"}
+{"task":"calc","cols":"","q":"천오백오십사에서 29를 뺀 값","formula":"=1554-29"}
+{"task":"calc","cols":"","q":"63에 오천칠백삼십이를 더하고 구를 곱하기","formula":"=(63+5732)*9"}
+{"task":"calc","cols":"","q":"540 더하기 41","formula":"=540+41"}
+{"task":"calc","cols":"","q":"십구과 32의 합","formula":"=19+32"}
+{"task":"calc","cols":"","q":"오십이 곱하기 805","formula":"=52*805"}
+{"task":"calc","cols":"","q":"620와 627의 차","formula":"=ABS(620-627)"}
+{"task":"calc","cols":"","q":"육백구십일에서 122를 뺀 값","formula":"=691-122"}
+{"task":"calc","cols":"","q":"팔백팔십일과 육백팔십구의 합","formula":"=881+689"}
+{"task":"calc","cols":"","q":"이천칠백삼십이만오천오백 나누기 300","formula":"=27325500/300"}
+{"task":"calc","cols":"","q":"오천구백칠십육에서 8524를 뺀 값","formula":"=5976-8524"}
+{"task":"calc","cols":"","q":"91과 이백육십구의 합","formula":"=91+269"}
+{"task":"calc","cols":"","q":"삼십육과 837의 곱","formula":"=36*837"}
+{"task":"calc","cols":"","q":"칠백십팔 빼기 45","formula":"=718-45"}
+{"task":"calc","cols":"","q":"구십 더하기 369","formula":"=90+369"}
+{"task":"calc","cols":"","q":"사백칠과 657의 곱","formula":"=407*657"}
+{"task":"calc","cols":"","q":"145624 나누기 육백육십팔","formula":"=145624/668"}
+{"task":"calc","cols":"","q":"육과 827의 합","formula":"=6+827"}
+{"task":"calc","cols":"","q":"사백삼십팔 곱하기 삼백오","formula":"=438*305"}
+{"task":"calc","cols":"","q":"886 곱하기 칠십사","formula":"=886*74"}
+{"task":"calc","cols":"","q":"이십과 칠십팔의 합","formula":"=20+78"}
+{"task":"calc","cols":"","q":"50 곱하기 육백십일","formula":"=50*611"}
+{"task":"calc","cols":"","q":"7395 더하기 육십사","formula":"=7395+64"}
+{"task":"calc","cols":"","q":"팔천사백십육 나누기 삼십이","formula":"=8416/32"}
+{"task":"calc","cols":"","q":"8211 빼기 9888","formula":"=8211-9888"}
+{"task":"calc","cols":"","q":"사만천오백이십구에서 삼천팔백육십를 뺀 값","formula":"=41529-3860"}
+{"task":"calc","cols":"","q":"육만육천팔백팔십육 빼기 오천이백칠십칠","formula":"=66886-5277"}
+{"task":"calc","cols":"","q":"815 빼기 구천백칠십","formula":"=815-9170"}
+{"task":"calc","cols":"","q":"5에서 팔백칠십구를 뺀 값","formula":"=5-879"}
+{"task":"calc","cols":"","q":"6339와 3879의 차","formula":"=ABS(6339-3879)"}
+{"task":"calc","cols":"","q":"292 더하기 6946","formula":"=292+6946"}
+{"task":"calc","cols":"","q":"336를 오로 나눈 나머지","formula":"=MOD(336,5)"}
+{"task":"calc","cols":"","q":"660와 십팔의 차","formula":"=ABS(660-18)"}
+{"task":"calc","cols":"","q":"42에 9를 더하고 사를 곱하기","formula":"=(42+9)*4"}
+{"task":"calc","cols":"","q":"502과 8360의 곱","formula":"=502*8360"}
+{"task":"calc","cols":"","q":"869 빼기 112","formula":"=869-112"}
+{"task":"calc","cols":"","q":"(1840+6)*19","formula":"=(1840+6)*19"}
+{"task":"calc","cols":"","q":"50원에 90% 더한 값","formula":"=50*(1+90%)"}
+{"task":"calc","cols":"","q":"1670원에서 30% 할인한 가격","formula":"=1670*(1-30%)"}
+{"task":"calc","cols":"","q":"1590원에서 15% 할인한 가격","formula":"=1590*(1-15%)"}
+{"task":"calc","cols":"","q":"41000원에 30% 더한 값","formula":"=41000*(1+30%)"}
+{"task":"calc","cols":"","q":"8400의 12%","formula":"=8400*12%"}
+{"task":"calc","cols":"","q":"오백의 80퍼센트","formula":"=500*80%"}
+{"task":"calc","cols":"","q":"840의 80%","formula":"=840*80%"}
+{"task":"calc","cols":"","q":"6600원에 5% 더한 값","formula":"=6600*(1+5%)"}
+{"task":"calc","cols":"","q":"13700원에서 90% 할인한 가격","formula":"=13700*(1-90%)"}
+{"task":"calc","cols":"","q":"십사만칠천의 5퍼센트","formula":"=147000*5%"}
+{"task":"calc","cols":"","q":"210원에 15% 더한 값","formula":"=210*(1+15%)"}
+{"task":"calc","cols":"","q":"6400원에서 50% 할인한 가격","formula":"=6400*(1-50%)"}
+{"task":"calc","cols":"","q":"2650 곱하기 10 더하기 50","formula":"=2650*10+50"}
+{"task":"calc","cols":"","q":"백육십의 15퍼센트","formula":"=160*15%"}
+{"task":"calc","cols":"","q":"천구백의 30퍼센트","formula":"=1900*30%"}
+{"task":"calc","cols":"","q":"8000에서 8를 빼고 9로 나누기","formula":"=(8000-8)/9"}
+{"task":"calc","cols":"","q":"16900의 10%","formula":"=16900*10%"}
+{"task":"calc","cols":"","q":"만구백의 40퍼센트","formula":"=10900*40%"}
+{"task":"calc","cols":"","q":"6800 곱하기 2 더하기 20","formula":"=6800*2+20"}
+{"task":"calc","cols":"","q":"4800원에 5% 더한 값","formula":"=4800*(1+5%)"}
+{"task":"calc","cols":"","q":"8450원에 90% 더한 값","formula":"=8450*(1+90%)"}
+{"task":"calc","cols":"","q":"1500원에 60% 더한 값","formula":"=1500*(1+60%)"}
+{"task":"calc","cols":"","q":"7300원에서 40% 할인한 가격","formula":"=7300*(1-40%)"}
+{"task":"calc","cols":"","q":"460원에 80% 더한 값","formula":"=460*(1+80%)"}
+{"task":"calc","cols":"","q":"141000에서 17를 빼고 3로 나누기","formula":"=(141000-17)/3"}
+{"task":"calc","cols":"","q":"6350원에서 12% 할인한 가격","formula":"=6350*(1-12%)"}
+{"task":"calc","cols":"","q":"5300에서 2를 빼고 7로 나누기","formula":"=(5300-2)/7"}
+{"task":"calc","cols":"","q":"(6900+18)*15","formula":"=(6900+18)*15"}
+{"task":"calc","cols":"","q":"천오백팔십의 70퍼센트","formula":"=1580*70%"}
+{"task":"calc","cols":"","q":"16200의 12%","formula":"=16200*12%"}
+{"task":"calc","cols":"","q":"17700원에 15% 더한 값","formula":"=17700*(1+15%)"}
+{"task":"calc","cols":"","q":"1900의 80%","formula":"=1900*80%"}
+{"task":"calc","cols":"","q":"18400 곱하기 16 더하기 50","formula":"=18400*16+50"}
+{"task":"calc","cols":"","q":"200원에서 60% 할인한 가격","formula":"=200*(1-60%)"}
+{"task":"calc","cols":"","q":"17500의 80%","formula":"=17500*80%"}
+{"task":"calc","cols":"","q":"팔백칠십의 90퍼센트","formula":"=870*90%"}
+{"task":"calc","cols":"","q":"13600의 25%","formula":"=13600*25%"}
+{"task":"calc","cols":"","q":"(2300+9)*20","formula":"=(2300+9)*20"}
+{"task":"calc","cols":"","q":"14700의 12%","formula":"=14700*12%"}
+{"task":"calc","cols":"","q":"7500에서 20를 빼고 9로 나누기","formula":"=(7500-20)/9"}
+{"task":"calc","cols":"","q":"3250원에 90% 더한 값","formula":"=3250*(1+90%)"}
+{"task":"calc","cols":"","q":"7000원에서 12% 할인한 가격","formula":"=7000*(1-12%)"}
+{"task":"calc","cols":"","q":"760원에서 25% 할인한 가격","formula":"=760*(1-25%)"}
+{"task":"calc","cols":"","q":"29000의 50%","formula":"=29000*50%"}
+{"task":"calc","cols":"","q":"143000원에 90% 더한 값","formula":"=143000*(1+90%)"}
+{"task":"calc","cols":"","q":"530 곱하기 32 더하기 10","formula":"=530*32+10"}
+{"task":"calc","cols":"","q":"400원에 12% 더한 값","formula":"=400*(1+12%)"}
+{"task":"calc","cols":"","q":"5100원에서 30% 할인한 가격","formula":"=5100*(1-30%)"}
+{"task":"calc","cols":"","q":"3450 곱하기 38 더하기 30","formula":"=3450*38+30"}
+{"task":"calc","cols":"","q":"7900 곱하기 36 더하기 20","formula":"=7900*36+20"}
+{"task":"calc","cols":"","q":"10800의 20%","formula":"=10800*20%"}
+{"task":"calc","cols":"","q":"370원에서 40% 할인한 가격","formula":"=370*(1-40%)"}
+{"task":"calc","cols":"","q":"400원에서 15% 할인한 가격","formula":"=400*(1-15%)"}
+{"task":"calc","cols":"","q":"(50+18)*9","formula":"=(50+18)*9"}
+{"task":"calc","cols":"","q":"630 곱하기 21 더하기 10","formula":"=630*21+10"}
+{"task":"calc","cols":"","q":"88000원에 10% 더한 값","formula":"=88000*(1+10%)"}
+{"task":"calc","cols":"","q":"1800에서 16를 빼고 3로 나누기","formula":"=(1800-16)/3"}
+{"task":"calc","cols":"","q":"79000원에서 40% 할인한 가격","formula":"=79000*(1-40%)"}
+{"task":"calc","cols":"","q":"5500원에 60% 더한 값","formula":"=5500*(1+60%)"}
+{"task":"calc","cols":"","q":"7150에서 17를 빼고 3로 나누기","formula":"=(7150-17)/3"}
+{"task":"calc","cols":"","q":"70원에서 30% 할인한 가격","formula":"=70*(1-30%)"}
+{"task":"calc","cols":"","q":"26000원에서 15% 할인한 가격","formula":"=26000*(1-15%)"}
+{"task":"calc","cols":"","q":"천구백십의 90퍼센트","formula":"=1910*90%"}
+{"task":"calc","cols":"","q":"172000의 40%","formula":"=172000*40%"}
+{"task":"calc","cols":"","q":"십사만구천의 60퍼센트","formula":"=149000*60%"}
+{"task":"calc","cols":"","q":"52000에서 5를 빼고 5로 나누기","formula":"=(52000-5)/5"}
+{"task":"calc","cols":"","q":"1220의 10%","formula":"=1220*10%"}
+{"task":"calc","cols":"","q":"12100의 20%","formula":"=12100*20%"}
+{"task":"calc","cols":"","q":"16300원에 90% 더한 값","formula":"=16300*(1+90%)"}
+{"task":"calc","cols":"","q":"900 곱하기 10 더하기 50","formula":"=900*10+50"}
+{"task":"calc","cols":"","q":"4400 곱하기 9 더하기 80","formula":"=4400*9+80"}
+{"task":"calc","cols":"","q":"구만사천의 25퍼센트","formula":"=94000*25%"}
+{"task":"calc","cols":"","q":"1850원에 50% 더한 값","formula":"=1850*(1+50%)"}
+{"task":"calc","cols":"","q":"900원에서 60% 할인한 가격","formula":"=900*(1-60%)"}
+{"task":"calc","cols":"","q":"십일만의 40퍼센트","formula":"=110000*40%"}
+{"task":"calc","cols":"","q":"십일만천의 12퍼센트","formula":"=111000*12%"}
+{"task":"calc","cols":"","q":"3600 곱하기 3 더하기 90","formula":"=3600*3+90"}
+{"task":"calc","cols":"","q":"(14900+2)*6","formula":"=(14900+2)*6"}
+{"task":"calc","cols":"","q":"9800에서 18를 빼고 2로 나누기","formula":"=(9800-18)/2"}
+{"task":"calc","cols":"A=이름, B=가격, C=수량","q":"B열 합계가 칠백 넘으면 1 아니면 0","formula":"=IF(SUM(B:B)>700,1,0)"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"B열 평균에 사십 더하기","formula":"=AVERAGE(B:B)+40"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"B2 곱하기 C2를 반올림해서 백 원 단위로","formula":"=ROUND(B2*C2,-2)"}
+{"task":"calc","cols":"A=이름, B=점수","q":"B열 개수","formula":"=COUNT(B:B)"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"B열 평균을 소수 첫째 자리까지 반올림","formula":"=ROUND(AVERAGE(B:B),1)"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"2행의 B와 C 곱하기","formula":"=B2*C2"}
+{"task":"calc","cols":"A=이름, B=점수","q":"B열 평균","formula":"=AVERAGE(B:B)"}
+{"task":"calc","cols":"A=반, B=평균, C=인원","q":"B열 개수","formula":"=COUNT(B:B)"}
+{"task":"calc","cols":"A=날짜, B=지출","q":"B열 합계","formula":"=SUM(B:B)"}
+{"task":"calc","cols":"A=날짜, B=지출","q":"B열 합계에서 10% 빼기","formula":"=SUM(B:B)*(1-10%)"}
+{"task":"calc","cols":"A=품목, B=가격","q":"B열 최댓값과 최솟값의 차이","formula":"=MAX(B:B)-MIN(B:B)"}
+{"task":"calc","cols":"A=반, B=평균, C=인원","q":"B열 합계에서 10% 빼기","formula":"=SUM(B:B)*(1-10%)"}
+{"task":"calc","cols":"A=이름, B=가격, C=수량","q":"B열 합계에서 10% 빼기","formula":"=SUM(B:B)*(1-10%)"}
+{"task":"calc","cols":"A=날짜, B=지출","q":"B열 평균을 소수 첫째 자리까지 반올림","formula":"=ROUND(AVERAGE(B:B),1)"}
+{"task":"calc","cols":"A=품목, B=가격","q":"B열 평균을 소수 둘째 자리까지 반올림","formula":"=ROUND(AVERAGE(B:B),2)"}
+{"task":"calc","cols":"A=날짜, B=지출","q":"B열 평균에 구십 더하기","formula":"=AVERAGE(B:B)+90"}
+{"task":"calc","cols":"A=이름, B=점수","q":"B열 합계에서 10% 빼기","formula":"=SUM(B:B)*(1-10%)"}
+{"task":"calc","cols":"A=이름, B=가격, C=수량","q":"C열 합계가 팔백 넘으면 1 아니면 0","formula":"=IF(SUM(C:C)>800,1,0)"}
+{"task":"calc","cols":"A=반, B=평균, C=인원","q":"C열 합계가 구백 넘으면 1 아니면 0","formula":"=IF(SUM(C:C)>900,1,0)"}
+{"task":"calc","cols":"A=반, B=평균, C=인원","q":"B열과 C열 곱해서 합계","formula":"=SUMPRODUCT(B:B,C:C)"}
+{"task":"calc","cols":"A=이름, B=점수","q":"B열 평균을 소수 첫째 자리까지 반올림","formula":"=ROUND(AVERAGE(B:B),1)"}
+{"task":"calc","cols":"A=날짜, B=지출","q":"B열 평균을 소수 둘째 자리까지 반올림","formula":"=ROUND(AVERAGE(B:B),2)"}
+{"task":"calc","cols":"A=이름, B=가격, C=수량","q":"B열 합계가 오백 넘으면 1 아니면 0","formula":"=IF(SUM(B:B)>500,1,0)"}
+{"task":"calc","cols":"A=날짜, B=지출","q":"B열 합계에 부가세 10% 더하기","formula":"=SUM(B:B)*(1+10%)"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"C열 평균을 소수 둘째 자리까지 반올림","formula":"=ROUND(AVERAGE(C:C),2)"}
+{"task":"calc","cols":"A=이름, B=점수","q":"B열 평균을 소수 둘째 자리까지 반올림","formula":"=ROUND(AVERAGE(B:B),2)"}
+{"task":"calc","cols":"A=이름, B=점수","q":"B열 합계에 부가세 10% 더하기","formula":"=SUM(B:B)*(1+10%)"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"C열에서 50 넘는 칸 개수","formula":"=COUNTIF(C:C,\">50\")"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"B열 합계가 팔백 넘으면 1 아니면 0","formula":"=IF(SUM(B:B)>800,1,0)"}
+{"task":"calc","cols":"A=이름, B=점수","q":"B열 합계가 팔백 넘으면 1 아니면 0","formula":"=IF(SUM(B:B)>800,1,0)"}
+{"task":"calc","cols":"A=품목, B=가격","q":"B열 합계","formula":"=SUM(B:B)"}
+{"task":"calc","cols":"A=날짜, B=지출","q":"B열 평균에 이십 더하기","formula":"=AVERAGE(B:B)+20"}
+{"task":"calc","cols":"A=이름, B=점수","q":"B열 평균에 구십 더하기","formula":"=AVERAGE(B:B)+90"}
+{"task":"calc","cols":"A=이름, B=가격, C=수량","q":"B열 합계","formula":"=SUM(B:B)"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"C열에서 30 넘는 칸 개수","formula":"=COUNTIF(C:C,\">30\")"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"B열 합계를 C열 합계로 나누기","formula":"=SUM(B:B)/SUM(C:C)"}
+{"task":"calc","cols":"A=품목, B=가격","q":"B열 합계가 삼백 넘으면 1 아니면 0","formula":"=IF(SUM(B:B)>300,1,0)"}
+{"task":"calc","cols":"A=품목, B=가격","q":"B열 합계가 칠백 넘으면 1 아니면 0","formula":"=IF(SUM(B:B)>700,1,0)"}
+{"task":"calc","cols":"A=이름, B=가격, C=수량","q":"C열 평균을 소수 둘째 자리까지 반올림","formula":"=ROUND(AVERAGE(C:C),2)"}
+{"task":"calc","cols":"A=이름, B=점수","q":"B열 합계가 삼백 넘으면 1 아니면 0","formula":"=IF(SUM(B:B)>300,1,0)"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"B열 합계","formula":"=SUM(B:B)"}
+{"task":"calc","cols":"A=이름, B=점수","q":"B열 합계","formula":"=SUM(B:B)"}
+{"task":"calc","cols":"A=품목, B=가격","q":"B열에서 30 넘는 칸 개수","formula":"=COUNTIF(B:B,\">30\")"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"B열에서 60 넘는 칸 개수","formula":"=COUNTIF(B:B,\">60\")"}
+{"task":"calc","cols":"A=품목, B=가격","q":"B열 합계가 팔백 넘으면 1 아니면 0","formula":"=IF(SUM(B:B)>800,1,0)"}
+{"task":"calc","cols":"A=이름, B=점수","q":"B열에서 60 넘는 칸 개수","formula":"=COUNTIF(B:B,\">60\")"}
+{"task":"calc","cols":"A=반, B=평균, C=인원","q":"B열 합계에 부가세 10% 더하기","formula":"=SUM(B:B)*(1+10%)"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"B열 개수","formula":"=COUNT(B:B)"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"B열과 C열 곱해서 합계","formula":"=SUMPRODUCT(B:B,C:C)"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"C열 합계가 칠백 넘으면 1 아니면 0","formula":"=IF(SUM(C:C)>700,1,0)"}
+{"task":"calc","cols":"A=이름, B=가격, C=수량","q":"B열 평균","formula":"=AVERAGE(B:B)"}
+{"task":"calc","cols":"A=이름, B=점수","q":"B열에서 40 넘는 칸 개수","formula":"=COUNTIF(B:B,\">40\")"}
+{"task":"calc","cols":"A=품목, B=가격","q":"B열 합계에서 10% 빼기","formula":"=SUM(B:B)*(1-10%)"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"B열 평균","formula":"=AVERAGE(B:B)"}
+{"task":"calc","cols":"A=반, B=평균, C=인원","q":"B열 평균을 소수 둘째 자리까지 반올림","formula":"=ROUND(AVERAGE(B:B),2)"}
+{"task":"calc","cols":"A=날짜, B=지출","q":"B열에서 80 넘는 칸 개수","formula":"=COUNTIF(B:B,\">80\")"}
+{"task":"calc","cols":"A=반, B=평균, C=인원","q":"B열 합계가 오백 넘으면 1 아니면 0","formula":"=IF(SUM(B:B)>500,1,0)"}
+{"task":"calc","cols":"A=이름, B=가격, C=수량","q":"B열 평균을 소수 둘째 자리까지 반올림","formula":"=ROUND(AVERAGE(B:B),2)"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"B열에서 20 넘는 칸 개수","formula":"=COUNTIF(B:B,\">20\")"}
+{"task":"calc","cols":"A=반, B=평균, C=인원","q":"C열 평균을 소수 둘째 자리까지 반올림","formula":"=ROUND(AVERAGE(C:C),2)"}
+{"task":"calc","cols":"A=반, B=평균, C=인원","q":"B열 합계를 C열 합계로 나누기","formula":"=SUM(B:B)/SUM(C:C)"}
+{"task":"calc","cols":"A=이름, B=가격, C=수량","q":"B열 합계에 부가세 10% 더하기","formula":"=SUM(B:B)*(1+10%)"}
+{"task":"calc","cols":"A=이름, B=가격, C=수량","q":"2행의 B와 C 곱하기","formula":"=B2*C2"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"C열 개수","formula":"=COUNT(C:C)"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"B열 최댓값과 최솟값의 차이","formula":"=MAX(B:B)-MIN(B:B)"}
+{"task":"calc","cols":"A=이름, B=가격, C=수량","q":"B열 합계를 C열 합계로 나누기","formula":"=SUM(B:B)/SUM(C:C)"}
+{"task":"calc","cols":"A=날짜, B=지출","q":"B열 최댓값과 최솟값의 차이","formula":"=MAX(B:B)-MIN(B:B)"}
+{"task":"calc","cols":"A=이름, B=가격, C=수량","q":"C열 평균에 사십 더하기","formula":"=AVERAGE(C:C)+40"}
+{"task":"calc","cols":"A=이름, B=점수","q":"B열에서 70 넘는 칸 개수","formula":"=COUNTIF(B:B,\">70\")"}
+{"task":"calc","cols":"A=반, B=평균, C=인원","q":"B열 최댓값과 최솟값의 차이","formula":"=MAX(B:B)-MIN(B:B)"}
+{"task":"calc","cols":"A=이름, B=가격, C=수량","q":"B열과 C열 곱해서 합계","formula":"=SUMPRODUCT(B:B,C:C)"}
+{"task":"calc","cols":"A=이름, B=점수","q":"B열 합계가 육백 넘으면 1 아니면 0","formula":"=IF(SUM(B:B)>600,1,0)"}
+{"task":"calc","cols":"A=날짜, B=지출","q":"B열에서 40 넘는 칸 개수","formula":"=COUNTIF(B:B,\">40\")"}
+{"task":"calc","cols":"A=품목, B=가격","q":"B열 개수","formula":"=COUNT(B:B)"}
+{"task":"calc","cols":"A=이름, B=가격, C=수량","q":"C열 합계에 부가세 10% 더하기","formula":"=SUM(C:C)*(1+10%)"}
+{"task":"calc","cols":"A=날짜, B=지출","q":"B열 합계가 이백 넘으면 1 아니면 0","formula":"=IF(SUM(B:B)>200,1,0)"}
+{"task":"calc","cols":"A=품목, B=가격","q":"B열 평균에 육십 더하기","formula":"=AVERAGE(B:B)+60"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"C열 평균에 오십 더하기","formula":"=AVERAGE(C:C)+50"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"B열 합계가 육백 넘으면 1 아니면 0","formula":"=IF(SUM(B:B)>600,1,0)"}
+{"task":"calc","cols":"A=반, B=평균, C=인원","q":"B열 평균을 소수 첫째 자리까지 반올림","formula":"=ROUND(AVERAGE(B:B),1)"}
+{"task":"calc","cols":"A=이름, B=가격, C=수량","q":"C열에서 90 넘는 칸 개수","formula":"=COUNTIF(C:C,\">90\")"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"C열 합계","formula":"=SUM(C:C)"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"B열에서 40 넘는 칸 개수","formula":"=COUNTIF(B:B,\">40\")"}
+{"task":"calc","cols":"A=품목, B=가격","q":"B열에서 70 넘는 칸 개수","formula":"=COUNTIF(B:B,\">70\")"}
+{"task":"calc","cols":"A=반, B=평균, C=인원","q":"C열 개수","formula":"=COUNT(C:C)"}
+{"task":"calc","cols":"A=반, B=평균, C=인원","q":"B열 합계가 삼백 넘으면 1 아니면 0","formula":"=IF(SUM(B:B)>300,1,0)"}
+{"task":"calc","cols":"A=반, B=평균, C=인원","q":"B2 곱하기 C2를 반올림해서 백 원 단위로","formula":"=ROUND(B2*C2,-2)"}
+{"task":"calc","cols":"A=날짜, B=지출","q":"B열 합계가 팔백 넘으면 1 아니면 0","formula":"=IF(SUM(B:B)>800,1,0)"}
+{"task":"calc","cols":"A=품목, B=가격","q":"B열 평균에 구십 더하기","formula":"=AVERAGE(B:B)+90"}
+{"task":"calc","cols":"A=반, B=평균, C=인원","q":"C열 평균","formula":"=AVERAGE(C:C)"}
+{"task":"calc","cols":"A=반, B=평균, C=인원","q":"2행의 B와 C 곱하기","formula":"=B2*C2"}
+{"task":"calc","cols":"A=반, B=평균, C=인원","q":"B열에서 20 넘는 칸 개수","formula":"=COUNTIF(B:B,\">20\")"}
+{"task":"calc","cols":"A=날짜, B=지출","q":"B열 평균에 팔십 더하기","formula":"=AVERAGE(B:B)+80"}
+{"task":"calc","cols":"A=이름, B=점수","q":"B열 평균에 칠십 더하기","formula":"=AVERAGE(B:B)+70"}
+{"task":"calc","cols":"A=이름, B=가격, C=수량","q":"C열 평균에 오십 더하기","formula":"=AVERAGE(C:C)+50"}
+{"task":"calc","cols":"A=이름, B=국어, C=수학","q":"C열 평균","formula":"=AVERAGE(C:C)"}
+{"task":"calc","cols":"A=이름, B=점수","q":"B열에서 30 넘는 칸 개수","formula":"=COUNTIF(B:B,\">30\")"}
+{"task":"calc","cols":"A=이름, B=점수","q":"B열 합계가 사백 넘으면 1 아니면 0","formula":"=IF(SUM(B:B)>400,1,0)"}
+{"task":"calc","cols":"A=날짜, B=지출","q":"B열 평균에 칠십 더하기","formula":"=AVERAGE(B:B)+70"}
+{"task":"calc","cols":"A=품목, B=가격","q":"B열 평균을 소수 첫째 자리까지 반올림","formula":"=ROUND(AVERAGE(B:B),1)"}
+{"task":"calc","cols":"A=날짜, B=지출","q":"B열 개수","formula":"=COUNT(B:B)"}
+{"task":"calc","cols":"A=품목, B=가격","q":"B열 평균","formula":"=AVERAGE(B:B)"}
+{"task":"calc","cols":"A=이름, B=가격, C=수량","q":"B열 개수","formula":"=COUNT(B:B)"}
+{"task":"calc","cols":"A=반, B=평균, C=인원","q":"C열 합계에 부가세 10% 더하기","formula":"=SUM(C:C)*(1+10%)"}

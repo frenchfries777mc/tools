@@ -1,0 +1,88 @@
+{
+ "built": "2026-10-19T10:36:37.534Z",
+ "total": 6000,
+ "newRows": 2243,
+ "take": {
+  "code": {
+   "want": 1380,
+   "rows": 1380,
+   "new": 450
+  },
+  "formula": {
+   "want": 1080,
+   "rows": 1080,
+   "new": 378
+  },
+  "und": {
+   "want": 720,
+   "rows": 720,
+   "new": 0
+  },
+  "calc": {
+   "want": 600,
+   "rows": 600,
+   "new": 584
+  },
+  "tr": {
+   "want": 540,
+   "rows": 540,
+   "new": 0
+  },
+  "table": {
+   "want": 480,
+   "rows": 480,
+   "new": 176
+  },
+  "unknown": {
+   "want": 420,
+   "rows": 420,
+   "new": 415
+  },
+  "graph": {
+   "want": 300,
+   "rows": 300,
+   "new": 0
+  },
+  "self": {
+   "want": 240,
+   "rows": 240,
+   "new": 240
+  },
+  "chat": {
+   "want": 240,
+   "rows": 240,
+   "new": 0
+  }
+ },
+ "short": {},
+ "blocked": 68,
+ "repeatedRows": 6,
+ "pool": {
+  "formula": 484,
+  "tr": 893,
+  "und": 650,
+  "memo-chip": 106,
+  "graph": 500,
+  "table": 361,
+  "slides": 200,
+  "cell": 221,
+  "ask4": 211,
+  "gen": 249,
+  "joke": 251,
+  "code": 461,
+  "ask": 219,
+  "memo-ex": 58,
+  "gen14": 62,
+  "fun": 58,
+  "explain": 8,
+  "ask4u": 17,
+  "calc": 16,
+  "spell": 10,
+  "newunknown": 415,
+  "newformula": 378,
+  "newtable": 176,
+  "newcode": 450,
+  "newcalc": 584,
+  "newself": 469
+ }
+}
