@@ -72,6 +72,8 @@ h1{font-size:22px; margin:6px 0 0;} p{margin:0; color:var(--dim); line-height:1.
 <script>
 (function(){
 'use strict';
+/* the panel toggles here mean expand / collapse (strings.js has "펼치기" as an animation effect) */
+FFT.add({'펼치기':['Expand','Mostrar','Afficher','Ausklappen','開く'],'접기':['Collapse','Ocultar','Masquer','Einklappen','閉じる']});
 var T=FFT.T, F=FFT.F, $=function(id){ return document.getElementById(id); };
 var CIRC='①②③④⑤⑥', COLS=['#ffc93c','#6fb1ff','#7ee2b0','#ff8fa3','#c9a6ff','#ffb36b'];
 function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
