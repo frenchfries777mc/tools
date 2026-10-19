@@ -6,6 +6,7 @@
 <title>AI 가르치기 · Frenchfries777 Tools</title>
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#08090d">
+<link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
@@ -34,7 +35,7 @@ FFT.add({
 '모델이 작아서 너무 많이 적으면 헷갈려요. 짧고 분명하게 적어 주세요.':['The model is small, so too many entries confuse it. Keep them short and clear.','El modelo es pequeño: demasiadas entradas lo confunden. Escríbelas cortas y claras.','Le modèle est petit : trop d’entrées le perdent. Écris court et clair.','Das Modell ist klein; zu viele Einträge verwirren es. Kurz und klar schreiben.','モデルが小さいので、多すぎると混乱します。短くはっきり書いてください。'],
 /* translations for i18n-todo 2026-10-18 */
 "틀렸다고 눌린 답":["Answers marked wrong","Respuestas marcadas como incorrectas","Réponses signalées comme fausses","Als falsch markierte Antworten","間違いと報告された答え"],
-"이 기기에서 👎 틀렸어요를 누른 것만 보여요.":["Only answers marked 👎 Wrong on this device are shown.","Solo se muestran las respuestas marcadas con 👎 Incorrecto en este dispositivo.","Seules les réponses signalées avec 👎 Faux sur cet appareil s’affichent.","Nur auf diesem Gerät mit 👎 Falsch markierte Antworten werden angezeigt.","この端末で👎 間違いを押したものだけ表示します。"],
+"이 기기에서 누른 것과, 로그인한 사람이 누른 것(서버)이 같이 보여요.":["Answers marked on this device and by logged-in people (server) are shown together.","Se muestran juntas las marcadas en este dispositivo y por personas con sesión iniciada (servidor).","Les réponses signalées sur cet appareil et par les personnes connectées (serveur) sont affichées ensemble.","Auf diesem Gerät und von angemeldeten Personen (Server) markierte Antworten werden zusammen gezeigt.","この端末と、ログインした人(サーバー)が押したものが一緒に表示されます。"],
 "AI 답":["AI answer","Respuesta de la IA","Réponse de l’IA","KI-Antwort","AIの答え"],
 "맞는 답":["Right answer","Respuesta correcta","Bonne réponse","Richtige Antwort","正しい答え"],
 "가르치기에 추가":["Add to what it knows","Añadir a lo que sabe","Ajouter à ce qu’elle sait","Zu ihrem Wissen hinzufügen","教えた内容に追加"]
@@ -105,7 +106,7 @@ li .who{display:inline-block; font-size:11px; border:1px solid var(--line); bord
       <p class="hint">모델이 작아서 너무 많이 적으면 헷갈려요. 짧고 분명하게 적어 주세요.</p>
     </form>
     <h2>틀렸다고 눌린 답</h2>
-    <p class="hint" style="margin:-4px 0 10px">이 기기에서 👎 틀렸어요를 누른 것만 보여요.</p>
+    <p class="hint" style="margin:-4px 0 10px">이 기기에서 누른 것과, 로그인한 사람이 누른 것(서버)이 같이 보여요.</p>
     <ul id="wrongList"></ul>
     <p class="msg" id="wrongEmpty" hidden>아직 없어요.</p>
     <h2>가르친 내용</h2>
@@ -122,12 +123,22 @@ var NAMES={all:T('둘 다'), tarius:'tarius', lectus:'lectus'};
 function say(t,k){ var m=$('msg'); m.textContent=t||''; m.className='msg'+(k?' '+k:''); }
 function gate(text,login){ $('admin').hidden=true; $('gate').hidden=false; $('gateMsg').textContent=text; $('loginBtn').hidden=!login; }
 /* answers people marked wrong (👎 틀렸어요, saved in this browser by ../ai-wrong.js) */
-var WLS='ffai.wrong.v1', pendingWrong=null;
-function wkey(e){ return e.t+'|'+e.tool+'|'+e.q; }
+var WLS='ffai.wrong.v1', pendingWrong=null, serverWrong=[];
+function wkey(e){ return e.sid?'s'+e.sid:e.t+'|'+e.tool+'|'+e.q; }
 function wrongRead(){ var a=[]; try{ a=JSON.parse(localStorage.getItem(WLS)||'[]'); }catch(e){} return Array.isArray(a)?a.filter(function(e){ return e&&typeof e==='object'; }):[]; }
-function wrongDrop(k){ var a=wrongRead().filter(function(e){ return wkey(e)!==k; }); try{ localStorage.setItem(WLS,JSON.stringify(a)); }catch(e){} if(pendingWrong===k) pendingWrong=null; renderWrong(); }
+function wrongServer(){
+  return sb.from('ff_ai_wrong').select('id,tool,model,question,answer,correction,created_at').order('id',{ascending:false}).limit(200).then(function(r){
+    serverWrong=(r.error||!r.data)?[]:r.data.map(function(x){ return {sid:x.id, t:x.created_at, tool:x.tool, model:x.model, q:x.question, a:x.answer, fix:x.correction}; });
+    renderWrong();
+  },function(){ serverWrong=[]; });
+}
+function wrongDrop(k){
+  if(k.charAt(0)==='s'&&/^s\d+$/.test(k)){ var id=k.slice(1); serverWrong=serverWrong.filter(function(e){ return String(e.sid)!==id; }); if(pendingWrong===k) pendingWrong=null; renderWrong(); sb.from('ff_ai_wrong').delete().eq('id',id).then(function(){},function(){}); return; }
+  var a=wrongRead().filter(function(e){ return wkey(e)!==k; }); try{ localStorage.setItem(WLS,JSON.stringify(a)); }catch(e){} if(pendingWrong===k) pendingWrong=null; renderWrong(); }
 function renderWrong(){
-  var ul=$('wrongList'), a=wrongRead().slice().reverse(); ul.innerHTML='';
+  var ul=$('wrongList'), loc=wrongRead(), seenK={}; ul.innerHTML='';
+  loc.forEach(function(e){ seenK[e.q+'|'+e.a+'|'+e.fix]=1; });
+  var a=loc.concat(serverWrong.filter(function(e){ return !seenK[e.q+'|'+e.a+'|'+e.fix]; })).sort(function(x,y){ return String(y.t).localeCompare(String(x.t)); });
   a.forEach(function(e){
     var k=wkey(e), li=document.createElement('li'), tx=document.createElement('div'); tx.className='tx'; tx.setAttribute('data-notr','');
     function line(cls,t){ var d=document.createElement('div'); d.className=cls; d.textContent=t; tx.appendChild(d); }
@@ -164,7 +175,7 @@ function check(){
   gate(T('확인 중…'),false);
   sb.rpc('ff_is_admin').then(function(r){
     if(r.error||r.data!==true){ gate(T('개발자만 쓸 수 있어요.'),false); return; }
-    $('gate').hidden=true; $('admin').hidden=false; load(); renderWrong();
+    $('gate').hidden=true; $('admin').hidden=false; load(); renderWrong(); wrongServer();
   });
 }
 $('loginBtn').onclick=function(){ FFAuth.openLogin(); };
@@ -182,5 +193,6 @@ if(!window.FFAuth){ gate(T('불러오지 못했어요'),false); return; }
 FFAuth.ready.then(function(c){ sb=c; check(); FFAuth.onChange(check); }, function(){ gate(T('불러오지 못했어요'),false); });
 })();
 </script>
+<script src="../pwa.js" defer></script>
 </body>
 </html>

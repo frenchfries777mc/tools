@@ -2,7 +2,9 @@
    FFWrong.attach(host, {tool, question, answer}) puts the button at the end of `host` (one per host).
    Clicking it opens the site's own dialog (no native dialogs) where the person can type the right answer (optional).
    The report is kept in this browser (localStorage 'ffai.wrong.v1', newest last, at most 200) and shows up on the
-   developer's teach/ page ("틀렸다고 눌린 답"). Nothing is sent to a server from here.
+   developer's teach/ page ("틀렸다고 눌린 답"). When the person is logged in (FFAuth from the games hub), the same report is also
+   sent to Supabase table ff_ai_wrong (supabase-ff-ai-wrong.sql); a failure there is ignored, the local copy stays.
+   o.model (optional) = the model that wrote the answer, for pages that let people pick one (ai-chat/).
    FFWrong.toast = function(text) can be set by the page to use its own toast. */
 (function(){
 'use strict';
@@ -40,9 +42,18 @@ function toast(t){
 }
 /* report: {tool, question, answer, fix} -> stored entry, or null when the browser cannot store it */
 function report(o){
-  var list=load(), e={t:new Date().toISOString(), tool:cut(o.tool,40), q:cut(o.question,300), a:cut(o.answer,1500), fix:cut(o.fix,500), model:cut(modelId(),80)};
+  var list=load(), e={t:new Date().toISOString(), tool:cut(o.tool,40), q:cut(o.question,300), a:cut(o.answer,1500), fix:cut(o.fix,500), model:cut(o.model||modelId(),80)};
   list.push(e); if(list.length>CAP) list=list.slice(list.length-CAP);
-  return save(list)?e:null;
+  var ok=save(list); send(e); return ok?e:null;
+}
+/* logged-in people also send it to the developer's table; nothing here may throw or show an error */
+function send(e){
+  try{
+    var u=window.FFAuth&&FFAuth.user&&FFAuth.user(); if(!u) return;
+    FFAuth.ready.then(function(sb){ if(!sb) return;
+      return sb.from('ff_ai_wrong').insert({tool:e.tool, model:e.model, question:e.q, answer:e.a, correction:e.fix});
+    }).then(null,function(){});
+  }catch(x){}
 }
 function build(){
   addCSS();
@@ -79,6 +90,6 @@ function attach(host,o){
   b.onclick=function(){ open(b,o); };
   host.appendChild(b); return b;
 }
-var api={attach:attach, report:report, list:load, key:LS, cap:CAP, toast:null};
+var api={attach:attach, report:report, sendOne:send, list:load, key:LS, cap:CAP, toast:null};
 window.FFWrong=api;
 })();
