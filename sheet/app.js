@@ -1194,6 +1194,7 @@ $('fileMenu').addEventListener('click',function(e){
 function fileCmd(f){
   if(f==='new'){ saveNow(); loadDoc(null); saveNow(); }
   else if(f==='open') $('fileIn').click();
+  else if(f==='url') openUrlDlg();
   else if(f==='tpl') openTpl();
   else if(f==='xlsx') exportXLSX();
   else if(f==='csv') exportCSV();
@@ -1203,6 +1204,95 @@ function fileCmd(f){
 }
 $('docName').addEventListener('input',function(){ doc.name=this.value; saveSoon(); });
 $('docName').addEventListener('keydown',function(e){ if(e.key==='Enter') this.blur(); });
+
+/* ---------- v32: import a table from a CSV web address ---------- */
+var URL_MAX_CHARS=2000000, URL_MAX_ROWS=20000, urlOpt={timeout:8000}, urlTable=null, urlWarn=0;
+/* CSV text -> rows of strings: quoted fields, "" quotes, newlines inside quotes, CRLF, BOM. Stops at maxRows (cut:true). */
+function parseCSV(text,delim,maxRows){
+  if(text.charCodeAt(0)===0xFEFF) text=text.slice(1);
+  var rows=[], row=[], f='', q=false, cut=false, i=0, n=text.length, ch;
+  for(;i<n;i++){
+    ch=text[i];
+    if(q){ if(ch==='"'){ if(text[i+1]==='"'){ f+='"'; i++; } else q=false; } else f+=ch; continue; }
+    if(ch==='"'&&f==='') q=true;
+    else if(ch===delim){ row.push(f); f=''; }
+    else if(ch==='\n'||ch==='\r'){ if(ch==='\r'&&text[i+1]==='\n') i++; row.push(f); f=''; rows.push(row); row=[]; if(maxRows&&rows.length>=maxRows&&i<n-1){ cut=true; break; } }
+    else f+=ch;
+  }
+  if(!cut&&(f!==''||row.length)){ row.push(f); rows.push(row); }
+  rows.cut=cut; return rows;
+}
+/* comma, tab or semicolon: the one that gives most of the first lines the same width (more than one column) */
+function sniffDelim(text){
+  var head=text.slice(0,20000), best=',', bs=0;
+  [',','\t',';'].forEach(function(d){
+    var rs=parseCSV(head,d,10), w=rs.length?rs[0].length:0, sc=0; if(w>1) rs.forEach(function(r){ if(r.length===w) sc++; });
+    if(sc>bs){ bs=sc; best=d; } });
+  return best;
+}
+/* a cell that reads as a plain number goes in as a number; anything else that the sheet would reinterpret (007, =SUM, TRUE, 1,234) is kept as text */
+function csvRaw(v){
+  if(v==='') return '';
+  if(/^[+-]?(0|[1-9]\d*)(\.\d+)?(e[+-]?\d+)?$/i.test(v)||/^[+-]?\.\d+$/.test(v)) return v;
+  var l=E.literal(v); return (typeof l!=='string'||v[0]==='='||v[0]==="'")?"'"+v:v;
+}
+/* reads the address; resolves {rows,chars} or rejects with a Korean message */
+function fetchCSV(url){
+  url=String(url||'').trim();
+  if(!/^https:\/\/[^\s\/]+/i.test(url)) return Promise.reject(T('https 로 시작하는 주소만 가져올 수 있어요'));
+  var ac=new AbortController(), timedOut=false, t=setTimeout(function(){ timedOut=true; ac.abort(); },urlOpt.timeout);
+  var fail=function(e){ if(typeof e==='string') throw e; throw T(timedOut?'시간이 너무 오래 걸려서 멈췄어요. 잠시 뒤에 다시 해 보세요':'주소가 허용하지 않아요 (CORS). 그 사이트가 다른 웹사이트의 읽기를 허용해야 해요. GitHub raw 파일이나 구글 시트의 웹에 게시 CSV 링크는 돼요'); };
+  return fetch(url,{signal:ac.signal,credentials:'omit',referrerPolicy:'no-referrer',redirect:'follow'}).then(function(res){
+    if(res.url&&!/^https:/i.test(res.url)) throw T('https 가 아닌 주소로 넘어가서 멈췄어요');
+    if(!res.ok) throw F('불러오지 못했어요 ({0})',res.status);
+    var ct=res.headers.get('content-type')||'';
+    if(ct&&(!/^(text\/(?!html)|application\/(csv|vnd\.ms-excel|octet-stream))/i.test(ct))) throw T('글자(CSV) 파일이 아니에요');
+    var big=T('파일이 너무 커요 (글자 200만 자, 2만 줄까지)');
+    var rd=res.body&&res.body.getReader?res.body.getReader():null, dec=new TextDecoder('utf-8'), text='';
+    if(!rd) return res.text().then(function(x){ if(x.length>URL_MAX_CHARS) throw big; return x; });
+    return (function pump(){ return rd.read().then(function(o){
+      if(o.done){ return text+dec.decode(); }
+      text+=dec.decode(o.value,{stream:true});
+      if(text.length>URL_MAX_CHARS){ try{ rd.cancel(); }catch(e){} throw big; }
+      return pump(); }); })();
+  }).then(function(text){
+    clearTimeout(t);
+    if(text.indexOf('\u0000')>=0) throw T('글자(CSV) 파일이 아니에요');
+    if(text.replace(/^﻿/,'').trim()==='') throw T('내용이 비어 있어요');
+    var rows=parseCSV(text,sniffDelim(text),URL_MAX_ROWS);
+    if(rows.cut) throw T('파일이 너무 커요 (글자 200만 자, 2만 줄까지)');
+    var w=0; rows.forEach(function(r){ if(r.length>w) w=r.length; });
+    return {rows:rows,w:w,chars:text.length};
+  }).catch(function(e){ clearTimeout(t); return fail(e); });
+}
+function openUrlDlg(){
+  urlTable=null; urlWarn=0; $('urlMsg').textContent=''; $('urlMsg').className='aiCtx'; $('urlPrev').innerHTML=''; $('urlPut').disabled=true; $('urlPut').textContent=T('여기에 넣기');
+  openDlg('urlDlg',$('urlIn'));
+}
+function urlMsg(t,err){ var m=$('urlMsg'); m.textContent=t; m.className=err?'aiErr':'aiCtx'; }
+function urlLoad(){
+  urlTable=null; urlWarn=0; $('urlPut').disabled=true; $('urlPut').textContent=T('여기에 넣기'); $('urlPrev').innerHTML=''; urlMsg(T('불러오는 중…'));
+  $('urlGo').disabled=true;
+  fetchCSV($('urlIn').value).then(function(t){
+    urlTable=t; urlMsg(F('{0}줄 × {1}열 ({2}자)',t.rows.length,t.w,t.chars));
+    var tb=document.createElement('table');
+    t.rows.slice(0,8).forEach(function(r){ var tr=tb.insertRow(); for(var c=0;c<Math.min(t.w,12);c++){ var td=tr.insertCell(); td.textContent=r[c]==null?'':r[c]; } });
+    $('urlPrev').appendChild(tb); $('urlPut').disabled=false;
+  },function(e){ urlMsg(String(e),true); }).then(function(){ $('urlGo').disabled=false; });
+}
+function urlPut(){
+  var t=urlTable; if(!t) return; var h=t.rows.length, w=t.w, r0=act.r, c0=act.c;
+  if(r0+h>MAXR||c0+w>MAXC) return urlMsg(F('시트에 다 들어가지 않아요 (최대 {0}줄 × {1}열). 위쪽 칸을 골라 주세요',MAXR,MAXC),true);
+  if(guard({r1:r0,c1:c0,r2:r0+h-1,c2:c0+w-1})) return;
+  var used=0; for(var i=0;i<h;i++) for(var j=0;j<w;j++){ var x=sh.cells[K(r0+i,c0+j)]; if(x&&x.v!=null&&x.v!=='') used++; }
+  if(used&&!urlWarn){ urlWarn=1; $('urlPut').textContent=F('덮어쓰기 ({0}칸)',used); return urlMsg(F('이미 내용이 있는 {0}칸을 덮어써요. 맞으면 한 번 더 눌러 주세요',used),true); }
+  pushUndo(); growTo(r0+h-1,c0+w-1); // grow once first: setRaw would rebuild the grid on every 50 rows
+  t.rows.forEach(function(row,i){ for(var j=0;j<w;j++) setRaw(r0+i,c0+j,csvRaw(row[j]==null?'':row[j])); });
+  growTo(r0+h-1,c0+w-1); sel={r1:r0,c1:c0,r2:r0+h-1,c2:c0+w-1}; changed(); closeDlgs(); toast(F('{0}줄 × {1}열을 넣었어요',h,w));
+}
+$('urlGo').onclick=urlLoad; $('urlPut').onclick=urlPut;
+$('urlIn').addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); urlLoad(); } });
+$('urlIn').addEventListener('input',function(){ urlTable=null; urlWarn=0; $('urlPut').disabled=true; $('urlPut').textContent=T('여기에 넣기'); });
 
 /* ---------- formula autocomplete ---------- */
 var acItems=[], acIdx=0;
@@ -1799,5 +1889,5 @@ if(opn&&sh.charts.length) setTimeout(openDrawer,0);
 window.FSAPI={run:runCmd, get doc(){ return doc; }, get eng(){ return eng; }, get sheet(){ return sh; }, sel:function(){ return sel; }, act:function(){ return act; }, region:region, hasHeader:hasHeader,
   drawChart:drawChart, chartData:chartData, PAL:PAL, toast:toast, download:download, commitEdit:commitEdit, uid:uid, pushUndo:pushUndo, saveSoon:saveSoon, openDrawer:openDrawer, renderCharts:renderCharts,
   changed:changed, setRaw:function(r,c,v){ if(locked(r,c)) return toast(T('잠긴 칸이라 고칠 수 없어요. 데이터 메뉴에서 잠금을 풀 수 있어요')); return setRaw(r,c,v); }, pasteText:pasteText, selectRange:selectRange, select:select, forSel:forSel};
-window.__fs={get doc(){ return doc; }, get eng(){ return eng; }, select:select, cmd:cmd, run:runCmd, sel:function(){ return sel; }, act:function(){ return act; }, setRaw:setRaw, changed:changed, startEdit:startEdit, commitEdit:commitEdit};
+window.__fs={urlOpt:urlOpt, parseCSV:parseCSV, sniffDelim:sniffDelim, csvRaw:csvRaw, get doc(){ return doc; }, get eng(){ return eng; }, select:select, cmd:cmd, run:runCmd, sel:function(){ return sel; }, act:function(){ return act; }, setRaw:setRaw, changed:changed, startEdit:startEdit, commitEdit:commitEdit};
 })();
