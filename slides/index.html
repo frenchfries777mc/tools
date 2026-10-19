@@ -153,6 +153,7 @@ button,input,select,textarea{font:inherit; color:inherit;}
 #canvasWrap{flex:1; min-height:0; position:relative;}
 #slideHost{position:absolute; border-radius:6px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,.45); background:#fff;}
 #slideHost .sl{transform-origin:0 0;}
+#slideHost.cnOn,#slideHost.cnOn *{cursor:crosshair!important;} #slideHost.cnOn [data-bk]{cursor:alias!important;}
 #slideHost.fpOn,#slideHost.fpOn *{cursor:crosshair!important;} #slideHost.fpOn [data-bk]{cursor:copy!important;}
 #waitMsg{position:absolute; inset:0; display:grid; place-items:center; color:var(--dim); font-size:15px; text-align:center; padding:20px;}
 #busy{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(5,6,10,.45); z-index:4;}
@@ -692,7 +693,7 @@ body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body
     <label class="lqRx"><input type="checkbox" id="lqQaOn" checked><span>청중 질문 받기</span></label>
     <div id="lqQa" hidden><div class="lqHd"><b id="lqQaN"></b><span class="sp"></span><button id="lqQaAll" class="dang">모두 지우기</button></div><div id="lqQaLs"></div></div>
     <div id="lqBars"></div><div class="lqFt"><span id="lqStat"></span><span class="sp"></span><button id="lqRev" hidden>정답 공개</button></div></div>
-  <div class="pbar"><span id="pClock"></span><button id="pNotesB" aria-label="발표자 메모" title="발표자 메모 (S)">📝</button><button id="pLaserB" aria-label="레이저 포인터" title="레이저 포인터 (L)">🔴</button><button id="pPvB" aria-label="발표자 화면" title="발표자 화면 열기 (V)">🖥️</button><button id="pLqB" aria-label="실시간 퀴즈" title="실시간 퀴즈 (Q)" hidden>📲</button><button id="pPenB" aria-label="펜" title="펜 (D)">✏️</button><button id="pHiB" aria-label="형광펜" title="형광펜 (M)">🖍️</button><button id="pErB" aria-label="지우개" title="지우개 (X)">🧽</button><button id="pBbB" aria-label="칠판" title="칠판 (W)">🟩</button><span id="pInkCols" role="group" aria-label="색"></span><button id="pClrB" aria-label="낙서 지우기" title="낙서 지우기 (E)" hidden>🧹</button><button id="pAutoB" aria-label="자동 넘기기" title="자동 넘기기 (K)" hidden>⏸</button><button id="pPrev" aria-label="이전 슬라이드">‹</button><span id="pNum"></span><button id="pNext" aria-label="다음 슬라이드">›</button><button id="pExit" aria-label="발표 끝내기">×</button></div>
+  <div class="pbar"><span id="pClock"></span><button id="pNotesB" aria-label="발표자 메모" title="발표자 메모 (S)">📝</button><button id="pLaserB" aria-label="레이저 포인터" title="레이저 포인터 (L)">🔴</button><button id="pPvB" aria-label="발표자 화면" title="발표자 화면 열기 (V)">🖥️</button><button id="pLqB" aria-label="실시간 퀴즈" title="실시간 퀴즈 (Q)" hidden>📲</button><button id="pPenB" aria-label="펜" title="펜 (D) · 슬라이드를 넘기면 그린 것이 지워져요">✏️</button><button id="pHiB" aria-label="형광펜" title="형광펜 (M)">🖍️</button><button id="pErB" aria-label="지우개" title="지우개 (X)">🧽</button><button id="pBbB" aria-label="칠판" title="칠판 (W)">🟩</button><span id="pInkCols" role="group" aria-label="색"></span><button id="pClrB" aria-label="낙서 지우기" title="낙서 지우기 (E)" hidden>🧹</button><button id="pAutoB" aria-label="자동 넘기기" title="자동 넘기기 (K)" hidden>⏸</button><button id="pPrev" aria-label="이전 슬라이드">‹</button><span id="pNum"></span><button id="pNext" aria-label="다음 슬라이드">›</button><button id="pExit" aria-label="발표 끝내기">×</button></div>
 </div>
 <div id="pv" hidden>
   <div class="pvTop"><b id="pvName" data-notr></b><span class="pvSt" id="pvStatus"></span><span class="sp"></span><span class="pvClock" id="pvWall" data-notr></span>
@@ -722,8 +723,8 @@ body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body
 <script src="../ai-prompts.js"></script>
 <script src="qr.js"></script>
 <script src="lq-net.js?v=s26"></script>
-<script src="ribbon.js?v=s25"></script>
-<script src="app.js?v=s26"></script>
+<script src="ribbon.js?v=s26"></script>
+<script src="app.js?v=s27"></script>
 <script src="collab.js?v=s22"></script>
 <script src="ai-slides.js"></script>
 </body>
