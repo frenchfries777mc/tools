@@ -5,7 +5,12 @@ C = nb['cells']
 def src(i): return ''.join(C[i]['source'])
 def put(i, s): C[i]['source'] = s.splitlines(True)
 
-put(0, """# Tools 자체 AI 학습 노트 (Kaggle용, FF777 1.4)
+put(0, """# Tools 자체 AI 학습 노트 (Kaggle용, FF777 1.5 / 1.4)
+
+**프레무스 1.5 이어 학습 (지금 설정)**: 설정 칸이 `MODEL = "premus"`, `VERSION = "1.5"`, `CONTINUE = True` 로 되어 있어요. 올려 둔 프레무스 1.4 (`FF-Tools-8B-merged`) 위에 새 자료 6,000줄(`data/v15-smart.jsonl`)을 2바퀴(약 1,500걸음, 약 6.5시간 추정, 학습률 1e-4) 이어서 학습해요. 끝나면 `FF-Tools-8B-merged-1.5` 에 올려서 1.4는 그대로 남아요. 오른쪽 **Session options** 가 **GPU T4 x2**, **Internet = On**, **Secrets의 HF_TOKEN 체크**인지 보고 **Save & Run All (Commit)** 만 누르면 돼요. 끊기면 같은 노트를 다시 돌리면 중간 저장(200걸음마다)에서 이어요. 끝나면 맨 아래 시험 결과와 "올림 끝"을 Claude에게 알려 주세요.
+
+아래는 1.4 설명이에요.
+
 
 Frenchfries777 Tools의 자체 AI를 학습시키는 노트예요. Colab 노트와 같은 학습이고, 토큰과 저장 방식만 Kaggle에 맞췄어요.
 1.4는 타리우스(basic, Qwen3 1.7B), 렉투스(smart, Qwen3 4B), 프레무스(premus, Qwen3 8B) 모두 바탕 Qwen3에서 처음부터 새로 학습해요.
