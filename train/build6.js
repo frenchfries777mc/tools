@@ -10,6 +10,8 @@ const fs=require('fs'), path=require('path'), cp=require('child_process');
 const DIR=__dirname, ROOT=path.join(DIR,'..'), RAW=path.join(DIR,'raw'), OUT=path.join(DIR,'data');
 const P=require(path.join(ROOT,'ai-prompts.js'));
 const N=6000, VER='1.5';
+const VARIANT=process.env.VARIANT==='basic'?'basic':'smart';   // basic = tarius (Qwen3 1.7B): same data, own name; node train/build6.js basic -> data/v15-basic.jsonl
+const BASIC=VARIANT==='basic';
 const GROUPS={ // pct of N; replay tasks are the v14 task names; new tasks are listed in NEW
   code:{pct:20, tasks:['code','gen','memo-ex','memo-chip','gen14','newcode']},
   formula:{pct:17, tasks:['formula','newformula','cell']},
@@ -26,6 +28,8 @@ const GROUPS={ // pct of N; replay tasks are the v14 task names; new tasks are l
 const NEW=new Set(['newcode','newformula','newcalc','newtable','newunknown','newself','newjoke']);
 const HUMOR='You are cheerful and a little funny: when you chat you add a short, kind joke, but answers about tables, formulas and code stay exact and serious.';
 const WHO={who:'You are FF777 '+VER+' lectus, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 4B. Your name is the end of the Latin word intellectus ("understanding"). '+HUMOR, fill:{NAME:'FF777 '+VER+' lectus', BASE:'Qwen3 4B', LATIN:'intellectus', MEANING_KO:'이해력', MEANING_EN:'understanding'}};
+if(BASIC){ WHO.who='You are FF777 '+VER+' tarius, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 1.7B. Your name is the end of the Latin word elementarius ("basic"). '+HUMOR;
+  WHO.fill={NAME:'FF777 '+VER+' tarius', BASE:'Qwen3 1.7B', LATIN:'elementarius', MEANING_KO:'기본', MEANING_EN:'basic'}; }
 let seed=20261019; const rnd=()=>{ seed=(seed*1103515245+12345)&0x7fffffff; return seed/0x7fffffff; };
 const shuffle=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
 const jl=f=>fs.existsSync(f)?fs.readFileSync(f,'utf8').split('\n').filter(Boolean).map(l=>JSON.parse(l)):[];
@@ -35,8 +39,9 @@ const test=jl(path.join(OUT,'v14-test.jsonl'));
 const testUsers=new Set(test.map(x=>norm(x.messages[1].content)));
 const blocked=u=>testUsers.has(norm(u));
 const WHO_RE=/You are FF777 [\d.]+ (lectus|tarius), the built-in AI[^\n]*/g;
-const rename=m=>{ const out=m.map(y=>({role:y.role,content:y.content.replace(WHO_RE,WHO.who).replace(/FF777 [\d.]+ lectus/g,'FF777 '+VER+' lectus')}));
-  return out.some(y=>/\btarius\b/.test(y.content))?null:out; };
+const OWN=BASIC?'tarius':'lectus', OTHER=BASIC?/\blectus\b|intellectus|Qwen3 4B/:/\btarius\b/;
+const rename=m=>{ const out=m.map(y=>({role:y.role,content:y.content.replace(WHO_RE,WHO.who).replace(new RegExp('FF777 [\\d.]+ '+OWN,'g'),'FF777 '+VER+' '+OWN)}));
+  return out.some(y=>OTHER.test(y.content))?null:out; };
 const pool={}, seen=new Set(); let blockedN=0;
 const put=(task,messages)=>{ const k=task.replace(/^memo-.*/,'memo')+'|'+key(messages); if(seen.has(k)) return; if(blocked(messages[1].content)){ blockedN++; return; } seen.add(k); (pool[task]=pool[task]||[]).push({task,messages}); };
 function checked(kind,file){
@@ -82,9 +87,9 @@ for(const [g,G] of Object.entries(GROUPS)){
   rows.push(...got.map(r=>({task:r.task,messages:rename(r.messages)})).filter(r=>r.messages));
 }
 const final=shuffle(rows);
-fs.writeFileSync(path.join(OUT,'v15-smart.jsonl'),final.map(x=>JSON.stringify(x)).join('\n')+'\n');
-fs.writeFileSync(path.join(OUT,'v15-test.jsonl'),test.map(x=>({task:x.task,messages:rename(x.messages)})).filter(x=>x.messages).map(x=>JSON.stringify(x)).join('\n')+'\n');
+fs.writeFileSync(path.join(OUT,'v15-'+VARIANT+'.jsonl'),final.map(x=>JSON.stringify(x)).join('\n')+'\n');
+fs.writeFileSync(path.join(OUT,BASIC?'v15-basic-test.jsonl':'v15-test.jsonl'),test.map(x=>({task:x.task,messages:rename(x.messages)})).filter(x=>x.messages).map(x=>JSON.stringify(x)).join('\n')+'\n');
 const stats={built:new Date().toISOString(),total:final.length,newRows:final.filter(r=>NEW.has(r.task)).length,take,short,blocked:blockedN,
   repeatedRows:final.length-new Set(final.map(r=>key(r.messages))).size,pool:Object.fromEntries(Object.entries(pool).map(([k,v])=>[k,v.length]))};
-fs.writeFileSync(path.join(OUT,'v15-stats.json'),JSON.stringify(stats,null,1)+'\n');
+fs.writeFileSync(path.join(OUT,BASIC?'v15-basic-stats.json':'v15-stats.json'),JSON.stringify(stats,null,1)+'\n');
 console.log(JSON.stringify(stats));
