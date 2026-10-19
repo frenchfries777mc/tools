@@ -36,6 +36,11 @@ FFT.add({
 '작은 AI라서 틀릴 수 있어요. 중요한 일은 꼭 다시 확인해 주세요.':['It is a small AI and can be wrong. Please double-check anything important.','Es una IA pequeña y puede equivocarse. Verifica lo importante.','C’est une petite IA qui peut se tromper. Vérifie ce qui est important.','Es ist eine kleine KI und kann sich irren. Prüfe Wichtiges bitte nach.','小さなAIなので間違えることがあります。大事なことは必ず確認してください。'],
 '로그인한 상태로 틀렸어요를 누르면 질문과 답이 개발자에게도 전해져요.':['If you press Wrong while logged in, the question and answer are also sent to the developer.','Si pulsas Incorrecto con la sesión iniciada, la pregunta y la respuesta también se envían al desarrollador.','Si tu appuies sur Faux en étant connecté, la question et la réponse sont aussi transmises au développeur.','Wenn du angemeldet auf Falsch tippst, gehen Frage und Antwort auch an den Entwickler.','ログインした状態で間違いを押すと、質問と答えが開発者にも届きます。'],
 '아직 {0} 파일이 올라오지 않았어요':['The {0} files are not online yet','Los archivos de {0} aún no están en línea','Les fichiers de {0} ne sont pas encore en ligne','Die Dateien von {0} sind noch nicht online','{0}のファイルはまだ公開されていません'],
+'지난 대화':['Past chats','Chats anteriores','Conversations passées','Frühere Chats','過去の会話'],
+'새 대화':['New chat','Nuevo chat','Nouvelle conversation','Neuer Chat','新しい会話'],
+'삭제':['Delete','Borrar','Supprimer','Löschen','削除'],
+'정말 지울까요?':['Really delete?','¿Borrar de verdad?','Vraiment supprimer ?','Wirklich löschen?','本当に消しますか?'],
+'이 기기에만 저장돼요':['Saved only on this device','Se guarda solo en este dispositivo','Enregistré uniquement sur cet appareil','Nur auf diesem Gerät gespeichert','この端末にだけ保存されます'],
 '답 길이':['Answer length','Longitud de respuesta','Longueur des réponses','Antwortlänge','答えの長さ'],
 '짧게':['Short','Corta','Courte','Kurz','短く'],
 '보통':['Normal','Normal','Normale','Normal','普通'],
@@ -111,6 +116,12 @@ form.in{display:flex; gap:8px; align-items:flex-end; padding:8px; background:var
 form.in:focus-within{border-color:var(--fry);}
 form.in textarea{flex:1; min-height:44px; max-height:140px; resize:none; background:transparent; border:0; border-radius:10px; padding:10px 8px;}
 form.in textarea:focus{outline:none;}
+.recent{margin-top:26px;} .recent h2{font-size:15px; margin:0 0 4px;} .recent .sub{font-size:12px; color:var(--dim); margin:0 0 10px;}
+.rl{list-style:none; margin:0; padding:0; display:grid; gap:8px;}
+.rl li{display:flex; gap:8px; align-items:stretch;}
+.rl .go{flex:1; min-width:0; text-align:left; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px 14px; cursor:pointer; display:grid; gap:2px;}
+.rl .go:hover{border-color:var(--fry);} .rl .go b{font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;} .rl .go small{color:var(--dim); font-size:12px;}
+.rl .del{flex:0 0 auto; background:transparent; border:1px solid var(--line); border-radius:12px; padding:0 12px; color:var(--dim); cursor:pointer; font-size:13px;} .rl .del:hover{color:var(--bad); border-color:var(--bad);}
 .hint{font-size:12px; color:var(--dim); line-height:1.6; margin:10px 0 0; text-align:center;}
 .ov{position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; padding:16px; background:rgba(0,0,0,.55);}
 .dlg{width:min(420px,100%); background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px;}
@@ -133,10 +144,11 @@ form.in textarea:focus{outline:none;}
   </section>
   <section id="pick">
     <div class="models" id="models"></div>
+    <section class="recent" id="recent" hidden><h2>지난 대화</h2><p class="sub">이 기기에만 저장돼요</p><ul class="rl" id="rl"></ul></section>
     <div class="err" id="gpuErr" hidden>이 기기나 브라우저에서는 쓸 수 없어요. 최신 크롬이나 엣지, 또는 최신 사파리에서 열어 주세요.</div>
   </section>
   <section class="chat" id="chat" hidden>
-    <div class="bar"><span class="cur"><i></i><span id="cur" data-notr></span></span><span class="sp"></span><span class="len" id="len" role="group" aria-label="답 길이"><button type="button" data-l="0">짧게</button><button type="button" data-l="1">보통</button><button type="button" data-l="2">길게</button></span><button class="ghost" id="clear" type="button">대화 지우기</button><button class="ghost" id="change" type="button">모델 바꾸기</button></div>
+    <div class="bar"><span class="cur"><i></i><span id="cur" data-notr></span></span><span class="sp"></span><span class="len" id="len" role="group" aria-label="답 길이"><button type="button" data-l="0">짧게</button><button type="button" data-l="1">보통</button><button type="button" data-l="2">길게</button></span><button class="ghost" id="clear" type="button">새 대화</button><button class="ghost" id="change" type="button">모델 바꾸기</button></div>
     <div class="log" id="log" aria-live="polite"></div>
     <div class="chips" id="chips" aria-label="예시 질문"></div>
     
@@ -164,6 +176,30 @@ var LEN=[{tok:220, ask:'Answer in 1 to 3 short sentences.'}, {tok:520, ask:'Answ
 var lv=2; try{ var sv=parseInt(localStorage.getItem('ffchat.len'),10); if(sv>=0&&sv<=2) lv=sv; }catch(e){}
 function chatSys(){ return 'You are chatting with a curious person. '+LEN[lv].ask+' Be warm and natural. Plain text only: no markdown tables, no code fences. Use the language the question is written in.'; }
 function showLen(){ Array.prototype.forEach.call(document.querySelectorAll('#len button'),function(b){ b.classList.toggle('on',+b.dataset.l===lv); b.textContent=T(['짧게','보통','길게'][+b.dataset.l]); }); }
+/* conversations are kept only in this browser (localStorage), newest first */
+var CK='ffchat.convs.v1', CAP=30, conv=null, gen=0;   // gen changes whenever the open conversation changes, so a late answer never lands in another one
+function convLoad(){ var a=[]; try{ a=JSON.parse(localStorage.getItem(CK)||'[]'); }catch(e){} return Array.isArray(a)?a.filter(function(c){ return c&&c.id&&Array.isArray(c.msgs); }):[]; }
+function convSave(list){ try{ localStorage.setItem(CK,JSON.stringify(list.slice(0,CAP))); }catch(e){} }
+function convPut(){ if(!conv) return; var l=convLoad().filter(function(c){ return c.id!==conv.id; }); conv.t=Date.now(); l.unshift(conv); convSave(l); }
+function convPush(r,text){
+  if(!conv){ conv={id:'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,6), model:cur.id, title:String(text).replace(/\s+/g,' ').slice(0,28), t:Date.now(), msgs:[]}; }
+  conv.msgs.push({r:r,x:String(text).slice(0,6000)}); if(conv.msgs.length>80) conv.msgs=conv.msgs.slice(-80);
+  convPut(); }
+function convDel(id){ convSave(convLoad().filter(function(c){ return c.id!==id; })); renderRecent(); }
+function renderRecent(){
+  var l=convLoad(), ul=$('rl'); ul.innerHTML=''; $('recent').hidden=!l.length;
+  l.forEach(function(c){
+    var li=document.createElement('li'), go=document.createElement('button'); go.type='button'; go.className='go'; go.setAttribute('data-notr','');
+    var b=document.createElement('b'); b.textContent=c.title||'…'; var sm=document.createElement('small');
+    var m=models.filter(function(x){ return x.id===c.model; })[0]; var d=new Date(c.t);
+    sm.textContent=((m?String(m.name).split(' ').pop():c.model)+' · '+d.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' · '+Math.ceil(c.msgs.length/2));
+    go.appendChild(b); go.appendChild(sm); go.onclick=function(){ if(m) choose(m,c); };
+    if(!m||!m.ready) go.disabled=true;
+    var del=document.createElement('button'); del.type='button'; del.className='del'; del.textContent=T('삭제'); var armed=0;
+    del.onclick=function(){ if(armed){ convDel(c.id); return; } armed=1; del.textContent=T('정말 지울까요?'); setTimeout(function(){ armed=0; del.textContent=T('삭제'); },3000); };
+    li.appendChild(go); li.appendChild(del); ul.appendChild(li);
+  });
+}
 function seen(id){ try{ return localStorage.getItem('ffchat.dl.'+id)==='1'; }catch(e){ return false; } }
 function markSeen(id){ try{ localStorage.setItem('ffchat.dl.'+id,'1'); }catch(e){} }
 function ask(text){
@@ -189,13 +225,15 @@ function renderModels(){
     b.onclick=function(){ choose(m); };
     box.appendChild(b);
   });
+  renderRecent();
 }
-function choose(m){
+function choose(m,c){
   if(!m.ready) return;
   var go=seen(m.id)?Promise.resolve(true):ask(T('처음 한 번만 {0} 크기의 파일을 내려받아요. 와이파이에서 쓰는 걸 추천해요. 계속할까요?').replace('{0}',m.size));
   go.then(function(ok){
     if(!ok) return;
-    markSeen(m.id); cur=m; hist=[]; $('cur').textContent=m.name; $('chat').style.setProperty('--ac',ACC[m.id]||'#ffc93c'); $('chips').hidden=false; greet();
+    markSeen(m.id); gen++; cur=m; hist=[]; conv=c||null; $('cur').textContent=m.name; $('chat').style.setProperty('--ac',ACC[m.id]||'#ffc93c'); $('chips').hidden=!!(c&&c.msgs.length); greet();
+    if(c) restore(c);
     $('pick').hidden=true; $('hero').hidden=true; $('chat').hidden=false; $('q').focus();
   });
 }
@@ -209,22 +247,31 @@ function greet(){
   $('log').innerHTML=''; var h=document.createElement('div'); h.className='hi'; h.setAttribute('data-notr','');
   h.innerHTML='<img src="../logo.svg" alt="" width="64" height="64"><b></b><span></span>'; h.querySelector('b').textContent=cur?cur.name:''; h.querySelector('span').textContent=T('궁금한 걸 물어보세요');
   $('log').appendChild(h); }
+function restore(c){
+  var lastQ='';
+  c.msgs.forEach(function(m){
+    if(m.r==='u'){ add('u',m.x); lastQ=m.x; hist.push({role:'user',content:m.x}); }
+    else{ var d=add('a',m.x); hist.push({role:'assistant',content:m.x}); FFWrong.attach(d,{tool:'ai-chat',question:lastQ,answer:m.x,model:'local:'+cur.id}); }
+  });
+  while(hist.length&&hist[hist.length-1].role==='user') hist.pop();   // a question that never got an answer is not part of the memory
+  $('log').scrollTop=$('log').scrollHeight;
+}
 function dots(d){ d.innerHTML='<span class="dots" aria-label="…"><i></i><i></i><i></i></span>'; }
 function trim(){ var n=0, i=hist.length; while(i>0){ n+=hist[i-1].content.length; if(n>1500) break; i--; } hist=hist.slice(i); if(hist.length&&hist[0].role==='assistant') hist.shift(); }
 function setBusy(b){ busy=b; $('send').textContent=T(b?'멈추기':'보내기'); $('send').type=b?'button':'submit'; }
 function send(q){
   q=String(q||'').trim(); if(!q||busy||!cur) return;
-  $('q').value=''; $('chips').hidden=true; add('u',q);
-  var out=add('a',''), got=''; dots(out); setBusy(true);
+  $('q').value=''; $('chips').hidden=true; add('u',q); convPush('u',q);
+  var out=add('a',''), got='', g=gen, mid=cur.id; dots(out); setBusy(true);
   trim();
   FFAI.ask({model:cur.id, prose:true, chat:true, maxTokens:LEN[lv].tok, facts:true, question:q, history:hist.slice(), system:chatSys(), prompt:q,
     onText:function(t){ got=t; out.textContent=t; $('log').scrollTop=$('log').scrollHeight; }}).then(function(r){
     var a=String(typeof r==='string'?r:(r&&r.text)||got||'').trim();
     out.textContent=a||T('답하지 못했어요');
-    if(a){ hist.push({role:'user',content:q},{role:'assistant',content:a}); FFWrong.attach(out,{tool:'ai-chat',question:q,answer:a,model:'local:'+cur.id}); }
+    if(a){ if(g===gen){ hist.push({role:'user',content:q},{role:'assistant',content:a}); convPush('a',a); } FFWrong.attach(out,{tool:'ai-chat',question:q,answer:a,model:'local:'+cur.id}); }
     else out.classList.add('bad');
   },function(e){
-    if(got){ out.textContent=got; return; }
+    if(got){ out.textContent=got; if(g===gen){ convPush('a',got); hist.push({role:'user',content:q},{role:'assistant',content:got}); } return; }
     out.classList.add('bad'); out.textContent=(e&&e.message)||T('답하지 못했어요');
   }).then(function(){ setBusy(false); });
 }
@@ -233,8 +280,8 @@ $('send').onclick=function(){ if(busy){ FFAI.stop(); } };
 $('q').onkeydown=function(e){ if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){ e.preventDefault(); if(!busy) send($('q').value); } };
 Array.prototype.forEach.call(document.querySelectorAll('#len button'),function(b){ b.onclick=function(){ lv=+b.dataset.l; try{ localStorage.setItem('ffchat.len',String(lv)); }catch(e){} showLen(); }; });
 showLen();
-$('clear').onclick=function(){ if(busy) FFAI.stop(); hist=[]; greet(); $('chips').hidden=false; };
-$('change').onclick=function(){ if(busy) FFAI.stop(); cur=null; hist=[]; $('chat').hidden=true; $('pick').hidden=false; $('hero').hidden=false; };
+$('clear').onclick=function(){ if(busy) FFAI.stop(); gen++; hist=[]; conv=null; greet(); $('chips').hidden=false; };
+$('change').onclick=function(){ if(busy) FFAI.stop(); gen++; cur=null; hist=[]; conv=null; renderRecent(); $('chat').hidden=true; $('pick').hidden=false; $('hero').hidden=false; };
 ['너는 누구야?','파이썬이 뭐야?','광합성을 쉽게 설명해 줘'].forEach(function(t){
   var b=document.createElement('button'); b.type='button'; b.textContent=T(t); b.onclick=function(){ send(T(t)); }; $('chips').appendChild(b);
 });
