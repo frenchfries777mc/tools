@@ -114,10 +114,13 @@ function fxOf(a){ for(var i=0;i<FX.length;i++) if(FX[i][0]===a) return FX[i]; re
 function num(v,d,lo,hi){ v=+v; return isFinite(v)?Math.max(lo,Math.min(hi,Math.round(v))):d; }
 function fixCol(v,d){ v=v==null?d:String(v); return v===''||v==='ac'||v==='fg'||/^#[0-9a-f]{6}$/i.test(v)?v:d; }
 function isLine(e){ return e.k==='line'||e.k==='arrow'; }
-/* a shape: closed ones are a box (x,y,w,h); a line or an arrow runs from (x,y) to (x+w,y+h), so w and h can be negative */
-function fixEl(e){ if(!e||typeof e!=='object'||SHK.indexOf(e.k)<0) return null; var L=isLine(e);
-  return {id:String(e.id||uid()).slice(0,40), k:e.k, x:num(e.x,400,-2000,3000), y:num(e.y,250,-2000,3000), w:L?num(e.w,300,-4000,4000):num(e.w,300,20,4000), h:L?num(e.h,0,-4000,4000):num(e.h,200,20,4000),
-    fill:L?'':fixCol(e.fill,'ac'), line:fixCol(e.line,L?'fg':'')||(L?'fg':''), sw:num(e.sw,L?6:0,L?1:0,40), text:L?'':String(e.text==null?'':e.text).slice(0,2000), back:!!e.back, op:L?100:num(e.op,100,10,100), al:['l','c','r'].indexOf(e.al)>=0?e.al:'c', fs:L?0:num(e.fs,0,0,400), g:String(e.g||'').slice(0,40)}; }
+/* a shape: closed ones are a box (x,y,w,h); a line or an arrow runs from (x,y) to (x+w,y+h), so w and h can be negative.
+   A connector is a line or an arrow with c = [from, to] (shape keys 'e:id' or layout box names): its x, y, w, h are worked out from the two boxes (connSync), so old decks and old versions just see a plain line. */
+function fixConn(c){ if(!Array.isArray(c)||c.length!==2) return null; var o=c.map(function(v){ return String(v==null?'':v); });
+  return o[0]!==o[1]&&o.every(function(v){ return /^(e:[\w-]{1,40}|[a-z]\w{0,19})$/i.test(v); })?o:null; }
+function fixEl(e){ if(!e||typeof e!=='object'||SHK.indexOf(e.k)<0) return null; var L=isLine(e), c=L?fixConn(e.c):null;
+  var o={id:String(e.id||uid()).slice(0,40), k:e.k, x:num(e.x,400,-2000,3000), y:num(e.y,250,-2000,3000), w:L?num(e.w,300,-4000,4000):num(e.w,300,20,4000), h:L?num(e.h,0,-4000,4000):num(e.h,200,20,4000),
+    fill:L?'':fixCol(e.fill,'ac'), line:fixCol(e.line,L?'fg':'')||(L?'fg':''), sw:num(e.sw,L?6:0,L?1:0,40), text:L?'':String(e.text==null?'':e.text).slice(0,2000), back:!!e.back, op:L?100:num(e.op,100,10,100), al:['l','c','r'].indexOf(e.al)>=0?e.al:'c', fs:L?0:num(e.fs,0,0,400), g:c?'':String(e.g||'').slice(0,40)}; if(c) o.c=c; return o; }
 function fixPos(p){ var o={}; if(p&&typeof p==='object'&&!Array.isArray(p)) for(var k in p){ var r=p[k]; if(r&&typeof r==='object'&&isFinite(+r.x)&&isFinite(+r.y)) o[k]={x:num(r.x,0,-2000,3000), y:num(r.y,0,-2000,3000), w:num(r.w,200,20,4000), h:num(r.h,100,20,4000)}; } return o; }
 function fixSlide(s){ var b=blank(); s=s&&typeof s==='object'?s:{};
   if(LAYS.indexOf(s.layout)<0) s.layout='bullets'; if(!s.id) s.id=uid();
@@ -127,6 +130,7 @@ function fixSlide(s){ var b=blank(); s=s&&typeof s==='object'?s:{};
   s.hide=!!s.hide; if(['bar','line','pie'].indexOf(s.ctype)<0) s.ctype='bar'; if(!/^#[0-9a-f]{6}$/i.test(s.bg)) s.bg='';
   /* decks saved before free placement, shapes and builds simply get none */
   s.pos=fixPos(s.pos); var ids={}; s.els=(Array.isArray(s.els)?s.els:[]).slice(0,80).map(fixEl).filter(function(e){ if(!e||ids[e.id]) return false; ids[e.id]=1; return true; });
+  s.els=s.els.filter(function(e){ return !e.c||e.c.every(function(k){ return connOk(s,k); }); }); // a connector needs both of its ends
   var gc={}; s.els.forEach(function(e){ if(e.g) gc[e.g]=(gc[e.g]||0)+1; }); s.els.forEach(function(e){ if(e.g&&gc[e.g]<2) e.g=''; }); // a group needs two shapes
   s.sec=num(s.sec,0,-1,3600); if(ISH.indexOf(s.ish)<0) s.ish='rect'; s.ibc=fixCol(s.ibc,''); s.ibw=num(s.ibw,0,0,40);
   var seen={}; s.build=(Array.isArray(s.build)?s.build:[]).filter(function(b){ if(!b||typeof b.k!=='string'||ANIMS.indexOf(b.a)<0||seen[b.k]) return false; seen[b.k]=1; return true; }).slice(0,80).map(function(b){ var o={k:b.k, a:b.a}; if(b.l&&LISTS.indexOf(b.k)>=0) o.l=1; if(BDIRS.indexOf(b.d)>=0) o.d=b.d; var bt=+b.t, bw=+b.w; if(bt>0) o.t=Math.round(Math.min(20,Math.max(.1,bt))*10)/10; if(bw>0) o.w=Math.round(Math.min(20,bw)*10)/10; if(b.m==='w'||b.m==='a') o.m=b.m; return o; });
@@ -149,7 +153,7 @@ function loadStore(){ var o=null; try{ o=JSON.parse(localStorage.getItem(LS)||'n
   o.decks=o.decks.filter(function(d){ return d&&typeof d==='object'; }).map(function(d){ if(!d.id) d.id=uid(); return fixDeck(d); }); return o; }
 var store=loadStore(), deck=null, cur=0, undo=[], redo=[], gen=false, busyOn=false, saveT=null;
 function isDefaultName(n){ return !n||!String(n).trim()||n===T('새 발표 자료')||n==='새 발표 자료'; }
-function saveNow(){ clearTimeout(saveT); saveT=null; if(!deck||MODE) return; deck.t=Date.now(); store.last=deck.id;
+function saveNow(){ clearTimeout(saveT); saveT=null; if(!deck||MODE) return; deck.slides.forEach(connSync); deck.t=Date.now(); store.last=deck.id;
   if(store.decks.indexOf(deck)<0) store.decks.unshift(deck);
   try{ localStorage.setItem(LS,JSON.stringify(store)); $('saved').textContent=T('저장됨'); }catch(e){ $('saved').textContent=''; toast(T('저장 공간이 부족해서 저장하지 못했어요')); }
   if(window.FSLX&&FSLX.onSaved) FSLX.onSaved(); }
@@ -176,7 +180,7 @@ function cssVars(th){ return '--s-bg:'+th.bg+';--s-fg:'+th.fg+';--s-sub:'+th.sub
 function onAc(th){ return lum(th.ac)>.4?'#111111':'#ffffff'; }
 function fillList(ul,items){ ul.innerHTML=''; (items.length?items:['']).forEach(function(t){ var li=document.createElement('li'); if(t) li.textContent=t; else li.appendChild(document.createElement('br')); ul.appendChild(li); }); ul.classList.toggle('ph',!items.length); }
 function slideEl(s,th,edit,opt){
-  th=eth(s,th); opt=opt||{};
+  th=eth(s,th); opt=opt||{}; connSync(s);
   var el=document.createElement('div'); el.className='sl'+(edit?' edit':''); el.style.cssText=cssVars(th); el.setAttribute('data-notr','');
   deco(th,s.layout).forEach(function(d){ var e=document.createElement('div'); e.className='dc';
     var st='left:'+d.x+'px;top:'+d.y+'px;width:'+d.w+'px;height:'+d.h+'px;opacity:'+d.o+';';
@@ -396,7 +400,7 @@ function scaleMain(){
   var el=host.firstChild; if(el){ el.style.transform='scale('+k+')'; el.style.setProperty('--hk',(1/k).toFixed(3)); }
 }
 if(window.ResizeObserver) new ResizeObserver(function(){ scaleMain(); }).observe($('canvasWrap')); else window.addEventListener('resize',scaleMain);
-function select(i,keepFocus){ blurEdit(); if(!deck.slides.length) return; if(i!==cur) selK=null; cur=Math.max(0,Math.min(i,deck.slides.length-1)); drawList(); drawMain();
+function select(i,keepFocus){ blurEdit(); cnOff(); if(!deck.slides.length) return; if(i!==cur) selK=null; cur=Math.max(0,Math.min(i,deck.slides.length-1)); drawList(); drawMain();
   var on=$('list').querySelector('.thumb.on'); if(on&&on.scrollIntoView) on.scrollIntoView({block:'nearest',inline:'nearest'}); }
 function blurEdit(){ var a=document.activeElement; if(a&&(a.classList.contains('in')||a.id==='notes')) a.blur(); }
 
@@ -456,13 +460,34 @@ $('deckName').addEventListener('keydown',function(e){ e.stopPropagation(); if(e.
    shapes keep their own box. The frame and handles are drawn inside the slide (sizes times --hk = 1 / scale), so they stay the same size on screen. ---------- */
 var selK=null, selNew=false, drg=null, SELH=46, nudgeT=0;
 function shapeOf(s,id){ for(var i=0;i<s.els.length;i++) if(s.els[i].id===id) return s.els[i]; return null; }
+/* connectors: a line or an arrow joining two boxes (picture, text box or shape) of one slide. Both ends sit on the middle of a side, the closest pair of sides. They are worked out again
+   whenever the slide is drawn (connSync), live while a box is dragged (liveConns), and before saving or exporting; deleting a box takes its connectors with it. */
+var cn=null;
+function connOk(s,k){ if(k.slice(0,2)==='e:'){ var x=shapeOf(s,k.slice(2)); return !!x&&!isLine(x); } return (LAY[s.layout]||[]).some(function(b){ return b.f===k; }); }
+function connPick(s,k){ return !isMany(k)&&connOk(s,k)&&(k!=='img'||!!s.img); }
+function connGeom(s,e,ov){ var A=(ov&&ov[e.c[0]])||keyBox(s,e.c[0]), B=(ov&&ov[e.c[1]])||keyBox(s,e.c[1]); if(!A||!B) return null; var best=null;
+  var sides=function(b){ return [[b.x+b.w/2,b.y],[b.x+b.w,b.y+b.h/2],[b.x+b.w/2,b.y+b.h],[b.x,b.y+b.h/2]].map(function(q){ return [Math.round(q[0]),Math.round(q[1])]; }); };
+  sides(A).forEach(function(p){ sides(B).forEach(function(q){ var d=Math.hypot(p[0]-q[0],p[1]-q[1]); if(!best||d<best.d-.01) best={d:d,p:p,q:q}; }); });
+  return {x:best.p[0], y:best.p[1], w:best.q[0]-best.p[0], h:best.q[1]-best.p[1]}; }
+function connSync(s){ s.els.forEach(function(e){ if(!e.c) return; var g=connGeom(s,e); if(g) Object.assign(e,g); }); }
+/* while dragging: ov = the new boxes by key; the connector nodes are drawn again */
+function liveConns(s,el,ov){ s.els.forEach(function(e){ if(!e.c) return; var g=connGeom(s,e,ov), n0=g&&el.querySelector('[data-bk="e:'+e.id+'"]'); if(!n0) return;
+  var n2=shapeEl(Object.assign({},e,g),th(),true); if(n0.classList.contains('isSel')) n2.classList.add('isSel'); n0.parentNode.replaceChild(n2,n0); }); }
+function dropConns(s){ var gone=s.els.filter(function(e){ return e.c&&!e.c.every(function(k){ return connOk(s,k); }); }); if(!gone.length) return;
+  var ks=gone.map(function(e){ return 'e:'+e.id; }); s.els=s.els.filter(function(e){ return gone.indexOf(e)<0; }); s.build=s.build.filter(function(b){ return ks.indexOf(b.k)<0; }); }
+function connStart(){ var s=deck.slides[cur]; if(!s||gen||busyOn) return; if(!selK||!connPick(s,selK)) return toast(T('이어 줄 도형·그림·글상자를 먼저 하나 골라 주세요'));
+  blurEdit(); closeMenus(); cn={k:selK, sid:s.id}; host.classList.add('cnOn'); toast(T('이어 줄 다른 도형을 눌러요. 그만두려면 Esc를 눌러요')); }
+function cnOff(){ if(!cn) return; cn=null; host.classList.remove('cnOn'); }
+function makeConn(s,a,b){ if(s.els.length>=80) return toast(T('도형이 너무 많아요'));
+  if(s.els.some(function(e){ return e.c&&e.c.indexOf(a)>=0&&e.c.indexOf(b)>=0; })) return toast(T('이미 이어져 있어요'));
+  pushUndo(); nudgeT=0; var e=fixEl({id:uid(), k:'arrow', x:0, y:0, w:0, h:0, line:'fg', sw:4, c:[a,b]}); Object.assign(e,connGeom(s,e)); s.els.push(e); selK='e:'+e.id; changed(); toast(T('연결선을 만들었어요. 도형을 옮기면 따라 움직여요')); }
 function selShape(){ var s=deck&&deck.slides[cur]; return s&&selK&&selK.slice(0,2)==='e:'?shapeOf(s,selK.slice(2)):null; }
 /* what is picked: 'e:id' one shape, 'g:gid' a whole group, 'm' several shapes picked together (selM = their ids), or a layout box / 'img' */
 var selM=[], multiOn=false;
 function selEls(s,k){ k=k||selK; if(!s||!k) return []; if(k==='m') return s.els.filter(function(e){ return selM.indexOf(e.id)>=0; }); if(k.slice(0,2)==='g:') return s.els.filter(function(e){ return e.g===k.slice(2); }); var e=k.slice(0,2)==='e:'&&shapeOf(s,k.slice(2)); return e?[e]:[]; }
 function isMany(k){ return k==='m'||(k||'').slice(0,2)==='g:'; }
 function unionBox(a){ var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9; a.forEach(function(e){ x0=Math.min(x0,e.x,e.x+e.w); y0=Math.min(y0,e.y,e.y+e.h); x1=Math.max(x1,e.x,e.x+e.w); y1=Math.max(y1,e.y,e.y+e.h); }); return a.length?{x:x0,y:y0,w:x1-x0,h:y1-y0,ln:false}:null; }
-function keyBox(s,k){ if(isMany(k)) return unionBox(selEls(s,k)); if(k.slice(0,2)==='e:'){ var e=shapeOf(s,k.slice(2)); return e?{x:e.x,y:e.y,w:e.w,h:e.h,ln:isLine(e)}:null; } var b=boxDef(s,k); return b?{x:b.x,y:b.y,w:b.w,h:b.h}:null; }
+function keyBox(s,k){ if(isMany(k)) return unionBox(selEls(s,k)); if(k.slice(0,2)==='e:'){ var e=shapeOf(s,k.slice(2)); return e?{x:e.x,y:e.y,w:e.w,h:e.h,ln:isLine(e),cn:!!e.c}:null; } var b=boxDef(s,k); return b?{x:b.x,y:b.y,w:b.w,h:b.h}:null; }
 /* a group or a picked set moves and resizes as one: every member keeps its place inside the union box (sizes of text follow the smaller scale) */
 function mapMembers(a,r0,r){ var sx=r0.w?r.w/r0.w:1, sy=r0.h?r.h/r0.h:1, q=Math.min(sx,sy);
   return a.map(function(e){ var c=JSON.parse(JSON.stringify(e)), L=isLine(e); c.x=Math.round(r.x+(e.x-r0.x)*sx); c.y=Math.round(r.y+(e.y-r0.y)*sy); c.w=Math.round(e.w*sx); c.h=Math.round(e.h*sy);
@@ -473,6 +498,7 @@ function noClick(){ return host._noClick&&Date.now()-host._noClick<350; }
 function frameEl(r){
   var f=document.createElement('div'); f.className='selFr'+(r.ln?' ln':'')+(r.y<70&&!r.ln?' low':'');
   var hd=function(h,x,y){ var d=document.createElement('div'); d.className='hd h-'+h; d.dataset.h=h; if(x!=null){ d.style.left=x+'px'; d.style.top=y+'px'; } f.appendChild(d); };
+  if(r.cn){ f.style.cssText='left:0;top:0;width:0;height:0;'; return f; } // a connector has no handles: it follows its two ends
   if(r.ln){ f.style.cssText='left:0;top:0;width:0;height:0;'; hd('p0',r.x,r.y); hd('p1',r.x+r.w,r.y+r.h); return f; }
   f.style.cssText='left:'+r.x+'px;top:'+r.y+'px;width:'+r.w+'px;height:'+r.h+'px;';
   [['nw',0,0],['n',.5,0],['ne',1,0],['e',1,.5],['se',1,1],['s',.5,1],['sw',0,1],['w',0,.5]].forEach(function(q){ hd(q[0],q[1]*r.w,q[2]*r.h); });
@@ -531,9 +557,12 @@ function livePlace(d){ var el=host.querySelector('.sl'), s=deck.slides[cur], r=d
   else if(d.k.slice(0,2)==='e:'){ var e=shapeOf(s,d.k.slice(2)), c={}, q; for(q in e) c[q]=e[q]; c.x=r.x; c.y=r.y; c.w=r.w; c.h=r.h; var n2=shapeEl(c,th(),true); n2.classList.add('isSel'); node.parentNode.replaceChild(n2,node); fitShapes(n2,th()); }
   else { node.style.left=r.x+'px'; node.style.top=r.y+'px'; node.style.width=r.w+'px'; node.style.height=r.h+'px';
     if(node.classList.contains('fld')){ var b=boxDef(s,d.k), o={}, k; for(k in b) o[k]=b[k]; o.w=r.w; o.h=r.h; fitBox(node,o,th(),s.layout); } }
+  var ov={}; if(isMany(d.k)) mapMembers(selEls(s,d.k),d.r0,r).forEach(function(c){ ov['e:'+c.id]=c; }); else ov[d.k]=r; liveConns(s,el,ov);
   var f=el.querySelector('.selFr'); if(f){ var nf=frameEl(r); if(isMany(d.k)) nf.classList.add('grp'); el.replaceChild(nf,f); } }
 host.addEventListener('pointerdown',function(e){
   if(gen||busyOn||(e.pointerType==='mouse'&&e.button)) return; var s=deck.slides[cur], el=host.querySelector('.sl'); if(!s||!el) return;
+  if(cn){ e.preventDefault(); var cnode=e.target.closest('[data-bk]'), ck=cnode&&el.contains(cnode)?cnode.dataset.bk:'', from=cn.k, same=cn.sid===s.id; cnOff();
+    if(same&&ck&&ck!==from&&connPick(s,ck)) makeConn(s,from,ck); else toast(T('연결선을 그만뒀어요')); return; }
   var hd=e.target.closest('.hd');
   if(hd&&selK){ e.preventDefault(); blurEdit(); drg={k:selK, h:hd.dataset.h, id:e.pointerId, x0:e.clientX, y0:e.clientY, r0:keyBox(s,selK), kk:host.offsetWidth/W, on:true}; try{ host.setPointerCapture(e.pointerId); }catch(err){} host.classList.add('dragging'); return; }
   if(e.target.closest('[data-rm],.lvEdit,iframe')) return;
@@ -548,6 +577,7 @@ host.addEventListener('pointerdown',function(e){
     if(se&&(selK==='g:'+se.g&&se.g||selK==='m'&&selM.indexOf(se.id)>=0)){ sub=k; k=selK; was=false; }
     else if(se&&se.g) k='g:'+se.g; }
   setSel(k); if(editing) return; // pressing inside text being typed: normal text selection
+  if(se&&se.c) return; // a connector is picked, never dragged
   var txt=node.classList.contains('fld')||node.classList.contains('shp');
   if(e.pointerType==='mouse'&&txt){ e.preventDefault(); blurEdit(); }
   drg={k:k, h:'mv', id:e.pointerId, x0:e.clientX, y0:e.clientY, r0:keyBox(s,k), kk:host.offsetWidth/W, on:false, was:was, sub:sub, hold:e.pointerType==='mouse'&&txt};
@@ -555,7 +585,7 @@ host.addEventListener('pointerdown',function(e){
 /* picking several shapes: drag a rectangle on an empty place, or Shift / Ctrl + click; the result is one shape, one whole group, or a loose set */
 var mq=null;
 function selIdsNow(){ return selEls(deck.slides[cur]).map(function(e){ return e.id; }); }
-function selectIds(ids,nodraw){ var s=deck.slides[cur]; ids=ids.filter(function(id,i){ return ids.indexOf(id)===i&&shapeOf(s,id); });
+function selectIds(ids,nodraw){ var s=deck.slides[cur]; ids=ids.filter(function(id,i){ return ids.indexOf(id)===i&&shapeOf(s,id)&&!shapeOf(s,id).c; });
   var gs={}; ids.forEach(function(id){ var g=shapeOf(s,id).g; if(g) gs[g]=1; }); s.els.forEach(function(e){ if(e.g&&gs[e.g]&&ids.indexOf(e.id)<0) ids.push(e.id); }); // a group is never half picked
   var gk=Object.keys(gs);
   var k=!ids.length?null:ids.length===1?'e:'+ids[0]:gk.length===1&&s.els.filter(function(e){ return e.g===gk[0]; }).length===ids.length?'g:'+gk[0]:'m'; if(k==='m') selM=ids;
@@ -590,11 +620,11 @@ function editShapeText(k){ if(selK!==k) setSel(k); var e=selShape(), inn=host.qu
   if(document.activeElement===inn) return; inn.contentEditable=CE; inn.focus();
   try{ var r=document.createRange(); r.selectNodeContents(inn); r.collapse(false); var gs=getSelection(); gs.removeAllRanges(); gs.addRange(r); }catch(err){} }
 /* arrow keys nudge the picked box (Shift: more); a run of presses is one undo step */
-function nudge(dx,dy){ var s=deck.slides[cur], r=s&&selK&&keyBox(s,selK); if(!r) return; if(Date.now()-nudgeT>900) pushUndo(); nudgeT=Date.now(); r.x+=dx; r.y+=dy; putBox(s,selK,r); saveSoon(); thumbSoon(cur); drawMain(); }
+function nudge(dx,dy){ var s=deck.slides[cur], r=s&&selK&&keyBox(s,selK); if(!r||r.cn) return; if(Date.now()-nudgeT>900) pushUndo(); nudgeT=Date.now(); r.x+=dx; r.y+=dy; putBox(s,selK,r); saveSoon(); thumbSoon(cur); drawMain(); }
 function delSel(){ var s=deck.slides[cur], a=selEls(s); if(!s||!selK) return;
-  if(a.length){ pushUndo(); var ks=a.map(function(e){ return 'e:'+e.id; }); s.els=s.els.filter(function(e){ return a.indexOf(e)<0; }); s.build=s.build.filter(function(b){ return ks.indexOf(b.k)<0; }); selK=null; selM=[]; changed(); toast(T('도형을 지웠어요')); }
-  else if(selK==='img'&&s.img){ pushUndo(); s.img=''; s.iw=s.ih=0; changed(true); }
-  else if(selK==='live'&&liveCfg(s)){ pushUndo(); s.live=''; selK=null; changed(true); toast(T('살아있는 화면을 지웠어요')); } }
+  if(a.length){ pushUndo(); var ks=a.map(function(e){ return 'e:'+e.id; }); s.els=s.els.filter(function(e){ return a.indexOf(e)<0; }); s.build=s.build.filter(function(b){ return ks.indexOf(b.k)<0; }); dropConns(s); selK=null; selM=[]; changed(); toast(T('도형을 지웠어요')); }
+  else if(selK==='img'&&s.img){ pushUndo(); s.img=''; s.iw=s.ih=0; dropConns(s); changed(true); }
+  else if(selK==='live'&&liveCfg(s)){ pushUndo(); s.live=''; selK=null; dropConns(s); changed(true); toast(T('살아있는 화면을 지웠어요')); } }
 
 /* ---------- shapes, builds and the bar of the picked box ---------- */
 var SWC=['#ffffff','#111111','#3d7fe0','#ff8a3d','#2fb27a','#e0526b','#8a5ce0','#ffc93c'];
@@ -611,7 +641,7 @@ function addEmoji(ch){ var s=deck.slides[cur]; if(!s||gen||busyOn) return; blurE
 function setPicShape(v){ var s=deck.slides[cur]; if(!s||!s.img||s.ish===v) return; blurEdit(); pushUndo(); s.ish=v; var b=boxDef(s,'img');
   if(v!=='rect'&&v!=='round'&&b&&Math.abs(b.w-b.h)>2){ var q=Math.min(b.w,b.h); s.pos.img={x:Math.round(b.x+(b.w-q)/2), y:Math.round(b.y+(b.h-q)/2), w:q, h:q}; } changed(); }
 /* line things up on the slide (picked box, picture or shape) */
-function alignSel(m){ var s=deck.slides[cur], r=s&&selK&&keyBox(s,selK); if(!r) return; var M=48, bx=r.ln?Math.min(r.x,r.x+r.w):r.x, by=r.ln?Math.min(r.y,r.y+r.h):r.y, bw=Math.abs(r.w), bh=Math.abs(r.h), dx=0, dy=0;
+function alignSel(m){ var s=deck.slides[cur], r=s&&selK&&keyBox(s,selK); if(!r||r.cn) return; var M=48, bx=r.ln?Math.min(r.x,r.x+r.w):r.x, by=r.ln?Math.min(r.y,r.y+r.h):r.y, bw=Math.abs(r.w), bh=Math.abs(r.h), dx=0, dy=0;
   if(m==='l') dx=M-bx; else if(m==='ch') dx=Math.round((W-bw)/2)-bx; else if(m==='r') dx=W-M-bw-bx; else if(m==='t') dy=M-by; else if(m==='cv') dy=Math.round((H-bh)/2)-by; else if(m==='b') dy=H-M-bh-by; else return;
   blurEdit(); pushUndo(); putBox(s,selK,{x:r.x+dx,y:r.y+dy,w:r.w,h:r.h,ln:r.ln}); changed(); }
 /* copy a shape and paste it on any slide or deck (also through the system clipboard, so Ctrl+C / Ctrl+V work) */
@@ -622,7 +652,8 @@ function copySel(){ var s=deck.slides[cur], a=selEls(s); if(!a.length) return to
   toast(T('복사했어요. 다른 슬라이드에서 붙여넣기를 눌러요')); selBar(); }
 /* copies of shapes (a group stays a group, with a new group id), put on top and picked */
 function addCopies(s,src,dx,dy,clamp){ src=Array.isArray(src)?src:[src]; var gm={}, out=[];
-  src.forEach(function(o){ var c=fixEl(JSON.parse(JSON.stringify(o))); if(!c) return; c.id=uid(); if(c.g){ gm[c.g]=gm[c.g]||uid(); c.g=gm[c.g]; }
+  src.forEach(function(o){ var c=fixEl(JSON.parse(JSON.stringify(o))); if(!c) return; c.id=uid(); delete c.c; // a copy of a connector is a plain line
+     if(c.g){ gm[c.g]=gm[c.g]||uid(); c.g=gm[c.g]; }
     c.x=c.x+dx; c.y=c.y+dy; if(clamp){ c.x=Math.max(-100,Math.min(1200,c.x)); c.y=Math.max(-100,Math.min(640,c.y)); } out.push(c); });
   var gc={}; out.forEach(function(c){ if(c.g) gc[c.g]=(gc[c.g]||0)+1; }); out.forEach(function(c){ if(c.g&&gc[c.g]<2) c.g=''; });
   out.forEach(function(c){ s.els.push(c); }); selectIds(out.map(function(c){ return c.id; }),true); return out; }
@@ -705,7 +736,8 @@ function selBar0(){ var b=$('selBar'), s=deck&&deck.slides[cur]; b.innerHTML='';
   if(!selK){ b.className='selBar hint'; b.textContent=T('글상자·그림·도형을 누르면 끌어서 옮기고 모서리로 크기를 바꿀 수 있어요. 빈 곳을 끌거나 Shift를 누르고 누르면 여러 개를 고를 수 있어요'); if(readClip()){ var pb=document.createElement('button'); pb.className='tbtn'; pb.dataset.sb='paste'; pb.textContent=T('붙여넣기'); b.appendChild(pb); } return; }
   b.className='selBar'; var e=selShape(), mem=selEls(s), bi=mem.length?buildIx(s,'e:'+mem[0].id):buildIx(s,selK), many=isMany(selK);
   var add=function(k,txt,dis){ var x=document.createElement('button'); x.className='tbtn'; x.dataset.sb=k; x.textContent=T(txt); if(dis) x.disabled=true; b.appendChild(x); return x; };
-  if(e){ if(!isLine(e)) add('fill','채우기'); add('line',isLine(e)?'선 색·굵기':'테두리'); if(!isLine(e)) add('text','글 쓰기'); }
+  if(e){ if(!isLine(e)) add('fill','채우기'); add('line',isLine(e)?'선 색·굵기':'테두리'); if(!isLine(e)) add('text','글 쓰기'); if(e.c){ var ca=add('carrow','화살표'); ca.classList.toggle('on',e.k==='arrow'); ca.title=T('끝에 화살표 달기 · 빼기'); } }
+  if(connPick(s,selK)) add('conn','연결선').title=T('다른 도형과 이어요. 도형을 옮기면 같이 따라 움직여요');
   if(selK==='img'&&s.img){ add('pshape','모양 자르기').classList.toggle('on',s.ish!=='rect'); add('pborder','테두리').classList.toggle('on',!!(s.ibw&&s.ibc)); }
   if(many) add('many',F('{0}개 골랐어요',mem.length),true);
   if(selK==='m') add('group','그룹으로 묶기');
@@ -760,9 +792,11 @@ $('selBar').addEventListener('click',function(e){ var x=e.target.closest('[data-
   if(k==='multi'){ multiOn=!multiOn; selBar(); toast(T(multiOn?'도형을 누르면 하나씩 더하거나 빼요':'여러 개 고르기를 껐어요')); return; }
   if(k==='copy') return copySel();
   if(k==='fpaint') return fpBtn(false);
+  if(k==='conn') return connStart();
   if(k==='text') return editShapeText(selK);
   blurEdit();
-  if(k==='reset'){ if(!s.pos[selK]) return; pushUndo(); delete s.pos[selK]; changed(); }
+  if(k==='carrow'){ if(!sh||!sh.c) return; pushUndo(); sh.k=sh.k==='arrow'?'line':'arrow'; changed(); }
+  else if(k==='reset'){ if(!s.pos[selK]) return; pushUndo(); delete s.pos[selK]; changed(); }
   else if(k==='del') delSel();
   else if(k==='dup') dupSel(); });
 $('elMenu').addEventListener('click',function(ev){ var b=ev.target.closest('[data-o]'); if(!b||b.disabled) return; var k=b.dataset.o, e=selShape(), s=deck.slides[cur];
@@ -798,7 +832,7 @@ function setLayout(lay){ var s=deck.slides[cur]; if(!s||s.layout===lay) return; 
   if(lay==='timer'&&!s.stat) s.stat='5:00';
   if(lay==='quote'&&!s.quote&&s.layout!=='quote'&&s.title){ s.quote=s.title; }
   if(lay==='stat'&&!s.caption&&s.bullets.length) s.caption=s.bullets[0];
-  s.layout=lay; s.pos={}; syncLink(s); changed(); if(lay==='image'&&!s.img) pickImage(); else if((lay==='table'||lay==='chart')&&!s.data.trim()) openData(); else if(lay==='live'&&!liveCfg(s)) openLive(); }
+  s.layout=lay; s.pos={}; dropConns(s); syncLink(s); changed(); if(lay==='image'&&!s.img) pickImage(); else if((lay==='table'||lay==='chart')&&!s.data.trim()) openData(); else if(lay==='live'&&!liveCfg(s)) openLive(); }
 function setTheme(id){ if(deck.theme===id) return; blurEdit(); if(deck.slides.length) pushUndo(); deck.theme=id; saveSoon(); if(deck.slides.length){ drawList(); drawMain(); } else drawStart(); drawThemes(); }
 $('undoBtn').onclick=doUndo; $('redoBtn').onclick=doRedo;
 $('addBtn').onclick=function(){ addSlide('bullets'); };
@@ -1670,7 +1704,7 @@ var SH_TEXT=['title','subtitle','leftTitle','rightTitle','stat','caption','quote
 function shareJSON(o){ var live=deck.slides.filter(function(s){ return !s.hide&&s.layout==='live'; }).length, vis=deck.slides.filter(function(s){ return !s.hide&&s.layout!=='live'; }), pics=0, start=0, d={v:1, n:deck.name, t:deck.theme};
   if(deck.font) d.f=deck.font; if(deck.nums) d.m=1; if(deck.footer) d.o=deck.footer; var ma=deck.master; if(ma&&(!ma.on||ma.fpos!=='l'||ma.npos!=='r'||ma.ttl)) d.ma=[ma.on?1:0,ma.fpos,ma.npos,ma.ttl?1:0];
   vis.forEach(function(s,i){ if(s.img) pics++; if(deck.slides[cur]&&deck.slides.indexOf(s)<=cur) start=i; });
-  d.s=vis.map(function(s){ var x={l:s.layout}; SH_TEXT.forEach(function(k){ if(s[k]&&!(k==='caption'&&s.layout==='quiz'&&!o.ans)) x[k]=s[k]; }); LISTS.forEach(function(k){ if(s[k].length) x[k]=s[k]; });
+  d.s=vis.map(function(s){ connSync(s); var x={l:s.layout}; SH_TEXT.forEach(function(k){ if(s[k]&&!(k==='caption'&&s.layout==='quiz'&&!o.ans)) x[k]=s[k]; }); LISTS.forEach(function(k){ if(s[k].length) x[k]=s[k]; });
     if(s.layout==='chart'&&s.ctype!=='bar') x.c=s.ctype; if(s.bg) x.bg=s.bg; if(Object.keys(s.pos).length) x.p=s.pos; if(s.els.length) x.e=s.els; if(o.notes&&s.notes&&s.notes.trim()) x.notes=s.notes; return x; });
   return {json:JSON.stringify(d), n:vis.length, hidden:deck.slides.length-vis.length-live, live:live, pics:pics, start:start}; }
 function shareEncode(json){ var bytes=new TextEncoder().encode(json), plain='j'+b64u(bytes);
@@ -1752,7 +1786,7 @@ document.addEventListener('keydown',function(e){
     return; }
   if($('sortDlg').classList.contains('open')&&(e.ctrlKey||e.metaKey)&&(e.key==='a'||e.key==='A')&&!(e.target.tagName==='INPUT')){ e.preventDefault(); $('sAll').click(); return; }
   if(document.querySelector('.ov.open')){ if(e.key==='Escape') document.querySelectorAll('.ov.open').forEach(function(o){ closeDlg(o.id,null); }); return; }
-  if(e.key==='Escape'){ closeMenus(); if(fp.on){ fpOff(); toast(T('서식 복사를 껐어요')); return; } }
+  if(e.key==='Escape'){ closeMenus(); if(cn){ cnOff(); toast(T('연결선을 그만뒀어요')); return; } if(fp.on){ fpOff(); toast(T('서식 복사를 껐어요')); return; } }
   if(e.ctrlKey&&e.altKey&&(e.code==='KeyN'||e.key==='n'||e.key==='N')){ e.preventDefault(); if(gen) toast(T('AI가 다 만들 때까지 기다려 주세요')); else { blurEdit(); newDeckAction(); } return; }
   var t=e.target; if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.tagName==='SELECT'||t.isContentEditable)) return;
   var mod=e.ctrlKey||e.metaKey;
@@ -1831,7 +1865,7 @@ function buildPPTX(P){
     else sl.addShape(ty,q); }
   var p=new P(); p.layout='LAYOUT_WIDE'; p.title=deck.name; p.author='Fry Slides'; p.company='Frenchfries777 Tools';
   deck.slides.forEach(function(s){
-    var t=eth(s,t0), sl=p.addSlide(); sl.background={color:C(t.bg)}; if(s.hide) sl.hidden=true;
+    connSync(s); var t=eth(s,t0), sl=p.addSlide(); sl.background={color:C(t.bg)}; if(s.hide) sl.hidden=true;
     deco(t,s.layout).forEach(function(d){
       var box={x:I(d.x), y:I(d.y), w:I(d.w), h:I(d.h)};
       if(d.r==='glyph'){ box.fontFace='Georgia'; box.fontSize=PT(d.fs); box.color=C(d.c); box.bold=true; box.align='center'; box.valign='top'; box.margin=0; box.transparency=Math.round((1-d.o)*100); sl.addText(d.t,box); return; }
@@ -1955,11 +1989,11 @@ window.FSL={
 window.FSLC={
   state:function(){ var s=deck&&deck.slides[cur], sh=selShape(), n=s?selEls(s).length:0, busy=gen||busyOn;
     return {slide:!!s, busy:busy, gen:gen, editor:!$('editor').hidden, pres:pr.on, lay:s?s.layout:'', ai:!!s&&AILAYS.indexOf(s.layout)>=0, hide:!!(s&&s.hide), link:!!(s&&s.link),
-      fp:fp.on, sel:!!(s&&selK), nSel:n, group:selK==='m'&&n>=2, ungroup:isMany(selK)&&selK!=='m'&&n>0, shape:!!sh, line:!!(sh&&isLine(sh)), clip:!!readClip(), nums:!!(deck&&deck.nums), footer:!!(deck&&deck.footer), master:!!(deck&&deck.master&&deck.master.on), auto:!!(deck&&deck.auto&&deck.auto.on)}; },
+      fp:fp.on, sel:!!(s&&selK), nSel:n, group:selK==='m'&&n>=2, ungroup:isMany(selK)&&selK!=='m'&&n>0, shape:!!sh, line:!!(sh&&isLine(sh)), conn:!!(s&&selK&&connPick(s,selK)), clip:!!readClip(), nums:!!(deck&&deck.nums), footer:!!(deck&&deck.footer), master:!!(deck&&deck.master&&deck.master.on), auto:!!(deck&&deck.auto&&deck.auto.on)}; },
   deck:deckAct, opt:optAct,
   optMenu:function(part,btn){ if(!deck.slides.length||gen||busyOn) return; blurEdit(); drawOptMenu(part); openMenu($('optMenu'),btn); },
   elMenu:function(kind,btn){ if(!deck.slides[cur]||gen||busyOn) return; blurEdit(); drawElMenu(kind); openMenu($('elMenu'),btn); },
-  addShape:addShape, fpaint:fpBtn, group:groupSel, ungroup:ungroupSel, copy:copySel, paste:function(){ pasteEl(); }, present:function(here){ present(here?cur:0); },
+  addShape:addShape, connect:connStart, fpaint:fpBtn, group:groupSel, ungroup:ungroupSel, copy:copySel, paste:function(){ pasteEl(); }, present:function(here){ present(here?cur:0); },
   live:function(){ var s=deck.slides[cur]; if(!s||gen||busyOn) return; if(s.layout==='live') openLive(); else { addSlide('live'); openLive(); } },
   setLayout:function(l){ setLayout(l); $('laySel').value=deck.slides[cur]?deck.slides[cur].layout:l; },
   rename:function(){ var n=$('deckName'); n.focus(); n.select(); }
