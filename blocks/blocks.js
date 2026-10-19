@@ -1395,6 +1395,8 @@ def('act_share',function(){ this.appendValueInput('TEXT').setCheck('String'); th
   function(b){ need('share'); return '__share('+(G.valueToCode(b,'TEXT',O.COMMA)||"''")+');\n'; });
 def('act_copy',function(){ this.appendValueInput('TEXT').setCheck('String'); this.appendDummyInput().appendField(T('을(를) 복사하기')); this.setInputsInline(true); act(this,'글을 복사해서 어디든 붙여 넣을 수 있게 해요. 버튼을 눌렀을 때만 돼요'); },
   function(b){ need('share'); return '__copy('+(G.valueToCode(b,'TEXT',O.COMMA)||"''")+');\n'; });
+def('act_openurl',function(){ this.appendValueInput('URL').setCheck('String'); this.appendDummyInput().appendField(T('웹페이지 열기 (열기 전에 한 번 물어봐요)')); this.setInputsInline(true); act(this,'실행되면 화면에 "이 주소를 열까요?" 확인 창이 떠요. 열기를 눌러야 새 창으로 열려요. https:// 나 http:// 주소만 열 수 있어요'); },
+  function(b){ need('openurl'); return '__openurl('+(G.valueToCode(b,'URL',O.COMMA)||"''")+');\n'; });
 def('act_qr',function(){ this.appendValueInput('TEXT').setCheck('String'); this.appendDummyInput().appendField(T('(으)로 QR 그림을')).appendField(elField(['el_canvas']),'EL').appendField(T('에 만들기')); this.setInputsInline(true); act(this,'글이나 주소를 폰 카메라로 읽을 수 있는 QR 그림으로 그려요. 그림판(캔버스) 위에 그려요. 글이 비어 있으면 지워요. 200글자까지만 써요'); },
   function(b){ need('qr'); return '__qr('+er(b)+', '+(G.valueToCode(b,'TEXT',O.COMMA)||"''")+');\n'; });
 def('act_list_shuffle',function(){ this.appendValueInput('LIST').setCheck('Array'); this.appendDummyInput().appendField(T('을(를) 섞기')); this.setInputsInline(true); act(this,'리스트 안의 항목 순서를 아무렇게나 바꿔요. 같은 리스트 안에서 바뀌어요'); },
@@ -1489,6 +1491,69 @@ HELP.share=src(function(){
       }
     } catch (e) {}
     __copy(text);
+  }
+});
+HELP.openurl=src(function(){
+  var __ouBox;
+  function __openurl(url) {
+    url = url == null ? '' : String(url).trim();
+    if (url && !/^[a-z][a-z0-9+.-]*:/i.test(url) && /^[^\s\/]+\.[^\s\/]+/.test(url)) url = 'https://' + url;
+    var ok = /^https?:\/\/[^\s\/$.?#][^\s]*$/i.test(url);
+    if (__ouBox && __ouBox.parentNode) __ouBox.parentNode.removeChild(__ouBox);
+    var box = __ouBox = document.createElement('div');
+    box.setAttribute('role', 'dialog');
+    box.setAttribute('aria-modal', 'true');
+    box.style.cssText = 'position:fixed;left:0;top:0;right:0;bottom:0;z-index:2147483647;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px;font-family:system-ui,"Apple SD Gothic Neo","Noto Sans KR",sans-serif';
+    var card = document.createElement('div');
+    card.style.cssText = 'background:#fff;color:#1f2937;border-radius:14px;padding:20px;max-width:420px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,.35);text-align:left';
+    var h = document.createElement('div');
+    h.style.cssText = 'font-weight:700;font-size:18px;margin-bottom:10px';
+    h.textContent = ok ? '이 웹페이지를 열까요?' : '열 수 없는 주소예요';
+    card.appendChild(h);
+    var u = document.createElement('div');
+    u.style.cssText = 'word-break:break-all;background:#f3f4f6;border-radius:8px;padding:10px;font-size:14px;margin-bottom:14px;max-height:120px;overflow:auto';
+    u.textContent = url ? (url.length > 300 ? url.slice(0, 300) + '…' : url) : '(주소가 비어 있어요)';
+    card.appendChild(u);
+    if (!ok) {
+      var m = document.createElement('div');
+      m.style.cssText = 'font-size:14px;margin-bottom:14px';
+      m.textContent = 'https:// 나 http:// 로 시작하는 주소만 열 수 있어요.';
+      card.appendChild(m);
+    }
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;gap:8px;justify-content:flex-end';
+    function close() { if (box.parentNode) box.parentNode.removeChild(box); document.removeEventListener('keydown', onKey, true); if (__ouBox === box) __ouBox = null; }
+    function onKey(e) { if (e.key === 'Escape') { e.preventDefault(); close(); } }
+    function btn(label, bg, fg, fn) {
+      var x = document.createElement('button');
+      x.type = 'button';
+      x.textContent = label;
+      x.style.cssText = 'font:inherit;font-weight:700;padding:9px 16px;border:0;border-radius:10px;cursor:pointer;background:' + bg + ';color:' + fg;
+      x.onclick = fn;
+      row.appendChild(x);
+      return x;
+    }
+    var first;
+    if (ok) {
+      first = btn('취소', '#e5e7eb', '#1f2937', close);
+      btn('열기', '#ffc93c', '#1c1405', function () {
+        close();
+        var a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+    } else first = btn('확인', '#ffc93c', '#1c1405', close);
+    card.appendChild(row);
+    box.appendChild(card);
+    box.addEventListener('click', function (e) { if (e.target === box) close(); });
+    document.addEventListener('keydown', onKey, true);
+    document.body.appendChild(box);
+    try { first.focus(); } catch (e) {}
   }
 });
 HELP.qr=';'+(window.FFQRSRC||'')+'\n'+src(function(){
@@ -1803,6 +1868,7 @@ function toolbox(){
       lab('인터넷에서 글 가져오기'),bk('act_fetch',{inputs:{URL:sh('text','https://')}}),bk('val_fetched'),bk('val_fetch_ok'),bk('val_json_get',{inputs:{TEXT:{block:{type:'val_fetched'}},KEY:sh('text','a.b')}}),
       lab('전체 화면'),bk('act_fullscreen'),bk('act_fullscreen',{fields:{MODE:'off'}}),
       lab('공유하기와 복사하기'),bk('act_share',{inputs:{TEXT:sh('text',T('안녕하세요!'))}}),bk('act_copy',{inputs:{TEXT:sh('text',T('안녕하세요!'))}}),
+      lab('웹페이지 열기'),bk('act_openurl',{inputs:{URL:sh('text','https://')}}),
       lab('QR 그림'),bk('act_qr',{inputs:{TEXT:sh('text','https://')}}),
       lab('스톱워치'),bk('act_stopwatch'),bk('act_stopwatch',{fields:{MODE:'stop'}}),bk('act_stopwatch',{fields:{MODE:'reset'}}),bk('val_stopwatch'),
       lab('알림'),bk('act_alert',{inputs:{VALUE:sh('text',T('안녕하세요!'))}}),
