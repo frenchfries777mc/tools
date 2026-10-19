@@ -1171,20 +1171,20 @@ def('ev_switch',function(){ this.appendDummyInput().appendField(elField(['el_swi
   function(b){ need('$'); return '$('+lit(b.getFieldValue('EL'))+').addEventListener(\'change\', '+AF()+') {\n'+hatBody(b)+'});\n'; });
 def('val_switch',function(){ this.appendDummyInput().appendField(elField(['el_switch']),'EL').appendField(T('이(가) 켜져 있나요?')); val(this,'Boolean','켜져 있으면 참, 꺼져 있으면 거짓이에요'); },
   function(b){ need('$'); return ['$('+er(b)+').checked',O.MEMBER]; });
-def('act_switch_set',function(){ this.appendDummyInput().appendField(elField(['el_switch']),'EL').appendField(T('을(를)')).appendField(new Blockly.FieldDropdown(function(){ return [[T('켜기'),'on'],[T('끄기'),'off'],[T('반대로 바꾸기'),'flip']]; }),'MODE'); act(this,'스위치를 켜거나 꺼요. "바뀌면"은 실행되지 않아요'); },
+def('act_switch_set',function(){ this.appendDummyInput().appendField(elField(['el_switch']),'EL').appendField(TK('을(를)','을(를) [생략]')).appendField(new Blockly.FieldDropdown(function(){ return [[T('켜기'),'on'],[T('끄기'),'off'],[T('반대로 바꾸기'),'flip']]; }),'MODE'); act(this,'스위치를 켜거나 꺼요. "바뀌면"은 실행되지 않아요'); },
   function(b){ need('$'); var m=b.getFieldValue('MODE'); return '$('+er(b)+').checked = '+(m==='flip'?'!$('+er(b)+').checked':String(m==='on'))+';\n'; });
 def('ev_select',function(){ this.appendDummyInput().appendField(elField(['el_select']),'EL').appendField(T('에서 고르면')); hat(this,'상자에서 다른 것을 고를 때마다 해요'); },
   function(b){ need('$'); return '$('+lit(b.getFieldValue('EL'))+').addEventListener(\'change\', '+AF()+') {\n'+hatBody(b)+'});\n'; });
 def('val_select',function(){ this.appendDummyInput().appendField(elField(['el_select']),'EL').appendField(T('에서 고른 것')); val(this,'String','지금 고른 글자예요'); },
   function(b){ need('get'); return ['__get('+er(b)+')',O.FUNCTION_CALL]; });
-def('act_select_set',function(){ this.appendValueInput('V').appendField(elField(['el_select']),'EL').appendField(T('의 고를 것을')); this.appendDummyInput().appendField(T('(으)로 바꾸기')); this.setInputsInline(true); act(this,'리스트나 쉼표로 나눈 글(사과, 배)로 고를 것을 새로 정해요'); },
+def('act_select_set',function(){ this.appendValueInput('V').appendField(elField(['el_select']),'EL').appendField(T('의 고를 것을')); this.appendDummyInput().appendField(TK('(으)로 바꾸기','(으)로 바꾸기 [고를 것]')); this.setInputsInline(true); act(this,'리스트나 쉼표로 나눈 글(사과, 배)로 고를 것을 새로 정해요'); },
   function(b){ need('choices'); return '__choices('+er(b)+', '+(G.valueToCode(b,'V',O.COMMA)||"''")+');\n'; });
-def('act_progress',function(){ this.appendValueInput('N').setCheck('Number').appendField(elField(['el_progress']),'EL').appendField(T('을(를)')); this.appendDummyInput().appendField(T('%로 하기')); this.setInputsInline(true); act(this,'진행 막대를 0~100% 사이로 채워요. 넘으면 0이나 100으로 맞춰요'); },
+def('act_progress',function(){ this.appendValueInput('N').setCheck('Number').appendField(elField(['el_progress']),'EL').appendField(TK('을(를)','을(를) [진행 막대]')); this.appendDummyInput().appendField(T('%로 하기')); this.setInputsInline(true); act(this,'진행 막대를 0~100% 사이로 채워요. 넘으면 0이나 100으로 맞춰요'); },
   function(b){ need('progress'); return '__progress('+er(b)+', '+(G.valueToCode(b,'N',O.COMMA)||'0')+');\n'; });
-def('act_table_set',function(){ this.appendValueInput('R').setCheck('Number').appendField(elField(['el_table']),'EL').appendField(T('의')); this.appendValueInput('C').setCheck('Number').appendField(T('줄')); this.appendValueInput('V').appendField(T('칸을')); this.appendDummyInput().appendField(T('(으)로 하기'));
+def('act_table_set',function(){ this.appendValueInput('R').setCheck('Number').appendField(elField(['el_table']),'EL').appendField(TK('의','의 [표 칸]')); this.appendValueInput('C').setCheck('Number').appendField(TK('줄','줄 [표 칸]')); this.appendValueInput('V').appendField(TK('칸을','칸을 [표 칸]')); this.appendDummyInput().appendField(TK('(으)로 하기','(으)로 하기 [표 칸]'));
   this.setInputsInline(true); act(this,'표의 한 칸에 글을 써요. 1부터 세고, 표 밖이면 아무 일도 안 해요'); },
   function(b){ need('table'); return '__tset('+[er(b),G.valueToCode(b,'R',O.COMMA)||'1',G.valueToCode(b,'C',O.COMMA)||'1',G.valueToCode(b,'V',O.COMMA)||"''"].join(', ')+');\n'; });
-def('val_table_get',function(){ this.appendValueInput('R').setCheck('Number').appendField(elField(['el_table']),'EL').appendField(T('의')); this.appendValueInput('C').setCheck('Number').appendField(T('줄')); this.appendDummyInput().appendField(T('칸의 글')); this.setInputsInline(true); val(this,'String','표의 한 칸에 쓰인 글이에요. 1부터 세고, 표 밖이면 빈 글자예요'); },
+def('val_table_get',function(){ this.appendValueInput('R').setCheck('Number').appendField(elField(['el_table']),'EL').appendField(TK('의','의 [표 칸]')); this.appendValueInput('C').setCheck('Number').appendField(TK('줄','줄 [표 칸]')); this.appendDummyInput().appendField(T('칸의 글')); this.setInputsInline(true); val(this,'String','표의 한 칸에 쓰인 글이에요. 1부터 세고, 표 밖이면 빈 글자예요'); },
   function(b){ need('table'); return ['__tget('+[er(b),G.valueToCode(b,'R',O.COMMA)||'1',G.valueToCode(b,'C',O.COMMA)||'1'].join(', ')+')',O.FUNCTION_CALL]; });
 def('act_table_add_row',function(){ this.appendDummyInput().appendField(elField(['el_table']),'EL').appendField(T('에 줄 더하기')); this.appendValueInput('V'); this.setInputsInline(true); act(this,'맨 아래에 새 줄을 더해요. 칸 글은 리스트나 쉼표로 나눈 글(철수, 90, 80)로 줘요'); },
   function(b){ need('table'); return '__tadd('+er(b)+', '+(G.valueToCode(b,'V',O.COMMA)||"''")+');\n'; });
@@ -1322,7 +1322,7 @@ def('val_mlang',function(){ var L=[['ko','한국어'],['en','영어'],['ja','일
   function(b){ need('mlang'); var parts=[]; ['ko','en','ja','es','fr','de'].forEach(function(k){ var v=b.getFieldValue('L_'+k); if(v) parts.push(k+': '+lit(v)); }); return ['__mlang({ '+parts.join(', ')+' })',O.FUNCTION_CALL]; });
 def('val_curlang',function(){ this.appendDummyInput().appendField(T('사용자의 언어')); val(this,'String','페이지를 보는 사람의 브라우저 언어 글자예요. 한국어는 ko, 영어는 en, 일본어는 ja예요'); },
   function(b){ need('lang'); return ['__lang()',O.FUNCTION_CALL]; });
-def('act_type',function(){ this.appendDummyInput().appendField(T('타자 치듯')); this.appendValueInput('TEXT').setCheck('String'); this.appendDummyInput().appendField(T('을(를)')).appendField(elField(),'EL').appendField(T('에 한 글자씩')); this.appendValueInput('SEC').setCheck('Number'); this.appendDummyInput().appendField(T('초마다 쓰기')); this.setInputsInline(true); act(this,'글자를 한 글자씩 차례로 나타내요. 다 쓸 때까지 기다렸다가 다음 블록으로 가요. 같은 요소에 새로 쓰면 먼저 쓰던 것은 멈춰요'); },
+def('act_type',function(){ this.appendDummyInput().appendField(T('타자 치듯')); this.appendValueInput('TEXT').setCheck('String'); this.appendDummyInput().appendField(TK('을(를)','을(를) [타자]')).appendField(elField(),'EL').appendField(T('에 한 글자씩')); this.appendValueInput('SEC').setCheck('Number'); this.appendDummyInput().appendField(T('초마다 쓰기')); this.setInputsInline(true); act(this,'글자를 한 글자씩 차례로 나타내요. 다 쓸 때까지 기다렸다가 다음 블록으로 가요. 같은 요소에 새로 쓰면 먼저 쓰던 것은 멈춰요'); },
   function(b){ need('typing'); return 'await __type('+er(b)+', '+(G.valueToCode(b,'TEXT',O.COMMA)||"''")+', '+(G.valueToCode(b,'SEC',O.COMMA)||'0.05')+');\n'; });
 def('act_video_ctl',function(){ this.appendDummyInput().appendField(T('영상')).appendField(new Blockly.FieldDropdown(function(){ return [[T('재생하기'),'play'],[T('잠깐 멈추기'),'pause'],[T('멈추고 처음으로'),'stop'],[T('지우기'),'remove']]; }),'ACT'); act(this,'영상을 재생하거나 멈춰요. 폰에서는 버튼을 누른 뒤에만 소리와 함께 재생될 수 있어요'); },
   function(b){ need('video'); return '__videoDo('+lit(b.getFieldValue('ACT'))+');\n'; });
@@ -1508,16 +1508,16 @@ HELP.openurl=src(function(){
     card.style.cssText = 'background:#fff;color:#1f2937;border-radius:14px;padding:20px;max-width:420px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,.35);text-align:left';
     var h = document.createElement('div');
     h.style.cssText = 'font-weight:700;font-size:18px;margin-bottom:10px';
-    h.textContent = ok ? '이 웹페이지를 열까요?' : '열 수 없는 주소예요';
+    h.textContent = ok ? '@@OU_ASK@@' : '@@OU_BAD@@';
     card.appendChild(h);
     var u = document.createElement('div');
     u.style.cssText = 'word-break:break-all;background:#f3f4f6;border-radius:8px;padding:10px;font-size:14px;margin-bottom:14px;max-height:120px;overflow:auto';
-    u.textContent = url ? (url.length > 300 ? url.slice(0, 300) + '…' : url) : '(주소가 비어 있어요)';
+    u.textContent = url ? (url.length > 300 ? url.slice(0, 300) + '…' : url) : '@@OU_EMPTY@@';
     card.appendChild(u);
     if (!ok) {
       var m = document.createElement('div');
       m.style.cssText = 'font-size:14px;margin-bottom:14px';
-      m.textContent = 'https:// 나 http:// 로 시작하는 주소만 열 수 있어요.';
+      m.textContent = '@@OU_ONLY@@';
       card.appendChild(m);
     }
     var row = document.createElement('div');
@@ -1535,8 +1535,8 @@ HELP.openurl=src(function(){
     }
     var first;
     if (ok) {
-      first = btn('취소', '#e5e7eb', '#1f2937', close);
-      btn('열기', '#ffc93c', '#1c1405', function () {
+      first = btn('@@OU_CANCEL@@', '#e5e7eb', '#1f2937', close);
+      btn('@@OU_OPEN@@', '#ffc93c', '#1c1405', function () {
         close();
         var a = document.createElement('a');
         a.href = url;
@@ -1547,7 +1547,7 @@ HELP.openurl=src(function(){
         a.click();
         document.body.removeChild(a);
       });
-    } else first = btn('확인', '#ffc93c', '#1c1405', close);
+    } else first = btn('@@OU_OK@@', '#ffc93c', '#1c1405', close);
     card.appendChild(row);
     box.appendChild(card);
     box.addEventListener('click', function (e) { if (e.target === box) close(); });
@@ -1555,7 +1555,7 @@ HELP.openurl=src(function(){
     document.body.appendChild(box);
     try { first.focus(); } catch (e) {}
   }
-});
+},{OU_ASK:T('이 웹페이지를 열까요?'),OU_BAD:T('열 수 없는 주소예요'),OU_EMPTY:T('(주소가 비어 있어요)'),OU_ONLY:T('https:// 나 http:// 로 시작하는 주소만 열 수 있어요.'),OU_CANCEL:T('취소'),OU_OPEN:T('열기'),OU_OK:TK('확인','확인 [창 단추]')});
 HELP.qr=';'+(window.FFQRSRC||'')+'\n'+src(function(){
   function __qr(name, text) {
     var c = $(name), s = text == null ? '' : String(text);
