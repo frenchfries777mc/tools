@@ -159,6 +159,7 @@ var C=[
   {id:'f.new',tab:'file',lb:'새 문서',kw:'new document file 새 파일 만들기'},
   {id:'f.tpl',tab:'file',lb:'템플릿으로 새 문서',kw:'template 템플릿 서식 양식'},
   {id:'f.open',tab:'file',lb:'파일 열기 (엑셀, CSV)',kw:'open import excel xlsx csv 열기 불러오기 엑셀 가져오기'},
+  {id:'f.url',tab:'file',lb:'주소에서 표 가져오기',kw:'import url csv web link 주소 링크 웹 표 가져오기 불러오기'},
   {id:'f.xlsx',tab:'file',lb:'엑셀 파일로 저장 (.xlsx)',kw:'save export excel xlsx download 저장 내보내기 다운로드 엑셀'},
   {id:'f.csv',tab:'file',lb:'이 시트를 CSV로 저장',kw:'csv export save 저장 내보내기'},
   {id:'f.docs',tab:'file',lb:'문서 관리',kw:'documents manage files 문서 목록 관리 휴지통'},
