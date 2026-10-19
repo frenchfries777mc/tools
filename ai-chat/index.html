@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI 체험 · Frenchfries777 Tools</title>
+<meta name="theme-color" content="#08090d">
+<link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="../i18n.js"></script>
+<script>
+FFT.add({
+'AI 체험':['Try the AI','Prueba la IA','Essayer l’IA','KI ausprobieren','AIを体験'],
+'사이트의 자체 AI와 이야기해 봐요. 내 기기 안에서 돌아가서 대화가 밖으로 나가지 않아요. 틀린 답에는 👎 틀렸어요를 눌러 알려 주세요.':['Chat with the site’s own AI. It runs inside your device, so the chat does not leave it. If an answer is wrong, press 👎 Wrong to tell us.','Habla con la IA propia del sitio. Funciona dentro de tu dispositivo, así que la conversación no sale de él. Si una respuesta es incorrecta, pulsa 👎 Incorrecto.','Discute avec l’IA du site. Elle tourne dans ton appareil, donc la conversation n’en sort pas. Si une réponse est fausse, appuie sur 👎 Faux.','Sprich mit der KI der Seite. Sie läuft auf deinem Gerät, das Gespräch verlässt es nicht. Ist eine Antwort falsch, tippe auf 👎 Falsch.','サイト独自のAIと話してみましょう。端末の中で動くので、会話は外に出ません。間違った答えには👎間違いを押して知らせてください。'],
+'가볍고 빨라요':['Light and fast','Ligera y rápida','Légère et rapide','Leicht und schnell','軽くて速い'],
+'똑똑해요':['Smarter','Más lista','Plus intelligente','Klüger','賢い'],
+'가장 똑똑해요':['Smartest','La más lista','La plus intelligente','Am klügsten','いちばん賢い'],
+'PC 추천 (그래픽 메모리 8GB 이상)':['Best on PC (8GB+ video memory)','Mejor en PC (8 GB+ de memoria gráfica)','Idéale sur PC (8 Go+ de mémoire vidéo)','Am besten am PC (8 GB+ Grafikspeicher)','PC向け (ビデオメモリ8GB以上)'],
+'준비 중':['Coming soon','Próximamente','Bientôt','Bald verfügbar','準備中'],
+'이 기기나 브라우저에서는 쓸 수 없어요. 최신 크롬이나 엣지, 또는 최신 사파리에서 열어 주세요.':['This device or browser cannot run it. Open it in a recent Chrome, Edge or Safari.','Este dispositivo o navegador no puede ejecutarla. Ábrela en un Chrome, Edge o Safari reciente.','Cet appareil ou navigateur ne peut pas l’exécuter. Ouvre-la dans un Chrome, Edge ou Safari récent.','Dieses Gerät oder dieser Browser kann sie nicht ausführen. Öffne sie in einem aktuellen Chrome, Edge oder Safari.','この端末やブラウザでは使えません。最新のChrome、Edge、Safariで開いてください。'],
+'처음 한 번만 {0} 크기의 파일을 내려받아요. 와이파이에서 쓰는 걸 추천해요. 계속할까요?':['The first time, it downloads about {0}. Wi-Fi is recommended. Continue?','La primera vez descarga unos {0}. Se recomienda Wi-Fi. ¿Continuar?','La première fois, elle télécharge environ {0}. Le Wi-Fi est conseillé. Continuer ?','Beim ersten Mal werden etwa {0} geladen. WLAN wird empfohlen. Fortfahren?','最初の一度だけ約{0}をダウンロードします。Wi-Fiでの利用をおすすめします。続けますか?'],
+'내려받고 시작':['Download and start','Descargar y empezar','Télécharger et commencer','Laden und starten','ダウンロードして開始'],
+'취소':['Cancel','Cancelar','Annuler','Abbrechen','キャンセル'],
+'궁금한 걸 물어보세요':['Ask anything','Pregunta lo que quieras','Pose ta question','Frag etwas','気になることを聞いてね'],
+'보내기':['Send','Enviar','Envoyer','Senden','送信'],
+'멈추기':['Stop','Detener','Arrêter','Stopp','止める'],
+'대화 지우기':['Clear chat','Borrar chat','Effacer le chat','Chat leeren','会話を消す'],
+'모델 바꾸기':['Change model','Cambiar modelo','Changer de modèle','Modell wechseln','モデルを変える'],
+'답하지 못했어요':['Could not answer','No pudo responder','Impossible de répondre','Konnte nicht antworten','答えられませんでした'],
+'예시 질문':['Examples','Ejemplos','Exemples','Beispiele','例'],
+'너는 누구야?':['Who are you?','¿Quién eres?','Qui es-tu ?','Wer bist du?','あなたは誰?'],
+'파이썬이 뭐야?':['What is Python?','¿Qué es Python?','C’est quoi Python ?','Was ist Python?','Pythonって何?'],
+'광합성을 쉽게 설명해 줘':['Explain photosynthesis simply','Explica la fotosíntesis de forma sencilla','Explique la photosynthèse simplement','Erkläre Photosynthese einfach','光合成を簡単に説明して'],
+'작은 AI라서 틀릴 수 있어요. 중요한 일은 꼭 다시 확인해 주세요.':['It is a small AI and can be wrong. Please double-check anything important.','Es una IA pequeña y puede equivocarse. Verifica lo importante.','C’est une petite IA qui peut se tromper. Vérifie ce qui est important.','Es ist eine kleine KI und kann sich irren. Prüfe Wichtiges bitte nach.','小さなAIなので間違えることがあります。大事なことは必ず確認してください。'],
+'로그인한 상태로 틀렸어요를 누르면 질문과 답이 개발자에게도 전해져요.':['If you press Wrong while logged in, the question and answer are also sent to the developer.','Si pulsas Incorrecto con la sesión iniciada, la pregunta y la respuesta también se envían al desarrollador.','Si tu appuies sur Faux en étant connecté, la question et la réponse sont aussi transmises au développeur.','Wenn du angemeldet auf Falsch tippst, gehen Frage und Antwort auch an den Entwickler.','ログインした状態で間違いを押すと、質問と答えが開発者にも届きます。'],
+'아직 {0} 파일이 올라오지 않았어요':['The {0} files are not online yet','Los archivos de {0} aún no están en línea','Les fichiers de {0} ne sont pas encore en ligne','Die Dateien von {0} sind noch nicht online','{0}のファイルはまだ公開されていません'],
+'만든 곳으로 가기':['Back to Tools','Volver a Tools','Retour à Tools','Zurück zu Tools','Toolsへ戻る']
+});
+</script>
+<style>
+:root{ --bg:#08090d; --panel:#10131b; --panel2:#151925; --line:#222837; --text:#eef0f5; --dim:#8a93a6; --fry:#ffc93c; --fry2:#ff8a3d; --bad:#ff6b6b; --ok:#5fd38d; }
+html[data-ff-theme=light]{ --bg:#f6f3ec; --panel:#ffffff; --panel2:#f1ede4; --line:#e2dccf; --text:#1f1b14; --dim:#6d6658; }
+*{box-sizing:border-box;}
+html,body{margin:0; background:var(--bg); color:var(--text);}
+body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif; font-size:15px; min-height:100vh;
+  padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0);}
+button,input,textarea{font:inherit; color:inherit;}
+[hidden]{display:none!important;}
+.top{display:flex; align-items:center; gap:8px; padding:8px 12px; border-bottom:1px solid var(--line); background:var(--panel);}
+.home{display:grid; place-items:center; width:34px; height:34px; border-radius:9px; background:linear-gradient(135deg,var(--fry),var(--fry2)); text-decoration:none; font-size:18px; flex:0 0 auto;}
+.brand{font-family:'Oswald',sans-serif; font-weight:700; font-size:18px; letter-spacing:.04em; white-space:nowrap;}
+.brand b{color:var(--fry);}
+.sp{flex:1;}
+main{max-width:760px; margin:0 auto; padding:24px 16px 40px;}
+h1{font-size:22px; margin:0 0 8px;}
+.lead{color:var(--dim); line-height:1.6; margin:0 0 20px;}
+.models{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px;}
+.mc{text-align:left; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px; cursor:pointer; display:grid; gap:4px;}
+.mc:hover:not([disabled]){border-color:var(--fry);}
+.mc[disabled]{opacity:.5; cursor:default;}
+.mc .n{font-weight:700; font-size:17px;} .mc .d{color:var(--dim); font-size:13px;} .mc .s{font-size:12px; color:var(--fry);}
+.err{margin-top:14px; padding:12px 14px; border:1px solid var(--bad); border-radius:12px; color:var(--bad); font-size:14px; line-height:1.55;}
+.chat{display:grid; gap:12px;}
+.bar{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+.bar .cur{font-weight:700;}
+.btn{border:0; border-radius:10px; padding:10px 18px; font-weight:700; cursor:pointer; background:linear-gradient(135deg,var(--fry),var(--fry2)); color:#1a1205;}
+.btn:disabled{opacity:.5; cursor:default;}
+.ghost{background:transparent; border:1px solid var(--line); color:var(--text); font-weight:500; padding:6px 12px; border-radius:10px; cursor:pointer;}
+.log{display:grid; gap:10px; min-height:220px; max-height:58vh; overflow:auto; padding:4px 2px;}
+.m{max-width:88%; border-radius:14px; padding:10px 14px; line-height:1.6; overflow-wrap:anywhere; white-space:pre-wrap;}
+.m.u{justify-self:end; background:linear-gradient(135deg,var(--fry),var(--fry2)); color:#1a1205;}
+.m.a{justify-self:start; background:var(--panel); border:1px solid var(--line);}
+.m.a.bad{border-color:var(--bad); color:var(--bad);}
+.m .ffw-btn{display:flex;width:fit-content;white-space:normal}
+.chips{display:flex; gap:8px; flex-wrap:wrap;}
+.chips button{background:var(--panel); border:1px solid var(--line); border-radius:999px; padding:6px 12px; cursor:pointer; font-size:13px;}
+.chips button:hover{border-color:var(--fry);}
+form.in{display:flex; gap:8px; align-items:flex-end;}
+form.in textarea{flex:1; min-height:44px; max-height:140px; resize:none; background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:10px 12px;}
+form.in textarea:focus{outline:2px solid var(--fry); outline-offset:-1px;}
+.hint{font-size:12px; color:var(--dim); line-height:1.6; margin:4px 0 0;}
+.ov{position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; padding:16px; background:rgba(0,0,0,.55);}
+.dlg{width:min(420px,100%); background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px;}
+.dlg p{margin:0 0 14px; line-height:1.6;}
+.dlg .acts{display:flex; justify-content:flex-end; gap:8px;}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="home" href="../" aria-label="도구 목록">🍟</a>
+  <span class="brand" data-notr>AI <b>CHAT</b></span>
+  <span class="sp"></span>
+  <span data-ff-account></span>
+</header>
+<main>
+  <h1>AI 체험</h1>
+  <p class="lead">사이트의 자체 AI와 이야기해 봐요. 내 기기 안에서 돌아가서 대화가 밖으로 나가지 않아요. 틀린 답에는 👎 틀렸어요를 눌러 알려 주세요.</p>
+  <section id="pick">
+    <div class="models" id="models"></div>
+    <div class="err" id="gpuErr" hidden>이 기기나 브라우저에서는 쓸 수 없어요. 최신 크롬이나 엣지, 또는 최신 사파리에서 열어 주세요.</div>
+  </section>
+  <section class="chat" id="chat" hidden>
+    <div class="bar"><span class="cur" id="cur" data-notr></span><span class="sp"></span><button class="ghost" id="clear" type="button">대화 지우기</button><button class="ghost" id="change" type="button">모델 바꾸기</button></div>
+    <div class="log" id="log" aria-live="polite"></div>
+    <div class="chips" id="chips" aria-label="예시 질문"></div>
+    <form class="in" id="form"><textarea id="q" rows="1" maxlength="600" placeholder="궁금한 걸 물어보세요"></textarea><button class="btn" id="send" type="submit">보내기</button></form>
+  </section>
+  <p class="hint">작은 AI라서 틀릴 수 있어요. 중요한 일은 꼭 다시 확인해 주세요.</p>
+  <p class="hint" id="loginHint" hidden>로그인한 상태로 틀렸어요를 누르면 질문과 답이 개발자에게도 전해져요.</p>
+</main>
+<script src="../ai-prompts.js"></script>
+<script src="../ai.js?v=ai29"></script>
+<script src="../ai-wrong.js?v=3"></script>
+<script src="https://frenchfries777mc.github.io/games/ff-lang.js"></script>
+<script src="https://frenchfries777mc.github.io/games/ff-auth.js"></script>
+<script>
+(function(){
+'use strict';
+var T=FFT.T, $=function(id){ return document.getElementById(id); };
+var DESC={'FF-Tools-1.7B':'가볍고 빨라요','FF-Tools-4B':'똑똑해요','FF-Tools-8B':'가장 똑똑해요'};
+var EXTRA={'FF-Tools-8B':'PC 추천 (그래픽 메모리 8GB 이상)'};
+var cur=null, hist=[], busy=false, models=[];
+function seen(id){ try{ return localStorage.getItem('ffchat.dl.'+id)==='1'; }catch(e){ return false; } }
+function markSeen(id){ try{ localStorage.setItem('ffchat.dl.'+id,'1'); }catch(e){} }
+function ask(text){
+  return new Promise(function(res){
+    var o=document.createElement('div'); o.className='ov'; o.setAttribute('data-notr','');
+    o.innerHTML='<div class="dlg" role="dialog" aria-modal="true"><p></p><div class="acts"><button class="ghost" type="button"></button><button class="btn" type="button"></button></div></div>';
+    o.querySelector('p').textContent=text; var b=o.querySelectorAll('button'); b[0].textContent=T('취소'); b[1].textContent=T('내려받고 시작');
+    function done(v){ o.remove(); res(v); }
+    b[0].onclick=function(){ done(false); }; b[1].onclick=function(){ done(true); };
+    o.onkeydown=function(e){ if(e.key==='Escape') done(false); };
+    document.body.appendChild(o); b[1].focus();
+  });
+}
+function renderModels(){
+  var box=$('models'); box.innerHTML='';
+  models.forEach(function(m){
+    var b=document.createElement('button'); b.type='button'; b.className='mc'; b.disabled=!m.ready; b.setAttribute('data-id',m.id);
+    var n=document.createElement('span'); n.className='n'; n.textContent=m.name; n.setAttribute('data-notr','');
+    var d=document.createElement('span'); d.className='d'; d.textContent=T(DESC[m.id]||'')+(EXTRA[m.id]?' · '+T(EXTRA[m.id]):'');
+    var s=document.createElement('span'); s.className='s'; s.setAttribute('data-notr',''); s.textContent=m.ready?m.size:T('준비 중');
+    b.appendChild(n); b.appendChild(d); b.appendChild(s);
+    b.onclick=function(){ choose(m); };
+    box.appendChild(b);
+  });
+}
+function choose(m){
+  if(!m.ready) return;
+  var go=seen(m.id)?Promise.resolve(true):ask(T('처음 한 번만 {0} 크기의 파일을 내려받아요. 와이파이에서 쓰는 걸 추천해요. 계속할까요?').replace('{0}',m.size));
+  go.then(function(ok){
+    if(!ok) return;
+    markSeen(m.id); cur=m; hist=[]; $('log').innerHTML=''; $('cur').textContent=m.name;
+    $('pick').hidden=true; $('chat').hidden=false; $('q').focus();
+  });
+}
+function add(cls,text){ var d=document.createElement('div'); d.className='m '+cls; d.setAttribute('data-notr',''); d.textContent=text; $('log').appendChild(d); $('log').scrollTop=$('log').scrollHeight; return d; }
+function trim(){ var n=0, i=hist.length; while(i>0){ n+=hist[i-1].content.length; if(n>1500) break; i--; } hist=hist.slice(i); if(hist.length&&hist[0].role==='assistant') hist.shift(); }
+function setBusy(b){ busy=b; $('send').textContent=T(b?'멈추기':'보내기'); $('send').type=b?'button':'submit'; }
+function send(q){
+  q=String(q||'').trim(); if(!q||busy||!cur) return;
+  $('q').value=''; $('chips').hidden=true; add('u',q);
+  var out=add('a',''), got=''; setBusy(true);
+  trim();
+  FFAI.ask({model:cur.id, prose:true, facts:true, question:q, history:hist.slice(), system:FFP.askSys, prompt:FFP.askPrompt(null,q),
+    onText:function(t){ got=t; out.textContent=t; $('log').scrollTop=$('log').scrollHeight; }}).then(function(r){
+    var a=String(typeof r==='string'?r:(r&&r.text)||got||'').trim();
+    out.textContent=a||T('답하지 못했어요');
+    if(a){ hist.push({role:'user',content:q},{role:'assistant',content:a}); FFWrong.attach(out,{tool:'ai-chat',question:q,answer:a,model:'local:'+cur.id}); }
+    else out.classList.add('bad');
+  },function(e){
+    if(got){ out.textContent=got; return; }
+    out.classList.add('bad'); out.textContent=(e&&e.message)||T('답하지 못했어요');
+  }).then(function(){ setBusy(false); });
+}
+$('form').onsubmit=function(e){ e.preventDefault(); send($('q').value); };
+$('send').onclick=function(){ if(busy){ FFAI.stop(); } };
+$('q').onkeydown=function(e){ if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){ e.preventDefault(); if(!busy) send($('q').value); } };
+$('clear').onclick=function(){ if(busy) FFAI.stop(); hist=[]; $('log').innerHTML=''; $('chips').hidden=false; };
+$('change').onclick=function(){ if(busy) FFAI.stop(); cur=null; hist=[]; $('chat').hidden=true; $('pick').hidden=false; };
+['너는 누구야?','파이썬이 뭐야?','광합성을 쉽게 설명해 줘'].forEach(function(t){
+  var b=document.createElement('button'); b.type='button'; b.textContent=T(t); b.onclick=function(){ send(T(t)); }; $('chips').appendChild(b);
+});
+function showLoginHint(){ $('loginHint').hidden=!(window.FFAuth&&FFAuth.user&&FFAuth.user()); }
+if(window.FFAuth){ FFAuth.ready.then(function(){ showLoginHint(); FFAuth.onChange(showLoginHint); },function(){}); }
+var tuned=FFAI.models().filter(function(m){ return /^FF-/.test(m.id); });
+models=tuned.map(function(m){ return {id:m.id, name:m.name, size:m.size, ready:false}; });
+renderModels();
+FFAI.gpu().then(function(ok){
+  if(!ok){ $('gpuErr').hidden=false; return; }
+  models.forEach(function(m){ FFAI.tunedReady(m.id).then(function(r){ m.ready=!!r; renderModels(); }); });
+});
+})();
+</script>
+<script src="../pwa.js" defer></script>
+</body>
+</html>
