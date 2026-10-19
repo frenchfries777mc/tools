@@ -9,6 +9,8 @@
          FFAI.settings(onSaved)  -> opens the settings dialog
          FFAI.ask({system, prompt, json, maxTokens}) -> Promise<string> (opens settings first when no key)
          FFAI.ask({…, onText}) streams the answer as it is written; FFAI.stop() stops it
+         FFAI.ask({…, model:'FF-Tools-4B', history:[{role,content}…]}) answers with that built-in model whatever the saved setting is (ai-chat/), after earlier chat turns
+         FFAI.models() / FFAI.tunedReady(id) / FFAI.gpu() -> our built-in models, whether their files are online, whether WebGPU works
          FFAI.ask({…, facts:true}) for free answers: our own models also get who they are and what the developer taught them (teach/)
          FFAI.ask({…, prose:true, question}) for plain-text answers: the built-in AI samples more freely (temperature 0.7, top_p 0.8,
                                  presence_penalty 1), stops at about 400 tokens on a full sentence, cuts a phrase repeated 3 times,
@@ -271,7 +273,7 @@ function askLocal(c,o){
     var fail=function(err){ if(err&&err.kind) throw err; console.error(err); var m=String(err&&err.message||'');
       throw AIError(/context|prompt.*(long|length)|exceed/i.test(m)?T('자체 AI에게는 너무 긴 요청이에요. 고를 칸을 줄이거나 API 키를 써 보세요'):T('자체 AI가 답하지 못했어요'),'api'); };
     var request=function(sys){
-      var msgs=(sys?[{role:'system',content:sys}]:[]).concat([{role:'user',content:o.prompt}]);
+      var msgs=(sys?[{role:'system',content:sys}]:[]).concat(o.history||[],[{role:'user',content:o.prompt}]);
       var req={messages:msgs, max_tokens:Math.min(o.maxTokens||2048,2560), temperature:o.temperature||0.3, extra_body:{enable_thinking:false}};
       if(prose){ req.max_tokens=Math.min(o.maxTokens||PROSE.maxTokens,PROSE.maxTokens); req.temperature=PROSE.temperature; req.top_p=PROSE.top_p; req.presence_penalty=PROSE.presence_penalty; }
       else if(o.freqPenalty) req.frequency_penalty=o.freqPenalty;
@@ -339,6 +341,7 @@ function send(c,o){ return c.local?askLocal(c,o):c.provider==='claude'?askClaude
 function ask(o){
   quiet=false;
   var c=cfg();
+  if(o.model&&TUNED[o.model]) c={provider:'local', key:'', model:o.model, local:true, localOk:true}; // a page that lets people pick one of our models (ai-chat/) leaves the saved AI setting alone
   if(c.local?!c.localOk:!c.key) return new Promise(function(res,rej){ settings(function(){ ask(o).then(res,rej); },function(){ rej(AIError(c.local?T('자체 AI를 쓰려면 AI 설정에서 저장을 눌러 주세요'):T('AI를 쓰려면 먼저 API 키를 넣어 주세요'),'nokey')); }); });
   return withFacts(c,o).then(function(o2){ return send(c,o2); });
 }
@@ -438,5 +441,5 @@ function warmSoon(){ setTimeout(warm,1500); }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',warmSoon); else warmSoon();
 
 function stop(){ if(stopNow){ var f=stopNow; stopNow=null; try{ f(); }catch(e){} } }
-window.FFAI={facts:facts, ready:ready, isLocal:isLocal, isTuned:isTuned, model:function(){ return cfg().model; }, stop:stop, settings:settings, ask:ask, parseJSON:parseJSON, config:cfg};
+window.FFAI={models:function(){ return PROVIDERS.local.models.map(function(m){ return {id:m[0], name:m[1], size:m[2], note:m[3]}; }); }, tunedReady:probeTuned, gpu:function(){ return gpuOk==null?checkGPU():Promise.resolve(gpuOk); }, facts:facts, ready:ready, isLocal:isLocal, isTuned:isTuned, model:function(){ return cfg().model; }, stop:stop, settings:settings, ask:ask, parseJSON:parseJSON, config:cfg};
 })();
