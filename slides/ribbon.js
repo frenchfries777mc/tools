@@ -25,7 +25,7 @@ var IC={
   ungroup:'<rect x="3" y="3" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/>', layer:'<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>',
   align:'<path d="M4 3v18"/><rect x="8" y="6" width="12" height="4" rx="1"/><rect x="8" y="14" width="7" height="4" rx="1"/>', find:'<circle cx="10" cy="10" r="6"/><path d="M14.5 14.5L20 20"/>',
   keys:'<rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/>', pic:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 9"/>',
-  shape:'<rect x="3" y="11" width="10" height="10" rx="1"/><circle cx="16" cy="8" r="5"/>', emoji:'<circle cx="12" cy="12" r="9"/><path d="M8.5 14.5c1 1.6 2.2 2.3 3.5 2.3s2.5-.7 3.5-2.3M9 9.5h.01M15 9.5h.01"/>',
+  conn:'<rect x="2" y="3" width="8" height="7" rx="1"/><rect x="14" y="14" width="8" height="7" rx="1"/><path d="M7 10l9 4"/><path d="M13 14h3v-3"/>', shape:'<rect x="3" y="11" width="10" height="10" rx="1"/><circle cx="16" cy="8" r="5"/>', emoji:'<circle cx="12" cy="12" r="9"/><path d="M8.5 14.5c1 1.6 2.2 2.3 3.5 2.3s2.5-.7 3.5-2.3M9 9.5h.01M15 9.5h.01"/>',
   text:'<path d="M5 6h14M12 6v13M9 19h6"/>', table:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16"/>', chart:'<path d="M5 20V11M10 20V5M15 20v-7M20 20v-4M3 20h18"/>',
   link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
   refresh:'<path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 3v5h5"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 21v-5h-5"/>',
@@ -47,7 +47,7 @@ var IC={
 };
 var LAYS=[['title','제목'],['section','구역 제목'],['bullets','글머리표'],['two','두 칸'],['stat','큰 숫자'],['quote','인용'],['closing','마무리'],['image','그림'],['agenda','차례'],['timeline','타임라인'],['table','표'],['chart','그래프'],['quiz','퀴즈'],['timer','타이머'],['live','살아있는 화면']];
 var MSG={slide:'먼저 슬라이드를 만들어 주세요', busy:'AI가 다 만들 때까지 기다려 주세요', sel:'슬라이드에서 글상자·그림·도형을 먼저 골라 주세요', many:'도형을 두 개 이상 골라 주세요 (Shift를 누르고 누르기)',
-  grp:'묶은 도형을 먼저 골라 주세요', shape:'슬라이드에서 도형을 먼저 골라 주세요', fillx:'선과 화살표에는 채우기가 없어요', data:'표나 그래프 슬라이드에서 쓸 수 있어요',
+  grp:'묶은 도형을 먼저 골라 주세요', shape:'슬라이드에서 도형을 먼저 골라 주세요', fillx:'선과 화살표에는 채우기가 없어요', conn:'이어 줄 도형·그림·글상자를 먼저 하나 골라 주세요', data:'표나 그래프 슬라이드에서 쓸 수 있어요',
   link:'시트와 연결한 슬라이드에서 쓸 수 있어요', quiz:'퀴즈 슬라이드에서 쓸 수 있어요', ai:'AI가 고칠 수 있는 슬라이드를 먼저 골라 주세요', clip:'복사한 도형이 없어요', els:'고를 수 있는 도형이 없어요'};
 
 var S=function(){ return window.FSLC?FSLC.state():{}; }, C=function(){ return window.FSLC; }, AI=function(){ return window.FSLAI; };
@@ -56,6 +56,7 @@ var nSlide=function(st){ return st.busy?'busy':!st.slide?'slide':''; };
 var nSel=function(st){ return nSlide(st)||(!st.sel?'sel':''); };
 var nEl=function(st){ return nSlide(st)||(!st.nSel?'sel':''); };
 var nShape=function(st){ return nSlide(st)||(!st.shape?'shape':''); };
+var nConn=function(st){ return nSlide(st)||(!st.conn?'conn':''); };
 var nData=function(st){ return nSlide(st)||(st.lay!=='table'&&st.lay!=='chart'?'data':''); };
 var nLink=function(st){ return nSlide(st)||(!st.link?'link':''); };
 var nAI=function(st){ return nSlide(st)||(!st.ai?'ai':''); };
@@ -98,6 +99,7 @@ var CMDS=[
 
  {id:'pic', tab:'ins', el:'picBtn', ic:'pic', lb:'그림', t:'그림 넣기', k:'사진 이미지 그림 넣기'},
  {id:'shape', tab:'ins', el:'shapeBtn', ic:'shape', lb:'도형', t:'도형·화살표 넣기', menu:1, k:'화살표 네모 동그라미 원 별 선 세모'},
+ {id:'conn', tab:'ins', ic:'conn', lb:'연결선', t:'연결선 (고른 도형과 다른 도형을 이어요)', k:'선 화살표 이어 붙이기 연결 커넥터 도형 잇기', need:nConn, run:function(){ C().connect(); }},
  {id:'textbox', tab:'ins', ic:'text', lb:'글상자', t:'글상자 넣기', k:'텍스트 상자 글 쓰기 텍스트', need:nSlide, run:function(){ C().addShape('text'); }},
  {id:'emoji', tab:'ins', el:'emojiBtn', ic:'emoji', lb:'이모지', t:'이모지·아이콘 넣기', menu:1, k:'아이콘 그림 문자 이모티콘'},
  {g:1},
