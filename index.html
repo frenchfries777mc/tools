@@ -8,6 +8,7 @@
 <meta name="description" content="Frenchfries777이 만든 브라우저 도구 모음. 설치 없이 바로 써요.">
 <meta property="og:title" content="Frenchfries777 Tools"><meta property="og:description" content="설치 없이 브라우저에서 바로 쓰는 도구들"><meta property="og:type" content="website">
 <meta name="theme-color" content="#08090d">
+<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
@@ -194,6 +195,7 @@ FFT.add({
   .why{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin:40px 0 0;}
   .why > div{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px 18px 16px;}
   .why .ic{font-size:24px;} .why h3{margin:6px 0 4px; font-size:16.5px;} .why p{margin:0; color:var(--dim); font-size:14.5px;}
+  .inst{margin:32px 0 -24px; padding:12px 14px; background:var(--panel); border:1px solid var(--line); border-radius:12px; color:var(--dim); font-size:14px; line-height:1.6;}
   footer{margin:56px 0 40px; padding-top:20px; border-top:1px solid var(--line); color:var(--dim); font-size:14px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;}
   footer a{color:var(--dim);}
   html[data-ff-theme=light]{--bg:#f6f3ec; --panel:#ffffff; --line:#e2dccf; --text:#1f1b14; --dim:#6d6658;}
@@ -307,7 +309,8 @@ FFT.add({
     <div><div class="ic">📤</div><h3>파일로 주고받기</h3><p>엑셀, 파워포인트, HTML 파일로 내보내서 다른 프로그램이나 친구에게 그대로 넘겨요.</p></div>
   </section>
 
-  <footer><span>Made by Frenchfries777 with Claude AI</span><a href="patchnotes/">패치노트</a><a id="teachLink" href="teach/" hidden>AI 가르치기</a><a href="https://frenchfries777mc.github.io/games/settings/">설정</a><a href="https://github.com/frenchfries777mc" target="_blank" rel="noopener">github.com/frenchfries777mc</a></footer>
+  <p id="installHint" class="inst" hidden>아이폰이나 아이패드는 Safari 아래쪽 공유 버튼을 누르고 '홈 화면에 추가'를 눌러요. 한 번 열어 본 도구는 인터넷 없이도 열려요.</p>
+  <footer><span>Made by Frenchfries777 with Claude AI</span><a href="patchnotes/">패치노트</a><a id="teachLink" href="teach/" hidden>AI 가르치기</a><a id="installLink" href="#" hidden>앱으로 설치</a><a href="https://frenchfries777mc.github.io/games/settings/">설정</a><a href="https://github.com/frenchfries777mc" target="_blank" rel="noopener">github.com/frenchfries777mc</a></footer>
 </div>
 <script src="https://frenchfries777mc.github.io/games/ff-auth.js"></script>
 <script>
@@ -360,5 +363,6 @@ FFT.add({
 })();
 </script>
 <script src="https://frenchfries777mc.github.io/games/ff-splash.js" defer></script>
+<script src="pwa.js" defer></script>
 </body>
 </html>
