@@ -343,6 +343,7 @@ button,input,select{font:inherit; color:inherit;}
   <button data-f="new">새 문서</button>
   <button data-f="tpl">템플릿으로 새 문서…</button>
   <button data-f="open">파일 열기 (엑셀, CSV)</button>
+  <button data-f="url">주소에서 표 가져오기…</button>
   <hr>
   <button data-f="xlsx">엑셀 파일로 저장 (.xlsx)</button>
   <button data-f="csv">이 시트를 CSV로 저장</button>
@@ -607,6 +608,13 @@ button,input,select{font:inherit; color:inherit;}
   <div class="dbody"><div class="tplGrid" id="tplGrid"></div></div>
 </div></div>
 <div id="acBox"></div>
+<div class="ov" id="urlDlg"><div class="dlg">
+  <div class="dh"><h3>주소에서 표 가져오기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><p style="margin:0 0 6px;color:var(--dim)">https 로 시작하는 CSV 주소를 넣어 주세요. 그 사이트가 다른 웹사이트의 읽기를 허용해야 해요 (GitHub raw 파일, 구글 시트 웹에 게시 CSV 링크는 돼요)</p>
+    <div class="dRow"><input type="text" id="urlIn" placeholder="https://…" inputmode="url" autocomplete="off" spellcheck="false"><button class="tbtn" id="urlGo">불러오기</button></div>
+    <div class="aiCtx" id="urlMsg" data-notr></div><div class="aiPrev" id="urlPrev" data-notr></div></div>
+  <div class="acts"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="urlPut" disabled>여기에 넣기</button></div>
+</div></div>
 <div class="ov" id="askDlg"><div class="dlg">
   <div class="dh"><h3 id="askT"></h3><button class="x" data-close aria-label="닫기">×</button></div>
   <div class="dbody"><p id="askP" style="margin:0 0 6px;color:var(--dim)"></p><input type="text" id="askI"></div>
@@ -647,8 +655,8 @@ button,input,select{font:inherit; color:inherit;}
 
 <script src="engine.js"></script>
 <script src="calc.js"></script>
-<script src="commands.js?v=29"></script>
-<script src="app.js?v=30"></script>
+<script src="commands.js?v=32"></script>
+<script src="app.js?v=32"></script>
 <script src="viz.js"></script>
 <script src="../ai.js?v=ai28"></script>
 <script src="../ai-wrong.js?v=2"></script>
