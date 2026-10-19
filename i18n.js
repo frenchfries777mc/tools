@@ -1,3 +1,14 @@
+/* thin dark scrollbars on every Tools page (the browser's white default clashes with the dark theme; scrolling itself is unchanged) */
+(function(){
+  try{
+    var st=document.createElement('style'); st.id='ff-scrollbars';
+    st.textContent='*{scrollbar-width:thin;scrollbar-color:rgba(138,147,166,.38) transparent}'+
+      '::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track,::-webkit-scrollbar-corner{background:transparent}'+
+      '::-webkit-scrollbar-thumb{background:rgba(138,147,166,.38);border:2px solid transparent;background-clip:content-box;border-radius:8px}'+
+      '::-webkit-scrollbar-thumb:hover{background:rgba(138,147,166,.65);background-clip:content-box}';
+    (document.head||document.documentElement).appendChild(st);
+  }catch(e){}
+})();
 /* Frenchfries777 Tools: page translation.
    Pages are written in Korean. Each page adds its own strings with FFT.add({'한국어':[en,es,fr,de,ja], ...});
    text nodes and a few attributes are translated in place (whole text first, then longest phrases).
