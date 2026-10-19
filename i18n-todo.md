@@ -111,3 +111,4 @@ sheet/app.js, sheet/index.html, sheet/commands.js | 주소에서 표 가져오�
 index.html | 앱으로 설치 / 아이폰이나 아이패드는 Safari 아래쪽 공유 버튼을 누르고 '홈 화면에 추가'를 눌러요. 한 번 열어 본 도구는 인터넷 없이도 열려요. | Site v16 | 2026-10-19
 ai-chat/index.html, ai-wrong.js, teach/index.html | AI 체험 페이지 글 전부 (제목, 안내, 모델 카드 설명, 내려받기 확인 창, 예시 질문, 로그인 안내), 틀린 답 목록 안내: 이 기기에서 누른 것과, 로그인한 사람이 누른 것(서버)이 같이 보여요. | Site v17 | 2026-10-19
 ai-chat/index.html | (새 글 없음) 모델 카드 이름 표시 방식만 바뀜 | Site v18 | 2026-10-19
+ai-chat/index.html | 답 길이, 짧게, 보통, 길게 | Site v19 | 2026-10-19
