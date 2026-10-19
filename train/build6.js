@@ -11,18 +11,19 @@ const DIR=__dirname, ROOT=path.join(DIR,'..'), RAW=path.join(DIR,'raw'), OUT=pat
 const P=require(path.join(ROOT,'ai-prompts.js'));
 const N=6000, VER='1.5';
 const GROUPS={ // pct of N; replay tasks are the v14 task names; new tasks are listed in NEW
-  code:{pct:23, tasks:['code','gen','memo-ex','memo-chip','gen14','newcode']},
-  formula:{pct:18, tasks:['formula','newformula','cell']},
-  und:{pct:12, tasks:['und','slides']},
+  code:{pct:20, tasks:['code','gen','memo-ex','memo-chip','gen14','newcode']},
+  formula:{pct:17, tasks:['formula','newformula','cell']},
+  und:{pct:10, tasks:['und','slides']},
   calc:{pct:10, tasks:['calc','newcalc']},
   tr:{pct:9, tasks:['tr']},
   table:{pct:8, tasks:['table','newtable']},
   unknown:{pct:7, tasks:['newunknown','ask4u']},
   graph:{pct:5, tasks:['graph']},
   self:{pct:4, tasks:['self','self7','newself']},
-  chat:{pct:4, tasks:['ask','fun','ask4','spell','explain','joke']}
+  chat:{pct:4, tasks:['ask','fun','ask4','spell','explain','joke']},
+  joke:{pct:6, tasks:['newjoke']}   // the owner's dad jokes, each riddle with its own answer (raw/joke-2.jsonl, genjoke.js)
 };
-const NEW=new Set(['newcode','newformula','newcalc','newtable','newunknown','newself']);
+const NEW=new Set(['newcode','newformula','newcalc','newtable','newunknown','newself','newjoke']);
 const HUMOR='You are cheerful and a little funny: when you chat you add a short, kind joke, but answers about tables, formulas and code stay exact and serious.';
 const WHO={who:'You are FF777 '+VER+' lectus, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 4B. Your name is the end of the Latin word intellectus ("understanding"). '+HUMOR, fill:{NAME:'FF777 '+VER+' lectus', BASE:'Qwen3 4B', LATIN:'intellectus', MEANING_KO:'이해력', MEANING_EN:'understanding'}};
 let seed=20261019; const rnd=()=>{ seed=(seed*1103515245+12345)&0x7fffffff; return seed/0x7fffffff; };
@@ -65,12 +66,15 @@ for(const it of jl(path.join(RAW,'calc-2.jsonl'))) put('newcalc',[{role:'system'
     if(m.some(y=>/\{\w+\}/.test(y.content))) throw new Error('unfilled placeholder in '+f);
     selfAll.push(m.map((y,i)=>i===0&&rnd()<0.5?{role:y.role,content:y.content+'\n\n'+WHO.who}:y)); }
   for(const m of selfAll) put('newself',m); }
+for(const x of checked('self','joke-2')) put('newjoke',x.messages);
+{ const cnt={}; const first=pool.newjoke||[]; // every riddle gets one row before any riddle gets a second one
+  pool.newjoke=shuffle(first).map(r=>{ const um=r.messages[1].content, k=(/([^\n]*\?)/.exec(um.replace(/^[\s\S]*Question: /,''))||/([^\n!.]*\?)/.exec(r.messages[2].content)||[um])[1], n=cnt[k]=(cnt[k]||0)+1; return {r,n}; }).sort((a,b)=>a.n-b.n).map(x=>x.r); }
 /* build */
 const rows=[], take={}, short={};
 for(const [g,G] of Object.entries(GROUPS)){
   const want=Math.round(N*G.pct/100); let got=[];
   for(const t of G.tasks) if(NEW.has(t)) got.push(...(pool[t]||[]));
-  if(got.length>want) got=shuffle(got).slice(0,want);
+  if(got.length>want) got=(G.tasks[0]==='newjoke'?got:shuffle(got)).slice(0,want);
   const old=shuffle(G.tasks.filter(t=>!NEW.has(t)).flatMap(t=>pool[t]||[]));
   got.push(...old.slice(0,Math.max(0,want-got.length)));
   if(got.length<want) short[g]=want-got.length;
