@@ -1,21 +1,21 @@
 {
- "built": "2026-10-19T10:36:37.534Z",
+ "built": "2026-10-19T12:55:20.918Z",
  "total": 6000,
- "newRows": 2243,
+ "newRows": 2603,
  "take": {
   "code": {
-   "want": 1380,
-   "rows": 1380,
+   "want": 1200,
+   "rows": 1200,
    "new": 450
   },
   "formula": {
-   "want": 1080,
-   "rows": 1080,
+   "want": 1020,
+   "rows": 1020,
    "new": 378
   },
   "und": {
-   "want": 720,
-   "rows": 720,
+   "want": 600,
+   "rows": 600,
    "new": 0
   },
   "calc": {
@@ -52,11 +52,16 @@
    "want": 240,
    "rows": 240,
    "new": 0
+  },
+  "joke": {
+   "want": 360,
+   "rows": 360,
+   "new": 360
   }
  },
  "short": {},
- "blocked": 68,
- "repeatedRows": 6,
+ "blocked": 91,
+ "repeatedRows": 17,
  "pool": {
   "formula": 484,
   "tr": 893,
@@ -83,6 +88,7 @@
   "newtable": 176,
   "newcode": 450,
   "newcalc": 584,
-  "newself": 469
+  "newself": 469,
+  "newjoke": 690
  }
 }
