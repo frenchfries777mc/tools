@@ -275,7 +275,7 @@ function askLocal(c,o){
     var request=function(sys){
       var msgs=(sys?[{role:'system',content:sys}]:[]).concat(o.history||[],[{role:'user',content:o.prompt}]);
       var req={messages:msgs, max_tokens:Math.min(o.maxTokens||2048,2560), temperature:o.temperature||0.3, extra_body:{enable_thinking:false}};
-      if(prose){ req.max_tokens=Math.min(o.maxTokens||PROSE.maxTokens,PROSE.maxTokens); req.temperature=PROSE.temperature; req.top_p=PROSE.top_p; req.presence_penalty=PROSE.presence_penalty; }
+      if(prose){ req.max_tokens=Math.min(o.maxTokens||PROSE.maxTokens,o.chat?1000:PROSE.maxTokens); req.temperature=PROSE.temperature; req.top_p=PROSE.top_p; req.presence_penalty=PROSE.presence_penalty; }
       else if(o.freqPenalty) req.frequency_penalty=o.freqPenalty;
       return req; };
     if(!o.onText&&!prose) return e.chat.completions.create(request(o.system)).then(function(r){

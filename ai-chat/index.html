@@ -36,6 +36,10 @@ FFT.add({
 '작은 AI라서 틀릴 수 있어요. 중요한 일은 꼭 다시 확인해 주세요.':['It is a small AI and can be wrong. Please double-check anything important.','Es una IA pequeña y puede equivocarse. Verifica lo importante.','C’est une petite IA qui peut se tromper. Vérifie ce qui est important.','Es ist eine kleine KI und kann sich irren. Prüfe Wichtiges bitte nach.','小さなAIなので間違えることがあります。大事なことは必ず確認してください。'],
 '로그인한 상태로 틀렸어요를 누르면 질문과 답이 개발자에게도 전해져요.':['If you press Wrong while logged in, the question and answer are also sent to the developer.','Si pulsas Incorrecto con la sesión iniciada, la pregunta y la respuesta también se envían al desarrollador.','Si tu appuies sur Faux en étant connecté, la question et la réponse sont aussi transmises au développeur.','Wenn du angemeldet auf Falsch tippst, gehen Frage und Antwort auch an den Entwickler.','ログインした状態で間違いを押すと、質問と答えが開発者にも届きます。'],
 '아직 {0} 파일이 올라오지 않았어요':['The {0} files are not online yet','Los archivos de {0} aún no están en línea','Les fichiers de {0} ne sont pas encore en ligne','Die Dateien von {0} sind noch nicht online','{0}のファイルはまだ公開されていません'],
+'답 길이':['Answer length','Longitud de respuesta','Longueur des réponses','Antwortlänge','答えの長さ'],
+'짧게':['Short','Corta','Courte','Kurz','短く'],
+'보통':['Normal','Normal','Normale','Normal','普通'],
+'길게':['Long','Larga','Longue','Lang','長く'],
 '만든 곳으로 가기':['Back to Tools','Volver a Tools','Retour à Tools','Zurück zu Tools','Toolsへ戻る']
 });
 </script>
@@ -53,6 +57,9 @@ button,input,textarea{font:inherit; color:inherit;}
 .brand{font-family:'Oswald',sans-serif; font-weight:700; font-size:18px; letter-spacing:.04em; white-space:nowrap;}
 .brand b{color:var(--fry);}
 .sp{flex:1;}
+.len{display:inline-flex; border:1px solid var(--line); border-radius:10px; overflow:hidden;}
+.len button{border:0; background:transparent; color:var(--dim); padding:6px 10px; cursor:pointer; font-size:13px;}
+.len button.on{background:var(--panel2); color:var(--text); font-weight:700;}
 main{max-width:760px; margin:0 auto; padding:8px 16px 40px;}
 .bar{margin-top:14px;}
 .hero[hidden]{display:none;}
@@ -129,7 +136,7 @@ form.in textarea:focus{outline:none;}
     <div class="err" id="gpuErr" hidden>이 기기나 브라우저에서는 쓸 수 없어요. 최신 크롬이나 엣지, 또는 최신 사파리에서 열어 주세요.</div>
   </section>
   <section class="chat" id="chat" hidden>
-    <div class="bar"><span class="cur"><i></i><span id="cur" data-notr></span></span><span class="sp"></span><button class="ghost" id="clear" type="button">대화 지우기</button><button class="ghost" id="change" type="button">모델 바꾸기</button></div>
+    <div class="bar"><span class="cur"><i></i><span id="cur" data-notr></span></span><span class="sp"></span><span class="len" id="len" role="group" aria-label="답 길이"><button type="button" data-l="0">짧게</button><button type="button" data-l="1">보통</button><button type="button" data-l="2">길게</button></span><button class="ghost" id="clear" type="button">대화 지우기</button><button class="ghost" id="change" type="button">모델 바꾸기</button></div>
     <div class="log" id="log" aria-live="polite"></div>
     <div class="chips" id="chips" aria-label="예시 질문"></div>
     
@@ -139,7 +146,7 @@ form.in textarea:focus{outline:none;}
   <p class="hint" id="loginHint" hidden>로그인한 상태로 틀렸어요를 누르면 질문과 답이 개발자에게도 전해져요.</p>
 </main>
 <script src="../ai-prompts.js"></script>
-<script src="../ai.js?v=ai29"></script>
+<script src="../ai.js?v=ai30"></script>
 <script src="../ai-wrong.js?v=3"></script>
 <script src="https://frenchfries777mc.github.io/games/ff-lang.js"></script>
 <script src="https://frenchfries777mc.github.io/games/ff-auth.js"></script>
@@ -152,6 +159,11 @@ var ACC={'FF-Tools-1.7B':'#5fd38d','FF-Tools-4B':'#6db3ff','FF-Tools-8B':'#b79bf
 var ICON={'FF-Tools-1.7B':'⚡','FF-Tools-4B':'💡','FF-Tools-8B':'🧠'};
 var EXTRA={'FF-Tools-8B':'PC 추천 (그래픽 메모리 8GB 이상)'};
 var cur=null, hist=[], busy=false, models=[];
+/* how talkative the AI is: the chat page uses its own chat prompt (the trained spreadsheet prompt makes answers short) */
+var LEN=[{tok:220, ask:'Answer in 1 to 3 short sentences.'}, {tok:520, ask:'Answer in 3 to 5 sentences with one concrete example.'}, {tok:1000, ask:'Be talkative: answer in 6 to 10 sentences, explain the idea step by step with a concrete example, then end with a friendly follow-up question or tip.'}];
+var lv=2; try{ var sv=parseInt(localStorage.getItem('ffchat.len'),10); if(sv>=0&&sv<=2) lv=sv; }catch(e){}
+function chatSys(){ return 'You are chatting with a curious person. '+LEN[lv].ask+' Be warm and natural. Plain text only: no markdown tables, no code fences. Use the language the question is written in.'; }
+function showLen(){ Array.prototype.forEach.call(document.querySelectorAll('#len button'),function(b){ b.classList.toggle('on',+b.dataset.l===lv); b.textContent=T(['짧게','보통','길게'][+b.dataset.l]); }); }
 function seen(id){ try{ return localStorage.getItem('ffchat.dl.'+id)==='1'; }catch(e){ return false; } }
 function markSeen(id){ try{ localStorage.setItem('ffchat.dl.'+id,'1'); }catch(e){} }
 function ask(text){
@@ -205,7 +217,7 @@ function send(q){
   $('q').value=''; $('chips').hidden=true; add('u',q);
   var out=add('a',''), got=''; dots(out); setBusy(true);
   trim();
-  FFAI.ask({model:cur.id, prose:true, facts:true, question:q, history:hist.slice(), system:FFP.askSys, prompt:FFP.askPrompt(null,q),
+  FFAI.ask({model:cur.id, prose:true, chat:true, maxTokens:LEN[lv].tok, facts:true, question:q, history:hist.slice(), system:chatSys(), prompt:q,
     onText:function(t){ got=t; out.textContent=t; $('log').scrollTop=$('log').scrollHeight; }}).then(function(r){
     var a=String(typeof r==='string'?r:(r&&r.text)||got||'').trim();
     out.textContent=a||T('답하지 못했어요');
@@ -219,6 +231,8 @@ function send(q){
 $('form').onsubmit=function(e){ e.preventDefault(); send($('q').value); };
 $('send').onclick=function(){ if(busy){ FFAI.stop(); } };
 $('q').onkeydown=function(e){ if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){ e.preventDefault(); if(!busy) send($('q').value); } };
+Array.prototype.forEach.call(document.querySelectorAll('#len button'),function(b){ b.onclick=function(){ lv=+b.dataset.l; try{ localStorage.setItem('ffchat.len',String(lv)); }catch(e){} showLen(); }; });
+showLen();
 $('clear').onclick=function(){ if(busy) FFAI.stop(); hist=[]; greet(); $('chips').hidden=false; };
 $('change').onclick=function(){ if(busy) FFAI.stop(); cur=null; hist=[]; $('chat').hidden=true; $('pick').hidden=false; $('hero').hidden=false; };
 ['너는 누구야?','파이썬이 뭐야?','광합성을 쉽게 설명해 줘'].forEach(function(t){
