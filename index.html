@@ -435,5 +435,24 @@ FFT.add({
   }
 })();
 </script>
+<script>
+(function(){
+  var bg=document.querySelector('.hero-bg'); if(!bg) return;
+  var rm=matchMedia('(prefers-reduced-motion:reduce)').matches, narrow=matchMedia('(max-width:640px)').matches, cn=navigator.connection||{};
+  if(rm||narrow||cn.saveData) return;
+  var clips=['sheet','blocks','slide','lab'], vids=[];
+  bg.querySelectorAll('i').forEach(function(el,k){
+    var v=document.createElement('video'); v.muted=true; v.loop=true; v.playsInline=true; v.preload='auto'; v.setAttribute('aria-hidden','true'); v.style.opacity=0; v.style.transition='opacity .6s';
+    v.src='hero/'+clips[k]+(v.canPlayType('video/mp4; codecs="avc1.42E01E"')?'.mp4':'.webm'); el.appendChild(v); vids.push(v);
+    v.addEventListener('playing',function(){ v.style.opacity=.9; });
+    v.addEventListener('error',function(){ v.remove(); });
+  });
+  function go(on){ vids.forEach(function(v){ if(!v.isConnected) return; if(on){ var p=v.play(); if(p&&p.catch) p.catch(function(){}); } else v.pause(); }); }
+  var vis=true,tab=true;
+  function upd(){ go(vis&&tab); }
+  new IntersectionObserver(function(e){ vis=e[0].isIntersecting; upd(); }).observe(document.querySelector('.hero'));
+  document.addEventListener('visibilitychange',function(){ tab=!document.hidden; upd(); });
+})();
+</script>
 </body>
 </html>
