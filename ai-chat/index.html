@@ -280,10 +280,10 @@ function typeOut(out,text,done,think){
 /* 여러 번 답해서 투표 (vote.js): 응답 중 화면에서 N개(짧게 1, 보통 3, 길게 7) 답을 모두 만들고 투표를 끝낸 뒤에 가장 많은 쪽의 답 하나만 한 단어씩 내보내요.
    같은 쪽이 60%보다 적으면 불확실 표시. 멈추기를 누르면 그때까지 모인 답으로 정해요. */
 function voteAnswer(out,q,g,before,N){
-  var all=[], tries=0, stopped=false, prog=document.createElement('span'); prog.className='cnote'; prog.setAttribute('data-notr',''); out.appendChild(prog);
+  var all=[], tries=0, stopped=false;   // 만드는 동안은 생각 중 점만 보여요 (진행 글자는 없어요)
   function step(){
     if(g!==gen||stopped||all.length>=N||tries>=N+3) return Promise.resolve();
-    tries++; prog.textContent=F('{0}개 답을 생각하는 중… ({1}/{0})',N,all.length+1);
+    tries++;
     return FFAI.ask({model:cur.id, prose:true, chat:true, maxTokens:LEN[lv].tok, facts:true, question:q, history:hist.slice(), system:chatSys(), prompt:q}).then(function(r){
       var b=String(typeof r==='string'?r:(r&&r.text)||'').trim(); if(b) all.push(b); return step();
     },function(){ stopped=true; });
