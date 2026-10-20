@@ -120,8 +120,7 @@ li .who{display:inline-block; font-size:11px; border:1px solid var(--line); bord
     <h2>모델 점수판</h2>
     <div id="scores"></div>
     <h2>틀렸다고 눌린 답</h2>
-    <p class="hint" style="margin:-4px 0 10px">이 기기에서 누른 것과, 로그인한 사람이 누른 것(서버)이 같이 보여요.</p>
-    <div class="row" style="margin:0 0 10px"><button class="btn" id="wExport" type="button">틀렸어요 파일로 내보내기</button><button class="btn ghost" id="wClear" type="button" hidden></button><span class="msg" id="wMsg"></span></div>
+    <p class="hint" style="margin:-4px 0 10px">이 기기에서 누른 것과, 로그인한 사람이 누른 것(서버)이 같이 보여요. 서버에 있는 것은 자동으로 모여서 학습 자료를 만들 때 제가 읽고, 진짜 틀린 것은 학습에 넣고 처리한 것은 서버에서 지워요.</p>
     <ul id="wrongList"></ul>
     <p class="msg" id="wrongEmpty" hidden>아직 없어요.</p>
     <h2>가르친 내용</h2>
@@ -154,30 +153,10 @@ function wrongServer(){
 function wrongDrop(k){
   if(k.charAt(0)==='s'&&/^s\d+$/.test(k)){ var id=k.slice(1); serverWrong=serverWrong.filter(function(e){ return String(e.sid)!==id; }); if(pendingWrong===k) pendingWrong=null; renderWrong(); sb.from('ff_ai_wrong').delete().eq('id',id).then(function(){},function(){}); return; }
   var a=wrongRead().filter(function(e){ return wkey(e)!==k; }); try{ localStorage.setItem(WLS,JSON.stringify(a)); }catch(e){} if(pendingWrong===k) pendingWrong=null; renderWrong(); }
-/* 내보내기: the list as one file (json) for the Tools thread; the exported keys are remembered so "내보낸 것 지우기" removes exactly those (new ones stay) */
-var WSENT='ffai.wrong.sent.v1', wrongAll=[], clearArm=false;
-function sentKeys(){ try{ var o=JSON.parse(localStorage.getItem(WSENT)||'null'); return o&&Array.isArray(o.keys)?o.keys:[]; }catch(e){ return []; } }
-function sentLeft(){ var have={}; wrongAll.forEach(function(e){ have[wkey(e)]=1; }); return sentKeys().filter(function(k){ return have[k]; }); }
-function wrongBtns(){ var n=sentLeft().length, b=$('wClear'); clearArm=false; b.hidden=!n; b.textContent=F('내보낸 {0}개 지우기',n); $('wExport').disabled=!wrongAll.length; }
-$('wExport').onclick=function(){
-  if(!wrongAll.length) return;
-  var rows=wrongAll.map(function(e){ return {key:wkey(e), t:e.t, tool:e.tool, model:e.model, history:e.h||[], q:e.q, a:e.a, fix:e.fix}; }), now=new Date(), pad=function(n){ return (n<10?'0':'')+n; };
-  var name='ff-wrong-'+now.getFullYear()+pad(now.getMonth()+1)+pad(now.getDate())+'-'+pad(now.getHours())+pad(now.getMinutes())+'.json';
-  var blob=new Blob([JSON.stringify({exported:now.toISOString(),rows:rows},null,1)],{type:'application/json'}), a=document.createElement('a');
-  a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){ URL.revokeObjectURL(a.href); },4000);
-  try{ localStorage.setItem(WSENT,JSON.stringify({t:now.toISOString(),keys:rows.map(function(r){ return r.key; })})); }catch(e){}
-  $('wMsg').textContent=F('{0}개를 {1} 파일로 내보냈어요. 이 파일을 Tools 스레드에 올려 주세요. 처리가 끝났다는 말을 들으면 내보낸 것 지우기를 눌러요.',rows.length,name); wrongBtns();
-};
-$('wClear').onclick=function(){
-  var ks=sentLeft(); if(!ks.length) return;
-  if(!clearArm){ clearArm=true; $('wClear').textContent=F('한 번 더 누르면 {0}개가 지워져요',ks.length); return; }
-  ks.forEach(wrongDrop); try{ localStorage.removeItem(WSENT); }catch(e){} $('wMsg').textContent=F('{0}개를 지웠어요.',ks.length); wrongBtns();
-};
 function renderWrong(){
   var ul=$('wrongList'), loc=wrongRead(), seenK={}; ul.innerHTML='';
   loc.forEach(function(e){ seenK[e.q+'|'+e.a+'|'+e.fix]=1; });
   var a=loc.concat(serverWrong.filter(function(e){ return !seenK[e.q+'|'+e.a+'|'+e.fix]; })).sort(function(x,y){ return String(y.t).localeCompare(String(x.t)); });
-  wrongAll=a; wrongBtns();
   a.forEach(function(e){
     var k=wkey(e), li=document.createElement('li'), tx=document.createElement('div'); tx.className='tx'; tx.setAttribute('data-notr','');
     function line(cls,t){ var d=document.createElement('div'); d.className=cls; d.textContent=t; tx.appendChild(d); }
