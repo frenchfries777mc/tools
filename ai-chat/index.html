@@ -289,6 +289,18 @@ function vote(out,q,a,g){
     note.textContent=v.uncertain?'⚠ '+F('불확실해요: {0}번 중 {1}번만 같은 답이었어요',v.n,v.size):'✓ '+F('{0}번 중 {1}번이 같은 답이었어요',v.n,v.size);
   });
 }
+/* 목록 답을 모델처럼 내보내기: 5~10초 동안 생각 중 점을 보이고, 한 단어씩 이어서 써요. fake.cancel()은 멈추기 단추 (생각 중이면 text=null, 쓰는 중이면 지금까지 쓴 것) */
+var fake=null;
+function typeOut(out,text,done){
+  var toks=text.match(/\S+\s*/g)||[text], i=0, shown='', timer, run=fake={};
+  function step(){
+    if(i>=toks.length){ fake=null; done(shown); return; }
+    shown+=toks[i++]; out.textContent=shown; $('log').scrollTop=$('log').scrollHeight;
+    timer=setTimeout(step,50+Math.random()*110);
+  }
+  run.cancel=function(){ clearTimeout(timer); fake=null; done(shown||null); };
+  timer=setTimeout(function(){ out.textContent=''; step(); },5000+Math.random()*5000);
+}
 function send(q){
   q=String(q||'').trim(); if(!q||busy||!cur) return;
   var before=prior(conv?conv.msgs:[]);
@@ -296,9 +308,13 @@ function send(q){
   var out=add('a',''), got='', g=gen, mid=cur.id;
   if(jst.g!==gen) jst={g:gen};
   var sc=window.FFJoke&&FFJoke.reply(q,jst,{id:cur.id,name:cur.name});
-  if(sc){   // 아재개그와 자기소개는 모델이 지어내지 않고 목록에서 짝 그대로 꺼내 말해요
-    out.textContent=sc.text; hist.push({role:'user',content:q},{role:'assistant',content:sc.text}); convPush('a',sc.text);
-    FFWrong.attach(out,{tool:'ai-chat',question:q,answer:sc.text,model:'list:'+cur.id,history:before}); return;
+  if(sc){   // 아재개그와 자기소개는 모델이 지어내지 않고 목록에서 짝 그대로 꺼내 말해요. 보이는 모습은 모델 답과 같게: 5~10초 생각 중 점, 그다음 한 단어씩
+    dots(out); setBusy(true);
+    typeOut(out,sc.text,function(text){
+      if(text==null){ out.textContent=T('멈췄어요'); out.classList.add('bad'); setBusy(false); return; }
+      if(g===gen){ hist.push({role:'user',content:q},{role:'assistant',content:text}); convPush('a',text); }
+      FFWrong.attach(out,{tool:'ai-chat',question:q,answer:text,model:'list:'+cur.id,history:before}); setBusy(false);
+    }); return;
   }
   dots(out); setBusy(true);
   trim();
@@ -315,12 +331,12 @@ function send(q){
   }).then(function(){ setBusy(false); });
 }
 $('form').onsubmit=function(e){ e.preventDefault(); send($('q').value); };
-$('send').onclick=function(){ if(busy){ FFAI.stop(); } };
+$('send').onclick=function(){ if(busy){ if(fake) fake.cancel(); else FFAI.stop(); } };
 $('q').onkeydown=function(e){ if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){ e.preventDefault(); if(!busy) send($('q').value); } };
 Array.prototype.forEach.call(document.querySelectorAll('#len button'),function(b){ b.onclick=function(){ lv=+b.dataset.l; try{ localStorage.setItem('ffchat.len',String(lv)); }catch(e){} showLen(); }; });
 showLen();
-$('clear').onclick=function(){ if(busy) FFAI.stop(); gen++; hist=[]; conv=null; greet(); $('chips').hidden=false; };
-$('change').onclick=function(){ if(busy) FFAI.stop(); gen++; cur=null; hist=[]; conv=null; renderRecent(); $('chat').hidden=true; $('pick').hidden=false; $('hero').hidden=false; };
+$('clear').onclick=function(){ if(fake) fake.cancel(); if(busy) FFAI.stop(); gen++; hist=[]; conv=null; greet(); $('chips').hidden=false; };
+$('change').onclick=function(){ if(fake) fake.cancel(); if(busy) FFAI.stop(); gen++; cur=null; hist=[]; conv=null; renderRecent(); $('chat').hidden=true; $('pick').hidden=false; $('hero').hidden=false; };
 ['너는 누구야?','파이썬이 뭐야?','광합성을 쉽게 설명해 줘'].forEach(function(t){
   var b=document.createElement('button'); b.type='button'; b.textContent=T(t); b.onclick=function(){ send(T(t)); }; $('chips').appendChild(b);
 });
