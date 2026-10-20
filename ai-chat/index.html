@@ -298,8 +298,7 @@ function voteAnswer(out,q,g,before,N){
         if(text==null){ out.textContent=T('멈췄어요'); out.classList.add('bad'); res(); return; }
         if(g===gen){ hist.push({role:'user',content:q},{role:'assistant',content:text}); convPush('a',text); }
         FFWrong.attach(out,{tool:'ai-chat',question:q,answer:text,model:'local:'+cur.id,history:before});
-        if(v.n>1){ var note=document.createElement('span'); note.className='cnote '+(v.uncertain?'warn':'ok'); note.setAttribute('data-notr','');
-          note.textContent=v.uncertain?'⚠ '+F('불확실해요: {0}번 중 {1}번만 같은 답이었어요',v.n,v.size):'✓ '+F('{0}번 중 {1}번이 같은 답이었어요',v.n,v.size); out.appendChild(note); }
+        if(v.uncertain){ var note=document.createElement('span'); note.className='cnote warn'; note.setAttribute('data-notr',''); note.textContent=T('답변이 불확실할 수도 있습니다'); out.appendChild(note); }   // 일치할 때는 아무 표시도 없어요
         res();
       },0);
     });
