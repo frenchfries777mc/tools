@@ -101,6 +101,7 @@ FFT.add({
     Array.prototype.forEach.call(tabs.children,function(b){ b.classList.toggle('on',b.dataset.id===id); });
     msg.textContent=''; list.innerHTML='';
     function show(d){ list.innerHTML=(d.notes||[]).map(function(n){
+      var t=n.tr&&window.FFT&&n.tr[FFT.lang]; if(t) n={build:n.build, date:n.date, title:t.title||n.title, items:t.items||n.items};   // translated notes (tr.{lang}), else Korean
       return '<li class="note"><div class="top"><span class="bd">'+esc(n.build)+'</span><h2>'+esc(n.title)+'</h2><time>'+esc(n.date)+'</time></div><ul>'+(n.items||[]).map(function(i){ return '<li>'+esc(i)+'</li>'; }).join('')+'</ul></li>'; }).join(''); }
     if(cache[id]) return show(cache[id]);
     msg.textContent=T('불러오는 중…');

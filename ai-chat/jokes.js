@@ -122,13 +122,26 @@ var J=[
 ["아이스크림이 가수가 될 수 없는 이유는?", "녹음 안되니까"]
 ];
 var SELF={
-  'FF-Tools-1.7B':{base:'Qwen3 1.7B', latin:'elementarius', ko:'기본'},
-  'FF-Tools-4B':{base:'Qwen3 4B', latin:'intellectus', ko:'이해력'},
-  'FF-Tools-8B':{base:'Qwen3 8B', latin:'supremus', ko:'가장 높은'}
+  'FF-Tools-1.7B':{base:'Qwen3 1.7B', latin:'elementarius', ko:'기본', tr:['basic','básico','de base','grundlegend','基本']},
+  'FF-Tools-4B':{base:'Qwen3 4B', latin:'intellectus', ko:'이해력', tr:['understanding','entendimiento','compréhension','Verstand','理解力']},
+  'FF-Tools-8B':{base:'Qwen3 8B', latin:'supremus', ko:'가장 높은', tr:['highest','el más alto','le plus haut','der höchste','最も高い']}
 };
+/* 화면 언어가 한국어가 아니면 자기소개와 '정답은 …' 같은 우리 말은 그 언어로 (개그 문제와 정답 자체는 한국어 그대로). Node에서는 한국어. */
+var FFT_=root.FFT, LX={en:0,es:1,fr:2,de:3,ja:4}, li=FFT_&&LX[FFT_.lang];
+if(FFT_) FFT_.add({
+'저는 {0}예요. Frenchfries777 Tools 사이트의 AI이고, 개발자 Frenchfries777이 {1}를 바탕으로 만들었어요. 이름은 라틴어 {2}("{3}")의 끝에서 따왔어요. 아재개그도 좋아해요!':[
+  'I’m {0}, the AI of the Frenchfries777 Tools site. The developer Frenchfries777 built me on {1}. My name comes from the end of the Latin word {2} (“{3}”). I love cheesy jokes too!',
+  'Soy {0}, la IA del sitio Frenchfries777 Tools. El desarrollador Frenchfries777 me creó a partir de {1}. Mi nombre viene del final de la palabra latina {2} («{3}»). ¡También me encantan los chistes malos!',
+  'Je suis {0}, l’IA du site Frenchfries777 Tools. Le développeur Frenchfries777 m’a créée à partir de {1}. Mon nom vient de la fin du mot latin {2} (« {3} »). J’adore aussi les blagues nulles !',
+  'Ich bin {0}, die KI der Website Frenchfries777 Tools. Der Entwickler Frenchfries777 hat mich auf Basis von {1} gebaut. Mein Name stammt vom Ende des lateinischen Wortes {2} („{3}“). Ich mag auch Flachwitze!',
+  '私は{0}です。Frenchfries777 ToolsサイトのAIで、開発者Frenchfries777が{1}をもとに作りました。名前はラテン語{2}（「{3}」）の終わりから取りました。おやじギャグも大好きです！'],
+'정답은 {0}!':['The answer is: {0}!','La respuesta es: ¡{0}!','La réponse est : {0} !','Die Antwort lautet: {0}!','答えは{0}！'],
+'네, 외워요! 하나 들려 드릴게요.':['Yes, I know some by heart! Here’s one.','¡Sí, me sé algunos! Ahí va uno.','Oui, j’en connais par cœur ! En voici une.','Ja, ich kenne welche auswendig! Hier ist einer.','はい、覚えています！1つ聞かせますね。']
+});
+function tf(t){ var a=arguments; if(FFT_&&FFT_.F) return FFT_.F.apply(null,a); return t.replace(/\{(\d)\}/g,function(_,n){ return String(a[+n+1]); }); }
 function norm(s){ return String(s||'').toLowerCase().replace(/[^가-힣a-z0-9]/g,''); }
 var NJ=J.map(function(x){ return norm(x[0]); });
-function say(i){ return J[i][0]+'\n정답은 '+J[i][1]+'!'; }
+function say(i){ return J[i][0]+'\n'+tf('정답은 {0}!',J[i][1]); }
 function fresh(st){
   st.used=st.used||[]; if(st.used.length>=J.length) st.used=[];
   var left=[]; for(var i=0;i<J.length;i++) if(st.used.indexOf(i)<0) left.push(i);
@@ -148,19 +161,21 @@ function riddle(t){
 var ASKJ=/(아재\s*개그|넌센스|말장난|웃긴\s*(거|것|얘기|이야기|말)|농담|개그)/, ASKV=/(해|줘|들려|하나|내\s*봐|내봐|말해|ㄱㄱ|던져|보여|또|더|다른|심심|외워|알아)/, ASKQ=/(뭐야|뭔데|뭐지|무슨|란|이란|의미|뜻)\??\s*$/;
 var MORE=/^(다른\s*거|다른\s*것|하나\s*더|한\s*번\s*더|또|더|또\s*해|다시)\s*[?!.~]*$/, ANS=/^(뭔데|몰라|모르겠어|모르겠는데|정답|정답이?\s*뭐야|답이?\s*뭐야|정답\s*알려\s*줘|답\s*알려\s*줘|정답\s*뭐야|힌트)\s*[?!.~]*$/;
 var WHO=/(너\s*누구|넌\s*누구|누구\s*야|이름이?\s*뭐|이름\s*알려|자기\s*소개|누가\s*만들|무슨\s*모델|어떤\s*모델)/;
+/* the same question in the other site languages (the "너는 누구야?" example chip is sent translated) */
+var WHO2=/^\s*[¿]?\s*(who\s+are\s+you|what('?s|\s+is)\s+your\s+name|qui[eé]n\s+eres|c[oó]mo\s+te\s+llamas|qui\s+es[\s-]+tu|comment\s+tu\s+t[’']appelles|wer\s+bist\s+du|wie\s+hei(ß|ss)t\s+du|(あなた|君|きみ)は(誰|だれ)|お名前は|名前は)/i;
 function self_(model){
   var s=SELF[model&&model.id]; if(!s) return null;
   var nm=(model.name||'FF777').replace(/^\s+|\s+$/g,'');
-  return '저는 '+nm+'예요. Frenchfries777 Tools 사이트의 AI이고, 개발자 Frenchfries777이 '+s.base+'를 바탕으로 만들었어요. 이름은 라틴어 '+s.latin+'("'+s.ko+'")의 끝에서 따왔어요. 아재개그도 좋아해요!';
+  return tf('저는 {0}예요. Frenchfries777 Tools 사이트의 AI이고, 개발자 Frenchfries777이 {1}를 바탕으로 만들었어요. 이름은 라틴어 {2}("{3}")의 끝에서 따왔어요. 아재개그도 좋아해요!',nm,s.base,s.latin,li!=null?s.tr[li]:s.ko);
 }
 function reply(text, st, model){
   var t=String(text||'').trim(); if(!t||t.length>80) return null; st=st||{};
   var r=riddle(t);
-  if(r>=0){ st.last=r; return {text:'정답은 '+J[r][1]+'!', kind:'answer'}; }
+  if(r>=0){ st.last=r; return {text:tf('정답은 {0}!',J[r][1]), kind:'answer'}; }
   if(st.last!=null&&ANS.test(t)) return {text:say(st.last), kind:'answer'};
   if(st.last!=null&&MORE.test(t)) return {text:say(fresh(st)), kind:'joke'};
-  if(ASKJ.test(t)&&ASKV.test(t)&&!ASKQ.test(t)) return {text:(/외워|알아/.test(t)?'네, 외워요! 하나 들려 드릴게요.\n':'')+say(fresh(st)), kind:'joke'};
-  if(t.length<=24&&WHO.test(t)){ var s=self_(model); if(s){ st.last=null; return {text:s, kind:'self'}; } }
+  if(ASKJ.test(t)&&ASKV.test(t)&&!ASKQ.test(t)) return {text:(/외워|알아/.test(t)?tf('네, 외워요! 하나 들려 드릴게요.')+'\n':'')+say(fresh(st)), kind:'joke'};
+  if(t.length<=24&&(WHO.test(t)||WHO2.test(t))){ var s=self_(model); if(s){ st.last=null; return {text:s, kind:'self'}; } }
   st.last=null; return null;
 }
 var api={reply:reply, jokes:J, riddle:riddle};

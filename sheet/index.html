@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <script src="../i18n.js"></script>
-<script src="strings.js"></script>
+<script src="strings.js?v=33.1"></script>
 <style>
 :root{ --bg:#08090d; --panel:#10131b; --panel2:#151925; --line:#222837; --grid:#1c2130; --text:#eef0f5; --dim:#8a93a6; --fry:#ffc93c; --fry2:#ff8a3d; --sel:#ffc93c; --hd:#0d1017; }
 *{box-sizing:border-box;}
@@ -330,7 +330,7 @@ button,input,select{font:inherit; color:inherit;}
   <input id="fin" aria-label="수식 입력줄" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off">
   <button id="fxHelp" class="fxh" type="button" title="이 칸의 수식을 한국어로 풀어 줘요" aria-expanded="false">풀이</button>
 </div>
-<div id="fxPanel" class="fxp" hidden></div>
+<div id="fxPanel" class="fxp" hidden data-notr></div>
 
 <div class="main">
   <div id="gridWrap">
@@ -675,10 +675,10 @@ button,input,select{font:inherit; color:inherit;}
 <div id="toast"></div>
 
 <script src="engine.js"></script>
-<script src="explain.js"></script>
+<script src="explain.js?v=33.1"></script>
 <script src="calc.js"></script>
 <script src="commands.js?v=33"></script>
-<script src="app.js?v=33"></script>
+<script src="app.js?v=33.1"></script>
 <script src="viz.js"></script>
 <script src="../ai.js?v=ai30"></script>
 <script src="../ai-wrong.js?v=3"></script>

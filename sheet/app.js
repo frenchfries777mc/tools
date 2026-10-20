@@ -234,7 +234,7 @@ function selName(){
 }
 /* ---------- 수식 풀이 (sheet/explain.js): the formula of the active cell, step by step, in Korean ---------- */
 var fxDesc=null;
-function fxDescOf(n){ if(!fxDesc){ fxDesc={}; (window.FNDOC||[]).forEach(function(f){ fxDesc[f[1]]=f[3]||''; }); } return fxDesc[n]||''; }
+function fxDescOf(n){ if(!fxDesc){ fxDesc={}; (window.FNDOC||[]).forEach(function(f){ fxDesc[f[1]]=(FFT.lang==='ko'?f[3]:f[4]||f[3])||''; }); } return fxDesc[n]||''; }
 function fxShow(v){
   if(v&&typeof v==='object'&&!E.isErr(v)) return v.rows?F('{0}줄 × {1}칸 표',v.rows.length,v.rows[0]?v.rows[0].length:0):T('칸 범위');
   if(E.isErr(v)) return v.e; if(v==null||v==='') return T('(빈칸)'); return E.formatValue(v);
@@ -243,7 +243,7 @@ function fxVal(n){ try{ return fxShow(eng.ev(n,doc.active)); }catch(e){ return E
 function fxText(t,cls){ var s=document.createElement('span'); if(cls) s.className=cls; s.textContent=t; return s; }
 function fxRender(){
   var p=$('fxPanel'); if(p.hidden) return;
-  var cell=sh.cells[K(act.r,act.c)], raw=cell&&cell.v!=null?String(cell.v):'', x=window.FSExplain.explain(raw,{parse:E.parse,val:fxVal,ref:fxVal,desc:fxDescOf,addr:E.addr,rangeStr:E.rangeStr});
+  var cell=sh.cells[K(act.r,act.c)], raw=cell&&cell.v!=null?String(cell.v):'', x=window.FSExplain.explain(raw,{parse:E.parse,val:fxVal,ref:fxVal,desc:fxDescOf,addr:E.addr,rangeStr:E.rangeStr,F:F});
   p.textContent=''; var h=document.createElement('h4'), cl=document.createElement('button'); cl.className='fxx'; cl.type='button'; cl.textContent='×'; cl.setAttribute('aria-label',T('닫기')); cl.onclick=function(){ fxToggle(false); };
   p.appendChild(cl); h.appendChild(fxText(T('수식 풀이')+' · '+E.addr(act.r,act.c))); p.appendChild(h);
   function line(t,cls){ var d=document.createElement('div'); d.appendChild(fxText(t,cls)); p.appendChild(d); return d; }
@@ -253,7 +253,7 @@ function fxRender(){
   if(x.refs.length){ var rr=document.createElement('div'); rr.className='fxr'; rr.appendChild(fxText(T('쓰는 칸')+':','fxn')); x.refs.forEach(function(q){ var c=document.createElement('code'); c.textContent=q.t+' = '+q.v; rr.appendChild(c); }); p.appendChild(rr); }
   if(x.simple){ var d3=line(T('값을 그대로 가져와요')+' → '); d3.appendChild(fxText(x.result,'fxv')); return; }
   var ol=document.createElement('ol'); x.steps.forEach(function(s){ var li=document.createElement('li'), c=document.createElement('code'); c.textContent=s.expr; li.appendChild(c);
-    if(s.note) li.appendChild(fxText(' — '+s.note,'fxn')); li.appendChild(fxText(' → ')); li.appendChild(fxText(s.value,'fxv')); ol.appendChild(li); });
+    if(s.note) li.appendChild(fxText(' — '+T(s.note),'fxn')); li.appendChild(fxText(' → ')); li.appendChild(fxText(s.value,'fxv')); ol.appendChild(li); });
   p.appendChild(ol); if(x.more) line(F('이어서 {0}단계가 더 있어요.',x.more),'fxn');
   var d4=line(T('결과')+': '); d4.appendChild(fxText(x.result,'fxv'));
 }
