@@ -98,6 +98,8 @@ html[data-ff-theme=light] .mc[data-id]{--bgc:var(--panel); --bd:var(--line);}
 .btn:disabled{opacity:.5; cursor:default;}
 .ghost{background:transparent; border:1px solid var(--line); color:var(--text); font-weight:500; padding:6px 12px; border-radius:10px; cursor:pointer;}
 .ghost:hover{border-color:var(--fry);}
+.ghost[aria-pressed=true]{border-color:var(--fry); color:var(--fry);}
+.cnote{display:block; margin-top:8px; font-size:12px; color:var(--dim);} .cnote.warn{color:var(--bad);} .cnote.ok{color:var(--good,#5fd38d);}
 .log{display:grid; gap:14px; min-height:240px; max-height:56vh; overflow:auto; padding:6px 2px; align-content:start;}
 .row{display:flex; gap:10px; align-items:flex-start; max-width:92%;}
 .row.u{justify-self:end; flex-direction:row-reverse;}
@@ -150,7 +152,7 @@ form.in textarea:focus{outline:none;}
     <div class="err" id="gpuErr" hidden>이 기기나 브라우저에서는 쓸 수 없어요. 최신 크롬이나 엣지, 또는 최신 사파리에서 열어 주세요.</div>
   </section>
   <section class="chat" id="chat" hidden>
-    <div class="bar"><span class="cur"><i></i><span id="cur" data-notr></span></span><span class="sp"></span><span class="len" id="len" role="group" aria-label="답 길이"><button type="button" data-l="0">짧게</button><button type="button" data-l="1">보통</button><button type="button" data-l="2">길게</button></span><button class="ghost" id="clear" type="button">새 대화</button><button class="ghost" id="change" type="button">모델 바꾸기</button></div>
+    <div class="bar"><span class="cur"><i></i><span id="cur" data-notr></span></span><span class="sp"></span><span class="len" id="len" role="group" aria-label="답 길이"><button type="button" data-l="0">짧게</button><button type="button" data-l="1">보통</button><button type="button" data-l="2">길게</button></span><button class="ghost" id="chk" type="button" aria-pressed="false" title="같은 질문을 한 번 더 물어 답이 다르면 알려 줘요 (시간이 두 배 걸려요)">🔍 두 번 확인</button><button class="ghost" id="clear" type="button">새 대화</button><button class="ghost" id="change" type="button">모델 바꾸기</button></div>
     <div class="log" id="log" aria-live="polite"></div>
     <div class="chips" id="chips" aria-label="예시 질문"></div>
     
@@ -162,6 +164,7 @@ form.in textarea:focus{outline:none;}
 <script src="../ai-prompts.js"></script>
 <script src="../ai.js?v=ai30"></script>
 <script src="../ai-wrong.js?v=3"></script>
+<script src="jokes.js?v=1"></script>
 <script src="https://frenchfries777mc.github.io/games/ff-lang.js"></script>
 <script src="https://frenchfries777mc.github.io/games/ff-auth.js"></script>
 <script>
@@ -172,7 +175,8 @@ var DESC={'FF-Tools-1.7B':'가볍고 빨라요','FF-Tools-4B':'똑똑해요','FF
 var ACC={'FF-Tools-1.7B':'#5fd38d','FF-Tools-4B':'#6db3ff','FF-Tools-8B':'#b79bff'};
 var ICON={'FF-Tools-1.7B':'⚡','FF-Tools-4B':'💡','FF-Tools-8B':'🧠'};
 var EXTRA={'FF-Tools-8B':'PC 추천 (그래픽 메모리 8GB 이상)'};
-var cur=null, hist=[], busy=false, models=[];
+var cur=null, hist=[], busy=false, models=[], jst={g:-1};   // jst: what the joke list said last in this conversation (jokes.js)
+var CHK=false; try{ CHK=localStorage.getItem('ffchat.check')==='1'; }catch(e){}
 /* how talkative the AI is: the chat page uses its own chat prompt (the trained spreadsheet prompt makes answers short) */
 var LEN=[{tok:220, ask:'Answer in 1 to 3 short sentences.'}, {tok:520, ask:'Answer in 3 to 5 sentences with one concrete example.'}, {tok:1000, ask:'Be talkative: answer in 6 to 10 sentences, explain the idea step by step with a concrete example, then end with a friendly follow-up question or tip.'}];
 var lv=2; try{ var sv=parseInt(localStorage.getItem('ffchat.len'),10); if(sv>=0&&sv<=2) lv=sv; }catch(e){}
@@ -262,17 +266,43 @@ function restore(c){
 function dots(d){ d.innerHTML='<span class="dots" aria-label="…"><i></i><i></i><i></i></span>'; }
 function trim(){ var n=0, i=hist.length; while(i>0){ n+=hist[i-1].content.length; if(n>1500) break; i--; } hist=hist.slice(i); if(hist.length&&hist[0].role==='assistant') hist.shift(); }
 function setBusy(b){ busy=b; $('send').textContent=T(b?'멈추기':'보내기'); $('send').type=b?'button':'submit'; }
+/* 🔍 두 번 확인: the same question is asked once more (silently); numbers that differ, or words that hardly overlap, mean the AI is not sure */
+function wordsOf(t){ var m=String(t).toLowerCase().match(/[가-힣a-z]{2,}|\d+(?:\.\d+)?/g)||[]; var o={}; m.forEach(function(w){ o[w]=1; }); return o; }
+function nums(t){ return (String(t).match(/\d+(?:\.\d+)?/g)||[]).sort().join(','); }
+function sameness(a,b){
+  var x=wordsOf(a), y=wordsOf(b), kx=Object.keys(x), ky=Object.keys(y), both=0; if(!kx.length||!ky.length) return a.trim()===b.trim()?1:0;
+  kx.forEach(function(w){ if(y[w]) both++; }); return both/(kx.length+ky.length-both);
+}
+function recheck(out,q,a,before,g){
+  var host=out.parentNode, note=document.createElement('span'); note.className='cnote'; note.textContent=T('한 번 더 물어서 확인하는 중…'); out.appendChild(note); setBusy(true);
+  return FFAI.ask({model:cur.id, prose:true, chat:true, maxTokens:LEN[lv].tok, facts:true, question:q, history:hist.slice(0,-2), system:chatSys(), prompt:q}).then(function(r){
+    if(g!==gen) return; var b=String(typeof r==='string'?r:(r&&r.text)||'').trim(); if(!b){ note.remove(); return; }
+    var n1=nums(a), n2=nums(b), sim=sameness(a,b);
+    if(n1&&n2&&n1!==n2){ note.className='cnote warn'; note.textContent='⚠ '+T('두 번 물었더니 숫자가 달랐어요. 틀릴 수 있어요'); }
+    else if(sim<0.3){ note.className='cnote warn'; note.textContent='⚠ '+T('두 번 물었더니 답이 많이 달랐어요. 확실하지 않아요'); }
+    else { note.className='cnote ok'; note.textContent='✓ '+T('두 번 물어도 비슷한 답이었어요'); }
+    note.setAttribute('data-notr','');
+  },function(){ note.remove(); }).then(function(){ setBusy(false); });
+}
 function send(q){
   q=String(q||'').trim(); if(!q||busy||!cur) return;
   var before=prior(conv?conv.msgs:[]);
   $('q').value=''; $('chips').hidden=true; add('u',q); convPush('u',q);
-  var out=add('a',''), got='', g=gen, mid=cur.id; dots(out); setBusy(true);
+  var out=add('a',''), got='', g=gen, mid=cur.id;
+  if(jst.g!==gen) jst={g:gen};
+  var sc=window.FFJoke&&FFJoke.reply(q,jst,{id:cur.id,name:cur.name});
+  if(sc){   // 아재개그와 자기소개는 모델이 지어내지 않고 목록에서 짝 그대로 꺼내 말해요
+    out.textContent=sc.text; hist.push({role:'user',content:q},{role:'assistant',content:sc.text}); convPush('a',sc.text);
+    FFWrong.attach(out,{tool:'ai-chat',question:q,answer:sc.text,model:'list:'+cur.id,history:before}); return;
+  }
+  dots(out); setBusy(true);
   trim();
   FFAI.ask({model:cur.id, prose:true, chat:true, maxTokens:LEN[lv].tok, facts:true, question:q, history:hist.slice(), system:chatSys(), prompt:q,
     onText:function(t){ got=t; out.textContent=t; $('log').scrollTop=$('log').scrollHeight; }}).then(function(r){
     var a=String(typeof r==='string'?r:(r&&r.text)||got||'').trim();
     out.textContent=a||T('답하지 못했어요');
-    if(a){ if(g===gen){ hist.push({role:'user',content:q},{role:'assistant',content:a}); convPush('a',a); } FFWrong.attach(out,{tool:'ai-chat',question:q,answer:a,model:'local:'+cur.id,history:before}); }
+    if(a){ if(g===gen){ hist.push({role:'user',content:q},{role:'assistant',content:a}); convPush('a',a); } FFWrong.attach(out,{tool:'ai-chat',question:q,answer:a,model:'local:'+cur.id,history:before});
+      if(CHK&&g===gen) return recheck(out,q,a,before,g); }
     else out.classList.add('bad');
   },function(e){
     if(got){ out.textContent=got; if(g===gen){ convPush('a',got); hist.push({role:'user',content:q},{role:'assistant',content:got}); } return; }
@@ -284,6 +314,9 @@ $('send').onclick=function(){ if(busy){ FFAI.stop(); } };
 $('q').onkeydown=function(e){ if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){ e.preventDefault(); if(!busy) send($('q').value); } };
 Array.prototype.forEach.call(document.querySelectorAll('#len button'),function(b){ b.onclick=function(){ lv=+b.dataset.l; try{ localStorage.setItem('ffchat.len',String(lv)); }catch(e){} showLen(); }; });
 showLen();
+function showChk(){ var b=$('chk'); b.setAttribute('aria-pressed',CHK?'true':'false'); }
+$('chk').onclick=function(){ CHK=!CHK; try{ localStorage.setItem('ffchat.check',CHK?'1':'0'); }catch(e){} showChk(); };
+showChk();
 $('clear').onclick=function(){ if(busy) FFAI.stop(); gen++; hist=[]; conv=null; greet(); $('chips').hidden=false; };
 $('change').onclick=function(){ if(busy) FFAI.stop(); gen++; cur=null; hist=[]; conv=null; renderRecent(); $('chat').hidden=true; $('pick').hidden=false; $('hero').hidden=false; };
 ['너는 누구야?','파이썬이 뭐야?','광합성을 쉽게 설명해 줘'].forEach(function(t){
