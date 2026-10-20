@@ -3,6 +3,16 @@
  "name": "Tools 사이트",
  "notes": [
   {
+   "date": "2026-10-20",
+   "build": "v22",
+   "title": "저작권 표기",
+   "items": [
+    "모든 페이지 하단에 © 2026 Frenchfries777 · CC BY-NC-ND 4.0 표기 추가",
+    "저장소에 라이선스 파일(LICENSE) 추가: 원작자 표기 필수, 상업적 이용 금지, 변경 금지",
+    "AI 모델 FF777의 Qwen3(Apache 2.0) 기반 고지"
+   ]
+  },
+  {
    "date": "2026-10-19",
    "build": "v21",
    "title": "스크롤바 다듬기",
