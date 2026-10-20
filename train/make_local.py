@@ -26,6 +26,7 @@ s = s.replace('ROUND = 3  #@param [2, 3]', 'ROUND = int(_env("ROUND", "3"))')
 s = s.replace('MAX_TRAIN_HOURS = 6.0  #@param {type:"number"}', 'MAX_TRAIN_HOURS = float(_env("MAX_TRAIN_HOURS", "12"))')
 s = s.replace('EVAL_MINUTES = 45  #@param {type:"number"}', 'EVAL_MINUTES = int(_env("EVAL_MINUTES", "45"))')
 s = s.replace('MAX_LEN = 4096', 'MAX_LEN = int(_env("MAX_LEN", "4096"))')
+s = s.replace('getpass.getpass("Hugging Face Write 토큰(hf_...)을 붙여 넣고 Enter: ")', 'input("Hugging Face Write 토큰(hf_...)을 붙여 넣고 Enter (글자가 그대로 보여요): ")')
 s = s.replace('#@title 설정\n', '')
 assert '#@param' not in s, 'a Colab param is left in the settings'
 # MAX_TRAIN_HOURS for premus was raised to >= 7 for a T4 session; locally the number given is the number used
