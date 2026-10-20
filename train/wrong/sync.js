@@ -20,7 +20,8 @@ function inboxText(rows, done){
 async function run(env, o){
   o=o||{}; const url=(env.SUPABASE_URL||'').replace(/\/$/,''), key=env.SUPABASE_SERVICE_KEY;
   if(!url||!key){ console.log('SUPABASE_URL 이나 SUPABASE_SERVICE_KEY 가 없어요. 저장소 secret 을 먼저 넣어 주세요. 아무것도 안 했어요.'); return {skipped:true}; }
-  const f=o.fetch||fetch, H={apikey:key, Authorization:'Bearer '+key};
+  const f=o.fetch||fetch, H={apikey:key};
+  if(/^eyJ/.test(key)) H.Authorization='Bearer '+key;   // 예전 service_role(JWT)은 Bearer 도 필요하고, 새 sb_secret_ 키는 apikey 만 써요
   const done=readDone(o.doneFile); let deleted=0;
   if(done.length&&!o.dry){
     for(let i=0;i<done.length;i+=100){   // 100개씩
