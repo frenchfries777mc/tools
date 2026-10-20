@@ -161,7 +161,7 @@ form.in textarea:focus{outline:none;}
   <p class="hint" id="loginHint" hidden>로그인한 상태로 틀렸어요를 누르면 질문과 답이 개발자에게도 전해져요.</p>
 </main>
 <script src="../ai-prompts.js"></script>
-<script src="../ai.js?v=ai30"></script>
+<script src="../ai.js?v=ai31"></script>
 <script src="../ai-wrong.js?v=3"></script>
 <script src="jokes.js?v=1"></script>
 <script src="vote.js?v=1"></script>
@@ -265,17 +265,22 @@ function restore(c){
 function dots(d){ d.innerHTML='<span class="dots" aria-label="…"><i></i><i></i><i></i></span>'; }
 function trim(){ var n=0, i=hist.length; while(i>0){ n+=hist[i-1].content.length; if(n>1500) break; i--; } hist=hist.slice(i); if(hist.length&&hist[0].role==='assistant') hist.shift(); }
 function setBusy(b){ busy=b; $('send').textContent=T(b?'멈추기':'보내기'); $('send').type=b?'button':'submit'; }
-/* 목록 답을 모델처럼 내보내기: 5~10초 동안 생각 중 점을 보이고, 한 단어씩 이어서 써요. fake.cancel()은 멈추기 단추 (생각 중이면 text=null, 쓰는 중이면 지금까지 쓴 것) */
+/* 목록 답을 모델처럼 내보내기: 모델이 아직 안 불러와져 있으면 실제로 불러오고(진행 막대), 5~10초 생각 중 점을 보인 뒤 한 글자씩 이어서 써요.
+   fake.cancel()은 멈추기 단추 (생각 중이면 text=null, 쓰는 중이면 지금까지 쓴 것) */
 var fake=null;
 function typeOut(out,text,done,think){
-  var toks=text.match(/\S+\s*/g)||[text], i=0, shown='', timer, run=fake={};
+  var chars=Array.from(text), i=0, shown='', timer, run=fake={};
   function step(){
-    if(i>=toks.length){ fake=null; done(shown); return; }
-    shown+=toks[i++]; out.textContent=shown; $('log').scrollTop=$('log').scrollHeight;
-    timer=setTimeout(step,50+Math.random()*110);
+    if(i>=chars.length){ fake=null; done(shown); return; }
+    var n=Math.random()<0.25?2:1; shown+=chars.slice(i,i+n).join(''); i+=n; out.textContent=shown; $('log').scrollTop=$('log').scrollHeight;
+    timer=setTimeout(step,20+Math.random()*50);
   }
   run.cancel=function(){ clearTimeout(timer); fake=null; done(shown||null); };
   timer=setTimeout(function(){ out.textContent=''; step(); },think==null?5000+Math.random()*5000:think);
+}
+function listOut(out,text,done){   // 모델 불러오기가 끝난 뒤에 생각 중 → 한 글자씩. 불러오기 중에 멈추기를 눌러도 돼요
+  var dead=false, run=fake={cancel:function(){ dead=true; fake=null; done(null); }};
+  FFAI.load(cur.id).then(function(){ if(!dead) typeOut(out,text,done); });
 }
 /* 여러 번 답해서 투표 (vote.js): 응답 중 화면에서 N개(짧게 1, 보통 3, 길게 7) 답을 모두 만들고 투표를 끝낸 뒤에 가장 많은 쪽의 답 하나만 한 단어씩 내보내요.
    같은 쪽이 60%보다 적으면 불확실 표시. 멈추기를 누르면 그때까지 모인 답으로 정해요. */
@@ -313,7 +318,7 @@ function send(q){
   var sc=window.FFJoke&&FFJoke.reply(q,jst,{id:cur.id,name:cur.name});
   if(sc){   // 아재개그와 자기소개는 모델이 지어내지 않고 목록에서 짝 그대로 꺼내 말해요. 보이는 모습은 모델 답과 같게: 5~10초 생각 중 점, 그다음 한 단어씩
     dots(out); setBusy(true);
-    typeOut(out,sc.text,function(text){
+    listOut(out,sc.text,function(text){
       if(text==null){ out.textContent=T('멈췄어요'); out.classList.add('bad'); setBusy(false); return; }
       if(g===gen){ hist.push({role:'user',content:q},{role:'assistant',content:text}); convPush('a',text); }
       FFWrong.attach(out,{tool:'ai-chat',question:q,answer:text,model:'list:'+cur.id,history:before}); setBusy(false);

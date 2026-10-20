@@ -446,5 +446,5 @@ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded'
 function stop(){ if(stopNow){ var f=stopNow; stopNow=null; try{ f(); }catch(e){} } }
 var ICOS={'FF-Tools-1.7B':'tarius','FF-Tools-4B':'lectus','FF-Tools-8B':'premus'};
 function icon(id){ return ICOS[id]?BASE+'icons/ai/'+ICOS[id]+'.svg':''; }
-window.FFAI={icon:icon, models:function(){ return PROVIDERS.local.models.map(function(m){ return {id:m[0], name:m[1], size:m[2], note:m[3]}; }); }, tunedReady:probeTuned, gpu:function(){ return gpuOk==null?checkGPU():Promise.resolve(gpuOk); }, facts:facts, ready:ready, isLocal:isLocal, isTuned:isTuned, model:function(){ return cfg().model; }, stop:stop, settings:settings, ask:ask, parseJSON:parseJSON, config:cfg};
+window.FFAI={icon:icon, models:function(){ return PROVIDERS.local.models.map(function(m){ return {id:m[0], name:m[1], size:m[2], note:m[3]}; }); }, tunedReady:probeTuned, gpu:function(){ return gpuOk==null?checkGPU():Promise.resolve(gpuOk); }, facts:facts, ready:ready, load:function(m){ return engine(m).then(function(){ return true; },function(){ return false; }); }, isLocal:isLocal, isTuned:isTuned, model:function(){ return cfg().model; }, stop:stop, settings:settings, ask:ask, parseJSON:parseJSON, config:cfg};
 })();
