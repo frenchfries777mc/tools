@@ -85,14 +85,14 @@ html[data-ff-theme=light] .mc[data-id]{--bgc:var(--panel); --bd:var(--line);}
 .mc:hover:not([disabled]){border-color:var(--ac); transform:translateY(-2px);}
 .mc:focus-visible{outline:2px solid var(--ac); outline-offset:2px;}
 .mc[disabled]{opacity:.5; cursor:default;}
-.mc .ico{width:38px; height:38px; border-radius:10px; display:grid; place-items:center; font-size:18px; color:#111; background:var(--ac); margin-bottom:4px;}
+.mc .ico{width:48px; height:48px; display:block; margin-bottom:4px;}
 .mc .n{font-family:'Oswald','Noto Sans KR',sans-serif; font-weight:700; font-size:22px; letter-spacing:.02em; text-transform:uppercase;} .mc .n small{font-size:12px; font-weight:500; color:var(--dim); letter-spacing:0; text-transform:none; margin-left:6px;}
 .mc .d{color:var(--dim); font-size:14px; line-height:1.5;} .mc .s{margin-top:4px; font-size:12px; font-weight:700; color:var(--ac);}
 .err{margin-top:14px; padding:12px 14px; border:1px solid var(--bad); border-radius:12px; color:var(--bad); font-size:14px; line-height:1.55;}
 .chat{display:grid; gap:12px; margin-top:6px;}
 .bar{display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:10px 12px; background:var(--panel); border:1px solid var(--line); border-radius:14px;}
 .bar .cur{font-family:'Oswald','Noto Sans KR',sans-serif; font-weight:700; letter-spacing:.03em; display:flex; align-items:center; gap:8px;}
-.bar .cur i{width:10px; height:10px; border-radius:50%; background:var(--ac,var(--fry)); box-shadow:0 0 0 4px color-mix(in srgb,var(--ac,var(--fry)) 22%,transparent);}
+.bar .cur .ci{width:26px; height:26px; display:block;}
 .sp{flex:1;}
 .btn{border:0; border-radius:10px; padding:10px 18px; font-weight:700; cursor:pointer; background:linear-gradient(135deg,var(--fry),var(--fry2)); color:#1a1205;}
 .btn:disabled{opacity:.5; cursor:default;}
@@ -102,7 +102,7 @@ html[data-ff-theme=light] .mc[data-id]{--bgc:var(--panel); --bd:var(--line);}
 .log{display:grid; gap:14px; min-height:240px; max-height:56vh; overflow:auto; padding:6px 2px; align-content:start;}
 .row{display:flex; gap:10px; align-items:flex-start; max-width:92%;}
 .row.u{justify-self:end; flex-direction:row-reverse;}
-.av{flex:0 0 auto; width:32px; height:32px; border-radius:10px; display:grid; place-items:center; font-size:16px; background:linear-gradient(135deg,var(--fry),var(--fry2)); box-shadow:0 4px 12px rgba(255,160,60,.2);}
+.av{flex:0 0 auto; width:32px; height:32px; display:block;}
 .m{border-radius:14px; padding:10px 14px; line-height:1.65; overflow-wrap:anywhere; white-space:pre-wrap; min-width:0;}
 .m.u{background:var(--panel2); border:1px solid var(--line); border-top-right-radius:4px;}
 .m.a{background:var(--panel); border:1px solid var(--line); border-top-left-radius:4px;}
@@ -151,7 +151,7 @@ form.in textarea:focus{outline:none;}
     <div class="err" id="gpuErr" hidden>이 기기나 브라우저에서는 쓸 수 없어요. 최신 크롬이나 엣지, 또는 최신 사파리에서 열어 주세요.</div>
   </section>
   <section class="chat" id="chat" hidden>
-    <div class="bar"><span class="cur"><i></i><span id="cur" data-notr></span></span><span class="sp"></span><span class="len" id="len" role="group" aria-label="답 길이" title="짧게는 1번, 보통은 3번, 길게는 7번 답을 만들어 가장 많은 쪽으로 답해요"><button type="button" data-l="0">짧게</button><button type="button" data-l="1">보통</button><button type="button" data-l="2">길게</button></span><button class="ghost" id="clear" type="button">새 대화</button><button class="ghost" id="change" type="button">모델 바꾸기</button></div>
+    <div class="bar"><span class="cur"><img class="ci" id="curico" alt="" width="26" height="26"><span id="cur" data-notr></span></span><span class="sp"></span><span class="len" id="len" role="group" aria-label="답 길이" title="짧게는 1번, 보통은 3번, 길게는 7번 답을 만들어 가장 많은 쪽으로 답해요"><button type="button" data-l="0">짧게</button><button type="button" data-l="1">보통</button><button type="button" data-l="2">길게</button></span><button class="ghost" id="clear" type="button">새 대화</button><button class="ghost" id="change" type="button">모델 바꾸기</button></div>
     <div class="log" id="log" aria-live="polite"></div>
     <div class="chips" id="chips" aria-label="예시 질문"></div>
     
@@ -173,7 +173,7 @@ form.in textarea:focus{outline:none;}
 var T=FFT.T, F=FFT.F, $=function(id){ return document.getElementById(id); };
 var DESC={'FF-Tools-1.7B':'가볍고 빨라요','FF-Tools-4B':'똑똑해요','FF-Tools-8B':'가장 똑똑해요'};
 var ACC={'FF-Tools-1.7B':'#5fd38d','FF-Tools-4B':'#6db3ff','FF-Tools-8B':'#b79bff'};
-var ICON={'FF-Tools-1.7B':'⚡','FF-Tools-4B':'💡','FF-Tools-8B':'🧠'};
+function ico(id){ return window.FFAI&&FFAI.icon?FFAI.icon(id):''; }
 var EXTRA={'FF-Tools-8B':'PC 추천 (그래픽 메모리 8GB 이상)'};
 var cur=null, hist=[], busy=false, models=[], jst={g:-1};   // jst: what the joke list said last in this conversation (jokes.js)
 /* how talkative the AI is: the chat page uses its own chat prompt (the trained spreadsheet prompt makes answers short) */
@@ -222,7 +222,7 @@ function renderModels(){
   var box=$('models'); box.innerHTML='';
   models.forEach(function(m){
     var b=document.createElement('button'); b.type='button'; b.className='mc'; b.disabled=!m.ready; b.setAttribute('data-id',m.id);
-    var ic=document.createElement('span'); ic.className='ico'; ic.textContent=ICON[m.id]||'✦'; ic.setAttribute('aria-hidden','true'); b.appendChild(ic);
+    var ic=document.createElement('img'); ic.className='ico'; ic.alt=''; ic.width=48; ic.height=48; ic.src=ico(m.id); b.appendChild(ic);
     var n=document.createElement('span'); n.className='n'; n.setAttribute('data-notr',''); var nm=String(m.name).replace(/^FF777\s*/,'').split(' '); n.textContent=nm[nm.length-1]; var v=document.createElement('small'); v.textContent=nm.slice(0,-1).join(' '); n.appendChild(v);
     var d=document.createElement('span'); d.className='d'; d.textContent=T(DESC[m.id]||'')+(EXTRA[m.id]?' · '+T(EXTRA[m.id]):'');
     var s=document.createElement('span'); s.className='s'; s.setAttribute('data-notr',''); s.textContent=m.ready?m.size:T('준비 중');
@@ -237,7 +237,7 @@ function choose(m,c){
   var go=seen(m.id)?Promise.resolve(true):ask(T('처음 한 번만 {0} 크기의 파일을 내려받아요. 와이파이에서 쓰는 걸 추천해요. 계속할까요?').replace('{0}',m.size));
   go.then(function(ok){
     if(!ok) return;
-    markSeen(m.id); gen++; cur=m; hist=[]; conv=c||null; $('cur').textContent=m.name; $('chat').style.setProperty('--ac',ACC[m.id]||'#ffc93c'); $('chips').hidden=!!(c&&c.msgs.length); greet();
+    markSeen(m.id); gen++; cur=m; hist=[]; conv=c||null; $('cur').textContent=m.name; $('curico').src=ico(m.id); $('chat').style.setProperty('--ac',ACC[m.id]||'#ffc93c'); $('chips').hidden=!!(c&&c.msgs.length); greet();
     if(c) restore(c);
     $('pick').hidden=true; $('hero').hidden=true; $('chat').hidden=false; $('q').focus();
   });
@@ -245,12 +245,12 @@ function choose(m,c){
 function add(cls,text){
   var hi=$('log').querySelector('.hi'); if(hi) hi.remove();
   var row=document.createElement('div'); row.className='row '+cls;
-  if(cls==='a'){ var av=document.createElement('span'); av.className='av'; av.setAttribute('aria-hidden','true'); av.textContent='🍟'; row.appendChild(av); }
+  if(cls==='a'){ var av=document.createElement('img'); av.className='av'; av.alt=''; av.width=32; av.height=32; av.src=ico(cur&&cur.id); row.appendChild(av); }
   var d=document.createElement('div'); d.className='m '+cls; d.setAttribute('data-notr',''); d.textContent=text; row.appendChild(d);
   $('log').appendChild(row); $('log').scrollTop=$('log').scrollHeight; return d; }
 function greet(){
   $('log').innerHTML=''; var h=document.createElement('div'); h.className='hi'; h.setAttribute('data-notr','');
-  h.innerHTML='<img src="../logo.svg" alt="" width="64" height="64"><b></b><span></span>'; h.querySelector('b').textContent=cur?cur.name:''; h.querySelector('span').textContent=T('궁금한 걸 물어보세요');
+  h.innerHTML='<img alt="" width="64" height="64"><b></b><span></span>'; h.querySelector('img').src=ico(cur&&cur.id)||'../logo.svg'; h.querySelector('b').textContent=cur?cur.name:''; h.querySelector('span').textContent=T('궁금한 걸 물어보세요');
   $('log').appendChild(h); }
 function prior(msgs){ return msgs.map(function(m){ return {role:m.r==='u'?'user':'assistant',content:m.x}; }); }   // the turns before an answer, sent along with 틀렸어요
 function restore(c){
