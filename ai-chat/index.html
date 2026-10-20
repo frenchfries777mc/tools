@@ -164,7 +164,7 @@ form.in textarea:focus{outline:none;}
 <script src="../ai.js?v=ai31"></script>
 <script src="../ai-wrong.js?v=3"></script>
 <script src="jokes.js?v=1"></script>
-<script src="vote.js?v=1"></script>
+<script src="vote.js?v=2"></script>
 <script src="https://frenchfries777mc.github.io/games/ff-lang.js"></script>
 <script src="https://frenchfries777mc.github.io/games/ff-auth.js"></script>
 <script>
@@ -283,7 +283,7 @@ function listOut(out,text,done){   // 모델 불러오기가 끝난 뒤에 생�
   FFAI.load(cur.id).then(function(){ if(!dead) typeOut(out,text,done); });
 }
 /* 여러 번 답해서 투표 (vote.js): 응답 중 화면에서 N개(신속 1, 보통 3, 노력 7) 답을 모두 만들고 투표를 끝낸 뒤에 가장 많은 쪽의 답 하나만 한 단어씩 내보내요.
-   같은 쪽이 60%보다 적으면 불확실 표시. 멈추기를 누르면 그때까지 모인 답으로 정해요. */
+   같은 쪽이 40%보다 적으면 불확실 표시. 멈추기를 누르면 그때까지 모인 답으로 정해요. */
 function voteAnswer(out,q,g,before,N){
   var all=[], tries=0, stopped=false;   // 만드는 동안은 생각 중 점만 보여요 (진행 글자는 없어요)
   function step(){
