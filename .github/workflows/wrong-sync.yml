@@ -1,0 +1,42 @@
+# 틀렸어요 자동 모으기: 서버(ff_ai_wrong)에 쌓인 틀렸어요를 3시간마다 wrong-inbox 가지의 inbox.jsonl 로 옮기고,
+# train/wrong/done.json 에 적힌 (처리가 끝난) 것은 서버에서 지워요. 사람이 할 일은 없어요.
+# 저장소 secret SUPABASE_SERVICE_KEY 가 있어야 해요 (없으면 아무것도 안 하고 끝나요). 설명: train/wrong/README.md
+name: Collect wrong answers
+
+on:
+  schedule:
+    - cron: '17 */3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: wrong-sync
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Move wrong answers from the server to the inbox
+        env:
+          SUPABASE_URL: https://kebsbuvuutilitwlvxzv.supabase.co
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: node train/wrong/sync.js
+      - name: Publish the inbox on the wrong-inbox branch
+        run: |
+          if [ ! -f train/wrong/inbox.jsonl ]; then echo "inbox 가 없어요 (secret 이 없거나 읽지 못했어요)"; exit 0; fi
+          cp train/wrong/inbox.jsonl /tmp/inbox.jsonl
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -q --orphan wrong-inbox
+          git rm -rf -q .
+          cp /tmp/inbox.jsonl inbox.jsonl
+          git add inbox.jsonl
+          git commit -q -m "틀렸어요 inbox $(date -u +%FT%TZ)"
+          git push -q -f origin HEAD:wrong-inbox
