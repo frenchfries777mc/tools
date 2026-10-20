@@ -43,10 +43,10 @@ FFT.add({
 '삭제':['Delete','Borrar','Supprimer','Löschen','削除'],
 '정말 지울까요?':['Really delete?','¿Borrar de verdad?','Vraiment supprimer ?','Wirklich löschen?','本当に消しますか?'],
 '이 기기에만 저장돼요':['Saved only on this device','Se guarda solo en este dispositivo','Enregistré uniquement sur cet appareil','Nur auf diesem Gerät gespeichert','この端末にだけ保存されます'],
-'답 길이':['Answer length','Longitud de respuesta','Longueur des réponses','Antwortlänge','答えの長さ'],
-'짧게':['Short','Corta','Courte','Kurz','短く'],
+'답 방식':['Answer mode','Modo de respuesta','Mode de réponse','Antwortmodus','答え方'],
+'신속':['Quick','Rápido','Rapide','Schnell','迅速'],
 '보통':['Normal','Normal','Normale','Normal','普通'],
-'길게':['Long','Larga','Longue','Lang','長く'],
+'노력':['Effort','Esfuerzo','Effort','Mühe','努力'],
 '만든 곳으로 가기':['Back to Tools','Volver a Tools','Retour à Tools','Zurück zu Tools','Toolsへ戻る']
 });
 </script>
@@ -142,7 +142,7 @@ form.in textarea:focus{outline:none;}
 <main>
   <section class="hero" id="hero">
     <div><span class="eyebrow" data-notr>AI Chat</span><h1><span>AI 체험</span></h1>
-    <p class="lead">사이트의 자체 AI와 이야기해 봐요. 내 기기 안에서 돌아가서 대화가 밖으로 나가지 않아요. 틀린 답에는 👎 틀렸어요를 눌러 알려 주세요. 답 길이를 보통이나 길게로 하면 답을 3개, 7개 만들어 투표한 뒤 가장 많이 나온 답을 내놓아요(서로 많이 다르면 불확실하다고 표시해요, 시간이 더 걸려요).</p></div>
+    <p class="lead">사이트의 자체 AI와 이야기해 봐요. 내 기기 안에서 돌아가서 대화가 밖으로 나가지 않아요. 틀린 답에는 👎 틀렸어요를 눌러 알려 주세요. 답 방식을 보통이나 노력으로 하면 답을 3개, 7개 만들어 투표한 뒤 가장 많이 나온 답을 내놓아요(서로 많이 다르면 불확실하다고 표시해요, 시간이 더 걸려요).</p></div>
     <img class="hero-lg" src="../logo.svg" alt="" width="150" height="150">
   </section>
   <section id="pick">
@@ -151,7 +151,7 @@ form.in textarea:focus{outline:none;}
     <div class="err" id="gpuErr" hidden>이 기기나 브라우저에서는 쓸 수 없어요. 최신 크롬이나 엣지, 또는 최신 사파리에서 열어 주세요.</div>
   </section>
   <section class="chat" id="chat" hidden>
-    <div class="bar"><span class="cur"><img class="ci" id="curico" alt="" width="26" height="26"><span id="cur" data-notr></span></span><span class="sp"></span><span class="len" id="len" role="group" aria-label="답 길이" title="짧게는 답 1개, 보통은 3개, 길게는 7개를 만들어 투표한 뒤 가장 많은 쪽으로 답해요"><button type="button" data-l="0">짧게</button><button type="button" data-l="1">보통</button><button type="button" data-l="2">길게</button></span><button class="ghost" id="clear" type="button">새 대화</button><button class="ghost" id="change" type="button">모델 바꾸기</button></div>
+    <div class="bar"><span class="cur"><img class="ci" id="curico" alt="" width="26" height="26"><span id="cur" data-notr></span></span><span class="sp"></span><span class="len" id="len" role="group" aria-label="답 방식" title="신속은 답 1개, 보통은 3개, 노력은 7개를 만들어 투표한 뒤 가장 많은 쪽으로 답해요"><button type="button" data-l="0">신속</button><button type="button" data-l="1">보통</button><button type="button" data-l="2">노력</button></span><button class="ghost" id="clear" type="button">새 대화</button><button class="ghost" id="change" type="button">모델 바꾸기</button></div>
     <div class="log" id="log" aria-live="polite"></div>
     <div class="chips" id="chips" aria-label="예시 질문"></div>
     
@@ -180,7 +180,7 @@ var cur=null, hist=[], busy=false, models=[], jst={g:-1};   // jst: what the jok
 var LEN=[{tok:220, ask:'Answer in 1 to 3 short sentences.'}, {tok:520, ask:'Answer in 3 to 5 sentences with one concrete example.'}, {tok:1000, ask:'Be talkative: answer in 6 to 10 sentences, explain the idea step by step with a concrete example, then end with a friendly follow-up question or tip.'}];
 var lv=2; try{ var sv=parseInt(localStorage.getItem('ffchat.len'),10); if(sv>=0&&sv<=2) lv=sv; }catch(e){}
 function chatSys(){ return 'You are chatting with a curious person. '+LEN[lv].ask+' Be warm and natural. Plain text only: no markdown tables, no code fences. Use the language the question is written in.'; }
-function showLen(){ Array.prototype.forEach.call(document.querySelectorAll('#len button'),function(b){ b.classList.toggle('on',+b.dataset.l===lv); b.textContent=T(['짧게','보통','길게'][+b.dataset.l]); }); }
+function showLen(){ Array.prototype.forEach.call(document.querySelectorAll('#len button'),function(b){ b.classList.toggle('on',+b.dataset.l===lv); b.textContent=T(['신속','보통','노력'][+b.dataset.l]); }); }
 /* conversations are kept only in this browser (localStorage), newest first */
 var CK='ffchat.convs.v1', CAP=30, conv=null, gen=0;   // gen changes whenever the open conversation changes, so a late answer never lands in another one
 function convLoad(){ var a=[]; try{ a=JSON.parse(localStorage.getItem(CK)||'[]'); }catch(e){} return Array.isArray(a)?a.filter(function(c){ return c&&c.id&&Array.isArray(c.msgs); }):[]; }
@@ -282,7 +282,7 @@ function listOut(out,text,done){   // 모델 불러오기가 끝난 뒤에 생�
   var dead=false, run=fake={cancel:function(){ dead=true; fake=null; done(null); }};
   FFAI.load(cur.id).then(function(){ if(!dead) typeOut(out,text,done); });
 }
-/* 여러 번 답해서 투표 (vote.js): 응답 중 화면에서 N개(짧게 1, 보통 3, 길게 7) 답을 모두 만들고 투표를 끝낸 뒤에 가장 많은 쪽의 답 하나만 한 단어씩 내보내요.
+/* 여러 번 답해서 투표 (vote.js): 응답 중 화면에서 N개(신속 1, 보통 3, 노력 7) 답을 모두 만들고 투표를 끝낸 뒤에 가장 많은 쪽의 답 하나만 한 단어씩 내보내요.
    같은 쪽이 60%보다 적으면 불확실 표시. 멈추기를 누르면 그때까지 모인 답으로 정해요. */
 function voteAnswer(out,q,g,before,N){
   var all=[], tries=0, stopped=false;   // 만드는 동안은 생각 중 점만 보여요 (진행 글자는 없어요)
@@ -327,7 +327,7 @@ function send(q){
   dots(out); setBusy(true);
   trim();
   var N=FFVote.TIMES[lv];
-  if(N>1){ voteAnswer(out,q,g,before,N).then(function(){ setBusy(false); }); return; }   // 보통·길게: 답 여러 개를 만들고 투표한 뒤에 내보내요
+  if(N>1){ voteAnswer(out,q,g,before,N).then(function(){ setBusy(false); }); return; }   // 보통·노력: 답 여러 개를 만들고 투표한 뒤에 내보내요
   FFAI.ask({model:cur.id, prose:true, chat:true, maxTokens:LEN[lv].tok, facts:true, question:q, history:hist.slice(), system:chatSys(), prompt:q,
     onText:function(t){ got=t; out.textContent=t; $('log').scrollTop=$('log').scrollHeight; }}).then(function(r){
     var a=String(typeof r==='string'?r:(r&&r.text)||got||'').trim();
