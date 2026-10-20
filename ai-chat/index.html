@@ -249,11 +249,12 @@ function greet(){
   $('log').innerHTML=''; var h=document.createElement('div'); h.className='hi'; h.setAttribute('data-notr','');
   h.innerHTML='<img src="../logo.svg" alt="" width="64" height="64"><b></b><span></span>'; h.querySelector('b').textContent=cur?cur.name:''; h.querySelector('span').textContent=T('궁금한 걸 물어보세요');
   $('log').appendChild(h); }
+function prior(msgs){ return msgs.map(function(m){ return {role:m.r==='u'?'user':'assistant',content:m.x}; }); }   // the turns before an answer, sent along with 틀렸어요
 function restore(c){
   var lastQ='';
-  c.msgs.forEach(function(m){
+  c.msgs.forEach(function(m,i){
     if(m.r==='u'){ add('u',m.x); lastQ=m.x; hist.push({role:'user',content:m.x}); }
-    else{ var d=add('a',m.x); hist.push({role:'assistant',content:m.x}); FFWrong.attach(d,{tool:'ai-chat',question:lastQ,answer:m.x,model:'local:'+cur.id}); }
+    else{ var d=add('a',m.x); hist.push({role:'assistant',content:m.x}); FFWrong.attach(d,{tool:'ai-chat',question:lastQ,answer:m.x,model:'local:'+cur.id,history:prior(c.msgs.slice(0,i-1))}); }
   });
   while(hist.length&&hist[hist.length-1].role==='user') hist.pop();   // a question that never got an answer is not part of the memory
   $('log').scrollTop=$('log').scrollHeight;
@@ -263,6 +264,7 @@ function trim(){ var n=0, i=hist.length; while(i>0){ n+=hist[i-1].content.length
 function setBusy(b){ busy=b; $('send').textContent=T(b?'멈추기':'보내기'); $('send').type=b?'button':'submit'; }
 function send(q){
   q=String(q||'').trim(); if(!q||busy||!cur) return;
+  var before=prior(conv?conv.msgs:[]);
   $('q').value=''; $('chips').hidden=true; add('u',q); convPush('u',q);
   var out=add('a',''), got='', g=gen, mid=cur.id; dots(out); setBusy(true);
   trim();
@@ -270,7 +272,7 @@ function send(q){
     onText:function(t){ got=t; out.textContent=t; $('log').scrollTop=$('log').scrollHeight; }}).then(function(r){
     var a=String(typeof r==='string'?r:(r&&r.text)||got||'').trim();
     out.textContent=a||T('답하지 못했어요');
-    if(a){ if(g===gen){ hist.push({role:'user',content:q},{role:'assistant',content:a}); convPush('a',a); } FFWrong.attach(out,{tool:'ai-chat',question:q,answer:a,model:'local:'+cur.id}); }
+    if(a){ if(g===gen){ hist.push({role:'user',content:q},{role:'assistant',content:a}); convPush('a',a); } FFWrong.attach(out,{tool:'ai-chat',question:q,answer:a,model:'local:'+cur.id,history:before}); }
     else out.classList.add('bad');
   },function(e){
     if(got){ out.textContent=got; if(g===gen){ convPush('a',got); hist.push({role:'user',content:q},{role:'assistant',content:got}); } return; }
