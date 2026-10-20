@@ -31,7 +31,7 @@
 5. 코드를 받아요: `git clone https://github.com/frenchfries777mc/tools && cd tools`
 
 ## 실행
-Hugging Face **Write** 토큰(`hf_`로 시작)이 필요해요. 파일에 저장하지 않고, 실행하면 숨김 입력 칸이 떠요.
+Hugging Face **Write** 토큰(`hf_`로 시작)이 필요해요. 파일에 저장하지 않고, 실행하면 입력 칸이 떠요(글자가 그대로 보여요. 붙여넣기는 창 안에서 오른쪽 클릭). 매번 묻지 않게 하려면 `export HF_TOKEN=hf_...` 를 먼저 입력해 두세요.
 
 먼저 **짧은 시험**(1분 안에 메모리가 되는지만 봐요):
 ```
