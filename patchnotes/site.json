@@ -10,7 +10,8 @@
     "모든 페이지 하단에 © 2026 Frenchfries777 · CC BY-NC-ND 4.0 표기 추가",
     "저장소에 라이선스 파일(LICENSE) 추가: 원작자 표기 필수, 상업적 이용 금지, 변경 금지",
     "AI 모델 FF777의 Qwen3(Apache 2.0) 기반 고지"
-   ]
+   ],
+   "tr": {"en": {"title": "Copyright notice", "items": ["Added © 2026 Frenchfries777 · CC BY-NC-ND 4.0 at the bottom of every page", "Added a license file (LICENSE) to the repository: attribution required, no commercial use, no derivatives", "Notice that the FF777 AI models are based on Qwen3 (Apache 2.0)"]}, "es": {"title": "Aviso de derechos de autor", "items": ["Se añadió © 2026 Frenchfries777 · CC BY-NC-ND 4.0 al pie de todas las páginas", "Se añadió un archivo de licencia (LICENSE) al repositorio: reconocimiento obligatorio, sin uso comercial, sin obras derivadas", "Aviso de que los modelos de IA FF777 se basan en Qwen3 (Apache 2.0)"]}, "fr": {"title": "Mention de droits d’auteur", "items": ["Ajout de © 2026 Frenchfries777 · CC BY-NC-ND 4.0 en bas de chaque page", "Ajout d’un fichier de licence (LICENSE) au dépôt : attribution obligatoire, pas d’utilisation commerciale, pas de modification", "Mention que les modèles d’IA FF777 sont basés sur Qwen3 (Apache 2.0)"]}, "de": {"title": "Urheberrechtshinweis", "items": ["© 2026 Frenchfries777 · CC BY-NC-ND 4.0 unten auf jeder Seite hinzugefügt", "Lizenzdatei (LICENSE) im Repository hinzugefügt: Namensnennung Pflicht, keine kommerzielle Nutzung, keine Bearbeitung", "Hinweis, dass die KI-Modelle FF777 auf Qwen3 (Apache 2.0) basieren"]}, "ja": {"title": "著作権表示", "items": ["すべてのページの下に © 2026 Frenchfries777 · CC BY-NC-ND 4.0 の表示を追加", "リポジトリにライセンスファイル（LICENSE）を追加：作者の表示が必須、商用利用禁止、改変禁止", "AIモデルFF777がQwen3（Apache 2.0）をもとにしていることを表示"]}}
   },
   {
    "date": "2026-10-19",

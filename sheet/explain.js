@@ -50,10 +50,10 @@ function explain(raw,o){
   var src=raw.slice(1), ast;
   try{ ast=o.parse(src); }
   catch(e){
-    var p=parens(src), hint='';
-    if(p.close>p.open) hint='닫는 괄호 )가 '+(p.close-p.open)+'개 더 많아요. 끝이나 중간에서 하나를 지워 보세요.';
-    else if(p.open>p.close) hint='여는 괄호 (가 '+(p.open-p.close)+'개 더 많아요. 닫는 괄호 )를 더 넣어 보세요.';
-    else hint='괄호 개수는 맞아요. 쉼표, 따옴표, 함수 이름 철자를 확인해 보세요.';
+    var p=parens(src), hint='', F=o.F||function(t,n){ return t.replace('{0}',n); };   // o.F: the page's translator (FFT.F)
+    if(p.close>p.open) hint=F('닫는 괄호 )가 {0}개 더 많아요. 끝이나 중간에서 하나를 지워 보세요.',p.close-p.open);
+    else if(p.open>p.close) hint=F('여는 괄호 (가 {0}개 더 많아요. 닫는 괄호 )를 더 넣어 보세요.',p.open-p.close);
+    else hint=F('괄호 개수는 맞아요. 쉼표, 따옴표, 함수 이름 철자를 확인해 보세요.');
     return {kind:'bad',hint:hint,open:p.open,close:p.close};
   }
   if(ast.k==='fn'&&ast.n==='AI'){
