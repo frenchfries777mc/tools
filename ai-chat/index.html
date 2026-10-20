@@ -183,7 +183,7 @@ var EXTRA={'FF-Tools-8B':'PC 추천 (그래픽 메모리 8GB 이상)'};
 var cur=null, hist=[], busy=false, models=[], jst={g:-1};   // jst: what the joke list said last in this conversation (jokes.js)
 /* how talkative the AI is: the chat page uses its own chat prompt (the trained spreadsheet prompt makes answers short) */
 var LEN=[{tok:220, ask:'Answer in 1 to 3 short sentences.'}, {tok:520, ask:'Answer in 3 to 5 sentences with one concrete example.'}, {tok:1000, ask:'Be talkative: answer in 6 to 10 sentences, explain the idea step by step with a concrete example, then end with a friendly follow-up question or tip.'}];
-var lv=2; try{ var sv=parseInt(localStorage.getItem('ffchat.len'),10); if(sv>=0&&sv<=2) lv=sv; }catch(e){}
+var lv=1; try{ var sv=parseInt(localStorage.getItem('ffchat.len'),10); if(sv>=0&&sv<=2) lv=sv; }catch(e){}
 function chatSys(){ return 'You are chatting with a curious person. '+LEN[lv].ask+' Be warm and natural. Plain text only: no markdown tables, no code fences. Use the language the question is written in.'; }
 function showLen(){ Array.prototype.forEach.call(document.querySelectorAll('#len button'),function(b){ b.classList.toggle('on',+b.dataset.l===lv); b.textContent=T(['신속','보통','노력'][+b.dataset.l]); }); }
 /* conversations are kept only in this browser (localStorage), newest first */
