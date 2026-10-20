@@ -91,8 +91,9 @@ FFT.add({
   html,body{margin:0; padding:0; background:var(--bg); color:var(--text);}
   body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif; font-size:16px; line-height:1.6; min-height:100vh;
     padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
-    background-image:radial-gradient(ellipse 900px 520px at 10% -10%, rgba(255,201,60,.10), transparent 60%), radial-gradient(ellipse 800px 600px at 110% 30%, rgba(63,224,143,.07), transparent 60%), radial-gradient(ellipse 800px 600px at -10% 90%, rgba(61,127,224,.12), transparent 60%);
-    background-attachment:fixed;}
+    background:none;}
+  html{background-image:radial-gradient(ellipse 900px 520px at 10% -10%, rgba(255,201,60,.10), transparent 60%), radial-gradient(ellipse 800px 600px at 110% 30%, rgba(63,224,143,.07), transparent 60%), radial-gradient(ellipse 800px 600px at -10% 90%, rgba(61,127,224,.12), transparent 60%);
+  background-attachment:fixed;}
   .wrap{max-width:1120px; margin:0 auto; padding:0 22px;}
   header{display:flex; align-items:center; justify-content:space-between; padding:26px 0 0;}
   .logo{display:flex; align-items:center; gap:10px; font-family:'Oswald',sans-serif; font-weight:600; font-size:20px; letter-spacing:.04em; color:var(--text); text-decoration:none;}
@@ -138,6 +139,43 @@ FFT.add({
   .hero h1 span{background:linear-gradient(90deg,var(--fry),var(--fry2)); -webkit-background-clip:text; background-clip:text; color:transparent;}
   .hero{display:flex; align-items:center; justify-content:space-between; gap:28px;}
   .hero .hero-t{min-width:0;}
+  /* 첫 화면 배경: 이 사이트 도구·게임 장면이 번갈아 천천히 나타나요 (오른쪽에서 왼쪽으로 사라지게 깔려서 글자는 그대로 읽혀요) */
+  .hero{position:relative;}
+  body{overflow-x:clip;}
+  .hero-bg{position:absolute; z-index:-1; left:50%; width:100vw; margin-left:-50vw; top:-130px; bottom:-30px; pointer-events:none; overflow:hidden; -webkit-mask-image:linear-gradient(180deg,#000 0,#000 66%,transparent 100%); mask-image:linear-gradient(180deg,#000 0,#000 66%,transparent 100%);}
+  .hero-bg i{position:absolute; inset:0; opacity:0; animation:hbFade 32s linear infinite;}
+  .hero-bg i:nth-child(1){animation-delay:-2s;} .hero-bg i:nth-child(2){animation-delay:6s;} .hero-bg i:nth-child(3){animation-delay:14s;} .hero-bg i:nth-child(4){animation-delay:22s;}
+  .hero-bg img,.hero-bg video{position:absolute; top:0; right:0; width:72%; height:100%; object-fit:cover; opacity:.8; -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 48%); mask-image:linear-gradient(90deg,transparent 0,#000 48%); animation:hbKen 32s ease-in-out infinite alternate;}
+  .hero-bg i::after{content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 80% at 82% 55%, color-mix(in srgb,var(--c) 38%,transparent), transparent 70%), radial-gradient(ellipse 50% 60% at 8% 30%, color-mix(in srgb,var(--c) 14%,transparent), transparent 70%);}
+  .hero-bg::after{content:''; position:absolute; inset:0; background:linear-gradient(180deg,color-mix(in srgb,var(--bg) 90%,transparent) 0,color-mix(in srgb,var(--bg) 55%,transparent) 14%,transparent 34%);}
+  @keyframes hbFade{0%{opacity:0;} 5%{opacity:1;} 25%{opacity:1;} 31%{opacity:0;} 100%{opacity:0;}}
+  @keyframes hbKen{from{transform:scale(1.03) translate3d(0,0,0);} to{transform:scale(1.14) translate3d(-2%,-2%,0);}}
+  @keyframes hbRise{from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:none;}}
+  .hero-t>*:not(.ffs){animation:hbRise .6s cubic-bezier(.2,.7,.2,1) both;} .hero-t>:nth-child(2){animation-delay:.07s;} .hero-t>:nth-child(3){animation-delay:.14s;} .hero-t>:nth-child(4){animation-delay:.21s;} .hero-t>:nth-child(5){animation-delay:.28s;}
+  @media(max-width:640px){ .hero-bg img,.hero-bg video{width:100%; -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 30%); mask-image:linear-gradient(90deg,transparent 0,#000 30%); opacity:.55;} }
+  @media(prefers-reduced-motion:reduce){ .hero-bg i{animation:none;} .hero-bg i:first-child{opacity:1;} .hero-bg img,.hero-bg video,.hero-t>*:not(.ffs){animation:none;} }
+  /* 도구 화면은 글자가 빽빽해서 더 흐리고 어둡게 깔아요 */
+  .hero-bg img{opacity:.42; filter:blur(1.5px) saturate(1.15);}
+  /* 숫자로 보는 줄 */
+  .hstats{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:0 0 18px; padding:18px 8px; border:1px solid var(--line); border-radius:18px; background:color-mix(in srgb,var(--panel) 80%,transparent); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);}
+  .hstats div{text-align:center; padding:2px 6px; border-left:1px solid var(--line);} .hstats div:first-child{border-left:0;}
+  .hstats b{display:block; font-family:'Oswald','Noto Sans KR',sans-serif; font-weight:700; font-size:clamp(26px,4.2vw,42px); line-height:1.1; background:linear-gradient(90deg,var(--fry),var(--fry2)); -webkit-background-clip:text; background-clip:text; color:transparent; font-variant-numeric:tabular-nums;}
+  .hstats span{display:block; margin-top:4px; font-size:13px; color:var(--dim);}
+  @media(max-width:640px){ .hstats{gap:4px; padding:14px 4px;} .hstats div{padding:2px 2px;} .hstats span{font-size:12px;} }
+  /* 게임 카드: 스크롤하면 차례로 나타나고, 올리면 장면이 커지며 대표색 빛이 번져요 */
+  .game.fs{--gc:63,224,143;}
+  .game.bh{--gc:255,179,71;}
+  .game.sl{--gc:255,106,138;}
+  .game.fl{--gc:122,140,255;}
+  .game{--rx:0deg; --ry:0deg; --mx:50%; --my:30%;}
+  .game.rv{opacity:0; transform:translateY(34px);}
+  .game.rv.in{opacity:1; transform:none; transition:opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1);}
+  .game.in.tilt:hover{transform:perspective(1000px) translateY(-6px) rotateX(var(--rx)) rotateY(var(--ry)); transition:transform .12s ease-out, box-shadow .2s, border-color .2s;}
+  .game:hover{border-color:rgba(var(--gc),.55); box-shadow:0 24px 54px -16px rgba(var(--gc),.42);}
+  .game::after{content:''; position:absolute; inset:0; z-index:2; pointer-events:none; opacity:0; transition:opacity .25s; background:radial-gradient(420px circle at var(--mx) var(--my), rgba(var(--gc),.16), transparent 62%);}
+  .game:hover::after{opacity:1;}
+  .game:hover .shot img{transform:scale(1.09);}
+  @media(prefers-reduced-motion:reduce){ .game.rv{opacity:1; transform:none;} .game.in.tilt:hover{transform:translateY(-4px);} }
   .hero-lg{order:2; flex:0 0 auto; width:clamp(150px,21vw,230px); height:auto; filter:drop-shadow(0 18px 50px rgba(255,150,40,.28)); transform:rotate(4deg);}
   @media(max-width:640px){ .hero{flex-direction:column; align-items:flex-start; gap:12px;} .hero-lg{order:0; width:92px; transform:none;} }
   .hero p{color:var(--dim); font-size:18px; margin:16px 0 0; max-width:46ch;}
@@ -223,12 +261,19 @@ FFT.add({
   </header>
 
   <section class="hero">
+    <div class="hero-bg" aria-hidden="true"><i style="--c:#3fe08f"><img src="sheet.webp" alt=""></i><i style="--c:#ffb347"><img src="blocks.webp" alt=""></i><i style="--c:#ff6a8a"><img src="slides.webp" alt=""></i><i style="--c:#7a8cff"><img src="lab.webp" alt=""></i></div>
     <img class="hero-lg" src="logo.svg" alt="" width="230" height="230">
     <div class="hero-t">
     <span class="eyebrow">Handy Tools</span>
     <h1>Frenchfries777<br><span>Tools</span></h1>
     <p>공부하고 만들 때 쓰는 도구 모음이에요. 링크를 열면 설치 없이 바로 써요. AI는 Fry Sheet의 수식·그래프·표 만들기에 가장 잘 맞아요.</p>
     </div>
+  </section>
+
+  <section class="hstats" id="heroStats" aria-label="숫자로 보기">
+    <div><b data-n="4" id="hsCount">4</b><span>도구</span></div>
+    <div><b data-n="6">6</b><span>언어</span></div>
+    <div><b data-n="0">0</b><span>필요한 설치</span></div>
   </section>
 
   <section class="games" id="tools">
@@ -369,5 +414,26 @@ FFT.add({
 </script>
 <script src="https://frenchfries777mc.github.io/games/ff-splash.js" defer></script>
 <script src="pwa.js" defer></script>
+<script>
+(function(){
+  var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var io=('IntersectionObserver' in window)?IntersectionObserver:null;
+  /* 숫자 올라가기: 처음 보일 때 한 번 */
+  var st=document.getElementById('heroStats');
+  function count(b){ var n=+b.getAttribute('data-n')||0; if(rm||!n){ b.textContent=n; return; } var t0=null; function f(t){ if(!t0)t0=t; var p=Math.min(1,(t-t0)/1100); b.textContent=Math.round(n*(1-Math.pow(1-p,3))); if(p<1)requestAnimationFrame(f); } b.textContent=0; requestAnimationFrame(f); }
+  if(st){ var bs=[].slice.call(st.querySelectorAll('b'));
+    if(io){ new io(function(es,ob){ es.forEach(function(e){ if(e.isIntersecting){ bs.forEach(count); ob.disconnect(); } }); },{threshold:.4}).observe(st); } else bs.forEach(count);
+  }
+  /* 게임 카드: 스크롤하면 차례로 나타나기, 마우스를 따라 빛과 기울기 */
+  var hc=document.getElementById('hsCount'); if(hc){ var nn=document.querySelectorAll('.games .game').length; if(nn){ hc.setAttribute('data-n',nn); hc.textContent=nn; } }
+  var cards=[].slice.call(document.querySelectorAll('.games .game'));
+  cards.forEach(function(c,i){ c.style.transitionDelay=''; if(!rm&&io){ c.classList.add('rv'); } else c.classList.add('in'); });
+  if(!rm&&io){ var o2=new io(function(es){ es.forEach(function(e){ if(e.isIntersecting){ var el=e.target, i=cards.indexOf(el)%3; setTimeout(function(){ el.classList.add('in'); setTimeout(function(){ el.classList.add('tilt'); el.style.transitionDelay=''; },800); },i*110); o2.unobserve(el); } }); },{threshold:.12}); cards.forEach(function(c){ o2.observe(c); }); }
+  else cards.forEach(function(c){ c.classList.add('tilt'); });
+  if(window.matchMedia&&matchMedia('(hover:hover) and (pointer:fine)').matches&&!rm){
+    cards.forEach(function(c){ c.addEventListener('pointermove',function(e){ var r=c.getBoundingClientRect(), x=(e.clientX-r.left)/r.width, y=(e.clientY-r.top)/r.height; c.style.setProperty('--mx',(x*100)+'%'); c.style.setProperty('--my',(y*100)+'%'); c.style.setProperty('--ry',((x-.5)*5).toFixed(2)+'deg'); c.style.setProperty('--rx',((.5-y)*4).toFixed(2)+'deg'); }); c.addEventListener('pointerleave',function(){ c.style.setProperty('--rx','0deg'); c.style.setProperty('--ry','0deg'); }); });
+  }
+})();
+</script>
 </body>
 </html>
