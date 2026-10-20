@@ -47,7 +47,12 @@ FFT.add({
 '신속':['Quick','Rápido','Rapide','Schnell','迅速'],
 '보통':['Normal','Normal','Normale','Normal','普通'],
 '노력':['Effort','Esfuerzo','Effort','Mühe','努力'],
-'만든 곳으로 가기':['Back to Tools','Volver a Tools','Retour à Tools','Zurück zu Tools','Toolsへ戻る']
+'만든 곳으로 가기':['Back to Tools','Volver a Tools','Retour à Tools','Zurück zu Tools','Toolsへ戻る'],
+/* translations for i18n-todo 2026-10-20 (AI v35-v40) */
+'멈췄어요':['Stopped','Detenido','Arrêté','Gestoppt','止めました'],
+'답 방식을 보통이나 노력으로 하면 답을 3개, 7개 만들어 투표한 뒤 가장 많이 나온 답을 내놓아요(서로 많이 다르면 불확실하다고 표시해요, 시간이 더 걸려요).':['In Normal or Effort mode it writes 3 or 7 answers, votes, and gives the most common one (if they differ a lot it says it may be unsure; this takes longer).','En modo Normal o Esfuerzo escribe 3 o 7 respuestas, vota y da la más repetida (si difieren mucho, avisa de que puede no estar segura; tarda más).','En mode Normale ou Effort, elle écrit 3 ou 7 réponses, vote et donne la plus fréquente (si elles diffèrent beaucoup, elle signale qu’elle n’est peut-être pas sûre ; c’est plus long).','Im Modus Normal oder Mühe schreibt sie 3 bzw. 7 Antworten, stimmt ab und gibt die häufigste aus (weichen sie stark ab, weist sie auf mögliche Unsicherheit hin; das dauert länger).','答え方を「普通」か「努力」にすると、答えを3つ・7つ作って投票し、いちばん多かった答えを出します（大きく違うときは不確かと表示します。時間が長くかかります）。'],
+'신속은 답 1개, 보통은 3개, 노력은 7개를 만들어 투표한 뒤 가장 많은 쪽으로 답해요':['Quick writes 1 answer, Normal 3 and Effort 7, then it votes and answers with the most common one','Rápido escribe 1 respuesta, Normal 3 y Esfuerzo 7; luego vota y responde con la más repetida','Rapide écrit 1 réponse, Normale 3 et Effort 7, puis elle vote et répond avec la plus fréquente','Schnell schreibt 1 Antwort, Normal 3 und Mühe 7, dann wird abgestimmt und die häufigste genommen','迅速は答え1つ、普通は3つ、努力は7つ作って投票し、いちばん多い答えで答えます'],
+'답변이 불확실할 수도 있습니다':['This answer may be uncertain','Esta respuesta puede no ser fiable','Cette réponse est peut-être incertaine','Diese Antwort ist möglicherweise unsicher','この答えは不確かかもしれません']
 });
 </script>
 <style>
@@ -163,7 +168,7 @@ form.in textarea:focus{outline:none;}
 <script src="../ai-prompts.js"></script>
 <script src="../ai.js?v=ai31"></script>
 <script src="../ai-wrong.js?v=3"></script>
-<script src="jokes.js?v=1"></script>
+<script src="jokes.js?v=2"></script>
 <script src="vote.js?v=2"></script>
 <script src="https://frenchfries777mc.github.io/games/ff-lang.js"></script>
 <script src="https://frenchfries777mc.github.io/games/ff-auth.js"></script>
