@@ -16,5 +16,9 @@ const S=require('./sync.js'), fs=require('fs'), os=require('os'), path=require('
   assert.strictEqual(S.inboxText(rows,[1]).trim().split('\n').length,1);   // done ids stay out
   const none=await S.run({},{fetch:fake}); assert(none.skipped);          // no secret: nothing happens
   const dry=await S.run({SUPABASE_URL:'https://x',SUPABASE_SERVICE_KEY:'k'},{fetch:fake,dry:true,inboxFile:inbox,doneFile}); assert.strictEqual(dry.deleted,0);
-  console.log('4 tests passed');
+  let hdr; await S.run({SUPABASE_URL:'https://x',SUPABASE_SERVICE_KEY:'sb_secret_abc'},{fetch:async(u,o)=>{ hdr=o.headers; return {ok:true,json:async()=>[],text:async()=>''}; },inboxFile:inbox,doneFile,dry:true});
+  assert.deepStrictEqual(hdr,{apikey:'sb_secret_abc'});   // 새 키는 Bearer 없이
+  await S.run({SUPABASE_URL:'https://x',SUPABASE_SERVICE_KEY:'eyJabc'},{fetch:async(u,o)=>{ hdr=o.headers; return {ok:true,json:async()=>[],text:async()=>''}; },inboxFile:inbox,doneFile,dry:true});
+  assert.strictEqual(hdr.Authorization,'Bearer eyJabc');
+  console.log('6 tests passed');
 })().catch(e=>{ console.error(e); process.exit(1); });
