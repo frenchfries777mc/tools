@@ -119,6 +119,7 @@ function ruleHit(s,v){
   if(f.op==='ne') return E.cmpVals(v,a)!==0;
   return false;
 }
+var AIRE=/^=.*\bAI\s*\(/i;   // a cell the AI fills (=AI(...)) or wrote (cell.ai); cell.ar = 1 checked right, 2 reported wrong
 function paintCell(r,c){
   var td=tdRaw(r,c); if(!td) return;
   var mg=sh.merges.length?mergeAt(r,c):null; if(mg&&(mg.r1!==r||mg.c1!==c)) return;
@@ -129,6 +130,7 @@ function paintCell(r,c){
   if(cell&&cell.cb&&!E.isErr(v)){ td.innerHTML='<span class="cb'+(v===true?' on':'')+'" data-cb="1"></span>'; cls='ctr'+(cell.al?' al-'+cell.al:''); }
   else td.textContent=E.formatValue(v,cell&&cell.nf);
   if(cell&&cell.nt) cls+=' nt';
+  if(cell&&(cell.ai||(typeof cell.v==='string'&&AIRE.test(cell.v)))) cls+=cell.ar===1?' aiok':cell.ar===2?' aibad':' aim';
   if(sh.lock&&locked(r,c)) cls+=' lk';
   if(sh.flt&&r===sh.flt.r1&&c>=sh.flt.c1&&c<=sh.flt.c2) cls+=' flt'+(sh.flt.h[c]&&sh.flt.h[c].length?' flton':'');
   td.className=cls+fzCls(r,c)+(r===act.r&&c===act.c?' act':'');
@@ -230,8 +232,36 @@ function selName(){
   var nm=doc.names.filter(function(n){ var p=E.parseNameRef(n.ref); return p&&p.sh===sh.name&&p.t==='rng'&&!p.col&&p.a.r===sel.r1&&p.a.c===sel.c1&&p.b.r===sel.r2&&p.b.c===sel.c2||p&&p.sh===sh.name&&p.t==='ref'&&p.a.r===sel.r1&&p.a.c===sel.c1&&sel.r1===sel.r2&&sel.c1===sel.c2; })[0];
   return nm?nm.name:E.rangeStr(sel);
 }
+/* ---------- 수식 풀이 (sheet/explain.js): the formula of the active cell, step by step, in Korean ---------- */
+var fxDesc=null;
+function fxDescOf(n){ if(!fxDesc){ fxDesc={}; (window.FNDOC||[]).forEach(function(f){ fxDesc[f[1]]=f[3]||''; }); } return fxDesc[n]||''; }
+function fxShow(v){
+  if(v&&typeof v==='object'&&!E.isErr(v)) return v.rows?F('{0}줄 × {1}칸 표',v.rows.length,v.rows[0]?v.rows[0].length:0):T('칸 범위');
+  if(E.isErr(v)) return v.e; if(v==null||v==='') return T('(빈칸)'); return E.formatValue(v);
+}
+function fxVal(n){ try{ return fxShow(eng.ev(n,doc.active)); }catch(e){ return E.isErr(e)?e.e:'#ERROR!'; } }
+function fxText(t,cls){ var s=document.createElement('span'); if(cls) s.className=cls; s.textContent=t; return s; }
+function fxRender(){
+  var p=$('fxPanel'); if(p.hidden) return;
+  var cell=sh.cells[K(act.r,act.c)], raw=cell&&cell.v!=null?String(cell.v):'', x=window.FSExplain.explain(raw,{parse:E.parse,val:fxVal,ref:fxVal,desc:fxDescOf,addr:E.addr,rangeStr:E.rangeStr});
+  p.textContent=''; var h=document.createElement('h4'), cl=document.createElement('button'); cl.className='fxx'; cl.type='button'; cl.textContent='×'; cl.setAttribute('aria-label',T('닫기')); cl.onclick=function(){ fxToggle(false); };
+  p.appendChild(cl); h.appendChild(fxText(T('수식 풀이')+' · '+E.addr(act.r,act.c))); p.appendChild(h);
+  function line(t,cls){ var d=document.createElement('div'); d.appendChild(fxText(t,cls)); p.appendChild(d); return d; }
+  if(x.kind==='text') return void line(raw?T('이 칸은 수식이 아니라 글자나 숫자예요. 수식은 =로 시작해요.'):T('빈 칸이에요. 수식이 있는 칸을 눌러 보세요.'));
+  if(x.kind==='bad'){ line(T('수식을 읽지 못했어요.'),'fxbad'); line(F('여는 괄호 {0}개, 닫는 괄호 {1}개예요.',x.open,x.close)); line(x.hint); return; }
+  if(x.kind==='ai'){ line(T('AI가 칸 내용을 보고 답을 채우는 함수예요.')); if(x.prompt){ var d1=line(T('시킨 일')+': '); d1.appendChild(fxText(x.prompt,'fxv')); } var d2=line(T('지금 답')+': '); d2.appendChild(fxText(x.value,'fxv')); line(T('AI의 답은 틀릴 수 있어요. 아래 ✨ 검수에서 맞는지 확인해 주세요.'),'fxn'); return; }
+  if(x.refs.length){ var rr=document.createElement('div'); rr.className='fxr'; rr.appendChild(fxText(T('쓰는 칸')+':','fxn')); x.refs.forEach(function(q){ var c=document.createElement('code'); c.textContent=q.t+' = '+q.v; rr.appendChild(c); }); p.appendChild(rr); }
+  if(x.simple){ var d3=line(T('값을 그대로 가져와요')+' → '); d3.appendChild(fxText(x.result,'fxv')); return; }
+  var ol=document.createElement('ol'); x.steps.forEach(function(s){ var li=document.createElement('li'), c=document.createElement('code'); c.textContent=s.expr; li.appendChild(c);
+    if(s.note) li.appendChild(fxText(' — '+s.note,'fxn')); li.appendChild(fxText(' → ')); li.appendChild(fxText(s.value,'fxv')); ol.appendChild(li); });
+  p.appendChild(ol); if(x.more) line(F('이어서 {0}단계가 더 있어요.',x.more),'fxn');
+  var d4=line(T('결과')+': '); d4.appendChild(fxText(x.result,'fxv'));
+}
+function fxToggle(on){ var p=$('fxPanel'); p.hidden=on===undefined?!p.hidden:!on; $('fxHelp').classList.toggle('on',!p.hidden); $('fxHelp').setAttribute('aria-expanded',String(!p.hidden)); fxRender(); }
+$('fxHelp').onclick=function(){ fxToggle(); };
 function updateBar(){
   nameBox.value=selName();
+  if(!$('fxPanel').hidden) fxRender(); if(window.FSReview) FSReview.refresh();
   if(!editing||editing.src!=='bar'){ var c=sh.cells[K(act.r,act.c)]; fin.value=c&&c.v!=null?c.v:'';
     var sg=!fin.value&&splAt(act.r,act.c), ac=sg&&sh.cells[K(sg.r1,sg.c1)]; fin.placeholder=ac?ac.v:''; fin.classList.toggle('spl',!!ac); } // a spilled cell shows its anchor's formula, greyed
   var cell=sh.cells[K(act.r,act.c)]||{};
@@ -294,8 +324,8 @@ function cancelEdit(){ if(!editing) return; acHide(); editing=null; refMode(); e
 function closeParens(s){ var o=0, q=false; for(var i=0;i<s.length;i++){ var ch=s[i]; if(ch==='"') q=!q; else if(!q){ if(ch==='(') o++; else if(ch===')') o--; } } while(o-->0) s+=')'; return s; }
 function setRaw(r,c,val){
   var k=K(r,c), cell=sh.cells[k];
-  if(val===''||val==null){ if(cell){ delete cell.v; if(!hasFmt(cell)) delete sh.cells[k]; } return; }
-  if(!cell) cell=sh.cells[k]={}; cell.v=val; growTo(r,c);
+  if(val===''||val==null){ if(cell){ delete cell.v; delete cell.ai; delete cell.ar; if(!hasFmt(cell)) delete sh.cells[k]; } return; }
+  if(!cell) cell=sh.cells[k]={}; if(cell.v!==val){ delete cell.ai; delete cell.ar; } cell.v=val; growTo(r,c);
 }
 /* v21: sheet protection. sh.lock={all:1,rg:[{r1,c1,r2,c2}]}; every way of changing a cell asks guard() first */
 function locked(r,c){ return E.lockHit(sh.lock,r,c); }
@@ -1888,6 +1918,7 @@ setZoom(z0);
 if(opn&&sh.charts.length) setTimeout(openDrawer,0);
 window.FSAPI={run:runCmd, get doc(){ return doc; }, get eng(){ return eng; }, get sheet(){ return sh; }, sel:function(){ return sel; }, act:function(){ return act; }, region:region, hasHeader:hasHeader,
   drawChart:drawChart, chartData:chartData, PAL:PAL, toast:toast, download:download, commitEdit:commitEdit, uid:uid, pushUndo:pushUndo, saveSoon:saveSoon, openDrawer:openDrawer, renderCharts:renderCharts,
+  markAI:function(r1,c1,r2,c2){ for(var r=r1;r<=r2;r++) for(var c=c1;c<=c2;c++){ var x=sh.cells[K(r,c)]; if(x&&x.v!=null&&x.v!==''){ x.ai=1; delete x.ar; } } },
   changed:changed, setRaw:function(r,c,v){ if(locked(r,c)) return toast(T('잠긴 칸이라 고칠 수 없어요. 데이터 메뉴에서 잠금을 풀 수 있어요')); return setRaw(r,c,v); }, pasteText:pasteText, selectRange:selectRange, select:select, forSel:forSel};
 window.__fs={urlOpt:urlOpt, parseCSV:parseCSV, sniffDelim:sniffDelim, csvRaw:csvRaw, get doc(){ return doc; }, get eng(){ return eng; }, select:select, cmd:cmd, run:runCmd, sel:function(){ return sel; }, act:function(){ return act; }, setRaw:setRaw, changed:changed, startEdit:startEdit, commitEdit:commitEdit};
 })();

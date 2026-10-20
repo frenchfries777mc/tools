@@ -130,12 +130,12 @@ function go(){
   if(mode==='ask') p=FFAI.ask({onText:liveOut, facts:true, prose:true, question:q, system:FFP.askSys, prompt:FFP.askPrompt(t&&t.text,q)})
     .then(function(r){ lastAnswer=r.trim(); out('<div class="aiAns">'+esc(lastAnswer).replace(/\n/g,'<br>')+'</div>');
       $('aiActs').innerHTML='<button class="tbtn" id="aiPut">'+T('답을 칸에 넣기')+'</button>';
-      $('aiPut').onclick=function(){ var g=t?t.g:null, r0=g?g.r2+2:a.r, c0=g?g.c1:a.c; A.pushUndo(); lastAnswer.split('\n').forEach(function(l,i){ A.setRaw(r0+i,c0,l); }); A.changed(); A.select(r0,c0); close(); }; });
+      $('aiPut').onclick=function(){ var g=t?t.g:null, r0=g?g.r2+2:a.r, c0=g?g.c1:a.c; A.pushUndo(); lastAnswer.split('\n').forEach(function(l,i){ A.setRaw(r0+i,c0,l); }); A.markAI(r0,c0,r0+lastAnswer.split('\n').length-1,c0); A.changed(); A.select(r0,c0); close(); }; });
   else if(mode==='formula'){
     var tr=translateFormula(q,a);
     if(tr){ busy(false); lastFormula=tr.f; out('<code class="aiF">'+esc(tr.f)+'</code><div class="aiEx">'+esc(T('번역은 수식 함수가 없어서 AI() 함수로 해요. 칸마다 AI가 번역해서 채워요.'))+'</div>');
       $('aiActs').innerHTML='<button class="tbtn pri" id="aiPut">'+F('{0}에 넣기',E.addr(a.r,a.c))+'</button>';
-      $('aiPut').onclick=function(){ A.pushUndo(); A.setRaw(a.r,a.c,lastFormula); A.changed(); close(); }; wrongFor('sheet-formula',q,lastFormula); return; }
+      $('aiPut').onclick=function(){ A.pushUndo(); A.setRaw(a.r,a.c,lastFormula); A.markAI(a.r,a.c,a.r,a.c); A.changed(); close(); }; wrongFor('sheet-formula',q,lastFormula); return; }
     p=FFAI.ask({onText:liveOut, json:true, system:FFAI.isTuned()?FFP.formulaSys:FFP.formulaSys+' Use only these functions: '+fnList()+'. For translating, summarizing or classifying text use =AI("instruction", cell). If no formula can do the request, reply {"formula":"","explain":"why not, in one short sentence"}.',
       prompt:FFP.formulaPrompt(t&&t.text,E.addr(a.r,a.c),q)})
     .then(function(r){ var j=FFAI.parseJSON(r), f=String(j.formula||'').trim(); if(f&&f[0]!=='=') f='='+f;
@@ -143,7 +143,7 @@ function go(){
       try{ E.parse(f.slice(1)); }catch(e){ throw new Error(T('AI가 만든 수식에 오류가 있어요')+': '+f); }
       lastFormula=f; out('<code class="aiF">'+esc(f)+'</code><div class="aiEx">'+esc(j.explain||'')+'</div>');
       $('aiActs').innerHTML='<button class="tbtn pri" id="aiPut">'+F('{0}에 넣기',E.addr(a.r,a.c))+'</button>';
-      $('aiPut').onclick=function(){ A.pushUndo(); A.setRaw(a.r,a.c,lastFormula); A.changed(); close(); }; });
+      $('aiPut').onclick=function(){ A.pushUndo(); A.setRaw(a.r,a.c,lastFormula); A.markAI(a.r,a.c,a.r,a.c); A.changed(); close(); }; });
   }
   else if(mode==='graph'){
     if(!t){ busy(false); out('<div class="aiErr">'+esc(T('그래프로 만들 표를 먼저 고르세요'))+'</div>'); return; }
@@ -159,7 +159,7 @@ function go(){
       lastTable=rows; var w=Math.max.apply(null,rows.map(function(x){ return x.length; }));
       out('<div class="aiPrev"><table>'+rows.slice(0,8).map(function(row,i){ return '<tr>'+row.map(function(v){ return (i?'<td>':'<th>')+esc(v)+(i?'</td>':'</th>'); }).join('')+'</tr>'; }).join('')+'</table>'+(rows.length>8?'<div class="aiEx">'+F('외 {0}줄',rows.length-8)+'</div>':'')+'</div>');
       $('aiActs').innerHTML='<button class="tbtn pri" id="aiPut">'+F('{0} 칸부터 넣기',E.addr(a.r,a.c))+'</button>';
-      $('aiPut').onclick=function(){ A.pasteText(lastTable.map(function(r){ return r.join('\t'); }).join('\n')); A.forSel(function(r,c){ if(r===A.act().r){ var cell=A.sheet.cells[E.K(r,c)]; if(cell) cell.b=1; } }); A.changed(); close(); }; });
+      $('aiPut').onclick=function(){ A.pasteText(lastTable.map(function(r){ return r.join('\t'); }).join('\n')); A.markAI(a.r,a.c,a.r+lastTable.length-1,a.c+Math.max.apply(null,lastTable.map(function(r){ return r.length; }))-1); A.forSel(function(r,c){ if(r===A.act().r){ var cell=A.sheet.cells[E.K(r,c)]; if(cell) cell.b=1; } }); A.changed(); close(); }; });
   p.then(function(){ wrongFor('sheet-'+mode,q,$('aiOut').innerText); }).then(null,function(e){ if(e.kind!=='nokey') out('<div class="aiErr">'+esc(e.message||T('AI에 연결하지 못했어요'))+'</div>'); }).then(function(){ busy(false); });
 }
 /* ---------- "AI 계산": words -> one formula. calc.js reads most phrases without AI; the engine computes and checks. ---------- */
@@ -168,7 +168,7 @@ function calcShow(f,v,a,note,viaAI){
   lastFormula=f;
   out('<code class="aiF">'+esc(f)+'</code><div class="aiCalc">= <b>'+esc(E.formatValue(v))+'</b></div><div class="aiEx">'+esc(note)+'</div>');
   $('aiActs').innerHTML='<button class="tbtn pri" id="aiPut">'+F('{0} 칸에 넣기',E.addr(a.r,a.c))+'</button>';
-  $('aiPut').onclick=function(){ A.pushUndo(); A.setRaw(a.r,a.c,lastFormula); A.changed(); close(); };
+  $('aiPut').onclick=function(){ A.pushUndo(); A.setRaw(a.r,a.c,lastFormula); A.markAI(a.r,a.c,a.r,a.c); A.changed(); close(); };
   if(viaAI) wrongFor('sheet-calc',$('aiQ').value.trim(),f+' = '+E.formatValue(v));
 }
 function colsText(){ // "A=이름, B=점수": the header row, so the AI can match column words

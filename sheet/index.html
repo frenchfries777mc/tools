@@ -87,6 +87,18 @@ button,input,select{font:inherit; color:inherit;}
 .fbar{display:flex; align-items:stretch; border-bottom:1px solid var(--line); background:var(--hd); flex:0 0 auto;}
 #nameBox{width:84px; flex:0 0 auto; border:0; border-right:1px solid var(--line); background:transparent; padding:0 10px; font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--fry);}
 #nameBox:focus{outline:none; background:var(--panel);}
+.fxh{flex:0 0 auto; margin:4px 6px; padding:0 12px; font:inherit; font-size:12px; color:var(--dim); background:transparent; border:1px solid var(--line); border-radius:999px; cursor:pointer;}
+.fxh:hover,.fxh.on{color:var(--text); border-color:var(--fry);}
+.fxp{flex:0 0 auto; max-height:34vh; overflow:auto; padding:10px 14px; border-bottom:1px solid var(--line); background:var(--panel); font-size:13px; line-height:1.6;}
+.fxp[hidden]{display:none;} .fxp h4{margin:0 0 6px; font-size:13px;} .fxp .fxx{float:right; background:none; border:0; color:var(--dim); font-size:18px; cursor:pointer;}
+.fxp ol{margin:6px 0; padding-left:22px;} .fxp li{margin:3px 0;} .fxp code{font-family:ui-monospace,Menlo,Consolas,monospace; background:var(--hd); padding:1px 5px; border-radius:5px;}
+.fxp .fxv{color:var(--fry); font-weight:700;} .fxp .fxn{color:var(--dim);} .fxp .fxbad{color:#ff8a8a;} .fxp .fxr{display:flex; flex-wrap:wrap; gap:4px 10px; margin:4px 0 6px;}
+#grid td.aim{box-shadow:inset 3px 0 0 #a78bfa;} #grid td.aiok{box-shadow:inset 3px 0 0 #4ade80;} #grid td.aibad{box-shadow:inset 3px 0 0 #ff5d5d;}
+.revb{background:transparent; border:1px solid var(--line); color:var(--dim); border-radius:999px; font:inherit; font-size:12px; padding:2px 10px; margin-right:8px; cursor:pointer;} .revb:hover{color:var(--text); border-color:#a78bfa;}
+#revDlg .dlg{width:min(680px,100%);} #revList{overflow:auto; padding:8px 12px;} .revRow{display:grid; grid-template-columns:auto 1fr auto; gap:4px 10px; align-items:center; padding:8px 0; border-bottom:1px solid var(--line);}
+.revRow .rA{font-weight:700; cursor:pointer; color:var(--fry); background:none; border:0; font:inherit;} .revRow .rF{font-size:12px; color:var(--dim); word-break:break-all;} .revRow .rV{grid-column:2; word-break:break-word;}
+.revRow .rB{grid-row:1/3; grid-column:3; display:flex; gap:6px;} .revRow .rB button{font:inherit; font-size:12px; padding:4px 10px; border-radius:8px; border:1px solid var(--line); background:var(--panel2,var(--hd)); color:var(--text); cursor:pointer;}
+.revRow.ok{opacity:.6;} .revRow.bad .rV{color:#ff8a8a;}
 .fx{display:grid; place-items:center; padding:0 10px; color:var(--dim); font-style:italic; font-family:Georgia,serif; border-right:1px solid var(--line);}
 #fin{flex:1; min-width:0; border:0; background:transparent; padding:8px 10px; font-family:'JetBrains Mono','Noto Sans KR',monospace; font-size:13.5px;}
 #fin:focus{outline:none; background:var(--panel);}
@@ -316,7 +328,9 @@ button,input,select{font:inherit; color:inherit;}
   <input id="nameBox" value="A1" aria-label="셀 주소" spellcheck="false" autocomplete="off" autocapitalize="characters">
   <span class="fx">fx</span>
   <input id="fin" aria-label="수식 입력줄" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off">
+  <button id="fxHelp" class="fxh" type="button" title="이 칸의 수식을 한국어로 풀어 줘요" aria-expanded="false">풀이</button>
 </div>
+<div id="fxPanel" class="fxp" hidden></div>
 
 <div class="main">
   <div id="gridWrap">
@@ -336,7 +350,7 @@ button,input,select{font:inherit; color:inherit;}
 
 <div class="foot">
   <div id="tabs"></div><button class="addTab" id="addTab" title="시트 추가">+</button>
-  <span style="flex:1"></span><span id="stats"></span>
+  <span style="flex:1"></span><button id="aiRev" class="revb" type="button" hidden></button><span id="stats"></span>
   <span class="zoom"><button id="zOut" aria-label="축소">−</button><span id="zLbl">100%</span><button id="zIn" aria-label="확대">+</button></span>
 </div>
 
@@ -621,6 +635,12 @@ button,input,select{font:inherit; color:inherit;}
   <div class="dbody"><p id="askP" style="margin:0 0 6px;color:var(--dim)"></p><input type="text" id="askI"></div>
   <div class="acts"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="askOk">확인</button></div>
 </div></div>
+<div class="ov" id="revDlg"><div class="dlg">
+  <div class="dh"><h3>✨ AI가 넣은 칸 검수</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <p class="aiIntro" style="margin:8px 12px 0">AI가 쓴 칸을 하나씩 보고 맞는지 눌러 주세요. 틀렸어요를 누르면 가르치기 화면으로 모여요. 칸을 고치면 표시가 사라져요.</p>
+  <div id="revList" data-notr></div>
+  <div class="aiRow" style="padding:8px 12px"><span class="aiNote" id="revNote"></span><button class="tbtn" id="revAll">남은 칸 모두 맞아요</button></div>
+</div></div>
 <div class="ov" id="aiDlg"><div class="dlg">
   <div class="dh"><h3>✨ AI 수식·그래프·표</h3><button class="tbtn" id="aiSet">AI 설정</button><button class="x" id="aiClose" aria-label="닫기">×</button></div>
   <div class="vtabs"><button class="atab vtab on" data-m="formula">수식 만들기</button><button class="atab vtab" data-m="calc">AI 계산</button><button class="atab vtab" data-m="graph">그래프 만들기</button><button class="atab vtab" data-m="table">표 만들기</button><button class="atab vtab" data-m="ask">질문·요약</button></div>
@@ -655,14 +675,16 @@ button,input,select{font:inherit; color:inherit;}
 <div id="toast"></div>
 
 <script src="engine.js"></script>
+<script src="explain.js"></script>
 <script src="calc.js"></script>
-<script src="commands.js?v=32"></script>
-<script src="app.js?v=32"></script>
+<script src="commands.js?v=33"></script>
+<script src="app.js?v=33"></script>
 <script src="viz.js"></script>
 <script src="../ai.js?v=ai30"></script>
 <script src="../ai-wrong.js?v=3"></script>
 <script src="../ai-prompts.js"></script>
-<script src="ai-sheet.js?v=30"></script>
+<script src="ai-sheet.js?v=31"></script>
+<script src="ai-review.js?v=1"></script>
 <script src="../pwa.js" defer></script>
 </body>
 </html>
