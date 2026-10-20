@@ -4,7 +4,8 @@
    The report is kept in this browser (localStorage 'ffai.wrong.v1', newest last, at most 200) and shows up on the
    developer's teach/ page ("틀렸다고 눌린 답"). When the person is logged in (FFAuth from the games hub), the same report is also
    sent to Supabase table ff_ai_wrong (supabase-ff-ai-wrong.sql); a failure there is ignored, the local copy stays.
-   o.model (optional) = the model that wrote the answer, for pages that let people pick one (ai-chat/).
+   o.history (optional) = the turns before the answer, [{role:'user'|'assistant',content}], saved with the report (last 12 turns, 600 characters each)
+   so the developer sees the whole conversation (ai-chat/). o.model (optional) = the model that wrote the answer, for pages that let people pick one (ai-chat/).
    FFWrong.toast = function(text) can be set by the page to use its own toast. */
 (function(){
 'use strict';
@@ -41,8 +42,13 @@ function toast(t){
   var e=document.createElement('div'); e.className='ffw-toast'; e.setAttribute('role','status'); e.textContent=t; addCSS(); document.body.appendChild(e); setTimeout(function(){ e.remove(); },2400);
 }
 /* report: {tool, question, answer, fix} -> stored entry, or null when the browser cannot store it */
+function hist(a){
+  if(!Array.isArray(a)) return [];
+  return a.filter(function(m){ return m&&typeof m.content==='string'&&m.content; }).slice(-12).map(function(m){ return {role:m.role==='assistant'?'assistant':'user', content:cut(m.content,600)}; });
+}
 function report(o){
   var list=load(), e={t:new Date().toISOString(), tool:cut(o.tool,40), q:cut(o.question,300), a:cut(o.answer,1500), fix:cut(o.fix,500), model:cut(o.model||modelId(),80)};
+  var h=hist(o.history); if(h.length) e.h=h;
   list.push(e); if(list.length>CAP) list=list.slice(list.length-CAP);
   var ok=save(list); send(e); return ok?e:null;
 }
@@ -51,7 +57,11 @@ function send(e){
   try{
     var u=window.FFAuth&&FFAuth.user&&FFAuth.user(); if(!u) return;
     FFAuth.ready.then(function(sb){ if(!sb) return;
-      return sb.from('ff_ai_wrong').insert({tool:e.tool, model:e.model, question:e.q, answer:e.a, correction:e.fix});
+      var row={tool:e.tool, model:e.model, question:e.q, answer:e.a, correction:e.fix};
+      if(!e.h) return sb.from('ff_ai_wrong').insert(row);
+      /* the history column comes from supabase-ff-ai-wrong-history.sql; without it the report goes without the history */
+      row.history=JSON.stringify(e.h);
+      return sb.from('ff_ai_wrong').insert(row).then(function(r){ if(r&&r.error){ delete row.history; return sb.from('ff_ai_wrong').insert(row); } });
     }).then(null,function(){});
   }catch(x){}
 }
@@ -71,7 +81,7 @@ function build(){
     if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){ e.preventDefault(); q('.ffw-ok').click(); }
     if(e.key==='Tab'){ var f=[q('textarea'),q('.ffw-no'),q('.ffw-ok')], i=f.indexOf(document.activeElement); e.preventDefault(); f[(i+(e.shiftKey?-1:1)+f.length)%f.length].focus(); } });
   q('.ffw-ok').onclick=function(){
-    var c=cur; if(!c) return; var ok=report({tool:c.o.tool, question:c.o.question, answer:c.o.answer, fix:q('textarea').value.trim()});
+    var c=cur; if(!c) return; var ok=report({tool:c.o.tool, question:c.o.question, answer:c.o.answer, history:c.o.history, model:c.o.model, fix:q('textarea').value.trim()});
     close();
     if(ok){ c.btn.disabled=true; c.btn.textContent='✓ '+T('알려 주셔서 고마워요'); toast(T('알려 주셔서 고마워요. 더 나아지게 참고할게요')); }
     else toast(T('저장하지 못했어요'));
