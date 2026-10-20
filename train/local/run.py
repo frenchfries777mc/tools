@@ -12,7 +12,7 @@ if not HF_TOKEN:   # Lightning: typed into a hidden prompt, never written into t
     HF_TOKEN = os.environ.get("HF_TOKEN", "")
     if not HF_TOKEN:
         import getpass
-        HF_TOKEN = getpass.getpass("Hugging Face Write 토큰(hf_...)을 붙여 넣고 Enter: ").strip()
+        HF_TOKEN = input("Hugging Face Write 토큰(hf_...)을 붙여 넣고 Enter (글자가 그대로 보여요): ").strip()
 RUN_EVAL = _env("RUN_EVAL", "1") == "1"
 CONTINUE = _env("CONTINUE", "1") == "1"
 ROUND = int(_env("ROUND", "3"))
