@@ -11,7 +11,7 @@ const DIR=__dirname, DONE=path.join(DIR,'done.json'), INBOX=path.join(DIR,'inbox
 function readDone(file){ try{ const j=JSON.parse(fs.readFileSync(file||DONE,'utf8')); return Array.isArray(j.ids)?j.ids.filter(x=>Number.isInteger(x)):[]; }catch(e){ return []; } }
 function toLine(r){
   let h=[]; try{ h=r.history?JSON.parse(r.history):[]; }catch(e){}
-  return JSON.stringify({id:r.id, t:r.created_at, tool:r.tool, model:r.model, history:Array.isArray(h)?h:[], q:r.question, a:r.answer, fix:r.correction});
+  return JSON.stringify({id:r.id, t:r.created_at, tool:r.tool, model:r.model, history:Array.isArray(h)?h:[], q:r.question, a:r.answer, fix:r.correction, why:r.reason||''});
 }
 /* rows from the server -> inbox text (ids in `done` are left out) */
 function inboxText(rows, done){
@@ -31,10 +31,13 @@ async function run(env, o){
     }
     deleted=done.length;
   }
-  // history 열은 supabase-ff-ai-wrong-history.sql 을 실행해야 있어요. 없으면 그 열 없이 읽어요.
+  // history 열은 supabase-ff-ai-wrong-history.sql, reason 열은 supabase-ff-ai-wrong-reason.sql 을 실행해야 있어요. 없으면 그 열 없이 읽어요.
   const cols='id,created_at,tool,model,question,answer,correction';
-  let r=await f(url+'/rest/v1/ff_ai_wrong?select='+cols+',history&order=id.asc&limit=1000',{headers:H});
-  if(!r.ok) r=await f(url+'/rest/v1/ff_ai_wrong?select='+cols+'&order=id.asc&limit=1000',{headers:H});
+  let r;
+  for(const extra of [',history,reason',',history','']){
+    r=await f(url+'/rest/v1/ff_ai_wrong?select='+cols+extra+'&order=id.asc&limit=1000',{headers:H});
+    if(r.ok) break;
+  }
   if(!r.ok) throw new Error('읽기 실패 '+r.status+' '+(await r.text()).slice(0,200));
   const rows=await r.json(); const text=inboxText(rows,o.dry?[]:done);
   if(!o.noWrite) fs.writeFileSync(o.inboxFile||INBOX,text);

@@ -10,7 +10,7 @@ if(cmd==='show'){
   const f=rest[0]||path.join(__dirname,'inbox.jsonl'); const L=fs.readFileSync(f,'utf8').split('\n').filter(Boolean).map(JSON.parse);
   L.forEach(r=>{ console.log('#'+r.id+' ['+r.tool+' '+r.model+' '+String(r.t).slice(0,16)+']');
     (r.history||[]).forEach(m=>console.log('   '+(m.role==='user'?'사람':'AI')+': '+m.content.replace(/\n/g,' / ').slice(0,200)));
-    console.log('   Q: '+r.q); console.log('   A: '+String(r.a).replace(/\n/g,' / ').slice(0,300)); if(r.fix) console.log('   맞는 답(사람): '+r.fix); console.log(''); });
+    if(r.why) console.log('   이유(사람): '+({fact:'사실이 틀려요',tone:'말투나 형식이 이상해요',offtopic:'질문과 상관없는 답',repeat:'같은 말을 반복해요'}[r.why]||r.why)); console.log('   Q: '+r.q); console.log('   A: '+String(r.a).replace(/\n/g,' / ').slice(0,300)); if(r.fix) console.log('   맞는 답(사람): '+r.fix); console.log(''); });
   console.log(L.length+'개');
 } else if(cmd==='done'){
   const ids=rest.map(Number).filter(Number.isInteger); let cur={ids:[]}; try{ cur=JSON.parse(fs.readFileSync(DONE,'utf8')); }catch(e){}
