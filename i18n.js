@@ -18,7 +18,7 @@
   var NAMES={ko:'한국어',en:'English',es:'Español',fr:'Français',de:'Deutsch',ja:'日本語',zh:'简体中文',pt:'Português (Brasil)',ru:'Русский',tr:'Türkçe',nw:'Newspeak',gk:'번역기 한국어'};
   /* fictional languages sit in their own group; Aurebesh is English text in the Aurebesh font (ff-lang.js) */
   var VIRT={nw:1,gk:1}, VLABEL={ko:'가상 언어',en:'Fictional languages',es:'Idiomas ficticios',fr:'Langues fictives',de:'Fiktive Sprachen',ja:'架空の言語',zh:'虚构语言',pt:'Idiomas fictícios',ru:'Вымышленные языки',tr:'Kurgusal diller',nw:'Unreal speaks',gk:'Fictional 언어들'};
-  function auOn(){ try{ return !!(window.FFLang&&FFLang.script&&FFLang.script()==='au'); }catch(e){ return false; } }
+  function auOn(){ try{ return !!(window.FFLang&&FFLang.script&&FFLang.script()); }catch(e){ return false; } }
   var pref=null; try{ pref=localStorage.getItem(LS); }catch(e){}
   function detect(){ var c=[]; try{ c=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||'']; }catch(e){}
     for(var i=0;i<c.length;i++){ var b=String(c[i]||'').toLowerCase().split('-')[0]; if(LANGS.indexOf(b)>=0) return b; } return 'en'; }
@@ -52,11 +52,11 @@
     for(var j=0;j<slots.length;j++){
       var sel=document.createElement('select'); sel.className='langSel'; sel.setAttribute('data-notr',''); sel.setAttribute('aria-label',T('언어'));
       var grp=document.createElement('optgroup'); grp.label=VLABEL[lang]||VLABEL.en;
-      LANGS.concat(['au']).forEach(function(l){ var o=document.createElement('option'); o.value=l; o.textContent=l==='au'?'🌐 Aurebesh':NAMES[l];
-        if(l==='au'){ o.style.fontFamily="'FF Aurebesh',system-ui"; if(auOn()) o.selected=true; } else if(l===lang&&!auOn()) o.selected=true;
-        (VIRT[l]||l==='au'?grp:sel).appendChild(o); });
+      LANGS.concat(['au','sg']).forEach(function(l){ var o=document.createElement('option'); o.value=l; o.textContent=l==='au'?'🌐 Aurebesh':l==='sg'?'🌐 Standard Galactic':NAMES[l];
+        if((l==='au'||l==='sg')){ o.style.fontFamily=l==='au'?"'FF Aurebesh',system-ui":"'FF Galactic',system-ui"; if(auOn()&&FFLang.script()===l) o.selected=true; } else if(l===lang&&!auOn()) o.selected=true;
+        (VIRT[l]||(l==='au'||l==='sg')?grp:sel).appendChild(o); });
       sel.appendChild(grp);
-      sel.onchange=function(){ var v=this.value; try{ localStorage.setItem(LS,v==='au'?'en':v); }catch(e){} try{ if(window.FFLang) FFLang.set(v); }catch(e){} location.reload(); };
+      sel.onchange=function(){ var v=this.value; try{ localStorage.setItem(LS,(v==='au'||v==='sg')?'en':v); }catch(e){} try{ if(window.FFLang) FFLang.set(v); }catch(e){} location.reload(); };
       slots[j].appendChild(sel);
     }
   }
