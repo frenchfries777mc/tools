@@ -3,6 +3,17 @@
  "name": "Tools 사이트",
  "notes": [
   {
+   "date": "2026-10-21",
+   "build": "v23",
+   "title": "13개 언어",
+   "items": [
+    "중국어(간체), 포르투갈어(브라질), 러시아어, 튀르키예어 추가",
+    "가상 언어 묶음 추가: 뉴스피크, 번역기 한국어, 오러베시",
+    "번역이 없는 글은 영어로 표시"
+   ],
+   "tr": {"en": {"title": "13 languages", "items": ["Added Chinese (Simplified), Portuguese (Brazil), Russian and Turkish", "Added a fictional languages group: Newspeak, 번역기 한국어 and Aurebesh", "Text without a translation is shown in English"]}, "es": {"title": "13 idiomas", "items": ["Se añadieron chino (simplificado), portugués (Brasil), ruso y turco", "Se añadió un grupo de idiomas ficticios: neolengua, 번역기 한국어 y aurebesh", "El texto sin traducción se muestra en inglés"]}, "fr": {"title": "13 langues", "items": ["Ajout du chinois (simplifié), du portugais (Brésil), du russe et du turc", "Ajout d’un groupe de langues fictives : novlangue, 번역기 한국어 et aurebesh", "Le texte sans traduction s’affiche en anglais"]}, "de": {"title": "13 Sprachen", "items": ["Chinesisch (vereinfacht), Portugiesisch (Brasilien), Russisch und Türkisch hinzugefügt", "Gruppe fiktiver Sprachen hinzugefügt: Neusprech, 번역기 한국어 und Aurebesh", "Text ohne Übersetzung wird auf Englisch angezeigt"]}, "ja": {"title": "13言語", "items": ["中国語（簡体字）、ポルトガル語（ブラジル）、ロシア語、トルコ語を追加", "架空の言語グループを追加：ニュースピーク、번역기 한국어、オーラベッシュ", "翻訳のない文は英語で表示"]}, "zh": {"title": "13 种语言", "items": ["新增简体中文、葡萄牙语（巴西）、俄语和土耳其语", "新增虚构语言组：新话、번역기 한국어 和奥瑞贝什文", "没有翻译的文字以英语显示"]}, "pt": {"title": "13 idiomas", "items": ["Adicionados chinês (simplificado), português (Brasil), russo e turco", "Adicionado um grupo de idiomas fictícios: novilíngua, 번역기 한국어 e aurebesh", "Textos sem tradução aparecem em inglês"]}, "ru": {"title": "13 языков", "items": ["Добавлены китайский (упрощённый), португальский (Бразилия), русский и турецкий", "Добавлена группа вымышленных языков: новояз, 번역기 한국어 и ауребеш", "Текст без перевода показывается на английском"]}, "tr": {"title": "13 dil", "items": ["Çince (Basitleştirilmiş), Portekizce (Brezilya), Rusça ve Türkçe eklendi", "Kurgusal diller grubu eklendi: Yenikonuş, 번역기 한국어 ve Aurebesh", "Çevirisi olmayan metin İngilizce gösterilir"]}, "nw": {"title": "13 speaks", "items": ["Plusadded Chinese, Portuguese, Russian plus Turkish", "Plusadded unreal speaks group: Newspeak, 번역기 한국어 plus Aurebesh", "Untranslated speakwrite shows in Oldspeak English"]}, "gk": {"title": "13 언어들", "items": ["더하다 중국인 (단순화된), 포르투갈어 (브라질), 러시아인 그리고 터키인", "더하다 하나의 허구의 언어들 그룹: 뉴스피크, 번역기 한국어 그리고 오러베시", "글자 없이 번역 이다 보여진 안에 영어"]}}
+  },
+  {
    "date": "2026-10-20",
    "build": "v22",
    "title": "저작권 표기",
