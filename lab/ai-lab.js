@@ -6,7 +6,7 @@
 (function(){
 'use strict';
 var T=FFT.T, F=FFT.F, $=function(id){ return document.getElementById(id); };
-var LANG={ko:'Korean',en:'English',es:'Spanish',fr:'French',de:'German',ja:'Japanese'};
+var LANG={ko:'Korean',en:'English',es:'Spanish',fr:'French',de:'German',ja:'Japanese',zh:'Simplified Chinese',pt:'Brazilian Portuguese',ru:'Russian',tr:'Turkish',nw:'English',gk:'Korean'};
 var busy=false, stopped=false, mode='ask';
 var CHIPS=[['🔍 지금 무슨 일이 일어나요?','지금 이 실험에서 무슨 일이 일어나고 있는지 지금 값으로 설명해 줘'],
   ['📐 공식이 왜 이렇게 돼요?','이 실험에 나오는 공식이 왜 그렇게 되는지 쉽게 설명해 줘'],
