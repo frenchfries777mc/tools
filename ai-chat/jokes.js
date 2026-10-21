@@ -122,21 +122,21 @@ var J=[
 ["아이스크림이 가수가 될 수 없는 이유는?", "녹음 안되니까"]
 ];
 var SELF={
-  'FF-Tools-1.7B':{base:'Qwen3 1.7B', latin:'elementarius', ko:'기본', tr:['basic','básico','de base','grundlegend','基本']},
-  'FF-Tools-4B':{base:'Qwen3 4B', latin:'intellectus', ko:'이해력', tr:['understanding','entendimiento','compréhension','Verstand','理解力']},
-  'FF-Tools-8B':{base:'Qwen3 8B', latin:'supremus', ko:'가장 높은', tr:['highest','el más alto','le plus haut','der höchste','最も高い']}
+  'FF-Tools-1.7B':{base:'Qwen3 1.7B', latin:'elementarius', ko:'기본', tr:['basic','básico','de base','grundlegend','基本','基础','básico','базовый','temel']},
+  'FF-Tools-4B':{base:'Qwen3 4B', latin:'intellectus', ko:'이해력', tr:['understanding','entendimiento','compréhension','Verstand','理解力','理解力','entendimento','понимание','anlayış']},
+  'FF-Tools-8B':{base:'Qwen3 8B', latin:'supremus', ko:'가장 높은', tr:['highest','el más alto','le plus haut','der höchste','最も高い','最高的','o mais alto','высший','en yüksek']}
 };
 /* 화면 언어가 한국어가 아니면 자기소개와 '정답은 …' 같은 우리 말은 그 언어로 (개그 문제와 정답 자체는 한국어 그대로). Node에서는 한국어. */
-var FFT_=root.FFT, LX={en:0,es:1,fr:2,de:3,ja:4}, li=FFT_&&LX[FFT_.lang];
+var FFT_=root.FFT, LX={en:0,es:1,fr:2,de:3,ja:4,zh:5,pt:6,ru:7,tr:8,nw:0}, li=FFT_&&LX[FFT_.lang];
 if(FFT_) FFT_.add({
 '저는 {0}예요. Frenchfries777 Tools 사이트의 AI이고, 개발자 Frenchfries777이 {1}를 바탕으로 만들었어요. 이름은 라틴어 {2}("{3}")의 끝에서 따왔어요. 아재개그도 좋아해요!':[
   'I’m {0}, the AI of the Frenchfries777 Tools site. The developer Frenchfries777 built me on {1}. My name comes from the end of the Latin word {2} (“{3}”). I love cheesy jokes too!',
   'Soy {0}, la IA del sitio Frenchfries777 Tools. El desarrollador Frenchfries777 me creó a partir de {1}. Mi nombre viene del final de la palabra latina {2} («{3}»). ¡También me encantan los chistes malos!',
   'Je suis {0}, l’IA du site Frenchfries777 Tools. Le développeur Frenchfries777 m’a créée à partir de {1}. Mon nom vient de la fin du mot latin {2} (« {3} »). J’adore aussi les blagues nulles !',
   'Ich bin {0}, die KI der Website Frenchfries777 Tools. Der Entwickler Frenchfries777 hat mich auf Basis von {1} gebaut. Mein Name stammt vom Ende des lateinischen Wortes {2} („{3}“). Ich mag auch Flachwitze!',
-  '私は{0}です。Frenchfries777 ToolsサイトのAIで、開発者Frenchfries777が{1}をもとに作りました。名前はラテン語{2}（「{3}」）の終わりから取りました。おやじギャグも大好きです！'],
-'정답은 {0}!':['The answer is: {0}!','La respuesta es: ¡{0}!','La réponse est : {0} !','Die Antwort lautet: {0}!','答えは{0}！'],
-'네, 외워요! 하나 들려 드릴게요.':['Yes, I know some by heart! Here’s one.','¡Sí, me sé algunos! Ahí va uno.','Oui, j’en connais par cœur ! En voici une.','Ja, ich kenne welche auswendig! Hier ist einer.','はい、覚えています！1つ聞かせますね。']
+  '私は{0}です。Frenchfries777 ToolsサイトのAIで、開発者Frenchfries777が{1}をもとに作りました。名前はラテン語{2}（「{3}」）の終わりから取りました。おやじギャグも大好きです！',"我是 {0}，Frenchfries777 Tools 网站的 AI。开发者 Frenchfries777 基于 {1} 打造了我。我的名字来自拉丁语单词 {2}（“{3}”）的词尾。我也喜欢冷笑话！","Sou {0}, a IA do site Frenchfries777 Tools. O desenvolvedor Frenchfries777 me criou com base em {1}. Meu nome vem do fim da palavra latina {2} (“{3}”). Também adoro piadas bobas!","Я {0}, ИИ сайта Frenchfries777 Tools. Разработчик Frenchfries777 создал меня на основе {1}. Моё имя — окончание латинского слова {2} («{3}»). А ещё я обожаю дурацкие шутки!","Ben {0}, Frenchfries777 Tools sitesinin yapay zekâsıyım. Geliştirici Frenchfries777 beni {1} üzerine kurdu. Adım Latince {2} (“{3}”) kelimesinin sonundan geliyor. Bayat esprileri de severim!","I’m {0}, AI of Frenchfries777 Workthings ministry. inner party Frenchfries777 built me on {1}. My name goes from unstart of Latin word {2} (“{3}”). I pluslike cheesy jokes plus!","나는 이다 {0}, 그 AI 의 그 Frenchfries777 도구들 현장. 그 현상액 Frenchfries777 built 나를 위에 {1}. 나의 이름 오다들 로부터 그 끝 의 그 Latin word {2} (“{3}”). 나는 love cheesy jokes 또한!"],
+'정답은 {0}!':['The answer is: {0}!','La respuesta es: ¡{0}!','La réponse est : {0} !','Die Antwort lautet: {0}!','答えは{0}！',"答案是：{0}！","A resposta é: {0}!","Ответ: {0}!","Cevap: {0}!","Truth is: {0}!","그 answer 이다: {0}!"],
+'네, 외워요! 하나 들려 드릴게요.':['Yes, I know some by heart! Here’s one.','¡Sí, me sé algunos! Ahí va uno.','Oui, j’en connais par cœur ! En voici une.','Ja, ich kenne welche auswendig! Hier ist einer.','はい、覚えています！1つ聞かせますね。',"对，我背过一些！来一个。","Sim, sei algumas de cor! Aqui vai uma.","Да, я знаю некоторые наизусть! Вот одна.","Evet, bazılarını ezbere biliyorum! İşte bir tane.","Yes, I think unmany by heart! Here’s one.","네, 나는 알다 약간의 옆에 heart! 여기의 하나."]
 });
 function tf(t){ var a=arguments; if(FFT_&&FFT_.F) return FFT_.F.apply(null,a); return t.replace(/\{(\d)\}/g,function(_,n){ return String(a[+n+1]); }); }
 function norm(s){ return String(s||'').toLowerCase().replace(/[^가-힣a-z0-9]/g,''); }

@@ -612,7 +612,7 @@ HELP.lang=src(function(){
 });
 HELP.mlang=src(function(){
   function __mlang(map) {
-    var l = __lang(), order = ['ko', 'en', 'ja', 'es', 'fr', 'de'];
+    var l = __lang(), order = ['ko', 'en', 'ja', 'es', 'fr', 'de', 'zh', 'pt', 'ru', 'tr'];
     if (map[l]) return map[l];
     if (map.ko) return map.ko;
     for (var i = 0; i < order.length; i++) if (map[order[i]]) return map[order[i]];
@@ -644,7 +644,7 @@ HELP.typing=src(function(){
 });
 HELP.ltag=src(function(){
   function __ltag(l) {
-    var m = { ko: 'ko-KR', en: 'en-US', ja: 'ja-JP', es: 'es-ES', fr: 'fr-FR', de: 'de-DE' };
+    var m = { ko: 'ko-KR', en: 'en-US', ja: 'ja-JP', es: 'es-ES', fr: 'fr-FR', de: 'de-DE', zh: 'zh-CN', pt: 'pt-BR', ru: 'ru-RU', tr: 'tr-TR' };
     if (!l || l === 'auto') return m[__lang()] || navigator.language || 'ko-KR';
     return m[l] || l;
   }
@@ -1315,11 +1315,11 @@ def('val_myvideo',function(){ this.appendDummyInput().appendField(T('내 영상 
   function(b){ var n=b.getFieldValue('SND'); if(!isVid(n)) return ["''",O.ATOMIC]; USEDS[n]=1; need('mp3'); return ['__mp3s['+lit(n)+']',O.MEMBER]; });
 def('act_video',function(){ this.appendDummyInput().appendField(T('영상')); this.appendValueInput('SRC').setCheck('String'); this.appendDummyInput().appendField(T('을(를) x')); this.appendValueInput('X').setCheck('Number'); this.appendDummyInput().appendField('y'); this.appendValueInput('Y').setCheck('Number'); this.appendDummyInput().appendField(T('너비')); this.appendValueInput('W').setCheck('Number'); this.appendDummyInput().appendField(T('로 보이기')); this.setInputsInline(true); act(this,'영상 주소(https://…)나 내 영상 파일을 페이지에 보여요. 페이지에는 영상이 하나만 있고, 다시 쓰면 영상이 바뀌어요. 아직 재생은 안 해요'); },
   function(b){ need('video'); return '__video('+(G.valueToCode(b,'SRC',O.COMMA)||"''")+', '+(G.valueToCode(b,'X',O.COMMA)||'0')+', '+(G.valueToCode(b,'Y',O.COMMA)||'0')+', '+(G.valueToCode(b,'W',O.COMMA)||'320')+');\n'; });
-def('val_mlang',function(){ var L=[['ko','한국어'],['en','영어'],['ja','일본어'],['es','스페인어'],['fr','프랑스어'],['de','독일어']];
+def('val_mlang',function(){ var L=[['ko','한국어'],['en','영어'],['ja','일본어'],['es','스페인어'],['fr','프랑스어'],['de','독일어'],['zh','중국어'],['pt','포르투갈어'],['ru','러시아어'],['tr','튀르키예어']];
     this.appendDummyInput().appendField(T('여러 나라 말 글자'));
     L.forEach(function(x){ this.appendDummyInput().setAlign(Blockly.inputs.Align.RIGHT).appendField(T(x[1])).appendField(new Blockly.FieldTextInput(x[0]==='ko'?T('안녕하세요'):x[0]==='en'?'Hello':''),'L_'+x[0]); },this);
     val(this,'String','같은 글자를 여러 나라 말로 적어 두면 페이지를 보는 사람의 언어에 맞는 글자가 나와요. 그 언어 칸이 비어 있으면 한국어 글자가 나와요. 글자가 들어가는 곳에 끼워 써요'); },
-  function(b){ need('mlang'); var parts=[]; ['ko','en','ja','es','fr','de'].forEach(function(k){ var v=b.getFieldValue('L_'+k); if(v) parts.push(k+': '+lit(v)); }); return ['__mlang({ '+parts.join(', ')+' })',O.FUNCTION_CALL]; });
+  function(b){ need('mlang'); var parts=[]; ['ko','en','ja','es','fr','de','zh','pt','ru','tr'].forEach(function(k){ var v=b.getFieldValue('L_'+k); if(v) parts.push(k+': '+lit(v)); }); return ['__mlang({ '+parts.join(', ')+' })',O.FUNCTION_CALL]; });
 def('val_curlang',function(){ this.appendDummyInput().appendField(T('사용자의 언어')); val(this,'String','페이지를 보는 사람의 브라우저 언어 글자예요. 한국어는 ko, 영어는 en, 일본어는 ja예요'); },
   function(b){ need('lang'); return ['__lang()',O.FUNCTION_CALL]; });
 def('act_type',function(){ this.appendDummyInput().appendField(T('타자 치듯')); this.appendValueInput('TEXT').setCheck('String'); this.appendDummyInput().appendField(TK('을(를)','을(를) [타자]')).appendField(elField(),'EL').appendField(T('에 한 글자씩')); this.appendValueInput('SEC').setCheck('Number'); this.appendDummyInput().appendField(T('초마다 쓰기')); this.setInputsInline(true); act(this,'글자를 한 글자씩 차례로 나타내요. 다 쓸 때까지 기다렸다가 다음 블록으로 가요. 같은 요소에 새로 쓰면 먼저 쓰던 것은 멈춰요'); },
@@ -1359,7 +1359,7 @@ def('val_cd_left',function(){ this.appendDummyInput().appendField(T('카운트�
 def('ev_cd_end',function(){ this.appendDummyInput().appendField(T('카운트다운이 끝나면')); hat(this,'카운트다운이 0이 될 때 한 번 해요'); },
   function(b){ need('cd'); return 'document.addEventListener(\'bhcdend\', '+AF()+') {\n'+hatBody(b)+'});\n'; });
 
-def('val_lang',function(){ this.appendDummyInput().appendField(T('만약 사용자의 언어가')).appendField(new Blockly.FieldDropdown(function(){ return [[T('한국어'),'ko'],[T('영어'),'en'],[T('일본어'),'ja'],[T('스페인어'),'es'],[T('프랑스어'),'fr'],[T('독일어'),'de']]; }),'LANG').appendField(T('인가?')); val(this,'Boolean','페이지를 보는 사람의 브라우저 언어가 같으면 참이에요. 만약 블록 안에 끼워 써요'); },
+def('val_lang',function(){ this.appendDummyInput().appendField(T('만약 사용자의 언어가')).appendField(new Blockly.FieldDropdown(function(){ return [[T('한국어'),'ko'],[T('영어'),'en'],[T('일본어'),'ja'],[T('스페인어'),'es'],[T('프랑스어'),'fr'],[T('독일어'),'de'],[T('중국어'),'zh'],[T('포르투갈어'),'pt'],[T('러시아어'),'ru'],[T('튀르키예어'),'tr']]; }),'LANG').appendField(T('인가?')); val(this,'Boolean','페이지를 보는 사람의 브라우저 언어가 같으면 참이에요. 만약 블록 안에 끼워 써요'); },
   function(b){ return ['((navigator.language || \'\').split(\'-\')[0].toLowerCase() === '+lit(b.getFieldValue('LANG'))+')',O.EQUALITY]; });
 def('val_device',function(){ this.appendDummyInput().appendField(T('만약 사용자의 기기가')).appendField(new Blockly.FieldDropdown(function(){ return [[T('모바일'),'mobile'],[T('컴퓨터'),'desktop']]; }),'DEV').appendField(T('인가?')); val(this,'Boolean','폰이나 태블릿이면 "모바일", 아니면 "컴퓨터"예요. 만약 블록 안에 끼워 써요'); },
   function(b){ need('device'); return ['(__isMobile() === '+(b.getFieldValue('DEV')==='mobile')+')',O.EQUALITY]; });
