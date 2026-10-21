@@ -159,9 +159,9 @@ function wrongRead(){ var a=[]; try{ a=JSON.parse(localStorage.getItem(WLS)||'[]
 function wrongServer(){
   function q(cols){ return sb.from('ff_ai_wrong').select(cols).order('id',{ascending:false}).limit(200); }
   /* the history column exists only after supabase-ff-ai-wrong-history.sql; without it the list is read without it */
-  return q('id,tool,model,question,answer,correction,created_at,history').then(function(r){ return r.error?q('id,tool,model,question,answer,correction,created_at'):r; }).then(function(r){
+  return q('id,tool,model,question,answer,correction,created_at,history,reason').then(function(r){ return r.error?q('id,tool,model,question,answer,correction,created_at,history'):r; }).then(function(r){ return r.error?q('id,tool,model,question,answer,correction,created_at'):r; }).then(function(r){
     serverWrong=(r.error||!r.data)?[]:r.data.map(function(x){ var h=null; try{ h=x.history?JSON.parse(x.history):null; }catch(e){}
-      return {sid:x.id, t:x.created_at, tool:x.tool, model:x.model, q:x.question, a:x.answer, fix:x.correction, h:Array.isArray(h)?h:null}; });
+      return {sid:x.id, t:x.created_at, tool:x.tool, model:x.model, q:x.question, a:x.answer, fix:x.correction, why:x.reason||'', h:Array.isArray(h)?h:null}; });
     renderWrong();
   },function(){ serverWrong=[]; });
 }
@@ -178,6 +178,7 @@ function renderWrong(){
     if(e.h&&e.h.length) line('meta',F('앞 대화 {0}줄 함께 저장됨',e.h.length));
     if(e.q) line('q','Q. '+e.q);
     if(e.a) line('wa',T('AI 답')+': '+String(e.a).slice(0,400));
+    if(e.why) line('meta',T('이유')+': '+T(({fact:'사실이 틀려요',tone:'말투나 형식이 이상해요',offtopic:'질문과 상관없는 답이에요',repeat:'같은 말을 반복해요'})[e.why]||e.why));
     if(e.fix) line('fx',T('맞는 답')+': '+e.fix);
     line('meta',[e.tool,e.model,String(e.t||'').slice(0,16).replace('T',' ')].filter(Boolean).join(' · '));
     var add=document.createElement('button'); add.className='btn ghost'; add.type='button'; add.textContent=T('가르치기에 추가');
