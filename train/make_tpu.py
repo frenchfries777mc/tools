@@ -149,7 +149,7 @@ shutil.rmtree("merged", ignore_errors=True)
 model.save_pretrained("merged"); tok.save_pretrained("merged")
 from huggingface_hub import HfApi
 api = HfApi(token=HF_TOKEN); user = api.whoami()["name"]
-rid = f"{user}/FF-Tools-{CFG['size']}-merged" + ("-1.5" if VERSION == "1.5" else "") + "-tpu"   # its own repo: the GPU result stays untouched
+rid = f"{user}/FF-Tools-{CFG['size']}-merged" + ("-" + VERSION if VERSION in ("1.5", "1.6") else "") + "-tpu"   # its own repo: the GPU result stays untouched
 api.create_repo(rid, private=True, exist_ok=True)
 api.upload_folder(folder_path="merged", repo_id=rid, commit_message="Tools fine-tune (TPU, MaxText LoRA)")
 print("올렸어요:", rid)
