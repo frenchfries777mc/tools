@@ -132,7 +132,18 @@ form.in textarea:focus{outline:none;}
 .rl .del{flex:0 0 auto; background:transparent; border:1px solid var(--line); border-radius:12px; padding:0 12px; color:var(--dim); cursor:pointer; font-size:13px;} .rl .del:hover{color:var(--bad); border-color:var(--bad);}
 .cmeta{font-size:12px; color:var(--dim); margin:8px 4px 0;}
 .rl .rn{flex:0 0 auto; background:transparent; border:1px solid var(--line); border-radius:12px; padding:0 12px; color:var(--dim); cursor:pointer; font-size:13px;} .rl .rn:hover{color:var(--text); border-color:var(--fry);}
-.dlg input{width:100%; box-sizing:border-box; margin:0 0 14px; background:var(--bg); color:inherit; border:1px solid var(--line); border-radius:10px; padding:10px 12px; font:inherit;}
+.dlg input[type=text]{width:100%; box-sizing:border-box; margin:0 0 14px; background:var(--bg); color:inherit; border:1px solid var(--line); border-radius:10px; padding:10px 12px; font:inherit;}
+.arenaGo{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:14px;} .arenaGo small{color:var(--dim); font-size:12px;}
+.arena{display:grid; gap:12px; margin-top:6px;} .arow{display:flex; gap:10px; flex-wrap:wrap; align-items:center; font-size:13px;} .arow select{background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:6px 8px; color:inherit;}
+.arow .chk{display:flex; gap:6px; align-items:center; color:var(--dim);}
+.acards{display:grid; grid-template-columns:1fr 1fr; gap:12px;} @media(max-width:620px){ .acards{grid-template-columns:1fr;} }
+.ac{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:12px 14px; min-height:120px;} .ac h3{margin:0 0 6px; font-size:14px; color:var(--dim);} .ac .atx{white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.65;}
+.ac.win{border-color:var(--good,#5fd38d);}
+.avote{display:flex; gap:8px; flex-wrap:wrap;} .avote button{background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:9px 14px; cursor:pointer;} .avote button:hover:not([disabled]){border-color:var(--fry);} .avote button[disabled]{opacity:.5; cursor:default;}
+.ares{font-size:13px; color:var(--dim); line-height:1.7;}
+.msug{display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:8px 12px; background:var(--panel2); border:1px solid var(--line); border-radius:12px; font-size:13px;} .msug span{flex:1; min-width:0; overflow-wrap:anywhere;}
+.mlist{display:grid; gap:6px; margin:0 0 12px; max-height:44vh; overflow:auto;} .mrow{display:flex; gap:6px;} .mrow input{flex:1; min-width:0; margin:0!important;} .mrow button{flex:0 0 auto;}
+.dlg .mnote{font-size:12px; color:var(--dim); line-height:1.55; margin:0 0 12px;} .dlg .mon{display:flex; gap:8px; align-items:center; margin:0 0 12px; font-size:14px;}
 .hint{font-size:12px; color:var(--dim); line-height:1.6; margin:10px 0 0; text-align:center;}
 .ov{position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; padding:16px; background:rgba(0,0,0,.55);}
 .dlg{width:min(420px,100%); background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px;}
@@ -155,15 +166,26 @@ form.in textarea:focus{outline:none;}
   </section>
   <section id="pick">
     <div class="models" id="models"></div>
+    <div class="arenaGo"><button class="ghost" id="arenaBtn" type="button" disabled>⚔ AI 대결장</button><small>두 모델이 같은 질문에 답하면, 더 나은 쪽을 골라요</small></div>
     <section class="recent" id="recent" hidden><h2>지난 대화</h2><p class="sub">이 기기에만 저장돼요</p><p class="sub">이름을 붙인 대화는 오래돼도 지워지지 않아요</p><ul class="rl" id="rl"></ul></section>
     <div class="err" id="gpuErr" hidden>이 기기나 브라우저에서는 쓸 수 없어요. 최신 크롬이나 엣지, 또는 최신 사파리에서 열어 주세요.</div>
   </section>
+  <section class="arena" id="arena" hidden>
+    <div class="bar"><b>⚔ AI 대결장</b><span class="sp"></span><button class="ghost" id="arenaBack" type="button">돌아가기</button></div>
+    <div class="arow"><label>왼쪽 <select id="arA"></select></label><label>오른쪽 <select id="arB"></select></label><label class="chk"><input type="checkbox" id="arBlind" checked> 누가 썼는지 숨기기</label></div>
+    <form class="in" id="arForm"><textarea id="arQ" rows="1" maxlength="300" placeholder="두 모델에게 물어볼 질문"></textarea><button class="btn" id="arGo" type="submit">대결!</button></form>
+    <div class="acards" id="acards" hidden><div class="ac" id="acL"><h3></h3><div class="atx" data-notr></div></div><div class="ac" id="acR"><h3></h3><div class="atx" data-notr></div></div></div>
+    <div class="avote" id="avote" hidden><button type="button" data-w="l">왼쪽이 나아요</button><button type="button" data-w="r">오른쪽이 나아요</button><button type="button" data-w="tie">비슷해요</button><button type="button" data-w="none">둘 다 별로예요</button></div>
+    <div class="ares" id="ares" data-notr></div>
+    <p class="hint">모델을 번갈아 불러와서 처음에는 시간이 걸려요. 결과는 이 기기에 남고, 로그인했다면 개발자에게도 전해져요.</p>
+  </section>
   <section class="chat" id="chat" hidden>
-    <div class="bar"><span class="cur"><img class="ci" id="curico" alt="" width="26" height="26"><span id="cur" data-notr></span></span><span class="sp"></span><span class="len" id="len" role="group" aria-label="답 방식" title="신속은 답 1개, 보통은 3개, 노력은 7개를 만들어 투표한 뒤 가장 많은 쪽으로 답해요"><button type="button" data-l="0">신속</button><button type="button" data-l="1">보통</button><button type="button" data-l="2">노력</button></span><button class="ghost" id="clear" type="button">새 대화</button><button class="ghost" id="nameBtn" type="button" disabled>이름 짓기</button><button class="ghost" id="change" type="button">모델 바꾸기</button></div>
+    <div class="bar"><span class="cur"><img class="ci" id="curico" alt="" width="26" height="26"><span id="cur" data-notr></span></span><span class="sp"></span><span class="len" id="len" role="group" aria-label="답 방식" title="신속은 답 1개, 보통은 3개, 노력은 7개를 만들어 투표한 뒤 가장 많은 쪽으로 답해요"><button type="button" data-l="0">신속</button><button type="button" data-l="1">보통</button><button type="button" data-l="2">노력</button></span><button class="ghost" id="clear" type="button">새 대화</button><button class="ghost" id="nameBtn" type="button" disabled>이름 짓기</button><button class="ghost" id="memoBtn" type="button">메모장</button><button class="ghost" id="change" type="button">모델 바꾸기</button></div>
     <div class="cmeta" id="cmeta" data-notr></div>
     <div class="log" id="log" aria-live="polite"></div>
     <div class="chips" id="chips" aria-label="예시 질문"></div>
     
+    <div class="msug" id="msug" hidden><span data-notr></span><button class="ghost" id="msugYes" type="button">메모장에 넣기</button><button class="ghost" id="msugNo" type="button">아니요</button></div>
     <form class="in" id="form"><textarea id="q" rows="1" maxlength="600" placeholder="궁금한 걸 물어보세요"></textarea><button class="btn" id="send" type="submit">보내기</button></form>
   </section>
   <p class="hint">작은 AI라서 틀릴 수 있어요. 중요한 일은 꼭 다시 확인해 주세요.</p>
@@ -174,6 +196,8 @@ form.in textarea:focus{outline:none;}
 <script src="../ai-wrong.js?v=4.l13"></script>
 <script src="jokes.js?v=2.l13"></script>
 <script src="vote.js?v=2"></script>
+<script src="memo.js?v=1"></script>
+<script src="arena.js?v=1"></script>
 <script src="https://frenchfries777mc.github.io/games/ff-lang.js"></script>
 <script src="https://frenchfries777mc.github.io/games/ff-auth.js"></script>
 <script>
@@ -188,7 +212,8 @@ var cur=null, hist=[], busy=false, models=[], jst={g:-1};   // jst: what the jok
 /* how talkative the AI is: the chat page uses its own chat prompt (the trained spreadsheet prompt makes answers short) */
 var LEN=[{tok:220, ask:'Answer in 1 to 3 short sentences.'}, {tok:520, ask:'Answer in 3 to 5 sentences with one concrete example.'}, {tok:1000, ask:'Be talkative: answer in 6 to 10 sentences, explain the idea step by step with a concrete example, then end with a friendly follow-up question or tip.'}];
 var lv=1; try{ var sv=parseInt(localStorage.getItem('ffchat.len'),10); if(sv>=0&&sv<=2) lv=sv; }catch(e){}
-function chatSys(){ return 'You are chatting with a curious person. '+LEN[lv].ask+' Be warm and natural. Plain text only: no markdown tables, no code fences. Use the language the question is written in.'; }
+function baseSys(ask){ return 'You are chatting with a curious person. '+ask+' Be warm and natural. Plain text only: no markdown tables, no code fences. Use the language the question is written in.'; }
+function chatSys(){ return baseSys(LEN[lv].ask)+(window.FFMemo?FFMemo.block():''); }   // FFMemo.block(): 내 AI 메모장 (이 기기에만 저장)
 function showLen(){ Array.prototype.forEach.call(document.querySelectorAll('#len button'),function(b){ b.classList.toggle('on',+b.dataset.l===lv); b.textContent=T(['신속','보통','노력'][+b.dataset.l]); }); }
 /* conversations are kept only in this browser (localStorage), newest first */
 var CK='ffchat.convs.v1', CAP=30, conv=null, gen=0;   // gen changes whenever the open conversation changes, so a late answer never lands in another one
@@ -360,6 +385,7 @@ function send(q){
   q=String(q||'').trim(); if(!q||busy||!cur) return;
   var before=prior(conv?conv.msgs:[]);
   $('q').value=''; $('chips').hidden=true; add('u',q); convPush('u',q);
+  hideSug(); var sg=window.FFMemo&&FFMemo.suggest(q); if(sg) showSug(sg);
   var out=add('a',''), got='', g=gen, mid=cur.id;
   if(jst.g!==gen) jst={g:gen};
   var sc=window.FFJoke&&FFJoke.reply(q,jst,{id:cur.id,name:cur.name});
@@ -392,7 +418,7 @@ $('send').onclick=function(){ if(busy){ if(fake) fake.cancel(); else FFAI.stop()
 $('q').onkeydown=function(e){ if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){ e.preventDefault(); if(!busy) send($('q').value); } };
 Array.prototype.forEach.call(document.querySelectorAll('#len button'),function(b){ b.onclick=function(){ lv=+b.dataset.l; try{ localStorage.setItem('ffchat.len',String(lv)); }catch(e){} showLen(); renderMeta(); }; });
 showLen();
-$('clear').onclick=function(){ if(fake) fake.cancel(); if(busy) FFAI.stop(); gen++; hist=[]; conv=null; greet(); $('chips').hidden=false; renderMeta(); };
+$('clear').onclick=function(){ if(fake) fake.cancel(); if(busy) FFAI.stop(); gen++; hist=[]; conv=null; greet(); $('chips').hidden=false; renderMeta(); hideSug(); };
 $('nameBtn').onclick=function(){ if(conv) convRename(conv); };
 $('change').onclick=function(){ if(fake) fake.cancel(); if(busy) FFAI.stop(); gen++; cur=null; hist=[]; conv=null; renderMeta(); renderRecent(); $('chat').hidden=true; $('pick').hidden=false; $('hero').hidden=false; };
 ['너는 누구야?','파이썬이 뭐야?','광합성을 쉽게 설명해 줘'].forEach(function(t){
@@ -400,12 +426,92 @@ $('change').onclick=function(){ if(fake) fake.cancel(); if(busy) FFAI.stop(); ge
 });
 function showLoginHint(){ $('loginHint').hidden=!(window.FFAuth&&FFAuth.user&&FFAuth.user()); }
 if(window.FFAuth){ FFAuth.ready.then(function(){ showLoginHint(); FFAuth.onChange(showLoginHint); },function(){}); }
+/* ---------- 내 AI 메모장 (memo.js): 취향 메모를 이 기기에만 적어 두고 AI가 참고해요 ---------- */
+var sug=null;
+function hideSug(){ sug=null; $('msug').hidden=true; }
+function showSug(x){ sug=x; $('msug').querySelector('span').textContent=F('메모장에 "{0}" 를 넣을까요?',x.text); $('msug').hidden=false; }
+$('msugYes').onclick=function(){ if(sug&&FFMemo.add(sug.text)) $('msug').querySelector('span').textContent=T('메모장에 넣었어요'); else hideSug(); sug=null; setTimeout(function(){ if(!sug) $('msug').hidden=true; },1400); };
+$('msugNo').onclick=hideSug;
+function memoDlg(){
+  var o=document.createElement('div'); o.className='ov'; o.setAttribute('data-notr','');
+  o.innerHTML='<div class="dlg" role="dialog" aria-modal="true"><p class="mnote"></p><label class="mon"><input type="checkbox"> <span></span></label><div class="mlist"></div><div class="mrow"><input type="text" maxlength="'+FFMemo.MAXC+'"><button class="ghost" type="button"></button></div><div class="acts" style="margin-top:12px"><button class="btn" type="button"></button></div></div>';
+  var note=o.querySelector('.mnote'), chk=o.querySelector('.mon input'), lst=o.querySelector('.mlist'), inp=o.querySelector('.mrow input'), addb=o.querySelector('.mrow button'), cls=o.querySelector('.acts button');
+  note.textContent=T('내 AI 메모장: 내 취향을 적어 두면 AI가 참고해요. 이 기기에만 저장되고 서버로 나가지 않아요. 작은 AI라서 메모를 못 지킬 때도 있어요.');
+  o.querySelector('.mon span').textContent=T('메모장 쓰기'); chk.checked=FFMemo.on(); chk.onchange=function(){ FFMemo.setOn(chk.checked); };
+  inp.placeholder=T('예: 반말로 말하기'); addb.textContent=T('추가'); cls.textContent=T('닫기');
+  function draw(){
+    lst.innerHTML='';
+    FFMemo.list().forEach(function(n){
+      var r=document.createElement('div'); r.className='mrow'; var i=document.createElement('input'); i.type='text'; i.maxLength=FFMemo.MAXC; i.value=n.text;
+      i.onchange=function(){ FFMemo.edit(n.id,i.value); draw(); };
+      var d=document.createElement('button'); d.type='button'; d.className='ghost'; d.textContent='✕'; d.setAttribute('aria-label',T('삭제')); d.onclick=function(){ FFMemo.remove(n.id); draw(); };
+      r.appendChild(i); r.appendChild(d); lst.appendChild(r);
+    });
+    addb.disabled=FFMemo.list().length>=FFMemo.MAXN;
+  }
+  function add(){ if(FFMemo.add(inp.value)) inp.value=''; draw(); inp.focus(); }
+  addb.onclick=add; inp.onkeydown=function(e){ if(e.key==='Enter'&&!e.isComposing){ e.preventDefault(); add(); } };
+  function done(){ o.remove(); $('q').focus(); } cls.onclick=done; o.onkeydown=function(e){ if(e.key==='Escape') done(); };
+  draw(); document.body.appendChild(o); inp.focus();
+}
+$('memoBtn').onclick=memoDlg;
+
+/* ---------- AI 대결장 (arena.js): 같은 질문에 두 모델이 차례로 답하고, 더 나은 쪽을 골라요 ---------- */
+var arGen=0, arRun=false, arSide=null;   // arSide: {l:model, r:model, q, lt, rt}
+function arenaReady(){ return models.filter(function(m){ return m.ready; }); }
+function arenaFill(){
+  var rd=arenaReady(); $('arenaBtn').disabled=rd.length<2;
+  ['arA','arB'].forEach(function(id,k){ var sel=$(id), v=sel.value; sel.innerHTML='';
+    rd.forEach(function(m){ var op=document.createElement('option'); op.value=m.id; op.textContent=String(m.name).split(' ').pop(); sel.appendChild(op); });
+    if(v&&rd.some(function(m){ return m.id===v; })) sel.value=v; else if(rd[k]) sel.value=rd[k].id; });
+  if($('arA').value===$('arB').value){ var o2=rd.filter(function(m){ return m.id!==$('arA').value; })[0]; if(o2) $('arB').value=o2.id; }   // 둘이 같으면 서로 다르게
+}
+function mName(id){ var m=models.filter(function(x){ return x.id===id; })[0]; return m?String(m.name).split(' ').pop():id; }
+function arenaOpen(on){ $('arena').hidden=!on; $('pick').hidden=on; $('hero').hidden=on; if(on){ arenaFill(); $('arQ').focus(); } }
+$('arenaBtn').onclick=function(){ arenaOpen(true); };
+$('arenaBack').onclick=function(){ if(arRun){ arGen++; FFAI.stop(); arRun=false; setArBusy(false); } arenaOpen(false); };
+function setArBusy(b){ arRun=b; $('arGo').textContent=T(b?'멈추기':'대결!'); $('arGo').type=b?'button':'submit'; }
+function arOne(mid,q,el,g){
+  return FFAI.ask({model:mid, prose:true, chat:true, maxTokens:LEN[1].tok, facts:true, question:q, history:[], system:baseSys(LEN[1].ask), prompt:q,
+    onText:function(t){ if(g===arGen) el.textContent=t; }}).then(function(r){ return String(typeof r==='string'?r:(r&&r.text)||'').trim(); },function(){ return ''; });
+}
+function arenaRun(q){
+  var a=$('arA').value, b=$('arB').value;
+  if(!a||!b||a===b){ $('ares').textContent=T('왼쪽과 오른쪽에 서로 다른 모델을 골라 주세요'); return; }
+  var unseen=[a,b].filter(function(id){ return !seen(id); }), mm=unseen.map(function(id){ return models.filter(function(m){ return m.id===id; })[0]; });
+  if(mm.length){   // 처음 쓰는 모델은 내려받기 전에 한 번 물어봐요 (대화 화면과 같게)
+    var sz=mm.map(function(m){ return String(m.name).split(' ').pop()+' '+m.size; }).join(', ');
+    ask(T('처음 한 번만 {0} 크기의 파일을 내려받아요. 와이파이에서 쓰는 걸 추천해요. 계속할까요?').replace('{0}',sz)).then(function(ok){ if(ok){ unseen.forEach(markSeen); arenaRun(q); } });
+    return;
+  }
+  var blind=$('arBlind').checked, swap=blind&&Math.random()<0.5, L=swap?b:a, R=swap?a:b, g=++arGen;
+  arSide={l:L, r:R, q:q, lt:'', rt:''}; setArBusy(true);
+  $('avote').hidden=true; $('ares').textContent=''; $('acards').hidden=false;
+  [['acL',L],['acR',R]].forEach(function(x){ var c=$(x[0]); c.classList.remove('win'); c.querySelector('h3').textContent=blind?T('누구일까요?'):mName(x[1]); dots(c.querySelector('.atx')); });
+  arOne(L,q,$('acL').querySelector('.atx'),g).then(function(t){ if(g!==arGen) return; arSide.lt=t; if(!t) $('acL').querySelector('.atx').textContent=T('답하지 못했어요');
+    dots($('acR').querySelector('.atx'));
+    return arOne(R,q,$('acR').querySelector('.atx'),g).then(function(t2){ if(g!==arGen) return; arSide.rt=t2; if(!t2) $('acR').querySelector('.atx').textContent=T('답하지 못했어요'); }); })
+  .then(function(){ if(g!==arGen) return; setArBusy(false);
+    if(arSide.lt&&arSide.rt){ Array.prototype.forEach.call($('avote').children,function(bt){ bt.disabled=false; }); $('avote').hidden=false; }
+    else $('ares').textContent=T('한쪽이 답하지 못해서 투표할 수 없어요. 다시 해 보세요'); });
+}
+$('arForm').onsubmit=function(e){ e.preventDefault(); if(arRun){ arGen++; FFAI.stop(); setArBusy(false); return; } var q=$('arQ').value.trim(); if(q) arenaRun(q); };
+$('arQ').onkeydown=function(e){ if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){ e.preventDefault(); if(!arRun) $('arForm').requestSubmit(); } };
+Array.prototype.forEach.call($('avote').children,function(bt){ bt.onclick=function(){
+  if(!arSide||!arSide.lt||!arSide.rt) return; var w=bt.dataset.w;
+  Array.prototype.forEach.call($('avote').children,function(x){ x.disabled=true; });
+  FFArena.record({q:arSide.q, a:{model:arSide.l,text:arSide.lt}, b:{model:arSide.r,text:arSide.rt}, win:w==='l'?'a':w==='r'?'b':w});
+  $('acL').querySelector('h3').textContent=mName(arSide.l); $('acR').querySelector('h3').textContent=mName(arSide.r);
+  if(w==='l') $('acL').classList.add('win'); if(w==='r') $('acR').classList.add('win');
+  var tl=FFArena.tally(), line=[arSide.l,arSide.r].map(function(id){ var x=tl[id]||{win:0,lose:0,tie:0,none:0,games:0}; return mName(id)+' '+F('{0}승 {1}무 {2}패',x.win,x.tie,x.lose)+' ('+F('{0}판',x.games)+')'; }).join(' · ');
+  $('ares').textContent=T('투표 고마워요! 이 기기에서의 전적')+': '+line; }; });
+
 var tuned=FFAI.models().filter(function(m){ return /^FF-/.test(m.id); });
 models=tuned.map(function(m){ return {id:m.id, name:m.name, size:m.size, ready:false}; });
 renderModels();
 FFAI.gpu().then(function(ok){
   if(!ok){ $('gpuErr').hidden=false; return; }
-  models.forEach(function(m){ FFAI.tunedReady(m.id).then(function(r){ m.ready=!!r; renderModels(); }); });
+  models.forEach(function(m){ FFAI.tunedReady(m.id).then(function(r){ m.ready=!!r; renderModels(); arenaFill(); }); });
 });
 })();
 </script>
