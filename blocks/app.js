@@ -222,10 +222,14 @@ function writeIdx(){ return lsSet(PIDX,JSON.stringify(P)); }
 function pid(){ return 'p'+Date.now().toString(36)+Math.floor(Math.random()*1296).toString(36); }
 function entry(id){ return P.list.filter(function(x){ return x.id===id; })[0]; }
 function readProj(id){ try{ return JSON.parse(lsGet(PK+id)||'null'); }catch(e){ return null; } }
+function wsJSON(){ return JSON.stringify(Blockly.serialization.workspaces.save(ws)); }
 function snapshot(){ return {name:$('projName').value,ws:Blockly.serialization.workspaces.save(ws),imgs:BH.IMGS,snds:BH.SNDS}; }
 function saveNow(){ clearTimeout(saveT); if(!P.cur) return; var d=snapshot(), ok=lsSet(PK+P.cur,JSON.stringify(d)), e=entry(P.cur); if(e){ e.name=d.name; e.t=Date.now(); } writeIdx();
-  if(!ok&&!fullWarned){ fullWarned=true; toast(T('저장 공간이 꽉 찼어요. 프로젝트 파일로 저장해 두세요')); } if(ok) fullWarned=false; return ok; }
+  if(!ok&&!fullWarned){ fullWarned=true; toast(T('저장 공간이 꽉 찼어요. 프로젝트 파일로 저장해 두세요')); } if(ok) fullWarned=false; if(ok&&window.FFVer) FFVer.tick('blocks.'+P.cur,wsJSON); return ok; }
 function save(){ clearTimeout(saveT); saveT=setTimeout(saveNow,300); }
+$('verBtn').onclick=function(){ if(!P.cur||!window.FFVer) return; saveNow(); FFVer.open({key:'blocks.'+P.cur,title:'버전 기록',get:wsJSON,toast:toast,
+  put:function(d){ loadJSON(JSON.parse(d)); save(); },
+  describe:function(d){ return F('블록 {0}개',(d.match(/"type":/g)||[]).length); }}); };
 window.addEventListener('pagehide',function(){ saveNow(); });
 document.addEventListener('visibilitychange',function(){ if(document.hidden) saveNow(); });
 function setSnds(o){ var S=BH.SNDS; Object.keys(S).forEach(function(k){ delete S[k]; }); if(o&&typeof o==='object') Object.keys(o).forEach(function(k){ var m=o[k]; if(m&&typeof m.data==='string'&&/^data:(audio|video)\//.test(m.data)) S[k]={name:k,data:m.data}; }); }

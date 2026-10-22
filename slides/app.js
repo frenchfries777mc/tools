@@ -156,7 +156,8 @@ function isDefaultName(n){ return !n||!String(n).trim()||n===T('새 발표 자�
 function saveNow(){ clearTimeout(saveT); saveT=null; if(!deck||MODE) return; deck.slides.forEach(connSync); deck.t=Date.now(); store.last=deck.id;
   if(store.decks.indexOf(deck)<0) store.decks.unshift(deck);
   try{ localStorage.setItem(LS,JSON.stringify(store)); $('saved').textContent=T('저장됨'); }catch(e){ $('saved').textContent=''; toast(T('저장 공간이 부족해서 저장하지 못했어요')); }
-  if(window.FSLX&&FSLX.onSaved) FSLX.onSaved(); }
+  if(window.FSLX&&FSLX.onSaved) FSLX.onSaved();
+  if(window.FFVer) FFVer.tick('slides.'+deck.id,snap); }
 function saveSoon(){ $('saved').textContent=''; clearTimeout(saveT); saveT=setTimeout(saveNow,400); }
 function openDeck(d){
   if(deck&&deck!==d&&!deck.slides.length&&isDefaultName(deck.name)&&!deck.topic) store.decks=store.decks.filter(function(x){ return x!==deck; }); // drop an untouched empty deck
@@ -168,6 +169,9 @@ function openDeck(d){
 function snap(){ return JSON.stringify({n:deck.name, th:deck.theme, s:deck.slides, c:cur, f:deck.footer, nm:deck.nums, fo:deck.font, tr:deck.trans, ma:deck.master, au:deck.auto}); }
 function pushUndo(s){ undo.push(s||snap()); if(undo.length>100) undo.shift(); redo=[]; updUR(); }
 function restore(j){ var o=JSON.parse(j); deck.name=o.n; deck.theme=o.th; deck.footer=o.f||''; deck.nums=!!o.nm; deck.font=o.fo||''; deck.trans=o.tr||'fade'; deck.master=fixMaster(o.ma); deck.auto=fixAuto(o.au); deck.slides=o.s.map(fixSlide); cur=Math.max(0,Math.min(o.c,deck.slides.length-1)); $('deckName').value=deck.name; refresh(); saveSoon(); }
+$('verBtn').onclick=function(){ blurEdit(); if(gen||busyOn||!window.FFVer) return; FFVer.open({key:'slides.'+deck.id,title:'버전 기록',get:snap,toast:toast,
+  put:function(d){ pushUndo(); restore(d); },
+  describe:function(d){ var o=JSON.parse(d); return F('슬라이드 {0}장',o.s.length); }}); };
 function doUndo(){ blurEdit(); if(!undo.length||gen||busyOn) return; redo.push(snap()); restore(undo.pop()); updUR(); }
 function doRedo(){ blurEdit(); if(!redo.length||gen||busyOn) return; undo.push(snap()); restore(redo.pop()); updUR(); }
 function updUR(){ $('undoBtn').disabled=!undo.length||gen||busyOn; $('redoBtn').disabled=!redo.length||gen||busyOn; if(window.FRB) FRB.sync(); }
