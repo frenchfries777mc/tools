@@ -241,13 +241,24 @@ function fxShow(v){
 }
 function fxVal(n){ try{ return fxShow(eng.ev(n,doc.active)); }catch(e){ return E.isErr(e)?e.e:'#ERROR!'; } }
 function fxText(t,cls){ var s=document.createElement('span'); if(cls) s.className=cls; s.textContent=t; return s; }
+/* 칸의 일기 (sheet/diary.js): the values this cell has had, and a short story the AI writes from them */
+function fxDiary(p,cell){
+  var now=Date.now(), e=window.FSDiary?FSDiary.entries(cell,now):[]; if(!e.length) return;
+  var h=document.createElement('h4'); h.appendChild(fxText(T('칸의 일기'))); p.appendChild(h);
+  var ol=document.createElement('ol'); e.forEach(function(x){ var li=document.createElement('li'); if(x.when) li.appendChild(fxText(T(x.when)+' ')); var c=document.createElement('code'); c.textContent=x.v; li.appendChild(c); ol.appendChild(li); }); p.appendChild(ol);
+  if(!window.FSDiaryAI) return;
+  var b=document.createElement('button'); b.type='button'; b.className='fxai'; b.textContent=T('이야기로 요약'); var out=document.createElement('div'); out.className='fxstory';
+  b.onclick=function(){ b.disabled=true; out.textContent=T('쓰는 중…'); var at=E.addr(act.r,act.c);
+    FSDiaryAI(FSDiary.prompt(at,cell,Date.now())).then(function(t){ out.textContent=t; },function(er){ out.textContent=(er&&er.message)||T('AI가 답하지 못했어요'); }).then(function(){ b.disabled=false; }); };
+  p.appendChild(b); p.appendChild(out);
+}
 function fxRender(){
   var p=$('fxPanel'); if(p.hidden) return;
   var cell=sh.cells[K(act.r,act.c)], raw=cell&&cell.v!=null?String(cell.v):'', x=window.FSExplain.explain(raw,{parse:E.parse,val:fxVal,ref:fxVal,desc:fxDescOf,addr:E.addr,rangeStr:E.rangeStr,F:F});
   p.textContent=''; var h=document.createElement('h4'), cl=document.createElement('button'); cl.className='fxx'; cl.type='button'; cl.textContent='×'; cl.setAttribute('aria-label',T('닫기')); cl.onclick=function(){ fxToggle(false); };
   p.appendChild(cl); h.appendChild(fxText(T('수식 풀이')+' · '+E.addr(act.r,act.c))); p.appendChild(h);
   function line(t,cls){ var d=document.createElement('div'); d.appendChild(fxText(t,cls)); p.appendChild(d); return d; }
-  if(x.kind==='text') return void line(raw?T('이 칸은 수식이 아니라 글자나 숫자예요. 수식은 =로 시작해요.'):T('빈 칸이에요. 수식이 있는 칸을 눌러 보세요.'));
+  if(x.kind==='text'){ line(raw?T('이 칸은 수식이 아니라 글자나 숫자예요. 수식은 =로 시작해요.'):T('빈 칸이에요. 수식이 있는 칸을 눌러 보세요.')); return void fxDiary(p,cell); }
   if(x.kind==='bad'){ line(T('수식을 읽지 못했어요.'),'fxbad'); line(F('여는 괄호 {0}개, 닫는 괄호 {1}개예요.',x.open,x.close)); line(x.hint); return; }
   if(x.kind==='ai'){ line(T('AI가 칸 내용을 보고 답을 채우는 함수예요.')); if(x.prompt){ var d1=line(T('시킨 일')+': '); d1.appendChild(fxText(x.prompt,'fxv')); } var d2=line(T('지금 답')+': '); d2.appendChild(fxText(x.value,'fxv')); line(T('AI의 답은 틀릴 수 있어요. 아래 ✨ 검수에서 맞는지 확인해 주세요.'),'fxn'); return; }
   if(x.refs.length){ var rr=document.createElement('div'); rr.className='fxr'; rr.appendChild(fxText(T('쓰는 칸')+':','fxn')); x.refs.forEach(function(q){ var c=document.createElement('code'); c.textContent=q.t+' = '+q.v; rr.appendChild(c); }); p.appendChild(rr); }
@@ -325,7 +336,7 @@ function closeParens(s){ var o=0, q=false; for(var i=0;i<s.length;i++){ var ch=s
 function setRaw(r,c,val){
   var k=K(r,c), cell=sh.cells[k];
   if(val===''||val==null){ if(cell){ delete cell.v; delete cell.ai; delete cell.ar; if(!hasFmt(cell)) delete sh.cells[k]; } return; }
-  if(!cell) cell=sh.cells[k]={}; if(cell.v!==val){ delete cell.ai; delete cell.ar; } cell.v=val; growTo(r,c);
+  if(!cell) cell=sh.cells[k]={}; if(cell.v!==val){ delete cell.ai; delete cell.ar; if(window.FSDiary) FSDiary.record(cell,val,Date.now()); } cell.v=val; growTo(r,c);
 }
 /* v21: sheet protection. sh.lock={all:1,rg:[{r1,c1,r2,c2}]}; every way of changing a cell asks guard() first */
 function locked(r,c){ return E.lockHit(sh.lock,r,c); }
