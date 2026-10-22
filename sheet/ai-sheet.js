@@ -77,7 +77,7 @@ function rerunSel(){
 }
 
 /* ---------- dialog ---------- */
-var mode='formula', lastAnswer='', lastFormula='', lastTable=null, lastChart=null;
+var mode='formula', lastAnswer='', lastFormula='', lastWhy='', lastTable=null, lastChart=null;
 function tableText(){
   var s=A.sel(), a=A.act(), g=(s.r1===s.r2&&s.c1===s.c2)?A.region(a.r,a.c):s;
   if(!g) return null;
@@ -141,9 +141,12 @@ function go(){
     .then(function(r){ var j=FFAI.parseJSON(r), f=String(j.formula||'').trim(); if(f&&f[0]!=='=') f='='+f;
       if(!f){ if(j.explain){ lastFormula=''; out('<div class="aiEx">'+esc(T('수식으로는 만들 수 없는 요청이에요.')+' '+j.explain)+'</div>'); $('aiActs').innerHTML=''; return; } throw new Error(T('AI 답을 읽지 못했어요')); }
       try{ E.parse(f.slice(1)); }catch(e){ throw new Error(T('AI가 만든 수식에 오류가 있어요')+': '+f); }
-      lastFormula=f; out('<code class="aiF">'+esc(f)+'</code><div class="aiEx">'+esc(j.explain||'')+'</div>');
+      lastFormula=f; lastWhy=String(j.explain||'').trim(); out('<code class="aiF">'+esc(f)+'</code><div class="aiEx">'+esc(j.explain||'')+'</div>');
       $('aiActs').innerHTML='<button class="tbtn pri" id="aiPut">'+F('{0}에 넣기',E.addr(a.r,a.c))+'</button>';
-      $('aiPut').onclick=function(){ A.pushUndo(); A.setRaw(a.r,a.c,lastFormula); A.markAI(a.r,a.c,a.r,a.c); A.changed(); close(); }; });
+      /* 넣을 때 AI가 왜 이렇게 썼는지 한 줄 설명을 그 칸 메모로 붙여요 (이미 메모가 있으면 건드리지 않아요. 칸에 마우스를 올리면 보여요) */
+      $('aiPut').onclick=function(){ A.pushUndo(); A.setRaw(a.r,a.c,lastFormula); A.markAI(a.r,a.c,a.r,a.c);
+        var cl=A.sheet.cells[E.K(a.r,a.c)]; if(cl&&!cl.nt&&lastWhy) cl.nt='🤖 '+lastWhy.slice(0,200);
+        A.changed(); close(); }; });
   }
   else if(mode==='graph'){
     if(!t){ busy(false); out('<div class="aiErr">'+esc(T('그래프로 만들 표를 먼저 고르세요'))+'</div>'); return; }
