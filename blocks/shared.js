@@ -10,7 +10,7 @@ var COLS='id,user_id,author,name,image,w,h,created_at';
 
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
 function toast(s){ var t=$('toast'); if(!t) return; t.textContent=s; t.classList.add('on'); clearTimeout(toast.t); toast.t=setTimeout(function(){ t.classList.remove('on'); },2200); }
-function ask(msg,ok,danger){ return window.BHASK?window.BHASK(msg,ok,danger):Promise.resolve(window.confirm(msg)); }
+function ask(msg,ok,danger){ return window.BHASK?window.BHASK(msg,ok,danger):Promise.resolve(false); }   // 브라우저 기본 확인창은 쓰지 않아요 (창이 아직 안 만들어졌으면 안 하고 넘어가요)
 
 /* ---------- account (ff-auth.js) ---------- */
 var authP=null, sb=null, admin=null;
