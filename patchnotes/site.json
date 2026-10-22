@@ -4,6 +4,14 @@
  "notes": [
   {
    "date": "2026-10-22",
+   "build": "v26",
+   "title": "도구 카드 로고",
+   "items": [
+    "Fry Sheet, Block HTML, Fry Slides, Fry Lab 카드에 로고 추가"
+   ]
+  },
+  {
+   "date": "2026-10-22",
    "build": "v25",
    "title": "17개 언어",
    "items": [
