@@ -10,14 +10,14 @@
   }catch(e){}
 })();
 /* Frenchfries777 Tools: page translation.
-   Pages are written in Korean. Each page adds its own strings with FFT.add({'한국어':[en,es,fr,de,ja,zh,pt,ru,tr,nw,gk], ...});
+   Pages are written in Korean. Each page adds its own strings with FFT.add({'한국어':[en,es,fr,de,ja,zh,pt,ru,tr,nw,gk,it,pl,ar], ...});
    text nodes and a few attributes are translated in place (whole text first, then longest phrases).
    The language choice is shared with the games and the hub (localStorage 'arenaClashLang'). */
 (function(){
-  var LS='arenaClashLang', LANGS=['ko','en','es','fr','de','ja','zh','pt','ru','tr','nw','gk'], IX={en:0,es:1,fr:2,de:3,ja:4,zh:5,pt:6,ru:7,tr:8,nw:9,gk:10};
-  var NAMES={ko:'한국어',en:'English',es:'Español',fr:'Français',de:'Deutsch',ja:'日本語',zh:'简体中文',pt:'Português (Brasil)',ru:'Русский',tr:'Türkçe',nw:'Newspeak',gk:'번역기 한국어'};
+  var LS='arenaClashLang', LANGS=['ko','en','es','fr','de','ja','zh','pt','ru','tr','it','pl','ar','nw','gk'], IX={en:0,es:1,fr:2,de:3,ja:4,zh:5,pt:6,ru:7,tr:8,nw:9,gk:10,it:11,pl:12,ar:13};
+  var NAMES={ko:'한국어',en:'English',es:'Español',fr:'Français',de:'Deutsch',ja:'日本語',zh:'简体中文',pt:'Português (Brasil)',ru:'Русский',tr:'Türkçe',it:'Italiano',pl:'Polski',ar:'العربية',nw:'Newspeak',gk:'번역기 한국어'};
   /* fictional languages sit in their own group; Aurebesh is English text in the Aurebesh font (ff-lang.js) */
-  var VIRT={nw:1,gk:1}, VLABEL={ko:'가상 언어',en:'Fictional languages',es:'Idiomas ficticios',fr:'Langues fictives',de:'Fiktive Sprachen',ja:'架空の言語',zh:'虚构语言',pt:'Idiomas fictícios',ru:'Вымышленные языки',tr:'Kurgusal diller',nw:'Unreal speaks',gk:'Fictional 언어들'};
+  var VIRT={nw:1,gk:1}, VLABEL={ko:'가상 언어',en:'Fictional languages',es:'Idiomas ficticios',fr:'Langues fictives',de:'Fiktive Sprachen',ja:'架空の言語',zh:'虚构语言',pt:'Idiomas fictícios',ru:'Вымышленные языки',tr:'Kurgusal diller',it:'Lingue immaginarie',pl:'Języki fikcyjne',ar:'لغات خيالية',nw:'Unreal speaks',gk:'Fictional 언어들'};
   function auOn(){ try{ return !!(window.FFLang&&FFLang.script&&FFLang.script()); }catch(e){ return false; } }
   var pref=null; try{ pref=localStorage.getItem(LS); }catch(e){}
   function detect(){ var c=[]; try{ c=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||'']; }catch(e){}
@@ -61,7 +61,7 @@
     }
   }
   function start(){
-    picker(); document.documentElement.lang=lang==='nw'?'en':lang==='gk'?'ko':lang;
+    picker(); document.documentElement.lang=lang==='nw'?'en':lang==='gk'?'ko':lang; document.documentElement.dir=lang==='ar'?'rtl':'ltr';
     if(lang==='ko') return;
     var tt=document.querySelector('title'); if(tt) tt.textContent=T(tt.textContent);
     var md=document.querySelector('meta[name="description"]'); if(md) md.setAttribute('content',T(md.getAttribute('content')||''));
@@ -69,7 +69,7 @@
     if(window.MutationObserver) new MutationObserver(function(ms){ ms.forEach(function(m){ if(m.type==='characterData') doText(m.target); else if(m.type==='attributes') doAttr(m.target); else m.addedNodes.forEach(walk); }); })
       .observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:ATTRS});
   }
-  add({'언어':['Language','Idioma','Langue','Sprache','言語','语言','Idioma','Язык','Dil','Speakword','언어 설정']});
+  add({'언어':['Language','Idioma','Langue','Sprache','言語','语言','Idioma','Язык','Dil','Speakword','언어 설정',"Lingua","Język","اللغة"]});
   window.FFT={lang:lang, add:add, T:T, F:F, walk:walk};
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
 })();
