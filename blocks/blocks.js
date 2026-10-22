@@ -229,7 +229,7 @@ def('act_sayfor',function(){ this.appendValueInput('VALUE').appendField(elField(
     act(this,'말풍선을 정한 시간 동안 보여 주고 없애요. 기다리지 않고 바로 다음 블록으로 가요'); },
   function(b){ need('say'); return '__say('+er(b)+', '+(G.valueToCode(b,'VALUE',O.COMMA)||"''")+', '+(G.valueToCode(b,'SEC',O.COMMA)||'2')+', '+(b.getFieldValue('KIND')==='think')+');\n'; });
 def('act_alert',function(){ this.appendValueInput('VALUE').appendField(T('알림창에')); this.appendDummyInput().appendField(T('띄우기')); this.setInputsInline(true); act(this,'작은 알림창으로 보여줘요'); },
-  function(b){ return 'alert('+(G.valueToCode(b,'VALUE',O.NONE)||"''")+');\n'; });
+  function(b){ need('dialog'); return 'await __alert('+(G.valueToCode(b,'VALUE',O.NONE)||"''")+');\n'; });   // 브라우저 기본 팝업 대신 페이지 안의 창 (기다렸다가 이어가요)
 def('act_after',function(){ this.appendValueInput('SEC').setCheck('Number'); this.appendDummyInput().appendField(T('초 기다린 다음')); this.appendStatementInput('DO'); this.setInputsInline(true); act(this,'정한 시간이 지난 뒤에 한 번 해요'); },
   function(b){ return 'setTimeout('+AF()+') {\n'+G.statementToCode(b,'DO')+'}, ('+(G.valueToCode(b,'SEC',O.MULTIPLICATION)||'1')+') * 1000);\n'; });
 /* with a wait on the page, functions are async and every call waits for them */
@@ -362,7 +362,7 @@ def('val_color',function(){ this.appendDummyInput().appendField(T('색')).append
 def('val_rcolor',function(){ this.appendDummyInput().appendField(T('아무 색이나')); val(this,'String'); },
   function(){ return ['\'hsl(\' + Math.floor(Math.random() * 360) + \', 80%, 60%)\'',O.ADDITION]; });
 def('val_prompt',function(){ this.appendValueInput('VALUE'); this.appendDummyInput().appendField(T('물어보고 받은 답')); this.setInputsInline(true); val(this,'String','질문 창을 띄우고 쓴 답을 가져와요'); },
-  function(b){ return ['(prompt('+(G.valueToCode(b,'VALUE',O.NONE)||"''")+') || \'\')',O.LOGICAL_OR]; });
+  function(b){ need('dialog'); return ['(await __prompt('+(G.valueToCode(b,'VALUE',O.NONE)||"''")+'))',O.ATOMIC]; });
 def('val_key',function(){ this.appendDummyInput().appendField(T('마지막으로 누른 키')); val(this,'String'); },
   function(){ need('key'); return ['__key',O.ATOMIC]; });
 def('val_keyheld',function(){ this.appendDummyInput().appendField(keyDrop(),'KEY').appendField(T('키를 누르고 있나?')); this.setOutput(true,'Boolean'); this.setTooltip(T('그 키를 지금 누르고 있으면 참이에요. 아무로 두면 어떤 키든 누르고 있을 때 참이에요')); },
@@ -725,6 +725,52 @@ HELP.voice=src(function(){
     } catch (e) { __vRec = null; }
   }
 },{NOSR:T('이 브라우저는 음성 인식을 지원하지 않아요')});
+/* 알림창과 물어보기: 브라우저 기본 팝업(alert, prompt)을 쓰지 않고 페이지 안에 창을 띄워요. 창이 닫힐 때까지 기다렸다가 이어가요 */
+HELP.dialog=src(function(){
+  function __dlg(msg, ask) {
+    return new Promise(function (done) {
+      var ov = document.createElement('div');
+      ov.setAttribute('role', 'dialog');
+      ov.style.cssText = 'position:fixed;left:0;top:0;right:0;bottom:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.5);font-family:system-ui,sans-serif';
+      var box = document.createElement('div');
+      box.style.cssText = 'max-width:380px;width:100%;background:#fff;color:#1f2937;border-radius:14px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.35)';
+      var p = document.createElement('div');
+      p.style.cssText = 'margin:0 0 14px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere';
+      p.textContent = msg == null ? '' : String(msg);
+      box.appendChild(p);
+      var inp = null;
+      if (ask) {
+        inp = document.createElement('input');
+        inp.style.cssText = 'width:100%;box-sizing:border-box;margin:0 0 14px;padding:9px 10px;font:inherit;color:inherit;background:#fff;border:1px solid #c7ccd4;border-radius:8px';
+        box.appendChild(inp);
+      }
+      var row = document.createElement('div');
+      row.style.cssText = 'display:flex;justify-content:flex-end;gap:8px';
+      function btn(label, main) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = label;
+        b.style.cssText = 'font:inherit;padding:8px 16px;border-radius:9px;cursor:pointer;border:1px solid #c7ccd4;background:' + (main ? '#ffb93c' : '#f3f4f6') + ';color:#1f2937;font-weight:' + (main ? '700' : '400');
+        row.appendChild(b);
+        return b;
+      }
+      var no = ask ? btn('@@NO@@', false) : null, ok = btn('@@OK@@', true);
+      function end(v) { ov.remove(); done(v); }
+      ok.onclick = function () { end(inp ? inp.value : ''); };
+      if (no) no.onclick = function () { end(''); };
+      ov.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') end('');
+        else if (e.key === 'Enter') { e.preventDefault(); end(inp ? inp.value : ''); }
+      });
+      box.appendChild(row);
+      ov.appendChild(box);
+      document.body.appendChild(ov);
+      (inp || ok).focus();
+    });
+  }
+  function __alert(msg) { return __dlg(msg, false); }
+  function __prompt(msg) { return __dlg(msg, true); }
+},{OK:T('확인'),NO:T('취소')});
 HELP.say=src(function(){
   var __bubs = [];
   function __say(name, text, sec, think) {
@@ -1241,7 +1287,7 @@ function build(ws,opts){
     body+=bodyHTML(b,'  ',true);
   });
   // JavaScript
-  WAITS=ws.getAllBlocks(false).some(function(x){ return (x.type==='act_wait'||x.type==='act_glideto'||x.type==='act_glidexy'||x.type==='act_tween'||x.type==='act_path_go'||x.type==='act_type'||x.type==='act_speak_wait'||x.type==='act_fetch')&&x.isEnabled(); });
+  WAITS=ws.getAllBlocks(false).some(function(x){ return (x.type==='act_wait'||x.type==='act_glideto'||x.type==='act_glidexy'||x.type==='act_tween'||x.type==='act_path_go'||x.type==='act_type'||x.type==='act_speak_wait'||x.type==='act_fetch'||x.type==='act_alert'||x.type==='val_prompt')&&x.isEnabled(); });
   NEED={}; USED={}; USEDS={}; G.INFINITE_LOOP_TRAP=opts.trap?'if (--window.__loop < 0) throw new Error("'+T('반복이 끝나지 않아요')+'");\n':null;
   DBG=!!opts.debug; dbgSeq=0; GLW=!!opts.glow&&!DBG; G.STATEMENT_PREFIX=DBG?'await __step(%1);\n':GLW?'__glow(%1);\n':null;
   var js, dbgVars=[];
