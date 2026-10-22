@@ -61,7 +61,7 @@
     }
   }
   function start(){
-    picker(); document.documentElement.lang=lang==='nw'?'en':lang==='gk'?'ko':lang; document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+    picker(); document.documentElement.lang=lang==='nw'?'en':lang==='gk'?'ko':lang; document.documentElement.dir=lang==='ar'&&!document.documentElement.hasAttribute('data-ltr')?'rtl':'ltr';
     if(lang==='ko') return;
     var tt=document.querySelector('title'); if(tt) tt.textContent=T(tt.textContent);
     var md=document.querySelector('meta[name="description"]'); if(md) md.setAttribute('content',T(md.getAttribute('content')||''));
