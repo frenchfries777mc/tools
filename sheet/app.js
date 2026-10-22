@@ -42,12 +42,16 @@ function saveNow(){
   var ok=lsSet(LSD+docId,JSON.stringify(doc)); var idx=docIndex().filter(function(x){ return x.id!==docId; });
   idx.unshift({id:docId,name:doc.name,t:Date.now()}); lsSet(LSI,JSON.stringify(idx.slice(0,50))); lsSet(LSL,docId);
   $('saved').textContent=ok?T('저장됨'):T('저장 공간이 가득 찼어요');
+  if(ok&&window.FFVer) FFVer.tick('sheet.'+docId,snap);
 }
 
 /* ---------- undo ---------- */
 function snap(){ return JSON.stringify({a:doc.active,s:doc.sheets,n:doc.names}); }
 function pushUndo(){ undoS.push(snap()); if(undoS.length>80) undoS.shift(); redoS=[]; }
 function restore(s){ var o=JSON.parse(s); doc.sheets=o.s; doc.names=o.n||[]; doc.active=Math.min(o.a,o.s.length-1); fixDoc(doc); eng=new E.Engine(doc); switchSheet(doc.active,true); saveSoon(); }
+$('verBtn').onclick=function(){ commitEdit(); if(window.FFVer) FFVer.open({key:'sheet.'+docId,title:'버전 기록',get:snap,toast:toast,
+  put:function(d){ pushUndo(); restore(d); },
+  describe:function(d){ var o=JSON.parse(d), n=0; o.s.forEach(function(x){ n+=Object.keys(x.cells||{}).length; }); return F('시트 {0}개, 칸 {1}개',o.s.length,n); }}); };
 function undo(){ commitEdit(); if(!undoS.length) return toast(T('되돌릴 작업이 없어요')); redoS.push(snap()); restore(undoS.pop()); }
 function redo(){ commitEdit(); if(!redoS.length) return; undoS.push(snap()); restore(redoS.pop()); }
 
