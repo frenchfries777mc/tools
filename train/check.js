@@ -177,8 +177,9 @@ function slidesSite(){ // the site's own reader (slides/ai-slides.js norm/readAl
   const app=fs.readFileSync(path.join(ROOT,'slides','app.js'),'utf8'), a=app.indexOf('var HEAD='), b=app.indexOf('var LISTS=');
   const box=vm.createContext({}); vm.runInContext(app.slice(a,b)+';this.LAY=LAY;this.LAYS=LAYS;',box);
   const aijs=fs.readFileSync(path.join(ROOT,'ai.js'),'utf8'), pj=/function parseJSON\(t\)\{[\s\S]*?\n\}/.exec(aijs)[0];
-  const el=()=>new Proxy({},{get:(t,k)=>k==='addEventListener'?()=>{}:t[k],set:(t,k,v)=>{ t[k]=v; return true; }});
-  const ctx=vm.createContext({window:{addEventListener(){},FSL:{LAYS:box.LAYS,LAY:box.LAY}},FFT:{T:x=>x,F:x=>x},document:{getElementById:el},FFP:P,console});
+  const NOOP=new Set(['addEventListener','insertBefore','appendChild','setAttribute','removeAttribute','remove','focus','click','blur']);   // ai-slides.js touches the page while loading: every element is a do-nothing stub
+  const el=()=>new Proxy({},{get:(t,k)=>k in t?t[k]:k==='querySelector'||k==='closest'?()=>el():k==='querySelectorAll'?()=>[]:k==='dataset'||k==='style'?(t[k]={}):k==='classList'?{add(){},remove(){},toggle(){},contains:()=>false}:NOOP.has(k)?()=>{}:undefined,set:(t,k,v)=>{ t[k]=v; return true; }});
+  const ctx=vm.createContext({window:{addEventListener(){},FSL:{LAYS:box.LAYS,LAY:box.LAY}},FFT:{T:x=>x,F:x=>x},document:{getElementById:el,querySelector:el,querySelectorAll:()=>[],addEventListener(){},createElement:el,body:el()},FFP:P,console});
   vm.runInContext(pj+';FFAI={parseJSON:parseJSON,isLocal:function(){return true;}};',ctx);
   vm.runInContext(fs.readFileSync(path.join(ROOT,'slides','ai-slides.js'),'utf8'),ctx);
   const LISTS=['bullets','left','right'], TEXTS=['title','subtitle','leftTitle','rightTitle','stat','caption','quote','by','notes'];
@@ -327,9 +328,9 @@ async function blocks(){
 (async()=>{
   let out=[];
   if(task==='code'||task==='und') out=await blocks();
-  else if(task==='slides') items.forEach(it=>{ try{ slidesItem(it.o).forEach(m=>out.push({n:it.n,task,messages:m})); }catch(e){ bad.push([it.n,e.message]); } });
-  else if(task==='self') items.forEach(it=>{ try{ out.push({n:it.n,task,messages:checks.ask(it.o)}); }catch(e){ bad.push([it.n,e.message]); } });
-  else if(checks[task]) items.forEach(it=>{ try{ out.push({n:it.n,task,messages:checks[task](it.o)}); }catch(e){ bad.push([it.n,e.message]); } });
+  else if(task==='slides') items.forEach(it=>{ try{ slidesItem(it.o).forEach(m=>out.push({n:it.n,task,messages:m})); }catch(e){ bad.push([it.n,e.message+(process.env.TRACE?e.stack:'')]); } });
+  else if(task==='self') items.forEach(it=>{ try{ out.push({n:it.n,task,messages:checks.ask(it.o)}); }catch(e){ bad.push([it.n,e.message+(process.env.TRACE?e.stack:'')]); } });
+  else if(checks[task]) items.forEach(it=>{ try{ out.push({n:it.n,task,messages:checks[task](it.o)}); }catch(e){ bad.push([it.n,e.message+(process.env.TRACE?e.stack:'')]); } });
   else { console.error('unknown task '+task); process.exit(2); }
   bad.sort((a,b)=>a[0]-b[0]).forEach(([n,m])=>console.log('line '+n+': '+m));
   console.log(`${path.basename(file)}: ${out.length} ok, ${bad.length} failed`);
