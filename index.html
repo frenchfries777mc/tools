@@ -189,6 +189,7 @@ FFT.add({
   .shot::after{content:''; position:absolute; inset:0; background:linear-gradient(180deg,transparent 45%,var(--card) 100%);}
   .badge{position:absolute; top:14px; left:14px; z-index:1; font-size:12.5px; font-weight:700; padding:4px 11px; border-radius:99px; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);}
   .body{padding:4px 26px 26px; margin-top:-34px; position:relative; z-index:1; display:flex; flex-direction:column; flex:1;}
+  .game h2 .ch{width:44px; height:44px; margin-right:10px; vertical-align:-9px; border-radius:10px;}
   .game h2{margin:0; line-height:1.05; font-family:'Oswald',sans-serif; font-weight:700; font-size:40px; letter-spacing:.02em; color:#eef0f5;}
   .motto{display:flex; align-items:center; gap:10px; font-size:12px; font-weight:700; letter-spacing:.2em; margin-top:6px; white-space:nowrap;}
   .motto i{flex:0 0 26px; height:1px; opacity:.6;}
@@ -248,7 +249,7 @@ FFT.add({
   @media(max-width:860px){ .why{grid-template-columns:1fr;} }
   @media(max-width:520px){
     .wrap{padding:0 16px;} header nav{display:none;} header{gap:8px;} .logo{font-size:16px; gap:8px; min-width:0; flex:1 1 auto;} .logo span:last-child{min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;} header .right{flex:0 0 auto;} .logo .fry{width:30px; height:30px; font-size:17px;} .langSel{margin-left:0; padding:6px 6px;} .ffa-wrap{margin-left:8px !important;} .ffa-chip{max-width:118px !important;} .ffa-btn{padding:7px 10px !important;} .hero{padding:38px 0 24px;} .hero p{font-size:16.5px;}
-    .body{padding:4px 18px 20px;} .game h2{font-size:34px;}
+    .body{padding:4px 18px 20px;} .game h2{font-size:34px;} .game h2 .ch{width:38px; height:38px; vertical-align:-8px;}
     .play{flex:1; justify-content:center;}
   }
 </style>
@@ -281,7 +282,7 @@ FFT.add({
     <article class="game fs">
       <a class="shot" href="sheet/" aria-label="Fry Sheet 열기"><span class="badge">스프레드시트</span><img src="sheet.webp" alt="Fry Sheet 화면" loading="lazy"></a>
       <div class="body">
-        <h2>FRY <b>SHEET</b></h2>
+        <h2><img class="ch" src="icons/cards/fry-sheet.svg" alt="" width="44" height="44">FRY <b>SHEET</b></h2>
         <div class="motto"><i></i>SPREADSHEET<i></i></div>
         <div class="tags"><span>수식 · 차트 · 엑셀 파일</span><span class="ai">수식·그래프·표 AI</span><span>자동 저장</span><span>로그인 없이</span></div>
         <div class="desc">
@@ -300,7 +301,7 @@ FFT.add({
     <article class="game bh">
       <a class="shot" href="blocks/" aria-label="Block HTML 열기"><span class="badge">블록 코딩</span><img src="blocks.webp" alt="Block HTML 화면" loading="lazy"></a>
       <div class="body">
-        <h2>BLOCK <b>HTML</b></h2>
+        <h2><img class="ch" src="icons/cards/block-html.svg" alt="" width="44" height="44">BLOCK <b>HTML</b></h2>
         <div class="motto"><i></i>JAVASCRIPT BLOCKS<i></i></div>
         <div class="tags"><span>블록 → HTML 파일</span><span>한 블록씩 실행</span><span>예제 5개</span><span>로그인 없이</span></div>
         <div class="desc">
@@ -318,7 +319,7 @@ FFT.add({
     <article class="game sl">
       <a class="shot" href="slides/" aria-label="Fry Slides 열기"><span class="badge">발표 자료</span><img src="slides.webp" alt="Fry Slides 화면" loading="lazy"></a>
       <div class="body">
-        <h2>FRY <b>SLIDES</b></h2>
+        <h2><img class="ch" src="icons/cards/fry-slides.svg" alt="" width="44" height="44">FRY <b>SLIDES</b></h2>
         <div class="motto"><i></i>PRESENTATIONS<i></i></div>
         <div class="tags"><span>슬라이드 편집</span><span>PPTX 파일</span><span>발표 모드</span><span>로그인 없이</span></div>
         <div class="desc">
@@ -336,7 +337,7 @@ FFT.add({
     <article class="game fl">
       <a class="shot" href="lab/" aria-label="Fry Lab 열기"><span class="badge">실험실</span><img src="lab.webp" alt="Fry Lab 화면" loading="lazy"></a>
       <div class="body">
-        <h2>FRY <b>LAB</b></h2>
+        <h2><img class="ch" src="icons/cards/fry-lab.svg" alt="" width="44" height="44">FRY <b>LAB</b></h2>
         <div class="motto"><i></i>SCIENCE &amp; MATH LAB<i></i></div>
         <div class="tags"><span>실험 9가지</span><span>기록·그래프·CSV</span><span>탐구 과제</span><span>로그인 없이</span></div>
         <div class="desc">
