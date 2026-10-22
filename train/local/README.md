@@ -51,3 +51,17 @@ MODEL=smart python3 train/local/run.py
 - `CUDA out of memory`: `MAX_LEN=2048`을 붙이거나, 다른 프로그램을 닫아요.
 - `Killed`(램 부족으로 꺼짐): 크롬을 완전히 닫고, 그래도 안 되면 윈도우 `C:\Users\<이름>\.wslconfig`에 `[wsl2]` 줄 아래 `memory=13GB`, `swap=16GB`를 넣고 PowerShell에서 `wsl --shutdown` 후 다시 해요.
 - 노트북은 충전기를 꽂고 **절전을 꺼** 주세요. 오래 걸리고 뜨거워질 수 있어요.
+
+## 점수 시험(140문항)을 이 컴퓨터에서 돌리기
+
+학습한 Ubuntu 창에서 (토큰은 터미널에만 입력해요):
+
+```
+cd ~/tools && git pull && source ~/ffenv/bin/activate && pip install -q bitsandbytes accelerate
+HF_TOKEN=hf_... python3 train/local/eval.py tarius
+```
+
+- `tarius`는 `Frenchfries777/FF-Tools-1.7B-merged-1.6`을 시험해요 (다른 저장소는 `FF_REPO=...`). 모델 이름을 여러 개 적을 수도 있어요 (`qwen3-4b` 등).
+- 끝나면 맨 아래에 한국어 요약이 나오고, `eval-out/baseline-results.json`과 `baseline-answers.jsonl`이 생겨요. 요약을 캡처해서 보내 주세요.
+- 처음 한 번은 코드 채점용 node/jsdom을 내려받아요. `QUICK=1`을 앞에 붙이면 과제마다 2문제만 풀어서 잘 도는지만 봐요.
+- Kaggle과 같은 시험지·채점기를 쓰지만 라이브러리 버전이 달라 점수가 조금 다를 수 있어요.
