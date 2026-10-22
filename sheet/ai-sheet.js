@@ -5,6 +5,9 @@
 'use strict';
 var A=window.FSAPI, E=FSE, T=FFT.T, F=FFT.F, $=function(id){ return document.getElementById(id); };
 
+/* 칸의 일기: the story of one cell's changes (the list comes from diary.js, app.js shows the answer) */
+window.FSDiaryAI=function(prompt){ return FFAI.ask({prose:true, system:'당신은 표 계산 도우미예요. 한국어로 짧고 쉽게 답해요.', prompt:prompt, maxTokens:300}).then(function(t){ return String(t||'').trim(); }); };
+
 /* ---------- =AI() ---------- */
 var pending={}, errs={}, queue=[], running=0, MAXRUN=3, askedKey=false, paintT=null, force=false;
 var CELL_SYS=FFP.cellSys;

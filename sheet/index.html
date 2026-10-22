@@ -92,6 +92,7 @@ button,input,select{font:inherit; color:inherit;}
 .fxp{flex:0 0 auto; max-height:34vh; overflow:auto; padding:10px 14px; border-bottom:1px solid var(--line); background:var(--panel); font-size:13px; line-height:1.6;}
 .fxp[hidden]{display:none;} .fxp h4{margin:0 0 6px; font-size:13px;} .fxp .fxx{float:right; background:none; border:0; color:var(--dim); font-size:18px; cursor:pointer;}
 .fxp ol{margin:6px 0; padding-left:22px;} .fxp li{margin:3px 0;} .fxp code{font-family:ui-monospace,Menlo,Consolas,monospace; background:var(--hd); padding:1px 5px; border-radius:5px;}
+.fxp .fxai{margin:6px 0 4px; padding:4px 10px; border-radius:8px; border:1px solid var(--fry); background:none; color:var(--fry); font:inherit; cursor:pointer;} .fxp .fxstory{margin:4px 0; line-height:1.5;} .fxp ol code{margin-right:2px;}
 .fxp .fxv{color:var(--fry); font-weight:700;} .fxp .fxn{color:var(--dim);} .fxp .fxbad{color:#ff8a8a;} .fxp .fxr{display:flex; flex-wrap:wrap; gap:4px 10px; margin:4px 0 6px;}
 #grid td.aim{box-shadow:inset 3px 0 0 #a78bfa;} #grid td.aiok{box-shadow:inset 3px 0 0 #4ade80;} #grid td.aibad{box-shadow:inset 3px 0 0 #ff5d5d;}
 .revb{background:transparent; border:1px solid var(--line); color:var(--dim); border-radius:999px; font:inherit; font-size:12px; padding:2px 10px; margin-right:8px; cursor:pointer;} .revb:hover{color:var(--text); border-color:#a78bfa;}
@@ -328,7 +329,7 @@ button,input,select{font:inherit; color:inherit;}
   <input id="nameBox" value="A1" aria-label="셀 주소" spellcheck="false" autocomplete="off" autocapitalize="characters">
   <span class="fx">fx</span>
   <input id="fin" aria-label="수식 입력줄" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off">
-  <button id="fxHelp" class="fxh" type="button" title="이 칸의 수식을 한국어로 풀어 줘요" aria-expanded="false">풀이</button>
+  <button id="fxHelp" class="fxh" type="button" title="이 칸의 수식을 한국어로 풀어 주고, 값이 바뀐 기록(칸의 일기)도 보여 줘요" aria-expanded="false">풀이</button>
 </div>
 <div id="fxPanel" class="fxp" hidden data-notr></div>
 
@@ -676,14 +677,15 @@ button,input,select{font:inherit; color:inherit;}
 
 <script src="engine.js"></script>
 <script src="explain.js?v=33.1"></script>
+<script src="diary.js?v=35"></script>
 <script src="calc.js"></script>
 <script src="commands.js?v=33"></script>
-<script src="app.js?v=33.1"></script>
+<script src="app.js?v=35"></script>
 <script src="viz.js"></script>
 <script src="../ai.js?v=ai30.l13"></script>
 <script src="../ai-wrong.js?v=4.l13"></script>
 <script src="../ai-prompts.js"></script>
-<script src="ai-sheet.js?v=32"></script>
+<script src="ai-sheet.js?v=35"></script>
 <script src="ai-review.js?v=1"></script>
 <script src="../pwa.js" defer></script>
 </body>
