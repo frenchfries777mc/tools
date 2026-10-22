@@ -69,7 +69,7 @@ P.spellSys='You fix spelling, spacing and typing mistakes in slide text. Reply w
 P.spellPrompt=function(json){ return 'Slide text (JSON): '+json; };
 
 /* Block HTML "이 블록 설명해 줘" (blocks/ai-blocks.js): a compact outline of the blocks -> one or two plain sentences */
-P.langName={ko:'Korean',en:'English',es:'Spanish',fr:'French',de:'German',ja:'Japanese',zh:'Simplified Chinese',pt:'Brazilian Portuguese',ru:'Russian',tr:'Turkish',nw:'English',gk:'Korean'};
+P.langName={ko:'Korean',en:'English',es:'Spanish',fr:'French',de:'German',ja:'Japanese',zh:'Simplified Chinese',pt:'Brazilian Portuguese',ru:'Russian',tr:'Turkish',it:'Italian',pl:'Polish',ar:'Arabic',nw:'English',gk:'Korean'};
 P.explainSys=function(lang){ return 'You explain Block HTML blocks to a beginner. Reply with one or two short sentences of plain text (no lists, no code, no markdown) saying what these blocks do when the page runs. Write in '+(P.langName[lang]||'Korean')+'.'; };
 P.explainPrompt=function(outline){ return 'Blocks (indented lines are inside the block above):\n'+outline; };
 
