@@ -274,8 +274,8 @@ FFT.add({
 
   <section class="hstats" id="heroStats" aria-label="숫자로 보기">
     <div><b data-n="4" id="hsCount">4</b><span>도구</span></div>
+    <div><b data-n="182" id="hsExp">182</b><span>실험 종류</span></div>
     <div><b data-n="17">17</b><span>언어</span></div>
-    <div><b data-n="231">231</b><span>블록 종류</span></div>
   </section>
 
   <section class="games" id="tools">
@@ -416,11 +416,13 @@ FFT.add({
 </script>
 <script src="https://frenchfries777mc.github.io/games/ff-splash.js" defer></script>
 <script src="pwa.js" defer></script>
+<script src="lab/logos.js?v=l25"></script>
 <script>
 (function(){
   var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   var io=('IntersectionObserver' in window)?IntersectionObserver:null;
   /* 숫자 올라가기: 처음 보일 때 한 번 */
+  var he=document.getElementById('hsExp'); if(he&&window.LABLOGOS){ var ne=Object.keys(window.LABLOGOS).length; if(ne){ he.setAttribute('data-n',ne); he.textContent=ne; } }   // Fry Lab 실험 수: 실험마다 로고가 있어서 로고 목록(lab/logos.js)에서 세요
   var st=document.getElementById('heroStats');
   function count(b){ var n=+b.getAttribute('data-n')||0; if(rm||!n){ b.textContent=n; return; } var t0=null; function f(t){ if(!t0)t0=t; var p=Math.min(1,(t-t0)/1100); b.textContent=Math.round(n*(1-Math.pow(1-p,3))); if(p<1)requestAnimationFrame(f); } b.textContent=0; requestAnimationFrame(f); }
   if(st){ var bs=[].slice.call(st.querySelectorAll('b'));
