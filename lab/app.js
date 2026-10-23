@@ -121,7 +121,7 @@ function drawNav(){ var n=$('nav'); n.innerHTML='';
   CATS.forEach(function(c){ var h=document.createElement('div'); h.className='cat'; h.textContent=T(c[1]); n.appendChild(h);
     EXPS.filter(function(e){ return e.cat===c[0]; }).forEach(function(e){ var b=document.createElement('button'); b.className='ex'; b.dataset.id=e.id;
       b.innerHTML='<span class="ic"></span><span><span class="nm"></span><span class="ds"></span></span>';
-      b.querySelector('.ic').textContent=e.icon; b.querySelector('.nm').textContent=T(e.name); b.querySelector('.ds').textContent=T(e.desc);
+      LAB.ico(b.querySelector('.ic'),e); b.querySelector('.nm').textContent=T(e.name); b.querySelector('.ds').textContent=T(e.desc);
       b.onclick=function(){ open(e.id); }; n.appendChild(b); }); }); }
 
 /* ---------- controls ---------- */
@@ -494,7 +494,8 @@ function start(){
 }
 document.addEventListener('DOMContentLoaded',start);
 
-window.LAB={add:add, show:show, vcount:vcount, get view(){ return curView; }, versions:function(){ return cur?vlist():[]; }, loadVersion:loadVer, saveVersion:saveVer, get last(){ return st.last; }, H:H, open:open, record:record, toast:toast,
+function ico(el,e){ var L=window.LABLOGOS; if(L&&L[e.id]){ el.textContent=''; el.classList.add('lg'); var i=document.createElement('img'); i.alt=''; i.src='icons/'+e.id+'.svg'; i.width=28; i.height=28; el.appendChild(i); } else el.textContent=e.icon; }
+window.LAB={ico:ico, add:add, show:show, vcount:vcount, get view(){ return curView; }, versions:function(){ return cur?vlist():[]; }, loadVersion:loadVer, saveVersion:saveVer, get last(){ return st.last; }, H:H, open:open, record:record, toast:toast,
   get cur(){ return cur; }, get list(){ return EXPS; }, get rows(){ return cur?rows():[]; }, get running(){ return running; }, get speed(){ return speed; },
   colTitle:colTitle, csv:csv, setAuto:setAuto, get auto(){ return !!autoT; }, sheetDoc:function(){ return cur?sheetDoc():null; }, xlsxBook:xlsxBook, needXLSX:needXLSX, graphPts:graphPts, toSheet:toSheet, linfit:linfit, get fit(){ return lastFit; }, setP:setP, tab:tab, saveNow:saveNow,
   valText:valText, applySet:applySet, shareCode:shareCode, shareURL:shareURL, readShare:readShare, openShare:openShare, graphImage:graphImage};
