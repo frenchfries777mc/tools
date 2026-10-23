@@ -843,7 +843,7 @@ function tabCmd(t){
   else if(t==='left'&&i>0){ pushUndo(); doc.sheets.splice(i-1,0,doc.sheets.splice(i,1)[0]); doc.active=i-1; renderTabs(); changed(); }
   else if(t==='right'&&i<doc.sheets.length-1){ pushUndo(); doc.sheets.splice(i+1,0,doc.sheets.splice(i,1)[0]); doc.active=i+1; renderTabs(); changed(); }
   else if(t==='del'){ if(doc.sheets.length<2) return toast(T('시트가 하나뿐이에요'));
-    confirmDlg(F('"{0}" 시트를 지울까요?',sh.name)).then(function(ok){ if(!ok) return; pushUndo(); doc.sheets.splice(i,1); eng=new E.Engine(doc); switchSheet(Math.max(0,i-1)); saveSoon(); }); }
+    pushUndo(); doc.sheets.splice(i,1); eng=new E.Engine(doc); switchSheet(Math.max(0,i-1)); saveSoon(); FFUndo.show('시트를 지웠어요',function(){ undo(); }); }
 }
 
 /* ---------- menus & dialogs ---------- */
@@ -1404,12 +1404,11 @@ function dupDoc(id){
 }
 function deleteDoc(id){
   saveNow(); var ent=docIndex().filter(function(x){ return x.id===id; })[0]; var nm=(ent&&ent.name)||(id===docId?doc.name:'')||T('이름 없음');
-  confirmDlg(F('"{0}" 문서를 지울까요? 되돌릴 수 없어요.',nm)+' '+T('(최근 삭제에서 되살릴 수 있어요)')).then(function(ok){ if(!ok) return;
-    var raw=lsGet(LSD+id); if(raw){ var tr=trashGet().filter(function(x){ return x.id!==id; }); tr.unshift({id:id,name:nm,t:Date.now(),data:raw}); tr=tr.slice(0,5);
+  { var raw=lsGet(LSD+id); if(raw){ var tr=trashGet().filter(function(x){ return x.id!==id; }); tr.unshift({id:id,name:nm,t:Date.now(),data:raw}); tr=tr.slice(0,5);
       while(tr.length&&!lsSet(LST,JSON.stringify(tr))) tr.pop(); }
     lsDel(LSD+id); lsSet(LSI,JSON.stringify(docIndex().filter(function(x){ return x.id!==id; })));
     if(id===docId){ var rest=docIndex(); loadDoc(rest.length?rest[0].id:null); saveNow(); }
-    if($('docDlg').classList.contains('open')) drawDocMgr(); toast(T('문서를 지웠어요')); });
+    if($('docDlg').classList.contains('open')) drawDocMgr(); FFUndo.show('문서를 지웠어요',function(){ restoreDoc(id); }); }
 }
 function restoreDoc(id){
   var tr=trashGet(), x=tr.filter(function(y){ return y.id===id; })[0]; if(!x) return;
