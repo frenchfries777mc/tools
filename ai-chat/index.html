@@ -27,6 +27,7 @@ FFT.add({
 '취소':['Cancel','Cancelar','Annuler','Abbrechen','キャンセル',"取消","Cancelar","Отмена","İptal","Unthink","취소하다!","Annulla","Anuluj","إلغاء"],
 '궁금한 걸 물어보세요':['Ask anything','Pregunta lo que quieras','Pose ta question','Frag etwas','気になることを聞いてね',"随便问","Pergunte qualquer coisa","Спросите что угодно","Her şeyi sor","Ask thing","묻다 anything","Chiedi qualsiasi cosa","Zapytaj o cokolwiek","اسأل أي شيء"],
 '보내기':['Send','Enviar','Envoyer','Senden','送信',"发送","Enviar","Отправить","Gönder","Give","보내다!","Invia","Wyślij","إرسال"],
+'지금 투표':['Vote now','Votar ya','Voter maintenant','Jetzt abstimmen','今すぐ投票',"现在投票","Votar agora","Голосовать сейчас","Şimdi oyla","Now vote","지금 투표","Vota ora","Głosuj teraz","صوّت الآن"],
 '멈추기':['Stop','Detener','Arrêter','Stopp','止める',"停止","Parar","Стоп","Durdur","Unstart","멈추기","Ferma","Zatrzymaj","أوقف"],
 '대화 지우기':['Clear chat','Borrar chat','Effacer le chat','Chat leeren','会話を消す',"清空对话","Limpar conversa","Очистить чат","Sohbeti temizle","Clear speakwrite","맑은 수다","Cancella chat","Wyczyść czat","مسح المحادثة"],
 '모델 바꾸기':['Change model','Cambiar modelo','Changer de modèle','Modell wechseln','モデルを変える',"更换模型","Trocar modelo","Сменить модель","Modeli değiştir","Rectify model","잔돈 model","Cambia modello","Zmień model","تغيير النموذج"],
@@ -120,6 +121,7 @@ html[data-ff-theme=light] .mc[data-id]{--bgc:var(--panel); --bd:var(--line);}
 .chips{display:flex; gap:8px; flex-wrap:wrap; justify-content:center;}
 .chips button{background:var(--panel); border:1px solid var(--line); border-radius:999px; padding:7px 14px; cursor:pointer; font-size:13px;}
 .chips button:hover{border-color:var(--fry);}
+.vnow{display:flex; align-items:center; gap:8px; margin-bottom:6px;} .vnow span{color:var(--muted,#999); font-size:13px;}
 form.in{display:flex; gap:8px; align-items:flex-end; padding:8px; background:var(--panel); border:1px solid var(--line); border-radius:16px;}
 form.in:focus-within{border-color:var(--fry);}
 form.in textarea{flex:1; min-height:44px; max-height:140px; resize:none; background:transparent; border:0; border-radius:10px; padding:10px 8px;}
@@ -186,6 +188,7 @@ form.in textarea:focus{outline:none;}
     <div class="chips" id="chips" aria-label="예시 질문"></div>
     
     <div class="msug" id="msug" hidden><span data-notr></span><button class="ghost" id="msugYes" type="button">메모장에 넣기</button><button class="ghost" id="msugNo" type="button">아니요</button></div>
+    <div class="vnow" id="vnow" hidden><button class="ghost" id="vnowBtn" type="button">지금 투표</button><span id="vnowN" data-notr></span></div>
     <form class="in" id="form"><textarea id="q" rows="1" maxlength="600" placeholder="궁금한 걸 물어보세요"></textarea><button class="btn" id="send" type="submit">보내기</button></form>
   </section>
   <p class="hint">작은 AI라서 틀릴 수 있어요. 중요한 일은 꼭 다시 확인해 주세요.</p>
@@ -336,7 +339,7 @@ function restore(c){
 }
 function dots(d){ d.innerHTML='<span class="dots" aria-label="…"><i></i><i></i><i></i></span>'; }
 function trim(){ var n=0, i=hist.length; while(i>0){ n+=hist[i-1].content.length; if(n>1500) break; i--; } hist=hist.slice(i); if(hist.length&&hist[0].role==='assistant') hist.shift(); }
-function setBusy(b){ busy=b; $('send').textContent=T(b?'멈추기':'보내기'); $('send').type=b?'button':'submit'; }
+function setBusy(b){ busy=b; if(!b){ $('vnow').hidden=true; voteNow=null; } $('send').textContent=T(b?'멈추기':'보내기'); $('send').type=b?'button':'submit'; }
 /* 목록 답을 모델처럼 내보내기: 모델이 아직 안 불러와져 있으면 실제로 불러오고(진행 막대), 5~10초 생각 중 점을 보인 뒤 한 글자씩 이어서 써요.
    fake.cancel()은 멈추기 단추 (생각 중이면 text=null, 쓰는 중이면 지금까지 쓴 것) */
 var fake=null;
@@ -356,16 +359,20 @@ function listOut(out,text,done){   // 모델 불러오기가 끝난 뒤에 생�
 }
 /* 여러 번 답해서 투표 (vote.js): 응답 중 화면에서 N개(신속 1, 보통 3, 노력 7) 답을 모두 만들고 투표를 끝낸 뒤에 가장 많은 쪽의 답 하나만 한 단어씩 내보내요.
    같은 쪽이 40%보다 적으면 불확실 표시. 멈추기를 누르면 그때까지 모인 답으로 정해요. */
+var voteNow=null;
 function voteAnswer(out,q,g,before,N){
-  var all=[], tries=0, stopped=false;   // 만드는 동안은 생각 중 점만 보여요 (진행 글자는 없어요)
+  var all=[], tries=0, stopped=false;
+  function vshow(){ $('vnow').hidden=!all.length||stopped; $('vnowN').textContent=all.length+'/'+N; }
+  voteNow=function(){ if(!all.length||stopped) return; stopped=true; $('vnow').hidden=true; FFAI.stop(); };   // 만드는 동안은 생각 중 점만 보여요 (진행 글자는 없어요)
   function step(){
     if(g!==gen||stopped||all.length>=N||tries>=N+3) return Promise.resolve();
     tries++;
     return FFAI.ask({model:cur.id, prose:true, chat:true, maxTokens:LEN[lv].tok, facts:true, question:q, history:hist.slice(), system:chatSys(), prompt:q}).then(function(r){
-      var b=String(typeof r==='string'?r:(r&&r.text)||'').trim(); if(b) all.push(b); return step();
+      var b=String(typeof r==='string'?r:(r&&r.text)||'').trim(); if(b){ all.push(b); vshow(); } return step();
     },function(){ stopped=true; });
   }
   return step().then(function(){
+    $('vnow').hidden=true; voteNow=null;
     if(g!==gen) return;
     if(!all.length){ out.textContent=T('답하지 못했어요'); out.classList.add('bad'); return; }
     var v=FFVote.pick(all), best=all[v.index];
@@ -414,6 +421,7 @@ function send(q){
   }).then(function(){ setBusy(false); });
 }
 $('form').onsubmit=function(e){ e.preventDefault(); send($('q').value); };
+$('vnowBtn').onclick=function(){ if(voteNow) voteNow(); };
 $('send').onclick=function(){ if(busy){ if(fake) fake.cancel(); else FFAI.stop(); } };
 $('q').onkeydown=function(e){ if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){ e.preventDefault(); if(!busy) send($('q').value); } };
 Array.prototype.forEach.call(document.querySelectorAll('#len button'),function(b){ b.onclick=function(){ lv=+b.dataset.l; try{ localStorage.setItem('ffchat.len',String(lv)); }catch(e){} showLen(); renderMeta(); }; });
