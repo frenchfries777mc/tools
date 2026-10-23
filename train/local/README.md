@@ -43,7 +43,7 @@ MODEL=smart MAX_TRAIN_HOURS=0.03 RUN_EVAL=0 python3 train/local/run.py
 ```
 MODEL=smart python3 train/local/run.py
 ```
-- 렉투스 1.5는 올려 둔 1.4 렉투스(`FF-Tools-4B-merged`)에서 이어서 학습해요. 끝나면 `FF-Tools-4B-merged-1.5`에 비공개로 올라가요.
+- 렉투스 1.6(`MODEL=smart`, 기본값 `VERSION=1.6`)은 올려 둔 1.4 렉투스(`FF-Tools-4B-merged`)에서 이어서 학습해요. 자료는 `v16-smart`(5,290줄)예요. 끝나면 `FF-Tools-4B-merged-1.6`에 비공개로 올라가요. (1.5는 따로 올라가 있어요: `-1.5`)
 - 중간에 끊겨도 같은 명령을 다시 실행하면 200걸음마다 올려 둔 곳에서 이어요.
 - 끝에 "올림 끝: ..." 줄이 나오면 Claude에게 알려 주세요.
 
