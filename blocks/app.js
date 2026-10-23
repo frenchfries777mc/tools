@@ -285,12 +285,15 @@ function createProject(name,loader){ saveNow(); var id=pid(), nm=uniqProj(name);
 function switchTo(id){ if(id===P.cur) return; saveNow(); var d=readProj(id), e=entry(id);
   if(!d||!d.ws){ P.list=P.list.filter(function(x){ return x.id!==id; }); writeIdx(); renderProjs(); toast(T('이 프로젝트는 열 수 없어요')); return; }
   P.cur=id; $('projName').value=d.name||(e&&e.name)||T('나의 웹페이지'); setImgs(d.imgs); setSnds(d.snds); try{ loadJSON(d.ws); }catch(err){ console.error(err); blank(); } ws.clearUndo(); writeIdx(); syncBar(); renderProjs(); }
-function deleteProject(id){ var e=entry(id); if(!e) return;
-  ask(F('"{0}" 프로젝트를 삭제할까요? 되돌릴 수 없어요.',e.name),T('삭제'),true).then(function(ok){ if(!ok) return;
-    try{ localStorage.removeItem(PK+id); localStorage.removeItem(STK+id); localStorage.removeItem('ffblocks.ai.'+id); }catch(err){} P.list=P.list.filter(function(x){ return x.id!==id; });
+function deleteProject(id){ var e=entry(id); if(!e) return; saveNow();   // 확인 창 없이 바로 지우고, 되돌리기 안내를 보여 줘요
+  { var keys=[PK+id,STK+id,'ffblocks.ai.'+id], kept={}, at=P.list.indexOf(e);
+    try{ keys.forEach(function(k){ kept[k]=localStorage.getItem(k); }); }catch(err){}
+    try{ keys.forEach(function(k){ localStorage.removeItem(k); }); }catch(err){} P.list=P.list.filter(function(x){ return x.id!==id; });
     if(id===P.cur){ P.cur=null; var nx=P.list.slice().sort(function(a,b){ return b.t-a.t; })[0];
       if(nx){ writeIdx(); switchTo(nx.id); } else createProject(T('나의 웹페이지'),blank); }
-    writeIdx(); renderProjs(); toast(T('프로젝트를 삭제했어요')); }); }
+    writeIdx(); renderProjs();
+    FFUndo.show('프로젝트를 삭제했어요',function(){ try{ keys.forEach(function(k){ if(kept[k]!=null) localStorage.setItem(k,kept[k]); }); }catch(err){}
+      P.list.splice(Math.min(Math.max(at,0),P.list.length),0,e); writeIdx(); renderProjs(); }); } }
 window.BHASK=function(m,o,d){ return ask(m,o,d); };
 function ask(msg,okText,danger,opt){ opt=opt||{}; return new Promise(function(res){ var dlg=$('askDlg'), ok=$('askOk'), no=$('askNo'), inp=$('askIn'), text=opt.input!==undefined; $('askMsg').textContent=msg; ok.textContent=okText||T('확인'); ok.className='tbtn '+(danger?'dang':'pri');
   inp.hidden=!text; no.hidden=!!opt.notice; if(text) inp.value=opt.input||''; dlg.classList.add('open');
@@ -476,7 +479,7 @@ function renderMgr(){
       if(a==='share'){ if(window.BHSHARE) BHSHARE.openShare(id); return; }
       if(a==='add'){ addToPage(id); $('mgrDlg').classList.remove('open'); }
       if(a==='edit'){ $('mgrDlg').classList.remove('open'); openPad(id); }
-      if(a==='del'){ var u=usedBy(id), go=function(){ delete I[id]; afterImgChange(); renderMgr(); }; if(u.length) ask(F('이 그림을 쓰는 블록이 {0}개 있어요. 그래도 지울까요?',u.length),T('삭제'),true).then(function(ok){ if(ok) go(); }); else go(); } };
+      if(a==='del'){ var u=usedBy(id), go=function(){ delete I[id]; afterImgChange(); renderMgr(); }; var old=I[id]; go(); FFUndo.show(u.length?F('이 그림을 지웠어요. 쓰던 블록 {0}개에 영향이 있어요',u.length):'그림을 지웠어요',function(){ I[id]=old; afterImgChange(); renderMgr(); }); } };
     box.appendChild(d); });
 }
 /* only drawings can be shared: not photos (faces, names) and not library objects or pictures that came from '모두의 그림' */
@@ -504,10 +507,10 @@ function pasteBlock(){ var st=window.__clip; if(!st){ try{ st=JSON.parse(lsGet(C
   var m=ws.getMetricsManager().getViewMetrics(true), x=st.x!=null?st.x+30*pasteN:m.left+60, y=st.y!=null?st.y+30*pasteN:m.top+60;
   if(x<m.left||x>m.left+m.width-80||y<m.top||y>m.top+m.height-60){ x=m.left+60+((pasteN*30)%180); y=m.top+60+((pasteN*30)%180); }
   st.x=x; st.y=y; Blockly.Events.setGroup(true); var nb; try{ nb=Blockly.serialization.blocks.append(st,ws,{recordUndo:true}); }finally{ Blockly.Events.setGroup(false); } if(nb&&nb.select) nb.select(); }
-function deleteAll(){ var tops=ws.getTopBlocks(false); if(!tops.length) return; ask(T('블록을 모두 지울까요? 되돌리기로 다시 살릴 수 있어요.'),T('모두 지우기'),true).then(function(ok){ if(ok) doDeleteAll(); }); }
+function deleteAll(){ var tops=ws.getTopBlocks(false); if(!tops.length) return; doDeleteAll(); }
 function doDeleteAll(){ var tops=ws.getTopBlocks(false);
   tops.sort(function(a,b){ return (a.type==='page_root')-(b.type==='page_root'); }); // pages go last so undo brings them back first
-  Blockly.Events.setGroup(true); try{ tops.forEach(function(b){ b.dispose(false); }); }finally{ Blockly.Events.setGroup(false); } toast(T('블록을 모두 지웠어요')); }
+  Blockly.Events.setGroup(true); try{ tops.forEach(function(b){ b.dispose(false); }); }finally{ Blockly.Events.setGroup(false); } FFUndo.show('블록을 모두 지웠어요',function(){ ws.undo(false); syncBar(); }); }
 function syncBar(){ var sel=Blockly.getSelected(); $('ebCopy').disabled=!(sel&&!sel.isShadow()); $('ebUndo').disabled=!ws.getUndoStack().length; $('ebRedo').disabled=!ws.getRedoStack().length; }
 $('ebCopy').onclick=function(){ copyBlock(); };
 $('ebPaste').onclick=pasteBlock;
