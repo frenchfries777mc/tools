@@ -50,7 +50,7 @@ function draw(){
         var n=multi?0:LAB.vcount(e.id); if(n){ var s3=document.createElement('span'); s3.className='gtag mine'; s3.textContent=F('내 버전 {0}개',n); tags.appendChild(s3); } }
       var h3=document.createElement('h3'); h3.textContent=T(u[2]); var p=document.createElement('p'); p.textContent=T(u[3]);
       var tp=document.createElement('div'); tp.className='gtpl';
-      if(e){ tp.innerHTML='<span class="ic"></span><span class="nm"></span><span class="go"></span>'; if(multi) tp.querySelector('.ic').textContent=es.map(function(x){ return x.icon; }).slice(0,4).join(' '); else LAB.ico(tp.querySelector('.ic'),e); tp.querySelector('.nm').textContent=multi?es.map(function(x){ return T(x.name); }).join(' · '):T(e.name); tp.querySelector('.go').textContent=T(multi?'고르기':'열기'); }
+      if(e){ tp.innerHTML='<span class="ic"></span><span class="nm"></span><span class="go"></span>'; if(multi){ var ic=tp.querySelector('.ic'); ic.classList.add('strip'); es.slice(0,4).forEach(function(x){ ic.appendChild(LAB.mini(x,22)); }); } else LAB.ico(tp.querySelector('.ic'),e); tp.querySelector('.nm').textContent=multi?es.map(function(x){ return T(x.name); }).join(' · '):T(e.name); tp.querySelector('.go').textContent=T(multi?'고르기':'열기'); }
       else tp.textContent=T('이 단원의 템플릿은 준비 중이에요');
       card.appendChild(tags); card.appendChild(h3); card.appendChild(p); card.appendChild(tp); grid.appendChild(card); }); });
 }

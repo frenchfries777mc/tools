@@ -495,7 +495,8 @@ function start(){
 document.addEventListener('DOMContentLoaded',start);
 
 function ico(el,e){ var L=window.LABLOGOS; if(L&&L[e.id]){ el.textContent=''; el.classList.add('lg'); var i=document.createElement('img'); i.alt=''; i.src='icons/'+e.id+'.svg'; i.width=28; i.height=28; el.appendChild(i); } else el.textContent=e.icon; }
-window.LAB={ico:ico, add:add, show:show, vcount:vcount, get view(){ return curView; }, versions:function(){ return cur?vlist():[]; }, loadVersion:loadVer, saveVersion:saveVer, get last(){ return st.last; }, H:H, open:open, record:record, toast:toast,
+function mini(e,px){ var L=window.LABLOGOS; if(L&&L[e.id]){ var i=document.createElement('img'); i.alt=''; i.src='icons/'+e.id+'.svg'; i.width=px; i.height=px; i.className='li'; return i; } return document.createTextNode(e.icon); }
+window.LAB={ico:ico, mini:mini, add:add, show:show, vcount:vcount, get view(){ return curView; }, versions:function(){ return cur?vlist():[]; }, loadVersion:loadVer, saveVersion:saveVer, get last(){ return st.last; }, H:H, open:open, record:record, toast:toast,
   get cur(){ return cur; }, get list(){ return EXPS; }, get rows(){ return cur?rows():[]; }, get running(){ return running; }, get speed(){ return speed; },
   colTitle:colTitle, csv:csv, setAuto:setAuto, get auto(){ return !!autoT; }, sheetDoc:function(){ return cur?sheetDoc():null; }, xlsxBook:xlsxBook, needXLSX:needXLSX, graphPts:graphPts, toSheet:toSheet, linfit:linfit, get fit(){ return lastFit; }, setP:setP, tab:tab, saveNow:saveNow,
   valText:valText, applySet:applySet, shareCode:shareCode, shareURL:shareURL, readShare:readShare, openShare:openShare, graphImage:graphImage};
