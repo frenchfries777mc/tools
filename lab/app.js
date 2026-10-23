@@ -118,7 +118,7 @@ $('speedSel').onchange=function(){ speed=+this.value||1; saveSoon(); };
 /* ---------- experiment list ---------- */
 var CATS=[['math','수학'],['sci','과학']];
 function drawNav(){ var n=$('nav'); n.innerHTML='';
-  CATS.forEach(function(c){ var h=document.createElement('div'); h.className='cat'; h.textContent=T(c[1]); n.appendChild(h);
+  CATS.forEach(function(c){ var h=document.createElement('div'); h.className='cat'; var si=document.createElement('img'); si.alt=''; si.src='subjects/'+c[0]+'.svg'; si.width=16; si.height=16; si.className='si'; h.appendChild(si); h.appendChild(document.createTextNode(T(c[1]))); n.appendChild(h);
     EXPS.filter(function(e){ return e.cat===c[0]; }).forEach(function(e){ var b=document.createElement('button'); b.className='ex'; b.dataset.id=e.id;
       b.innerHTML='<span class="ic"></span><span><span class="nm"></span><span class="ds"></span></span>';
       LAB.ico(b.querySelector('.ic'),e); b.querySelector('.nm').textContent=T(e.name); b.querySelector('.ds').textContent=T(e.desc);
