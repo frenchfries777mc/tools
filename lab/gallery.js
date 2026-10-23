@@ -8,8 +8,18 @@ var CUR=window.LABCUR, LS='fflab.gal.v1', f={s:'all', g:'all', q:'', soon:true};
 try{ var o=JSON.parse(localStorage.getItem(LS)||'null'); if(o&&typeof o==='object'){ if(o.s==='math'||o.s==='sci'||o.s==='all') f.s=o.s; if(o.g==='all'||CUR.grades.indexOf(o.g)>=0) f.g=o.g; if(typeof o.soon==='boolean') f.soon=o.soon; } }catch(e){}
 function persist(){ try{ localStorage.setItem(LS,JSON.stringify({s:f.s,g:f.g,soon:f.soon})); }catch(e){} }
 function byId(id){ return LAB.list.filter(function(e){ return e.id===id; })[0]; }
-function seg(box,items,key){ box.innerHTML=''; items.forEach(function(it){ var b=document.createElement('button'); b.type='button'; b.textContent=T(it[1]); b.dataset.v=it[0]; b.setAttribute('aria-pressed',String(f[key]===it[0]));
+function seg(box,items,key){ box.innerHTML=''; items.forEach(function(it){ var b=document.createElement('button'); b.type='button'; if(key==='s'&&(it[0]==='math'||it[0]==='sci')) b.appendChild(sico(it[0],16)); b.appendChild(document.createTextNode(T(it[1]))); b.dataset.v=it[0]; b.setAttribute('aria-pressed',String(f[key]===it[0]));
   b.classList.toggle('on',f[key]===it[0]); b.onclick=function(){ f[key]=it[0]; persist(); draw(); }; box.appendChild(b); }); }
+var SUBJ_ELECT={'물리학':'physics','화학':'chemistry','생명과학':'biology','지구과학':'earth'};
+function subj(u){   /* 고2·고3 선택과목: [로고 id, 이름] (이름이 없는 과목은 null) */
+  if(u[0]!=='고2'&&u[0]!=='고3') return null;
+  if(u[1]==='sci'){ var k=String(u[2]).split(':')[0]; return SUBJ_ELECT[k]?[SUBJ_ELECT[k],k]:null; }
+  var n=String(u[2]);
+  if(/극한|미분|적분|급수/.test(n)) return ['calculus','미적분'];
+  if(/확률|통계|분포|추정/.test(n)) return ['probstats','확률과 통계'];
+  if(/삼각함수|수열|지수|로그/.test(n)) return ['algebra','대수'];
+  return null; }
+function sico(k,px){ var i=document.createElement('img'); i.alt=''; i.src='subjects/'+k+'.svg'; i.width=px; i.height=px; i.className='si'; return i; }
 function exps(u){ return CUR.ids(u).map(byId).filter(Boolean); }
 function match(u,es,q){ if(!q) return true; q=q.toLowerCase(); var hay=[u[2],u[3],T(u[2]),T(u[3]),u[0]].concat(es.map(function(e){ return e.name+' '+T(e.name); })).join(' ').toLowerCase(); return hay.indexOf(q)>=0; }
 var pk=null;
@@ -44,7 +54,8 @@ function draw(){
     var grid=document.createElement('div'); grid.className='gcards'; box.appendChild(grid);
     us.forEach(function(u){ var es=exps(u), e=es[0]||null, multi=es.length>1, card=document.createElement(e?'button':'div'); card.className='gcard '+(e?'ok':'soon'); if(e){ card.type='button'; card.onclick=multi?function(){ openPick(u,es,card); }:function(){ LAB.open(e.id); }; }
       var tags=document.createElement('div'); tags.className='gtags';
-      [[u[0],''],[u[1]==='math'?'수학':'과학',u[1]==='math'?'m':'s']].forEach(function(t){ var s=document.createElement('span'); s.className='gtag '+t[1]; s.textContent=T(t[0]); tags.appendChild(s); });
+      var sj=subj(u);
+      [[u[0],'',null],[u[1]==='math'?'수학':'과학',u[1]==='math'?'m':'s',u[1]],sj?[sj[1],u[1]==='math'?'m':'s',sj[0]]:null].forEach(function(t){ if(!t) return; var s=document.createElement('span'); s.className='gtag '+t[1]; if(t[2]) s.appendChild(sico(t[2],16)); s.appendChild(document.createTextNode(T(t[0]))); tags.appendChild(s); });
       if(!e){ var s2=document.createElement('span'); s2.className='gtag soon'; s2.textContent=T('준비 중'); tags.appendChild(s2); }
       else { if(multi){ var s4=document.createElement('span'); s4.className='gtag multi'; s4.textContent=F('실험 {0}개',es.length); tags.appendChild(s4); }
         var n=multi?0:LAB.vcount(e.id); if(n){ var s3=document.createElement('span'); s3.className='gtag mine'; s3.textContent=F('내 버전 {0}개',n); tags.appendChild(s3); } }
