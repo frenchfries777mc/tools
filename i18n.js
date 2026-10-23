@@ -18,7 +18,11 @@
   var NAMES={ko:'한국어',en:'English',es:'Español',fr:'Français',de:'Deutsch',ja:'日本語',zh:'简体中文',pt:'Português (Brasil)',ru:'Русский',tr:'Türkçe',it:'Italiano',pl:'Polski',ar:'العربية',nw:'Newspeak',gk:'번역기 한국어'};
   /* fictional languages sit in their own group; Aurebesh is English text in the Aurebesh font (ff-lang.js) */
   var VIRT={nw:1,gk:1}, VLABEL={ko:'가상 언어',en:'Fictional languages',es:'Idiomas ficticios',fr:'Langues fictives',de:'Fiktive Sprachen',ja:'架空の言語',zh:'虚构语言',pt:'Idiomas fictícios',ru:'Вымышленные языки',tr:'Kurgusal diller',it:'Lingue immaginarie',pl:'Języki fikcyjne',ar:'لغات خيالية',nw:'Unreal speaks',gk:'Fictional 언어들'};
-  function auOn(){ try{ return !!(window.FFLang&&FFLang.script&&FFLang.script()); }catch(e){ return false; } }
+  /* 이모지어(em) also works on pages without ff-lang.js (sheet, slides, blocks, lab, teach): the flag is read straight from storage and ff-emoji.js is loaded here */
+  function scr(){ try{ return (window.FFLang&&FFLang.script)?FFLang.script():(localStorage.getItem('ff.script')==='em'?'em':''); }catch(e){ return ''; } }
+  function auOn(){ return !!scr(); }
+  if(!window.FFLang&&scr()==='em'){ try{ var eh=document.documentElement, es=document.createElement('style'); es.textContent='html:not(.ff-em-ready) body{visibility:hidden}'; (document.head||eh).appendChild(es); setTimeout(function(){ eh.classList.add('ff-em-ready'); },2500);
+    var ej=document.createElement('script'); ej.src='https://frenchfries777mc.github.io/games/ff-emoji.js?v=1'; ej.onerror=function(){ eh.classList.add('ff-em-ready'); }; (document.head||eh).appendChild(ej); }catch(e){} }
   var pref=null; try{ pref=localStorage.getItem(LS); }catch(e){}
   function detect(){ var c=[]; try{ c=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||'']; }catch(e){}
     for(var i=0;i<c.length;i++){ var b=String(c[i]||'').toLowerCase().split('-')[0]; if(LANGS.indexOf(b)>=0) return b; } return 'en'; }
@@ -52,11 +56,11 @@
     for(var j=0;j<slots.length;j++){
       var sel=document.createElement('select'); sel.className='langSel'; sel.setAttribute('data-notr',''); sel.setAttribute('aria-label',T('언어'));
       var grp=document.createElement('optgroup'); grp.label=VLABEL[lang]||VLABEL.en;
-      LANGS.concat(['au','sg']).forEach(function(l){ var o=document.createElement('option'); o.value=l; o.textContent=l==='au'?'🌐 Aurebesh':l==='sg'?'🌐 Standard Galactic':NAMES[l];
-        if((l==='au'||l==='sg')){ o.style.fontFamily=l==='au'?"'FF Aurebesh',system-ui":"'FF Galactic',system-ui"; if(auOn()&&FFLang.script()===l) o.selected=true; } else if(l===lang&&!auOn()) o.selected=true;
-        (VIRT[l]||(l==='au'||l==='sg')?grp:sel).appendChild(o); });
+      LANGS.concat(['au','sg','em']).forEach(function(l){ var o=document.createElement('option'); o.value=l; o.textContent=l==='au'?'🌐 Aurebesh':l==='sg'?'🌐 Standard Galactic':l==='em'?'😀💬':NAMES[l];
+        if((l==='au'||l==='sg'||l==='em')){ if(l!=='em') o.style.fontFamily=l==='au'?"'FF Aurebesh',system-ui":"'FF Galactic',system-ui"; if(scr()===l) o.selected=true; } else if(l===lang&&!auOn()) o.selected=true;
+        (VIRT[l]||(l==='au'||l==='sg'||l==='em')?grp:sel).appendChild(o); });
       sel.appendChild(grp);
-      sel.onchange=function(){ var v=this.value; try{ localStorage.setItem(LS,(v==='au'||v==='sg')?'en':v); }catch(e){} try{ if(window.FFLang) FFLang.set(v); }catch(e){} location.reload(); };
+      sel.onchange=function(){ var v=this.value; try{ localStorage.setItem(LS,(v==='au'||v==='sg'||v==='em')?'en':v); }catch(e){} try{ if(window.FFLang) FFLang.set(v); else if(v==='em') localStorage.setItem('ff.script','em'); else localStorage.removeItem('ff.script'); }catch(e){} location.reload(); };
       slots[j].appendChild(sel);
     }
   }
