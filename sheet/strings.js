@@ -1,5 +1,6 @@
 /* Fry Sheet strings: UI translations ([en, es, fr, de, ja]) and the function list shown in "함수 넣기". */
 FFT.add({
+'되돌리기':['Undo','Deshacer','Annuler','Rückgängig','元に戻す',"撤销","Desfazer","Отменить","Geri al","Undo","되돌리기","Annulla","Cofnij","تراجع"],
 'AI 계산':['AI calculate','Calcular con IA','Calcul IA','KI-Rechnen','AI計算',"AI 计算","Cálculo com IA","ИИ-расчёт","Yapay zekâyla hesapla","AI calculate","AI 계산","Calcolo IA","Obliczenia AI","حساب بالذكاء الاصطناعي"],
 '🧮 할인 계산':['🧮 Discount','🧮 Descuento','🧮 Remise','🧮 Rabatt','🧮 割引計算',"🧮 折扣","🧮 Desconto","🧮 Скидка","🧮 İndirim","🧮 Discount","🧮 Discount","🧮 Sconto","🧮 Rabat","🧮 خصم"],
 '3500원짜리 7개에 10% 할인':['3500 × 7 with 10% off','3500 × 7 con 10% de descuento','3500 × 7 avec 10 % de remise','3500 × 7 mit 10 % Rabatt','3500 × 7 から10%引き',"3500 × 7 打九折","3500 × 7 com 10% de desconto","3500 × 7 со скидкой 10%","3500 × 7, %10 indirimli","3500 × 7 with 10% unon","3500 × 7 와 함께 10% 떨어져","3500 × 7 con il 10% di sconto","3500 × 7 z rabatem 10%","3500 × 7 بخصم 10%"],

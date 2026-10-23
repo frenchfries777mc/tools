@@ -15,3 +15,4 @@ versions.js (Sheet·Slides·Block HTML) | 버전 기록, 이 브라우저에만 
 ai.js (모델 소개 문구 1.6) | 번역 키 문구의 버전 숫자만 1.4→1.6 | AI v46 | 2026-10-23
 index.html (첫 화면 숫자 띠) | 실험 종류 | Site v27 | 2026-10-23
 patchnotes/site.json | 이모지어 추가 3줄 | site v28 | 2026-10-23
+undotoast.js (삭제 뒤 되돌리기 안내) | 그림을 지웠어요, 이 그림을 지웠어요. 쓰던 블록 {0}개에 영향이 있어요, 블록을 모두 지웠어요 (시트·슬라이드·블록 되돌리기 버튼 문구는 번역됨) | Blocks v64, Sheet v38, Slides v29 | 2026-10-23

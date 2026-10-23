@@ -1121,10 +1121,9 @@ function drawDeckList(){ var l=$('deckList'); l.innerHTML='';
 function drawDeckMenu(){}
 function newDeckAction(){ saveNow(); if(!deck.slides.length&&isDefaultName(deck.name)){ deck.topic=''; deck.aud=''; refresh(); } else openDeck(newDeck()); $('topic').focus(); }
 function renameDeck(d){ ask(T('이름 바꾸기'),'',T('발표 자료 이름'),T('확인'),d.name).then(function(v){ if(!v) return; d.name=v; if(d===deck) $('deckName').value=v; saveNow(); drawMgr(); }); }
-function deleteDeck(d){ confirmDlg(F('"{0}" 발표 자료를 지울까요? 되돌릴 수 없어요.',d.name||T('이름 없음'))).then(function(ok){ if(!ok) return;
-  var wasOpen=d===deck; store.decks=store.decks.filter(function(x){ return x!==d; });
+function deleteDeck(d){ { var wasOpen=d===deck, at=store.decks.indexOf(d); store.decks=store.decks.filter(function(x){ return x!==d; });
   if(wasOpen){ deck=null; var rest=store.decks.slice().sort(function(a,b){ return b.t-a.t; }); openDeck(rest.length?rest[0]:newDeck()); } else saveNow();
-  drawMgr(); toast(T('지웠어요')); }); }
+  drawMgr(); FFUndo.show('지웠어요',function(){ if(store.decks.indexOf(d)<0) store.decks.splice(Math.min(Math.max(at,0),store.decks.length),0,d); saveNow(); drawMgr(); }); } }
 function copyDeck(d){ saveNow(); var c=JSON.parse(JSON.stringify(d)); c.id=uid(); c.name=F('{0} 사본',d.name||T('이름 없음')); c.t=Date.now(); c.slides.forEach(function(x){ x.id=uid(); }); store.decks.unshift(c); saveNow(); drawMgr(); toast(T('복사했어요')); }
 function drawMgr(){ var l=$('mgrList'); l.innerHTML=''; saveNow();
   store.decks.slice().sort(function(a,b){ return (b===deck)-(a===deck)||b.t-a.t; }).forEach(function(d){
@@ -1952,8 +1951,9 @@ function sortCopy(){ var S=sortSel.slice(); sortApply(function(){ var idx=sortId
   var copies=idx.map(function(i){ var c=JSON.parse(JSON.stringify(deck.slides[i])); c.id=uid(); return c; }); deck.slides.splice.apply(deck.slides,[idx[idx.length-1]+1,0].concat(copies));
   sortSel=copies.map(function(c){ return c.id; }); sortAnchor=-1; return true; },F('{0}장을 복사했어요',S.length)); }
 function sortDel(){ var n=sortSel.length; if(!n) return; if(n>=deck.slides.length) return toast(T('모든 슬라이드를 지울 수는 없어요'));
-  confirmDlg(F('선택한 슬라이드 {0}장을 지울까요? 되돌리기로 살릴 수 있어요.',n)).then(function(ok){ if(!ok) return; var S=sortSel.slice();
-    sortApply(function(){ deck.slides=deck.slides.filter(function(s){ return S.indexOf(s.id)<0; }); sortSel=[]; sortAnchor=-1; return true; },F('{0}장을 지웠어요',n)); }); }
+  var S=sortSel.slice();
+  sortApply(function(){ deck.slides=deck.slides.filter(function(s){ return S.indexOf(s.id)<0; }); sortSel=[]; sortAnchor=-1; return true; });
+  FFUndo.show(F('{0}장을 지웠어요',n),function(){ doUndo(); drawSort(); }); }
 $('sortBtn').onclick=openSort;
 $('sAll').onclick=function(){ sortSel=deck.slides.map(function(s){ return s.id; }); sortPaint(); };
 $('sNone').onclick=function(){ sortSel=[]; sortAnchor=-1; sortPaint(); };
