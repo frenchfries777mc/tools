@@ -162,7 +162,7 @@ form.in textarea:focus{outline:none;}
   <section class="hero" id="hero">
     <div><span class="eyebrow" data-notr>AI Chat</span><h1><span>AI 체험</span></h1>
     <p class="lead">사이트의 자체 AI와 이야기해 봐요. 내 기기 안에서 돌아가서 대화가 밖으로 나가지 않아요. 틀린 답에는 👎 틀렸어요를 눌러 알려 주세요. 답 방식을 보통이나 노력으로 하면 답을 3개, 7개 만들어 투표한 뒤 가장 많이 나온 답을 내놓아요(서로 많이 다르면 불확실하다고 표시해요, 시간이 더 걸려요).</p></div>
-    <img class="hero-lg" src="../logo.svg" alt="" width="150" height="150">
+    <img class="hero-lg" src="../icons/ai-chat.svg" alt="" width="150" height="150">
   </section>
   <section id="pick">
     <div class="models" id="models"></div>
@@ -322,7 +322,7 @@ function add(cls,text){
   $('log').appendChild(row); $('log').scrollTop=$('log').scrollHeight; return d; }
 function greet(){
   $('log').innerHTML=''; var h=document.createElement('div'); h.className='hi'; h.setAttribute('data-notr','');
-  h.innerHTML='<img alt="" width="64" height="64"><b></b><span></span>'; h.querySelector('img').src=ico(cur&&cur.id)||'../logo.svg'; h.querySelector('b').textContent=cur?cur.name:''; h.querySelector('span').textContent=T('궁금한 걸 물어보세요');
+  h.innerHTML='<img alt="" width="64" height="64"><b></b><span></span>'; h.querySelector('img').src=ico(cur&&cur.id)||'../icons/ai-chat.svg'; h.querySelector('b').textContent=cur?cur.name:''; h.querySelector('span').textContent=T('궁금한 걸 물어보세요');
   $('log').appendChild(h); }
 function prior(msgs){ return msgs.map(function(m){ return {role:m.r==='u'?'user':'assistant',content:m.x}; }); }   // the turns before an answer, sent along with 틀렸어요
 function restore(c){
