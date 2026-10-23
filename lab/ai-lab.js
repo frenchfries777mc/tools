@@ -19,7 +19,7 @@ function ctxLine(){ var e=LAB.cur; if(!e) return ''; var p=e.p, parts=[];
     if(q.type==='check') return; if(q.type==='text'){ parts.push(T(q.l)+': '+String(v).slice(0,60)); return; } if(q.type==='seg'){ var o=q.opts.filter(function(x){ return x[0]===v; })[0]; parts.push(T(q.l)+': '+(o?T(o[1]):v)); return; }
     parts.push(T(q.l)+' '+LAB.H.fmt(v,q.d!=null?q.d:(String(q.step).split('.')[1]||'').length)+(q.u?' '+q.u:'')); });
   return parts.join(' · '); }
-function drawCtx(){ var e=LAB.cur; if(!e) return; var c=$('aiCtx'); c.innerHTML=''; var b=document.createElement('b'); b.textContent=e.icon+' '+T(e.name); c.appendChild(b);
+function drawCtx(){ var e=LAB.cur; if(!e) return; var c=$('aiCtx'); c.innerHTML=''; var b=document.createElement('b'); b.appendChild(LAB.mini(e,18)); b.appendChild(document.createTextNode(' '+T(e.name))); c.appendChild(b);
   var s=document.createElement('div'); s.textContent=ctxLine(); c.appendChild(s);
   var n=LAB.rows.length; if(n){ var r=document.createElement('div'); r.textContent=F('기록 {0}줄도 함께 보내요',n); c.appendChild(r); } }
 function data(max){ var e=LAB.cur, R=LAB.rows; if(!R.length) return ''; var rows=R.slice(-max);
@@ -94,9 +94,9 @@ function rank(q,list){ var ws=words(q); if(!ws.length) return [];
     ws.forEach(function(w){ if(nm.indexOf(w)>=0) sc+=3*w.length; else if(ds.indexOf(w)>=0) sc+=w.length;
       else if(w.length>=3) for(var i=0;i+2<=w.length;i++){ var b=w.slice(i,i+2); if(nm.indexOf(b)>=0) sc+=1.5; else if(ds.indexOf(b)>=0) sc+=0.5; } });
     return {e:e, s:sc}; }).filter(function(x){ return x.s>0; }).sort(function(a,b){ return b.s-a.s; }); }
-function shown(e,note,alts){ var out=$('aiOut'); out.hidden=false; out.innerHTML=''; var p=document.createElement('p'); p.textContent=T('열었어요')+': '+e.icon+' '+T(e.name)+(note?' · '+note:''); out.appendChild(p);
+function shown(e,note,alts){ var out=$('aiOut'); out.hidden=false; out.innerHTML=''; var p=document.createElement('p'); p.appendChild(document.createTextNode(T('열었어요')+': ')); p.appendChild(LAB.mini(e,18)); p.appendChild(document.createTextNode(' '+T(e.name)+(note?' · '+note:''))); out.appendChild(p);
   if(alts&&alts.length){ var h=document.createElement('p'); h.textContent=T('다른 후보'); out.appendChild(h); var c=document.createElement('div'); c.className='chips';
-    alts.forEach(function(x){ var b=document.createElement('button'); b.type='button'; b.textContent=x.e.icon+' '+T(x.e.name); b.onclick=function(){ LAB.open(x.e.id); drawCtx(); shown(x.e,''); }; c.appendChild(b); }); out.appendChild(c); } }
+    alts.forEach(function(x){ var b=document.createElement('button'); b.type='button'; b.appendChild(LAB.mini(x.e,18)); b.appendChild(document.createTextNode(' '+T(x.e.name))); b.onclick=function(){ LAB.open(x.e.id); drawCtx(); shown(x.e,''); }; c.appendChild(b); }); out.appendChild(c); } }
 function offline(q,why){ var r=rank(q), out=$('aiOut'); out.hidden=false;
   if(!r.length){ out.textContent=(why?why+' · ':'')+T('비슷한 실험을 찾지 못했어요. 다른 말로 써 보세요'); return; }
   LAB.open(r[0].e.id); drawCtx(); shown(r[0].e,why||T('이름과 설명에서 찾았어요'),r.slice(1,4)); }
