@@ -27,7 +27,8 @@ FFT.add({
 '취소':['Cancel','Cancelar','Annuler','Abbrechen','キャンセル',"取消","Cancelar","Отмена","İptal","Unthink","취소하다!","Annulla","Anuluj","إلغاء"],
 '궁금한 걸 물어보세요':['Ask anything','Pregunta lo que quieras','Pose ta question','Frag etwas','気になることを聞いてね',"随便问","Pergunte qualquer coisa","Спросите что угодно","Her şeyi sor","Ask thing","묻다 anything","Chiedi qualsiasi cosa","Zapytaj o cokolwiek","اسأل أي شيء"],
 '보내기':['Send','Enviar','Envoyer','Senden','送信',"发送","Enviar","Отправить","Gönder","Give","보내다!","Invia","Wyślij","إرسال"],
-'지금 투표':['Vote now','Votar ya','Voter maintenant','Jetzt abstimmen','今すぐ投票',"现在投票","Votar agora","Голосовать сейчас","Şimdi oyla","Now vote","지금 투표","Vota ora","Głosuj teraz","صوّت الآن"],
+'바로 답변':['Answer now','Responder ya','Répondre maintenant','Jetzt antworten','今すぐ答える',"立即回答","Responder agora","Ответить сейчас","Hemen yanıtla","Answer nowfast","빨리 바로 대답함","Rispondi ora","Odpowiedz teraz","أجب الآن"],
+'← 모델 선택':['← Models','← Modelos','← Modèles','← Modelle','← モデル選択',"← 选择模型","← Modelos","← Модели","← Modeller","← Unmodels","← 모형 고르기","← Modelli","← Modele","← النماذج"],
 '멈추기':['Stop','Detener','Arrêter','Stopp','止める',"停止","Parar","Стоп","Durdur","Unstart","멈추기","Ferma","Zatrzymaj","أوقف"],
 '대화 지우기':['Clear chat','Borrar chat','Effacer le chat','Chat leeren','会話を消す',"清空对话","Limpar conversa","Очистить чат","Sohbeti temizle","Clear speakwrite","맑은 수다","Cancella chat","Wyczyść czat","مسح المحادثة"],
 '모델 바꾸기':['Change model','Cambiar modelo','Changer de modèle','Modell wechseln','モデルを変える',"更换模型","Trocar modelo","Сменить модель","Modeli değiştir","Rectify model","잔돈 model","Cambia modello","Zmień model","تغيير النموذج"],
@@ -163,7 +164,7 @@ form.in textarea:focus{outline:none;}
 <main>
   <section class="hero" id="hero">
     <div><span class="eyebrow" data-notr>AI Chat</span><h1><span>AI 체험</span></h1>
-    <p class="lead">사이트의 자체 AI와 이야기해 봐요. 내 기기 안에서 돌아가서 대화가 밖으로 나가지 않아요. 틀린 답에는 👎 틀렸어요를 눌러 알려 주세요. 답 방식을 보통이나 노력으로 하면 답을 3개, 7개 만들어 투표한 뒤 가장 많이 나온 답을 내놓아요(서로 많이 다르면 불확실하다고 표시해요, 시간이 더 걸려요).</p></div>
+    <p class="lead">사이트의 자체 AI와 이야기해 봐요. 내 기기 안에서 돌아가서 대화가 밖으로 나가지 않아요. 틀린 답에는 👎 틀렸어요를 눌러 알려 주세요.</p></div>
     <img class="hero-lg" src="../icons/ai-chat.svg" alt="" width="150" height="150">
   </section>
   <section id="pick">
@@ -182,13 +183,13 @@ form.in textarea:focus{outline:none;}
     <p class="hint">모델을 번갈아 불러와서 처음에는 시간이 걸려요. 결과는 이 기기에 남고, 로그인했다면 개발자에게도 전해져요.</p>
   </section>
   <section class="chat" id="chat" hidden>
-    <div class="bar"><span class="cur"><img class="ci" id="curico" alt="" width="26" height="26"><span id="cur" data-notr></span></span><span class="sp"></span><span class="len" id="len" role="group" aria-label="답 방식" title="신속은 답 1개, 보통은 3개, 노력은 7개를 만들어 투표한 뒤 가장 많은 쪽으로 답해요"><button type="button" data-l="0">신속</button><button type="button" data-l="1">보통</button><button type="button" data-l="2">노력</button></span><button class="ghost" id="clear" type="button">새 대화</button><button class="ghost" id="nameBtn" type="button" disabled>이름 짓기</button><button class="ghost" id="memoBtn" type="button">메모장</button><button class="ghost" id="change" type="button">모델 바꾸기</button></div>
+    <div class="bar"><button class="ghost" id="change" type="button">← 모델 선택</button><span class="cur"><img class="ci" id="curico" alt="" width="26" height="26"><span id="cur" data-notr></span></span><span class="sp"></span><span class="len" id="len" role="group" aria-label="답 방식"><button type="button" data-l="0">신속</button><button type="button" data-l="1">보통</button><button type="button" data-l="2">노력</button></span><button class="ghost" id="clear" type="button">새 대화</button><button class="ghost" id="nameBtn" type="button" disabled>이름 짓기</button><button class="ghost" id="memoBtn" type="button">메모장</button></div>
     <div class="cmeta" id="cmeta" data-notr></div>
     <div class="log ff-em-keep" id="log" aria-live="polite"></div>
     <div class="chips" id="chips" aria-label="예시 질문"></div>
     
     <div class="msug" id="msug" hidden><span data-notr></span><button class="ghost" id="msugYes" type="button">메모장에 넣기</button><button class="ghost" id="msugNo" type="button">아니요</button></div>
-    <div class="vnow" id="vnow" hidden><button class="ghost" id="vnowBtn" type="button">지금 투표</button><span id="vnowN" data-notr></span></div>
+    <div class="vnow" id="vnow" hidden><button class="ghost" id="vnowBtn" type="button">바로 답변</button><span id="vnowN" data-notr></span></div>
     <form class="in" id="form"><textarea id="q" rows="1" maxlength="600" placeholder="궁금한 걸 물어보세요"></textarea><button class="btn" id="send" type="submit">보내기</button></form>
   </section>
   <p class="hint">작은 AI라서 틀릴 수 있어요. 중요한 일은 꼭 다시 확인해 주세요.</p>
@@ -233,7 +234,7 @@ function convPush(r,text){
   convPut(); renderMeta(); }
 /* 대화 맨 위 한 줄: 이 대화에서 쓴 모델과 답 방식 */
 var MODES=['신속','보통','노력'];
-function modeText(l){ var n=FFVote.TIMES[l]; return T(MODES[l])+(n>1?' ('+T('답 {0}개 투표').replace('{0}',n)+')':' ('+T('바로 답')+')'); }
+function modeText(l){ return T(MODES[l]); }
 function renderMeta(){
   var m=$('cmeta'), nb=$('nameBtn'); if(!m||!nb) return;
   nb.disabled=!conv; nb.textContent=T(conv&&conv.name?'이름 바꾸기':'이름 짓기');
