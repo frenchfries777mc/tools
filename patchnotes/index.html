@@ -68,6 +68,7 @@ FFT.add({
   .note ul{margin:10px 0 0; padding-left:20px;} .note li{margin:3px 0;}
   .note li::marker{color:var(--fry);}
   .msg{color:var(--dim); margin:26px 0;}
+  .ffpn{margin:20px 0 -10px;}
   footer{margin:56px 0 40px; padding-top:20px; border-top:1px solid var(--line); color:var(--dim); font-size:14px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;}
   footer a{color:var(--dim);}
   html[data-ff-theme=light]{ --bg:#f4f5f8; --panel:#fff; --line:#dfe2ea; --text:#161a24; --dim:#5d667a; }
@@ -90,6 +91,7 @@ FFT.add({
 
   <footer><span>Made by Frenchfries777 with Claude AI</span> <span class="ff-copy">© 2026 Frenchfries777 · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.ko" target="_blank" rel="noopener">CC BY-NC-ND 4.0</a></span><a href="../">← Tools</a></footer>
 </div>
+<script src="https://frenchfries777mc.github.io/games/ff-pnsearch.js"></script>
 <script>
 (function(){
   var PROGS=[['site','Tools'],['sheet','Fry Sheet'],['blocks','Block HTML'],['slides','Fry Slides'],['lab','Fry Lab'],['ai','AI']];
@@ -100,7 +102,9 @@ FFT.add({
   function draw(id){
     Array.prototype.forEach.call(tabs.children,function(b){ b.classList.toggle('on',b.dataset.id===id); });
     msg.textContent=''; list.innerHTML='';
-    function show(d){ list.innerHTML=(d.notes||[]).map(function(n){
+    function show(d){ var raw=d.notes||[], ns=window.FFPN?FFPN.filter(raw):raw;
+      if(window.FFPN){ FFPN.count(ns.length); if(raw.length&&!ns.length){ list.innerHTML=FFPN.none(); return; } }
+      list.innerHTML=ns.map(function(n){
       var L=window.FFT&&FFT.lang, t=n.tr&&L&&(n.tr[L]||(L!=='ko'&&L!=='gk'?n.tr.en:null)); if(t) n={build:n.build, date:n.date, title:t.title||n.title, items:t.items||n.items};   // translated notes (tr.{lang}); a language without its own note shows the English one (번역기 한국어 keeps the Korean)
       return '<li class="note"><div class="top"><span class="bd">'+esc(n.build)+'</span><h2>'+esc(n.title)+'</h2><time>'+esc(n.date)+'</time></div><ul>'+(n.items||[]).map(function(i){ return '<li>'+esc(i)+'</li>'; }).join('')+'</ul></li>'; }).join(''); }
     if(cache[id]) return show(cache[id]);
@@ -112,6 +116,7 @@ FFT.add({
   PROGS.forEach(function(p){ var b=document.createElement('button'); b.type='button'; b.dataset.id=p[0]; b.textContent=p[1];
     b.onclick=function(){ location.hash=p[0]; }; tabs.appendChild(b); });
   window.addEventListener('hashchange',function(){ draw(cur()); });
+  if(window.FFPN) FFPN.mount('list',function(){ draw(cur()); });
   draw(cur());
 })();
 </script>
