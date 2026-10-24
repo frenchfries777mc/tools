@@ -587,6 +587,27 @@ function addLog(level,text){ var box=$('logBox'), d=document.createElement('div'
   if(err){ $('pPrev').classList.add('logOpen'); } }
 function showBlocksView(){ if(window.matchMedia('(max-width:900px)').matches){ var b=document.querySelector('#seg button[data-v="blocks"]'); if(b) b.click(); } }
 window.addEventListener('message',function(e){ var d=e.data; if(!d||!d.ffbhLog||e.source!==$('frame').contentWindow) return; addLog(d.ffbhLog[0],d.ffbhLog[1]); });
+/* AI 블록 (v65): the page in the preview asks here, the AI the person set up (AI 설정) answers, one question at a time */
+var AI_NAME={ko:'Korean',en:'English',es:'Spanish',fr:'French',de:'German',ja:'Japanese',zh:'Simplified Chinese',pt:'Brazilian Portuguese',ru:'Russian',tr:'Turkish',it:'Italian',pl:'Polish',ar:'Arabic'}, aiQ=Promise.resolve();
+function aiJob(q){ var t=q.text, L=q.opt, font='';
+  if(q.task==='tr'){ if(L==='user'){ var sc=''; try{ sc=localStorage.getItem('ff.script')||''; }catch(e){} L=(sc==='em'||sc==='au'||sc==='sg')?sc:(FFT.lang||'ko'); }
+    if(L==='au'||L==='sg'){ font=L; L='en'; }
+    var how=AI_NAME[L]?'Translate the text into '+AI_NAME[L]+'.':
+      L==='nw'?'Translate the text into Newspeak from the novel 1984: very simple English, opposites made with un- (ungood, uncold), stronger words with plus- and doubleplus- (plusgood, doubleplusgood), as few words as possible.':
+      L==='gk'?'Translate the text into Korean the way a bad word-by-word machine translator does: take each word alone, often pick a wrong literal meaning, keep awkward word order. It should be funny but still Korean.':
+      L==='em'?'Rewrite the text using only emoji, no letters or numbers: a few emoji for each word or idea, in order.':'Translate the text into Korean.';
+    return {sys:how+' Reply with the result only: no quotes, notes or explanations.', prompt:t, font:font}; }
+  if(q.task==='qa') return {sys:'Answer the question shortly and clearly, in one to three sentences, in the same language as the question. Reply with the answer only.', prompt:t};
+  if(q.task==='sum') return {sys:'Summarize the text in one or two short sentences, in the same language as the text. Reply with the summary only.', prompt:t};
+  if(q.task==='pick') return {sys:'From the text, list every '+(L==='neg'?'negative':'positive')+' word or expression exactly as written in the text, separated by ", ". If there is none, reply with: NONE. Reply with the list only.', prompt:t, pick:true};
+  return null; }
+function aiClean(t,pick){ t=String(t||'').replace(/^```[a-z]*\s*|\s*```$/g,'').trim().replace(/^(translation|answer|summary|번역|답|요약)\s*[:：]\s*/i,'').replace(/^["'“”「]+|["'“”」]+$/g,'').trim();
+  if(pick&&/^(none|없음|\(none\))\.?$/i.test(t)) t=''; return t; }
+window.addEventListener('message',function(e){ var d=e.data; if(!d||!d.ffbhAI||e.source!==$('frame').contentWindow) return;
+  var q=d.ffbhAI, w=e.source, job=aiJob(q);
+  function back(text){ try{ w.postMessage({ffbhAIRes:{id:q.id,text:text||'',font:job&&job.font||''}},'*'); }catch(x){} }
+  if(!job||!String(q.text||'').trim()||!window.FFAI) return back('');
+  aiQ=aiQ.then(function(){ return FFAI.ask({system:job.sys, prompt:job.prompt, maxTokens:600, prose:true, temperature:0.2}).then(function(t){ back(aiClean(t,job.pick)); },function(err){ back(''); if(err&&err.message) addLog('error',T('AI 블록')+': '+err.message); }); }); });
 $('logToggle').onclick=function(){ $('pPrev').classList.toggle('logOpen'); };
 $('logClear').onclick=clearLog;
 
