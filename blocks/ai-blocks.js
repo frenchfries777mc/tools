@@ -228,7 +228,7 @@ function libMatch(q){ var n=String(q||'').toLowerCase().replace(/\s+/g,''); if(n
   return ''; }
 function readyGo(q){ var ex=BH_EXAMPLES.filter(function(e){ return e.name===readyEx; })[0]; if(!ex) return false;
   before={name:$('projName').value, ws:Blockly.serialization.workspaces.save(ws)};
-  B.loadExample(ex,true); $('projName').value=T(ex.name); B.save(); addHist(q,false,'new'); $('baiUndo').hidden=false; readyEx='';
+  B.loadExample(ex,true); B.save(); addHist(q,false,'new'); $('baiUndo').hidden=false; readyEx='';
   // the code scrolls in like a live answer; it is the stored example, shown (not made by the AI)
   var html=BHX.lean(B.build()), n=0, step=Math.max(20,Math.ceil(html.length/90)), p=$('baiLive'); busyNow=true; $('baiGo').disabled=true; $('baiStop').hidden=true;
   msg(F('AI가 생각하는 중… {0}초',1)); p.hidden=false; p.textContent='';
@@ -248,7 +248,6 @@ function exec(q,shown,fix){
     before={name:$('projName').value, ws:Blockly.serialization.workspaces.save(ws)};
     B.showHTML(html); // the page first appears in the HTML code tab and the preview, as the AI wrote it
     var how=toBlocks(html); if(how.blocks) B.showPreview();
-    if(!modify&&how.title) $('projName').value=how.title;
     B.save(); addHist(shown,fix,plan); if(fix) $('baiFix').value=''; $('baiUndo').hidden=false; busy(false);
     msg(brokenNote?T('코드에 틀린 곳이 남았어요. 읽을 수 있는 만큼 블록으로 바꾸고 나머지는 JS 직접 쓰기 블록에 넣었어요'):T('다 만들었어요! 미리보기에서 확인해 보세요'),brokenNote?'bad':'ok'); close();
     if(brokenNote){ B.toast(T('코드에 틀린 곳이 남았어요. 읽을 수 있는 만큼 블록으로 바꾸고 나머지는 JS 직접 쓰기 블록에 넣었어요')+' · '+T('"틀린 곳을 알려 주세요"로 고쳐 보세요')); return; }
