@@ -6,7 +6,7 @@ var T=FFT.T, G=javascript.javascriptGenerator, O=javascript.Order;
 /* one colour per toolbox category; every block takes the colour of the one category it is in (see paint() at the end).
    12 categories (v40), picked so neighbours are easy to tell apart and white text stays readable (contrast 3.9:1 or more) */
 var C={ev:'#a67a00', page:'#cc5a14', look:'#0b8577', move:'#1769c4', game:'#cc2448', draw:'#b0368f', sound:'#4a4fd8', save:'#71701a',
-  logic:'#4f6f8f', loop:'#2f8a3a', math:'#9333b8', vars:'#9a4a3a'};
+  logic:'#4f6f8f', loop:'#2f8a3a', math:'#9333b8', vars:'#9a4a3a', ai:'#0e7490'};
 var KO=(FFT.lang||'ko')==='ko', PUT=KO?'넣기':''; // "버튼 [..] 넣기": the verb only reads well in Korean
 /* a bare Korean particle label that has to read differently in one block: other languages look it up under a longer key (strings.js, "을(를) [생략]" and the like) */
 function TK(ko,key){ return KO?ko:T(key); }
@@ -1287,7 +1287,7 @@ function build(ws,opts){
     body+=bodyHTML(b,'  ',true);
   });
   // JavaScript
-  WAITS=ws.getAllBlocks(false).some(function(x){ return (x.type==='act_wait'||x.type==='act_glideto'||x.type==='act_glidexy'||x.type==='act_tween'||x.type==='act_path_go'||x.type==='act_type'||x.type==='act_speak_wait'||x.type==='act_fetch'||x.type==='act_alert'||x.type==='val_prompt')&&x.isEnabled(); });
+  WAITS=ws.getAllBlocks(false).some(function(x){ return (x.type==='act_wait'||x.type==='act_glideto'||x.type==='act_glidexy'||x.type==='act_tween'||x.type==='act_path_go'||x.type==='act_type'||x.type==='act_speak_wait'||x.type==='act_fetch'||x.type==='act_alert'||x.type==='val_prompt'||/^ai_/.test(x.type))&&x.isEnabled(); });
   NEED={}; USED={}; USEDS={}; G.INFINITE_LOOP_TRAP=opts.trap?'if (--window.__loop < 0) throw new Error("'+T('반복이 끝나지 않아요')+'");\n':null;
   DBG=!!opts.debug; dbgSeq=0; GLW=!!opts.glow&&!DBG; G.STATEMENT_PREFIX=DBG?'await __step(%1);\n':GLW?'__glow(%1);\n':null;
   var js, dbgVars=[];
@@ -1455,6 +1455,55 @@ def('act_stopwatch',function(){ this.appendDummyInput().appendField(T('스톱워
   function(b){ need('sw'); return '__sw('+lit(b.getFieldValue('MODE'))+');\n'; });
 def('val_stopwatch',function(){ this.appendDummyInput().appendField(T('스톱워치 시간(초)')); val(this,'Number','스톱워치가 잰 시간(초)이에요. 재는 동안에는 계속 늘어나고, 멈추면 그대로예요. 소수 셋째 자리까지 나와요'); },
   function(){ need('sw'); return ['__swVal()',O.FUNCTION_CALL]; });
+/* ---------- v65: AI 블록. The page asks Block HTML (its parent window) through postMessage; app.js runs the AI the person set up and sends the answer back.
+   A page opened on its own (downloaded HTML) has no Block HTML around it, so the blocks give an empty text there. ---------- */
+var AI_LANGS=[['사용자의 언어','user'],['한국어','ko'],['영어','en'],['스페인어','es'],['프랑스어','fr'],['독일어','de'],['일본어','ja'],['중국어','zh'],['포르투갈어','pt'],['러시아어','ru'],['튀르키예어','tr'],
+  ['이탈리아어','it'],['폴란드어','pl'],['아랍어','ar'],['신어','nw'],['번역기 한국어','gk'],['오라베쉬','au'],['Standard Galactic','sg'],['이모지어','em']];
+def('ai_translate',function(){ this.appendValueInput('TEXT').setCheck('String'); this.appendDummyInput().appendField(T('을(를)')).appendField(new Blockly.FieldDropdown(function(){ return AI_LANGS.map(function(l){ return [T(l[0]),l[1]]; }); }),'LANG').appendField(T('(으)로 번역한 글')); this.setInputsInline(true); val(this,'String','AI가 글을 고른 언어로 번역해요. "사용자의 언어"는 페이지를 보는 사람이 사이트에서 고른 언어예요. 답이 올 때까지 기다려요. Block HTML 밖에서 열면 빈 글자예요'); },
+  function(b){ need('ai'); return ['(await __ai(\'tr\', '+(G.valueToCode(b,'TEXT',O.COMMA)||"''")+', '+lit(b.getFieldValue('LANG'))+'))',O.ATOMIC]; });
+def('ai_answer',function(){ this.appendValueInput('Q').setCheck('String'); this.appendDummyInput().appendField(T('에 대한 AI의 답')); this.setInputsInline(true); val(this,'String','AI가 질문에 짧게 답해요. 답이 올 때까지 기다려요. AI 답은 틀릴 수 있어요. Block HTML 밖에서 열면 빈 글자예요'); },
+  function(b){ need('ai'); return ['(await __ai(\'qa\', '+(G.valueToCode(b,'Q',O.COMMA)||"''")+', \'\'))',O.ATOMIC]; });
+def('ai_summary',function(){ this.appendValueInput('TEXT').setCheck('String'); this.appendDummyInput().appendField(T('을(를) 요약한 글')); this.setInputsInline(true); val(this,'String','AI가 글을 한두 문장으로 줄여요. 답이 올 때까지 기다려요. Block HTML 밖에서 열면 빈 글자예요'); },
+  function(b){ need('ai'); return ['(await __ai(\'sum\', '+(G.valueToCode(b,'TEXT',O.COMMA)||"''")+', \'\'))',O.ATOMIC]; });
+def('ai_pick',function(){ this.appendValueInput('TEXT').setCheck('String'); this.appendDummyInput().appendField(T('중에서')).appendField(new Blockly.FieldDropdown(function(){ return [[T('긍정적'),'pos'],[T('부정적'),'neg']]; }),'KIND').appendField(T('표현을')).appendField(new Blockly.FieldVariable(T('표현')),'VAR').appendField(T('에 저장하기')); this.setInputsInline(true); act(this,'AI가 글에서 긍정적이거나 부정적인 낱말과 표현을 찾아 쉼표로 이어 변수에 넣어요. 없으면 빈 글자를 넣어요. 답이 올 때까지 기다려요'); },
+  function(b){ need('ai'); return G.getVariableName(b.getFieldValue('VAR'))+' = await __ai(\'pick\', '+(G.valueToCode(b,'TEXT',O.COMMA)||"''")+', '+lit(b.getFieldValue('KIND'))+');\n'; });
+HELP.ai=src(function(){
+  var __aiN = 0, __aiWait = {}, __aiTexts = {}, __aiObs = null;
+  window.addEventListener('message', function (e) {
+    var d = e.data;
+    if (!d || !d.ffbhAIRes || e.source !== window.parent) return;
+    var f = __aiWait[d.ffbhAIRes.id];
+    if (f) { delete __aiWait[d.ffbhAIRes.id]; f(d.ffbhAIRes); }
+  });
+  function __ai(task, text, opt) {
+    return new Promise(function (res) {
+      if (window.parent === window) { res(''); return; }
+      var id = ++__aiN, t = setTimeout(function () { delete __aiWait[id]; res(''); }, 180000);
+      __aiWait[id] = function (r) { clearTimeout(t); var s = String(r.text || ''); if (r.font && s) __aiFont(s, r.font); res(s); };
+      window.parent.postMessage({ ffbhAI: { id: id, task: task, text: String(text == null ? '' : text).slice(0, 4000), opt: opt } }, '*');
+    });
+  }
+  /* 오라베쉬 and Standard Galactic are English written in other letters: whatever shows the translated text gets that font */
+  function __aiFont(s, font) {
+    if (!document.getElementById('__aifont')) {
+      var st = document.createElement('style'); st.id = '__aifont';
+      st.textContent = "@font-face{font-family:'FF Aurebesh';src:url('https://frenchfries777mc.github.io/games/fonts/ff-aurebesh.woff2?v=2') format('woff2')}" +
+        "@font-face{font-family:'FF Galactic';src:url('https://frenchfries777mc.github.io/games/fonts/ff-galactic.woff2?v=1') format('woff2')}";
+      document.head.appendChild(st);
+    }
+    __aiTexts[s] = font === 'au' ? 'FF Aurebesh' : 'FF Galactic';
+    function mark(el) {
+      if (!el || el.nodeType !== 1) return;
+      var tx = el.textContent || '';
+      for (var k in __aiTexts) if (k && tx.indexOf(k) >= 0 && el.children.length === 0) el.style.fontFamily = "'" + __aiTexts[k] + "',system-ui,sans-serif";
+    }
+    document.querySelectorAll('body *').forEach(mark);
+    if (!__aiObs) {
+      __aiObs = new MutationObserver(function (ms) { ms.forEach(function (m) { mark(m.target.nodeType === 3 ? m.target.parentNode : m.target); m.addedNodes.forEach(function (n) { mark(n.nodeType === 3 ? n.parentNode : n); }); }); });
+      __aiObs.observe(document.body, { childList: true, subtree: true, characterData: true });
+    }
+  }
+});
 HELP.fetch=src(function(){
   var __fetched = '', __fetchOk = false;
   async function __fetch(url) {
@@ -1846,7 +1895,7 @@ function toolbox(){
   var n=function(v){ return sh('math_number',v); }, lab=function(t){ return {kind:'label',text:T(t)}; };
   var img={shadow:{type:'val_myimg'}}, bk=function(type,o){ var b={kind:'block',type:type}; if(o) for(var k in o) b[k]=o[k]; return b; };
   var cat=function(id,name,c,extra){ var o={kind:'category',name:T(name),colour:C[id],toolboxitemid:'cat_'+id}; if(typeof c==='string'){ o.custom=c; o.contents=extra||[]; } else o.contents=c; return o; };
-  /* 12 categories (v40). Labels split the bigger ones into small groups. A "custom" category is filled by app.js; its "contents"
+  /* 13 categories (v40, AI added in v65). Labels split the bigger ones into small groups. A "custom" category is filled by app.js; its "contents"
      only lists the fixed blocks it shows, so the block colours, block search and AI catalog see them too (Blockly uses "custom" and ignores "contents"). */
   var picBtns=function(){ return [lab('그림·사진'),{kind:'button',text:T('✏️ 그림 그리기'),callbackKey:'imgDraw'},{kind:'button',text:T('📷 사진 넣기'),callbackKey:'imgPhoto'},{kind:'button',text:T('🗂 내 그림 관리'),callbackKey:'imgManage'}]; }; // shown at the top of 화면 and 그림판
   return {kind:'categoryToolbox',contents:[
@@ -1947,7 +1996,11 @@ function toolbox(){
       lab('리스트'),bk('lists_create_with',{extraState:{itemCount:0}}),bk('lists_create_with'),
       bk('lists_repeat',{inputs:{NUM:n(5)}}),bk('lists_length'),bk('lists_isEmpty'),
       bk('lists_indexOf'),bk('lists_getIndex'),bk('lists_setIndex'),bk('lists_sort'),bk('act_list_shuffle'),bk('val_list_pick'),bk('act_ul_shuffle')]),
-    cat('vars','변수·함수','FFVARS',[bk('js_raw'),bk('js_val')])
+    cat('vars','변수·함수','FFVARS',[bk('js_raw'),bk('js_val')]),
+    cat('ai','AI',[
+      lab('AI에게 시키기 (답이 올 때까지 기다려요)'),bk('ai_translate',{inputs:{TEXT:sh('text',T('안녕하세요!'))}}),bk('ai_answer',{inputs:{Q:sh('text',T('하늘은 왜 파란색이야?'))}}),
+      bk('ai_summary',{inputs:{TEXT:sh('text',T('오늘은 공원에서 자전거를 타고 아이스크림을 먹었다. 정말 즐거웠다.'))}}),
+      bk('ai_pick',{inputs:{TEXT:sh('text',T('음식은 맛있었지만 서비스가 너무 느렸어요.'))}})])
   ]};
 }
 /* the "변수·함수" category: Blockly's variable blocks, then the function blocks, then the two "JS 직접 쓰기" blocks */
@@ -1970,7 +2023,7 @@ function withAssets(imgs,snds,fn){
 /* ---------- block colours: each block type sits in exactly one toolbox category and takes its colour.
    Built-in blocks outside the toolbox (variables, functions, mutator parts, converter-only ones) go by their name. ---------- */
 var CAT_OF={}, BY_NAME=[[/^(variables_|math_change$|procedures_|js_)/,'vars'],[/^(controls_if|logic_)/,'logic'],[/^controls_/,'loop'],[/^(math_|text|lists_)/,'math'],
-  [/^ev_/,'ev'],[/^el_/,'page'],[/^draw_/,'draw'],[/^(clone_|tile_)/,'game'],[/^time_/,'sound']];
+  [/^ev_/,'ev'],[/^ai_/,'ai'],[/^el_/,'page'],[/^draw_/,'draw'],[/^(clone_|tile_)/,'game'],[/^time_/,'sound']];
 (function walk(list,id){ (list||[]).forEach(function(it){ if(it.kind==='category') walk(it.contents,it.toolboxitemid.slice(4)); else if(it.kind==='block'&&id&&!CAT_OF[it.type]) CAT_OF[it.type]=id; }); })(toolbox().contents);
 function catOf(t){ if(CAT_OF[t]) return CAT_OF[t]; for(var i=0;i<BY_NAME.length;i++) if(BY_NAME[i][0].test(t)) return BY_NAME[i][1]; return null; }
 Object.keys(Blockly.Blocks).forEach(function(t){ var o=Blockly.Blocks[t], id=catOf(t); if(!id||!o||typeof o.init!=='function') return;
