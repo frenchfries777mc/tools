@@ -332,7 +332,7 @@ $('fileMenu').addEventListener('click',function(e){
 $('htmlIn').addEventListener('change',function(){
   var file=this.files&&this.files[0]; this.value=''; if(!file) return;
   var r=new FileReader(); r.onload=function(){ var html=String(r.result||''); if(!html.trim()) return toast(T('이 파일은 열 수 없어요'));
-    createProject(file.name.replace(/\.html?$/i,'').slice(0,40)||T('나의 웹페이지'),function(){}); toBlocks(html,false); };
+    replaceHere(function(){ toBlocks(html,false); },'HTML을 지금 프로젝트로 불러왔어요'); };
   r.readAsText(file);
 });
 $('fileIn').addEventListener('change',function(){
@@ -345,7 +345,12 @@ $('fileIn').addEventListener('change',function(){
 /* ---------- examples ---------- */
 var exMenu=$('exMenu');
 BH_EXAMPLES.forEach(function(ex,i){ var b=document.createElement('button'); b.innerHTML='<span></span><small></small>'; b.firstChild.textContent=T(ex.name); b.lastChild.textContent=T(ex.desc);
-  b.onclick=function(){ closeMenus(); createProject(T(ex.name),function(){ loadExample(ex); }); toast(T('새 프로젝트로 열었어요')); }; exMenu.appendChild(b); });
+  b.onclick=function(){ closeMenus(); replaceHere(function(){ loadExample(ex); },F('"{0}" 예제를 지금 프로젝트로 불러왔어요',T(ex.name))); }; exMenu.appendChild(b); });
+/* 예제·HTML 불러오기는 새 프로젝트를 만들지 않고 지금 프로젝트를 바꿔요. 바꾸기 전 모습은 되돌리기 안내로 살릴 수 있어요 */
+function replaceHere(fn,msg){ if(!P.cur){ createProject(T('나의 웹페이지'),blank); } saveNow();
+  var old={name:$('projName').value, ws:Blockly.serialization.workspaces.save(ws), imgs:Object.assign({},BH.IMGS), snds:Object.assign({},BH.SNDS)};
+  fn(); saveNow(); syncBar();
+  FFUndo.show(msg,function(){ setImgs(old.imgs); setSnds(old.snds); try{ loadJSON(old.ws); }catch(e){ console.error(e); } $('projName').value=old.name; saveNow(); syncBar(); }); }
 /* an example can bring its own pictures ("내 그림", e.g. 🍎 오브젝트 pictures) */
 function loadExample(ex,merge){ var im=typeof ex.imgs==='function'?ex.imgs():ex.imgs; if(im){ if(merge){ Object.keys(im).forEach(function(k){ BH.IMGS[k]=im[k]; }); setTimeout(regenThumbs,0); } else setImgs(im); } loadXML(ex.xml()); arrange(); } // merge: keep the project's own pictures too
 
