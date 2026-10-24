@@ -48,6 +48,7 @@ MODEL=smart python3 train/local/run.py
 - 끝에 "올림 끝: ..." 줄이 나오면 Claude에게 알려 주세요.
 
 ## 자주 막히는 곳
+- 학습은 끝났는데 올리다가 `Killed`로 꺼졌어요: 합친 모델은 `~/tools/merged`에 이미 있어요. 다시 학습하지 말고 `python3 train/local/upload.py smart 1.6`으로 합친 폴더만 올려요 (크롬 등을 닫고 실행).
 - `CUDA out of memory`: `MAX_LEN=2048`을 붙이거나, 다른 프로그램을 닫아요.
 - `Killed`(램 부족으로 꺼짐): 크롬을 완전히 닫고, 그래도 안 되면 윈도우 `C:\Users\<이름>\.wslconfig`에 `[wsl2]` 줄 아래 `memory=13GB`, `swap=16GB`를 넣고 PowerShell에서 `wsl --shutdown` 후 다시 해요.
 - 노트북은 충전기를 꽂고 **절전을 꺼** 주세요. 오래 걸리고 뜨거워질 수 있어요.
