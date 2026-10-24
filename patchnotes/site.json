@@ -3,6 +3,16 @@
  "name": "Tools 사이트",
  "notes": [
   {
+   "date": "2026-10-25",
+   "build": "v29",
+   "title": "패치노트 검색",
+   "items": [
+    "패치노트에 검색칸 추가",
+    "빌드 번호(v60, 60, 빌드 60)나 내용으로 찾기",
+    "찾은 개수 표시"
+   ]
+  },
+  {
    "date": "2026-10-23",
    "build": "v28",
    "title": "이모지어 추가",
@@ -57,7 +67,96 @@
     "가상 언어 묶음 추가: 뉴스피크, 번역기 한국어, 오러베시",
     "번역이 없는 글은 영어로 표시"
    ],
-   "tr": {"en": {"title": "13 languages", "items": ["Added Chinese (Simplified), Portuguese (Brazil), Russian and Turkish", "Added a fictional languages group: Newspeak, 번역기 한국어 and Aurebesh", "Text without a translation is shown in English"]}, "es": {"title": "13 idiomas", "items": ["Se añadieron chino (simplificado), portugués (Brasil), ruso y turco", "Se añadió un grupo de idiomas ficticios: neolengua, 번역기 한국어 y aurebesh", "El texto sin traducción se muestra en inglés"]}, "fr": {"title": "13 langues", "items": ["Ajout du chinois (simplifié), du portugais (Brésil), du russe et du turc", "Ajout d’un groupe de langues fictives : novlangue, 번역기 한국어 et aurebesh", "Le texte sans traduction s’affiche en anglais"]}, "de": {"title": "13 Sprachen", "items": ["Chinesisch (vereinfacht), Portugiesisch (Brasilien), Russisch und Türkisch hinzugefügt", "Gruppe fiktiver Sprachen hinzugefügt: Neusprech, 번역기 한국어 und Aurebesh", "Text ohne Übersetzung wird auf Englisch angezeigt"]}, "ja": {"title": "13言語", "items": ["中国語（簡体字）、ポルトガル語（ブラジル）、ロシア語、トルコ語を追加", "架空の言語グループを追加：ニュースピーク、번역기 한국어、オーラベッシュ", "翻訳のない文は英語で表示"]}, "zh": {"title": "13 种语言", "items": ["新增简体中文、葡萄牙语（巴西）、俄语和土耳其语", "新增虚构语言组：新话、번역기 한국어 和奥瑞贝什文", "没有翻译的文字以英语显示"]}, "pt": {"title": "13 idiomas", "items": ["Adicionados chinês (simplificado), português (Brasil), russo e turco", "Adicionado um grupo de idiomas fictícios: novilíngua, 번역기 한국어 e aurebesh", "Textos sem tradução aparecem em inglês"]}, "ru": {"title": "13 языков", "items": ["Добавлены китайский (упрощённый), португальский (Бразилия), русский и турецкий", "Добавлена группа вымышленных языков: новояз, 번역기 한국어 и ауребеш", "Текст без перевода показывается на английском"]}, "tr": {"title": "13 dil", "items": ["Çince (Basitleştirilmiş), Portekizce (Brezilya), Rusça ve Türkçe eklendi", "Kurgusal diller grubu eklendi: Yenikonuş, 번역기 한국어 ve Aurebesh", "Çevirisi olmayan metin İngilizce gösterilir"]}, "nw": {"title": "13 speaks", "items": ["Plusadded Chinese, Portuguese, Russian plus Turkish", "Plusadded unreal speaks group: Newspeak, 번역기 한국어 plus Aurebesh", "Untranslated speakwrite shows in Oldspeak English"]}, "gk": {"title": "13 언어들", "items": ["더하다 중국인 (단순화된), 포르투갈어 (브라질), 러시아인 그리고 터키인", "더하다 하나의 허구의 언어들 그룹: 뉴스피크, 번역기 한국어 그리고 오러베시", "글자 없이 번역 이다 보여진 안에 영어"]}}
+   "tr": {
+    "en": {
+     "title": "13 languages",
+     "items": [
+      "Added Chinese (Simplified), Portuguese (Brazil), Russian and Turkish",
+      "Added a fictional languages group: Newspeak, 번역기 한국어 and Aurebesh",
+      "Text without a translation is shown in English"
+     ]
+    },
+    "es": {
+     "title": "13 idiomas",
+     "items": [
+      "Se añadieron chino (simplificado), portugués (Brasil), ruso y turco",
+      "Se añadió un grupo de idiomas ficticios: neolengua, 번역기 한국어 y aurebesh",
+      "El texto sin traducción se muestra en inglés"
+     ]
+    },
+    "fr": {
+     "title": "13 langues",
+     "items": [
+      "Ajout du chinois (simplifié), du portugais (Brésil), du russe et du turc",
+      "Ajout d’un groupe de langues fictives : novlangue, 번역기 한국어 et aurebesh",
+      "Le texte sans traduction s’affiche en anglais"
+     ]
+    },
+    "de": {
+     "title": "13 Sprachen",
+     "items": [
+      "Chinesisch (vereinfacht), Portugiesisch (Brasilien), Russisch und Türkisch hinzugefügt",
+      "Gruppe fiktiver Sprachen hinzugefügt: Neusprech, 번역기 한국어 und Aurebesh",
+      "Text ohne Übersetzung wird auf Englisch angezeigt"
+     ]
+    },
+    "ja": {
+     "title": "13言語",
+     "items": [
+      "中国語（簡体字）、ポルトガル語（ブラジル）、ロシア語、トルコ語を追加",
+      "架空の言語グループを追加：ニュースピーク、번역기 한국어、オーラベッシュ",
+      "翻訳のない文は英語で表示"
+     ]
+    },
+    "zh": {
+     "title": "13 种语言",
+     "items": [
+      "新增简体中文、葡萄牙语（巴西）、俄语和土耳其语",
+      "新增虚构语言组：新话、번역기 한국어 和奥瑞贝什文",
+      "没有翻译的文字以英语显示"
+     ]
+    },
+    "pt": {
+     "title": "13 idiomas",
+     "items": [
+      "Adicionados chinês (simplificado), português (Brasil), russo e turco",
+      "Adicionado um grupo de idiomas fictícios: novilíngua, 번역기 한국어 e aurebesh",
+      "Textos sem tradução aparecem em inglês"
+     ]
+    },
+    "ru": {
+     "title": "13 языков",
+     "items": [
+      "Добавлены китайский (упрощённый), португальский (Бразилия), русский и турецкий",
+      "Добавлена группа вымышленных языков: новояз, 번역기 한국어 и ауребеш",
+      "Текст без перевода показывается на английском"
+     ]
+    },
+    "tr": {
+     "title": "13 dil",
+     "items": [
+      "Çince (Basitleştirilmiş), Portekizce (Brezilya), Rusça ve Türkçe eklendi",
+      "Kurgusal diller grubu eklendi: Yenikonuş, 번역기 한국어 ve Aurebesh",
+      "Çevirisi olmayan metin İngilizce gösterilir"
+     ]
+    },
+    "nw": {
+     "title": "13 speaks",
+     "items": [
+      "Plusadded Chinese, Portuguese, Russian plus Turkish",
+      "Plusadded unreal speaks group: Newspeak, 번역기 한국어 plus Aurebesh",
+      "Untranslated speakwrite shows in Oldspeak English"
+     ]
+    },
+    "gk": {
+     "title": "13 언어들",
+     "items": [
+      "더하다 중국인 (단순화된), 포르투갈어 (브라질), 러시아인 그리고 터키인",
+      "더하다 하나의 허구의 언어들 그룹: 뉴스피크, 번역기 한국어 그리고 오러베시",
+      "글자 없이 번역 이다 보여진 안에 영어"
+     ]
+    }
+   }
   },
   {
    "date": "2026-10-20",
@@ -68,7 +167,48 @@
     "저장소에 라이선스 파일(LICENSE) 추가: 원작자 표기 필수, 상업적 이용 금지, 변경 금지",
     "AI 모델 FF777의 Qwen3(Apache 2.0) 기반 고지"
    ],
-   "tr": {"en": {"title": "Copyright notice", "items": ["Added © 2026 Frenchfries777 · CC BY-NC-ND 4.0 at the bottom of every page", "Added a license file (LICENSE) to the repository: attribution required, no commercial use, no derivatives", "Notice that the FF777 AI models are based on Qwen3 (Apache 2.0)"]}, "es": {"title": "Aviso de derechos de autor", "items": ["Se añadió © 2026 Frenchfries777 · CC BY-NC-ND 4.0 al pie de todas las páginas", "Se añadió un archivo de licencia (LICENSE) al repositorio: reconocimiento obligatorio, sin uso comercial, sin obras derivadas", "Aviso de que los modelos de IA FF777 se basan en Qwen3 (Apache 2.0)"]}, "fr": {"title": "Mention de droits d’auteur", "items": ["Ajout de © 2026 Frenchfries777 · CC BY-NC-ND 4.0 en bas de chaque page", "Ajout d’un fichier de licence (LICENSE) au dépôt : attribution obligatoire, pas d’utilisation commerciale, pas de modification", "Mention que les modèles d’IA FF777 sont basés sur Qwen3 (Apache 2.0)"]}, "de": {"title": "Urheberrechtshinweis", "items": ["© 2026 Frenchfries777 · CC BY-NC-ND 4.0 unten auf jeder Seite hinzugefügt", "Lizenzdatei (LICENSE) im Repository hinzugefügt: Namensnennung Pflicht, keine kommerzielle Nutzung, keine Bearbeitung", "Hinweis, dass die KI-Modelle FF777 auf Qwen3 (Apache 2.0) basieren"]}, "ja": {"title": "著作権表示", "items": ["すべてのページの下に © 2026 Frenchfries777 · CC BY-NC-ND 4.0 の表示を追加", "リポジトリにライセンスファイル（LICENSE）を追加：作者の表示が必須、商用利用禁止、改変禁止", "AIモデルFF777がQwen3（Apache 2.0）をもとにしていることを表示"]}}
+   "tr": {
+    "en": {
+     "title": "Copyright notice",
+     "items": [
+      "Added © 2026 Frenchfries777 · CC BY-NC-ND 4.0 at the bottom of every page",
+      "Added a license file (LICENSE) to the repository: attribution required, no commercial use, no derivatives",
+      "Notice that the FF777 AI models are based on Qwen3 (Apache 2.0)"
+     ]
+    },
+    "es": {
+     "title": "Aviso de derechos de autor",
+     "items": [
+      "Se añadió © 2026 Frenchfries777 · CC BY-NC-ND 4.0 al pie de todas las páginas",
+      "Se añadió un archivo de licencia (LICENSE) al repositorio: reconocimiento obligatorio, sin uso comercial, sin obras derivadas",
+      "Aviso de que los modelos de IA FF777 se basan en Qwen3 (Apache 2.0)"
+     ]
+    },
+    "fr": {
+     "title": "Mention de droits d’auteur",
+     "items": [
+      "Ajout de © 2026 Frenchfries777 · CC BY-NC-ND 4.0 en bas de chaque page",
+      "Ajout d’un fichier de licence (LICENSE) au dépôt : attribution obligatoire, pas d’utilisation commerciale, pas de modification",
+      "Mention que les modèles d’IA FF777 sont basés sur Qwen3 (Apache 2.0)"
+     ]
+    },
+    "de": {
+     "title": "Urheberrechtshinweis",
+     "items": [
+      "© 2026 Frenchfries777 · CC BY-NC-ND 4.0 unten auf jeder Seite hinzugefügt",
+      "Lizenzdatei (LICENSE) im Repository hinzugefügt: Namensnennung Pflicht, keine kommerzielle Nutzung, keine Bearbeitung",
+      "Hinweis, dass die KI-Modelle FF777 auf Qwen3 (Apache 2.0) basieren"
+     ]
+    },
+    "ja": {
+     "title": "著作権表示",
+     "items": [
+      "すべてのページの下に © 2026 Frenchfries777 · CC BY-NC-ND 4.0 の表示を追加",
+      "リポジトリにライセンスファイル（LICENSE）を追加：作者の表示が必須、商用利用禁止、改変禁止",
+      "AIモデルFF777がQwen3（Apache 2.0）をもとにしていることを表示"
+     ]
+    }
+   }
   },
   {
    "date": "2026-10-19",
