@@ -186,6 +186,7 @@ FFT.add({
   .game.sl{--gc:255,106,138;}
   .game.fl{--gc:122,140,255;}
   .game.dc{--gc:77,171,247;}
+  .game.py{--gc:255,212,59;}
   .game{--rx:0deg; --ry:0deg; --mx:50%; --my:30%;}
   .game.rv{opacity:0; transform:translateY(34px);}
   .game.rv.in{opacity:1; transform:none; transition:opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1);}
@@ -225,6 +226,14 @@ FFT.add({
   .play:hover{filter:brightness(1.1);} .play:active{transform:scale(.98);}
   .play svg{width:18px; height:18px;}
   /* Fry Sheet: spreadsheet green on the hub's dark panel */
+  .py{--card:#13110a; background:#13110a; border-color:#3a3315;}
+  .py:hover{border-color:#ffd43b; box-shadow:0 18px 50px rgba(255,212,59,.14);}
+  .py .badge{background:rgba(255,212,59,.92); color:#1a1503;}
+  .py h2 b{color:#ffd43b;}
+  .py .motto{color:#ffd43b;} .py .motto i{background:#ffd43b;}
+  .py .tags span{background:rgba(255,212,59,.08); color:#fbefc4; border:1px solid rgba(255,212,59,.28);}
+  .py .desc{color:#b8b19c;} .py .desc li::marker{color:#ffd43b;}
+  .py .play{background:#ffd43b; color:#1a1503;}
   .dc{--card:#0b111b; background:#0b111b; border-color:#1b2e46;}
   .dc:hover{border-color:#4dabf7; box-shadow:0 18px 50px rgba(77,171,247,.14);}
   .dc .badge{background:rgba(77,171,247,.92); color:#03121f;}
@@ -306,13 +315,31 @@ FFT.add({
   </section>
 
   <section class="hstats" id="heroStats" aria-label="숫자로 보기">
-    <div><b data-n="5" id="hsCount">5</b><span>도구</span></div>
+    <div><b data-n="6" id="hsCount">6</b><span>도구</span></div>
     <div><b data-n="182" id="hsExp">182</b><span>실험 종류</span></div>
     <div><b data-n="235">235</b><span>블록 종류</span></div>
     <div><b data-n="18">18</b><span>언어</span></div>
   </section>
 
   <section class="games" id="tools">
+    <article class="game py">
+      <a class="shot" href="python/" aria-label="Fry Python 열기"><span class="badge">파이썬</span><img src="python.webp" alt="Fry Python 화면" loading="lazy"></a>
+      <div class="body">
+        <h2><img class="ch" src="icons/cards/fry-python.svg" alt="" width="44" height="44">FRY <b>PYTHON</b></h2>
+        <div class="motto"><i></i>PYTHON IN THE BROWSER<i></i></div>
+        <div class="tags"><span>설치 없이 실행</span><span>거북이 · 그래프</span><span class="ai">오류 설명 AI</span><span>로그인 없이</span></div>
+        <div class="desc">
+          설치 없이 브라우저에서 진짜 파이썬을 실행해요. 거북이로 그림을 그리고 그래프를 만들 수 있어요.
+          <ul>
+            <li>색이 입혀지는 코드 칸, 자동 들여쓰기, Ctrl+Enter로 실행, 끝나지 않는 반복은 멈추기</li>
+            <li>turtle 거북이 그림과 matplotlib 기본 그래프(선·점·막대·히스토그램·원)</li>
+            <li>input()에 들어갈 값을 미리 적는 입력값 칸, 예제 10개, .py 파일 열기·받기</li>
+            <li>오류가 나면 줄을 표시하고, AI(시험 기능)가 무엇이 틀렸는지 쉽게 설명해 줘요</li>
+          </ul>
+        </div>
+        <div class="acts"><a class="play" href="python/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
+      </div>
+    </article>
     <article class="game bh">
       <a class="shot" href="blocks/" aria-label="Block HTML 열기"><span class="badge">블록 코딩</span><img src="blocks.webp" alt="Block HTML 화면" loading="lazy"></a>
       <div class="body">
