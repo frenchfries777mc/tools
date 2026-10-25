@@ -254,7 +254,7 @@ function rowBg(th,ri){ return ri%2?mix(th.bg,th.fg,.08):th.bg; }
 var CPAL=['#3d7fe0','#ff8a3d','#2fb27a','#e0526b','#8a5ce0','#e0b93c','#3db5e0','#a0a7b8'];
 function chartCols(th){ return [th.ac].concat(CPAL.filter(function(c){ return c!==th.ac; })); }
 function clip(t,wpx,fs){ var w=0, o=''; for(var i=0;i<t.length;i++){ var c=t.charCodeAt(i), cw=(c>0x2e80?1:.56)*fs; if(w+cw>wpx){ return o.replace(/\s+$/,'')+'…'; } w+=cw; o+=t[i]; } return o; }
-/* live screen: a mini app in a sandboxed iframe (Block HTML snapshot or pasted HTML: srcdoc, allow-scripts only; Fry Lab: same-origin page).
+/* live screen: a mini app in a sandboxed iframe (Fry Blocks snapshot or pasted HTML: srcdoc, allow-scripts only; Fry Lab: same-origin page).
    Only the editor's main view and presenting run it; thumbnails, the sorter, print and the presenter view show a placeholder card. */
 function liveCfg(s){ try{ var c=JSON.parse(s.live||'null'); if(c&&(c.k==='lab'&&typeof c.e==='string'||(c.k==='block'||c.k==='html')&&typeof c.h==='string')) return c; }catch(e){} return null; }
 var ESC_JS='<scr'+'ipt>addEventListener("keydown",function(e){if(e.key==="Escape")parent.postMessage({ffslLive:"esc"},"*")},true)</scr'+'ipt>';
@@ -994,7 +994,7 @@ $('lkOk').onclick=function(){ var s=deck.slides[cur], l=lkLink(); if(!s||!l) ret
 /* LABX: only the fallback names of the first 9 experiments (old decks, and if the Lab page cannot be read); the real list comes from Lab itself (loadLabCat) */
 var LABX=[['func','함수 그래프'],['prob','확률 실험'],['trig','단위원과 삼각함수'],['proj','포물선 운동'],['pend','진자'],['spring','용수철과 훅의 법칙'],['refr','빛의 굴절'],['wave','파동의 간섭'],['ohm','전기 회로와 옴의 법칙']], LIVE_MAX=1500000;
 function bhProjects(){ try{ var o=JSON.parse(localStorage.getItem('ffblocks.projects')||'null'); return o&&Array.isArray(o.list)?o.list.filter(function(e){ return e&&e.id&&localStorage.getItem('ffblocks.p.'+e.id); }):[]; }catch(e){ return []; } }
-/* builds the final HTML of a saved Block HTML project in a hidden same-origin Block HTML page (#embed=<id>: read only, nothing is saved there) */
+/* builds the final HTML of a saved Fry Blocks project in a hidden same-origin Fry Blocks page (#embed=<id>: read only, nothing is saved there) */
 function buildBlock(id){ return new Promise(function(res,rej){ var fr=document.createElement('iframe'), done=false, tm;
   function fin(v,err){ if(done) return; done=true; clearTimeout(tm); window.removeEventListener('message',on); fr.remove(); if(err) rej(err); else res(v); }
   function on(e){ if(e.source===fr.contentWindow&&e.data&&e.data.ffbhBuilt&&e.data.id===id){ if(typeof e.data.html==='string'&&e.data.html) fin(e.data.html); else fin(null,new Error('empty')); } }
@@ -1043,7 +1043,7 @@ $('liveOk').onclick=function(){ var s=deck.slides[cur]; if(!s) return closeDlg('
   function put(c){ var j=JSON.stringify(c); if(j.length>LIVE_MAX){ msg.textContent=T('너무 커서 담을 수 없어요 (1.5MB까지)'); return false; } pushUndo(); s.live=j; closeDlg('liveDlg',null); changed(true); return true; }
   if(k==='lab'){ var x=labCat&&labCat.by[labPick], o=!x&&LABX.filter(function(q){ return q[0]===labPick; })[0]; if(!x&&!o){ msg.textContent=T('실험을 골라 주세요'); return; } put({k:'lab',e:labPick,n:x?x.name:o[1]}); }
   else if(k==='html'){ var h=$('liveHtml').value.trim(); if(!h){ msg.textContent=T('HTML을 붙여 넣어 주세요'); return; } put({k:'html',n:'HTML',h:h}); }
-  else { var id=$('liveBlk').value; if(!id){ msg.textContent=T('Block HTML에 저장된 프로젝트가 없어요'); return; } var nm=($('liveBlk').selectedOptions[0]||{}).textContent||'';
+  else { var id=$('liveBlk').value; if(!id){ msg.textContent=T('Fry Blocks에 저장된 프로젝트가 없어요'); return; } var nm=($('liveBlk').selectedOptions[0]||{}).textContent||'';
     msg.textContent=T('프로젝트를 불러오는 중…'); $('liveOk').disabled=true;
     buildBlock(id).then(function(h){ $('liveOk').disabled=false; if(!$('liveDlg').classList.contains('open')) return; if(put({k:'block',n:nm,h:h})) msg.textContent=''; },function(err){ console.warn(err); $('liveOk').disabled=false; msg.textContent=T('프로젝트를 불러오지 못했어요'); }); } };
 $('laySel').onchange=function(){ setLayout(this.value); };

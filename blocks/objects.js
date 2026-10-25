@@ -1,4 +1,4 @@
-/* Block HTML: "오브젝트" picker. Adds a toolbox button next to "사진 넣기" and a dialog with category tabs, search and a grid.
+/* Fry Blocks: "오브젝트" picker. Adds a toolbox button next to "사진 넣기" and a dialog with category tabs, search and a grid.
    The library is loaded only when the picker is first opened: objects/index.js (names of every object, about 50 KB) first,
    then the pictures of one tab at a time (objects/<tab>.js, 25-120 KB each) as tabs are opened or search results need them (v41).
    Picking calls the handler given to BHOBJ.open with {id, name, svg, src, data}; app.js turns it into a normal picture (SVG data URL).
@@ -40,7 +40,7 @@ function loadTab(c){
 }
 function svgOf(o){ return SVG[o.id]; }
 function dataUrl(o){ return URLS[o.id]||(URLS[o.id]='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(svgOf(o))))); }
-var SRC={own:'Block HTML', fluent:'Fluent Emoji (Microsoft, MIT)'};
+var SRC={own:'Fry Blocks', fluent:'Fluent Emoji (Microsoft, MIT)'};
 
 function norm(s){ return String(s||'').toLowerCase().normalize('NFC').trim(); }
 function renderTabs(){
