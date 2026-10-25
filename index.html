@@ -201,6 +201,7 @@ FFT.add({
   .hero p{color:var(--dim); font-size:18px; margin:16px 0 0; max-width:46ch;}
   .onl{display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; margin-top:18px; font-size:14.5px; color:var(--dim);} .onl:empty{display:none;} .onl>b{color:var(--text);}
   .on-dot{width:9px; height:9px; border-radius:50%; background:#3fe0c5; box-shadow:0 0 0 0 rgba(63,224,197,.6); animation:onp 2s infinite;} @keyframes onp{70%{box-shadow:0 0 0 8px rgba(63,224,197,0);}100%{box-shadow:0 0 0 0 rgba(63,224,197,0);}}
+  .on-f{display:inline-flex; flex-wrap:wrap; align-items:center; gap:6px;} .on-p{display:inline-flex; align-items:center; gap:5px; padding:3px 10px 3px 4px; border-radius:99px; background:rgba(63,224,197,.1); border:1px solid rgba(63,224,197,.3); color:var(--text);} .on-i{width:20px; height:20px; border-radius:50%; object-fit:cover; flex:none;} .on-p small{color:var(--dim); font-size:11.5px;}
   .on-me{display:inline-flex; align-items:center; gap:6px; padding:3px 10px 3px 4px; border-radius:99px; border:1px solid rgba(63,224,160,.35); background:rgba(63,224,160,.12); color:var(--text); font-size:13px;} .on-me img{width:22px; height:22px; border-radius:50%; object-fit:cover;}
   .on-c{padding:3px 10px; border-radius:99px; border:1px solid var(--line); background:var(--panel);} .on-c b{color:var(--text);}
   .games{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; padding-bottom:20px;}   /* 한 줄에 3개 */
@@ -510,7 +511,15 @@ FFT.add({
       var c={}; (r.data||[]).forEach(function(x){ c[x.place]=x.people; });
       var h='<span class="on-dot"></span><b>'+esc(F('지금 {0}명 접속 중',c.all||0))+'</b>';
       L.concat(['hub']).forEach(function(g){ if(c[g]) h+='<span class="on-c">'+(g==='hub'?'<span>'+esc(T('허브'))+'</span>':'<span data-notr>'+esc(G[g])+'</span>')+' <b data-notr>'+c[g]+'</b></span>'; });
-      b.innerHTML=h+me; }catch(e){ b.innerHTML=''; } }
+      h+=await friends(); b.innerHTML=h+me; }catch(e){ b.innerHTML=''; } }
+    /* 접속 중인 친구: 프로필 사진(ff_avatar, 없으면 기본 사진)과 이름, 있는 곳 */
+    function place(id){ return id==='hub'?T('허브'):(G[id]||id); }
+    async function friends(){ var u=FFAuth.user&&FFAuth.user(); if(!u||!u.id) return '';
+      var f=await sb.rpc('ff_online_friends'), rows=((f&&!f.error&&f.data)||[]).filter(function(x){ return !(FFAuth.isBlocked&&FFAuth.isBlocked(x.user_id)); }); if(!rows.length) return '';
+      var top=rows.slice(0,8), ids=top.map(function(x){ return x.user_id; }), nm={}, av={};
+      try{ var pr=await sb.from('profiles').select('id,username,display_name').in('id',ids); ((pr&&pr.data)||[]).forEach(function(x){ nm[x.id]=(x.display_name&&String(x.display_name).trim())||x.username||'???'; }); }catch(e){}
+      try{ var ar=await sb.from('ff_avatar').select('user_id,pick').in('user_id',ids); ((ar&&!ar.error&&ar.data)||[]).forEach(function(x){ av[x.user_id]=x.pick; }); }catch(e){}
+      return '<span class="on-f"><span>'+esc(T('친구'))+'</span> '+top.map(function(x){ var pk=av[x.user_id]; return '<span class="on-p"><img class="on-i" src="https://frenchfries777mc.github.io/games/avatars/'+encodeURIComponent(/^[a-z0-9-]{2,24}$/.test(pk||'')?pk:'account')+'.svg" alt="" width="20" height="20" onerror="this.style.display=\'none\'"><span data-notr>'+esc(nm[x.user_id]||'???')+'</span><small data-notr>'+esc(place(x.place))+'</small></span>'; }).join('')+(rows.length>8?'<span>+'+(rows.length-8)+'</span>':'')+'</span>'; }
     who().then(draw); if(FFAuth.onChange) FFAuth.onChange(function(){ who().then(draw); });
     setInterval(function(){ if(document.visibilityState==='visible') draw(); },20000);
     document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible') draw(); }); }); })();
