@@ -4,6 +4,15 @@
  "notes": [
   {
    "date": "2026-10-25",
+   "build": "v37",
+   "title": "Block HTML 이름을 Fry Blocks로",
+   "items": [
+    "도구 이름 Block HTML을 Fry Blocks로 변경",
+    "Fry Python에 자동완성과 사전 추가"
+   ]
+  },
+  {
+   "date": "2026-10-25",
    "build": "v36",
    "title": "접속 표시줄에 내 프로필",
    "items": [
