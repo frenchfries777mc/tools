@@ -84,6 +84,11 @@ var C=[
   {id:'paste',tab:'home',g:2,ic:I.paste,lb:'붙여넣기',kw:'paste 붙이기',key:'Ctrl+V',sel:1},
   {id:'bold',tab:'home',g:3,ic:I.bold,lb:'굵게',kw:'bold 진하게 굵은 글씨',key:'Ctrl+B',sel:1,el:'bBold'},
   {id:'italic',tab:'home',g:3,ic:I.italic,lb:'기울임',kw:'italic 이탤릭 기울게',key:'Ctrl+I',sel:1,el:'bItal'},
+  {id:'under',tab:'home',g:3,ic:'<u style="font-size:15px">U</u>',lb:'밑줄',kw:'underline 밑줄 줄',key:'Ctrl+U',sel:1,el:'bUnder'},
+  {id:'strike',tab:'home',g:3,ic:'<s style="font-size:15px">S</s>',lb:'취소선',kw:'strikethrough 취소선 가운데 줄',key:'Ctrl+5',sel:1,el:'bStrike'},
+  {id:'fsz',tab:'home',g:3,ic:'',lb:'글자 크기',kw:'font size 글자 크기 글씨 크기 폰트 크게 작게',sel:1,select:'fszSel',opts:[['','크기'],['9','9'],['10','10'],['11','11'],['12','12'],['13','13 (기본)'],['14','14'],['16','16'],['18','18'],['20','20'],['24','24'],['28','28']]},
+  {id:'ffam',tab:'home',g:3,ic:'',lb:'글꼴',kw:'font family 글꼴 서체 폰트',sel:1,select:'ffSel',opts:[['','글꼴'],['sans','기본 고딕'],['serif','명조'],['mono','고정폭'],['hand','손글씨']]},
+  {id:'painter',tab:'home',g:3,ic:SV('<rect x="4" y="3" width="14" height="6" rx="1.5"/><path d="M18 6h2v5h-8v3"/><path d="M11 14h2v7h-2z"/>'),lb:'서식 복사',tt:'서식 복사 (지금 칸의 모양을 다음에 고르는 칸에 입혀요)',kw:'format painter copy format 서식 복사 붓 모양 복사',el:'bPaint'},
   {id:'fc',tab:'home',g:3,ic:I.fc,lb:'글자색',kw:'font color text color 글씨 색 글자 색 폰트',sel:1,color:['fcPick','fcChip','#ff5d5d']},
   {id:'bg',tab:'home',g:3,ic:I.bg,lb:'채우기 색',kw:'fill color background 배경 색 칸 색 바탕',sel:1,color:['bgPick','bgChip','#3a5bd9']},
   {id:'al-l',tab:'home',g:4,ic:I.all,lb:'왼쪽',tt:'왼쪽 정렬',kw:'align left 정렬',sel:1},
@@ -113,6 +118,8 @@ var C=[
   {id:'check',tab:'insert',g:3,ic:I.check,lb:'체크박스',kw:'checkbox tick 체크 확인란',sel:1},
   {id:'dv',tab:'insert',g:3,ic:I.dv,lb:'목록',tt:'드롭다운 목록',kw:'dropdown list validation 드롭다운 선택 목록 고르기'},
   {id:'note',tab:'insert',g:3,ic:I.note,lb:'메모',kw:'note comment 메모 댓글 주석',el:'bNote'},
+  {id:'link',tab:'insert',g:3,ic:SV('<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>'),lb:'링크',tt:'링크 넣기 (Ctrl+누르면 열려요)',kw:'hyperlink link url 링크 주소 하이퍼링크 연결'},
+  {id:'img',tab:'insert',g:3,ic:SV('<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-5-5-9 8"/>'),lb:'그림',tt:'그림 넣기',kw:'image picture photo 그림 사진 이미지'},
   {id:'d.xref',tab:'insert',g:4,ic:I.xref,lb:'다른 시트 참조',tt:'다른 시트 참조 만들기',kw:'reference other sheet link 시트 참조 연결'},
   {id:'d.names',tab:'insert',g:4,ic:I.names,lb:'이름 범위',tt:'이름 범위 관리',kw:'named range name 이름 정의 이름표'},
 
@@ -129,6 +136,11 @@ var C=[
   {id:'d.unlockSel',tab:'data',g:4,ic:I.unlock,lb:'잠금 풀기',tt:'선택 범위 잠금 풀기',kw:'unlock 잠금 해제 풀기 잠금',sel:1},
   {id:'d.lockSheet',tab:'data',g:4,ic:I.lockS,lb:'시트 잠그기',tt:'시트 전체 잠그기',kw:'lock protect sheet 잠금 잠그기 시트 보호'},
   {id:'d.unlockSheet',tab:'data',g:4,ic:I.unlockS,lb:'시트 잠금 풀기',tt:'시트 잠금 모두 풀기',kw:'unlock sheet 잠금 해제 풀기 잠금'},
+  {id:'r.hideRow',tab:'data',g:5,ic:SV('<rect x="3" y="9" width="18" height="6" rx="1.5" stroke-dasharray="2 2"/><path d="M3 5h18M3 19h18"/>'),lb:'행 숨기기',tt:'선택한 행 숨기기',kw:'hide rows 행 숨기기 감추기',sel:1},
+  {id:'r.hideCol',tab:'data',g:5,ic:SV('<rect x="9" y="3" width="6" height="18" rx="1.5" stroke-dasharray="2 2"/><path d="M5 3v18M19 3v18"/>'),lb:'열 숨기기',tt:'선택한 열 숨기기',kw:'hide columns 열 숨기기 감추기',sel:1},
+  {id:'r.unhide',tab:'data',g:5,ic:SV('<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'),lb:'숨기기 취소',tt:'숨긴 행·열 모두 보이기',kw:'unhide show rows columns 숨기기 해제 보이기 취소'},
+  {id:'d.goal',tab:'data',g:6,ic:SV('<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/>'),lb:'목표값 찾기',tt:'목표값 찾기 (수식 결과가 원하는 값이 되게 칸 값을 찾아요)',kw:'goal seek what if 목표값 찾기 가상 분석 역산'},
+  {id:'d.trace',tab:'data',g:6,ic:SV('<circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8 8l8 8M16 16v-4M16 16h-4"/>'),lb:'수식 추적',tt:'수식 추적 (이 칸이 쓰는 칸과 이 칸을 쓰는 칸)',kw:'trace precedents dependents 참조 추적 연결 화살표 수식',sel:1},
   {id:'r.fitCol',tab:'data',g:5,ic:I.fit,lb:'열 너비 맞춤',tt:'선택한 열 너비 자동 맞춤',kw:'autofit column width 너비 폭 맞춤 자동',sel:1},
   {id:'r.fzMenu',tab:'data',g:5,ic:I.fzHere,lb:'틀 고정',tt:'틀 고정 (첫 행, 첫 열 고르기)',kw:'freeze panes 고정 틀 머리글 행 열 스크롤'},
   {id:'r.fzTop',nobtn:1,tab:'data',g:5,ic:I.fzRow,lb:'첫 행 고정',tt:'맨 위 1행을 고정',kw:'freeze top row 고정 틀 머리글 첫 행 맨 위'},
@@ -186,6 +198,7 @@ C.forEach(function(c){
   last[c.tab]=c.g;
   var tt=esc(c.tt||c.lb)+(c.key?' ('+keyText(c.key)+')':''), cls='rb'+(c.tab==='ai'?' aib':'');
   if(c.color) html+='<span class="'+cls+'" data-tab="'+c.tab+'" data-k="'+c.id+'" title="'+tt+'">'+c.ic+'<span class="lb">'+esc(c.lb)+'</span><span class="chip" id="'+c.color[1]+'" style="background:'+c.color[2]+'"></span><input type="color" id="'+c.color[0]+'" value="'+c.color[2]+'" aria-label="'+esc(c.lb)+'"></span>';
+  else if(c.select&&c.opts) html+='<select id="'+c.select+'" data-tab="'+c.tab+'" data-k="'+c.id+'" title="'+tt+'" aria-label="'+esc(c.lb)+'">'+c.opts.map(function(o){ return '<option value="'+esc(o[0])+'">'+esc(o[1])+'</option>'; }).join('')+'</select>';
   else if(c.select) html+='<select id="'+c.select+'" data-tab="'+c.tab+'" data-k="'+c.id+'" title="'+tt+'" aria-label="'+esc(c.lb)+'"><option value="">일반</option><option value="n0">1,234</option><option value="n2">1,234.56</option><option value="p0">12%</option><option value="p1">12.3%</option><option value="w0">₩1,234</option><option value="u2">$1,234.56</option><option value="t">텍스트</option></select>';
   else html+='<button class="'+cls+'" data-tab="'+c.tab+'" data-k="'+c.id+'" data-cmd="'+c.id+'"'+(c.el?' id="'+c.el+'"':'')+' title="'+tt+'">'+c.ic+'<span class="lb">'+esc(c.lb)+'</span></button>';
 });

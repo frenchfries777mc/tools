@@ -56,13 +56,13 @@ function undo(){ commitEdit(); if(!undoS.length) return toast(T('되돌릴 작�
 function redo(){ commitEdit(); if(!redoS.length) return; undoS.push(snap()); restore(redoS.pop()); }
 
 /* ---------- grid build ---------- */
-function cw(c){ return sh.cw[c]||DEF_W; }
+function cw(c){ return sh.hc&&sh.hc[c]?5:(sh.cw[c]||DEF_W); }
 function buildGrid(){
   var h='<col style="width:46px">'; for(var c=0;c<sh.cols;c++) h+='<col style="width:'+cw(c)+'px">'; colsEl.innerHTML=h;
-  h='<th class="corner"></th>'; for(c=0;c<sh.cols;c++) h+='<th data-c="'+c+'">'+E.colName(c)+'<span class="rz" data-rz="'+c+'"></span></th>'; hrow.innerHTML=h;
+  h='<th class="corner"></th>'; for(c=0;c<sh.cols;c++) h+='<th data-c="'+c+'"'+(sh.hc&&sh.hc[c]?' class="hidc" title="'+T('숨긴 열')+'"':'')+'>'+E.colName(c)+'<span class="rz" data-rz="'+c+'"></span></th>'; hrow.innerHTML=h;
   var rowTpl=''; for(c=0;c<sh.cols;c++) rowTpl+='<td></td>';
   var parts=[]; for(var r=0;r<sh.rows;r++) parts.push('<tr><th>'+(r+1)+'</th>'+rowTpl+'</tr>');
-  gbody.innerHTML=parts.join(''); painted=new Set(); applyFreeze(); applyMerges(); paintAll(); applyFilter();
+  gbody.innerHTML=parts.join(''); painted=new Set(); applyFreeze(); applyMerges(); paintAll(); applyFilter(); drawImgs();
 }
 /* freeze: first sh.fr rows and sh.fc columns stay put while scrolling */
 function fzCls(r,c){ var f=''; if(r<sh.fr||c<sh.fc) f=' fz'; if(sh.fr&&r===sh.fr-1) f+=' fzr'; if(sh.fc&&c===sh.fc-1) f+=' fzc'; return f; }
@@ -140,6 +140,9 @@ function paintCell(r,c){
   td.className=cls+fzCls(r,c)+(r===act.r&&c===act.c?' act':'');
   td.title=(E.isErr(v)?T(E.errHint(v)):'')||(cell&&cell.nt)||'';
   st.fontWeight=cell&&cell.b?'700':''; st.fontStyle=cell&&cell.i?'italic':''; st.color=cell&&cell.fc||'';
+  st.textDecoration=cell&&(cell.u||cell.s)?((cell.u?'underline ':'')+(cell.s?'line-through':'')).trim():''; st.fontSize=cell&&cell.fz?cell.fz+'px':''; st.lineHeight=cell&&cell.fz>18?Math.round(cell.fz*1.35)+'px':'';
+  st.fontFamily=cell&&cell.ff?ffam(cell.ff):'';
+  var lu=cellLink(cell); if(lu){ td.classList.add('lnk'); td.title=(td.title?td.title+'\n':'')+lu+'\n'+T('Ctrl을 누른 채 누르면 열려요'); }
   var bg=cell&&cell.bg||'', layers=[], icon=null;
   for(var i=0;i<cfStats.length;i++){ var s=cfStats[i], f=s.f;
     if(f.t==='rule'){ if(r>=f.r1&&r<=f.r2&&c>=f.c1&&c<=f.c2&&ruleHit(s,v)) bg=f.col; continue; }
@@ -281,6 +284,8 @@ function updateBar(){
     var sg=!fin.value&&splAt(act.r,act.c), ac=sg&&sh.cells[K(sg.r1,sg.c1)]; fin.placeholder=ac?ac.v:''; fin.classList.toggle('spl',!!ac); } // a spilled cell shows its anchor's formula, greyed
   var cell=sh.cells[K(act.r,act.c)]||{};
   $('bBold').classList.toggle('on',!!cell.b); $('bItal').classList.toggle('on',!!cell.i);
+  if($('bUnder')) $('bUnder').classList.toggle('on',!!cell.u); if($('bStrike')) $('bStrike').classList.toggle('on',!!cell.s);
+  if($('fszSel')) $('fszSel').value=cell.fz?String(cell.fz):''; if($('ffSel')) $('ffSel').value=cell.ff||'';
   var nso=$('nfSel'); nso.querySelectorAll('.tmp').forEach(function(x){ x.remove(); }); nso.value=cell.nf||''; if(nso.value!==(cell.nf||'')){ var op=document.createElement('option'); op.value=cell.nf; op.textContent=nfLabel(cell.nf); op.setAttribute('data-notr',''); op.className='tmp'; nso.appendChild(op); nso.value=cell.nf; }
   $('bNote').classList.toggle('on',!!cell.nt); $('bMerge').classList.toggle('on',!!mergeAt(act.r,act.c)); $('bFilter').classList.toggle('on',!!sh.flt);
 }
@@ -346,7 +351,7 @@ function setRaw(r,c,val){
 function locked(r,c){ return E.lockHit(sh.lock,r,c); }
 function guard(g,s2){ if(!E.lockAny((s2||sh).lock,g)) return false; toast(T('잠긴 칸이라 고칠 수 없어요. 데이터 메뉴에서 잠금을 풀 수 있어요')); return true; }
 function cellBox(r,c){ return {r1:r,c1:c,r2:r,c2:c}; }
-function hasFmt(c){ return c.b||c.i||c.fc||c.bg||c.al||c.nf||c.cb||c.bd||c.bx||c.nt; }
+function hasFmt(c){ return c.b||c.i||c.fc||c.bg||c.al||c.nf||c.cb||c.bd||c.bx||c.nt||c.u||c.s||c.fz||c.ff||c.ln; }
 function refPoint(){
   if(!editing) return false; var inp=edInput(), v=inp.value; if(v[0]!=='=') return false;
   var p=inp.selectionStart==null?v.length:inp.selectionStart, before=v.slice(0,p).replace(/\s+$/,'');
@@ -417,6 +422,8 @@ document.addEventListener('keydown',function(e){
     if(l==='z'&&!e.shiftKey){ e.preventDefault(); undo(); return; }
     if(l==='y'||(l==='z'&&e.shiftKey)){ e.preventDefault(); redo(); return; }
     if(l==='b'){ e.preventDefault(); cmd('bold'); return; }
+    if(l==='u'){ e.preventDefault(); cmd('under'); return; }
+    if(k==='5'){ e.preventDefault(); cmd('strike'); return; }
     if(l==='i'){ e.preventDefault(); cmd('italic'); return; }
     if(l==='a'){ e.preventDefault(); selectRange({r1:0,c1:0,r2:sh.rows-1,c2:sh.cols-1}); return; }
     if(l==='f'||l==='h'){ e.preventDefault(); cmd('find'); return; }
@@ -616,7 +623,12 @@ function cmd(n){
     case 'bold': { var b=!cur.b; return fmtSel(function(x){ if(b) x.b=1; else delete x.b; }); }
     case 'italic': { var it=!cur.i; return fmtSel(function(x){ if(it) x.i=1; else delete x.i; }); }
     case 'al-l': case 'al-c': case 'al-r': { var a=n.slice(3); return fmtSel(function(x){ if(x.al===a&&cur.al===a) delete x.al; else x.al=a; }); }
-    case 'clearfmt': return fmtSel(function(x){ ['b','i','fc','bg','al','nf','cb','bd','bx'].forEach(function(p){ delete x[p]; }); });
+    case 'clearfmt': return fmtSel(function(x){ ['b','i','fc','bg','al','nf','cb','bd','bx','u','s','fz','ff'].forEach(function(p){ delete x[p]; }); });
+    case 'under': { var un=!cur.u; return fmtSel(function(x){ if(un) x.u=1; else delete x.u; }); }
+    case 'strike': { var sk=!cur.s; return fmtSel(function(x){ if(sk) x.s=1; else delete x.s; }); }
+    case 'painter': return startPaint();
+    case 'link': return editLink();
+    case 'img': $('imgPick').value=''; return $('imgPick').click();
     case 'check': { var on=!cur.cb; return fmtSel(function(x){ if(on){ x.cb=1; var l=E.literal(x.v); if(typeof l!=='boolean'&&String(x.v||'')[0]!=='=') x.v='FALSE'; } else { delete x.cb; } }); }
     case 'sum': return autoSum();
     case 'fn': return openFn();
@@ -658,6 +670,7 @@ function runCmd(id){
     if(window.FSAI){ FSAI.open(); var tb=document.querySelector('#aiDlg .atab[data-m="'+n+'"]'); if(tb) tb.click(); } return; }
   if(n==='fc'||n==='bg'){ var pk=$(n==='fc'?'fcPick':'bgPick'); try{ if(pk.showPicker) pk.showPicker(); else pk.click(); }catch(e){ pk.click(); } return; }
   if(n==='nf'){ $('nfSel').focus(); return; }
+  if(n==='fsz'||n==='ffam'){ $(n==='fsz'?'fszSel':'ffSel').focus(); return; }
   return cmd(n);
 }
 document.getElementById('ribbon').addEventListener('click',function(e){ var b=e.target.closest('[data-cmd]'); if(b) runCmd(b.dataset.cmd); });
@@ -739,6 +752,7 @@ function structural(isRow,at,count){
   doc.names.forEach(function(n){ n.ref=E.adjustFormula('='+n.ref,'',name,isRow,at,count).slice(1); });
   doc.sheets.forEach(function(s){ if(s.pv) s.pv.ref=E.adjustFormula('='+s.pv.ref,'',name,isRow,at,count).slice(1); });
   doc.sheets.forEach(function(s){ for(var k in s.cells){ var cl=s.cells[k]; if(cl.v&&String(cl.v)[0]==='=') cl.v=E.adjustFormula(cl.v,s.name,name,isRow,at,count); } });
+  ['hr','hc'].forEach(function(key){ if(!sh[key]||(key==='hr')!==isRow) return; var o={}; for(var q in sh[key]){ var x=+q; if(count>0){ if(x>=at) x+=count; } else { if(x>=at&&x<at-count) continue; if(x>=at-count) x+=count; } o[x]=1; } sh[key]=o; });
   if(!isRow){ var cwn={}; for(var c in sh.cw){ var x=+c; if(count>0){ if(x>=at) x+=count; } else { if(x>=at&&x<at-count) continue; if(x>=at-count) x+=count; } cwn[x]=sh.cw[c]; } sh.cw=cwn; }
   function adj(o){ var a=isRow?'r1':'c1', b=isRow?'r2':'c2';
     if(count>0){ if(o[a]>=at) o[a]+=count; if(o[b]>=at) o[b]+=count; return true; }
@@ -774,6 +788,9 @@ function rowCmd(n){
   else if(n==='insColR') structural(false,sel.c2+1,nc);
   else if(n==='delCol') structural(false,sel.c1,-nc);
   else if(n==='fitCol'){ fitCols(sel.c1,sel.c2); return; }
+  else if(n==='hideRow'){ if(sel.r1===0&&sel.r2>=sh.rows-1){ toast(T('모든 행을 숨길 수는 없어요')); return; } sh.hr=sh.hr||{}; for(var hr0=sel.r1;hr0<=sel.r2;hr0++) sh.hr[hr0]=1; applyFilter(); overlay(); saveSoon(); toast(F('{0}개 행을 숨겼어요 · 숨기기 취소로 다시 보여요',sel.r2-sel.r1+1)); return; }
+  else if(n==='hideCol'){ if(sel.c1===0&&sel.c2>=sh.cols-1){ toast(T('모든 열을 숨길 수는 없어요')); return; } sh.hc=sh.hc||{}; for(var hc0=sel.c1;hc0<=sel.c2;hc0++) sh.hc[hc0]=1; buildGrid(); overlay(); saveSoon(); toast(F('{0}개 열을 숨겼어요 · 숨기기 취소로 다시 보여요',sel.c2-sel.c1+1)); return; }
+  else if(n==='unhide'){ var had=Object.keys(sh.hr||{}).length+Object.keys(sh.hc||{}).length; delete sh.hr; delete sh.hc; buildGrid(); overlay(); saveSoon(); toast(had?T('숨긴 행·열을 모두 보이게 했어요'):T('숨긴 행·열이 없어요')); return; }
   else if(n==='fzRow'){ sh.fr=act.r+1; buildGrid(); toast(F('{0}행까지 고정했어요',act.r+1)); }
   else if(n==='fzCol'){ sh.fc=act.c+1; buildGrid(); toast(F('{0}열까지 고정했어요',E.colName(act.c))); }
   else if(n==='fzTop'){ sh.fr=1; buildGrid(); toast(F('{0}행까지 고정했어요',1)); }
@@ -1105,7 +1122,7 @@ function needXLSX(){ if(window.XLSX) return Promise.resolve(window.XLSX); if(xls
   xlsxP=new Promise(function(res,rej){ var s=document.createElement('script'); s.src='xlsx.full.min.js'; s.onload=function(){ res(window.XLSX); }; s.onerror=function(){ xlsxP=null; rej(); }; document.head.appendChild(s); }); return xlsxP; }
 var fsxP=null;
 function needFSX(){ if(window.FSX) return Promise.resolve(window.FSX); if(fsxP) return fsxP;
-  fsxP=new Promise(function(res,rej){ var s=document.createElement('script'); s.src='xlsxio.js'; s.onload=function(){ res(window.FSX); }; s.onerror=function(){ fsxP=null; rej(); }; document.head.appendChild(s); }); return fsxP; }
+  fsxP=new Promise(function(res,rej){ var s=document.createElement('script'); s.src='xlsxio.js?v=39'; s.onload=function(){ res(window.FSX); }; s.onerror=function(){ fsxP=null; rej(); }; document.head.appendChild(s); }); return fsxP; }
 function exportXLSX(){
   commitEdit(); toast(T('엑셀 파일을 만드는 중…'));
   needFSX().then(function(X){
@@ -1183,7 +1200,7 @@ function applyXlsxExtras(X,wb,s,ex,dateAt){
   Object.keys(ex.cells).forEach(function(key){
     var p=key.split(','), R=+p[0], C=+p[1]; if(R>=MAXR||C>=MAXC) return;
     var xf=ex.cells[key], k=K(R,C), cell=s.cells[k], pr={};
-    if(xf.b) pr.b=1; if(xf.i) pr.i=1; if(xf.al) pr.al=xf.al; if(xf.bg) pr.bg=xf.bg;
+    if(xf.b) pr.b=1; if(xf.i) pr.i=1; if(xf.al) pr.al=xf.al; if(xf.bg) pr.bg=xf.bg; if(xf.u) pr.u=1; if(xf.s) pr.s=1; if(xf.fz) pr.fz=xf.fz;
     if(xf.fc&&!(xf.fc==='#000000'&&!xf.bg)) pr.fc=xf.fc;
     if(xf.bg&&!pr.fc&&window.FSX.lum(xf.bg.slice(1))>0.6) pr.fc='#000000'; // Excel's black text: keep it readable on a light fill
     if(xf.bx){ pr.bx={}; for(var sd in xf.bx) pr.bx[sd]={c:xf.bx[sd].c,w:xf.bx[sd].w}; }
@@ -1204,6 +1221,7 @@ function applyXlsxExtras(X,wb,s,ex,dateAt){
     for(var sd in x.bx){ var f=FACE[sd], nr=rc[0]+f[0], nc=rc[1]+f[1]; if(nr<0||nc<0||nr>=MAXR||nc>=MAXC||(s.merges.length&&inMerge(nr,nc))) continue;
       var nk=K(nr,nc), nx=s.cells[nk]||(s.cells[nk]={}); nx.bx=nx.bx||{}; if(!nx.bx[f[2]]) nx.bx[f[2]]={c:x.bx[sd].c,w:x.bx[sd].w}; } });
   Object.keys(ex.cw).forEach(function(c){ if(+c<MAXC) s.cw[c]=ex.cw[c]; });
+  if(ex.hc){ s.hc={}; Object.keys(ex.hc).forEach(function(c){ if(+c<MAXC) s.hc[c]=1; }); } if(ex.hr){ s.hr={}; Object.keys(ex.hr).forEach(function(r){ if(+r<MAXR) s.hr[r]=1; }); }
   s.fr=Math.min(ex.fr,500); s.fc=Math.min(ex.fc,50);
   if(ex.flt&&ex.flt.g.r1<MAXR&&ex.flt.g.c1<MAXC){ var fg=ex.flt.g; s.flt={r1:fg.r1,c1:fg.c1,r2:Math.min(fg.r2,fg.r1+4000,MAXR-1),c2:Math.min(fg.c2,MAXC-1),h:{},xshow:ex.flt.cols}; }
   ex.cfs.slice(0,200).forEach(function(f){ if(f.r1>=MAXR||f.c1>=MAXC) return; f.r2=Math.min(f.r2,f.r1+2000,MAXR-1); f.c2=Math.min(f.c2,MAXC-1); s.cfs.push(f); });
@@ -1443,6 +1461,7 @@ function cellText(r,c){ var x=sh.cells[K(r,c)], v=eng.value(doc.active,r,c); ret
 function applyFilter(){
   var f=sh.flt, rows=gbody.rows, r;
   for(r=0;r<rows.length;r++) if(rows[r].style.display) rows[r].style.display='';
+  if(sh.hr) for(var hk in sh.hr){ if(rows[+hk]) rows[+hk].style.display='none'; }
   if(!f) return; f.h=f.h||{}; var shown=0;
   for(r=f.r1+1;r<=f.r2&&r<rows.length;r++){ var hide=false;
     for(var c in f.h){ var hv=f.h[c]; if(hv&&hv.length&&hv.indexOf(cellText(r,+c))>=0){ hide=true; break; } }
@@ -1809,7 +1828,86 @@ $('nmName').addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preve
 $('nmRef').addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); $('nmSave').click(); } });
 
 /* ---------- v11: data menu, pivot table ---------- */
+/* ---------- v40: fonts, links, format painter, pictures, goal seek, formula tracing ---------- */
+function ffam(k){ return {serif:'"Noto Serif KR","Batang",Georgia,serif',mono:'"JetBrains Mono",Consolas,monospace',hand:'"Nanum Pen Script","Gaegu",cursive'}[k]||''; }
+function safeUrl(u){ u=String(u||'').trim(); if(/^(https?:|mailto:)/i.test(u)) return u; if(/^www\./i.test(u)||/^[^\s:/]+\.[a-z]{2,}(\/|$)/i.test(u)) return 'https://'+u; return ''; }
+function cellLink(cell){ if(!cell) return ''; if(cell.ln) return safeUrl(cell.ln); var m=typeof cell.v==='string'&&/^=\s*HYPERLINK\(\s*"([^"]+)"/i.exec(cell.v); return m?safeUrl(m[1]):''; }
+$('fszSel').addEventListener('change',function(){ var v=+this.value; commitEdit(); fmtSel(function(x){ if(v&&v!==13) x.fz=v; else delete x.fz; }); });
+$('ffSel').addEventListener('change',function(){ var v=this.value; commitEdit(); fmtSel(function(x){ if(v&&v!=='sans') x.ff=v; else delete x.ff; }); });
+function editLink(){ var k=K(act.r,act.c), cell=sh.cells[k]||{};
+  ask(T('링크'),T('이 칸에 붙일 주소를 쓰세요 (예: https://naver.com). 비우면 링크가 지워져요. Ctrl을 누른 채 칸을 누르면 열려요'),cell.ln||'').then(function(v){
+    if(v===null) return; if(guard({r1:act.r,c1:act.c,r2:act.r,c2:act.c})) return; v=v.trim(); var u=v?safeUrl(v):'';
+    if(v&&!u){ toast(T('https:// 로 시작하는 주소를 넣어 주세요')); return; }
+    pushUndo(); var x=sh.cells[k]||(sh.cells[k]={}); if(u){ x.ln=u; if(x.v==null||x.v==='') x.v=u; } else delete x.ln; if(x.v==null&&!hasFmt(x)) delete sh.cells[k]; changed(); }); }
+gbody.addEventListener('click',function(e){ if(!(e.ctrlKey||e.metaKey)) return; var td=e.target.closest('td'); if(!td) return;
+  var r=td.parentNode.rowIndex-0, tr=td.parentNode, rr=Array.prototype.indexOf.call(gbody.rows,tr), cc=td.cellIndex-1, u=cellLink(sh.cells[K(rr,cc)]);
+  if(u){ e.preventDefault(); window.open(u,'_blank','noopener'); } });
+/* format painter: copy how the active cell looks, put it on the next range picked */
+var painter=null, PAINT_KEYS=['b','i','u','s','fc','bg','al','nf','fz','ff','bd','bx'];
+function startPaint(){ commitEdit(); if(painter){ stopPaint(); return; } var c=sh.cells[K(act.r,act.c)]||{}; painter={}; PAINT_KEYS.forEach(function(p){ if(c[p]!=null) painter[p]=JSON.parse(JSON.stringify(c[p])); });
+  $('bPaint').classList.add('on'); wrap.classList.add('painting'); toast(T('서식을 입힐 칸을 누르거나 끌어서 고르세요 (Esc로 그만)')); }
+function stopPaint(){ painter=null; if($('bPaint')) $('bPaint').classList.remove('on'); wrap.classList.remove('painting'); }
+gbody.addEventListener('pointerup',function(){ if(!painter) return; setTimeout(function(){ if(!painter) return; var f=painter; stopPaint();
+  fmtSel(function(x){ PAINT_KEYS.forEach(function(p){ if(f[p]!=null) x[p]=JSON.parse(JSON.stringify(f[p])); else delete x[p]; }); }); toast(T('서식을 입혔어요')); },30); });
+document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&painter) stopPaint(); },true);
+/* pictures float over the grid; stored per sheet as {src, x, y, w, h} in grid pixels */
+var imgSel=-1;
+function drawImgs(){ Array.prototype.slice.call(gin.querySelectorAll('.simg')).forEach(function(n){ n.remove(); }); (sh.imgs||[]).forEach(function(m,i){
+  var d=document.createElement('div'); d.className='simg'+(i===imgSel?' on':''); d.style.left=m.x+'px'; d.style.top=m.y+'px'; d.style.width=m.w+'px'; d.style.height=m.h+'px';
+  var im=document.createElement('img'); im.src=m.src; im.alt=''; im.draggable=false; d.appendChild(im);
+  var rz=document.createElement('span'); rz.className='srz'; d.appendChild(rz); var x=document.createElement('button'); x.className='sdel'; x.type='button'; x.textContent='×'; x.title=T('그림 지우기'); d.appendChild(x);
+  x.onclick=function(ev){ ev.stopPropagation(); pushUndo(); sh.imgs.splice(i,1); imgSel=-1; drawImgs(); saveSoon(); toast(T('그림을 지웠어요 · Ctrl+Z로 되돌리기')); };
+  d.addEventListener('pointerdown',function(ev){ if(ev.target===x) return; ev.preventDefault(); ev.stopPropagation(); commitEdit(); imgSel=i; Array.prototype.forEach.call(gin.querySelectorAll('.simg'),function(n){ n.classList.remove('on'); }); d.classList.add('on');
+    var sx=ev.clientX, sy=ev.clientY, o={x:m.x,y:m.y,w:m.w,h:m.h}, resize=ev.target===rz, moved=false, z=zoom||1;
+    function mv(e2){ var dx=(e2.clientX-sx)/z, dy=(e2.clientY-sy)/z; if(!moved&&Math.abs(dx)+Math.abs(dy)>3){ moved=true; pushUndo(); }
+      if(!moved) return; if(resize){ m.w=Math.max(30,Math.round(o.w+dx)); m.h=Math.max(20,Math.round(o.w+dx)*o.h/o.w); } else { m.x=Math.max(46,Math.round(o.x+dx)); m.y=Math.max(26,Math.round(o.y+dy)); }
+      d.style.left=m.x+'px'; d.style.top=m.y+'px'; d.style.width=m.w+'px'; d.style.height=m.h+'px'; }
+    function up(){ document.removeEventListener('pointermove',mv); document.removeEventListener('pointerup',up); if(moved) saveSoon(); }
+    document.addEventListener('pointermove',mv); document.addEventListener('pointerup',up); });
+  gin.appendChild(d); }); }
+gbody.addEventListener('pointerdown',function(){ if(imgSel>=0){ imgSel=-1; Array.prototype.forEach.call(gin.querySelectorAll('.simg.on'),function(n){ n.classList.remove('on'); }); } });
+$('imgPick').addEventListener('change',function(){ var f=this.files[0]; if(!f) return; var fr=new FileReader(); fr.onload=function(){ var im=new Image(); im.onload=function(){
+    var k=Math.min(1,800/im.naturalWidth), cv=document.createElement('canvas'); cv.width=Math.round(im.naturalWidth*k); cv.height=Math.round(im.naturalHeight*k);
+    var g=cv.getContext('2d'), png=/png|gif|webp|svg/.test(f.type); if(!png){ g.fillStyle='#fff'; g.fillRect(0,0,cv.width,cv.height); } g.drawImage(im,0,0,cv.width,cv.height);
+    var td=tdRaw(act.r,act.c), w=Math.min(320,cv.width); sh.imgs=sh.imgs||[]; pushUndo();
+    sh.imgs.push({src:cv.toDataURL(png?'image/png':'image/jpeg',.85), x:td?td.offsetLeft:60, y:td?td.offsetTop:40, w:w, h:Math.round(w*cv.height/cv.width)});
+    imgSel=sh.imgs.length-1; drawImgs(); saveSoon(); toast(T('그림을 넣었어요. 끌어서 옮기고 오른쪽 아래 모서리로 크기를 바꿔요')); };
+  im.onerror=function(){ toast(T('그림을 열지 못했어요')); }; im.src=fr.result; }; fr.readAsDataURL(f); });
+/* goal seek: change one input cell until a formula cell reaches a value */
+function openGoal(){ var c=sh.cells[K(act.r,act.c)]; $('gsSet').value=E.addr(act.r,act.c); $('gsTo').value=''; $('gsBy').value='';
+  if(!(c&&typeof c.v==='string'&&c.v[0]==='=')) $('gsSet').value=''; openDlg('goalDlg',$('gsSet').value?$('gsTo'):$('gsSet')); }
+$('gsOk').onclick=function(){ var a=E.parseAddr($('gsSet').value.trim().replace(/\$/g,'')), b=E.parseAddr($('gsBy').value.trim().replace(/\$/g,'')), goal=Number(String($('gsTo').value).replace(/,/g,''));
+  if(!a){ toast(T('수식 칸 주소를 넣어 주세요 (예: B5)')); return; } if(!b){ toast(T('바꿀 칸 주소를 넣어 주세요 (예: B2)')); return; } if(!isFinite(goal)||$('gsTo').value.trim()===''){ toast(T('목표값을 숫자로 넣어 주세요')); return; }
+  var fc=sh.cells[K(a.r,a.c)]; if(!(fc&&typeof fc.v==='string'&&fc.v[0]==='=')){ toast(T('수식 칸에는 수식이 들어 있어야 해요')); return; }
+  var bc=sh.cells[K(b.r,b.c)]; if(bc&&typeof bc.v==='string'&&bc.v[0]==='='){ toast(T('바꿀 칸에는 수식이 아닌 숫자가 들어 있어야 해요')); return; }
+  if(guard({r1:b.r,c1:b.c,r2:b.r,c2:b.c})) return;
+  var kb=K(b.r,b.c), orig=bc?bc.v:null; if(!sh.cells[kb]) sh.cells[kb]={};
+  function f(x){ sh.cells[kb].v=String(x); eng.reset(); var v=eng.value(doc.active,a.r,a.c); return typeof v==='number'?v-goal:NaN; }
+  var x0=Number(orig)||0, x1=x0?x0*1.1:1, f0=f(x0), f1=f(x1), best=null, i;
+  for(i=0;i<100&&isFinite(f0)&&isFinite(f1);i++){ if(Math.abs(f1)<1e-9*Math.max(1,Math.abs(goal))){ best=x1; break; } if(f1===f0){ x1+=1; f1=f(x1); continue; } var x2=x1-f1*(x1-x0)/(f1-f0); x0=x1; f0=f1; x1=x2; f1=f(x1); }
+  if(best==null){ // fall back: look for a sign change and halve it
+    var lo=null, hi=null, base=Number(orig)||0, step=Math.max(1,Math.abs(base)); for(i=0;i<60&&lo==null;i++){ var p=base-step, q=base+step, fp=f(p), fq=f(q), fb=f(base); if(fb*fq<=0){ lo=base; hi=q; } else if(fp*fb<=0){ lo=p; hi=base; } step*=2; }
+    if(lo!=null){ var flo=f(lo); for(i=0;i<200;i++){ var mid=(lo+hi)/2, fm=f(mid); if(Math.abs(fm)<1e-9*Math.max(1,Math.abs(goal))||hi-lo<1e-12){ best=mid; break; } if(flo*fm<=0){ hi=mid; } else { lo=mid; flo=fm; } } } }
+  if(orig==null) delete sh.cells[kb].v; else sh.cells[kb].v=orig; if(sh.cells[kb].v==null&&!hasFmt(sh.cells[kb])) delete sh.cells[kb]; eng.reset();
+  if(best==null||!isFinite(best)){ closeDlgs(); changed(); toast(T('답을 찾지 못했어요. 수식이 바꿀 칸을 쓰는지 확인해 주세요')); return; }
+  var nice=+best.toPrecision(12); pushUndo(); if(!sh.cells[kb]) sh.cells[kb]={}; sh.cells[kb].v=String(nice); closeDlgs(); changed(); toast(F('{0} 칸을 {1}(으)로 바꿨어요 · Ctrl+Z로 되돌리기',E.addr(b.r,b.c),nice)); };
+/* formula tracing: boxes on the cells this cell uses (blue) and the cells that use it (orange) */
+var trT=null;
+function refsOf(v){ var out=[]; if(typeof v!=='string'||v[0]!=='=') return out; var t; try{ t=E.tokenize(v); }catch(e){ return out; }
+  t.forEach(function(k){ if(k.sh&&k.sh!==sh.name) return; if(k.t==='ref') out.push({r1:k.a.r,c1:k.a.c,r2:k.a.r,c2:k.a.c}); else if(k.t==='rng'&&k.a&&k.b) out.push({r1:Math.min(k.a.r,k.b.r),c1:Math.min(k.a.c,k.b.c),r2:Math.max(k.a.r,k.b.r),c2:Math.max(k.a.c,k.b.c)}); });
+  return out; }
+function clearTrace(){ clearTimeout(trT); Array.prototype.slice.call(gin.querySelectorAll('.trc')).forEach(function(n){ n.remove(); }); }
+function traceCell(){ commitEdit(); clearTrace(); var c=sh.cells[K(act.r,act.c)], pre=refsOf(c&&c.v), dep=[];
+  for(var k in sh.cells){ var x=sh.cells[k]; if(typeof x.v!=='string'||x.v[0]!=='=') continue; var rc=E.RC(k);
+    if(refsOf(x.v).some(function(g){ return act.r>=g.r1&&act.r<=g.r2&&act.c>=g.c1&&act.c<=g.c2; })) dep.push({r1:rc[0],c1:rc[1],r2:rc[0],c2:rc[1]}); }
+  if(!pre.length&&!dep.length){ toast(T('이 칸은 다른 칸을 쓰지 않고, 이 칸을 쓰는 칸도 없어요')); return; }
+  function mk(g,cls){ g={r1:g.r1,c1:g.c1,r2:Math.min(g.r2,sh.rows-1),c2:Math.min(g.c2,sh.cols-1)}; var d=document.createElement('div'); d.className='trc '+cls; gin.appendChild(d); box(d,g); }
+  pre.forEach(function(g){ mk(g,'pre'); }); dep.forEach(function(g){ mk(g,'dep'); });
+  toast(F('파란 칸 {0}곳을 써서 계산하고, 주황 칸 {1}곳이 이 칸을 써요',pre.length,dep.length)); trT=setTimeout(clearTrace,8000); }
+
 function dataCmd(d){
+  if(d==='goal') return openGoal();
+  if(d==='trace') return traceCell();
   if(d==='pivot') return openPivot();
   if(d==='names') return openNames();
   if(d==='dedupe') return openDedupe();
