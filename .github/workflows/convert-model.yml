@@ -53,7 +53,10 @@ jobs:
           python -m pip install -q safetensors huggingface_hub transformers sentencepiece tiktoken ml_dtypes \
             psutil fastapi uvicorn shortuuid requests tqdm pydantic prompt_toolkit openai
           python -m pip list 2>/dev/null | grep -i -E "mlc|numpy|torch|transformers|ml.dtypes"
+      - name: Work folder on the big disk
+        run: sudo mkdir -p /mnt/work && sudo chown $USER /mnt/work && df -h /mnt
       - name: Convert and upload
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          WORK: /mnt/work
         run: python -u train/convert.py "${{ inputs.source || 'Qwen/Qwen3-1.7B' }}" "${{ inputs.name || 'test' }}" "${{ inputs.quants || 'q4f16_1' }}" "${{ inputs.upload || 'false' }}"
