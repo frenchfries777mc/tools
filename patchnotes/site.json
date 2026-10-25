@@ -4,6 +4,15 @@
  "notes": [
   {
    "date": "2026-10-25",
+   "build": "v35",
+   "title": "Fry Python 추가",
+   "items": [
+    "새 도구 Fry Python (브라우저에서 파이썬 실행) 카드를 맨 앞에",
+    "숫자 줄 도구 수 6개"
+   ]
+  },
+  {
+   "date": "2026-10-25",
    "build": "v34",
    "title": "Fry Docs 추가",
    "items": [

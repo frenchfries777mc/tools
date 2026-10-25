@@ -21,3 +21,4 @@ blocks/blocks.js, blocks/app.js (AI 블록) | AI, AI에게 시키기 (답이 올
 patchnotes/index.html (games/ff-pnsearch.js) | 빌드 번호나 내용으로 검색, {0}개 찾음, 찾는 패치노트가 없어요. | site v29 | 2026-10-25
 index.html (지금 접속 중 줄) | 지금 {0}명 접속 중, 허브 (14개 언어 넣음) | site v32 | 2026-10-25
 docs/index.html, docs/app.js (Fry Docs 전체), index.html (Fry Docs 카드) | 화면 글자 전부 (도구 이름 Fry Docs는 그대로) | docs v1 · site v34 | 2026-10-25
+python/index.html, python/app.js, python/examples.js, python/lib/*.py (Fry Python 전체), index.html (Fry Python 카드) | 화면 글자와 예제 이름·주석, 오류 안내 (도구 이름 Fry Python은 그대로) | python v1 · site v35 | 2026-10-25
