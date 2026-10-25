@@ -1,7 +1,15 @@
 {
  "program": "blocks",
- "name": "Block HTML",
+ "name": "Fry Blocks",
  "notes": [
+  {
+   "date": "2026-10-25",
+   "build": "v67",
+   "title": "이름 변경",
+   "items": [
+    "Block HTML 이름을 Fry Blocks로 변경"
+   ]
+  },
   {
    "date": "2026-10-24",
    "build": "v66",
