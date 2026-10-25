@@ -10,7 +10,7 @@
 <link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@500&family=Noto+Serif+KR:wght@400;700&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
 <script src="../i18n.js"></script>
 <script src="strings.js?v=33.2.l18"></script>
 <style>
@@ -83,6 +83,13 @@ button,input,select{font:inherit; color:inherit;}
   .top.srch #docName,.top.srch .tbtn,.top.srch [data-lang-slot]{display:none;}
 }
 @media(max-width:420px){ .top{gap:6px; padding:8px 8px;} }
+.gsl{display:flex; align-items:center; gap:10px; margin:6px 0; color:var(--dim);} .gsl input{flex:1; margin:0;}
+#grid td.lnk{color:#5aa2ff; text-decoration:underline;} #grid th.hidc{background:repeating-linear-gradient(90deg,var(--line) 0 2px,transparent 2px 4px); color:transparent; overflow:hidden; padding:0;}
+#gridWrap.painting #grid td{cursor:copy;}
+.simg{position:absolute; z-index:3; border:2px solid transparent; touch-action:none; cursor:move;} .simg img{width:100%; height:100%; display:block; object-fit:fill; pointer-events:none;}
+.simg.on{border-color:var(--fry);} .simg .srz,.simg .sdel{display:none;} .simg.on .srz{display:block; position:absolute; right:-7px; bottom:-7px; width:14px; height:14px; border-radius:3px; background:var(--fry); cursor:nwse-resize;}
+.simg.on .sdel{display:grid; place-items:center; position:absolute; right:-10px; top:-10px; width:22px; height:22px; border-radius:50%; border:0; background:#ff5d5d; color:#fff; font-size:15px; cursor:pointer; line-height:1;}
+.trc{position:absolute; pointer-events:none; z-index:2; border:2px dashed; border-radius:2px;} .trc.pre{border-color:#5aa2ff; background:rgba(90,162,255,.12);} .trc.dep{border-color:#ff9f1c; background:rgba(255,159,28,.12);}
 .ribbon select{height:40px; background:var(--panel2); border:1px solid var(--line); border-radius:7px; padding:0 6px; font-size:13px; flex:0 0 auto;}
 .fbar{display:flex; align-items:stretch; border-bottom:1px solid var(--line); background:var(--hd); flex:0 0 auto;}
 #nameBox{width:84px; flex:0 0 auto; border:0; border-right:1px solid var(--line); background:transparent; padding:0 10px; font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--fry);}
@@ -632,6 +639,15 @@ button,input,select{font:inherit; color:inherit;}
     <div class="aiCtx" id="urlMsg" data-notr></div><div class="aiPrev" id="urlPrev" data-notr></div></div>
   <div class="acts"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="urlPut" disabled>여기에 넣기</button></div>
 </div></div>
+<div class="ov" id="goalDlg"><div class="dlg">
+  <div class="dh"><h3>목표값 찾기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><p style="margin:0 0 8px;color:var(--dim)">수식 칸의 결과가 목표값이 되도록, 바꿀 칸에 들어갈 숫자를 찾아요.</p>
+    <label class="gsl">수식 칸 <input type="text" id="gsSet" placeholder="예: B5" autocomplete="off" data-notr></label>
+    <label class="gsl">목표값 <input type="text" id="gsTo" placeholder="예: 100" inputmode="decimal" autocomplete="off" data-notr></label>
+    <label class="gsl">바꿀 칸 <input type="text" id="gsBy" placeholder="예: B2" autocomplete="off" data-notr></label></div>
+  <div class="acts"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="gsOk">찾기</button></div>
+</div></div>
+<input type="file" id="imgPick" accept="image/*" hidden>
 <div class="ov" id="askDlg"><div class="dlg">
   <div class="dh"><h3 id="askT"></h3><button class="x" data-close aria-label="닫기">×</button></div>
   <div class="dbody"><p id="askP" style="margin:0 0 6px;color:var(--dim)"></p><input type="text" id="askI"></div>
@@ -676,14 +692,14 @@ button,input,select{font:inherit; color:inherit;}
 <input type="file" id="fileIn" accept=".xlsx,.xls,.xlsm,.ods,.csv,.tsv,.txt" hidden>
 <div id="toast"></div>
 
-<script src="engine.js"></script>
+<script src="engine.js?v=39"></script>
 <script src="explain.js?v=33.1"></script>
 <script src="diary.js?v=35"></script>
 <script src="../versions.js?v=2"></script>
 <script src="calc.js"></script>
-<script src="commands.js?v=33"></script>
+<script src="commands.js?v=39"></script>
 <script src="../undotoast.js"></script>
-<script src="app.js?v=36"></script>
+<script src="app.js?v=39"></script>
 <script src="viz.js"></script>
 <script src="../ai.js?v=ai32.l13"></script>
 <script src="../ai-wrong.js?v=4.l13"></script>

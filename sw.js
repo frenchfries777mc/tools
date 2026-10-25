@@ -1,7 +1,7 @@
 /* Fry Tools service worker: lets the site install as an app and open without internet.
    Network first (so a new release shows up at once); a copy of every page and file you opened is kept and used when the
    network fails or answers too slowly (4 s). Only this site's own files are kept: other sites and anything but GET are left alone. */
-var V='fftools-v1', CORE=['./','sheet/','blocks/','slides/','lab/','docs/','logo.svg'], SLOW=4000;
+var V='fftools-v1', CORE=['./','python/','sheet/','blocks/','slides/','lab/','docs/','logo.svg'], SLOW=4000;
 self.addEventListener('install',function(e){
   e.waitUntil(caches.open(V).then(function(c){ return Promise.all(CORE.map(function(u){ return c.add(u).catch(function(){}); })); }).then(function(){ return self.skipWaiting(); }));
 });

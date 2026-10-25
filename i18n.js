@@ -19,10 +19,13 @@
   /* fictional languages sit in their own group; Aurebesh is English text in the Aurebesh font (ff-lang.js) */
   var VIRT={nw:1,gk:1}, VLABEL={ko:'가상 언어',en:'Fictional languages',es:'Idiomas ficticios',fr:'Langues fictives',de:'Fiktive Sprachen',ja:'架空の言語',zh:'虚构语言',pt:'Idiomas fictícios',ru:'Вымышленные языки',tr:'Kurgusal diller',it:'Lingue immaginarie',pl:'Języki fikcyjne',ar:'لغات خيالية',nw:'Unreal speaks',gk:'Fictional 언어들'};
   /* 이모지어(em) also works on pages without ff-lang.js (sheet, slides, blocks, lab, teach): the flag is read straight from storage and ff-emoji.js is loaded here */
-  function scr(){ try{ return (window.FFLang&&FFLang.script)?FFLang.script():(localStorage.getItem('ff.script')==='em'?'em':''); }catch(e){ return ''; } }
+  function scr(){ try{ if(window.FFLang&&FFLang.script) return FFLang.script(); var v=localStorage.getItem('ff.script'); return (v==='em'||v==='au'||v==='sg')?v:''; }catch(e){ return ''; } }
   function auOn(){ return !!scr(); }
+  /* pages without ff-lang.js (sheet, slides, blocks, lab, docs, python): draw the English text in the Aurebesh / Galactic letters the same way ff-lang.js does */
+  if(!window.FFLang&&(scr()==='au'||scr()==='sg')){ try{ var sk=scr(), fam=sk==='au'?'FF Aurebesh':'FF Galactic', fl=sk==='au'?'ff-aurebesh.woff2?v=2':'ff-galactic.woff2?v=1', ah=document.documentElement, as=document.createElement('style'); ah.classList.add('ff-'+sk);
+    as.textContent="@font-face{font-family:'"+fam+"';src:url('https://frenchfries777mc.github.io/games/fonts/"+fl+"') format('woff2');font-display:block}html.ff-"+sk+" body,html.ff-"+sk+" body *:not(select):not(option):not(optgroup):not([data-lg]):not([data-l]):not([data-lang]):not(.ff-au-keep):not(input):not(textarea):not(code):not(pre):not(#grid *):not(#stage *):not(#slideHost *):not(.cm-editor *){font-family:'"+fam+"',system-ui,sans-serif!important}"; (document.head||ah).appendChild(as); }catch(e){} }
   if(!window.FFLang&&scr()==='em'){ try{ var eh=document.documentElement, es=document.createElement('style'); es.textContent='html:not(.ff-em-ready) body{visibility:hidden}'; (document.head||eh).appendChild(es); setTimeout(function(){ eh.classList.add('ff-em-ready'); },2500);
-    var ej=document.createElement('script'); ej.src='https://frenchfries777mc.github.io/games/ff-emoji.js?v=1'; ej.onerror=function(){ eh.classList.add('ff-em-ready'); }; (document.head||eh).appendChild(ej); }catch(e){} }
+    var ej=document.createElement('script'); ej.src='https://frenchfries777mc.github.io/games/ff-emoji.js?v=3'; ej.onerror=function(){ eh.classList.add('ff-em-ready'); }; (document.head||eh).appendChild(ej); }catch(e){} }
   var pref=null; try{ pref=localStorage.getItem(LS); }catch(e){}
   function detect(){ var c=[]; try{ c=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||'']; }catch(e){}
     for(var i=0;i<c.length;i++){ var b=String(c[i]||'').toLowerCase().split('-')[0]; if(LANGS.indexOf(b)>=0) return b; } return 'en'; }

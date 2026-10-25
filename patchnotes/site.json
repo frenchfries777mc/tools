@@ -4,6 +4,59 @@
  "notes": [
   {
    "date": "2026-10-25",
+   "build": "v40",
+   "title": "접속 중인 친구 사진",
+   "items": [
+    "접속 표시줄에 지금 접속 중인 친구의 프로필 사진, 이름, 있는 곳 표시"
+   ]
+  },
+  {
+   "date": "2026-10-25",
+   "build": "v39",
+   "title": "Block HTML 이름을 Fry Blocks로",
+   "items": [
+    "도구 이름 Block HTML을 Fry Blocks로 변경",
+    "Fry Python에 자동완성과 사전 추가"
+   ]
+  },
+  {
+   "date": "2026-10-25",
+   "build": "v38",
+   "title": "이모지어 낱말 보강",
+   "items": [
+    "Fry Lab 과목, Sheet·Slides 메뉴 등 영어로 남던 낱말을 이모지로 바꿈"
+   ],
+   "tr": {"en": {"title": "More Emoji words", "items": ["Fry Lab subjects and Sheet and Slides menu words that stayed English now turn into emoji"]}}
+  },
+  {
+   "date": "2026-10-25",
+   "build": "v37",
+   "title": "오라베쉬·은하 표준어 글자",
+   "items": [
+    "Block HTML, Fry Sheet, Fry Docs, Fry Slides, Fry Lab, Fry Python에서도 오라베쉬·은하 표준어를 고르면 글자가 바뀜",
+    "이모지어 낱말 430개 추가"
+   ],
+   "tr": {"en": {"title": "Aurebesh and Standard Galactic letters", "items": ["Picking Aurebesh or Standard Galactic now changes the letters in Block HTML, Fry Sheet, Fry Docs, Fry Slides, Fry Lab and Fry Python too", "430 new Emoji words"]}}
+  },
+  {
+   "date": "2026-10-25",
+   "build": "v36",
+   "title": "접속 표시줄에 내 프로필",
+   "items": [
+    "로그인하면 접속 표시줄에 내 프로필 사진과 이름 표시"
+   ]
+  },
+  {
+   "date": "2026-10-25",
+   "build": "v35",
+   "title": "Fry Python 추가",
+   "items": [
+    "새 도구 Fry Python (브라우저에서 파이썬 실행) 카드를 맨 앞에",
+    "숫자 줄 도구 수 6개"
+   ]
+  },
+  {
+   "date": "2026-10-25",
    "build": "v34",
    "title": "Fry Docs 추가",
    "items": [
