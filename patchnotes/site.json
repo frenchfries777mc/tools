@@ -4,6 +4,15 @@
  "notes": [
   {
    "date": "2026-10-25",
+   "build": "v38",
+   "title": "이모지어 낱말 보강",
+   "items": [
+    "Fry Lab 과목, Sheet·Slides 메뉴 등 영어로 남던 낱말을 이모지로 바꿈"
+   ],
+   "tr": {"en": {"title": "More Emoji words", "items": ["Fry Lab subjects and Sheet and Slides menu words that stayed English now turn into emoji"]}}
+  },
+  {
+   "date": "2026-10-25",
    "build": "v37",
    "title": "오라베쉬·은하 표준어 글자",
    "items": [
