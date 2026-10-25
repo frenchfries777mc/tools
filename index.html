@@ -506,35 +506,6 @@ FFT.add({
     else if(e.key==='Escape') close(); });
 })();
 </script>
-<script>
-/* 지금 접속 중: 허브·게임 사이트와 같은 인원 줄 (RPC ff_online). 읽기만 하고 접속 표시는 남기지 않아요 */
-(function(){ var T=FFT.T, F=FFT.F, b=document.getElementById('onlineBar'); if(!b||!window.FFAuth) return;
-  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
-  var G={}, L=[]; (window.FF_REG||[]).forEach(function(e){ if(!e.hub){ G[e.id]=e.name; L.push(e.id); } });
-  FFAuth.ready.then(function(sb){ if(!sb) return;
-    var me='';
-    async function who(){ try{ var u=FFAuth.user&&FFAuth.user(); if(!u||!u.id){ me=''; return; }
-      var p=await sb.from('profiles').select('display_name').eq('id',u.id).maybeSingle(), a=await sb.from('ff_avatar').select('pick').eq('user_id',u.id).maybeSingle();
-      var pk=a&&a.data&&a.data.pick, nm=(p&&p.data&&p.data.display_name)||T('내 계정');
-      me='<span class="on-me"><img src="https://frenchfries777mc.github.io/games/avatars/'+encodeURIComponent(/^[a-z0-9-]{2,24}$/.test(pk||'')?pk:'account')+'.svg" alt="" width="22" height="22" onerror="this.style.display=\'none\'"><span data-notr>'+esc(nm)+'</span></span>'; }catch(e){ me=''; } }
-    async function draw(){ try{
-      var r=await sb.rpc('ff_online'); if(r.error){ b.innerHTML=''; return; }
-      var c={}; (r.data||[]).forEach(function(x){ c[x.place]=x.people; });
-      var h='<span class="on-dot"></span><b>'+esc(F('지금 {0}명 접속 중',c.all||0))+'</b>';
-      L.concat(['hub']).forEach(function(g){ if(c[g]) h+='<span class="on-c">'+(g==='hub'?'<span>'+esc(T('허브'))+'</span>':'<span data-notr>'+esc(G[g])+'</span>')+' <b data-notr>'+c[g]+'</b></span>'; });
-      h+=await friends(); b.innerHTML=h+me; }catch(e){ b.innerHTML=''; } }
-    /* 접속 중인 친구: 프로필 사진(ff_avatar, 없으면 기본 사진)과 이름, 있는 곳 */
-    function place(id){ return id==='hub'?T('허브'):(G[id]||id); }
-    async function friends(){ var u=FFAuth.user&&FFAuth.user(); if(!u||!u.id) return '';
-      var f=await sb.rpc('ff_online_friends'), rows=((f&&!f.error&&f.data)||[]).filter(function(x){ return !(FFAuth.isBlocked&&FFAuth.isBlocked(x.user_id)); }); if(!rows.length) return '';
-      var top=rows.slice(0,8), ids=top.map(function(x){ return x.user_id; }), nm={}, av={};
-      try{ var pr=await sb.from('profiles').select('id,username,display_name').in('id',ids); ((pr&&pr.data)||[]).forEach(function(x){ nm[x.id]=(x.display_name&&String(x.display_name).trim())||x.username||'???'; }); }catch(e){}
-      try{ var ar=await sb.from('ff_avatar').select('user_id,pick').in('user_id',ids); ((ar&&!ar.error&&ar.data)||[]).forEach(function(x){ av[x.user_id]=x.pick; }); }catch(e){}
-      return '<span class="on-f"><span>'+esc(T('친구'))+'</span> '+top.map(function(x){ var pk=av[x.user_id]; return '<span class="on-p"><img class="on-i" src="https://frenchfries777mc.github.io/games/avatars/'+encodeURIComponent(/^[a-z0-9-]{2,24}$/.test(pk||'')?pk:'account')+'.svg" alt="" width="20" height="20" onerror="this.style.display=\'none\'"><span data-notr>'+esc(nm[x.user_id]||'???')+'</span><small data-notr>'+esc(place(x.place))+'</small></span>'; }).join('')+(rows.length>8?'<span>+'+(rows.length-8)+'</span>':'')+'</span>'; }
-    who().then(draw); if(FFAuth.onChange) FFAuth.onChange(function(){ who().then(draw); });
-    setInterval(function(){ if(document.visibilityState==='visible') draw(); },20000);
-    document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible') draw(); }); }); })();
-</script>
 <script src="https://frenchfries777mc.github.io/games/ff-splash.js" defer></script>
 <script src="pwa.js" defer></script>
 <script src="ping.js" defer></script>
