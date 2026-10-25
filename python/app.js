@@ -6,6 +6,8 @@ var T=function(s){ return window.FFT&&FFT.T?FFT.T(s):s; }, F=function(s){ var a=
 function $(id){ return document.getElementById(id); }
 var code=$('code'), hl=$('hl'), gut=$('gut'), out=$('out'), LS='ffpy.v1', FILE='ffpy.file.';
 var toastT=null;
+function trCode(src){ return String(src).split('\n').map(function(l){ if(!/[\uAC00-\uD7A3]/.test(l)) return l; var m=/^(\s*)([\s\S]*)$/.exec(l); return m[1]+T(m[2]); }).join('\n'); }
+function trErr(e){ return String(e).split('\n').map(function(l){ if(!/[\uAC00-\uD7A3]/.test(l)) return l; var q=l.replace(/<코드>/g,'\u0001'); var m=/^(\s*[A-Za-z]*Error: )(.*)$/.exec(q); var xy=m&&/^x와 y의 개수가 달라요 \(x (\d+)개, y (\d+)개\)$/.exec(m[2]); q=xy?m[1]+F('x와 y의 개수가 달라요 (x {0}개, y {1}개)',xy[1],xy[2]):m?m[1]+T(m[2]):q; return q.replace(/\u0001/g,T('<코드>')); }).join('\n'); }
 function toast(m){ var t=$('toast'); t.textContent=T(m); t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(function(){ t.classList.remove('on'); },2600); }
 function esc(s){ return String(s).replace(/[&<>]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]; }); }
 
@@ -128,10 +130,10 @@ function drawDict(){ var q=$('dictQ').value.trim().toLowerCase(), box=$('dictLis
   var chips=$('dictCats'); if(!chips.children.length){ [['all','전체']].concat(D.cats).forEach(function(c){ var b=document.createElement('button'); b.type='button'; b.dataset.c=c[0]; b.textContent=T(c[1]); b.onclick=function(){ dictCat=c[0]; drawDict(); }; chips.appendChild(b); }); }
   Array.prototype.forEach.call(chips.children,function(b){ b.classList.toggle('on',b.dataset.c===dictCat); });
   var n=0; D.list.forEach(function(x){ if(dictCat!=='all'&&x.c!==dictCat) return;
-    if(q&&(x.n+' '+x.d+' '+(PFX[x.c]||'')+x.n).toLowerCase().indexOf(q)<0) return; n++;
+    if(q&&(x.n+' '+x.d+' '+T(x.d)+' '+(PFX[x.c]||'')+x.n).toLowerCase().indexOf(q)<0) return; n++;
     var row=document.createElement('button'); row.type='button'; row.className='drow'; var p=(x.n==='turtle.Turtle')?'':(PFX[x.c]||'');
     var h=document.createElement('code'); h.textContent=p+x.n; var d=document.createElement('span'); d.textContent=T(x.d); row.appendChild(h); row.appendChild(d);
-    if(x.e){ var e=document.createElement('pre'); e.textContent=x.e; row.appendChild(e); }
+    if(x.e){ var e=document.createElement('pre'); e.textContent=trCode(x.e); row.appendChild(e); }
     row.onclick=function(){ closeDlg('dictDlg'); var t=p+x.i.replace(/\n/g,'\n'), at=t.indexOf('$0'); t=t.replace('$0',''); var base=code.selectionStart; code.focus(); ins(t); if(at>=0) code.setSelectionRange(base+at,base+at); caretPos(); };
     box.appendChild(row); });
   if(!n){ var e2=document.createElement('p'); e2.className='none'; e2.textContent=T('찾는 명령이 없어요'); box.appendChild(e2); } }
@@ -186,10 +188,10 @@ function popMenu(menu,btn){ var open=menu.classList.contains('open'); closeMenus
   var r=btn.getBoundingClientRect(), w=menu.offsetWidth; menu.style.top=(r.bottom+6)+'px'; menu.style.left=Math.max(8,Math.min(innerWidth-w-8,r.right-w))+'px'; }
 document.addEventListener('mousedown',function(e){ if(!e.target.closest('.menu')&&!e.target.closest('#exBtn')&&!e.target.closest('#fileBtn')) closeMenus(); });
 (function(){ var m=$('exMenu'); var h=document.createElement('div'); h.className='mh'; h.textContent=T('예제를 지금 파일에 불러와요 (원래 코드는 되돌리기로 살려요)'); m.appendChild(h);
-  (window.FPY_EX||[]).forEach(function(ex){ var b=document.createElement('button'); b.textContent=ex[0];
+  (window.FPY_EX||[]).forEach(function(ex){ var b=document.createElement('button'); b.textContent=T(ex[0]);
     b.onclick=function(){ closeMenus(); var prev={c:code.value, i:$('stdin').value};
-      code.value=ex[1]; $('stdin').value=ex[2]||''; $('stdinBox').open=!!ex[2]; errLine=0; paint(); caretPos(); code.scrollTop=0; saveNow();
-      if(window.FFUndo) FFUndo.show('예제를 이 파일에 불러왔어요. ▶ 실행을 눌러 보세요',function(){ code.value=prev.c; $('stdin').value=prev.i; errLine=0; paint(); saveNow(); }); else toast('예제를 이 파일에 불러왔어요'); };
+      code.value=trCode(ex[1]); $('stdin').value=ex[2]||''; $('stdinBox').open=!!ex[2]; errLine=0; paint(); caretPos(); code.scrollTop=0; saveNow();
+      if(window.FFUndo) FFUndo.show(T('예제를 이 파일에 불러왔어요. ▶ 실행을 눌러 보세요'),function(){ code.value=prev.c; $('stdin').value=prev.i; errLine=0; paint(); saveNow(); }); else toast('예제를 이 파일에 불러왔어요'); };
     m.appendChild(b); }); })();
 $('exBtn').onclick=function(){ popMenu($('exMenu'),this); };
 $('fileBtn').onclick=function(){ popMenu($('fileMenu'),this); };
@@ -318,7 +320,7 @@ function mkWorker(){ worker=new Worker('worker.js?v=p1'); ready=false;
   worker.postMessage({boot:true}); }
 function checkDone(){ var d=pendingDone; if(!d||(tur&&tur.q.length)) return; pendingDone=null; running=false; ui(); state('');
   if(d.ok){ sys(F('✔ 끝났어요 ({0}초)',((Date.now()-t0)/1000).toFixed(1)),'ok'); return; }
-  write(d.error+'\n','err'); errLine=d.line||0; paint();
+  write(trErr(d.error)+'\n','err'); errLine=d.line||0; paint();
   if(errLine){ var lh=parseFloat(getComputedStyle(code).lineHeight)||21; if(errLine*lh<code.scrollTop||errLine*lh>code.scrollTop+code.clientHeight) code.scrollTop=Math.max(0,(errLine-4)*lh); }
   lastErr={code:code.value, error:d.error, last:d.last, line:d.line}; whyBox(lastErr); }
 var t0=0;
@@ -350,7 +352,7 @@ function whyBox(er){ var box=document.createElement('div'); box.className='why';
 
 /* ---------- start ---------- */
 (function(){ var f=idx.files.filter(function(x){ return x.id===idx.last; })[0]||idx.files[0];
-  if(f) openFile(f); else { var ex=(window.FPY_EX||[])[0]; newFile(T('첫 파일'),ex?ex[1]:'print("안녕하세요!")\n'); } })();
+  if(f) openFile(f); else { var ex=(window.FPY_EX||[])[0]; newFile(T('첫 파일'),ex?trCode(ex[1]):T('print("안녕하세요!")')+'\n'); } })();
 sys(T('▶ 실행(Ctrl+Enter)을 누르면 여기에 결과가 나와요. 처음 실행할 때는 파이썬(약 10MB)을 받느라 조금 걸려요.'));
 setTimeout(function(){ if(!worker) mkWorker(); },600);
 window.addEventListener('pagehide',saveNow);
