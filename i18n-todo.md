@@ -19,3 +19,5 @@ undotoast.js (삭제 뒤 되돌리기 안내) | 그림을 지웠어요, 이 그�
 blocks/app.js | "HTML을 지금 프로젝트로 불러왔어요", "\"{0}\" 예제를 지금 프로젝트로 불러왔어요" | blocks v65 | 2026-10-24
 blocks/blocks.js, blocks/app.js (AI 블록) | AI, AI에게 시키기 (답이 올 때까지 기다려요), 을(를) / (으)로 번역한 글, 에 대한 AI의 답, 을(를) 요약한 글, 중에서 / 긍정적 / 부정적 / 표현을 / 표현 / 에 저장하기, 언어 이름 (사용자의 언어, 한국어…이모지어, 신어, 번역기 한국어, 오라베쉬), 블록 기본 글 3개 (하늘은 왜 파란색이야?, 오늘은 공원에서…, 음식은 맛있었지만…), 블록 설명 4개, AI 블록 | blocks v66 | 2026-10-24
 patchnotes/index.html (games/ff-pnsearch.js) | 빌드 번호나 내용으로 검색, {0}개 찾음, 찾는 패치노트가 없어요. | site v29 | 2026-10-25
+index.html (지금 접속 중 줄) | 지금 {0}명 접속 중, 허브 (14개 언어 넣음) | site v32 | 2026-10-25
+docs/index.html, docs/app.js (Fry Docs 전체), index.html (Fry Docs 카드) | 화면 글자 전부 (도구 이름 Fry Docs는 그대로) | docs v1 · site v34 | 2026-10-25

@@ -4,6 +4,32 @@
  "notes": [
   {
    "date": "2026-10-25",
+   "build": "v34",
+   "title": "Fry Docs 추가",
+   "items": [
+    "새 도구 Fry Docs (워드처럼 글 문서 쓰기) 카드",
+    "도구 카드 순서 변경 (Block HTML, Fry Sheet, Fry Docs, Fry Slides, Fry Lab)",
+    "숫자 줄 도구 수 5개"
+   ]
+  },
+  {
+   "date": "2026-10-25",
+   "build": "v33",
+   "title": "접속 인원에 Tools 포함",
+   "items": [
+    "로그인한 채 Tools를 쓰면 1분마다 접속 신호 (허브·게임 사이트 접속 인원에 Tools 포함)"
+   ]
+  },
+  {
+   "date": "2026-10-25",
+   "build": "v32",
+   "title": "지금 접속 중 표시",
+   "items": [
+    "첫 화면에 허브·게임 사이트와 같은 접속 인원 줄 (전체·게임별·허브)"
+   ]
+  },
+  {
+   "date": "2026-10-25",
    "build": "v31",
    "title": "도구 카드 한 줄에 3개",
    "items": [
