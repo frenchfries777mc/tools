@@ -8,7 +8,8 @@
    "title": "이름 변경",
    "items": [
     "Block HTML 이름을 Fry Blocks로 변경"
-   ]
+   ],
+   "tr": {"en": {"title": "Renamed", "items": ["Block HTML is renamed Fry Blocks"]}, "es": {"title": "Cambio de nombre", "items": ["Block HTML pasa a llamarse Fry Blocks"]}, "fr": {"title": "Changement de nom", "items": ["Block HTML devient Fry Blocks"]}, "de": {"title": "Umbenennung", "items": ["Block HTML heißt jetzt Fry Blocks"]}, "ja": {"title": "名前の変更", "items": ["Block HTML の名前を Fry Blocks に変更"]}, "zh": {"title": "更名", "items": ["Block HTML 改名为 Fry Blocks"]}, "pt": {"title": "Mudança de nome", "items": ["Block HTML passa a se chamar Fry Blocks"]}, "ru": {"title": "Переименование", "items": ["Block HTML переименован в Fry Blocks"]}, "tr": {"title": "Ad değişikliği", "items": ["Block HTML'in adı Fry Blocks oldu"]}, "it": {"title": "Cambio di nome", "items": ["Block HTML ora si chiama Fry Blocks"]}, "pl": {"title": "Zmiana nazwy", "items": ["Block HTML zmienia nazwę na Fry Blocks"]}, "ar": {"title": "تغيير الاسم", "items": ["تغيير اسم Block HTML إلى Fry Blocks"]}, "nw": {"title": "Rename", "items": ["Block HTML renamed Fry Blocks"]}, "gk": {"title": "이름 바꾸다", "items": ["Block HTML 이름을 Fry Blocks 로 바꾸다"]}}
   },
   {
    "date": "2026-10-24",
