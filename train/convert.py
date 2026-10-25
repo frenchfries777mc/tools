@@ -26,7 +26,8 @@ for f in glob.glob(os.path.join(os.path.dirname(mlc_llm.__file__), "**", "*.py")
         open(f, "w").write(t)
         print("patched", f)
 
-model = snapshot_download(src, token=token, local_dir="/tmp/src",
+WORK = os.environ.get("WORK", "/tmp")  # the 8B model needs the big /mnt disk on GitHub runners
+model = snapshot_download(src, token=token, local_dir=WORK+"/src",
                           allow_patterns=["*.json", "*.safetensors", "*.txt", "*.model", "*.jinja"])
 
 # Newer transformers writes rope_theta inside rope_parameters; MLC reads it from the top level.
@@ -41,7 +42,7 @@ json.dump(c, open(p, "w"), indent=2)
 api = HfApi(token=token)
 for q in quants:
     repo = f"{name}-{q}-MLC"
-    out = f"/tmp/mlc/{repo}"
+    out = f"{WORK}/mlc/{repo}"
     run(["convert_weight", model, "--quantization", q, "-o", out])
     # Same chat template and sizes as MLC's prebuilt Qwen3, whose WebLLM model code the site reuses.
     run(["gen_config", model, "--quantization", q, "--conv-template", "qwen3", "-o", out])
@@ -57,7 +58,7 @@ print("done")
 # WebLLM model code was built for. Same tensor names, shapes and dtypes means it will load.
 if name == "test":
     for q in quants:
-        ref = snapshot_download(f"mlc-ai/Qwen3-1.7B-{q}-MLC", local_dir=f"/tmp/ref-{q}")
+        ref = snapshot_download(f"mlc-ai/Qwen3-1.7B-{q}-MLC", local_dir=f"{WORK}/ref-{q}")
         out = f"/tmp/mlc/{name}-{q}-MLC"
         def recs(d):
             f = next(x for x in ("tensor-cache.json", "ndarray-cache.json") if os.path.exists(os.path.join(d, x)))
