@@ -158,7 +158,7 @@ FFT.add({
   /* 도구 화면은 글자가 빽빽해서 더 흐리고 어둡게 깔아요 */
   .hero-bg img{opacity:.42; filter:blur(1.5px) saturate(1.15);}
   /* 숫자로 보는 줄 */
-  .hstats{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:0 0 18px; padding:18px 8px; border:1px solid var(--line); border-radius:18px; background:color-mix(in srgb,var(--panel) 80%,transparent); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);}
+  .hstats{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:0 0 18px; padding:18px 8px; border:1px solid var(--line); border-radius:18px; background:color-mix(in srgb,var(--panel) 80%,transparent); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);}
   .hstats div{text-align:center; padding:2px 6px; border-left:1px solid var(--line);} .hstats div:first-child{border-left:0;}
   .hstats b{display:block; font-family:'Oswald','Noto Sans KR',sans-serif; font-weight:700; font-size:clamp(26px,4.2vw,42px); line-height:1.1; background:linear-gradient(90deg,var(--fry),var(--fry2)); -webkit-background-clip:text; background-clip:text; color:transparent; font-variant-numeric:tabular-nums;}
   .hstats span{display:block; margin-top:4px; font-size:13px; color:var(--dim);}
@@ -275,6 +275,7 @@ FFT.add({
   <section class="hstats" id="heroStats" aria-label="숫자로 보기">
     <div><b data-n="4" id="hsCount">4</b><span>도구</span></div>
     <div><b data-n="182" id="hsExp">182</b><span>실험 종류</span></div>
+    <div><b data-n="235">235</b><span>블록 종류</span></div>
     <div><b data-n="18">18</b><span>언어</span></div>
   </section>
 
