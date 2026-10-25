@@ -4,6 +4,14 @@
  "notes": [
   {
    "date": "2026-10-25",
+   "build": "v40",
+   "title": "접속 중인 친구 사진",
+   "items": [
+    "접속 표시줄에 지금 접속 중인 친구의 프로필 사진, 이름, 있는 곳 표시"
+   ]
+  },
+  {
+   "date": "2026-10-25",
    "build": "v39",
    "title": "Block HTML 이름을 Fry Blocks로",
    "items": [
