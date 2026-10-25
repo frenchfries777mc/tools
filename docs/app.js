@@ -5,6 +5,7 @@
 var T=function(s){ return window.FFT&&FFT.T?FFT.T(s):s; }, F=function(s){ var a=arguments; s=T(s); return s.replace(/\{(\d)\}/g,function(m,i){ return a[+i+1]; }); };
 function $(id){ return document.getElementById(id); }
 var page=$('page'), LS='ffdocs.v1', DOC='ffdocs.doc.';
+page.setAttribute('data-ph',T(page.getAttribute('data-ph')||''));   // the empty-page hint (page is data-notr, so i18n.js leaves it alone)
 
 /* ---------- toast ---------- */
 var toastT=null;

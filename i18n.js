@@ -36,6 +36,7 @@
     if(lang==='ko'||typeof s!=='string'||!HAN.test(s)) return s;
     var m=/^(\s*)([\s\S]*?)(\s*)$/.exec(s), core=m[2];
     if(D[core]!==undefined) return m[1]+D[core]+m[3];
+    var ago=/^(\d+)(분|시간|일|달|년) 전$/.exec(core); if(ago&&D['{0}'+ago[2]+' 전']!==undefined) return m[1]+D['{0}'+ago[2]+' 전'].replace('{0}',ago[1])+m[3];
     if(dirty) build();
     return re?s.replace(re,function(x){ return D[x]; }):s;
   }
@@ -45,7 +46,9 @@
   var ATTRS=['placeholder','title','aria-label','alt'], seen=new WeakMap();
   function skip(n){ for(var e=n.nodeType===1?n:n.parentNode;e&&e.nodeType===1;e=e.parentNode){ if(e.nodeName==='SCRIPT'||e.nodeName==='STYLE'||e.nodeName==='TEXTAREA'||e.hasAttribute('data-notr')) return true; } return false; }
   function doText(n){ var v=n.nodeValue; if(!HAN.test(v)||seen.get(n)===v||skip(n)) return; var o=T(v); seen.set(n,o); if(o!==v) n.nodeValue=o; }
-  function doAttr(el){ for(var i=0;i<ATTRS.length;i++){ var a=ATTRS[i], v=el.getAttribute&&el.getAttribute(a); if(v&&HAN.test(v)&&!skip(el)){ var o=T(v); if(o!==v) el.setAttribute(a,o); } } } // only when it changed: an untranslated title would otherwise re-trigger the attribute observer forever
+  /* attributes: a textarea's own placeholder/title is page text (only what is typed inside it is skipped) */
+  function skipA(el){ return el.nodeName==='TEXTAREA'?(el.hasAttribute('data-notr')||skip(el.parentNode)):skip(el); }
+  function doAttr(el){ for(var i=0;i<ATTRS.length;i++){ var a=ATTRS[i], v=el.getAttribute&&el.getAttribute(a); if(v&&HAN.test(v)&&!skipA(el)){ var o=T(v); if(o!==v) el.setAttribute(a,o); } } } // only when it changed: an untranslated title would otherwise re-trigger the attribute observer forever
   function walk(root){
     if(!root||lang==='ko') return; if(root.nodeType===3){ doText(root); return; } if(root.nodeType!==1) return;
     doAttr(root); var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT|NodeFilter.SHOW_ELEMENT,null), n;
@@ -74,6 +77,13 @@
       .observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:ATTRS});
   }
   add({'언어':['Language','Idioma','Langue','Sprache','言語','语言','Idioma','Язык','Dil','Speakword','언어 설정',"Lingua","Język","اللغة"]});
+  /* relative times ("5분 전") from versions.js and sheet/diary.js: T() turns "N단위 전" into the {0} template of the language */
+  add({"방금":["just now", "ahora mismo", "à l’instant", "gerade eben", "たった今", "刚刚", "agora mesmo", "только что", "az önce", "justnow", "단지 지금", "proprio ora", "przed chwilą", "الآن"],
+    "{0}분 전":["{0} min ago", "hace {0} min", "il y a {0} min", "vor {0} Min.", "{0}分前", "{0} 分钟前", "há {0} min", "{0} мин назад", "{0} dk önce", "{0} mins before", "{0} 분들 전에", "{0} min fa", "{0} min temu", "قبل {0} دقيقة"],
+    "{0}시간 전":["{0} h ago", "hace {0} h", "il y a {0} h", "vor {0} Std.", "{0}時間前", "{0} 小时前", "há {0} h", "{0} ч назад", "{0} sa önce", "{0} hours before", "{0} 시간들 전에", "{0} ore fa", "{0} godz. temu", "قبل {0} ساعة"],
+    "{0}일 전":["{0} days ago", "hace {0} días", "il y a {0} jours", "vor {0} Tagen", "{0}日前", "{0} 天前", "há {0} dias", "{0} дн. назад", "{0} gün önce", "{0} days before", "{0} 날들 전에", "{0} giorni fa", "{0} dni temu", "قبل {0} يوم"],
+    "{0}달 전":["{0} months ago", "hace {0} meses", "il y a {0} mois", "vor {0} Monaten", "{0}か月前", "{0} 个月前", "há {0} meses", "{0} мес. назад", "{0} ay önce", "{0} moons before", "{0} 달들 전에", "{0} mesi fa", "{0} mies. temu", "قبل {0} شهر"],
+    "{0}년 전":["{0} years ago", "hace {0} años", "il y a {0} ans", "vor {0} Jahren", "{0}年前", "{0} 年前", "há {0} anos", "{0} г. назад", "{0} yıl önce", "{0} years before", "{0} 년들 전에", "{0} anni fa", "{0} lat temu", "قبل {0} سنة"]});
   window.FFT={lang:lang, add:add, T:T, F:F, walk:walk};
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
 })();
