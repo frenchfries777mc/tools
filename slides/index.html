@@ -646,6 +646,12 @@ body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body
     <p id="dataLinkMiss" class="lnkMiss" hidden></p></div>
   <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="dataOk">확인</button></div>
 </div></div>
+<div class="ov" id="urlDlg"><div class="dlg" style="width:min(460px,100%)">
+  <div class="dh"><h3>도형에 링크 넣기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><p class="lab" style="margin:0">발표할 때 이 도형을 누르면 새 탭으로 열리는 주소</p>
+    <input id="uUrl" data-notr spellcheck="false" placeholder="https://..." style="width:100%;height:38px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:0 12px;font-size:15px"></div>
+  <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="urlOk">넣기</button></div>
+</div></div>
 <div class="ov" id="mediaDlg"><div class="dlg" style="width:min(520px,100%)">
   <div class="dh"><h3>동영상·소리 넣기</h3><button class="x" data-close aria-label="닫기">×</button></div>
   <div class="dbody"><p class="lab" style="margin:0">내 컴퓨터의 파일 (mp4, webm, mp3, wav · 200MB까지)</p>
@@ -756,7 +762,7 @@ body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body
 <script src="lq-net.js?v=s26"></script>
 <script src="ribbon.js?v=s30"></script>
 <script src="../undotoast.js"></script>
-<script src="app.js?v=s30"></script>
+<script src="app.js?v=s31"></script>
 <script src="collab.js?v=s22"></script>
 <script src="ai-slides.js"></script>
 <script src="../pwa.js" defer></script>
