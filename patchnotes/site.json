@@ -4,6 +4,16 @@
  "notes": [
   {
    "date": "2026-10-25",
+   "build": "v34",
+   "title": "Fry Docs 추가",
+   "items": [
+    "새 도구 Fry Docs (워드처럼 글 문서 쓰기) 카드",
+    "도구 카드 순서 변경 (Block HTML, Fry Sheet, Fry Docs, Fry Slides, Fry Lab)",
+    "숫자 줄 도구 수 5개"
+   ]
+  },
+  {
+   "date": "2026-10-25",
    "build": "v33",
    "title": "접속 인원에 Tools 포함",
    "items": [
