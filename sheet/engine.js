@@ -470,6 +470,7 @@ def('REPLACE',function(a){ var s=toStr(this.scal(a[0])), st=toNum(this.scal(a[1]
 def('FIND',function(a){ var f=toStr(this.scal(a[0])), s=toStr(this.scal(a[1])), st=a[2]?toNum(this.scal(a[2])):1, i=s.indexOf(f,st-1); if(i<0) fail('#VALUE!'); return i+1; });
 def('SEARCH',function(a){ var f=toStr(this.scal(a[0])).toLowerCase(), s=toStr(this.scal(a[1])).toLowerCase(), st=a[2]?toNum(this.scal(a[2])):1, i=s.indexOf(f,st-1); if(i<0) fail('#VALUE!'); return i+1; });
 def('REPT',function(a){ var n=toNum(this.scal(a[1])); if(n<0||n>10000) fail('#VALUE!'); return toStr(this.scal(a[0])).repeat(Math.floor(n)); });
+def('HYPERLINK',function(a){ var u=this.scal(a[0]); if(a.length>1){ var l=this.scal(a[1]); if(l!=null&&l!=='') return l; } return u; });
 def('EXACT',function(a){ return toStr(this.scal(a[0]))===toStr(this.scal(a[1])); });
 def('VALUE',function(a){ return toNum(this.scal(a[0])); });
 def('TEXT',function(a){ var n=this.scal(a[0]), f=toStr(this.scal(a[1]));
