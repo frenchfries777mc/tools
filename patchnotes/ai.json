@@ -9,7 +9,107 @@
    "items": [
     "균형 모델을 FF777 1.6 lectus로 교체",
     "아재개그 점검 학습 113/115"
-   ]
+   ],
+   "tr": {
+    "en": {
+     "title": "lectus 1.6 update",
+     "items": [
+      "Swapped the balanced model for FF777 1.6 lectus",
+      "Dad-joke check training 113/115"
+     ]
+    },
+    "es": {
+     "title": "Actualización lectus 1.6",
+     "items": [
+      "El modelo equilibrado pasa a ser FF777 1.6 lectus",
+      "Entrenamiento de chistes de papá 113/115"
+     ]
+    },
+    "fr": {
+     "title": "Mise à jour lectus 1.6",
+     "items": [
+      "Le modèle équilibré est remplacé par FF777 1.6 lectus",
+      "Entraînement des blagues de papa 113/115"
+     ]
+    },
+    "de": {
+     "title": "lectus 1.6 Update",
+     "items": [
+      "Das ausgewogene Modell wurde durch FF777 1.6 lectus ersetzt",
+      "Dad-Joke-Prüfung trainiert 113/115"
+     ]
+    },
+    "ja": {
+     "title": "lectus 1.6 反映",
+     "items": [
+      "バランス型モデルを FF777 1.6 lectus に交換",
+      "おやじギャグ確認の学習 113/115"
+     ]
+    },
+    "zh": {
+     "title": "lectus 1.6 更新",
+     "items": [
+      "均衡模型换成了 FF777 1.6 lectus",
+      "冷笑话检查学习 113/115"
+     ]
+    },
+    "pt": {
+     "title": "Atualização lectus 1.6",
+     "items": [
+      "O modelo equilibrado foi trocado pelo FF777 1.6 lectus",
+      "Treino de piadas bobas 113/115"
+     ]
+    },
+    "ru": {
+     "title": "Обновление lectus 1.6",
+     "items": [
+      "Сбалансированную модель заменили на FF777 1.6 lectus",
+      "Обучение на проверку шуток 113/115"
+     ]
+    },
+    "tr": {
+     "title": "lectus 1.6 güncellemesi",
+     "items": [
+      "Dengeli model FF777 1.6 lectus ile değiştirildi",
+      "Baba şakası kontrolü öğrenimi 113/115"
+     ]
+    },
+    "it": {
+     "title": "Aggiornamento lectus 1.6",
+     "items": [
+      "Il modello bilanciato è stato sostituito con FF777 1.6 lectus",
+      "Addestramento battute 113/115"
+     ]
+    },
+    "pl": {
+     "title": "Aktualizacja lectus 1.6",
+     "items": [
+      "Zrównoważony model zamieniono na FF777 1.6 lectus",
+      "Nauka sprawdzania żartów 113/115"
+     ]
+    },
+    "ar": {
+     "title": "تحديث lectus 1.6",
+     "items": [
+      "استبدال النموذج المتوازن بـ FF777 1.6 lectus",
+      "تدريب فحص النكات 113/115"
+     ]
+    },
+    "nw": {
+     "title": "lectus 1.6 upgrade",
+     "items": [
+      "Balanced model swapped to FF777 1.6 lectus",
+      "Joke-check learning 113/115"
+     ]
+    },
+    "gk": {
+     "title": "lectus 1.6 비추다",
+     "items": [
+      "균형 모델 을 FF777 1.6 lectus 로 바꾸다",
+      "아재개그 점검 배우다 113/115"
+     ]
+    }
+   }
   },
   {
    "date": "2026-10-26",
@@ -18,7 +118,107 @@
    "items": [
     "가장 똑똑한 모델을 FF777 1.6 premus로 교체",
     "아재개그 점검 학습 115/115, 대화 114/115"
-   ]
+   ],
+   "tr": {
+    "en": {
+     "title": "premus 1.6 update",
+     "items": [
+      "Swapped the smartest model for FF777 1.6 premus",
+      "Dad-joke check training 115/115, chat 114/115"
+     ]
+    },
+    "es": {
+     "title": "Actualización premus 1.6",
+     "items": [
+      "El modelo más inteligente pasa a ser FF777 1.6 premus",
+      "Entrenamiento de chistes de papá 115/115, chat 114/115"
+     ]
+    },
+    "fr": {
+     "title": "Mise à jour premus 1.6",
+     "items": [
+      "Le modèle le plus intelligent est remplacé par FF777 1.6 premus",
+      "Entraînement des blagues de papa 115/115, discussion 114/115"
+     ]
+    },
+    "de": {
+     "title": "premus 1.6 Update",
+     "items": [
+      "Das klügste Modell wurde durch FF777 1.6 premus ersetzt",
+      "Dad-Joke-Prüfung trainiert 115/115, Chat 114/115"
+     ]
+    },
+    "ja": {
+     "title": "premus 1.6 反映",
+     "items": [
+      "最も賢いモデルを FF777 1.6 premus に交換",
+      "おやじギャグ確認の学習 115/115、会話 114/115"
+     ]
+    },
+    "zh": {
+     "title": "premus 1.6 更新",
+     "items": [
+      "最聪明的模型换成了 FF777 1.6 premus",
+      "冷笑话检查学习 115/115，对话 114/115"
+     ]
+    },
+    "pt": {
+     "title": "Atualização premus 1.6",
+     "items": [
+      "O modelo mais inteligente foi trocado pelo FF777 1.6 premus",
+      "Treino de piadas bobas 115/115, chat 114/115"
+     ]
+    },
+    "ru": {
+     "title": "Обновление premus 1.6",
+     "items": [
+      "Самую умную модель заменили на FF777 1.6 premus",
+      "Обучение на проверку шуток 115/115, диалог 114/115"
+     ]
+    },
+    "tr": {
+     "title": "premus 1.6 güncellemesi",
+     "items": [
+      "En akıllı model FF777 1.6 premus ile değiştirildi",
+      "Baba şakası kontrolü öğrenimi 115/115, sohbet 114/115"
+     ]
+    },
+    "it": {
+     "title": "Aggiornamento premus 1.6",
+     "items": [
+      "Il modello più intelligente è stato sostituito con FF777 1.6 premus",
+      "Addestramento battute 115/115, chat 114/115"
+     ]
+    },
+    "pl": {
+     "title": "Aktualizacja premus 1.6",
+     "items": [
+      "Najmądrzejszy model zamieniono na FF777 1.6 premus",
+      "Nauka sprawdzania żartów 115/115, rozmowa 114/115"
+     ]
+    },
+    "ar": {
+     "title": "تحديث premus 1.6",
+     "items": [
+      "استبدال النموذج الأذكى بـ FF777 1.6 premus",
+      "تدريب فحص النكات 115/115، والمحادثة 114/115"
+     ]
+    },
+    "nw": {
+     "title": "premus 1.6 upgrade",
+     "items": [
+      "Smartest model swapped to FF777 1.6 premus",
+      "Joke-check learning 115/115, chat 114/115"
+     ]
+    },
+    "gk": {
+     "title": "premus 1.6 비추다",
+     "items": [
+      "가장 똑똑하다 모델 을 FF777 1.6 premus 로 바꾸다",
+      "아재개그 점검 배우다 115/115, 대화 114/115"
+     ]
+    }
+   }
   },
   {
    "date": "2026-10-24",
