@@ -528,26 +528,49 @@ var TASKS={
   fix:{title:'맞춤법 고치기', sys:'You fix Korean and English spelling, spacing and grammar. Keep the meaning, tone and language. Reply with only the corrected text.', pre:'Fix the spelling of this text:\n\n'},
   easy:{title:'더 쉽게', sys:'You rewrite text so a 10-year-old can understand it. Keep the language of the text. Reply with only the rewritten text.', pre:'Rewrite this more simply:\n\n'},
   sum:{title:'요약', sys:'You summarize text in the same language, in 2-4 short sentences. Reply with only the summary.', pre:'Summarize:\n\n'},
-  cont:{title:'이어 쓰기', sys:'You continue a document in the same language and style. Write one or two new paragraphs that follow naturally. Reply with only the new text.', pre:'Continue this text:\n\n'}};
+  cont:{title:'이어 쓰기', sys:'You continue a document in the same language and style. Write one or two new paragraphs that follow naturally. Reply with only the new text.', pre:'Continue this text:\n\n'},
+  formal:{title:'격식 있게', sys:'You rewrite text in a polite, formal register. Keep the meaning and the language of the text. Reply with only the rewritten text.', pre:'Rewrite this formally:\n\n'},
+  soft:{title:'부드럽게', sys:'You rewrite text so it sounds friendly and gentle. Keep the meaning and the language of the text. Reply with only the rewritten text.', pre:'Rewrite this in a gentle, friendly tone:\n\n'},
+  short:{title:'짧게 줄이기', sys:'You shorten text to about half its length without losing the key points. Keep the language of the text. Reply with only the shortened text.', pre:'Shorten this:\n\n'},
+  long:{title:'길게 늘이기', sys:'You expand text with a little more detail and clearer wording, about twice as long, without inventing facts. Keep the language of the text. Reply with only the expanded text.', pre:'Expand this:\n\n'},
+  bullets:{title:'글머리 목록으로', sys:'You turn text into a short bullet list, one point per line, each line starting with "- ". Keep the language of the text. Reply with only the list.', pre:'Turn this into bullet points:\n\n'},
+  title:{title:'제목 추천', sys:'You suggest 5 short titles for a text, one per line, no numbering. Use the language of the text. Reply with only the titles.', pre:'Suggest titles for:\n\n', norep:1},
+  outline:{title:'개요 만들기', sys:'You write a clear outline of a document: main headings, with two or three short sub-points under each. Use the language of the document. Plain text, one item per line. Reply with only the outline.', pre:'Outline this document:\n\n', all:1, norep:1},
+  en:{title:'영어로 번역', sys:'You translate text into natural English. Reply with only the translation.', pre:'Translate into English:\n\n'},
+  ko:{title:'한국어로 번역', sys:'You translate text into natural Korean. Reply with only the translation.', pre:'Translate into Korean:\n\n'},
+  ja:{title:'일본어로 번역', sys:'You translate text into natural Japanese. Reply with only the translation.', pre:'Translate into Japanese:\n\n'},
+  ask:{title:'문서에 질문하기', sys:'You answer a question using only the document given. If the document does not say, say so. Use the language of the question. Be brief.', pre:'', all:1, norep:1, q:'문서에 대해 궁금한 것'},
+  draft:{title:'주제로 초안 쓰기', sys:'You write a clear first draft of a document on the given topic, with a short title line and a few paragraphs. Use the language of the topic. Plain text only.', pre:'', free:1, norep:1, q:'어떤 글을 쓸까요? (주제)'}};
 function stopAI(){ if(aiJob){ aiJob++; try{ FFAI.stop(); }catch(e){} } }
 function aiSource(){ backSel(); var s=getSelection(), r=s.rangeCount?s.getRangeAt(0):null;
   if(r&&!r.collapsed&&page.contains(r.commonAncestorContainer)) return {range:r.cloneRange(), text:r.toString()};
   var bl=curBlock(); if(bl&&bl.textContent.trim()){ var rr=document.createRange(); rr.selectNodeContents(bl); return {range:rr, text:bl.textContent}; }
   return null; }
+var aiQTask='';
 function runAI(task){ closeMenus(); if(!window.FFAI){ toast('AI를 불러오지 못했어요'); return; }
   if(task==='set'){ FFAI.settings(); return; }
+  var t=TASKS[task];
+  if(t.q){ aiQTask=task; keepSel(); $('aiQT').textContent=T(t.title); $('aiQL').textContent=T(t.q); $('aiQ').value=''; openDlg('aiQDlg'); setTimeout(function(){ $('aiQ').focus(); },30); return; }
   var src=aiSource();
-  if(task==='cont'&&!src){ var all=page.innerText.trim(); if(all){ var r0=document.createRange(); r0.selectNodeContents(page); r0.collapse(false); src={range:r0,text:all.slice(-1500)}; } }
+  if(t.all){ var allT=page.innerText.trim(); if(!allT){ toast('문서에 글이 없어요'); return; } var r1=document.createRange(); r1.selectNodeContents(page); r1.collapse(false); src={range:r1,text:allT}; }
+  else if(task==='cont'&&!src){ var all=page.innerText.trim(); if(all){ var r0=document.createRange(); r0.selectNodeContents(page); r0.collapse(false); src={range:r0,text:all.slice(-1500)}; } }
   if(!src||!src.text.trim()){ toast('먼저 글을 고르거나 문단 안을 누르세요'); return; }
-  aiRange=src.range; aiTask=task; aiText=''; var t=TASKS[task], job=++aiJob, text=src.text.slice(0,task==='cont'?1500:4000);
+  goAI(task,src,t.pre+src.text.slice(0,task==='cont'?1500:4000)); }
+function goAI(task,src,prompt){ var t=TASKS[task], job=++aiJob; aiRange=src.range; aiTask=task; aiText='';
   $('aiTitle').textContent=T(t.title); $('aiOut').textContent=T('AI가 쓰는 중…'); $('aiRep').disabled=true; $('aiBelow').disabled=true; $('aiStop').hidden=false;
-  $('aiRep').hidden=task==='cont'; openDlg('aiDlg');
-  FFAI.ask({system:t.sys, prompt:t.pre+text, prose:true, maxTokens:task==='sum'?300:900, onText:function(s){ if(job===aiJob){ aiText=s; $('aiOut').textContent=s; } }})
+  $('aiRep').hidden=!!t.norep||task==='cont'; openDlg('aiDlg');
+  FFAI.ask({system:t.sys, prompt:prompt, prose:true, maxTokens:/^(sum|title|ask)$/.test(task)?300:900, onText:function(s){ if(job===aiJob){ aiText=s; $('aiOut').textContent=s; } }})
     .then(function(s){ if(job!==aiJob) return; aiJob=0; aiText=String(s||aiText).replace(/^\s*["“]|["”]\s*$/g,'').trim(); $('aiOut').textContent=aiText||T('AI가 아무것도 쓰지 않았어요'); $('aiStop').hidden=true; $('aiRep').disabled=$('aiBelow').disabled=!aiText; },
       function(e){ if(job!==aiJob) return; aiJob=0; $('aiStop').hidden=true; $('aiOut').textContent=(e&&e.message)||T('AI가 답하지 못했어요'); if(aiText){ $('aiRep').disabled=$('aiBelow').disabled=false; } }); }
+$('aiQOk').onclick=function(){ var q=$('aiQ').value.trim(); if(!q){ $('aiQ').focus(); return; } closeDlg('aiQDlg'); var t=TASKS[aiQTask], src=aiSource();
+  if(!src){ var r=document.createRange(); r.selectNodeContents(page); r.collapse(false); src={range:r,text:''}; }
+  if(aiQTask==='ask'){ var d=page.innerText.trim(); if(!d){ toast('문서에 글이 없어요'); return; } goAI('ask',src,'Document:\n'+d.slice(0,4000)+'\n\nQuestion: '+q); }
+  else goAI('draft',src,'Write a draft about: '+q); };
+$('aiQ').addEventListener('keydown',function(e){ if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){ e.preventDefault(); $('aiQOk').click(); } });
 Array.prototype.forEach.call(document.querySelectorAll('[data-a]'),function(b){ b.onclick=function(){ runAI(b.dataset.a); }; });
 $('aiStop').onclick=function(){ stopAI(); aiJob=0; $('aiStop').hidden=true; $('aiRep').disabled=$('aiBelow').disabled=!aiText; };
-function paras(t){ return t.split(/\n{2,}|\n/).filter(function(l){ return l.trim(); }).map(function(l){ return '<p>'+esc(l.trim())+'</p>'; }).join(''); }
+function paras(t){ var ls=t.split(/\n+/).filter(function(l){ return l.trim(); }); if(ls.length>1&&ls.every(function(l){ return /^\s*[-•*]\s+/.test(l); })) return '<ul>'+ls.map(function(l){ return '<li>'+esc(l.replace(/^\s*[-•*]\s+/,'').trim())+'</li>'; }).join('')+'</ul>';
+  return t.split(/\n{2,}|\n/).filter(function(l){ return l.trim(); }).map(function(l){ return '<p>'+esc(l.trim())+'</p>'; }).join(''); }
 $('aiRep').onclick=function(){ if(!aiRange||!aiText) return; closeDlg('aiDlg'); mark(true); var s=getSelection(); page.focus(); s.removeAllRanges(); s.addRange(aiRange);
   if(/\n/.test(aiText)) document.execCommand('insertHTML',false,paras(aiText)); else document.execCommand('insertText',false,aiText); fixTop(); count(); saveSoon(); toast('바꿨어요 · Ctrl+Z로 되돌리기'); };
 $('aiBelow').onclick=function(){ if(!aiRange||!aiText) return; closeDlg('aiDlg'); mark(true);
@@ -696,6 +719,29 @@ Array.prototype.forEach.call(document.querySelectorAll('[data-rv]'),function(b){
   if(k==='memo') memoStart(); else if(k==='memos') showMemos(); else if(k==='trk'){ if(doc){ doc.trk=!doc.trk; trkUI(); saveNow(); toast(doc.trk?'변경 추적을 켰어요. 고친 곳이 색으로 표시돼요':'변경 추적을 껐어요'); } }
   else if(k==='acc') revAll(true); else if(k==='rej') revAll(false); else if(k==='eq') openEq(null); else if(k==='ck') makeCheck(); else if(k==='shape') openShape();
   else if(k==='up'||k==='low'||k==='cap') caseText(k); else if(k==='head') headRow(); else if(k==='shd') cellColor(b.dataset.c||''); }; });
+
+/* ---------- ribbon tabs: home / insert / layout / review / AI / view ---------- */
+(function(){ var bar=$('bar'), BTNS={
+  insert:[['[data-n=link]','🔗 링크'],['[data-n=sym]','Ω 특수 문자'],['[data-n=date]','📅 날짜'],['[data-n=time]','🕒 시각'],['[data-n=toc]','📑 목차'],['[data-n=fn]','¹ 각주'],['[data-n=capImg]','🖼️ 그림 설명'],['[data-n=capTbl]','▦ 표 설명'],['[data-n=box]','▢ 글상자'],['[data-rv=eq]','∑ 수식'],['[data-rv=ck]','☑ 체크'],['[data-rv=shape]','⬟ 도형'],['[data-n=pb]','📄 쪽 나누기']],
+  review:[['[data-rv=memo]','💬 메모 달기'],['[data-rv=memos]','🗒️ 메모 모음'],['[data-rv=trk]','✏️ 변경 추적'],['[data-rv=acc]','✔️ 모두 받아들이기'],['[data-rv=rej]','↩️ 모두 되돌리기'],['[data-rv=up]','ABC 대문자'],['[data-rv=low]','abc 소문자'],['[data-rv=cap]','Abc 첫 글자만'],['[data-rv=head]','▤ 제목 줄']],
+  ai:[['[data-a=fix]','✍️ 맞춤법'],['[data-a=easy]','🧒 쉽게'],['[data-a=formal]','🎩 격식'],['[data-a=soft]','🙂 부드럽게'],['[data-a=short]','➖ 줄이기'],['[data-a=long]','➕ 늘이기'],['[data-a=sum]','✂️ 요약'],['[data-a=bullets]','• 목록으로'],['[data-a=cont]','➕ 이어 쓰기'],['[data-a=title]','🏷️ 제목 추천'],['[data-a=outline]','🗂️ 개요'],['[data-a=en]','🌐 영어'],['[data-a=ko]','🌐 한국어'],['[data-a=ja]','🌐 일본어'],['[data-a=ask]','❓ 문서에 질문'],['[data-a=draft]','📝 초안 쓰기'],['[data-a=set]','⚙️ AI 설정']]};
+  var ctx=bar.querySelector('.ctx');
+  Object.keys(BTNS).forEach(function(tab){ BTNS[tab].forEach(function(x){ var b=document.createElement('button'); b.type='button'; b.className='ib wide'; b.setAttribute('data-tab',tab); b.innerHTML='<span class="lb"></span>'; b.firstChild.textContent=x[1]; b.addEventListener('mousedown',function(e){ e.preventDefault(); keepSel(); });
+    b.onclick=function(){ var t=document.querySelector(x[0]); if(t) t.click(); }; bar.insertBefore(b,ctx); }); });
+  function tg(tab,label,id){ var b=document.createElement('button'); b.type='button'; b.className='ib wide tg'; b.id=id; b.setAttribute('data-tab',tab); b.innerHTML='<span class="lb"></span>'; b.firstChild.textContent=label; bar.insertBefore(b,ctx); return b; }
+  var pv=tg('view','📄 쪽 경계 보기','pvBtn'); pv.onclick=function(){ var on=document.body.classList.toggle('pv'); pv.classList.toggle('on',on); try{ localStorage.setItem('fd.pv',on?'1':''); }catch(e){} };
+  try{ if(localStorage.getItem('fd.pv')){ document.body.classList.add('pv'); pv.classList.add('on'); } }catch(e){}
+  var z=100; function zoom(v){ z=Math.max(50,Math.min(200,v)); page.style.zoom=z===100?'':String(z/100); zb.firstChild.textContent=z+'%'; }
+  tg('view','－ 축소','zoOut').onclick=function(){ zoom(z-10); }; var zb=tg('view','100%','zoCur'); zb.onclick=function(){ zoom(100); }; tg('view','＋ 확대','zoIn').onclick=function(){ zoom(z+10); };
+  tg('view','🔢 글 통계','stBtn').onclick=function(){ var t=page.innerText||'', no=t.replace(/\s/g,'').length, w=(t.match(/\S+/g)||[]).length, sn=(t.match(/[^.!?。？！\n]+[.!?。？！]*/g)||[]).filter(function(x){ return x.trim(); }).length, ps=page.querySelectorAll('p,h1,h2,h3,li,blockquote').length, rd=Math.max(1,Math.round(w/200));
+    var rows=[['글자 수 (공백 뺀)',no.toLocaleString()],['글자 수 (공백 포함)',t.replace(/\n/g,'').length.toLocaleString()],['단어 수',w.toLocaleString()],['문장 수',sn.toLocaleString()],['문단 수',ps.toLocaleString()],['그림',page.querySelectorAll('img').length],['표',page.querySelectorAll('table').length],['메모',page.querySelectorAll('span.cm').length],['읽는 시간(약)',rd+'분']];
+    $('stTbl').innerHTML=rows.map(function(r){ return '<tr><td>'+T(r[0])+'</td><td>'+r[1]+'</td></tr>'; }).join(''); openDlg('stDlg'); };
+  var tb=$('tabs'); function pick(k){ bar.setAttribute('data-active',k); Array.prototype.forEach.call(tb.children,function(b){ b.classList.toggle('on',b.dataset.tb===k); }); try{ sessionStorage.setItem('fd.tab',k); }catch(e){} bar.scrollLeft=0; }
+  Array.prototype.forEach.call(tb.children,function(b){ b.onclick=function(){ pick(b.dataset.tb); }; });
+  try{ var k0=sessionStorage.getItem('fd.tab'); if(k0&&tb.querySelector('[data-tb='+k0+']')) pick(k0); }catch(e){}
+  // the old header AI menu button opens the AI tab; Ctrl+H/F keep opening find
+  $('aiBtn').onclick=function(){ pick('ai'); };
+})();
 
 /* ---------- start ---------- */
 (function(){ var d=idx.docs.filter(function(x){ return x.id===idx.last; })[0]||idx.docs[0]; if(d) openDoc(d); else newDoc(); })();
