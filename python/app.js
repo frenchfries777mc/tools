@@ -344,9 +344,8 @@ function whyBox(er){ var box=document.createElement('div'); box.className='why';
   box.appendChild(b); box.appendChild(ans); box.appendChild(note); out.appendChild(box); lastPre=null; stick();
   b.onclick=function(){ if(!window.FFAI){ toast('AI를 불러오지 못했어요'); return; } b.disabled=true; ans.hidden=false; note.hidden=false; ans.textContent=T('AI가 읽는 중…');
     var lang=(window.FFT&&FFT.lang)||'ko', ln=LANGN[lang]||(lang==='au'||lang==='nw'?'English':'Korean');
-    var numbered=er.code.split('\n').slice(0,200).map(function(l,i){ return (i+1)+': '+l; }).join('\n');
-    FFAI.ask({system:'You are a kind Python teacher for students aged 10-16. Explain the error simply in '+ln+' in 3-5 short sentences: what went wrong, on which line, and how to fix it. Then show the fixed line as code. Do not rewrite the whole program.',
-      prompt:'Code:\n'+numbered+'\n\nError:\n'+er.error.slice(-1500), prose:true, maxTokens:450, onText:function(t){ ans.textContent=t; stick(); }})
+    FFAI.ask({system:FFP.pySys(ln),
+      prompt:FFP.pyPrompt(er.code,er.error), prose:true, maxTokens:450, onText:function(t){ ans.textContent=t; stick(); }})
       .then(function(t){ ans.textContent=String(t||ans.textContent).trim(); b.hidden=true; stick(); },
         function(e){ ans.textContent=(e&&e.message)||T('AI가 답하지 못했어요'); b.disabled=false; }); }; }
 
