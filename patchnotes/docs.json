@@ -3,6 +3,19 @@
  "name": "Fry Docs",
  "notes": [
   {
+   "date": "2026-10-26",
+   "build": "v4",
+   "title": "리본 탭과 AI 기능 대폭 추가",
+   "items": [
+    "위쪽 탭: 홈, 삽입, 레이아웃, 검토, AI, 보기",
+    "삽입 탭에 링크·특수 문자·날짜·목차·각주·글상자·수식·도형 등 바로 누르는 버튼",
+    "검토 탭에 메모·변경 추적·대소문자·제목 줄 버튼",
+    "AI 탭: 맞춤법, 쉽게, 격식, 부드럽게, 줄이기, 늘이기, 요약, 글머리 목록, 이어 쓰기, 제목 추천, 개요, 영어·한국어·일본어 번역",
+    "AI: 문서에 질문하기, 주제로 초안 쓰기",
+    "보기 탭: 쪽 경계 보기, 확대·축소, 글 통계(글자·단어·문장·문단·읽는 시간)"
+   ]
+  },
+  {
    "date": "2026-10-25",
    "build": "v3",
    "title": "메모·변경 추적·수식·도형 추가",
@@ -28,7 +41,176 @@
     "표에서 Tab으로 다음 칸, 마지막 칸에서 새 줄",
     "Word 문서 저장·열기에 새 서식, 쪽 설정, 머리글·바닥글, 쪽 번호 반영"
    ],
-   "tr": {"en": {"title": "Big upgrade of Word features", "items": ["14 fonts, font size with bigger and smaller, highlighter, superscript and subscript", "Format painter, line spacing, indent and outdent (Tab, Shift+Tab)", "Find and replace (Ctrl+F, Ctrl+H), links (Ctrl+K)", "Insert menu: special characters, date and time, table of contents, footnotes, picture and table captions, text box, page break (Ctrl+Enter)", "Page setup: 5 paper sizes, landscape and portrait, margins, 2 and 3 columns, header and footer, page numbers, watermark", "In tables, Tab moves to the next cell and adds a new row from the last cell", "Saving and opening Word files now keeps the new formatting, page setup, header and footer, and page numbers"]}, "es": {"title": "Gran mejora de las funciones de Word", "items": ["14 fuentes, tamaño de letra con aumentar y reducir, resaltador, superíndice y subíndice", "Copiar formato, interlineado, aumentar y reducir sangría (Tab, Mayús+Tab)", "Buscar y reemplazar (Ctrl+F, Ctrl+H), enlaces (Ctrl+K)", "Menú Insertar: caracteres especiales, fecha y hora, tabla de contenido, notas al pie, leyendas de imagen y tabla, cuadro de texto, salto de página (Ctrl+Enter)", "Configurar página: 5 tamaños de papel, horizontal y vertical, márgenes, 2 y 3 columnas, encabezado y pie de página, números de página, marca de agua", "En las tablas, Tab pasa a la siguiente celda y añade una fila nueva desde la última celda", "Al guardar y abrir archivos de Word se conservan los nuevos formatos, la configuración de página, el encabezado y pie de página y los números de página"]}, "fr": {"title": "Grande mise à niveau des fonctions Word", "items": ["14 polices, taille de police avec agrandir et réduire, surligneur, exposant et indice", "Reproduire la mise en forme, interligne, retrait et retrait négatif (Tab, Maj+Tab)", "Rechercher et remplacer (Ctrl+F, Ctrl+H), liens (Ctrl+K)", "Menu Insertion : caractères spéciaux, date et heure, table des matières, notes de bas de page, légendes d'image et de tableau, zone de texte, saut de page (Ctrl+Entrée)", "Mise en page : 5 formats de papier, paysage et portrait, marges, 2 et 3 colonnes, en-tête et pied de page, numéros de page, filigrane", "Dans les tableaux, Tab passe à la cellule suivante et ajoute une ligne depuis la dernière cellule", "L'enregistrement et l'ouverture de fichiers Word conservent les nouvelles mises en forme, la mise en page, l'en-tête et le pied de page et les numéros de page"]}, "de": {"title": "Große Erweiterung der Word-Funktionen", "items": ["14 Schriftarten, Schriftgröße mit Größer und Kleiner, Textmarker, Hoch- und Tiefstellen", "Format übertragen, Zeilenabstand, Einzug vergrößern und verkleinern (Tab, Umschalt+Tab)", "Suchen und Ersetzen (Strg+F, Strg+H), Links (Strg+K)", "Einfügen-Menü: Sonderzeichen, Datum und Uhrzeit, Inhaltsverzeichnis, Fußnoten, Bild- und Tabellenbeschriftungen, Textfeld, Seitenumbruch (Strg+Enter)", "Seite einrichten: 5 Papierformate, Quer- und Hochformat, Ränder, 2 und 3 Spalten, Kopf- und Fußzeile, Seitenzahlen, Wasserzeichen", "In Tabellen springt Tab zur nächsten Zelle und fügt in der letzten Zelle eine neue Zeile hinzu", "Beim Speichern und Öffnen von Word-Dateien bleiben die neuen Formatierungen, Seiteneinrichtung, Kopf- und Fußzeile und Seitenzahlen erhalten"]}, "ja": {"title": "Word機能を大きく強化", "items": ["フォント14種、文字サイズと拡大・縮小、蛍光ペン、上付き・下付き文字", "書式のコピー、行間、インデントの増減（Tab、Shift+Tab）", "検索と置換（Ctrl+F、Ctrl+H）、リンク（Ctrl+K）", "挿入メニュー：特殊文字、日付と時刻、目次、脚注、図・表の説明、テキストボックス、改ページ（Ctrl+Enter）", "ページ設定：用紙5種類、横・縦向き、余白、2段・3段、ヘッダーとフッター、ページ番号、透かし", "表ではTabで次のセルへ移動し、最後のセルでは新しい行を追加", "Word文書の保存と読み込みに、新しい書式、ページ設定、ヘッダー・フッター、ページ番号を反映"]}, "zh": {"title": "大幅增强 Word 功能", "items": ["14 种字体，字号及增大、减小，荧光笔，上标和下标", "格式刷、行距、增加和减少缩进（Tab、Shift+Tab）", "查找和替换（Ctrl+F、Ctrl+H），链接（Ctrl+K）", "插入菜单：特殊字符、日期和时间、目录、脚注、图片和表格说明、文本框、分页符（Ctrl+Enter）", "页面设置：5 种纸张、横向和纵向、页边距、2 栏和 3 栏、页眉页脚、页码、水印", "在表格中按 Tab 跳到下一个单元格，在最后一个单元格按 Tab 会新增一行", "保存和打开 Word 文档时，会保留新的格式、页面设置、页眉页脚和页码"]}, "pt": {"title": "Grande reforço dos recursos do Word", "items": ["14 fontes, tamanho da letra com aumentar e diminuir, marca-texto, sobrescrito e subscrito", "Pincel de formatação, espaçamento entre linhas, aumentar e diminuir recuo (Tab, Shift+Tab)", "Localizar e substituir (Ctrl+F, Ctrl+H), links (Ctrl+K)", "Menu Inserir: caracteres especiais, data e hora, sumário, notas de rodapé, legendas de imagem e tabela, caixa de texto, quebra de página (Ctrl+Enter)", "Configurar página: 5 tamanhos de papel, paisagem e retrato, margens, 2 e 3 colunas, cabeçalho e rodapé, números de página, marca-d'água", "Nas tabelas, Tab vai para a próxima célula e cria uma nova linha na última célula", "Ao salvar e abrir arquivos do Word, a nova formatação, a configuração de página, o cabeçalho e rodapé e os números de página são mantidos"]}, "ru": {"title": "Большое обновление функций Word", "items": ["14 шрифтов, размер шрифта с увеличением и уменьшением, маркер, верхний и нижний индекс", "Формат по образцу, межстрочный интервал, увеличение и уменьшение отступа (Tab, Shift+Tab)", "Поиск и замена (Ctrl+F, Ctrl+H), ссылки (Ctrl+K)", "Меню «Вставка»: специальные символы, дата и время, оглавление, сноски, подписи к рисункам и таблицам, надпись, разрыв страницы (Ctrl+Enter)", "Параметры страницы: 5 форматов бумаги, альбомная и книжная ориентация, поля, 2 и 3 колонки, колонтитулы, номера страниц, подложка", "В таблицах Tab переходит к следующей ячейке, а в последней добавляет новую строку", "При сохранении и открытии файлов Word сохраняются новое форматирование, параметры страницы, колонтитулы и номера страниц"]}, "tr": {"title": "Word özelliklerinde büyük güçlendirme", "items": ["14 yazı tipi, büyütme ve küçültmeli yazı boyutu, vurgu kalemi, üst simge ve alt simge", "Biçim boyacısı, satır aralığı, girinti artırma ve azaltma (Tab, Shift+Tab)", "Bul ve değiştir (Ctrl+F, Ctrl+H), bağlantılar (Ctrl+K)", "Ekle menüsü: özel karakterler, tarih ve saat, içindekiler, dipnotlar, resim ve tablo açıklamaları, metin kutusu, sayfa sonu (Ctrl+Enter)", "Sayfa yapısı: 5 kâğıt boyutu, yatay ve dikey, kenar boşlukları, 2 ve 3 sütun, üst ve alt bilgi, sayfa numaraları, filigran", "Tablolarda Tab sonraki hücreye geçer, son hücrede yeni satır ekler", "Word dosyalarını kaydederken ve açarken yeni biçimler, sayfa yapısı, üst ve alt bilgi ve sayfa numaraları korunur"]}, "it": {"title": "Grande potenziamento delle funzioni Word", "items": ["14 caratteri, dimensione del testo con ingrandisci e riduci, evidenziatore, apice e pedice", "Copia formato, interlinea, aumenta e riduci rientro (Tab, Maiusc+Tab)", "Trova e sostituisci (Ctrl+F, Ctrl+H), collegamenti (Ctrl+K)", "Menu Inserisci: caratteri speciali, data e ora, sommario, note a piè di pagina, didascalie di immagini e tabelle, casella di testo, interruzione di pagina (Ctrl+Invio)", "Imposta pagina: 5 formati di carta, orizzontale e verticale, margini, 2 e 3 colonne, intestazione e piè di pagina, numeri di pagina, filigrana", "Nelle tabelle Tab passa alla cella successiva e nell'ultima cella aggiunge una nuova riga", "Salvando e aprendo file Word si mantengono i nuovi formati, l'impostazione della pagina, intestazione e piè di pagina e i numeri di pagina"]}, "pl": {"title": "Duże wzmocnienie funkcji Worda", "items": ["14 czcionek, rozmiar czcionki z powiększaniem i zmniejszaniem, zakreślacz, indeks górny i dolny", "Malarz formatów, interlinia, zwiększanie i zmniejszanie wcięcia (Tab, Shift+Tab)", "Znajdowanie i zamienianie (Ctrl+F, Ctrl+H), łącza (Ctrl+K)", "Menu Wstawianie: znaki specjalne, data i godzina, spis treści, przypisy, podpisy obrazów i tabel, pole tekstowe, podział strony (Ctrl+Enter)", "Ustawienia strony: 5 rozmiarów papieru, orientacja pozioma i pionowa, marginesy, 2 i 3 kolumny, nagłówek i stopka, numery stron, znak wodny", "W tabelach Tab przechodzi do następnej komórki, a w ostatniej dodaje nowy wiersz", "Zapis i otwieranie plików Word zachowują nowe formatowanie, ustawienia strony, nagłówek i stopkę oraz numery stron"]}, "ar": {"title": "تعزيز كبير لميزات Word", "items": ["14 خطًا وحجم الخط مع التكبير والتصغير وقلم التمييز والرمز العلوي والسفلي", "نسخ التنسيق وتباعد الأسطر وزيادة المسافة البادئة وتقليلها (Tab وShift+Tab)", "بحث واستبدال (Ctrl+F وCtrl+H) وروابط (Ctrl+K)", "قائمة إدراج: رموز خاصة والتاريخ والوقت وجدول المحتويات والحواشي السفلية وتسميات الصور والجداول ومربع نص وفاصل صفحة (Ctrl+Enter)", "إعداد الصفحة: 5 أحجام ورق واتجاه أفقي وعمودي وهوامش وعمودان وثلاثة أعمدة ورأس وتذييل وأرقام صفحات وعلامة مائية", "في الجداول ينقل Tab إلى الخلية التالية ويضيف صفًا جديدًا من الخلية الأخيرة", "يحافظ حفظ ملفات Word وفتحها على التنسيقات الجديدة وإعداد الصفحة والرأس والتذييل وأرقام الصفحات"]}, "nw": {"title": "Big strengthening of Word features", "items": ["14 fonts, font size with bigger and smaller, highlightpen, upscript and downscript", "Format copying, line spacing, indent and outdent (Tab, Shift+Tab)", "Find and replace (Ctrl+F, Ctrl+H), links (Ctrl+K)", "Put-in menu: special marks, date and time, contents list, footnotes, picture and table notes, textbox, page break (Ctrl+Enter)", "Page rules: 5 paper sizes, wide and tall, margins, 2 and 3 columns, head and foot, page numbers, watermark", "In tables, Tab goes to the next cell and makes a new row from the last cell", "Saving and opening Word files now keeps the new format, page rules, head and foot, and page numbers"]}, "gk": {"title": "워드 기능 크게 튼튼하게 하다", "items": ["글꼴 14개, 글자 크기와 크게·작게, 형광 붓, 위 첨자·아래 첨자", "서식 베끼다, 줄 사이, 들여쓰다·내어쓰다 (탭, 시프트+탭)", "찾다·바꾸다 (컨트롤+F, 컨트롤+H), 이음 (컨트롤+K)", "넣다 차림표: 특별 글자, 날짜·시각, 차례, 발 주석, 그림·표 설명, 글 상자, 쪽 나누다 (컨트롤+엔터)", "쪽 차리다: 종이 5종, 가로·세로, 여백, 2·3단, 머리글·바닥글, 쪽 번호, 물 도장", "표에서 탭으로 다음 칸, 마지막 칸에서 새 줄", "워드 문서 저장·열다에 새 서식, 쪽 차리다, 머리글·바닥글, 쪽 번호 반영하다"]}}
+   "tr": {
+    "en": {
+     "title": "Big upgrade of Word features",
+     "items": [
+      "14 fonts, font size with bigger and smaller, highlighter, superscript and subscript",
+      "Format painter, line spacing, indent and outdent (Tab, Shift+Tab)",
+      "Find and replace (Ctrl+F, Ctrl+H), links (Ctrl+K)",
+      "Insert menu: special characters, date and time, table of contents, footnotes, picture and table captions, text box, page break (Ctrl+Enter)",
+      "Page setup: 5 paper sizes, landscape and portrait, margins, 2 and 3 columns, header and footer, page numbers, watermark",
+      "In tables, Tab moves to the next cell and adds a new row from the last cell",
+      "Saving and opening Word files now keeps the new formatting, page setup, header and footer, and page numbers"
+     ]
+    },
+    "es": {
+     "title": "Gran mejora de las funciones de Word",
+     "items": [
+      "14 fuentes, tamaño de letra con aumentar y reducir, resaltador, superíndice y subíndice",
+      "Copiar formato, interlineado, aumentar y reducir sangría (Tab, Mayús+Tab)",
+      "Buscar y reemplazar (Ctrl+F, Ctrl+H), enlaces (Ctrl+K)",
+      "Menú Insertar: caracteres especiales, fecha y hora, tabla de contenido, notas al pie, leyendas de imagen y tabla, cuadro de texto, salto de página (Ctrl+Enter)",
+      "Configurar página: 5 tamaños de papel, horizontal y vertical, márgenes, 2 y 3 columnas, encabezado y pie de página, números de página, marca de agua",
+      "En las tablas, Tab pasa a la siguiente celda y añade una fila nueva desde la última celda",
+      "Al guardar y abrir archivos de Word se conservan los nuevos formatos, la configuración de página, el encabezado y pie de página y los números de página"
+     ]
+    },
+    "fr": {
+     "title": "Grande mise à niveau des fonctions Word",
+     "items": [
+      "14 polices, taille de police avec agrandir et réduire, surligneur, exposant et indice",
+      "Reproduire la mise en forme, interligne, retrait et retrait négatif (Tab, Maj+Tab)",
+      "Rechercher et remplacer (Ctrl+F, Ctrl+H), liens (Ctrl+K)",
+      "Menu Insertion : caractères spéciaux, date et heure, table des matières, notes de bas de page, légendes d'image et de tableau, zone de texte, saut de page (Ctrl+Entrée)",
+      "Mise en page : 5 formats de papier, paysage et portrait, marges, 2 et 3 colonnes, en-tête et pied de page, numéros de page, filigrane",
+      "Dans les tableaux, Tab passe à la cellule suivante et ajoute une ligne depuis la dernière cellule",
+      "L'enregistrement et l'ouverture de fichiers Word conservent les nouvelles mises en forme, la mise en page, l'en-tête et le pied de page et les numéros de page"
+     ]
+    },
+    "de": {
+     "title": "Große Erweiterung der Word-Funktionen",
+     "items": [
+      "14 Schriftarten, Schriftgröße mit Größer und Kleiner, Textmarker, Hoch- und Tiefstellen",
+      "Format übertragen, Zeilenabstand, Einzug vergrößern und verkleinern (Tab, Umschalt+Tab)",
+      "Suchen und Ersetzen (Strg+F, Strg+H), Links (Strg+K)",
+      "Einfügen-Menü: Sonderzeichen, Datum und Uhrzeit, Inhaltsverzeichnis, Fußnoten, Bild- und Tabellenbeschriftungen, Textfeld, Seitenumbruch (Strg+Enter)",
+      "Seite einrichten: 5 Papierformate, Quer- und Hochformat, Ränder, 2 und 3 Spalten, Kopf- und Fußzeile, Seitenzahlen, Wasserzeichen",
+      "In Tabellen springt Tab zur nächsten Zelle und fügt in der letzten Zelle eine neue Zeile hinzu",
+      "Beim Speichern und Öffnen von Word-Dateien bleiben die neuen Formatierungen, Seiteneinrichtung, Kopf- und Fußzeile und Seitenzahlen erhalten"
+     ]
+    },
+    "ja": {
+     "title": "Word機能を大きく強化",
+     "items": [
+      "フォント14種、文字サイズと拡大・縮小、蛍光ペン、上付き・下付き文字",
+      "書式のコピー、行間、インデントの増減（Tab、Shift+Tab）",
+      "検索と置換（Ctrl+F、Ctrl+H）、リンク（Ctrl+K）",
+      "挿入メニュー：特殊文字、日付と時刻、目次、脚注、図・表の説明、テキストボックス、改ページ（Ctrl+Enter）",
+      "ページ設定：用紙5種類、横・縦向き、余白、2段・3段、ヘッダーとフッター、ページ番号、透かし",
+      "表ではTabで次のセルへ移動し、最後のセルでは新しい行を追加",
+      "Word文書の保存と読み込みに、新しい書式、ページ設定、ヘッダー・フッター、ページ番号を反映"
+     ]
+    },
+    "zh": {
+     "title": "大幅增强 Word 功能",
+     "items": [
+      "14 种字体，字号及增大、减小，荧光笔，上标和下标",
+      "格式刷、行距、增加和减少缩进（Tab、Shift+Tab）",
+      "查找和替换（Ctrl+F、Ctrl+H），链接（Ctrl+K）",
+      "插入菜单：特殊字符、日期和时间、目录、脚注、图片和表格说明、文本框、分页符（Ctrl+Enter）",
+      "页面设置：5 种纸张、横向和纵向、页边距、2 栏和 3 栏、页眉页脚、页码、水印",
+      "在表格中按 Tab 跳到下一个单元格，在最后一个单元格按 Tab 会新增一行",
+      "保存和打开 Word 文档时，会保留新的格式、页面设置、页眉页脚和页码"
+     ]
+    },
+    "pt": {
+     "title": "Grande reforço dos recursos do Word",
+     "items": [
+      "14 fontes, tamanho da letra com aumentar e diminuir, marca-texto, sobrescrito e subscrito",
+      "Pincel de formatação, espaçamento entre linhas, aumentar e diminuir recuo (Tab, Shift+Tab)",
+      "Localizar e substituir (Ctrl+F, Ctrl+H), links (Ctrl+K)",
+      "Menu Inserir: caracteres especiais, data e hora, sumário, notas de rodapé, legendas de imagem e tabela, caixa de texto, quebra de página (Ctrl+Enter)",
+      "Configurar página: 5 tamanhos de papel, paisagem e retrato, margens, 2 e 3 colunas, cabeçalho e rodapé, números de página, marca-d'água",
+      "Nas tabelas, Tab vai para a próxima célula e cria uma nova linha na última célula",
+      "Ao salvar e abrir arquivos do Word, a nova formatação, a configuração de página, o cabeçalho e rodapé e os números de página são mantidos"
+     ]
+    },
+    "ru": {
+     "title": "Большое обновление функций Word",
+     "items": [
+      "14 шрифтов, размер шрифта с увеличением и уменьшением, маркер, верхний и нижний индекс",
+      "Формат по образцу, межстрочный интервал, увеличение и уменьшение отступа (Tab, Shift+Tab)",
+      "Поиск и замена (Ctrl+F, Ctrl+H), ссылки (Ctrl+K)",
+      "Меню «Вставка»: специальные символы, дата и время, оглавление, сноски, подписи к рисункам и таблицам, надпись, разрыв страницы (Ctrl+Enter)",
+      "Параметры страницы: 5 форматов бумаги, альбомная и книжная ориентация, поля, 2 и 3 колонки, колонтитулы, номера страниц, подложка",
+      "В таблицах Tab переходит к следующей ячейке, а в последней добавляет новую строку",
+      "При сохранении и открытии файлов Word сохраняются новое форматирование, параметры страницы, колонтитулы и номера страниц"
+     ]
+    },
+    "tr": {
+     "title": "Word özelliklerinde büyük güçlendirme",
+     "items": [
+      "14 yazı tipi, büyütme ve küçültmeli yazı boyutu, vurgu kalemi, üst simge ve alt simge",
+      "Biçim boyacısı, satır aralığı, girinti artırma ve azaltma (Tab, Shift+Tab)",
+      "Bul ve değiştir (Ctrl+F, Ctrl+H), bağlantılar (Ctrl+K)",
+      "Ekle menüsü: özel karakterler, tarih ve saat, içindekiler, dipnotlar, resim ve tablo açıklamaları, metin kutusu, sayfa sonu (Ctrl+Enter)",
+      "Sayfa yapısı: 5 kâğıt boyutu, yatay ve dikey, kenar boşlukları, 2 ve 3 sütun, üst ve alt bilgi, sayfa numaraları, filigran",
+      "Tablolarda Tab sonraki hücreye geçer, son hücrede yeni satır ekler",
+      "Word dosyalarını kaydederken ve açarken yeni biçimler, sayfa yapısı, üst ve alt bilgi ve sayfa numaraları korunur"
+     ]
+    },
+    "it": {
+     "title": "Grande potenziamento delle funzioni Word",
+     "items": [
+      "14 caratteri, dimensione del testo con ingrandisci e riduci, evidenziatore, apice e pedice",
+      "Copia formato, interlinea, aumenta e riduci rientro (Tab, Maiusc+Tab)",
+      "Trova e sostituisci (Ctrl+F, Ctrl+H), collegamenti (Ctrl+K)",
+      "Menu Inserisci: caratteri speciali, data e ora, sommario, note a piè di pagina, didascalie di immagini e tabelle, casella di testo, interruzione di pagina (Ctrl+Invio)",
+      "Imposta pagina: 5 formati di carta, orizzontale e verticale, margini, 2 e 3 colonne, intestazione e piè di pagina, numeri di pagina, filigrana",
+      "Nelle tabelle Tab passa alla cella successiva e nell'ultima cella aggiunge una nuova riga",
+      "Salvando e aprendo file Word si mantengono i nuovi formati, l'impostazione della pagina, intestazione e piè di pagina e i numeri di pagina"
+     ]
+    },
+    "pl": {
+     "title": "Duże wzmocnienie funkcji Worda",
+     "items": [
+      "14 czcionek, rozmiar czcionki z powiększaniem i zmniejszaniem, zakreślacz, indeks górny i dolny",
+      "Malarz formatów, interlinia, zwiększanie i zmniejszanie wcięcia (Tab, Shift+Tab)",
+      "Znajdowanie i zamienianie (Ctrl+F, Ctrl+H), łącza (Ctrl+K)",
+      "Menu Wstawianie: znaki specjalne, data i godzina, spis treści, przypisy, podpisy obrazów i tabel, pole tekstowe, podział strony (Ctrl+Enter)",
+      "Ustawienia strony: 5 rozmiarów papieru, orientacja pozioma i pionowa, marginesy, 2 i 3 kolumny, nagłówek i stopka, numery stron, znak wodny",
+      "W tabelach Tab przechodzi do następnej komórki, a w ostatniej dodaje nowy wiersz",
+      "Zapis i otwieranie plików Word zachowują nowe formatowanie, ustawienia strony, nagłówek i stopkę oraz numery stron"
+     ]
+    },
+    "ar": {
+     "title": "تعزيز كبير لميزات Word",
+     "items": [
+      "14 خطًا وحجم الخط مع التكبير والتصغير وقلم التمييز والرمز العلوي والسفلي",
+      "نسخ التنسيق وتباعد الأسطر وزيادة المسافة البادئة وتقليلها (Tab وShift+Tab)",
+      "بحث واستبدال (Ctrl+F وCtrl+H) وروابط (Ctrl+K)",
+      "قائمة إدراج: رموز خاصة والتاريخ والوقت وجدول المحتويات والحواشي السفلية وتسميات الصور والجداول ومربع نص وفاصل صفحة (Ctrl+Enter)",
+      "إعداد الصفحة: 5 أحجام ورق واتجاه أفقي وعمودي وهوامش وعمودان وثلاثة أعمدة ورأس وتذييل وأرقام صفحات وعلامة مائية",
+      "في الجداول ينقل Tab إلى الخلية التالية ويضيف صفًا جديدًا من الخلية الأخيرة",
+      "يحافظ حفظ ملفات Word وفتحها على التنسيقات الجديدة وإعداد الصفحة والرأس والتذييل وأرقام الصفحات"
+     ]
+    },
+    "nw": {
+     "title": "Big strengthening of Word features",
+     "items": [
+      "14 fonts, font size with bigger and smaller, highlightpen, upscript and downscript",
+      "Format copying, line spacing, indent and outdent (Tab, Shift+Tab)",
+      "Find and replace (Ctrl+F, Ctrl+H), links (Ctrl+K)",
+      "Put-in menu: special marks, date and time, contents list, footnotes, picture and table notes, textbox, page break (Ctrl+Enter)",
+      "Page rules: 5 paper sizes, wide and tall, margins, 2 and 3 columns, head and foot, page numbers, watermark",
+      "In tables, Tab goes to the next cell and makes a new row from the last cell",
+      "Saving and opening Word files now keeps the new format, page rules, head and foot, and page numbers"
+     ]
+    },
+    "gk": {
+     "title": "워드 기능 크게 튼튼하게 하다",
+     "items": [
+      "글꼴 14개, 글자 크기와 크게·작게, 형광 붓, 위 첨자·아래 첨자",
+      "서식 베끼다, 줄 사이, 들여쓰다·내어쓰다 (탭, 시프트+탭)",
+      "찾다·바꾸다 (컨트롤+F, 컨트롤+H), 이음 (컨트롤+K)",
+      "넣다 차림표: 특별 글자, 날짜·시각, 차례, 발 주석, 그림·표 설명, 글 상자, 쪽 나누다 (컨트롤+엔터)",
+      "쪽 차리다: 종이 5종, 가로·세로, 여백, 2·3단, 머리글·바닥글, 쪽 번호, 물 도장",
+      "표에서 탭으로 다음 칸, 마지막 칸에서 새 줄",
+      "워드 문서 저장·열다에 새 서식, 쪽 차리다, 머리글·바닥글, 쪽 번호 반영하다"
+     ]
+    }
+   }
   },
   {
    "date": "2026-10-25",
@@ -43,7 +225,176 @@
     "내 문서 목록, 자동 저장, 버전 기록, 지운 문서 되돌리기",
     "AI 도우미(시험): 맞춤법 고치기, 더 쉽게, 요약, 이어 쓰기"
    ],
-   "tr": {"en": {"title": "Fry Docs first version", "items": ["A document editor you write in right on an A4 page", "Headings 1·2·3, quotes, bulleted and numbered lists, bold · italic · underline · strikethrough · text color, alignment, sans-serif and serif fonts", "Tables with rows and columns to add and remove, pictures in a chosen size, dividers", "Export as a Word file (docx), PDF, web page or text file", "Open Word documents, web pages and text files (pictures inside Word documents are left out)", "Document list, autosave, version history, bring back a deleted document", "AI helper (beta): fix spelling, simpler, summary, keep writing"]}, "es": {"title": "Primera versión de Fry Docs", "items": ["Un editor de documentos en el que escribes directamente sobre una página A4", "Títulos 1·2·3, citas, listas con viñetas y numeradas, negrita · cursiva · subrayado · tachado · color del texto, alineación, fuentes sans serif y con serifa", "Tablas en las que añades y quitas filas y columnas, imágenes del tamaño que elijas, líneas divisorias", "Exportar como archivo de Word (docx), PDF, página web o archivo de texto", "Abrir documentos de Word, páginas web y archivos de texto (las imágenes de los documentos de Word no se incluyen)", "Lista de documentos, guardado automático, historial de versiones, recuperar un documento borrado", "Asistente de IA (beta): corregir ortografía, más fácil, resumen, seguir escribiendo"]}, "fr": {"title": "Première version de Fry Docs", "items": ["Un éditeur de documents où l’on écrit directement sur une page A4", "Titres 1·2·3, citations, listes à puces et numérotées, gras · italique · souligné · barré · couleur du texte, alignement, polices sans et avec empattement", "Tableaux où ajouter et retirer lignes et colonnes, images à la taille choisie, séparateurs", "Export en fichier Word (docx), PDF, page web ou fichier texte", "Ouverture de documents Word, pages web et fichiers texte (les images des documents Word ne sont pas reprises)", "Liste des documents, sauvegarde auto, historique des versions, récupération d’un document supprimé", "Assistant IA (bêta) : corriger l’orthographe, plus simple, résumé, continuer l’écriture"]}, "de": {"title": "Erste Version von Fry Docs", "items": ["Ein Dokumenteditor, in dem man direkt auf einer A4-Seite schreibt", "Überschriften 1·2·3, Zitate, Aufzählungen und nummerierte Listen, fett · kursiv · unterstrichen · durchgestrichen · Textfarbe, Ausrichtung, Schrift ohne und mit Serifen", "Tabellen mit Zeilen und Spalten zum Hinzufügen und Entfernen, Bilder in wählbarer Größe, Trennlinien", "Export als Word-Datei (docx), PDF, Webseite oder Textdatei", "Word-Dokumente, Webseiten und Textdateien öffnen (Bilder in Word-Dokumenten werden weggelassen)", "Dokumentliste, automatisches Speichern, Versionsverlauf, gelöschtes Dokument zurückholen", "KI-Helfer (Beta): Rechtschreibung korrigieren, einfacher, Zusammenfassung, weiterschreiben"]}, "ja": {"title": "Fry Docs 最初のバージョン", "items": ["A4のページにそのまま書く文書エディター", "見出し1·2·3、引用、箇条書き・番号付きリスト、太字・斜体・下線・取り消し線・文字の色、揃え、ゴシック・明朝", "行・列を足したり消したりできる表、大きさを選べる画像、区切り線", "Wordファイル（docx）・PDF・ウェブページ・テキストファイルで書き出し", "Word文書・ウェブページ・テキストファイルを開く（Word文書の中の画像は入りません）", "マイ文書の一覧、自動保存、バージョン履歴、消した文書を元に戻す", "AIヘルパー（試験）：つづりを直す、もっとやさしく、要約、続きを書く"]}, "zh": {"title": "Fry Docs 第一版", "items": ["直接在 A4 页面上书写的文档编辑器", "标题 1·2·3、引用、项目符号和编号列表、粗体·斜体·下划线·删除线·文字颜色、对齐、黑体·宋体", "可增删行列的表格、可选大小的图片、分隔线", "导出为 Word 文件（docx）、PDF、网页或文本文件", "打开 Word 文档、网页和文本文件（Word 文档中的图片不会带入）", "我的文档列表、自动保存、版本记录、恢复已删除的文档", "AI 助手（测试）：修正拼写、更简单、摘要、继续写"]}, "pt": {"title": "Primeira versão do Fry Docs", "items": ["Um editor de documentos em que você escreve direto numa página A4", "Títulos 1·2·3, citações, listas com marcadores e numeradas, negrito · itálico · sublinhado · tachado · cor do texto, alinhamento, fontes sem e com serifa", "Tabelas em que você põe e tira linhas e colunas, imagens no tamanho escolhido, divisórias", "Exportar como arquivo do Word (docx), PDF, página da web ou arquivo de texto", "Abrir documentos do Word, páginas da web e arquivos de texto (as imagens dos documentos do Word ficam de fora)", "Lista de documentos, salvamento automático, histórico de versões, recuperar um documento apagado", "Assistente de IA (beta): corrigir ortografia, mais simples, resumo, continuar escrevendo"]}, "ru": {"title": "Первая версия Fry Docs", "items": ["Редактор документов, в котором пишешь прямо на странице A4", "Заголовки 1·2·3, цитаты, маркированные и нумерованные списки, жирный · курсив · подчёркнутый · зачёркнутый · цвет текста, выравнивание, шрифты без засечек и с засечками", "Таблицы с добавлением и удалением строк и столбцов, картинки нужного размера, разделители", "Экспорт в файл Word (docx), PDF, веб-страницу или текстовый файл", "Открытие документов Word, веб-страниц и текстовых файлов (картинки из документов Word не переносятся)", "Список документов, автосохранение, история версий, возврат удалённого документа", "ИИ-помощник (тест): исправить орфографию, проще, кратко, продолжить текст"]}, "tr": {"title": "Fry Docs ilk sürüm", "items": ["Doğrudan A4 sayfaya yazılan belge düzenleyici", "Başlık 1·2·3, alıntı, madde işaretli ve numaralı listeler, kalın · italik · altı çizili · üstü çizili · yazı rengi, hizalama, tırnaksız ve tırnaklı yazı tipi", "Satır ve sütun eklenip çıkarılabilen tablolar, boyutu seçilebilen resimler, ayırıcı çizgiler", "Word dosyası (docx), PDF, web sayfası ya da metin dosyası olarak dışa aktar", "Word belgesi, web sayfası ve metin dosyası aç (Word belgelerindeki resimler alınmaz)", "Belge listesi, otomatik kayıt, sürüm geçmişi, silinen belgeyi geri getirme", "Yapay zekâ yardımcısı (deneme): yazımı düzelt, daha basit, özet, devam et"]}, "it": {"title": "Prima versione di Fry Docs", "items": ["Un editor di documenti in cui scrivi direttamente su una pagina A4", "Titoli 1·2·3, citazioni, elenchi puntati e numerati, grassetto · corsivo · sottolineato · barrato · colore del testo, allineamento, caratteri senza e con grazie", "Tabelle a cui aggiungere e togliere righe e colonne, immagini della dimensione scelta, separatori", "Esporta come file Word (docx), PDF, pagina web o file di testo", "Apri documenti Word, pagine web e file di testo (le immagini nei documenti Word restano fuori)", "Elenco dei documenti, salvataggio automatico, cronologia delle versioni, recupero di un documento eliminato", "Assistente IA (beta): correggi ortografia, più semplice, riassunto, continua a scrivere"]}, "pl": {"title": "Pierwsza wersja Fry Docs", "items": ["Edytor dokumentów, w którym piszesz od razu na stronie A4", "Nagłówki 1·2·3, cytaty, listy punktowane i numerowane, pogrubienie · kursywa · podkreślenie · przekreślenie · kolor tekstu, wyrównanie, czcionki bezszeryfowa i szeryfowa", "Tabele z dodawaniem i usuwaniem wierszy i kolumn, obrazy w wybranym rozmiarze, linie podziału", "Eksport do pliku Word (docx), PDF, strony WWW lub pliku tekstowego", "Otwieranie dokumentów Word, stron WWW i plików tekstowych (obrazy z dokumentów Word są pomijane)", "Lista dokumentów, zapis automatyczny, historia wersji, przywracanie usuniętego dokumentu", "Pomocnik AI (beta): popraw pisownię, prościej, streszczenie, pisz dalej"]}, "ar": {"title": "الإصدار الأول من Fry Docs", "items": ["محرر مستندات تكتب فيه مباشرة على صفحة A4", "عناوين 1·2·3، اقتباسات، قوائم نقطية ومرقّمة، غامق · مائل · تسطير · يتوسطه خط · لون النص، محاذاة، خط بلا زوائد وخط بزوائد", "جداول تضيف إليها الصفوف والأعمدة وتحذفها، وصور بالحجم الذي تختاره، وخطوط فاصلة", "التصدير كملف Word ‏(docx) أو PDF أو صفحة ويب أو ملف نصي", "فتح مستندات Word وصفحات الويب والملفات النصية (لا تُنقل الصور الموجودة داخل مستندات Word)", "قائمة المستندات، حفظ تلقائي، سجل الإصدارات، استعادة مستند محذوف", "مساعد الذكاء الاصطناعي (تجريبي): تصحيح الإملاء، أبسط، ملخص، تابع الكتابة"]}, "nw": {"title": "Fry Docs first version", "items": ["A docwrite tool right on an A4 page", "Headings 1·2·3, quotes, dot plus number lists, bold · lean · underline · crossout · letter color, lining, plain plus foot letters", "Tables with rows plus columns in and out, pictures in picked size, cutlines", "Giveout as Word file (docx), PDF, webpage or speakwrite file", "Open Word docs, webpages plus speakwrite files (pictures in Word docs left out)", "My doc list, autokeep, version record, unvaporize a doc", "AI helper (tryout): fix spellwrite, plussimple, shortspeak, writemore"]}, "gk": {"title": "튀김 문서들 첫 번째 버전", "items": ["하나의 문서 편집자 너 쓰다 안에 오른쪽 위에 하나의 A4 페이지", "제목들 1·2·3, 인용들, 총알 그리고 숫자 목록들, 대담한 · 이탤릭체 · 밑줄 · 파업을 통해 · 글자 색, 정렬, 산스 세리프 그리고 세리프", "탁자들 와 함께 노 젓다들 그리고 기둥들 에게 더하다 그리고 제거하다, 그림들 안에 하나의 선택된 크기, 분할기들", "수출하다 처럼 하나의 단어 파일 (docx), PDF, 거미줄 페이지 또는 글자 파일", "열다 단어 문서들, 거미줄 페이지들 그리고 글자 파일들 (그림들 안쪽 단어 문서들 이다 왼쪽 밖으로)", "문서 목록, 자동차 구하다, 버전 역사, 가져오다 뒤로 하나의 삭제된 문서", "AI 도우미 (시험): 고치다 철자, 더 쉬운, 요약, 계속하다 쓰는"]}}
+   "tr": {
+    "en": {
+     "title": "Fry Docs first version",
+     "items": [
+      "A document editor you write in right on an A4 page",
+      "Headings 1·2·3, quotes, bulleted and numbered lists, bold · italic · underline · strikethrough · text color, alignment, sans-serif and serif fonts",
+      "Tables with rows and columns to add and remove, pictures in a chosen size, dividers",
+      "Export as a Word file (docx), PDF, web page or text file",
+      "Open Word documents, web pages and text files (pictures inside Word documents are left out)",
+      "Document list, autosave, version history, bring back a deleted document",
+      "AI helper (beta): fix spelling, simpler, summary, keep writing"
+     ]
+    },
+    "es": {
+     "title": "Primera versión de Fry Docs",
+     "items": [
+      "Un editor de documentos en el que escribes directamente sobre una página A4",
+      "Títulos 1·2·3, citas, listas con viñetas y numeradas, negrita · cursiva · subrayado · tachado · color del texto, alineación, fuentes sans serif y con serifa",
+      "Tablas en las que añades y quitas filas y columnas, imágenes del tamaño que elijas, líneas divisorias",
+      "Exportar como archivo de Word (docx), PDF, página web o archivo de texto",
+      "Abrir documentos de Word, páginas web y archivos de texto (las imágenes de los documentos de Word no se incluyen)",
+      "Lista de documentos, guardado automático, historial de versiones, recuperar un documento borrado",
+      "Asistente de IA (beta): corregir ortografía, más fácil, resumen, seguir escribiendo"
+     ]
+    },
+    "fr": {
+     "title": "Première version de Fry Docs",
+     "items": [
+      "Un éditeur de documents où l’on écrit directement sur une page A4",
+      "Titres 1·2·3, citations, listes à puces et numérotées, gras · italique · souligné · barré · couleur du texte, alignement, polices sans et avec empattement",
+      "Tableaux où ajouter et retirer lignes et colonnes, images à la taille choisie, séparateurs",
+      "Export en fichier Word (docx), PDF, page web ou fichier texte",
+      "Ouverture de documents Word, pages web et fichiers texte (les images des documents Word ne sont pas reprises)",
+      "Liste des documents, sauvegarde auto, historique des versions, récupération d’un document supprimé",
+      "Assistant IA (bêta) : corriger l’orthographe, plus simple, résumé, continuer l’écriture"
+     ]
+    },
+    "de": {
+     "title": "Erste Version von Fry Docs",
+     "items": [
+      "Ein Dokumenteditor, in dem man direkt auf einer A4-Seite schreibt",
+      "Überschriften 1·2·3, Zitate, Aufzählungen und nummerierte Listen, fett · kursiv · unterstrichen · durchgestrichen · Textfarbe, Ausrichtung, Schrift ohne und mit Serifen",
+      "Tabellen mit Zeilen und Spalten zum Hinzufügen und Entfernen, Bilder in wählbarer Größe, Trennlinien",
+      "Export als Word-Datei (docx), PDF, Webseite oder Textdatei",
+      "Word-Dokumente, Webseiten und Textdateien öffnen (Bilder in Word-Dokumenten werden weggelassen)",
+      "Dokumentliste, automatisches Speichern, Versionsverlauf, gelöschtes Dokument zurückholen",
+      "KI-Helfer (Beta): Rechtschreibung korrigieren, einfacher, Zusammenfassung, weiterschreiben"
+     ]
+    },
+    "ja": {
+     "title": "Fry Docs 最初のバージョン",
+     "items": [
+      "A4のページにそのまま書く文書エディター",
+      "見出し1·2·3、引用、箇条書き・番号付きリスト、太字・斜体・下線・取り消し線・文字の色、揃え、ゴシック・明朝",
+      "行・列を足したり消したりできる表、大きさを選べる画像、区切り線",
+      "Wordファイル（docx）・PDF・ウェブページ・テキストファイルで書き出し",
+      "Word文書・ウェブページ・テキストファイルを開く（Word文書の中の画像は入りません）",
+      "マイ文書の一覧、自動保存、バージョン履歴、消した文書を元に戻す",
+      "AIヘルパー（試験）：つづりを直す、もっとやさしく、要約、続きを書く"
+     ]
+    },
+    "zh": {
+     "title": "Fry Docs 第一版",
+     "items": [
+      "直接在 A4 页面上书写的文档编辑器",
+      "标题 1·2·3、引用、项目符号和编号列表、粗体·斜体·下划线·删除线·文字颜色、对齐、黑体·宋体",
+      "可增删行列的表格、可选大小的图片、分隔线",
+      "导出为 Word 文件（docx）、PDF、网页或文本文件",
+      "打开 Word 文档、网页和文本文件（Word 文档中的图片不会带入）",
+      "我的文档列表、自动保存、版本记录、恢复已删除的文档",
+      "AI 助手（测试）：修正拼写、更简单、摘要、继续写"
+     ]
+    },
+    "pt": {
+     "title": "Primeira versão do Fry Docs",
+     "items": [
+      "Um editor de documentos em que você escreve direto numa página A4",
+      "Títulos 1·2·3, citações, listas com marcadores e numeradas, negrito · itálico · sublinhado · tachado · cor do texto, alinhamento, fontes sem e com serifa",
+      "Tabelas em que você põe e tira linhas e colunas, imagens no tamanho escolhido, divisórias",
+      "Exportar como arquivo do Word (docx), PDF, página da web ou arquivo de texto",
+      "Abrir documentos do Word, páginas da web e arquivos de texto (as imagens dos documentos do Word ficam de fora)",
+      "Lista de documentos, salvamento automático, histórico de versões, recuperar um documento apagado",
+      "Assistente de IA (beta): corrigir ortografia, mais simples, resumo, continuar escrevendo"
+     ]
+    },
+    "ru": {
+     "title": "Первая версия Fry Docs",
+     "items": [
+      "Редактор документов, в котором пишешь прямо на странице A4",
+      "Заголовки 1·2·3, цитаты, маркированные и нумерованные списки, жирный · курсив · подчёркнутый · зачёркнутый · цвет текста, выравнивание, шрифты без засечек и с засечками",
+      "Таблицы с добавлением и удалением строк и столбцов, картинки нужного размера, разделители",
+      "Экспорт в файл Word (docx), PDF, веб-страницу или текстовый файл",
+      "Открытие документов Word, веб-страниц и текстовых файлов (картинки из документов Word не переносятся)",
+      "Список документов, автосохранение, история версий, возврат удалённого документа",
+      "ИИ-помощник (тест): исправить орфографию, проще, кратко, продолжить текст"
+     ]
+    },
+    "tr": {
+     "title": "Fry Docs ilk sürüm",
+     "items": [
+      "Doğrudan A4 sayfaya yazılan belge düzenleyici",
+      "Başlık 1·2·3, alıntı, madde işaretli ve numaralı listeler, kalın · italik · altı çizili · üstü çizili · yazı rengi, hizalama, tırnaksız ve tırnaklı yazı tipi",
+      "Satır ve sütun eklenip çıkarılabilen tablolar, boyutu seçilebilen resimler, ayırıcı çizgiler",
+      "Word dosyası (docx), PDF, web sayfası ya da metin dosyası olarak dışa aktar",
+      "Word belgesi, web sayfası ve metin dosyası aç (Word belgelerindeki resimler alınmaz)",
+      "Belge listesi, otomatik kayıt, sürüm geçmişi, silinen belgeyi geri getirme",
+      "Yapay zekâ yardımcısı (deneme): yazımı düzelt, daha basit, özet, devam et"
+     ]
+    },
+    "it": {
+     "title": "Prima versione di Fry Docs",
+     "items": [
+      "Un editor di documenti in cui scrivi direttamente su una pagina A4",
+      "Titoli 1·2·3, citazioni, elenchi puntati e numerati, grassetto · corsivo · sottolineato · barrato · colore del testo, allineamento, caratteri senza e con grazie",
+      "Tabelle a cui aggiungere e togliere righe e colonne, immagini della dimensione scelta, separatori",
+      "Esporta come file Word (docx), PDF, pagina web o file di testo",
+      "Apri documenti Word, pagine web e file di testo (le immagini nei documenti Word restano fuori)",
+      "Elenco dei documenti, salvataggio automatico, cronologia delle versioni, recupero di un documento eliminato",
+      "Assistente IA (beta): correggi ortografia, più semplice, riassunto, continua a scrivere"
+     ]
+    },
+    "pl": {
+     "title": "Pierwsza wersja Fry Docs",
+     "items": [
+      "Edytor dokumentów, w którym piszesz od razu na stronie A4",
+      "Nagłówki 1·2·3, cytaty, listy punktowane i numerowane, pogrubienie · kursywa · podkreślenie · przekreślenie · kolor tekstu, wyrównanie, czcionki bezszeryfowa i szeryfowa",
+      "Tabele z dodawaniem i usuwaniem wierszy i kolumn, obrazy w wybranym rozmiarze, linie podziału",
+      "Eksport do pliku Word (docx), PDF, strony WWW lub pliku tekstowego",
+      "Otwieranie dokumentów Word, stron WWW i plików tekstowych (obrazy z dokumentów Word są pomijane)",
+      "Lista dokumentów, zapis automatyczny, historia wersji, przywracanie usuniętego dokumentu",
+      "Pomocnik AI (beta): popraw pisownię, prościej, streszczenie, pisz dalej"
+     ]
+    },
+    "ar": {
+     "title": "الإصدار الأول من Fry Docs",
+     "items": [
+      "محرر مستندات تكتب فيه مباشرة على صفحة A4",
+      "عناوين 1·2·3، اقتباسات، قوائم نقطية ومرقّمة، غامق · مائل · تسطير · يتوسطه خط · لون النص، محاذاة، خط بلا زوائد وخط بزوائد",
+      "جداول تضيف إليها الصفوف والأعمدة وتحذفها، وصور بالحجم الذي تختاره، وخطوط فاصلة",
+      "التصدير كملف Word ‏(docx) أو PDF أو صفحة ويب أو ملف نصي",
+      "فتح مستندات Word وصفحات الويب والملفات النصية (لا تُنقل الصور الموجودة داخل مستندات Word)",
+      "قائمة المستندات، حفظ تلقائي، سجل الإصدارات، استعادة مستند محذوف",
+      "مساعد الذكاء الاصطناعي (تجريبي): تصحيح الإملاء، أبسط، ملخص، تابع الكتابة"
+     ]
+    },
+    "nw": {
+     "title": "Fry Docs first version",
+     "items": [
+      "A docwrite tool right on an A4 page",
+      "Headings 1·2·3, quotes, dot plus number lists, bold · lean · underline · crossout · letter color, lining, plain plus foot letters",
+      "Tables with rows plus columns in and out, pictures in picked size, cutlines",
+      "Giveout as Word file (docx), PDF, webpage or speakwrite file",
+      "Open Word docs, webpages plus speakwrite files (pictures in Word docs left out)",
+      "My doc list, autokeep, version record, unvaporize a doc",
+      "AI helper (tryout): fix spellwrite, plussimple, shortspeak, writemore"
+     ]
+    },
+    "gk": {
+     "title": "튀김 문서들 첫 번째 버전",
+     "items": [
+      "하나의 문서 편집자 너 쓰다 안에 오른쪽 위에 하나의 A4 페이지",
+      "제목들 1·2·3, 인용들, 총알 그리고 숫자 목록들, 대담한 · 이탤릭체 · 밑줄 · 파업을 통해 · 글자 색, 정렬, 산스 세리프 그리고 세리프",
+      "탁자들 와 함께 노 젓다들 그리고 기둥들 에게 더하다 그리고 제거하다, 그림들 안에 하나의 선택된 크기, 분할기들",
+      "수출하다 처럼 하나의 단어 파일 (docx), PDF, 거미줄 페이지 또는 글자 파일",
+      "열다 단어 문서들, 거미줄 페이지들 그리고 글자 파일들 (그림들 안쪽 단어 문서들 이다 왼쪽 밖으로)",
+      "문서 목록, 자동차 구하다, 버전 역사, 가져오다 뒤로 하나의 삭제된 문서",
+      "AI 도우미 (시험): 고치다 철자, 더 쉬운, 요약, 계속하다 쓰는"
+     ]
+    }
+   }
   }
  ]
 }
