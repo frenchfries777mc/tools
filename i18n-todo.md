@@ -6,3 +6,4 @@ docs/index.html·app.js (검토 메뉴, 메모, 변경 추적, 수식, 도형 �
 slides/app.js·index.html (도형 이름 9개, 효과 메뉴, 링크 창) | 새 문구 전부 | slides v31 | 2026-10-25
 patchnotes/ai.json | premus 1.6 반영 항목 | ai v50 | 2026-10-26
 patchnotes/site.json | 첫 화면 글자 없앰 항목 | site v42 | 2026-10-26
+patchnotes/site.json | 비스듬한 글자 되살림 항목 | site v43 | 2026-10-26
