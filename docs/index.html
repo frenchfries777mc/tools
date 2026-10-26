@@ -49,6 +49,15 @@ button,input,select,textarea{font:inherit; color:inherit;}
 .stt{width:100%; border-collapse:collapse;} .stt td{padding:7px 4px; border-bottom:1px solid var(--line);} .stt td:last-child{text-align:right; font-weight:600;}
 .ib.wide .lb{white-space:nowrap;} .ib.tg.on{background:rgba(255,201,60,.13); border-color:rgba(255,201,60,.45); color:var(--fry);}
 body.pv #page{background-image:repeating-linear-gradient(to bottom,transparent 0,transparent calc(var(--ph,1123px) - 3px),rgba(255,160,40,.55) calc(var(--ph,1123px) - 3px),rgba(255,160,40,.55) var(--ph,1123px));}
+/* docs v5 */
+#page .fxs{text-shadow:2px 2px 3px rgba(0,0,0,.45);} #page .fxo{-webkit-text-stroke:1px #1b1b1b; color:transparent;} #page .fxo[style*="color"]{-webkit-text-stroke-color:currentColor;} #page .fxl{letter-spacing:.25em;} #page .fxt{letter-spacing:-.05em;}
+#page .pbx{border:2px solid #555; padding:.4em .7em; border-radius:6px;} #page .pbg{background:#fff3b0; padding:.3em .6em; border-radius:4px;} #page .pbl{border-left:5px solid #f0a000; padding:.2em .8em; background:#fff8e6;}
+#page ul.ls1{list-style-type:circle;} #page ul.ls2{list-style-type:square;} #page ol.ls3,#page ul.ls3{list-style-type:lower-alpha;} #page ol.ls4,#page ul.ls4{list-style-type:upper-alpha;} #page ol.ls5,#page ul.ls5{list-style-type:lower-roman;} #page ol.ls6,#page ul.ls6{list-style-type:upper-roman;} #page ol.ls7,#page ul.ls7{list-style-type:hangul;} #page ol.ls8,#page ul.ls8{list-style-type:hangul-consonant;} #page ol.ls9,#page ul.ls9{list-style-type:decimal-leading-zero;}
+#page table.ts1 tr:nth-child(even) td{background:#f1f5fb;} #page table.ts1 th{background:#cfe0f5;} #page table.ts2 td,#page table.ts2 th{border:0;} #page table.ts3 td,#page table.ts3 th{border:0; border-bottom:1px solid #9a9a9a;} #page table.ts3 th{background:#fff; border-bottom:2px solid #333;}
+#page img.ib{border:3px solid #444;} #page img.ir{border-radius:18px;} #page img.is{box-shadow:4px 4px 12px rgba(0,0,0,.4);} #page img.iwl{float:left; margin:0 14px 8px 0; max-width:50%;} #page img.iwr{float:right; margin:0 0 8px 14px; max-width:50%;}
+#page span.bm::before{content:"🔖"; font-size:.8em; opacity:.7;} #page span.bl{color:#1a56db; text-decoration:underline; cursor:pointer;}
+.cmpout{max-height:50vh; overflow:auto; background:var(--bg); border:1px solid var(--line); border-radius:9px; padding:10px 12px; font-size:14px; line-height:1.7; white-space:pre-wrap;} .cmpout ins{background:rgba(60,200,100,.25); text-decoration:none;} .cmpout del{background:rgba(255,90,90,.25);}
+.bmrow{display:flex; align-items:center; gap:6px; padding:5px 0; border-bottom:1px solid var(--line);} .bmrow span{flex:1;}
 /* toolbar */
 .bar{flex:0 0 auto; display:flex; align-items:center; gap:2px; padding:5px 8px; background:var(--panel); border-bottom:1px solid var(--line); overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch;}
 .bar::-webkit-scrollbar{display:none;}
@@ -87,7 +96,7 @@ body.painting #page{cursor:copy;}
   font-family:'Noto Sans KR','Malgun Gothic',sans-serif; font-size:15px; line-height:1.7; word-break:keep-all; overflow-wrap:break-word; caret-color:#1b1b1b;}
 #page.serif{font-family:'Noto Serif KR','Batang',serif;}
 #page:empty::before{content:attr(data-ph); color:#9a9a9a;}
-#page p{margin:0 0 .55em;} #page h1{font-size:28px; margin:.6em 0 .35em; line-height:1.3;} #page h2{font-size:22px; margin:.6em 0 .3em; line-height:1.35;} #page h3{font-size:18px; margin:.5em 0 .3em;}
+#page p{margin:0 0 .55em;} #page h1{font-size:var(--h1s,28px); color:var(--h1c,inherit); margin:.6em 0 .35em; line-height:1.3;} #page h2{font-size:var(--h2s,22px); color:var(--h2c,inherit); margin:.6em 0 .3em; line-height:1.35;} #page h3{font-size:var(--h3s,18px); color:var(--h3c,inherit); margin:.5em 0 .3em;}
 #page h1:first-child,#page h2:first-child,#page h3:first-child{margin-top:0;}
 #page blockquote{margin:.4em 0 .7em; padding:.2em 0 .2em 1em; border-left:4px solid #c9c9c9; color:#555; font-style:italic;}
 #page ul,#page ol{margin:0 0 .6em; padding-left:1.6em;}
@@ -236,12 +245,23 @@ body.painting #page{cursor:copy;}
     <button class="ib" data-t="colAdd" title="오른쪽에 칸 넣기"><span class="lb">+ 칸</span></button>
     <button class="ib" data-t="rowDel" title="이 줄 지우기"><span class="lb">− 줄</span></button>
     <button class="ib" data-t="colDel" title="이 칸 지우기"><span class="lb">− 칸</span></button>
+    <button class="ib" data-t="merge" title="오른쪽 칸과 합치기"><span class="lb">칸 합치기</span></button>
+    <button class="ib" data-t="split" title="합친 칸 나누기"><span class="lb">칸 나누기</span></button>
+    <button class="ib" data-t="sum" title="이 칸이 있는 열의 숫자를 더한 줄 넣기"><span class="lb">Σ 합계 줄</span></button>
+    <button class="ib" data-t="sty" title="표 모양 바꾸기: 줄무늬, 테두리 없음, 가로줄만"><span class="lb">표 모양</span></button>
     <button class="ib" data-t="del" title="표 지우기" style="color:#ff7b7b"><span class="lb">표 지우기</span></button>
   </span>
   <span class="ctx" id="imgCtx" hidden><span class="sep"></span><b>그림</b>
     <button class="ib" data-i="25"><span class="lb">작게</span></button>
     <button class="ib" data-i="50"><span class="lb">보통</span></button>
     <button class="ib" data-i="100"><span class="lb">꽉 차게</span></button>
+    <button class="ib" data-ix="ib"><span class="lb">테두리</span></button>
+    <button class="ib" data-ix="ir"><span class="lb">둥글게</span></button>
+    <button class="ib" data-ix="is"><span class="lb">그림자</span></button>
+    <button class="ib" data-ix="iwl"><span class="lb">왼쪽 감싸기</span></button>
+    <button class="ib" data-ix="iwr"><span class="lb">오른쪽 감싸기</span></button>
+    <button class="ib" data-ix="none"><span class="lb">감싸기 끄기</span></button>
+    <button class="ib" data-ix="crop"><span class="lb">가장자리 자르기</span></button>
     <button class="ib" data-i="del" style="color:#ff7b7b"><span class="lb">지우기</span></button>
   </span>
 </nav>
@@ -328,6 +348,33 @@ body.painting #page{cursor:copy;}
   <hr>
   <button data-n="pb">📄 쪽 나누기 <small>Ctrl+Enter</small></button>
 </div>
+<div class="menu" id="fxMenu">
+  <button data-fx="fxs">▨ 그림자</button><button data-fx="fxo">◌ 윤곽선 글자</button><button data-fx="fxl">↔ 글자 사이 넓게</button><button data-fx="fxt">⇥ 글자 사이 좁게</button><hr><button data-fx="clr">효과 지우기</button>
+</div>
+<div class="menu" id="pbMenu">
+  <button data-pb="pbx">▭ 테두리 상자</button><button data-pb="pbg">🟨 노랑 배경</button><button data-pb="pbl">▌ 왼쪽 막대</button><hr><button data-pb="clr">꾸밈 지우기</button>
+</div>
+<div class="menu" id="lsMenu">
+  <div class="mh">글머리 모양</div><button data-ls="0">● 기본 (동그라미)</button><button data-ls="1">○ 빈 동그라미</button><button data-ls="2">■ 네모</button>
+  <div class="mh">번호 모양</div><button data-ls="n">1. 2. 3.</button><button data-ls="9">01. 02. 03.</button><button data-ls="3">a. b. c.</button><button data-ls="4">A. B. C.</button><button data-ls="5">i. ii. iii.</button><button data-ls="6">I. II. III.</button><button data-ls="7">가. 나. 다.</button><button data-ls="8">ㄱ. ㄴ. ㄷ.</button>
+</div>
+<div class="ov" id="bmDlg"><div class="dlg" style="width:min(460px,100%)">
+  <div class="dh"><h3>책갈피</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><label class="fl">이름<input id="bmName" data-notr maxlength="40" autocomplete="off"></label>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0"><button class="tbtn" id="bmAdd">여기에 책갈피 넣기</button><button class="tbtn" id="bmLink">고른 글에 이 책갈피 링크 걸기</button></div>
+    <div id="bmList"></div><p>링크 건 글을 누르면 그 책갈피로 이동해요.</p></div>
+  <div class="dfoot"><button class="tbtn pri" data-close>닫기</button></div>
+</div></div>
+<div class="ov" id="styDlg"><div class="dlg" style="width:min(460px,100%)">
+  <div class="dh"><h3>스타일 편집</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody" id="styBody"></div>
+  <div class="dfoot"><button class="tbtn" id="styReset">처음 모양으로</button><span class="sp"></span><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="styOk">적용</button></div>
+</div></div>
+<div class="ov" id="cmpDlg"><div class="dlg" style="width:min(640px,100%)">
+  <div class="dh"><h3>문서 비교</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><label class="fl">비교할 문서 (지금 문서와 견줘요)<select id="cmpSel"></select></label><div class="cmpout" id="cmpOut" data-notr>고른 문서와 지금 문서의 다른 곳이 여기에 나와요. <ins>초록</ins>은 지금 문서에만 있는 글, <del>빨강</del>은 고른 문서에만 있는 글이에요.</div></div>
+  <div class="dfoot"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="cmpGo">비교하기</button></div>
+</div></div>
 <div class="menu" id="aiMenu">
   <div class="mh">고른 글 (안 고르면 지금 문단)</div>
   <button data-a="fix">✍️ 맞춤법 고치기</button>
