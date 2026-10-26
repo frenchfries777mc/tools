@@ -542,6 +542,7 @@ var TASKS={
   ja:{title:'일본어로 번역', sys:'You translate text into natural Japanese. Reply with only the translation.', pre:'Translate into Japanese:\n\n'},
   ask:{title:'문서에 질문하기', sys:'You answer a question using only the document given. If the document does not say, say so. Use the language of the question. Be brief.', pre:'', all:1, norep:1, q:'문서에 대해 궁금한 것'},
   draft:{title:'주제로 초안 쓰기', sys:'You write a clear first draft of a document on the given topic, with a short title line and a few paragraphs. Use the language of the topic. Plain text only.', pre:'', free:1, norep:1, q:'어떤 글을 쓸까요? (주제)'}};
+Object.keys(TASKS).forEach(function(k){ var d=window.FFP&&FFP.docsTasks[k]; if(d){ TASKS[k].sys=d.sys; TASKS[k].pre=d.pre; } });   // the prompts live in ../ai-prompts.js, shared with the training data
 function stopAI(){ if(aiJob){ aiJob++; try{ FFAI.stop(); }catch(e){} } }
 function aiSource(){ backSel(); var s=getSelection(), r=s.rangeCount?s.getRangeAt(0):null;
   if(r&&!r.collapsed&&page.contains(r.commonAncestorContainer)) return {range:r.cloneRange(), text:r.toString()};
@@ -565,8 +566,8 @@ function goAI(task,src,prompt){ var t=TASKS[task], job=++aiJob; aiRange=src.rang
       function(e){ if(job!==aiJob) return; aiJob=0; $('aiStop').hidden=true; $('aiOut').textContent=(e&&e.message)||T('AI가 답하지 못했어요'); if(aiText){ $('aiRep').disabled=$('aiBelow').disabled=false; } }); }
 $('aiQOk').onclick=function(){ var q=$('aiQ').value.trim(); if(!q){ $('aiQ').focus(); return; } closeDlg('aiQDlg'); var t=TASKS[aiQTask], src=aiSource();
   if(!src){ var r=document.createRange(); r.selectNodeContents(page); r.collapse(false); src={range:r,text:''}; }
-  if(aiQTask==='ask'){ var d=page.innerText.trim(); if(!d){ toast('문서에 글이 없어요'); return; } goAI('ask',src,'Document:\n'+d.slice(0,4000)+'\n\nQuestion: '+q); }
-  else goAI('draft',src,'Write a draft about: '+q); };
+  if(aiQTask==='ask'){ var d=page.innerText.trim(); if(!d){ toast('문서에 글이 없어요'); return; } goAI('ask',src,FFP.docsAskPrompt(d.slice(0,4000),q)); }
+  else goAI('draft',src,FFP.docsDraftPrompt(q)); };
 $('aiQ').addEventListener('keydown',function(e){ if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){ e.preventDefault(); $('aiQOk').click(); } });
 Array.prototype.forEach.call(document.querySelectorAll('[data-a]'),function(b){ b.onclick=function(){ runAI(b.dataset.a); }; });
 $('aiStop').onclick=function(){ stopAI(); aiJob=0; $('aiStop').hidden=true; $('aiRep').disabled=$('aiBelow').disabled=!aiText; };

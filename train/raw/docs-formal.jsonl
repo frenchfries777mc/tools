@@ -1,0 +1,56 @@
+{"task": "formal", "text": "내일 회의 시간 바뀌었으니까 다들 늦지 말고 와.", "out": "내일 회의 시간이 변경되었으니 모든 분께서는 늦지 않게 참석해 주시기 바랍니다."}
+{"task": "formal", "text": "숙제 못 냈어요. 죄송해요. 내일 꼭 낼게요.", "out": "숙제를 제출하지 못하여 죄송합니다. 내일 반드시 제출하겠습니다."}
+{"task": "formal", "text": "선생님 저 오늘 아파서 학교 못 가요.", "out": "선생님, 저는 오늘 몸이 아파서 등교하지 못하게 되었습니다."}
+{"task": "formal", "text": "자료 좀 빨리 보내줘. 급해.", "out": "자료를 가급적 빠르게 보내 주시기 바랍니다. 급한 사안이라 부탁드립니다."}
+{"task": "formal", "text": "이번 주 금요일에 동아리 모임 있어. 꼭 와.", "out": "이번 주 금요일에 동아리 모임이 있습니다. 반드시 참석해 주시기 바랍니다."}
+{"task": "formal", "text": "죄송한데 마감일 좀 늦춰줄 수 있을까요?", "out": "죄송하지만 마감일을 연장해 주실 수 있는지 문의드립니다."}
+{"task": "formal", "text": "이 제품 써봤는데 진짜 괜찮더라. 추천함.", "out": "이 제품을 사용해 보았는데 매우 만족스러웠습니다. 추천드립니다."}
+{"task": "formal", "text": "오늘 수업 끝나고 교실 청소 하고 가라.", "out": "오늘 수업이 끝난 후 교실 청소를 마치고 귀가하시기 바랍니다."}
+{"task": "formal", "text": "회의록 아직 안 왔는데 언제 줄 거예요?", "out": "회의록을 아직 받지 못하였습니다. 언제 전달해 주실 수 있는지 알려 주시기 바랍니다."}
+{"task": "formal", "text": "저희 가게는 일요일에 쉬어요. 월요일에 오세요.", "out": "저희 매장은 일요일에 휴무입니다. 월요일에 방문해 주시기 바랍니다."}
+{"task": "formal", "text": "문제 풀다가 모르는 게 있는데 좀 알려주세요.", "out": "문제를 풀던 중 이해되지 않는 부분이 있어 설명을 부탁드립니다."}
+{"task": "formal", "text": "다음 주까지 보고서 써서 내세요.", "out": "다음 주까지 보고서를 작성하여 제출해 주시기 바랍니다."}
+{"task": "formal", "text": "행사 장소가 바뀌었어요. 체육관으로 오세요.", "out": "행사 장소가 변경되었습니다. 체육관으로 오시기 바랍니다."}
+{"task": "formal", "text": "어제 연락 못 드려서 미안해요. 휴대폰이 꺼졌었어요.", "out": "어제 연락을 드리지 못하여 죄송합니다. 휴대폰 전원이 꺼져 있었습니다."}
+{"task": "formal", "text": "비밀번호 까먹었는데 어떻게 바꿔요?", "out": "비밀번호를 분실하였는데 변경하는 방법을 알려 주시기 바랍니다."}
+{"task": "formal", "text": "택배가 아직 안 왔어요. 확인 좀 해주세요.", "out": "주문한 택배가 아직 도착하지 않았습니다. 확인을 부탁드립니다."}
+{"task": "formal", "text": "이번 주말에 집들이 하는데 올 수 있어?", "out": "이번 주말에 집들이를 하려고 합니다. 참석해 주실 수 있으신지요?"}
+{"task": "formal", "text": "환불해 주세요. 제품에 문제가 있어요.", "out": "제품에 문제가 있어 환불을 요청드립니다."}
+{"task": "formal", "text": "내일 시험 범위가 어디까지예요?", "out": "내일 시험의 범위가 어디까지인지 알려 주시기 바랍니다."}
+{"task": "formal", "text": "교실에서 뛰어다니면 안 돼요. 다칠 수 있어요.", "out": "교실에서는 뛰어다니지 마시기 바랍니다. 다칠 위험이 있습니다."}
+{"task": "formal", "text": "저는 이 프로젝트에 참여하고 싶어요. 기회를 주세요.", "out": "저는 이 프로젝트에 참여하고 싶습니다. 기회를 주시면 감사하겠습니다."}
+{"task": "formal", "text": "오늘 발표 준비 다 됐으니까 확인해 봐 주세요.", "out": "오늘 발표 준비를 모두 마쳤으니 확인해 주시기 바랍니다."}
+{"task": "formal", "text": "점심 같이 먹을래요? 근처에 맛집 알아요.", "out": "점심 식사를 함께하시겠습니까? 근처에 맛있는 식당을 알고 있습니다."}
+{"task": "formal", "text": "계약서 내용 좀 확인하고 사인해 주세요.", "out": "계약서의 내용을 확인하신 후 서명해 주시기 바랍니다."}
+{"task": "formal", "text": "다음 주에 휴가 쓰고 싶은데 괜찮을까요?", "out": "다음 주에 휴가를 사용하고자 하는데 가능한지 여쭙습니다."}
+{"task": "formal", "text": "이 일은 제가 맡을게요. 걱정 마세요.", "out": "이 업무는 제가 맡겠습니다. 염려하지 않으셔도 됩니다."}
+{"task": "formal", "text": "도서관에서는 조용히 하고 책은 제때 반납하세요.", "out": "도서관에서는 정숙을 유지하시고, 도서는 기한 내에 반납해 주시기 바랍니다."}
+{"task": "formal", "text": "회원가입하면 할인 쿠폰 줘요. 지금 가입해 보세요.", "out": "회원 가입을 하시면 할인 쿠폰을 드립니다. 지금 가입해 보시기 바랍니다."}
+{"task": "formal", "text": "죄송한데 제가 좀 늦을 것 같아요. 먼저 시작하세요.", "out": "죄송하지만 제가 조금 늦을 것 같습니다. 먼저 시작해 주시기 바랍니다."}
+{"task": "formal", "text": "제안서 잘 봤어요. 몇 가지만 고치면 될 것 같아요.", "out": "제안서를 잘 검토하였습니다. 몇 가지 사항만 수정하면 될 것으로 판단됩니다."}
+{"task": "formal", "text": "내일부터 급식실 이용 시간이 바뀝니다. 잘 확인하세요.", "out": "내일부터 급식실 이용 시간이 변경되오니 반드시 확인하시기 바랍니다."}
+{"task": "formal", "text": "문의하신 건은 확인해 보고 다시 연락할게요.", "out": "문의하신 건은 확인한 후 다시 연락드리겠습니다."}
+{"task": "formal", "text": "신청서에 이름이랑 연락처를 적어서 내세요.", "out": "신청서에 성명과 연락처를 기재하여 제출해 주시기 바랍니다."}
+{"task": "formal", "text": "Hey, can you send me the file by tomorrow?", "out": "Could you please send me the file by tomorrow?"}
+{"task": "formal", "text": "Sorry I'm late, my bus broke down.", "out": "I apologize for my late arrival. My bus experienced a breakdown."}
+{"task": "formal", "text": "We need to talk about the budget ASAP.", "out": "We need to discuss the budget at your earliest convenience."}
+{"task": "formal", "text": "Thanks for helping me out, it was really nice of you.", "out": "Thank you for your assistance. It was very kind of you."}
+{"task": "formal", "text": "I can't come to the meeting because I'm sick.", "out": "I regret to inform you that I am unable to attend the meeting because I am unwell."}
+{"task": "formal", "text": "Let me know if you wanna join us for dinner.", "out": "Please let me know if you would like to join us for dinner."}
+{"task": "formal", "text": "The boss said we gotta finish this by Friday.", "out": "Our supervisor has stated that we must complete this by Friday."}
+{"task": "formal", "text": "Can you check my homework and tell me what's wrong?", "out": "Would you kindly review my homework and inform me of any errors?"}
+{"task": "formal", "text": "I don't get this part of the contract. Can you explain?", "out": "I do not understand this section of the contract. Could you please explain it?"}
+{"task": "formal", "text": "Don't forget to bring your ID to the exam.", "out": "Please remember to bring your identification to the examination."}
+{"task": "formal", "text": "We're gonna start the class in five minutes, so sit down.", "out": "The class will begin in five minutes. Please be seated."}
+{"task": "formal", "text": "I want my money back, the item is broken.", "out": "I would like to request a refund, as the item is damaged."}
+{"task": "formal", "text": "오늘 점심은 학교 식당에서 먹지 말고 도시락 싸 오세요. 소풍 가는 날이에요.", "out": "오늘은 학교 식당을 이용하지 않으므로 도시락을 지참해 오시기 바랍니다. 소풍을 가는 날입니다."}
+{"task": "formal", "text": "이번 학부모 상담은 다음 달 5일부터 해요. 시간은 따로 알려드릴게요.", "out": "이번 학부모 상담은 다음 달 5일부터 진행됩니다. 구체적인 시간은 추후 별도로 안내해 드리겠습니다."}
+{"task": "formal", "text": "방금 보낸 메일 잘못 보낸 거니까 무시해 주세요. 미안해요.", "out": "방금 발송한 메일은 잘못 보낸 것이오니 무시해 주시기 바랍니다. 불편을 드려 죄송합니다."}
+{"task": "formal", "text": "회비는 이번 달 말까지 내야 하고, 안 내면 모임에 못 나와요.", "out": "회비는 이번 달 말까지 납부해야 하며, 미납 시 모임에 참석하실 수 없습니다."}
+{"task": "formal", "text": "제 생각에는 이 계획은 좀 무리인 것 같아요. 다시 생각해 봅시다.", "out": "제 의견으로는 이 계획은 다소 무리가 있는 것으로 보입니다. 재검토해 보시기를 제안드립니다."}
+{"task": "formal", "text": "기말고사가 끝나면 우리 반 파티를 할 거예요. 먹고 싶은 음식 적어서 내요.", "out": "기말고사가 끝나면 학급 파티를 진행할 예정입니다. 먹고 싶은 음식을 적어서 제출해 주시기 바랍니다."}
+{"task": "formal", "text": "우리 팀은 이번 분기에 목표를 달성했어요. 다들 고생 많았어요.", "out": "우리 팀은 이번 분기 목표를 달성하였습니다. 모든 분께서 수고해 주셨습니다."}
+{"task": "formal", "text": "사진 찍을 때 플래시 쓰지 마세요. 작품이 상해요.", "out": "사진 촬영 시 플래시를 사용하지 마시기 바랍니다. 작품이 손상될 수 있습니다."}
+{"task": "formal", "text": "저 이번 학기에 동아리 그만두고 싶어요. 공부에 집중해야 해서요.", "out": "저는 이번 학기에 동아리 활동을 그만두고자 합니다. 학업에 집중해야 하기 때문입니다."}
+{"task": "formal", "text": "Please come to my office tomorrow. We need to chat about your grades.", "out": "Please come to my office tomorrow. We need to discuss your grades."}
+{"task": "formal", "text": "Thanks a lot for the gift! I really love it.", "out": "Thank you very much for the gift. I truly appreciate it."}
