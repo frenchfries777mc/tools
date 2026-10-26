@@ -26,14 +26,10 @@ function data(max){ var e=LAB.cur, R=LAB.rows; if(!R.length) return ''; var rows
   var head=e.cols.map(function(c){ return c.k+(c.u?' ('+c.u+')':''); }).join(', ');
   return '\nRecorded data'+(R.length>rows.length?' (last '+rows.length+' of '+R.length+' rows)':'')+', columns: '+head+'\n'+rows.map(function(r){ return r.map(function(v,i){ return v==null?'-':LAB.H.fmt(v,e.cols[i].d); }).join(', '); }).join('\n')
     +(LAB.fit?'\nLeast-squares line on the graph: slope '+(+LAB.fit.m.toPrecision(4))+', intercept '+(+LAB.fit.b.toPrecision(4))+', R^2 '+LAB.fit.r2.toFixed(4):''); }
-function system(){ var lang=LANG[FFT.lang]||'English', sm=local();
-  return 'You are a friendly science and math tutor for middle and high school students who are using an interactive simulation lab. '
-    +'Use the numbers given to explain what is happening, and connect them to the key idea or formula. Write formulas in plain text such as T = 2π√(L/g), never LaTeX. '
-    +'Do not invent measurements that are not given. '+(sm?'Answer in at most 120 words. ':'Keep the answer short: about 150-250 words, short paragraphs or a short list. ')
-    +'Answer in '+lang+'.'; }
+function system(){ return FFP.labSys(LANG[FFT.lang]||'English',local()); }
 function prompt(q){ var e=LAB.cur, sm=local(), info='';
   try{ info=e.ai(); }catch(er){}
-  var p='Experiment: '+info+(sm?data(6):data(40))+'\n\nStudent: '+q;
+  var p=FFP.labPrompt(info,sm?data(6):data(40),q);
   if(sm&&p.length>1800) p=p.slice(0,1800);
   return p; }
 /* tiny safe markdown: paragraphs, bullet and numbered lists, **bold**, `code` */
@@ -76,9 +72,7 @@ function reasonOut(e,nokeyMsg){ var out=$('aiOut'); out.hidden=false;
 /* q: "진자 길이를 두 배로 해 줘" -> the AI answers {"set":{"len":3}}; the values go through LAB.applySet (clamped, same path as the sliders) */
 function runSet(q){
   stopped=false; setBusy(true); var out=$('aiOut'); out.hidden=false; out.innerHTML='<span class="wait"><span class="spin"></span></span>'; out.querySelector('.wait').appendChild(document.createTextNode(T('AI가 생각하는 중…')));
-  var sys='You move the sliders of a simulation. Reply with ONLY one JSON object {"set":{"<id>":<value>}} and nothing else. Use only the ids listed. '
-    +'A number must stay between min and max; for an option list use one of the listed values; a checkbox is true or false. Work out relative requests (double, half, +10%) from the value now. Change only what the student asks.';
-  return FFAI.ask({system:sys, prompt:'Experiment: '+T(LAB.cur.name)+'\nParameters:\n'+plist()+'\n\nStudent: '+q, json:true, maxTokens:300})
+  return FFAI.ask({system:FFP.labSetSys, prompt:FFP.labSetPrompt(T(LAB.cur.name),plist(),q), json:true, maxTokens:300})
     .then(function(t){ if(stopped) return; var o=parseObj(t), set=o&&(o.set&&typeof o.set==='object'&&!Array.isArray(o.set)?o.set:o), ch=set?LAB.applySet(set):null;
         if(!set){ out.textContent=T('AI의 답을 읽지 못했어요. 다른 말로 다시 써 보거나 슬라이더로 바꿔 주세요'); return; }
         if(!ch.length){ out.textContent=T('바꾼 값이 없어요. 이미 그 값이거나, AI가 맞는 항목을 찾지 못했어요'); return; }
@@ -104,10 +98,8 @@ function runFind(q){
   var out=$('aiOut'); out.hidden=false; if(!window.FFAI||!FFAI.ready()){ offline(q,T('AI 설정이 없어서 이름과 설명으로 찾았어요')); return; }
   var all=local()?rank(q).slice(0,12).map(function(x){ return x.e; }):LAB.list; if(!all.length){ offline(q,''); return; }
   stopped=false; setBusy(true); out.innerHTML='<span class="wait"><span class="spin"></span></span>'; out.querySelector('.wait').appendChild(document.createTextNode(T('AI가 생각하는 중…')));
-  var sys='You pick the one simulation that best matches what the student wants to see, from the list. Reply with ONLY JSON {"id":"<id from the list>","set":{}} and nothing else. '
-    +'The id must be copied exactly from the list. Leave "set" empty unless the student names a parameter value.';
   var lines=all.map(function(e){ return e.id+' | '+T(e.name)+' | '+T(e.desc).slice(0,local()?40:50); }).join('\n');
-  return FFAI.ask({system:sys, prompt:'Simulations (id | name | description):\n'+lines+'\n\nStudent: '+q, json:true, maxTokens:200})
+  return FFAI.ask({system:FFP.labFindSys, prompt:FFP.labFindPrompt(lines,q), json:true, maxTokens:200})
     .then(function(t){ if(stopped) return; var o=parseObj(t), e=o&&typeof o.id==='string'?LAB.list.filter(function(x){ return x.id===o.id; })[0]:null;
         if(!e){ offline(q,T('AI의 답을 읽지 못해서 이름과 설명으로 찾았어요')); return; }
         LAB.open(e.id); var ch=o.set&&typeof o.set==='object'&&!Array.isArray(o.set)?LAB.applySet(o.set):[]; drawCtx();
@@ -116,13 +108,9 @@ function runFind(q){
     .then(function(){ setBusy(false); });
 }
 /* ---------- report draft: four sections as [PURPOSE] [METHOD] [RESULT] [CONCLUSION] (plain markers read better than JSON for a small model) ---------- */
-function draftSystem(){ var lang=LANG[FFT.lang]||'English', sm=local();
-  return 'You help a middle or high school student write a one-page lab report about a simulation experiment, in '+lang+'. '
-    +'Write exactly four sections, each marker alone on its own line, in this order: [PURPOSE] [METHOD] [RESULT] [CONCLUSION]. '
-    +'Use only the numbers given (settings, readouts, recorded data, trend line). Do not invent measurements, dates or names. If nothing was recorded, say so in RESULT and use the live readouts. '
-    +'Plain text, no markdown, no LaTeX; write formulas like T = 2π√(L/g). '+(sm?'Each section at most 2 short sentences.':'Each section 2-4 sentences; CONCLUSION says what the numbers show and one possible source of error.'); }
+function draftSystem(){ return FFP.labDraftSys(LANG[FFT.lang]||'English',local()); }
 function draftPrompt(){ var e=LAB.cur, sm=local(), info=''; try{ info=e.ai(); }catch(er){}
-  var p='Experiment: '+T(e.name)+'. '+info+'\nSettings: '+ctxLine()+(sm?data(6):data(30))+'\n\nWrite the report draft.'; return sm&&p.length>1800?p.slice(0,1800):p; }
+  var p=FFP.labDraftPrompt(T(e.name),info,ctxLine(),sm?data(6):data(30)); return sm&&p.length>1800?p.slice(0,1800):p; }
 function parseDraft(t){ var out={}, re=/\[(PURPOSE|METHOD|RESULT|CONCLUSION)\]/gi, m, last=null;
   while((m=re.exec(t))){ if(last) out[last.k]=t.slice(last.at,m.index).trim(); last={k:m[1].toLowerCase(),at:re.lastIndex}; }
   if(last) out[last.k]=t.slice(last.at).trim(); return out; }

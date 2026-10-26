@@ -1,0 +1,56 @@
+{"task": "soft", "text": "야, 숙제 좀 똑바로 해. 이게 뭐냐.", "out": "숙제를 조금만 더 신경 써서 해 보면 좋겠어요. 이번엔 조금 아쉬운 부분이 있었어요."}
+{"task": "soft", "text": "왜 이렇게 늦었어? 계속 기다렸잖아.", "out": "오느라 고생 많았어요. 많이 기다려서 조금 걱정했어요. 무슨 일이 있었는지 말해 줄래요?"}
+{"task": "soft", "text": "이거 틀렸어. 다시 해.", "out": "이 부분이 조금 틀린 것 같아요. 한 번만 다시 해 볼까요?"}
+{"task": "soft", "text": "시끄러워. 조용히 해.", "out": "조금만 조용히 해 주면 고맙겠어요. 집중이 잘 안 돼서요."}
+{"task": "soft", "text": "내 물건 함부로 만지지 마.", "out": "내 물건은 만지기 전에 먼저 말해 주면 좋겠어요. 소중한 물건이라서요."}
+{"task": "soft", "text": "너 때문에 망쳤잖아.", "out": "이번 일이 잘 안 되어서 저도 많이 속상해요. 다음에는 같이 더 신경 써 봐요."}
+{"task": "soft", "text": "빨리 좀 와. 언제까지 기다리게 할 거야.", "out": "혹시 많이 바쁜가요? 가능하면 조금만 서둘러 와 주면 좋겠어요."}
+{"task": "soft", "text": "이 보고서 별로야. 처음부터 다시 써.", "out": "보고서를 잘 읽어 봤어요. 몇 군데만 보완하면 훨씬 좋아질 것 같아요. 같이 다듬어 볼까요?"}
+{"task": "soft", "text": "공지 안 봤어? 몇 번을 말해.", "out": "공지를 아직 못 봤나 봐요. 중요한 내용이니까 한 번만 더 확인해 주세요."}
+{"task": "soft", "text": "회비 아직도 안 냈네요. 빨리 내세요.", "out": "회비를 아직 못 낸 분은 시간 될 때 내 주시면 감사하겠어요. 도움이 필요하면 말씀해 주세요."}
+{"task": "soft", "text": "그 옷 너한테 안 어울려.", "out": "그 옷도 괜찮은데, 다른 색을 입어 보면 더 잘 어울릴 것 같아요."}
+{"task": "soft", "text": "숙제 안 해 오면 점수 깎을 거야.", "out": "숙제를 꼭 해 와 주면 좋겠어요. 숙제를 해 오지 않으면 점수에 영향이 있을 수 있어서 걱정돼요."}
+{"task": "soft", "text": "내일 시험이니까 오늘 일찍 자라.", "out": "내일 시험이니까 오늘은 일찍 푹 자면 좋겠어요. 잘 쉬어야 실력도 잘 나오니까요."}
+{"task": "soft", "text": "이 방 너무 지저분해. 치워.", "out": "방이 조금 어수선하네요. 같이 정리하면 금방 깨끗해질 거예요."}
+{"task": "soft", "text": "저 사람은 말이 너무 많아서 싫어.", "out": "저 친구는 이야기를 정말 좋아하는 것 같아요. 저는 조용한 시간이 좀 필요할 때가 있어요."}
+{"task": "soft", "text": "거짓말하지 마. 다 알아.", "out": "사실대로 이야기해 주면 좋겠어요. 솔직하게 말해 줘도 괜찮아요."}
+{"task": "soft", "text": "오늘 회의 취소됐어. 다음에 연락할게.", "out": "오늘 회의는 취소되었어요. 불편하게 해서 미안해요. 다음에 다시 연락할게요."}
+{"task": "soft", "text": "제출 기한이 지났어요. 이제 받을 수 없어요.", "out": "제출 기한이 지나서 조금 아쉽지만 이번에는 받기가 어려워요. 다음에는 꼭 기한 안에 내 주세요."}
+{"task": "soft", "text": "컴퓨터 쓰고 나면 꺼라. 매번 말해야 돼?", "out": "컴퓨터를 다 쓰고 나면 꺼 주면 정말 고마울 것 같아요. 전기도 아낄 수 있어요."}
+{"task": "soft", "text": "네 의견은 틀렸어. 내 말대로 해.", "out": "네 생각도 잘 들었어요. 그런데 이번에는 이런 방법이 더 좋을 것 같아요. 어떻게 생각해요?"}
+{"task": "soft", "text": "지각하지 마세요. 벌써 세 번째입니다.", "out": "요즘 자꾸 늦는 것 같아서 걱정이 돼요. 혹시 힘든 일이 있나요? 내일은 조금만 일찍 와 주세요."}
+{"task": "soft", "text": "이 음식 맛없어요.", "out": "이 음식은 제 입맛에는 조금 아쉬웠어요. 소금을 조금 더 넣으면 더 맛있을 것 같아요."}
+{"task": "soft", "text": "그만 좀 물어봐. 귀찮아.", "out": "질문이 많아서 제가 조금 힘들어요. 잠깐 쉬었다가 다시 이야기해도 될까요?"}
+{"task": "soft", "text": "자리에 앉아. 서 있지 말고.", "out": "편하게 자리에 앉아 주세요. 오래 서 있으면 힘들잖아요."}
+{"task": "soft", "text": "이 코드 엉망이야. 누가 짰어?", "out": "이 코드를 읽어 봤어요. 몇 군데 정리하면 훨씬 보기 좋아질 것 같아요. 같이 살펴볼까요?"}
+{"task": "soft", "text": "연락 좀 해라. 걱정했잖아.", "out": "연락이 없어서 많이 걱정했어요. 시간 될 때 한 번 연락해 주면 좋겠어요."}
+{"task": "soft", "text": "내 말 끝까지 들어.", "out": "제 이야기를 끝까지 들어 주면 고맙겠어요. 마저 얘기하고 싶어요."}
+{"task": "soft", "text": "쓰레기 아무 데나 버리지 마세요.", "out": "쓰레기는 쓰레기통에 버려 주시면 감사하겠어요. 우리 모두 깨끗하게 지내요."}
+{"task": "soft", "text": "네가 잘못한 거 맞잖아. 사과해.", "out": "이번 일은 네 실수가 조금 있었던 것 같아요. 서로 마음이 풀리도록 사과해 주면 좋겠어요."}
+{"task": "soft", "text": "발표 너무 길어. 줄여.", "out": "발표 내용이 좋아요. 시간에 맞추려면 조금만 줄이면 좋을 것 같아요."}
+{"task": "soft", "text": "돈 빌려 간 거 언제 갚을 거야?", "out": "빌려 간 돈 말인데, 혹시 언제쯤 갚을 수 있을지 알려 줄래요? 사정이 있으면 편하게 말해 줘요."}
+{"task": "soft", "text": "이 문제 모르면 어떡해. 수업 시간에 뭐 했어.", "out": "이 문제가 어려웠나 봐요. 괜찮아요, 같이 천천히 다시 풀어 봐요."}
+{"task": "soft", "text": "Don't touch my stuff.", "out": "Could you please ask me before you touch my things? They mean a lot to me."}
+{"task": "soft", "text": "You're late again. This is unacceptable.", "out": "I noticed you were late again. Is everything okay? I would really appreciate it if we could try to be on time."}
+{"task": "soft", "text": "Your report is bad. Redo it.", "out": "Thanks for sending your report. I think a few parts could be a little stronger. Could we work on them together?"}
+{"task": "soft", "text": "Be quiet, I'm trying to study.", "out": "Would you mind keeping it down a little? I'm trying to study."}
+{"task": "soft", "text": "Pay me back by Friday.", "out": "When you have a chance, could you pay me back by Friday? Thanks so much."}
+{"task": "soft", "text": "I disagree with your idea.", "out": "I see your point, but I have a slightly different view. Could we talk about it?"}
+{"task": "soft", "text": "Stop talking and listen.", "out": "Could we pause the chat for a moment and listen? I'd love for everyone to hear this."}
+{"task": "soft", "text": "Clean up your room right now.", "out": "Your room needs a little tidying. Could you clean it up soon? I'm happy to help."}
+{"task": "soft", "text": "This food is terrible.", "out": "This dish wasn't quite to my taste, but thank you for making it. Maybe a bit more seasoning would help."}
+{"task": "soft", "text": "Send me the file now.", "out": "Whenever you get a moment, could you send me the file? Thank you so much."}
+{"task": "soft", "text": "Wow, you really messed up the presentation.", "out": "The presentation had a few bumps, but I know you worked hard. Let's look at how to make it smoother next time."}
+{"task": "soft", "text": "오늘 저녁 약속 취소할게. 못 가.", "out": "오늘 저녁 약속을 취소하게 되어 정말 미안해요. 사정이 생겨서 못 갈 것 같아요."}
+{"task": "soft", "text": "신청 마감은 내일이니 그전에 꼭 내세요.", "out": "신청 마감이 내일이에요. 그 전에 꼭 내 주시면 좋겠어요. 도움이 필요하면 언제든 말씀해 주세요."}
+{"task": "soft", "text": "이 책은 재미없고 지루했어요.", "out": "이 책은 저한테는 조금 느리게 느껴졌어요. 그래도 좋아하는 분들이 있을 것 같아요."}
+{"task": "soft", "text": "네 그림은 이상해.", "out": "네 그림은 독특해서 눈길이 가요. 색을 조금 더 써 보면 더 멋질 것 같아요."}
+{"task": "soft", "text": "방해하지 마. 지금 바빠.", "out": "지금은 조금 바빠서 얘기하기 어려워요. 일이 끝나면 꼭 이야기해요."}
+{"task": "soft", "text": "제발 한 번만 말해. 같은 소리를 몇 번 하게 해.", "out": "괜찮다면 한 번만 더 말씀해 주시겠어요? 제가 놓친 부분이 있는 것 같아요."}
+{"task": "soft", "text": "밥 먹었으면 설거지는 해야지.", "out": "밥을 다 먹었으면 설거지는 같이 해 주면 좋겠어요. 함께하면 더 빨리 끝나요."}
+{"task": "soft", "text": "이 제품은 고장이 잘 나요. 사지 마세요.", "out": "이 제품은 제가 쓰는 동안 고장이 몇 번 나서 아쉬웠어요. 구매하실 때 참고해 주세요."}
+{"task": "soft", "text": "그 얘기는 이미 들었어. 그만해.", "out": "그 이야기는 제가 이미 들었던 것 같아요. 다른 이야기도 들려주면 좋겠어요."}
+{"task": "soft", "text": "왜 아직도 안 했어? 빨리 해.", "out": "아직 못 했나 봐요. 힘든 일이 있었어요? 가능하면 조금만 서둘러 주면 좋겠어요."}
+{"task": "soft", "text": "네 말은 이해가 안 돼. 다시 설명해.", "out": "제가 이해를 잘 못한 것 같아요. 한 번만 더 설명해 줄 수 있을까요?"}
+{"task": "soft", "text": "앞으로 이런 실수 하지 마.", "out": "이번 실수는 괜찮아요. 다음에는 조금만 더 신경 써 주면 좋겠어요."}
+{"task": "soft", "text": "네 발표는 재미없었어.", "out": "발표 준비하느라 고생 많았어요. 다음에는 사례를 좀 더 넣으면 훨씬 재미있을 것 같아요."}

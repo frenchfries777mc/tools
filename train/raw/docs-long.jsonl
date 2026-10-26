@@ -1,0 +1,56 @@
+{"task": "long", "text": "오늘 도서관에서 책을 빌렸다. 재미있어 보였다.", "out": "오늘 도서관에 가서 책을 한 권 빌렸다. 책 표지와 제목을 살펴보니 내용이 재미있어 보였다. 집에 가서 얼른 읽어 보고 싶다."}
+{"task": "long", "text": "회의는 내일 오전 10시입니다. 자료를 준비해 오세요.", "out": "회의는 내일 오전 10시에 시작됩니다. 참석하시는 분들은 회의에서 사용할 자료를 미리 준비해 오시기 바랍니다. 자료가 있으면 회의를 더 원활하게 진행할 수 있습니다."}
+{"task": "long", "text": "김치는 한국의 대표 음식이다. 건강에도 좋다.", "out": "김치는 한국을 대표하는 음식으로, 오랜 세월 동안 많은 사람들이 즐겨 먹어 왔다. 또한 건강에도 도움이 되는 음식으로 알려져 있다."}
+{"task": "long", "text": "이 가방은 가볍고 튼튼하다. 가격도 괜찮다.", "out": "이 가방은 무게가 가벼워서 들고 다니기에 부담이 없고, 튼튼하게 만들어져 오래 사용할 수 있다. 가격도 적당한 편이라서 구매하기에 괜찮은 제품이다."}
+{"task": "long", "text": "저는 이번 프로젝트에서 자료 조사를 맡았습니다.", "out": "저는 이번 프로젝트에서 자료 조사를 맡았습니다. 필요한 정보를 찾아서 정리하는 역할을 하게 되었고, 팀이 좋은 결과를 낼 수 있도록 도우려고 합니다."}
+{"task": "long", "text": "비가 와서 소풍이 취소되었다.", "out": "비가 내리는 바람에 예정되어 있던 소풍이 취소되었다. 소풍을 기대하고 있었던 만큼 아쉬운 마음이 들었다."}
+{"task": "long", "text": "지구는 태양 주위를 돈다. 이를 공전이라고 한다.", "out": "지구는 태양을 중심으로 그 주위를 일정한 길을 따라 돈다. 이처럼 지구가 태양 주위를 도는 움직임을 공전이라고 한다."}
+{"task": "long", "text": "동아리 신입 부원을 모집합니다. 관심 있는 분은 신청해 주세요.", "out": "우리 동아리에서 함께 활동할 신입 부원을 모집합니다. 동아리 활동에 관심이 있는 분이라면 누구든지 신청해 주시기 바랍니다. 많은 관심과 참여를 기다리겠습니다."}
+{"task": "long", "text": "미안해. 내가 잘못했어.", "out": "정말 미안해. 내가 잘못했다는 것을 알고 있어. 내 행동 때문에 마음이 상했다면 진심으로 사과할게."}
+{"task": "long", "text": "고양이는 잠을 많이 잔다.", "out": "고양이는 하루 중 많은 시간을 잠을 자면서 보낸다. 우리가 보기에는 하루 종일 졸고 있는 것처럼 느껴질 정도이다."}
+{"task": "long", "text": "오늘은 날씨가 좋아서 공원에 갔다.", "out": "오늘은 날씨가 맑고 좋아서 기분 좋게 공원에 갔다. 공원에서 바람을 쐬며 산책을 하니 마음이 편안해졌다."}
+{"task": "long", "text": "숙제를 끝내고 나서 게임을 했다.", "out": "오늘 해야 할 숙제를 먼저 모두 끝냈다. 그러고 나서 쉬는 시간에 게임을 하며 즐거운 시간을 보냈다."}
+{"task": "long", "text": "이 식당은 음식이 맛있다. 직원도 친절하다.", "out": "이 식당은 나오는 음식마다 맛이 좋아서 만족스럽다. 직원들도 손님을 대하는 태도가 친절해서 편안하게 식사할 수 있다."}
+{"task": "long", "text": "물은 100도에서 끓는다.", "out": "물은 온도가 100도에 이르면 끓기 시작한다. 이때 물은 액체에서 기체인 수증기로 변하게 된다."}
+{"task": "long", "text": "내일 시험이 있어서 열심히 공부해야 한다.", "out": "내일 시험이 있기 때문에 오늘은 열심히 공부해야 한다. 시험 범위를 다시 한번 살펴보고 헷갈리는 부분을 복습할 생각이다."}
+{"task": "long", "text": "우리 가족은 주말마다 산에 간다.", "out": "우리 가족은 주말이 되면 함께 산에 가는 것이 습관이 되었다. 가족 모두가 같이 걸으며 시간을 보내는 것이 즐겁다."}
+{"task": "long", "text": "발표 자료를 이메일로 보내 주세요.", "out": "발표에 사용할 자료를 이메일로 보내 주시기 바랍니다. 자료를 미리 받아 두면 발표를 준비하는 데 도움이 되겠습니다."}
+{"task": "long", "text": "오늘 급식에 내가 좋아하는 불고기가 나왔다.", "out": "오늘 급식 메뉴 중에 내가 좋아하는 불고기가 나왔다. 불고기를 보자마자 기분이 좋아져서 맛있게 먹었다."}
+{"task": "long", "text": "세종대왕은 한글을 만들었다.", "out": "세종대왕은 조선의 왕으로, 한글을 만든 것으로 널리 알려져 있다. 한글은 지금도 우리가 사용하는 글자이다."}
+{"task": "long", "text": "도서관에서는 조용히 해야 한다.", "out": "도서관에서는 다른 사람들이 책을 읽고 공부하고 있기 때문에 조용히 해야 한다. 큰 소리로 말하거나 떠들지 않도록 서로 배려해야 한다."}
+{"task": "long", "text": "수영장에 가려면 수영복과 수건이 필요하다.", "out": "수영장에 가려면 준비물이 필요하다. 먼저 입고 수영할 수영복이 있어야 하고, 수영을 마친 뒤 몸을 닦을 수건도 챙겨야 한다."}
+{"task": "long", "text": "이번 주 금요일은 휴일입니다.", "out": "이번 주 금요일은 휴일입니다. 그날은 정상적으로 운영하지 않으므로 이 점 참고하여 일정을 계획해 주시기 바랍니다."}
+{"task": "long", "text": "컴퓨터가 느려서 일하기 힘들다.", "out": "컴퓨터가 느리게 작동해서 일을 하는 데 어려움이 많다. 작업을 할 때마다 시간이 오래 걸려서 답답한 마음이 든다."}
+{"task": "long", "text": "어제 친구와 영화를 봤다.", "out": "어제 친구와 함께 영화를 보러 갔다. 같이 영화를 보며 시간을 보내서 즐거웠다."}
+{"task": "long", "text": "달은 지구 주위를 돈다.", "out": "달은 지구를 중심으로 그 주위를 일정한 길을 따라 돈다. 달은 지구의 위성이라고 불린다."}
+{"task": "long", "text": "선생님께서 칭찬해 주셔서 기뻤다.", "out": "선생님께서 나를 칭찬해 주셨다. 칭찬을 들으니 기분이 좋아졌고, 앞으로도 더 열심히 해야겠다는 생각이 들었다."}
+{"task": "long", "text": "할인 행사는 이번 주말까지입니다.", "out": "현재 진행 중인 할인 행사는 이번 주말까지만 운영됩니다. 행사를 이용하고 싶으신 분은 기간이 끝나기 전에 방문해 주시기 바랍니다."}
+{"task": "long", "text": "저는 매일 아침 운동을 합니다.", "out": "저는 건강을 위해 매일 아침 운동을 합니다. 하루를 시작하기 전에 몸을 움직이면 기분도 상쾌해집니다."}
+{"task": "long", "text": "It rained all day yesterday.", "out": "It rained all day yesterday. The sky stayed gray from morning until night, so we had to stay inside."}
+{"task": "long", "text": "Please send me the report.", "out": "Please send me the report when you have a chance. I would like to read it carefully and review its contents."}
+{"task": "long", "text": "The movie was really good.", "out": "The movie was really good. I enjoyed the story from beginning to end, and I would be happy to watch it again."}
+{"task": "long", "text": "I like to read books before bed.", "out": "I like to read books before going to bed. Reading helps me relax at the end of the day and get ready to sleep."}
+{"task": "long", "text": "The store opens at nine.", "out": "The store opens at nine in the morning. Customers who want to shop should plan to arrive at that time or later."}
+{"task": "long", "text": "Our team won the game.", "out": "Our team won the game. Everyone was happy about the result, and we celebrated the victory together."}
+{"task": "long", "text": "The soup is hot.", "out": "The soup is very hot right now. Please be careful and let it cool a little before you eat it."}
+{"task": "long", "text": "He is learning to play the piano.", "out": "He is learning to play the piano. He is taking his first steps with the instrument and is working to get better."}
+{"task": "long", "text": "Thank you for your help.", "out": "Thank you very much for your help. I really appreciate the time and effort you gave to support me."}
+{"task": "long", "text": "The library closes early on Fridays.", "out": "The library closes earlier than usual on Fridays. Please plan your visit ahead of time so you can finish what you need before it closes."}
+{"task": "long", "text": "우리 반 친구들은 모두 사이가 좋다. 서로 잘 도와준다.", "out": "우리 반 친구들은 모두 서로 사이가 좋은 편이다. 어려운 일이 생기면 서로 먼저 나서서 잘 도와준다. 그래서 교실 분위기도 따뜻하다."}
+{"task": "long", "text": "이 앱은 무료이지만 광고가 나온다.", "out": "이 앱은 돈을 내지 않고 무료로 사용할 수 있다. 하지만 사용하는 중간중간 광고가 나오기 때문에 조금 불편할 수도 있다."}
+{"task": "long", "text": "오늘 아침에는 빵과 우유를 먹었다. 맛있었다.", "out": "오늘 아침 식사로는 빵과 우유를 먹었다. 간단한 식사였지만 모두 맛있어서 기분 좋게 하루를 시작할 수 있었다."}
+{"task": "long", "text": "기차는 오후 두 시에 출발합니다. 늦지 마세요.", "out": "기차는 오후 두 시 정각에 출발합니다. 출발 시간에 늦으면 탑승하지 못할 수 있으니 시간에 맞춰 미리 도착해 주시기 바랍니다."}
+{"task": "long", "text": "나는 강아지를 키우고 싶다.", "out": "나는 강아지를 키우고 싶다는 생각을 자주 한다. 강아지와 함께 지내면 즐거울 것 같아서 마음이 설렌다."}
+{"task": "long", "text": "시험 결과는 다음 주에 나옵니다.", "out": "시험 결과는 다음 주에 발표될 예정입니다. 결과가 나오면 확인할 수 있도록 안내해 드리겠습니다."}
+{"task": "long", "text": "사과는 비타민이 많은 과일이다.", "out": "사과는 비타민이 풍부하게 들어 있는 과일이다. 그래서 건강을 위해 먹으면 좋은 과일로 알려져 있다."}
+{"task": "long", "text": "회의실 예약은 미리 해야 합니다.", "out": "회의실을 사용하려면 사용하기 전에 미리 예약을 해야 합니다. 미리 예약해 두면 다른 사람과 겹치지 않고 원하는 시간에 사용할 수 있습니다."}
+{"task": "long", "text": "오늘은 엄마 생일이다. 선물을 준비했다.", "out": "오늘은 엄마의 생일이다. 엄마가 기뻐하시도록 미리 선물을 준비해 두었다. 선물을 드릴 생각을 하니 마음이 두근거린다."}
+{"task": "long", "text": "이 책은 청소년에게 추천한다.", "out": "이 책은 청소년들에게 추천하고 싶은 책이다. 청소년 독자들이 읽기에 알맞다고 생각하기 때문이다."}
+{"task": "long", "text": "겨울에는 따뜻한 옷을 입어야 한다.", "out": "겨울에는 날씨가 춥기 때문에 따뜻한 옷을 입어야 한다. 몸을 따뜻하게 하면 감기에 걸리는 것도 막을 수 있다."}
+{"task": "long", "text": "오늘 수업은 온라인으로 진행됩니다.", "out": "오늘 수업은 학교에 오지 않고 온라인으로 진행됩니다. 수업에 참여하는 학생들은 시간에 맞춰 접속해 주시기 바랍니다."}
+{"task": "long", "text": "나는 그림 그리기를 좋아한다.", "out": "나는 그림 그리기를 매우 좋아한다. 그림을 그리고 있으면 시간이 가는 줄 모를 정도로 즐겁다."}
+{"task": "long", "text": "이 노래는 가사가 아름답다.", "out": "이 노래는 가사가 아름답게 쓰여 있어서 마음에 와닿는다. 가사를 천천히 따라 부르다 보면 기분이 좋아진다."}
+{"task": "long", "text": "We will have lunch together.", "out": "We will have lunch together. It will be a good chance for all of us to sit down, eat, and enjoy each other's company."}
+{"task": "long", "text": "The test is on Monday.", "out": "The test is on Monday. Please make sure you are ready and review what you have learned before that day."}
+{"task": "long", "text": "I love my grandmother.", "out": "I love my grandmother very much. She is an important person in my life, and I always feel happy when I spend time with her."}
+{"task": "long", "text": "The park is near my house.", "out": "The park is near my house. Because it is so close, it is easy for me to go there whenever I want."}
