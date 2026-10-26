@@ -8,3 +8,4 @@ patchnotes/ai.json | premus 1.6 반영 항목 | ai v50 | 2026-10-26
 patchnotes/site.json | 첫 화면 글자 없앰 항목 | site v42 | 2026-10-26
 patchnotes/site.json | 비스듬한 글자 되살림 항목 | site v43 | 2026-10-26
 docs/index.html·app.js (리본 탭, AI 탭 새 작업 12개, 글 통계 창, 보기 탭) | 새 문구 전부 | docs v4 | 2026-10-26
+docs/index.html·app.js (글자 효과, 문단 꾸미기, 목록 모양, 스타일 편집, 책갈피, 표·그림 도구, 문서 비교 창) | 새 문구 전부 | docs v5 | 2026-10-26
