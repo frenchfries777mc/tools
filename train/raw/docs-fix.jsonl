@@ -1,0 +1,60 @@
+{"task": "fix", "text": "오늘 학교에서 친구랑 같이 도서관에 갓는데 책을 너무 만이 빌려서 가방이 무거웠다.", "out": "오늘 학교에서 친구랑 같이 도서관에 갔는데 책을 너무 많이 빌려서 가방이 무거웠다."}
+{"task": "fix", "text": "내일 소풍인데 비가 오면 어떻해요? 선생님께 여쭤보고 십습니다.", "out": "내일 소풍인데 비가 오면 어떡해요? 선생님께 여쭤보고 싶습니다."}
+{"task": "fix", "text": "이 문제는 아무리 생각해도 않 풀려서 너무 속상해요.", "out": "이 문제는 아무리 생각해도 안 풀려서 너무 속상해요."}
+{"task": "fix", "text": "숙제를 다 안했는데 선생님께서 내일까지 내라고 하셧다. 오늘 밤에 밤새서라도 해야 될것 같다.", "out": "숙제를 다 안 했는데 선생님께서 내일까지 내라고 하셨다. 오늘 밤에 밤새서라도 해야 될 것 같다."}
+{"task": "fix", "text": "회의 시간이 3시에서 4시로 변경 됬습니다. 참석 부탁드립니다.", "out": "회의 시간이 3시에서 4시로 변경됐습니다. 참석 부탁드립니다."}
+{"task": "fix", "text": "저는 어제 영화를 봣는데 정말 재미있었어요. 특히 마지막 장면이 감동적이엿어요.", "out": "저는 어제 영화를 봤는데 정말 재미있었어요. 특히 마지막 장면이 감동적이었어요."}
+{"task": "fix", "text": "김치찌개를 끓일때는 먼저 김치를 볶아야 맛이 더 깊어 집니다.", "out": "김치찌개를 끓일 때는 먼저 김치를 볶아야 맛이 더 깊어집니다."}
+{"task": "fix", "text": "선생님, 죄송하지만 오늘 몸이 않좋아서 학교에 못 갈것 같습니다.", "out": "선생님, 죄송하지만 오늘 몸이 안 좋아서 학교에 못 갈 것 같습니다."}
+{"task": "fix", "text": "지구는 태양 주위를 일년에 한바퀴 돕니다. 이것을 공전이라고 합니다.", "out": "지구는 태양 주위를 일 년에 한 바퀴 돕니다. 이것을 공전이라고 합니다."}
+{"task": "fix", "text": "이 제품은 가격에 비해 성능이 굉장히 좋아서 만족 합니다. 다만 베터리가 조금 빨리 닳는게 아쉽네요.", "out": "이 제품은 가격에 비해 성능이 굉장히 좋아서 만족합니다. 다만 배터리가 조금 빨리 닳는 게 아쉽네요."}
+{"task": "fix", "text": "우리 동아리는 매주 금요일 방과후에 모여서 같이 코딩을 공부합니다. 관심 있는 친구는 누구나 올수 있어요.", "out": "우리 동아리는 매주 금요일 방과 후에 모여서 같이 코딩을 공부합니다. 관심 있는 친구는 누구나 올 수 있어요."}
+{"task": "fix", "text": "할머니 댁에 가서 맛있는 밥을 먹구 왔다. 할머니께서는 항상 나에게 용돈을 주신다.", "out": "할머니 댁에 가서 맛있는 밥을 먹고 왔다. 할머니께서는 항상 나에게 용돈을 주신다."}
+{"task": "fix", "text": "어제 약속을 지키지 못해서 정말 미안해. 내가 갑자기 일이 생겨서 연락도 못했어. 담에 꼭 만회할께.", "out": "어제 약속을 지키지 못해서 정말 미안해. 내가 갑자기 일이 생겨서 연락도 못 했어. 다음에 꼭 만회할게."}
+{"task": "fix", "text": "세종대왕은 1443년에 훈민정음을 만드셧습니다. 백성들이 쉽게 글을 읽고 쓸수 있도록 하기 위해서 입니다.", "out": "세종대왕은 1443년에 훈민정음을 만드셨습니다. 백성들이 쉽게 글을 읽고 쓸 수 있도록 하기 위해서입니다."}
+{"task": "fix", "text": "물이 100도에서 끌으면 수증기로 변합니다. 이런 현상을 기화라고 부릅니다.", "out": "물이 100도에서 끓으면 수증기로 변합니다. 이런 현상을 기화라고 부릅니다."}
+{"task": "fix", "text": "이번 주말에 제주도로 가족여행을 가기로 했다. 비행기표는 이미 예매 했고 숙소만 정하면 된다.", "out": "이번 주말에 제주도로 가족 여행을 가기로 했다. 비행기표는 이미 예매했고 숙소만 정하면 된다."}
+{"task": "fix", "text": "부장님, 보고서 초안을 보내드립니다. 검토후 수정사항이 있으시면 말씀해 주십시요.", "out": "부장님, 보고서 초안을 보내드립니다. 검토 후 수정 사항이 있으시면 말씀해 주십시오."}
+{"task": "fix", "text": "나는 커서 과학자가 되고십다. 그래서 매일 과학책을 일고 있다.", "out": "나는 커서 과학자가 되고 싶다. 그래서 매일 과학책을 읽고 있다."}
+{"task": "fix", "text": "오늘 체육시간에 피구를 했는데 내가 마지막까지 살아 남았다. 정말 기분이 좋았다.", "out": "오늘 체육 시간에 피구를 했는데 내가 마지막까지 살아남았다. 정말 기분이 좋았다."}
+{"task": "fix", "text": "이 앱은 사용법이 간단해서 누구나 쉽게 쓸수있습니다. 하지만 광고가 너무 많아서 불편해요.", "out": "이 앱은 사용법이 간단해서 누구나 쉽게 쓸 수 있습니다. 하지만 광고가 너무 많아서 불편해요."}
+{"task": "fix", "text": "제가 말한게 오해를 불러 일으킨것 같아 죄송합니다. 그럴 의도는 아니였어요.", "out": "제가 말한 게 오해를 불러일으킨 것 같아 죄송합니다. 그럴 의도는 아니었어요."}
+{"task": "fix", "text": "라면을 끓이려면 물 500ml를 먼저 끓이고 면과 스프를 넣은 뒤 4분 정도 기다리면 됀다.", "out": "라면을 끓이려면 물 500ml를 먼저 끓이고 면과 스프를 넣은 뒤 4분 정도 기다리면 된다."}
+{"task": "fix", "text": "다음 주 월요일부터는 아침 8시 30분까지 등교해야 합니다. 지각하면 않 되니 주의 하세요.", "out": "다음 주 월요일부터는 아침 8시 30분까지 등교해야 합니다. 지각하면 안 되니 주의하세요."}
+{"task": "fix", "text": "광합성은 식물이 빛을 받아 영양분을 만드는 과정입니다. 이때 산소가 만들어저서 공기 중으로 나옵니다.", "out": "광합성은 식물이 빛을 받아 영양분을 만드는 과정입니다. 이때 산소가 만들어져서 공기 중으로 나옵니다."}
+{"task": "fix", "text": "엄마가 시장에서 사과랑 배를 사오셧는데 사과가 엄청 달았다.", "out": "엄마가 시장에서 사과랑 배를 사 오셨는데 사과가 엄청 달았다."}
+{"task": "fix", "text": "이번 시험은 생각보다 어려워서 시간이 모자랐다. 다음엔 더 열심히 준비해야 겠다.", "out": "이번 시험은 생각보다 어려워서 시간이 모자랐다. 다음엔 더 열심히 준비해야겠다."}
+{"task": "fix", "text": "회의록 작성자는 회의가 끝난후 30분 이내에 내용을 공유해야합니다.", "out": "회의록 작성자는 회의가 끝난 후 30분 이내에 내용을 공유해야 합니다."}
+{"task": "fix", "text": "우리 반 급훈은 '서로 배려하며 함께 성장하자' 입니다. 모두가 지키려고 노력하고 있어요.", "out": "우리 반 급훈은 '서로 배려하며 함께 성장하자'입니다. 모두가 지키려고 노력하고 있어요."}
+{"task": "fix", "text": "어떻게 해야 할지 몰라서 고민 중인데 도움을 줄수 있을까요?", "out": "어떻게 해야 할지 몰라서 고민 중인데 도움을 줄 수 있을까요?"}
+{"task": "fix", "text": "컴퓨터가 갑자기 꺼져서 작업하던 파일이 다 날라갔어요. 어떡게 복구할 수 있나요?", "out": "컴퓨터가 갑자기 꺼져서 작업하던 파일이 다 날아갔어요. 어떻게 복구할 수 있나요?"}
+{"task": "fix", "text": "설거지를 하다가 접시를 깨먹었는데 엄마한테 혼날까바 걱정이다.", "out": "설거지를 하다가 접시를 깨 먹었는데 엄마한테 혼날까 봐 걱정이다."}
+{"task": "fix", "text": "이 책은 주인공이 어려움을 이겨내는 이야기라서 읽고나면 힘이 난다.", "out": "이 책은 주인공이 어려움을 이겨 내는 이야기라서 읽고 나면 힘이 난다."}
+{"task": "fix", "text": "독도는 우리나라 동쪽 끝에 있는 섬입니다. 아름다운 자연을 가지고있어 보호해야 합니다.", "out": "독도는 우리나라 동쪽 끝에 있는 섬입니다. 아름다운 자연을 가지고 있어 보호해야 합니다."}
+{"task": "fix", "text": "요즘 날씨가 너무 더워서 밖에 나가기가 싫다. 에어컨 앞에서 수박이나 먹고싶다.", "out": "요즘 날씨가 너무 더워서 밖에 나가기가 싫다. 에어컨 앞에서 수박이나 먹고 싶다."}
+{"task": "fix", "text": "김 대리님, 어제 요청하신 자료는 오늘 오후까지 보내드리겠읍니다. 늦어서 죄송합니다.", "out": "김 대리님, 어제 요청하신 자료는 오늘 오후까지 보내드리겠습니다. 늦어서 죄송합니다."}
+{"task": "fix", "text": "내 동생은 숙제를 하다말고 자꾸 게임만 한다. 정말 답답하다.", "out": "내 동생은 숙제를 하다 말고 자꾸 게임만 한다. 정말 답답하다."}
+{"task": "fix", "text": "나는 어제 친구 생일 파티에 가서 케이크를 먹고 선물도 줫다.", "out": "나는 어제 친구 생일 파티에 가서 케이크를 먹고 선물도 줬다."}
+{"task": "fix", "text": "발표 준비를 하느라 며칠 동안 잠을 못잤더니 너무 피곤하다. 그래도 잘 해냇으면 좋겠다.", "out": "발표 준비를 하느라 며칠 동안 잠을 못 잤더니 너무 피곤하다. 그래도 잘 해냈으면 좋겠다."}
+{"task": "fix", "text": "프로젝트 마감일이 얼마 안 남았는데 아직 절반도 못끝냈어요. 팀원들과 상의해야겠어요.", "out": "프로젝트 마감일이 얼마 안 남았는데 아직 절반도 못 끝냈어요. 팀원들과 상의해야겠어요."}
+{"task": "fix", "text": "이 식당은 음식이 맛있고 직원분들도 친절해서 또 방문하고 싶습니다. 가격도 합리적이였어요.", "out": "이 식당은 음식이 맛있고 직원분들도 친절해서 또 방문하고 싶습니다. 가격도 합리적이었어요."}
+{"task": "fix", "text": "수학 시간에 분수의 덧셈을 배웠다. 분모가 다르면 먼저 통분을 해야한다.", "out": "수학 시간에 분수의 덧셈을 배웠다. 분모가 다르면 먼저 통분을 해야 한다."}
+{"task": "fix", "text": "이번 방학에는 책을 열권 읽고 매일 운동하기로 계획을 세웟다.", "out": "이번 방학에는 책을 열 권 읽고 매일 운동하기로 계획을 세웠다."}
+{"task": "fix", "text": "죄송합니다. 제가 시간을 잘못 알고 있어서 모임에 늦게 되었습니다. 다음부터는 꼭 확인하겠읍니다.", "out": "죄송합니다. 제가 시간을 잘못 알고 있어서 모임에 늦게 되었습니다. 다음부터는 꼭 확인하겠습니다."}
+{"task": "fix", "text": "조선시대에는 신분제도가 있어서 사람들이 양반, 중인, 상민, 천민으로 나뉘엇다.", "out": "조선시대에는 신분 제도가 있어서 사람들이 양반, 중인, 상민, 천민으로 나뉘었다."}
+{"task": "fix", "text": "강아지가 산책을 너무 좋아해서 매일 저녁마다 한시간씩 걷는다. 덕분에 나도 건강해지는것 같다.", "out": "강아지가 산책을 너무 좋아해서 매일 저녁마다 한 시간씩 걷는다. 덕분에 나도 건강해지는 것 같다."}
+{"task": "fix", "text": "I recieve your email yesterday, but I couldnt reply untill now.", "out": "I received your email yesterday, but I couldn't reply until now."}
+{"task": "fix", "text": "Their going to the libary tomorow to study for the exam.", "out": "They're going to the library tomorrow to study for the exam."}
+{"task": "fix", "text": "Please send me the report by friday, thanks you very much.", "out": "Please send me the report by Friday, thank you very much."}
+{"task": "fix", "text": "The meeting has been rescheduled to 3 pm, so please adjust you're calendar acordingly.", "out": "The meeting has been rescheduled to 3 pm, so please adjust your calendar accordingly."}
+{"task": "fix", "text": "I definately want to joing the science club this semster.", "out": "I definitely want to join the science club this semester."}
+{"task": "fix", "text": "The weather was beatiful, so we decided to have a picnic in the park.", "out": "The weather was beautiful, so we decided to have a picnic in the park."}
+{"task": "fix", "text": "She dont like spicy food, but he eat it every day.", "out": "She doesn't like spicy food, but he eats it every day."}
+{"task": "fix", "text": "Water boils at 100 degrees celcius at sea level. Its a basic fact of science.", "out": "Water boils at 100 degrees Celsius at sea level. It's a basic fact of science."}
+{"task": "fix", "text": "I'm sorry for being late, their was alot of traffic this morning.", "out": "I'm sorry for being late, there was a lot of traffic this morning."}
+{"task": "fix", "text": "Our teacher gave us alot of homework, and I havent finished it yet.", "out": "Our teacher gave us a lot of homework, and I haven't finished it yet."}
+{"task": "fix", "text": "The new phone has a great camra, but the batery life is realy short.", "out": "The new phone has a great camera, but the battery life is really short."}
+{"task": "fix", "text": "Thank you for you're help yesterday. I couldnt have done it with out you.", "out": "Thank you for your help yesterday. I couldn't have done it without you."}
+{"task": "fix", "text": "Mix the flour and sugar first, then ad two eggs and stir untill smooth.", "out": "Mix the flour and sugar first, then add two eggs and stir until smooth."}
+{"task": "fix", "text": "We vistied Paris last summer, and the Eiffel Tower was more amazing then I expected.", "out": "We visited Paris last summer, and the Eiffel Tower was more amazing than I expected."}
+{"task": "fix", "text": "Pleas let me know if you have any questons about the schedual.", "out": "Please let me know if you have any questions about the schedule."}

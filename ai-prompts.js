@@ -73,5 +73,51 @@ P.langName={ko:'Korean',en:'English',es:'Spanish',fr:'French',de:'German',ja:'Ja
 P.explainSys=function(lang){ return 'You explain Block HTML blocks to a beginner. Reply with one or two short sentences of plain text (no lists, no code, no markdown) saying what these blocks do when the page runs. Write in '+(P.langName[lang]||'Korean')+'.'; };
 P.explainPrompt=function(outline){ return 'Blocks (indented lines are inside the block above):\n'+outline; };
 
+
+/* Fry Docs AI (docs/app.js): rewrite, shorten, translate ... a chosen text; "ask" answers a question about the document; "draft" writes a first draft */
+P.docsTasks={
+  fix:{sys:'You fix Korean and English spelling, spacing and grammar. Keep the meaning, tone and language. Reply with only the corrected text.', pre:'Fix the spelling of this text:\n\n'},
+  easy:{sys:'You rewrite text so a 10-year-old can understand it. Keep the language of the text. Reply with only the rewritten text.', pre:'Rewrite this more simply:\n\n'},
+  sum:{sys:'You summarize text in the same language, in 2-4 short sentences. Reply with only the summary.', pre:'Summarize:\n\n'},
+  cont:{sys:'You continue a document in the same language and style. Write one or two new paragraphs that follow naturally. Reply with only the new text.', pre:'Continue this text:\n\n'},
+  formal:{sys:'You rewrite text in a polite, formal register. Keep the meaning and the language of the text. Reply with only the rewritten text.', pre:'Rewrite this formally:\n\n'},
+  soft:{sys:'You rewrite text so it sounds friendly and gentle. Keep the meaning and the language of the text. Reply with only the rewritten text.', pre:'Rewrite this in a gentle, friendly tone:\n\n'},
+  short:{sys:'You shorten text to about half its length without losing the key points. Keep the language of the text. Reply with only the shortened text.', pre:'Shorten this:\n\n'},
+  long:{sys:'You expand text with a little more detail and clearer wording, about twice as long, without inventing facts. Keep the language of the text. Reply with only the expanded text.', pre:'Expand this:\n\n'},
+  bullets:{sys:'You turn text into a short bullet list, one point per line, each line starting with "- ". Keep the language of the text. Reply with only the list.', pre:'Turn this into bullet points:\n\n'},
+  title:{sys:'You suggest 5 short titles for a text, one per line, no numbering. Use the language of the text. Reply with only the titles.', pre:'Suggest titles for:\n\n'},
+  outline:{sys:'You write a clear outline of a document: main headings, with two or three short sub-points under each. Use the language of the document. Plain text, one item per line. Reply with only the outline.', pre:'Outline this document:\n\n'},
+  en:{sys:'You translate text into natural English. Reply with only the translation.', pre:'Translate into English:\n\n'},
+  ko:{sys:'You translate text into natural Korean. Reply with only the translation.', pre:'Translate into Korean:\n\n'},
+  ja:{sys:'You translate text into natural Japanese. Reply with only the translation.', pre:'Translate into Japanese:\n\n'},
+  ask:{sys:'You answer a question using only the document given. If the document does not say, say so. Use the language of the question. Be brief.', pre:''},
+  draft:{sys:'You write a clear first draft of a document on the given topic, with a short title line and a few paragraphs. Use the language of the topic. Plain text only.', pre:''}};
+P.docsPrompt=function(task,text){ return P.docsTasks[task].pre+text; };
+P.docsAskPrompt=function(doc,q){ return 'Document:\n'+doc+'\n\nQuestion: '+q; };
+P.docsDraftPrompt=function(topic){ return 'Write a draft about: '+topic; };
+
+/* Fry Python "AI에게 오류 설명 듣기" (python/app.js): numbered code + the error tail -> a short explanation and the fixed line */
+P.pySys=function(langName){ return 'You are a kind Python teacher for students aged 10-16. Explain the error simply in '+langName+' in 3-5 short sentences: what went wrong, on which line, and how to fix it. Then show the fixed line as code. Do not rewrite the whole program.'; };
+P.pyNumber=function(code){ return String(code).split('\n').slice(0,200).map(function(l,i){ return (i+1)+': '+l; }).join('\n'); };
+P.pyPrompt=function(code,error){ return 'Code:\n'+P.pyNumber(code)+'\n\nError:\n'+String(error).slice(-1500); };
+
+/* Fry Lab AI helper (lab/ai-lab.js). sm = the small built-in model (shorter answers). */
+P.labSys=function(lang,sm){ return 'You are a friendly science and math tutor for middle and high school students who are using an interactive simulation lab. '
+    +'Use the numbers given to explain what is happening, and connect them to the key idea or formula. Write formulas in plain text such as T = 2π√(L/g), never LaTeX. '
+    +'Do not invent measurements that are not given. '+(sm?'Answer in at most 120 words. ':'Keep the answer short: about 150-250 words, short paragraphs or a short list. ')
+    +'Answer in '+lang+'.'; };
+P.labPrompt=function(info,data,q){ return 'Experiment: '+info+data+'\n\nStudent: '+q; };
+P.labSetSys='You move the sliders of a simulation. Reply with ONLY one JSON object {"set":{"<id>":<value>}} and nothing else. Use only the ids listed. '
+    +'A number must stay between min and max; for an option list use one of the listed values; a checkbox is true or false. Work out relative requests (double, half, +10%) from the value now. Change only what the student asks.';
+P.labSetPrompt=function(name,plist,q){ return 'Experiment: '+name+'\nParameters:\n'+plist+'\n\nStudent: '+q; };
+P.labFindSys='You pick the one simulation that best matches what the student wants to see, from the list. Reply with ONLY JSON {"id":"<id from the list>","set":{}} and nothing else. '
+    +'The id must be copied exactly from the list. Leave "set" empty unless the student names a parameter value.';
+P.labFindPrompt=function(lines,q){ return 'Simulations (id | name | description):\n'+lines+'\n\nStudent: '+q; };
+P.labDraftSys=function(lang,sm){ return 'You help a middle or high school student write a one-page lab report about a simulation experiment, in '+lang+'. '
+    +'Write exactly four sections, each marker alone on its own line, in this order: [PURPOSE] [METHOD] [RESULT] [CONCLUSION]. '
+    +'Use only the numbers given (settings, readouts, recorded data, trend line). Do not invent measurements, dates or names. If nothing was recorded, say so in RESULT and use the live readouts. '
+    +'Plain text, no markdown, no LaTeX; write formulas like T = 2π√(L/g). '+(sm?'Each section at most 2 short sentences.':'Each section 2-4 sentences; CONCLUSION says what the numbers show and one possible source of error.'); };
+P.labDraftPrompt=function(name,info,ctx,data){ return 'Experiment: '+name+'. '+info+'\nSettings: '+ctx+data+'\n\nWrite the report draft.'; };
+
 if(typeof module!=='undefined'&&module.exports) module.exports=P; else root.FFP=P;
 })(this);
