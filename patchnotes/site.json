@@ -3,6 +3,15 @@
  "name": "Tools 사이트",
  "notes": [
   {
+   "date": "2026-10-28",
+   "build": "v44",
+   "title": "더블터치 확대 막음",
+   "items": [
+    "모든 도구 페이지에서 화면을 두 번 눌러도 확대되지 않게 함"
+   ],
+   "tr": {"en": {"title": "Double-tap zoom disabled", "items": ["Double-tapping no longer zooms the page on any tool page"]}}
+  },
+  {
    "date": "2026-10-26",
    "build": "v43",
    "title": "첫 화면 비스듬한 글자 되살림",
