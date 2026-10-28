@@ -3,6 +3,24 @@
  "name": "자체 AI (FF777)",
  "notes": [
   {
+   "date": "2026-10-28",
+   "build": "v52",
+   "title": "lectus·premus 1.7 반영",
+   "items": [
+    "균형 모델을 FF777 1.7 lectus로, 가장 똑똑한 모델을 FF777 1.7 premus로 교체",
+    "문서·파이썬·랩 AI 과제와 아재개그 아무거나 요청을 추가로 학습"
+   ],
+   "tr": {
+    "en": {
+     "title": "lectus and premus 1.7 update",
+     "items": [
+      "Swapped the balanced model for FF777 1.7 lectus and the smartest model for FF777 1.7 premus",
+      "Trained on Docs, Python and Lab AI tasks and any-dad-joke requests"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-10-26",
    "build": "v51",
    "title": "lectus 1.6 반영",
