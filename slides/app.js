@@ -1264,7 +1264,7 @@ $('auOk').onclick=function(){ var s=deck.slides[cur]; pushUndo(); deck.auto={on:
 function readImg(file){ return new Promise(function(res,rej){ if(!file||!/^image\//.test(file.type)) return rej(new Error('type'));
   var fr=new FileReader(); fr.onerror=rej; fr.onload=function(){ var im=new Image(); im.onerror=rej; im.onload=function(){
     var k=Math.min(1,1600/Math.max(im.naturalWidth,im.naturalHeight)), w=Math.max(1,Math.round(im.naturalWidth*k)), h=Math.max(1,Math.round(im.naturalHeight*k)), c=document.createElement('canvas'); c.width=w; c.height=h;
-    var x=c.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,w,h); x.drawImage(im,0,0,w,h); var d; try{ d=c.toDataURL('image/jpeg',.82); }catch(e){ return rej(e); } res({d:d,w:w,h:h}); };
+    var x=c.getContext('2d'); if(!file.ffObj){ x.fillStyle='#fff'; x.fillRect(0,0,w,h); } x.drawImage(im,0,0,w,h); var d; try{ d=c.toDataURL(file.ffObj?'image/png':'image/jpeg',.82); }catch(e){ return rej(e); } res({d:d,w:w,h:h}); };
     im.src=fr.result; }; fr.readAsDataURL(file); }); }
 function blankSlide(s){ return !s.els.length&&LISTS.concat(TEXTS).every(function(f){ return f==='ctype'||f==='bg'||empty(s,f); }); }
 function putPictures(files){ files=[].slice.call(files||[]).filter(function(f){ return /^image\//.test(f.type); }); if(!files.length||gen||busyOn||!deck.slides.length) return;
@@ -2173,6 +2173,7 @@ window.FSLC={
   deck:deckAct, opt:optAct,
   optMenu:function(part,btn){ if(!deck.slides.length||gen||busyOn) return; blurEdit(); drawOptMenu(part); openMenu($('optMenu'),btn); },
   elMenu:function(kind,btn){ if(!deck.slides[cur]||gen||busyOn) return; blurEdit(); drawElMenu(kind); openMenu($('elMenu'),btn); },
+  objPic:function(){ if(!deck.slides.length||gen||busyOn) return; blurEdit(); FFOBJ.open(function(f){ putPictures([f]); }); },
   addShape:addShape, media:openMedia, smart:openSmart, rec:recStart, recording:function(){ return !!rec; }, connect:connStart, fpaint:fpBtn, group:groupSel, ungroup:ungroupSel, copy:copySel, paste:function(){ pasteEl(); }, present:function(here){ present(here?cur:0); },
   live:function(){ var s=deck.slides[cur]; if(!s||gen||busyOn) return; if(s.layout==='live') openLive(); else { addSlide('live'); openLive(); } },
   setLayout:function(l){ setLayout(l); $('laySel').value=deck.slides[cur]?deck.slides[cur].layout:l; },
