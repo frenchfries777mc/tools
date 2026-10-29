@@ -9,7 +9,80 @@
    "items": [
     "일러스트를 넣어도 깜빡이는 커서 막대가 나오지 않음"
    ],
-   "tr": {"en": {"title": "Cursor after illustrations", "items": ["The blinking text cursor no longer shows after inserting an illustration"]}}
+   "tr": {
+    "en": {
+     "title": "Cursor after illustrations",
+     "items": [
+      "The blinking text cursor no longer shows after inserting an illustration"
+     ]
+    },
+    "es": {
+     "title": "Cursor tras las ilustraciones",
+     "items": [
+      "El cursor de texto parpadeante ya no aparece tras insertar una ilustración"
+     ]
+    },
+    "fr": {
+     "title": "Curseur après les illustrations",
+     "items": [
+      "Le curseur clignotant n'apparaît plus après l'insertion d'une illustration"
+     ]
+    },
+    "de": {
+     "title": "Cursor nach Illustrationen",
+     "items": [
+      "Der blinkende Textcursor erscheint nach dem Einfügen einer Illustration nicht mehr"
+     ]
+    },
+    "ja": {
+     "title": "イラスト挿入後のカーソル",
+     "items": [
+      "イラストを入れても、点滅するカーソルが出なくなりました"
+     ]
+    },
+    "zh": {
+     "title": "插入插图后的光标",
+     "items": [
+      "插入插图后，不再显示闪烁的文字光标"
+     ]
+    },
+    "pt": {
+     "title": "Cursor após ilustrações",
+     "items": [
+      "O cursor de texto piscando não aparece mais depois de inserir uma ilustração"
+     ]
+    },
+    "ru": {
+     "title": "Курсор после иллюстраций",
+     "items": [
+      "После вставки иллюстрации мигающий текстовый курсор больше не появляется"
+     ]
+    },
+    "tr": {
+     "title": "İllüstrasyon sonrası imleç",
+     "items": [
+      "Bir illüstrasyon ekledikten sonra yanıp sönen imleç çubuğu artık görünmüyor"
+     ]
+    },
+    "it": {
+     "title": "Cursore dopo le illustrazioni",
+     "items": [
+      "Il cursore lampeggiante non compare più dopo aver inserito un'illustrazione"
+     ]
+    },
+    "pl": {
+     "title": "Kursor po ilustracjach",
+     "items": [
+      "Migający kursor tekstu nie pojawia się już po wstawieniu ilustracji"
+     ]
+    },
+    "ar": {
+     "title": "المؤشر بعد الرسوم التوضيحية",
+     "items": [
+      "لم يعد مؤشر الكتابة الوامض يظهر بعد إدراج رسم توضيحي"
+     ]
+    }
+   }
   },
   {
    "date": "2026-10-29",
@@ -19,7 +92,92 @@
     "삽입 탭에 일러스트 버튼 추가",
     "Block HTML의 오브젝트와 일러스트 660개를 문서에 그림으로 넣기"
    ],
-   "tr": {"en": {"title": "Illustrations", "items": ["Illustrations button on the Insert tab", "Insert any of the 660 Block HTML objects and illustrations into a document as a picture"]}}
+   "tr": {
+    "en": {
+     "title": "Illustrations",
+     "items": [
+      "Illustrations button on the Insert tab",
+      "Insert any of the 660 Block HTML objects and illustrations into a document as a picture"
+     ]
+    },
+    "es": {
+     "title": "Ilustraciones",
+     "items": [
+      "Botón Ilustraciones en la pestaña Insertar",
+      "Pone cualquiera de los 660 objetos e ilustraciones de Block HTML en un documento como imagen"
+     ]
+    },
+    "fr": {
+     "title": "Illustrations",
+     "items": [
+      "Bouton Illustrations dans l'onglet Insertion",
+      "Insère dans un document n'importe lequel des 660 objets et illustrations de Block HTML, sous forme d'image"
+     ]
+    },
+    "de": {
+     "title": "Illustrationen",
+     "items": [
+      "Schaltfläche Illustrationen auf der Registerkarte Einfügen",
+      "Fügt jedes der 660 Objekte und Illustrationen aus Block HTML als Bild in ein Dokument ein"
+     ]
+    },
+    "ja": {
+     "title": "イラスト",
+     "items": [
+      "挿入タブにイラストボタンを追加",
+      "Block HTMLのオブジェクトとイラスト660点から好きなものを画像として文書に入れられます"
+     ]
+    },
+    "zh": {
+     "title": "插图",
+     "items": [
+      "插入标签中新增插图按钮",
+      "可将 Block HTML 的 660 个对象和插图中的任意一个作为图片放入文档"
+     ]
+    },
+    "pt": {
+     "title": "Ilustrações",
+     "items": [
+      "Botão Ilustrações na aba Inserir",
+      "Coloca qualquer um dos 660 objetos e ilustrações do Block HTML no documento como imagem"
+     ]
+    },
+    "ru": {
+     "title": "Иллюстрации",
+     "items": [
+      "Кнопка «Иллюстрации» на вкладке «Вставка»",
+      "Любой из 660 объектов и иллюстраций Block HTML можно вставить в документ как картинку"
+     ]
+    },
+    "tr": {
+     "title": "İllüstrasyonlar",
+     "items": [
+      "Ekle sekmesinde İllüstrasyonlar düğmesi",
+      "Block HTML'in 660 nesne ve illüstrasyonunun herhangi birini belgeye resim olarak ekler"
+     ]
+    },
+    "it": {
+     "title": "Illustrazioni",
+     "items": [
+      "Pulsante Illustrazioni nella scheda Inserisci",
+      "Inserisce in un documento uno qualsiasi dei 660 oggetti e illustrazioni di Block HTML come immagine"
+     ]
+    },
+    "pl": {
+     "title": "Ilustracje",
+     "items": [
+      "Przycisk Ilustracje na karcie Wstawianie",
+      "Wstawia do dokumentu dowolny z 660 obiektów i ilustracji Block HTML jako obraz"
+     ]
+    },
+    "ar": {
+     "title": "رسومات توضيحية",
+     "items": [
+      "زر الرسومات التوضيحية في تبويب إدراج",
+      "إدراج أي من الكائنات والرسومات الـ660 في Block HTML في المستند كصورة"
+     ]
+    }
+   }
   },
   {
    "date": "2026-10-26",
@@ -33,7 +191,153 @@
     "표: 칸 합치기·나누기, 열 합계 줄 넣기, 표 모양(줄무늬·테두리 없음·가로줄만)",
     "그림: 테두리, 둥글게, 그림자, 글 감싸기, 가장자리 자르기",
     "검토 탭: 다른 문서와 글 비교(추가된 글은 초록, 빠진 글은 빨강)"
-   ]
+   ],
+   "tr": {
+    "en": {
+     "title": "Text effects, bookmarks, table tools, document compare",
+     "items": [
+      "Home tab: text effects (shadow, outline, wider or narrower spacing), paragraph styling (border box, yellow background, left bar), list styles (roman numerals, 가나다, ㄱㄴㄷ and more)",
+      "Format painter now copies paragraph formatting (heading, alignment, styling) too",
+      "Layout tab: change the size and text colour of headings 1–3 in Style editing",
+      "Insert tab: add a bookmark, link selected text to a bookmark so clicking it jumps there",
+      "Tables: merge and split cells, add a column total row, table styles (striped, no border, horizontal lines only)",
+      "Pictures: border, rounded corners, shadow, text wrap, crop edges",
+      "Review tab: compare the text with another document (added text in green, deleted text in red)"
+     ]
+    },
+    "es": {
+     "title": "Efectos de texto, marcadores, tablas y comparar",
+     "items": [
+      "Pestaña Inicio: efectos de texto (sombra, contorno, espaciado más amplio o estrecho), estilo de párrafo (recuadro, fondo amarillo, barra izquierda), estilos de lista (números romanos, 가나다, ㄱㄴㄷ y más)",
+      "El pincel de formato ahora copia también el formato del párrafo (título, alineación, estilo)",
+      "Pestaña Diseño: cambia el tamaño y el color del texto de los títulos 1–3 en Editar estilos",
+      "Pestaña Insertar: añade un marcador y enlaza el texto seleccionado a él para saltar al pulsar",
+      "Tablas: combinar y dividir celdas, fila de total de columna, estilos de tabla (rayas, sin borde, solo líneas horizontales)",
+      "Imágenes: borde, esquinas redondeadas, sombra, ajuste de texto, recortar bordes",
+      "Pestaña Revisar: compara el texto con otro documento (texto añadido en verde, eliminado en rojo)"
+     ]
+    },
+    "fr": {
+     "title": "Effets de texte, signets, outils de tableau, comparaison",
+     "items": [
+      "Onglet Accueil : effets de texte (ombre, contour, espacement plus large ou plus serré), mise en forme des paragraphes (cadre, fond jaune, barre à gauche), styles de liste (chiffres romains, 가나다, ㄱㄴㄷ et plus)",
+      "La reproduction de mise en forme copie aussi la mise en forme du paragraphe (titre, alignement, style)",
+      "Onglet Mise en page : modifie la taille et la couleur du texte des titres 1 à 3 dans Modifier les styles",
+      "Onglet Insertion : ajoute un signet et lie le texte sélectionné à ce signet pour y aller d'un clic",
+      "Tableaux : fusionner et scinder les cellules, ligne de total de colonne, styles de tableau (rayures, sans bordure, lignes horizontales seules)",
+      "Images : bordure, coins arrondis, ombre, renvoi à la ligne, recadrage des bords",
+      "Onglet Révision : compare le texte avec un autre document (ajouts en vert, suppressions en rouge)"
+     ]
+    },
+    "de": {
+     "title": "Texteffekte, Lesezeichen, Tabellenwerkzeuge, Vergleich",
+     "items": [
+      "Start-Reiter: Texteffekte (Schatten, Kontur, Zeichenabstand weiter oder enger), Absatzgestaltung (Rahmenkasten, gelber Hintergrund, linke Leiste), Listenformate (römische Ziffern, 가나다, ㄱㄴㄷ und mehr)",
+      "Format übertragen kopiert jetzt auch die Absatzformatierung (Überschrift, Ausrichtung, Gestaltung)",
+      "Layout-Reiter: Größe und Textfarbe der Überschriften 1–3 unter Stile bearbeiten ändern",
+      "Einfügen-Reiter: Lesezeichen setzen und den markierten Text darauf verlinken, Klick springt dorthin",
+      "Tabellen: Zellen verbinden und teilen, Summenzeile für Spalten, Tabellenformate (gestreift, ohne Rahmen, nur horizontale Linien)",
+      "Bilder: Rahmen, abgerundete Ecken, Schatten, Textumbruch, Ränder zuschneiden",
+      "Überprüfen-Reiter: Text mit einem anderen Dokument vergleichen (Hinzugefügtes grün, Gelöschtes rot)"
+     ]
+    },
+    "ja": {
+     "title": "文字効果・しおり・表ツール・文書比較",
+     "items": [
+      "ホームタブ：文字効果（影、輪郭、文字間隔を広く・狭く）、段落の装飾（枠線、黄色の背景、左の線）、リスト形式（ローマ数字、가나다、ㄱㄴㄷなど）",
+      "書式のコピーで段落の書式（見出し、配置、装飾）もコピーされる",
+      "レイアウトタブ：スタイルの編集で見出し1～3の文字サイズと色を変更",
+      "挿入タブ：しおりを入れ、選んだ文字をしおりへのリンクにしてクリックで移動",
+      "表：セルの結合・分割、列の合計行、表のスタイル（しま模様、罫線なし、横線のみ）",
+      "画像：枠線、角丸、影、text wrap、端のトリミング",
+      "校閲タブ：ほかの文書と文章を比較（追加された文字は緑、削除された文字は赤）"
+     ]
+    },
+    "zh": {
+     "title": "文字效果、书签、表格工具、文档比较",
+     "items": [
+      "开始标签：文字效果（阴影、轮廓、加宽或缩小字间距）、段落装饰（边框框、黄色底色、左侧竖线）、列表样式（罗马数字、가나다、ㄱㄴㄷ 等）",
+      "格式刷现在也会复制段落格式（标题、对齐、装饰）",
+      "布局标签：在“编辑样式”中更改标题 1～3 的大小和文字颜色",
+      "插入标签：添加书签，把选中的文字链接到书签，点击即可跳转",
+      "表格：合并与拆分单元格、添加列合计行、表格样式（条纹、无边框、仅横线）",
+      "图片：边框、圆角、阴影、文字环绕、裁剪边缘",
+      "审阅标签：与另一份文档比较文字（新增的文字为绿色，删除的为红色）"
+     ]
+    },
+    "pt": {
+     "title": "Efeitos de texto, marcadores, ferramentas de tabela e comparação",
+     "items": [
+      "Aba Início: efeitos de texto (sombra, contorno, espaçamento mais largo ou mais estreito), estilo de parágrafo (caixa de borda, fundo amarelo, barra à esquerda), estilos de lista (algarismos romanos, 가나다, ㄱㄴㄷ e mais)",
+      "O pincel de formatação agora copia também a formatação do parágrafo (título, alinhamento, estilo)",
+      "Aba Layout: muda o tamanho e a cor do texto dos títulos 1 a 3 em Editar estilos",
+      "Aba Inserir: adiciona um marcador e liga o texto selecionado a ele, para pular ao clicar",
+      "Tabelas: mesclar e dividir células, linha de total de coluna, estilos de tabela (listrado, sem borda, só linhas horizontais)",
+      "Imagens: borda, cantos arredondados, sombra, quebra de texto, cortar bordas",
+      "Aba Revisão: compara o texto com outro documento (texto incluído em verde, excluído em vermelho)"
+     ]
+    },
+    "ru": {
+     "title": "Эффекты текста, закладки, таблицы и сравнение",
+     "items": [
+      "Вкладка «Главная»: эффекты текста (тень, контур, разреженный или уплотнённый интервал), оформление абзаца (рамка, жёлтый фон, левая полоса), стили списков (римские цифры, 가나다, ㄱㄴㄷ и др.)",
+      "«Формат по образцу» теперь копирует и оформление абзаца (заголовок, выравнивание, стиль)",
+      "Вкладка «Разметка»: размер и цвет текста заголовков 1–3 меняются в «Изменить стили»",
+      "Вкладка «Вставка»: добавьте закладку и свяжите с ней выделенный текст, по нажатию переход к ней",
+      "Таблицы: объединение и разбиение ячеек, строка итогов по столбцу, стили таблиц (полосы, без рамки, только горизонтальные линии)",
+      "Рисунки: рамка, скруглённые углы, тень, обтекание текстом, обрезка краёв",
+      "Вкладка «Рецензирование»: сравнение текста с другим документом (добавленное зелёным, удалённое красным)"
+     ]
+    },
+    "tr": {
+     "title": "Metin efektleri, yer imleri, tablo araçları, belge karşılaştırma",
+     "items": [
+      "Giriş sekmesi: metin efektleri (gölge, dış hat, harf aralığını genişletme veya daraltma), paragraf stilleri (kenarlıklı kutu, sarı arka plan, sol çubuk), liste biçimleri (Roma rakamları, 가나다, ㄱㄴㄷ ve daha fazlası)",
+      "Biçim boyacısı artık paragraf biçimini de (başlık, hizalama, stil) kopyalıyor",
+      "Düzen sekmesi: Stilleri düzenle'de 1–3 başlıklarının boyutunu ve metin rengini değiştirin",
+      "Ekle sekmesi: yer imi ekleyin, seçili metni yer imine bağlayın; tıklayınca oraya gidilir",
+      "Tablolar: hücreleri birleştirme ve bölme, sütun toplamı satırı, tablo stilleri (çizgili, kenarlıksız, yalnızca yatay çizgiler)",
+      "Resimler: kenarlık, yuvarlatılmış köşeler, gölge, metin kaydırma, kenarları kırpma",
+      "Gözden geçir sekmesi: metni başka bir belgeyle karşılaştırın (eklenen yeşil, silinen kırmızı)"
+     ]
+    },
+    "it": {
+     "title": "Effetti testo, segnalibri, strumenti tabella, confronto documenti",
+     "items": [
+      "Scheda Home: effetti testo (ombra, contorno, spaziatura più ampia o più stretta), formattazione paragrafo (riquadro bordato, sfondo giallo, barra a sinistra), stili elenco (numeri romani, 가나다, ㄱㄴㄷ e altri)",
+      "Il pennello formato ora copia anche la formattazione del paragrafo (titolo, allineamento, stile)",
+      "Scheda Layout: cambia dimensione e colore del testo dei titoli 1–3 in Modifica stili",
+      "Scheda Inserisci: aggiungi un segnalibro e collega il testo selezionato a esso, cliccando si salta lì",
+      "Tabelle: unire e dividere celle, riga totale colonna, stili tabella (a righe, senza bordo, solo linee orizzontali)",
+      "Immagini: bordo, angoli arrotondati, ombra, a capo automatico, ritaglio dei bordi",
+      "Scheda Revisione: confronta il testo con un altro documento (testo aggiunto in verde, eliminato in rosso)"
+     ]
+    },
+    "pl": {
+     "title": "Efekty tekstu, zakładki, narzędzia tabel, porównanie",
+     "items": [
+      "Karta Start: efekty tekstu (cień, kontur, szerszy lub węższy odstęp), wygląd akapitu (ramka, żółte tło, lewy pasek), style list (cyfry rzymskie, 가나다, ㄱㄴㄷ i inne)",
+      "Malarz formatów kopiuje teraz także formatowanie akapitu (nagłówek, wyrównanie, styl)",
+      "Karta Układ: rozmiar i kolor tekstu nagłówków 1–3 zmienisz w Edytuj style",
+      "Karta Wstawianie: dodaj zakładkę i połącz zaznaczony tekst z zakładką, kliknięcie przenosi do niej",
+      "Tabele: scalanie i dzielenie komórek, wiersz sumy kolumny, style tabel (paski, bez obramowania, tylko linie poziome)",
+      "Obrazy: obramowanie, zaokrąglone rogi, cień, zawijanie tekstu, przycinanie krawędzi",
+      "Karta Recenzja: porównanie tekstu z innym dokumentem (dodany na zielono, usunięty na czerwono)"
+     ]
+    },
+    "ar": {
+     "title": "تأثيرات النص والإشارات المرجعية وأدوات الجداول والمقارنة",
+     "items": [
+      "تبويب الصفحة الرئيسية: تأثيرات النص (ظل، وحدود خارجية، وتباعد أحرف أوسع أو أضيق)، وتنسيق الفقرة (مربع إطار، وخلفية صفراء، وشريط جانبي)، وأنماط القوائم (أرقام رومانية، 가나다، ㄱㄴㄷ وغيرها)",
+      "أصبحت أداة نسخ التنسيق تنسخ تنسيق الفقرة أيضًا (العنوان والمحاذاة والنمط)",
+      "تبويب التخطيط: غيّر حجم العنوانين 1 إلى 3 ولون نصهما من تحرير الأنماط",
+      "تبويب إدراج: أضف إشارة مرجعية واربط النص المحدد بها، فينتقل القارئ إليها بالنقر",
+      "الجداول: دمج الخلايا وتقسيمها، وصف إجمالي للعمود، وأنماط للجدول (مخطط، بلا إطار، خطوط أفقية فقط)",
+      "الصور: إطار، وزوايا مستديرة، وظل، ولف النص، وقص الحواف",
+      "تبويب مراجعة: قارن النص بمستند آخر (النص المضاف باللون الأخضر والمحذوف بالأحمر)"
+     ]
+    }
+   }
   },
   {
    "date": "2026-10-26",
@@ -46,7 +350,141 @@
     "AI 탭: 맞춤법, 쉽게, 격식, 부드럽게, 줄이기, 늘이기, 요약, 글머리 목록, 이어 쓰기, 제목 추천, 개요, 영어·한국어·일본어 번역",
     "AI: 문서에 질문하기, 주제로 초안 쓰기",
     "보기 탭: 쪽 경계 보기, 확대·축소, 글 통계(글자·단어·문장·문단·읽는 시간)"
-   ]
+   ],
+   "tr": {
+    "en": {
+     "title": "Ribbon tabs and many AI features added",
+     "items": [
+      "Top tabs: Home, Insert, Layout, Review, AI and View",
+      "Insert tab: one-tap buttons for links, special characters, date, table of contents, footnotes, text box, equations, shapes and more",
+      "Review tab: buttons for comments, track changes, case and title line",
+      "AI tab: spell check, simpler, more formal, softer, shorten, expand, summarize, bulleted list, continue writing, title ideas, outline, translate to English, Korean and Japanese",
+      "AI: ask questions about the document, write a draft from a topic",
+      "View tab: page boundaries, zoom, word count (characters, words, sentences, paragraphs, reading time)"
+     ]
+    },
+    "es": {
+     "title": "Pestañas de cinta y muchas funciones de IA",
+     "items": [
+      "Pestañas superiores: Inicio, Insertar, Diseño, Revisar, IA y Ver",
+      "Pestaña Insertar: botones de un toque para enlaces, caracteres especiales, fecha, índice, notas al pie, cuadro de texto, ecuaciones, formas y más",
+      "Pestaña Revisar: botones para comentarios, control de cambios, mayúsculas y línea de título",
+      "Pestaña IA: corrección ortográfica, más sencillo, más formal, más suave, acortar, ampliar, resumir, lista con viñetas, seguir escribiendo, ideas de título, esquema, traducir al inglés, coreano y japonés",
+      "IA: hacer preguntas sobre el documento, escribir un borrador a partir de un tema",
+      "Pestaña Ver: límites de página, zoom, recuento de palabras (caracteres, palabras, frases, párrafos, tiempo de lectura)"
+     ]
+    },
+    "fr": {
+     "title": "Onglets du ruban et nombreuses fonctions IA",
+     "items": [
+      "Onglets du haut : Accueil, Insertion, Mise en page, Révision, IA et Affichage",
+      "Onglet Insertion : boutons en un clic pour liens, caractères spéciaux, date, sommaire, notes de bas de page, zone de texte, équations, formes et plus",
+      "Onglet Révision : boutons pour commentaires, suivi des modifications, casse et ligne de titre",
+      "Onglet IA : correction orthographique, plus simple, plus formel, plus doux, raccourcir, développer, résumer, liste à puces, poursuivre l'écriture, idées de titres, plan, traduction en anglais, coréen et japonais",
+      "IA : poser des questions sur le document, rédiger un brouillon à partir d'un sujet",
+      "Onglet Affichage : limites de page, zoom, nombre de mots (caractères, mots, phrases, paragraphes, temps de lecture)"
+     ]
+    },
+    "de": {
+     "title": "Menü-Reiter und viele KI-Funktionen hinzugefügt",
+     "items": [
+      "Obere Reiter: Start, Einfügen, Layout, Überprüfen, KI und Ansicht",
+      "Einfügen-Reiter: Ein-Klick-Schaltflächen für Links, Sonderzeichen, Datum, Inhaltsverzeichnis, Fußnoten, Textfeld, Gleichungen, Formen und mehr",
+      "Überprüfen-Reiter: Schaltflächen für Kommentare, Änderungsverfolgung, Groß-/Kleinschreibung und Titelzeile",
+      "KI-Reiter: Rechtschreibprüfung, einfacher, förmlicher, sanfter, kürzen, erweitern, zusammenfassen, Aufzählung, weiterschreiben, Titelideen, Gliederung, Übersetzung ins Englische, Koreanische und Japanische",
+      "KI: Fragen zum Dokument stellen, einen Entwurf zu einem Thema schreiben",
+      "Ansicht-Reiter: Seitengrenzen, Zoom, Wortzählung (Zeichen, Wörter, Sätze, Absätze, Lesezeit)"
+     ]
+    },
+    "ja": {
+     "title": "リボンタブとAI機能を大幅追加",
+     "items": [
+      "上のタブ：ホーム、挿入、レイアウト、校閲、AI、表示",
+      "挿入タブ：リンク、特殊文字、日付、目次、脚注、テキストボックス、数式、図形などをワンタップで挿入",
+      "校閲タブ：コメント、変更の記録、大文字・小文字、タイトル行のボタン",
+      "AIタブ：校正、やさしく、丁寧に、やわらかく、短く、長く、要約、箇条書き、続きを書く、タイトル案、アウトライン、英語・韓国語・日本語への翻訳",
+      "AI：文書に質問する、テーマから下書きを書く",
+      "表示タブ：ページの境界、拡大・縮小、文字数統計（文字・単語・文・段落・読了時間）"
+     ]
+    },
+    "zh": {
+     "title": "新增功能区标签和多项 AI 功能",
+     "items": [
+      "顶部标签：开始、插入、布局、审阅、AI、视图",
+      "插入标签：一键插入链接、特殊字符、日期、目录、脚注、文本框、公式、形状等",
+      "审阅标签：批注、修订记录、大小写和标题行按钮",
+      "AI 标签：拼写检查、更简单、更正式、更温和、缩短、扩写、摘要、项目符号列表、续写、标题建议、大纲，翻译为英语、韩语和日语",
+      "AI：向文档提问，根据主题写草稿",
+      "视图标签：页面边界、缩放、字数统计（字符、词、句子、段落、阅读时间）"
+     ]
+    },
+    "pt": {
+     "title": "Abas da faixa e muitos recursos de IA adicionados",
+     "items": [
+      "Abas superiores: Início, Inserir, Layout, Revisão, IA e Exibição",
+      "Aba Inserir: botões de um toque para links, caracteres especiais, data, sumário, notas de rodapé, caixa de texto, equações, formas e mais",
+      "Aba Revisão: botões para comentários, controle de alterações, maiúsculas e linha de título",
+      "Aba IA: revisão ortográfica, mais simples, mais formal, mais suave, encurtar, expandir, resumir, lista com marcadores, continuar escrevendo, ideias de título, esboço, traduzir para inglês, coreano e japonês",
+      "IA: fazer perguntas sobre o documento, escrever um rascunho a partir de um tema",
+      "Aba Exibir: limites de página, zoom, contagem de palavras (caracteres, palavras, frases, parágrafos, tempo de leitura)"
+     ]
+    },
+    "ru": {
+     "title": "Вкладки ленты и много функций ИИ",
+     "items": [
+      "Верхние вкладки: Главная, Вставка, Разметка, Рецензирование, ИИ и Вид",
+      "Вкладка «Вставка»: кнопки в одно нажатие для ссылок, спецсимволов, даты, оглавления, сносок, текстового поля, формул, фигур и др.",
+      "Вкладка «Рецензирование»: кнопки для комментариев, исправлений, регистра и строки заголовка",
+      "Вкладка ИИ: проверка орфографии, проще, официальнее, мягче, сократить, расширить, кратко, маркированный список, продолжить текст, идеи заголовков, план, перевод на английский, корейский и японский",
+      "ИИ: вопросы к документу, черновик по теме",
+      "Вкладка «Вид»: границы страниц, масштаб, подсчёт слов (знаки, слова, предложения, абзацы, время чтения)"
+     ]
+    },
+    "tr": {
+     "title": "Şerit sekmeleri ve birçok yapay zekâ özelliği eklendi",
+     "items": [
+      "Üst sekmeler: Giriş, Ekle, Düzen, Gözden Geçir, Yapay zekâ ve Görünüm",
+      "Ekle sekmesi: bağlantılar, özel karakterler, tarih, içindekiler, dipnotlar, metin kutusu, denklemler, şekiller ve daha fazlası için tek dokunuşluk düğmeler",
+      "Gözden Geçir sekmesi: yorumlar, değişiklik izleme, büyük/küçük harf ve başlık satırı düğmeleri",
+      "Yapay zekâ sekmesi: yazım denetimi, daha basit, daha resmi, daha yumuşak, kısalt, uzat, özetle, madde işaretli liste, yazmaya devam et, başlık önerileri, ana hat, İngilizce, Korece ve Japonca çeviri",
+      "Yapay zekâ: belgeye soru sorma, bir konudan taslak yazma",
+      "Görünüm sekmesi: sayfa sınırları, yakınlaştırma, kelime sayımı (karakter, kelime, cümle, paragraf, okuma süresi)"
+     ]
+    },
+    "it": {
+     "title": "Schede della barra e molte funzioni IA aggiunte",
+     "items": [
+      "Schede in alto: Home, Inserisci, Layout, Revisione, IA e Visualizza",
+      "Scheda Inserisci: pulsanti con un tocco per link, caratteri speciali, data, indice, note a piè di pagina, casella di testo, equazioni, forme e altro",
+      "Scheda Revisione: pulsanti per commenti, traccia modifiche, maiuscole/minuscole e riga del titolo",
+      "Scheda IA: correzione ortografica, più semplice, più formale, più morbido, accorcia, allunga, riassumi, elenco puntato, continua a scrivere, idee per titoli, struttura, traduci in inglese, coreano e giapponese",
+      "IA: fai domande sul documento, scrivi una bozza da un argomento",
+      "Scheda Visualizza: limiti di pagina, zoom, conteggio parole (caratteri, parole, frasi, paragrafi, tempo di lettura)"
+     ]
+    },
+    "pl": {
+     "title": "Dodano karty wstążki i wiele funkcji AI",
+     "items": [
+      "Karty na górze: Start, Wstawianie, Układ, Recenzja, AI i Widok",
+      "Karta Wstawianie: przyciski jednym kliknięciem do linków, znaków specjalnych, daty, spisu treści, przypisów, pola tekstowego, równań, kształtów i nie tylko",
+      "Karta Recenzja: przyciski komentarzy, śledzenia zmian, wielkości liter i wiersza tytułu",
+      "Karta AI: sprawdzanie pisowni, prościej, formalniej, łagodniej, skróć, rozwiń, podsumuj, lista punktowana, pisz dalej, pomysły na tytuł, konspekt, tłumaczenie na angielski, koreański i japoński",
+      "AI: zadawanie pytań o dokument, pisanie szkicu na podstawie tematu",
+      "Karta Widok: granice stron, powiększenie, liczenie słów (znaki, słowa, zdania, akapity, czas czytania)"
+     ]
+    },
+    "ar": {
+     "title": "إضافة تبويبات الشريط ومزايا كثيرة للذكاء الاصطناعي",
+     "items": [
+      "التبويبات العليا: الصفحة الرئيسية، وإدراج، وتخطيط، ومراجعة، والذكاء الاصطناعي، وعرض",
+      "تبويب إدراج: أزرار بنقرة واحدة للروابط والرموز الخاصة والتاريخ وفهرس المحتويات والحواشي ومربع النص والمعادلات والأشكال وغيرها",
+      "تبويب مراجعة: أزرار للتعليقات وتتبع التغييرات وحالة الأحرف وسطر العنوان",
+      "تبويب الذكاء الاصطناعي: تدقيق الإملاء، وتبسيط، وجعل النص رسميًا، وتليينه، واختصاره، وتوسيعه، وتلخيصه، وقائمة نقطية، ومتابعة الكتابة، واقتراحات العناوين، والمخطط، والترجمة إلى الإنجليزية والكورية واليابانية",
+      "الذكاء الاصطناعي: طرح أسئلة حول المستند، وكتابة مسودة انطلاقًا من موضوع",
+      "تبويب عرض: حدود الصفحات، والتكبير والتصغير، وإحصاءات الكلمات (الأحرف، والكلمات، والجمل، والفقرات، ووقت القراءة)"
+     ]
+    }
+   }
   },
   {
    "date": "2026-10-25",
@@ -59,7 +497,141 @@
     "체크 표시, 도형 8종(채우기·테두리·글자), 대문자·소문자 바꾸기",
     "표 첫 줄 제목 줄 켜기·끄기, 칸 색 칠하기",
     "Word 문서 저장에 메모, 변경 추적, 칸 색 반영"
-   ]
+   ],
+   "tr": {
+    "en": {
+     "title": "Comments, track changes, equations and shapes added",
+     "items": [
+      "Review menu: add a comment to selected text, view all comments, edit or delete them",
+      "Track changes: deleted or newly written text is marked in colour; accept or reject one by one or all at once",
+      "Equations: fractions, superscripts and subscripts, square roots, sums, Greek letters, with preview",
+      "Checkmarks, 8 shapes (fill, border, text), change case to upper or lower",
+      "Table first-row header on or off, cell colour fill",
+      "Saving to Word keeps comments, track changes and cell colours"
+     ]
+    },
+    "es": {
+     "title": "Comentarios, control de cambios, ecuaciones y formas",
+     "items": [
+      "Menú Revisar: añade un comentario al texto seleccionado, mira todos los comentarios, edítalos o bórralos",
+      "Control de cambios: el texto borrado o nuevo se marca en color; acepta o rechaza uno a uno o todos a la vez",
+      "Ecuaciones: fracciones, superíndices y subíndices, raíces cuadradas, sumas, letras griegas, con vista previa",
+      "Marcas de verificación, 8 formas (relleno, borde, texto), cambiar a mayúsculas o minúsculas",
+      "Fila de encabezado de la tabla activada o desactivada, relleno de color en celdas",
+      "Al guardar en Word se conservan los comentarios, el control de cambios y los colores de celda"
+     ]
+    },
+    "fr": {
+     "title": "Commentaires, suivi des modifications, équations et formes",
+     "items": [
+      "Menu Révision : ajoute un commentaire au texte sélectionné, affiche tous les commentaires, modifie-les ou supprime-les",
+      "Suivi des modifications : le texte supprimé ou nouveau est marqué en couleur ; accepte ou refuse une à une ou toutes ensemble",
+      "Équations : fractions, exposants et indices, racines carrées, sommes, lettres grecques, avec aperçu",
+      "Coches, 8 formes (remplissage, bordure, texte), passage en majuscules ou minuscules",
+      "Ligne d'en-tête du tableau activée ou désactivée, remplissage de couleur des cellules",
+      "L'enregistrement en Word garde les commentaires, le suivi des modifications et les couleurs de cellules"
+     ]
+    },
+    "de": {
+     "title": "Kommentare, Änderungsverfolgung, Gleichungen und Formen hinzugefügt",
+     "items": [
+      "Überprüfen-Menü: Kommentar zum markierten Text hinzufügen, alle Kommentare anzeigen, bearbeiten oder löschen",
+      "Änderungsverfolgung: gelöschter oder neu geschriebener Text wird farbig markiert; einzeln oder alle auf einmal annehmen oder ablehnen",
+      "Gleichungen: Brüche, Hoch- und Tiefstellung, Quadratwurzeln, Summen, griechische Buchstaben, mit Vorschau",
+      "Häkchen, 8 Formen (Füllung, Rahmen, Text), Groß- und Kleinschreibung ändern",
+      "Tabellen-Kopfzeile ein- oder ausschalten, Zellenfarbe füllen",
+      "Speichern als Word behält Kommentare, Änderungsverfolgung und Zellenfarben"
+     ]
+    },
+    "ja": {
+     "title": "コメント・変更の記録・数式・図形を追加",
+     "items": [
+      "校閲メニュー：選んだ文字にコメントを付ける、コメントの一覧、編集・削除",
+      "変更の記録：削除したり新しく書いた文字を色で表示し、1つずつまたはすべて承諾・元に戻す",
+      "数式：分数、上付き・下付き文字、平方根、総和、ギリシャ文字、プレビュー付き",
+      "チェックマーク、図形8種（塗りつぶし・枠線・文字）、大文字・小文字の変換",
+      "表の1行目を見出し行にする・しないの切り替え、セルの色塗り",
+      "Wordで保存するとコメント、変更の記録、セルの色も反映"
+     ]
+    },
+    "zh": {
+     "title": "新增批注、修订跟踪、公式和形状",
+     "items": [
+      "审阅菜单：为选中文字添加批注、查看所有批注、编辑或删除",
+      "修订跟踪：删除或新写的文字以颜色标记，可逐条或全部接受或拒绝",
+      "公式：分数、上标和下标、平方根、求和、希腊字母，带预览",
+      "勾选标记、8 种形状（填充、边框、文字）、大小写转换",
+      "表格首行标题行开关，单元格颜色填充",
+      "保存为 Word 时保留批注、修订跟踪和单元格颜色"
+     ]
+    },
+    "pt": {
+     "title": "Comentários, controle de alterações, equações e formas adicionados",
+     "items": [
+      "Menu Revisão: adiciona um comentário ao texto selecionado, vê todos os comentários, edita ou exclui",
+      "Controle de alterações: texto excluído ou novo é marcado em cor; aceita ou rejeita um a um ou todos de uma vez",
+      "Equações: frações, sobrescritos e subscritos, raízes quadradas, somas, letras gregas, com visualização",
+      "Marcas de seleção, 8 formas (preenchimento, borda, texto), mudar para maiúsculas ou minúsculas",
+      "Linha de cabeçalho da tabela ligada ou desligada, preenchimento de cor nas células",
+      "Salvar em Word mantém comentários, controle de alterações e cores de células"
+     ]
+    },
+    "ru": {
+     "title": "Добавлены комментарии, исправления, формулы и фигуры",
+     "items": [
+      "Меню «Рецензирование»: комментарий к выделенному тексту, список всех комментариев, изменение или удаление",
+      "Исправления: удалённый или новый текст помечен цветом; принимайте или отклоняйте по одному или сразу все",
+      "Формулы: дроби, верхние и нижние индексы, квадратные корни, суммы, греческие буквы, с предпросмотром",
+      "Галочки, 8 фигур (заливка, контур, текст), смена регистра на верхний или нижний",
+      "Строка заголовка таблицы вкл./выкл., заливка цветом ячеек",
+      "При сохранении в Word сохраняются комментарии, исправления и цвета ячеек"
+     ]
+    },
+    "tr": {
+     "title": "Yorumlar, değişiklik izleme, denklemler ve şekiller eklendi",
+     "items": [
+      "Gözden Geçir menüsü: seçili metne yorum ekleyin, tüm yorumları görün, düzenleyin veya silin",
+      "Değişiklik izleme: silinen veya yeni yazılan metin renkle işaretlenir; tek tek ya da hepsini birden kabul edin veya reddedin",
+      "Denklemler: kesirler, üst ve alt simgeler, karekökler, toplamlar, Yunan harfleri, önizlemeli",
+      "Onay işaretleri, 8 şekil (dolgu, kenarlık, metin), büyük veya küçük harfe çevirme",
+      "Tablonun ilk satırı başlık satırı olarak açılıp kapatılır, hücrelere renk dolgusu",
+      "Word olarak kaydetmek yorumları, değişiklik izlemeyi ve hücre renklerini korur"
+     ]
+    },
+    "it": {
+     "title": "Aggiunti commenti, traccia modifiche, equazioni e forme",
+     "items": [
+      "Menu Revisione: aggiungi un commento al testo selezionato, vedi tutti i commenti, modificali o eliminali",
+      "Traccia modifiche: il testo cancellato o nuovo è evidenziato a colori; accetta o rifiuta uno per uno o tutti insieme",
+      "Equazioni: frazioni, apici e pedici, radici quadrate, somme, lettere greche, con anteprima",
+      "Caselle di spunta, 8 forme (riempimento, bordo, testo), cambia maiuscole o minuscole",
+      "Riga di intestazione della tabella attiva o disattiva, riempimento colore delle celle",
+      "Il salvataggio in Word mantiene commenti, traccia modifiche e colori delle celle"
+     ]
+    },
+    "pl": {
+     "title": "Dodano komentarze, śledzenie zmian, równania i kształty",
+     "items": [
+      "Menu Recenzja: dodaj komentarz do zaznaczonego tekstu, zobacz wszystkie komentarze, edytuj lub usuń",
+      "Śledzenie zmian: usunięty lub nowy tekst jest zaznaczony kolorem; przyjmij lub odrzuć pojedynczo albo wszystkie naraz",
+      "Równania: ułamki, indeksy górne i dolne, pierwiastki, sumy, litery greckie, z podglądem",
+      "Znaczniki wyboru, 8 kształtów (wypełnienie, obramowanie, tekst), zmiana wielkości liter",
+      "Wiersz nagłówka tabeli włączony lub wyłączony, wypełnienie kolorem komórek",
+      "Zapis do Worda zachowuje komentarze, śledzenie zmian i kolory komórek"
+     ]
+    },
+    "ar": {
+     "title": "إضافة التعليقات وتتبع التغييرات والمعادلات والأشكال",
+     "items": [
+      "قائمة المراجعة: أضف تعليقًا إلى النص المحدد، واعرض جميع التعليقات، وعدّلها أو احذفها",
+      "تتبع التغييرات: يُظهر النص المحذوف أو المكتوب حديثًا بلون مميز؛ اقبل التغييرات أو ارفضها واحدًا تلو الآخر أو كلها معًا",
+      "المعادلات: الكسور، والأس والأسفل، والجذور التربيعية، والمجاميع، والحروف اليونانية، مع معاينة",
+      "علامات الاختيار، و8 أشكال (تعبئة، وإطار، ونص)، وتغيير حالة الأحرف إلى كبيرة أو صغيرة",
+      "تشغيل صف رأس الجدول الأول أو إيقافه، وتعبئة الخلايا باللون",
+      "يحفظ الحفظ بصيغة Word التعليقات وتتبع التغييرات وألوان الخلايا"
+     ]
+    }
+   }
   },
   {
    "date": "2026-10-25",
