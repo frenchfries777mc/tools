@@ -3,13 +3,15 @@
    cb(file, name) with a transparent 800 px PNG File, so the page can use its normal picture code. */
 (function(){
 'use strict';
-FFT.add({'일러스트·오브젝트':['Illustrations & objects','Ilustraciones y objetos','Illustrations et objets','Illustrationen & Objekte','イラスト・オブジェクト'],
-  '찾기 (예: 사과, car)':['Search (e.g. apple, car)','Buscar (p. ej. manzana, car)','Chercher (ex. pomme, car)','Suchen (z. B. Apfel, car)','さがす（例：りんご、car）'],
-  '불러오는 중…':['Loading…','Cargando…','Chargement…','Wird geladen…','よみこみ中…'],
-  '찾는 그림이 없어요':['No pictures found','No hay imágenes','Aucune image trouvée','Keine Bilder gefunden','みつかりません'],
-  '그림을 불러오지 못했어요. 다시 눌러 보세요':['Could not load the pictures. Try again.','No se pudieron cargar. Inténtalo de nuevo.','Chargement impossible. Réessayez.','Konnte nicht geladen werden. Versuche es erneut.','よみこめませんでした。もういちどおしてね。']});
+FFT.add({
+"일러스트·오브젝트":["Illustrations & objects","Ilustraciones y objetos","Illustrations et objets","Illustrationen & Objekte","イラスト・オブジェクト","插图与对象","Ilustrações e objetos","Иллюстрации и объекты","İllüstrasyonlar ve nesneler",null,null,"Illustrazioni e oggetti","Ilustracje i obiekty","رسومات وكائنات"],
+"찾기 (예: 사과, car)":["Search (e.g. apple, car)","Buscar (p. ej. manzana, car)","Chercher (ex. pomme, car)","Suchen (z. B. Apfel, car)","さがす（例：りんご、car）","搜索（例如 apple、car）","Pesquisar (ex.: maçã, car)","Поиск (напр.: apple, car)","Ara (ör. elma, car)",null,null,"Cerca (es. mela, car)","Szukaj (np. apple, car)","ابحث (مثل: apple، car)"],
+"불러오는 중…":["Loading…","Cargando…","Chargement…","Wird geladen…","よみこみ中…","加载中…","Carregando…","Загрузка…","Yükleniyor…",null,null,"Caricamento…","Wczytywanie…","جارٍ التحميل…"],
+"찾는 그림이 없어요":["No pictures found","No hay imágenes","Aucune image trouvée","Keine Bilder gefunden","みつかりません","找不到图片","Nenhuma imagem encontrada","Картинок не найдено","Resim bulunamadı",null,null,"Nessuna immagine trovata","Nie znaleziono obrazów","لم يتم العثور على صور"],
+"그림을 불러오지 못했어요. 다시 눌러 보세요":["Could not load the pictures. Try again.","No se pudieron cargar. Inténtalo de nuevo.","Chargement impossible. Réessayez.","Konnte nicht geladen werden. Versuche es erneut.","よみこめませんでした。もういちどおしてね。","无法加载图片，请再点一次。","Não foi possível carregar. Toque de novo.","Не удалось загрузить картинки. Нажмите ещё раз.","Resimler yüklenemedi. Tekrar deneyin.",null,null,"Impossibile caricare le immagini. Riprova.","Nie udało się wczytać obrazów. Spróbuj ponownie.","تعذّر تحميل الصور. حاول مرة أخرى."]
+});
 var T=FFT.T, BASE=(document.currentScript&&document.currentScript.src||'').replace(/[^\/]*$/,'')+'blocks/objects/', V='45';
-var LI=Math.max(0,['ko','en','es','fr','de','ja'].indexOf(FFT.lang));
+var LI=['ko','en','es','fr','de','ja'].indexOf(FFT.lang); if(LI<0) LI=FFT.lang==='gk'?0:1; /* languages the picture names lack show English, not Korean */
 var LIB=null, loading=null, cat=null, onPick=null, SVG={}, TABS={}, URLS={}, gen=0, dlg=null, q=null, tabs=null, grid=null;
 function script(src){ return new Promise(function(ok,no){ var s=document.createElement('script'); s.src=src; s.onload=ok; s.onerror=function(){ s.remove(); no(new Error('load')); }; document.head.appendChild(s); }); }
 window.BHOBJ_SVG=function(c,map){ for(var k in map) SVG[k]=map[k]; };
