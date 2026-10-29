@@ -1079,3 +1079,7 @@ FFT.add({
 "링크":["Link","Enlace","Lien","Link","リンク","链接","Link","Ссылка","Bağlantı","Link","링크","Collegamento","Łącze","رابط"],
 "말풍선":["Speech bubble","Globo de diálogo","Bulle","Sprechblase","吹き出し","对话框","Balão de fala","Выноска","Konuşma balonu","Speechbubble","말 풍선","Fumetto","Dymek","فقاعة كلام"]
 });
+FFT.add({
+"일러스트":["Illustrations","Ilustraciones","Illustrations","Illustrationen","イラスト","插图","Ilustrações","Иллюстрации","İllüstrasyonlar",null,null,"Illustrazioni","Ilustracje","رسومات توضيحية"],
+"일러스트·오브젝트 넣기":["Insert illustration or object","Insertar ilustración u objeto","Insérer une illustration ou un objet","Illustration oder Objekt einfügen","イラスト・オブジェクトを挿入","插入插图或对象","Inserir ilustração ou objeto","Вставить иллюстрацию или объект","İllüstrasyon veya nesne ekle",null,null,"Inserisci illustrazione o oggetto","Wstaw ilustrację lub obiekt","إدراج رسم توضيحي أو كائن"]
+});

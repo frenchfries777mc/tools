@@ -9,7 +9,93 @@
    "items": [
     "홈 탭에 몰려 있던 기능을 서식, 행·열, 보호·인쇄 탭으로 나눔",
     "데이터 탭에서 숨기기와 틀 고정, 잠금을 각각 행·열 탭과 보호·인쇄 탭으로 옮김"
-   ]
+   ],
+   "tr": {
+    "es": {
+     "title": "Pestañas de cinta reorganizadas",
+     "items": [
+      "Las funciones que se amontonaban en la pestaña Inicio se reparten en las pestañas Formato, Filas·Col. y Proteger·Imprimir",
+      "Ocultar, inmovilizar paneles y bloquear se pasan de la pestaña Datos a las pestañas Filas·Col. y Proteger·Imprimir"
+     ]
+    },
+    "fr": {
+     "title": "Onglets du ruban réorganisés",
+     "items": [
+      "Les fonctions regroupées dans l'onglet Accueil sont réparties entre les onglets Format, Lignes·Col. et Protéger·Imprimer",
+      "Masquer, figer les volets et verrouiller passent de l'onglet Données aux onglets Lignes·Col. et Protéger·Imprimer"
+     ]
+    },
+    "de": {
+     "title": "Menü-Reiter neu geordnet",
+     "items": [
+      "Die im Start-Reiter gedrängten Funktionen sind jetzt auf die Reiter Format, Zeilen·Spalten und Schutz·Druck verteilt",
+      "Ausblenden, Fenster fixieren und Sperren wurden vom Daten-Reiter auf die Reiter Zeilen·Spalten und Schutz·Druck verschoben"
+     ]
+    },
+    "ja": {
+     "title": "リボンタブを整理",
+     "items": [
+      "ホームタブに集まっていた機能を、書式・行・列・保護・印刷の各タブに分けました",
+      "データタブにあった非表示・ウィンドウ枠の固定・ロックを、行・列タブと保護・印刷タブへ移しました"
+     ]
+    },
+    "zh": {
+     "title": "整理功能区标签",
+     "items": [
+      "把开始标签中堆在一起的功能分到“格式”“行·列”“保护·打印”标签中",
+      "数据标签中的隐藏、冻结窗格和锁定分别移到“行·列”和“保护·打印”标签"
+     ]
+    },
+    "pt": {
+     "title": "Abas da faixa reorganizadas",
+     "items": [
+      "Os recursos que estavam amontoados na aba Início foram divididos nas abas Formatar, Linhas·Colunas e Proteger·Imprimir",
+      "Ocultar, congelar painéis e bloquear saíram da aba Dados e foram para as abas Linhas·Colunas e Proteger·Imprimir"
+     ]
+    },
+    "ru": {
+     "title": "Вкладки ленты перестроены",
+     "items": [
+      "Функции, собранные на вкладке «Главная», разнесены по вкладкам «Формат», «Строки·Столбцы» и «Защита·Печать»",
+      "Скрытие, закрепление областей и блокировка перенесены с вкладки «Данные» на вкладки «Строки·Столбцы» и «Защита·Печать»"
+     ]
+    },
+    "tr": {
+     "title": "Şerit sekmeleri düzenlendi",
+     "items": [
+      "Giriş sekmesinde toplanmış özellikler Biçim, Satır·Sütun ve Koruma·Yazdırma sekmelerine ayrıldı",
+      "Gizleme, bölme dondurma ve kilitleme Veri sekmesinden Satır·Sütun ve Koruma·Yazdırma sekmelerine taşındı"
+     ]
+    },
+    "it": {
+     "title": "Schede della barra riorganizzate",
+     "items": [
+      "Le funzioni raccolte nella scheda Home sono divise nelle schede Formato, Righe·Col e Proteggi·Stampa",
+      "Nascondi, blocca riquadri e blocca sono passati dalla scheda Dati alle schede Righe·Col e Proteggi·Stampa"
+     ]
+    },
+    "pl": {
+     "title": "Karty wstążki uporządkowane",
+     "items": [
+      "Funkcje zebrane na karcie Start rozdzielono na karty Format, Wiersze·Kol. i Ochrona·Drukowanie",
+      "Ukrywanie, zamrażanie okienek i blokowanie przeniesiono z karty Dane na karty Wiersze·Kol. i Ochrona·Drukowanie"
+     ]
+    },
+    "ar": {
+     "title": "إعادة تنظيم تبويبات الشريط",
+     "items": [
+      "وُزّعت الميزات المتكدسة في تبويب الصفحة الرئيسية على تبويبات التنسيق والصفوف·الأعمدة والحماية·الطباعة",
+      "نُقلت ميزات الإخفاء وتجميد الأجزاء والقفل من تبويب البيانات إلى تبويبي الصفوف·الأعمدة والحماية·الطباعة"
+     ]
+    },
+    "en": {
+     "title": "Ribbon tabs reorganized",
+     "items": [
+      "Features crowded on the Home tab are split into Format, Rows·Cols and Protect·Print tabs",
+      "Hide, freeze panes and lock moved from the Data tab to the Rows·Cols and Protect·Print tabs"
+     ]
+    }
+   }
   },
   {
    "date": "2026-10-25",
