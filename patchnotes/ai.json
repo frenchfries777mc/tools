@@ -3,6 +3,24 @@
  "name": "자체 AI (FF777)",
  "notes": [
   {
+   "date": "2026-10-29",
+   "build": "v53",
+   "title": "tarius 1.7 반영",
+   "items": [
+    "가장 가벼운 모델을 FF777 1.7 tarius로 교체",
+    "문서·파이썬·랩 AI 과제와 아재개그 아무거나 요청을 추가로 학습"
+   ],
+   "tr": {
+    "en": {
+     "title": "tarius 1.7 update",
+     "items": [
+      "Swapped the lightest model for FF777 1.7 tarius",
+      "Trained on Docs, Python and Lab AI tasks and any-dad-joke requests"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-10-28",
    "build": "v52",
    "title": "lectus·premus 1.7 반영",
