@@ -11,3 +11,6 @@ docs/index.html·app.js (리본 탭, AI 탭 새 작업 12개, 글 통계 창, �
 docs/index.html·app.js (글자 효과, 문단 꾸미기, 목록 모양, 스타일 편집, 책갈피, 표·그림 도구, 문서 비교 창) | 새 문구 전부 | docs v5 | 2026-10-26
 patchnotes/ai.json | lectus 1.6 반영 항목 | ai v51 | 2026-10-26
 patchnotes/ai.json | lectus·premus 1.7 반영 항목 (en만, 나머지 언어 필요) | ai v52 | 2026-10-28
+patchnotes/blocks.json | 일러스트 100개 추가 항목 (en만) | blocks v68 | 2026-10-29
+patchnotes/slides.json·docs.json | 일러스트 넣기 항목 (en만) | slides v32, docs v6 | 2026-10-29
+objpick.js·slides/ribbon.js·docs/index.html | 새 문구 (일러스트 버튼, 일러스트·오브젝트 창) | slides v32, docs v6 | 2026-10-29

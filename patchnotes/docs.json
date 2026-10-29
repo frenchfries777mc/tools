@@ -3,6 +3,16 @@
  "name": "Fry Docs",
  "notes": [
   {
+   "date": "2026-10-29",
+   "build": "v6",
+   "title": "일러스트 넣기",
+   "items": [
+    "삽입 탭에 일러스트 버튼 추가",
+    "Block HTML의 오브젝트와 일러스트 660개를 문서에 그림으로 넣기"
+   ],
+   "tr": {"en": {"title": "Illustrations", "items": ["Illustrations button on the Insert tab", "Insert any of the 660 Block HTML objects and illustrations into a document as a picture"]}}
+  },
+  {
    "date": "2026-10-26",
    "build": "v5",
    "title": "글자 효과·책갈피·표 도구·문서 비교 추가",

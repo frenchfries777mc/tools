@@ -383,6 +383,7 @@ Array.prototype.forEach.call(document.querySelectorAll('[data-i]'),function(b){ 
   if(b.dataset.i==='del'){ imgSel.remove(); selImg(null); } else { imgSel.style.width=b.dataset.i+'%'; imgSel.removeAttribute('width'); }
   count(); saveSoon(); }; });
 $('imgBtn').addEventListener('mousedown',function(e){ e.preventDefault(); keepSel(); });
+$('objBtn').onclick=function(){ FFOBJ.open(function(f){ shrink(f).then(function(o){ exec('insertHTML','<img src="'+o.src+'" width="'+Math.min(o.w,220)+'">'); },function(){ toast('그림을 넣지 못했어요'); }); }); };
 $('imgBtn').onclick=function(){ $('imgFile').value=''; $('imgFile').click(); };
 function shrink(file){ return new Promise(function(res,rej){ var fr=new FileReader(); fr.onerror=rej; fr.onload=function(){ var im=new Image(); im.onerror=rej; im.onload=function(){
     var w=im.naturalWidth, h=im.naturalHeight, k=Math.min(1,1200/w); var cv=document.createElement('canvas'); cv.width=Math.round(w*k); cv.height=Math.round(h*k);

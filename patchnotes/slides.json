@@ -3,6 +3,16 @@
  "name": "Fry Slides",
  "notes": [
   {
+   "date": "2026-10-29",
+   "build": "v32",
+   "title": "일러스트 넣기",
+   "items": [
+    "삽입 탭에 일러스트 버튼 추가",
+    "Block HTML의 오브젝트와 일러스트 660개를 슬라이드에 그림으로 넣기"
+   ],
+   "tr": {"en": {"title": "Illustrations", "items": ["Illustrations button on the Insert tab", "Put any of the 660 Block HTML objects and illustrations on a slide as a picture"]}}
+  },
+  {
    "date": "2026-10-25",
    "build": "v31",
    "title": "도형 9종, 돌리기, 그림자, 링크",
