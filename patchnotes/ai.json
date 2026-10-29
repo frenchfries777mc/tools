@@ -17,6 +17,83 @@
       "Swapped the lightest model for FF777 1.7 tarius",
       "Trained on Docs, Python and Lab AI tasks and any-dad-joke requests"
      ]
+    },
+    "es": {
+     "title": "Actualizado a tarius 1.7",
+     "items": [
+      "Cambiado el modelo más ligero por FF777 1.7 tarius",
+      "Entrenado con tareas de IA de Docs, Python y Lab y con cualquier petición de chiste de papá"
+     ]
+    },
+    "fr": {
+     "title": "Mise à jour tarius 1.7",
+     "items": [
+      "Modèle le plus léger remplacé par FF777 1.7 tarius",
+      "Entraîné sur les tâches IA de Docs, Python et Lab, et sur toutes les demandes de blagues de papa"
+     ]
+    },
+    "de": {
+     "title": "tarius 1.7 Update",
+     "items": [
+      "Leichtestes Modell durch FF777 1.7 tarius ersetzt",
+      "Zusätzlich trainiert auf KI-Aufgaben in Docs, Python und Lab sowie beliebige Dad-Joke-Anfragen"
+     ]
+    },
+    "ja": {
+     "title": "tarius 1.7 反映",
+     "items": [
+      "いちばん軽いモデルをFF777 1.7 tariusに入れ替え",
+      "Docs・Python・LabのAI課題と、おやじギャグのリクエストを追加で学習"
+     ]
+    },
+    "zh": {
+     "title": "tarius 1.7 更新",
+     "items": [
+      "将最轻量的模型换成 FF777 1.7 tarius",
+      "新增学习文档、Python 和 Lab 的 AI 任务，以及任意冷笑话请求"
+     ]
+    },
+    "pt": {
+     "title": "Atualização tarius 1.7",
+     "items": [
+      "Modelo mais leve trocado pelo FF777 1.7 tarius",
+      "Treinado com tarefas de IA de Docs, Python e Lab e com pedidos de piadas de tio"
+     ]
+    },
+    "ru": {
+     "title": "Обновление tarius 1.7",
+     "items": [
+      "Самую лёгкую модель заменили на FF777 1.7 tarius",
+      "Дополнительно обучена на задачах ИИ в Docs, Python и Lab и на любых запросах папиных шуток"
+     ]
+    },
+    "tr": {
+     "title": "tarius 1.7 güncellemesi",
+     "items": [
+      "En hafif model FF777 1.7 tarius ile değiştirildi",
+      "Docs, Python ve Lab yapay zekâ görevleri ile her türlü baba şakası isteği üzerine ek eğitim verildi"
+     ]
+    },
+    "it": {
+     "title": "Aggiornamento tarius 1.7",
+     "items": [
+      "Il modello più leggero sostituito con FF777 1.7 tarius",
+      "Addestrato in più su compiti IA di Docs, Python e Lab e su qualsiasi richiesta di barzellette da papà"
+     ]
+    },
+    "pl": {
+     "title": "Aktualizacja tarius 1.7",
+     "items": [
+      "Najlżejszy model zastąpiono przez FF777 1.7 tarius",
+      "Dodatkowo wytrenowano na zadaniach AI z Docs, Pythona i Lab oraz na dowolnych prośbach o żarty w stylu taty"
+     ]
+    },
+    "ar": {
+     "title": "تحديث tarius 1.7",
+     "items": [
+      "استبدال أخف النماذج بالنموذج FF777 1.7 tarius",
+      "تدريب إضافي على مهام الذكاء الاصطناعي في Docs وPython وLab، وعلى أي طلب لنكتة قديمة"
+     ]
     }
    }
   },
@@ -34,6 +111,83 @@
      "items": [
       "Swapped the balanced model for FF777 1.7 lectus and the smartest model for FF777 1.7 premus",
       "Trained on Docs, Python and Lab AI tasks and any-dad-joke requests"
+     ]
+    },
+    "es": {
+     "title": "Actualizado a lectus y premus 1.7",
+     "items": [
+      "Cambiados el modelo equilibrado por FF777 1.7 lectus y el más inteligente por FF777 1.7 premus",
+      "Entrenado con tareas de IA de Docs, Python y Lab y con cualquier petición de chiste de papá"
+     ]
+    },
+    "fr": {
+     "title": "Mise à jour lectus et premus 1.7",
+     "items": [
+      "Modèle équilibré remplacé par FF777 1.7 lectus, modèle le plus malin par FF777 1.7 premus",
+      "Entraîné sur les tâches IA de Docs, Python et Lab, et sur toutes les demandes de blagues de papa"
+     ]
+    },
+    "de": {
+     "title": "lectus- und premus-Update 1.7",
+     "items": [
+      "Das ausgewogene Modell durch FF777 1.7 lectus ersetzt, das klügste durch FF777 1.7 premus",
+      "Zusätzlich trainiert auf KI-Aufgaben in Docs, Python und Lab sowie beliebige Dad-Joke-Anfragen"
+     ]
+    },
+    "ja": {
+     "title": "lectus・premus 1.7 反映",
+     "items": [
+      "バランス型をFF777 1.7 lectusに、いちばん賢いモデルをFF777 1.7 premusに入れ替え",
+      "Docs・Python・LabのAI課題と、おやじギャグのリクエストを追加で学習"
+     ]
+    },
+    "zh": {
+     "title": "lectus·premus 1.7 更新",
+     "items": [
+      "将均衡模型换成 FF777 1.7 lectus，最聪明的模型换成 FF777 1.7 premus",
+      "新增学习文档、Python 和 Lab 的 AI 任务，以及任意冷笑话请求"
+     ]
+    },
+    "pt": {
+     "title": "Atualização lectus e premus 1.7",
+     "items": [
+      "Modelo equilibrado trocado pelo FF777 1.7 lectus e o mais inteligente pelo FF777 1.7 premus",
+      "Treinado com tarefas de IA de Docs, Python e Lab e com pedidos de piadas de tio"
+     ]
+    },
+    "ru": {
+     "title": "Обновление lectus и premus 1.7",
+     "items": [
+      "Сбалансированную модель заменили на FF777 1.7 lectus, самую умную — на FF777 1.7 premus",
+      "Дополнительно обучена на задачах ИИ в Docs, Python и Lab и на любых запросах папиных шуток"
+     ]
+    },
+    "tr": {
+     "title": "lectus ve premus 1.7 güncellemesi",
+     "items": [
+      "Dengeli model FF777 1.7 lectus ile, en akıllı model FF777 1.7 premus ile değiştirildi",
+      "Docs, Python ve Lab yapay zekâ görevleri ile her türlü baba şakası isteği üzerine ek eğitim verildi"
+     ]
+    },
+    "it": {
+     "title": "Aggiornamento lectus e premus 1.7",
+     "items": [
+      "Il modello bilanciato sostituito con FF777 1.7 lectus, quello più intelligente con FF777 1.7 premus",
+      "Addestrato in più su compiti IA di Docs, Python e Lab e su qualsiasi richiesta di barzellette da papà"
+     ]
+    },
+    "pl": {
+     "title": "Aktualizacja lectus i premus 1.7",
+     "items": [
+      "Zrównoważony model zastąpiono przez FF777 1.7 lectus, a najinteligentniejszy przez FF777 1.7 premus",
+      "Dodatkowo wytrenowano na zadaniach AI z Docs, Pythona i Lab oraz na dowolnych prośbach o żarty w stylu taty"
+     ]
+    },
+    "ar": {
+     "title": "تحديث lectus وpremus 1.7",
+     "items": [
+      "استبدال النموذج المتوازن بالنموذج FF777 1.7 lectus، والنموذج الأذكى بالنموذج FF777 1.7 premus",
+      "تدريب إضافي على مهام الذكاء الاصطناعي في Docs وPython وLab، وعلى أي طلب لنكتة قديمة"
      ]
     }
    }

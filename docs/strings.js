@@ -297,8 +297,8 @@ FFT.add({
 "○ 빈 동그라미":["○ Empty circle","○ Círculo vacío","○ Cercle vide","○ Leerer Kreis","○ 白丸","○ 空心圆","○ Círculo vazio","○ Пустой круг","○ Boş daire","○ Empty ring","○ 빈 동그라미","○ Cerchio vuoto","○ Puste koło","○ دائرة فارغة"],
 "■ 네모":["■ Square","■ Cuadrado","■ Carré","■ Quadrat","■ 四角","■ 方块","■ Quadrado","■ Квадрат","■ Kare","■ Box","■ 네모","■ Quadrato","■ Kwadrat","■ مربع"],
 "번호 모양":["Number style","Estilo de numeración","Style de numérotation","Nummerierungsstil","番号の形","编号样式","Estilo de numeração","Вид нумерации","Numara biçimi","Number shape","번호 모양","Stile numerato","Styl numeracji","نمط الترقيم"],
-"가. 나. 다.":["가. 나. 다.","가. 나. 다.","가. 나. 다.","가. 나. 다.","가. 나. 다.","가. 나. 다.","가. 나. 다.","가. 나. 다.","가. 나. 다.","가. 나. 다.","가. 나. 다.","가. 나. 다.","가. 나. 다.","가. 나. 다."],
-"ㄱ. ㄴ. ㄷ.":["ㄱ. ㄴ. ㄷ.","ㄱ. ㄴ. ㄷ.","ㄱ. ㄴ. ㄷ.","ㄱ. ㄴ. ㄷ.","ㄱ. ㄴ. ㄷ.","ㄱ. ㄴ. ㄷ.","ㄱ. ㄴ. ㄷ.","ㄱ. ㄴ. ㄷ.","ㄱ. ㄴ. ㄷ.","ㄱ. ㄴ. ㄷ.","ㄱ. ㄴ. ㄷ.","ㄱ. ㄴ. ㄷ.","ㄱ. ㄴ. ㄷ.","ㄱ. ㄴ. ㄷ."],
+"가. 나. 다.":["a) b) c)","a) b) c)","a) b) c)","a) b) c)","い. ろ. は.","甲、乙、丙、","a) b) c)","а) б) в)","a) b) c)","가. 나. 다.","가. 나. 다.","a) b) c)","a) b) c)","أ) ب) ت)"],
+"ㄱ. ㄴ. ㄷ.":["ⓐ ⓑ ⓒ","ⓐ ⓑ ⓒ","ⓐ ⓑ ⓒ","ⓐ ⓑ ⓒ","ア. イ. ウ.","一、二、三、","ⓐ ⓑ ⓒ","ⓐ ⓑ ⓒ","ⓐ ⓑ ⓒ","ㄱ. ㄴ. ㄷ.","ㄱ. ㄴ. ㄷ.","ⓐ ⓑ ⓒ","ⓐ ⓑ ⓒ","أ. ب. ت."],
 "책갈피":["Bookmark","Marcador","Signet","Lesezeichen","しおり","书签","Marcador","Закладка","Yer imi","Markplace","책갈피","Segnalibro","Zakładka","إشارة مرجعية"],
 "🔖 책갈피":["🔖 Bookmark","🔖 Marcador","🔖 Signet","🔖 Lesezeichen","🔖 しおり","🔖 书签","🔖 Marcador","🔖 Закладка","🔖 Yer imi","🔖 Markplace","🔖 책갈피","🔖 Segnalibro","🔖 Zakładka","🔖 إشارة مرجعية"],
 "이름":["Name","Nombre","Nom","Name","名前","名称","Nome","Имя","Ad","Name","이름","Nome","Nazwa","الاسم"],
@@ -440,4 +440,9 @@ FFT.add({
 "바꿀 글자를 먼저 고르세요":["Select the text to replace first","Primero selecciona el texto a reemplazar","Sélectionnez d’abord le texte à remplacer","Zuerst den Text zum Ersetzen markieren","先に置き換える文字を選んでください","请先选中要替换的文字","Primeiro selecione o texto a substituir","Сначала выделите текст для замены","Önce değiştirilecek metni seçin","Pick words to change first","바꾸다 글자 를 먼저 고르다","Prima seleziona il testo da cambiare","Najpierw zaznacz tekst do zmiany","اختر النص الذي تريد تغييره أولًا"],
 "표 안의 칸을 먼저 누르세요":["Click a cell in the table first","Pulsa primero una celda de la tabla","Cliquez d’abord sur une cellule du tableau","Zuerst eine Zelle der Tabelle anklicken","先に表の中のセルをクリックしてください","请先点击表格中的单元格","Clique primeiro numa célula da tabela","Сначала щёлкните ячейку таблицы","Önce tablodaki bir hücreye tıklayın","Press a box in the table first","표 안 의 칸 을 먼저 누르다","Prima clicca una cella della tabella","Najpierw kliknij komórkę w tabeli","انقر على خلية داخل الجدول أولًا"],
 "주제로 초안 쓰기":["Draft from a topic","Redactar un borrador a partir de un tema","Rédiger un brouillon sur un sujet","Entwurf zu einem Thema schreiben","テーマから下書きを書く","按主题写初稿","Escrever rascunho a partir de um tema","Написать черновик по теме","Bir konudan taslak yaz","Write draft from topic","주제 로 초안 쓰다","Scrivi una bozza da un tema","Napisz szkic na temat","كتابة مسودة من موضوع"]
+});
+FFT.add({
+"일러스트":["Illustrations","Ilustraciones","Illustrations","Illustrationen","イラスト","插图","Ilustrações","Иллюстрации","İllüstrasyonlar",null,null,"Illustrazioni","Ilustracje","رسومات توضيحية"],
+"일러스트·오브젝트 넣기":["Insert illustration or object","Insertar ilustración u objeto","Insérer une illustration ou un objet","Illustration oder Objekt einfügen","イラスト・オブジェクトを挿入","插入插图或对象","Inserir ilustração ou objeto","Вставить иллюстрацию или объект","İllüstrasyon veya nesne ekle",null,null,"Inserisci illustrazione o oggetto","Wstaw ilustrację lub obiekt","إدراج رسم توضيحي أو كائن"],
+"그림을 넣지 못했어요":["Couldn't insert the picture","No se pudo insertar la imagen","Impossible d'insérer l'image","Das Bild konnte nicht eingefügt werden","画像を入れられませんでした","无法插入图片","Não foi possível inserir a imagem","Не удалось вставить картинку","Resim eklenemedi",null,null,"Impossibile inserire l'immagine","Nie udało się wstawić obrazu","تعذّر إدراج الصورة"]
 });
