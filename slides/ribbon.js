@@ -99,6 +99,7 @@ var CMDS=[
  {id:'keys', tab:'home', ic:'keys', lb:'단축키', t:'단축키 보기', sc:'?', k:'키보드 도움말', need:function(){ return ''; }, run:function(){ C().deck('keys'); }},
 
  {id:'pic', tab:'ins', el:'picBtn', ic:'pic', lb:'그림', t:'그림 넣기', k:'사진 이미지 그림 넣기'},
+ {id:'objpic', tab:'ins', ic:'pic', lb:'일러스트', t:'일러스트·오브젝트 넣기', k:'일러스트 오브젝트 그림 스티커 아이콘 이모지 캐릭터', need:nSlide, run:function(){ C().objPic(); }},
  {id:'shape', tab:'ins', el:'shapeBtn', ic:'shape', lb:'도형', t:'도형·화살표 넣기', menu:1, k:'화살표 네모 동그라미 원 별 선 세모'},
  {id:'conn', tab:'ins', ic:'conn', lb:'연결선', t:'연결선 (고른 도형과 다른 도형을 이어요)', k:'선 화살표 이어 붙이기 연결 커넥터 도형 잇기', need:nConn, run:function(){ C().connect(); }},
  {id:'textbox', tab:'ins', ic:'text', lb:'글상자', t:'글상자 넣기', k:'텍스트 상자 글 쓰기 텍스트', need:nSlide, run:function(){ C().addShape('text'); }},
