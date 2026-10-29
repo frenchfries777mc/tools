@@ -1,0 +1,187 @@
+{
+ "built": "2026-10-29T09:01:33.822Z",
+ "total": 6000,
+ "filled": {
+  "code": 6,
+  "formula": 17,
+  "tr": 40,
+  "und": 20,
+  "table": 12,
+  "graph": 14,
+  "cell": 6,
+  "memo-ex": 3,
+  "gen14": 2,
+  "gen": 4
+ },
+ "newRows": 5276,
+ "take": {
+  "blocks": {
+   "want": 630,
+   "rows": 630,
+   "new": 489
+  },
+  "formula": {
+   "want": 216,
+   "rows": 216,
+   "new": 216
+  },
+  "calc": {
+   "want": 120,
+   "rows": 120,
+   "new": 120
+  },
+  "cell": {
+   "want": 72,
+   "rows": 72,
+   "new": 0
+  },
+  "table": {
+   "want": 120,
+   "rows": 120,
+   "new": 120
+  },
+  "graph": {
+   "want": 108,
+   "rows": 108,
+   "new": 0
+  },
+  "tr": {
+   "want": 84,
+   "rows": 84,
+   "new": 0
+  },
+  "slides": {
+   "want": 540,
+   "rows": 540,
+   "new": 540
+  },
+  "docs": {
+   "want": 540,
+   "rows": 540,
+   "new": 540
+  },
+  "python": {
+   "want": 240,
+   "rows": 240,
+   "new": 240
+  },
+  "labask": {
+   "want": 42,
+   "rows": 42,
+   "new": 42
+  },
+  "labdraft": {
+   "want": 30,
+   "rows": 30,
+   "new": 30
+  },
+  "labset": {
+   "want": 48,
+   "rows": 48,
+   "new": 48
+  },
+  "labfind": {
+   "want": 60,
+   "rows": 60,
+   "new": 60
+  },
+  "anyjoke": {
+   "want": 840,
+   "rows": 833,
+   "new": 833
+  },
+  "joke": {
+   "want": 135,
+   "rows": 135,
+   "new": 135
+  },
+  "use": {
+   "want": 480,
+   "rows": 480,
+   "new": 480
+  },
+  "talk": {
+   "want": 720,
+   "rows": 720,
+   "new": 720
+  },
+  "word": {
+   "want": 540,
+   "rows": 428,
+   "new": 428
+  },
+  "oldword": {
+   "want": 60,
+   "rows": 60,
+   "new": 60
+  },
+  "self": {
+   "want": 102,
+   "rows": 102,
+   "new": 102
+  },
+  "und": {
+   "want": 75,
+   "rows": 75,
+   "new": 0
+  },
+  "unknown": {
+   "want": 78,
+   "rows": 78,
+   "new": 78
+  },
+  "chat": {
+   "want": 120,
+   "rows": 120,
+   "new": 0
+  }
+ },
+ "short": {
+  "anyjoke": 7,
+  "word": 112
+ },
+ "blocked": 77,
+ "repeatedRows": 4,
+ "pool": {
+  "formula": 484,
+  "tr": 893,
+  "und": 650,
+  "memo-chip": 106,
+  "graph": 500,
+  "table": 361,
+  "slides": 200,
+  "cell": 221,
+  "ask4": 211,
+  "gen": 249,
+  "joke": 251,
+  "code": 461,
+  "ask": 219,
+  "memo-ex": 58,
+  "gen14": 62,
+  "fun": 58,
+  "explain": 8,
+  "ask4u": 17,
+  "calc": 16,
+  "spell": 10,
+  "py17": 288,
+  "newcalc": 584,
+  "joke16": 1339,
+  "newslides": 752,
+  "labset17": 90,
+  "newformula": 378,
+  "joke16x": 344,
+  "newunknown": 415,
+  "newcode": 489,
+  "docs17": 886,
+  "newtable": 176,
+  "labfind17": 80,
+  "word16": 77,
+  "labask17": 58,
+  "labdraft17": 48,
+  "newself": 469,
+  "joke18": 833,
+  "use18": 808,
+  "chat18": 800,
+  "word18": 428
+ }
+}
