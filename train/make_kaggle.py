@@ -5,9 +5,9 @@ C = nb['cells']
 def src(i): return ''.join(C[i]['source'])
 def put(i, s): C[i]['source'] = s.splitlines(True)
 
-put(0, """# Tools 자체 AI 학습 노트 (Kaggle용, FF777 1.7 / 1.4)
+put(0, """# Tools 자체 AI 학습 노트 (Kaggle용, FF777 1.8 / 1.4)
 
-**프레무스 1.7 이어 학습 (지금 설정)**: 설정 칸을 `MODEL = "premus"`, `VERSION = "1.7"`, `CONTINUE = True` 로 둬요. 올려 둔 프레무스 1.6 (`FF-Tools-8B-merged-1.6`) 위에 새 자료 6,000줄(`data/v17-smart.jsonl`: 블록·시트·슬라이드·문서·파이썬·랩·대화)을 2바퀴(약 1,500걸음, 약 6.5시간 추정, 학습률 1e-4) 이어서 학습해요. 끝나면 `FF-Tools-8B-merged-1.7` 에 올려서 1.6은 그대로 남아요. 오른쪽 **Session options** 가 **GPU T4 x2**, **Internet = On**, **Secrets의 HF_TOKEN 체크**인지 보고 **Save & Run All (Commit)** 만 누르면 돼요. 끊기면 같은 노트를 다시 돌리면 중간 저장(200걸음마다)에서 이어요. 끝나면 맨 아래 시험 결과와 "올림 끝"을 Claude에게 알려 주세요.
+**프레무스 1.8 이어 학습 (지금 설정)**: 설정 칸을 `MODEL = "premus"`, `VERSION = "1.8"`, `CONTINUE = True` 로 둬요. 올려 둔 프레무스 1.7 (`FF-Tools-8B-merged-1.7`) 위에 새 자료 6,000줄(`data/v18-smart.jsonl`: 아무거나 아재개그 833줄, 끝말잇기 428줄, 프로그램 사용법 약 470줄, 대화 720줄, 블록·시트·슬라이드·문서·파이썬·랩)을 2바퀴 이어서 학습해요(학습률 1e-4). 끝나면 `FF-Tools-8B-merged-1.8` 에 올려서 1.7은 그대로 남아요. 오른쪽 **Session options** 가 **GPU T4 x2**, **Internet = On**, **Secrets의 HF_TOKEN 체크**인지 보고 **Save & Run All (Commit)** 만 누르면 돼요. 끊기면 같은 노트를 다시 돌리면 중간 저장(200걸음마다)에서 이어요. 끝나면 맨 아래 시험 결과와 "올림 끝"을 Claude에게 알려 주세요.
 
 아래는 1.4 설명이에요.
 
