@@ -4,6 +4,15 @@
  "notes": [
   {
    "date": "2026-10-29",
+   "build": "v7",
+   "title": "일러스트 넣을 때 커서",
+   "items": [
+    "일러스트를 넣어도 깜빡이는 커서 막대가 나오지 않음"
+   ],
+   "tr": {"en": {"title": "Cursor after illustrations", "items": ["The blinking text cursor no longer shows after inserting an illustration"]}}
+  },
+  {
+   "date": "2026-10-29",
    "build": "v6",
    "title": "일러스트 넣기",
    "items": [
