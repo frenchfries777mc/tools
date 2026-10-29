@@ -14,3 +14,4 @@ patchnotes/ai.json | lectus·premus 1.7 반영 항목 (en만, 나머지 언어 �
 patchnotes/blocks.json | 일러스트 100개 추가 항목 (en만) | blocks v68 | 2026-10-29
 patchnotes/slides.json·docs.json | 일러스트 넣기 항목 (en만) | slides v32, docs v6 | 2026-10-29
 objpick.js·slides/ribbon.js·docs/index.html | 새 문구 (일러스트 버튼, 일러스트·오브젝트 창) | slides v32, docs v6 | 2026-10-29
+patchnotes/docs.json | 커서 항목 (en만) | docs v7 | 2026-10-29
