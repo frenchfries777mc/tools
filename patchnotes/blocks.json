@@ -3,6 +3,15 @@
  "name": "Fry Blocks",
  "notes": [
   {
+   "date": "2026-10-29",
+   "build": "v68",
+   "title": "일러스트 100개 추가",
+   "items": [
+    "오브젝트에 일러스트 탭을 만들고 풍경·직업·집·식물과 곤충·행사 그림 100개 추가"
+   ],
+   "tr": {"en": {"title": "100 illustrations added", "items": ["New Illustrations tab in Objects with 100 pictures: scenes, jobs, home, plants and insects, celebrations"]}}
+  },
+  {
    "date": "2026-10-25",
    "build": "v67",
    "title": "이름 변경",
