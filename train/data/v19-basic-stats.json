@@ -1,5 +1,5 @@
 {
- "built": "2026-10-30T11:14:06.450Z",
+ "built": "2026-10-30T11:24:21.835Z",
  "total": 6000,
  "filled": {
   "graph": 2,
@@ -78,14 +78,14 @@
    "new": 31
   },
   "anyjoke": {
-   "want": 1200,
-   "rows": 1200,
-   "new": 1200
-  },
-  "joke": {
    "want": 1800,
    "rows": 1800,
    "new": 1800
+  },
+  "joke": {
+   "want": 1200,
+   "rows": 1200,
+   "new": 1200
   },
   "jokereview": {
    "want": 600,
@@ -135,7 +135,7 @@
  },
  "short": {},
  "blocked": 77,
- "repeatedRows": 66,
+ "repeatedRows": 47,
  "pool": {
   "formula": 484,
   "tr": 893,
