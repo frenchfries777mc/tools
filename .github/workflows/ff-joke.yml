@@ -14,6 +14,9 @@ on:
       max_new_tokens:
         description: Longest answer in tokens
         default: '64'
+      site:
+        description: Ask the "chat" way the site does (the model's own name text in the system prompt, sampling) instead of the plain chat prompt
+        default: 'false'
 
 jobs:
   plan:
@@ -44,6 +47,7 @@ jobs:
       - name: Run
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          FF_SITE: ${{ inputs.site == 'true' && '1' || '0' }}
         run: python -u train/ff_joke.py "${{ inputs.model }}" ${{ matrix.shard }} "${{ inputs.shards }}" "${{ inputs.max_new_tokens }}"
       - uses: actions/upload-artifact@v4
         if: always()

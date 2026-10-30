@@ -4,6 +4,22 @@
  "notes": [
   {
    "date": "2026-10-30",
+   "build": "v55",
+   "title": "AI 대결장 바꿈",
+   "items": [
+    "모델을 고르지 않고 무작위 두 모델이 겨룸",
+    "두 답변이 끝나면 한꺼번에 나오고, 만드는 동안 불러오는 모습과 모델 이름은 숨김",
+    "버튼 대신 마음에 드는 답변 창을 눌러 고르면 그때 모델이 공개됨"
+   ],
+   "tr": {
+    "en": {
+     "title": "AI Arena changes",
+     "items": ["Two random models compete; you no longer pick them", "Both answers appear together once they are ready; loading and model names stay hidden while they are written", "Tap the answer you like instead of a button, and the models are revealed then"]
+    }
+   }
+  },
+  {
+   "date": "2026-10-30",
    "build": "v54",
    "title": "tarius·premus 1.8 반영",
    "items": [

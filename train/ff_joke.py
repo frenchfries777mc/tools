@@ -13,6 +13,15 @@ jokes = json.loads(re.search(r'var J=(\[.*?\n\]);', src, re.S).group(1))
 ask_sys = re.search(r"P\.askSys='([^']*)'", open('ai-prompts.js', encoding='utf-8').read()).group(1)
 chat_sys = ('You are chatting with a curious person. Answer in 3 to 5 sentences with one concrete example. Be warm and natural. '
             'Plain text only: no markdown tables, no code fences. Use the language the question is written in.')
+# FF_SITE=1: the "chat" prompt is what the site really sends (ai.js withFacts adds the model's own "You are FF777 x.y name ..." text to the chat system prompt)
+# and the site samples (temperature 0.7, top_p 0.8) instead of greedy decoding
+SITE = os.environ.get('FF_SITE') == '1'
+if SITE:
+    size = re.search(r'(1\.7B|4B|8B)', model_id).group(1); ver = re.search(r'-(1\.\d)$', model_id).group(1)
+    who = {'1.7B': ('tarius', 'Qwen3 1.7B', 'elementarius', 'basic'), '4B': ('lectus', 'Qwen3 4B', 'intellectus', 'understanding'), '8B': ('premus', 'Qwen3 8B', 'supremus', 'supreme')}[size]
+    chat_sys += ('\n\nYou are FF777 ' + ver + ' ' + who[0] + ', the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from ' + who[1] + '. Your name is the end of the Latin word ' + who[2] + ' ("' + who[3] + '"). '
+                 'You are cheerful and a little funny: when you chat you add a short, kind joke, but answers about tables, formulas and code stay exact and serious.')
+    torch.manual_seed(7)
 token = os.environ.get('HF_TOKEN')
 tok = AutoTokenizer.from_pretrained(model_id, token=token)
 model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.bfloat16, token=token)
@@ -34,7 +43,7 @@ for i, (q, a) in enumerate(jokes + [(w, '') for w in ANY]):
         ids = tok(text, return_tensors='pt')
         t0 = time.time()
         with torch.no_grad():
-            out = model.generate(**ids, max_new_tokens=max_new, do_sample=False)
+            out = model.generate(**ids, max_new_tokens=max_new, do_sample=True, temperature=0.7, top_p=0.8) if (SITE and mode == 'chat') else model.generate(**ids, max_new_tokens=max_new, do_sample=False)
         ans = tok.decode(out[0][ids['input_ids'].shape[1]:], skip_special_tokens=True)
         ans = re.sub(r'<think>.*?</think>', '', ans, flags=re.S).strip()
         row = {'i': i, 'mode': ('any-' + mode) if anyq else mode, 'q': q, 'a': a, 'ans': ans}
