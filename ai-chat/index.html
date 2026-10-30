@@ -178,7 +178,7 @@ form.in textarea:focus{outline:none;}
 .acards{display:grid; grid-template-columns:1fr 1fr; gap:12px;} @media(max-width:620px){ .acards{grid-template-columns:1fr;} }
 .ac{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:12px 14px; min-height:120px;} .ac.pick{cursor:pointer;} .ac.pick:hover,.ac.pick:focus-visible{border-color:var(--fry,#ffc93c); outline:none;} .ac h3{margin:0 0 6px; font-size:14px; color:var(--dim);} .ac .atx{white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.65;}
 .ac.win{border-color:var(--good,#5fd38d);}
-.ares{font-size:13px; color:var(--dim); line-height:1.7;}
+.ares{font-size:13px; color:var(--dim); line-height:1.7;} .ares.busy{display:flex; align-items:center; gap:8px; color:var(--fg,inherit);} .ares.busy::before{content:''; width:14px; height:14px; border-radius:50%; border:2px solid var(--line); border-top-color:var(--fry,#ffc93c); animation:arspin .8s linear infinite;} @keyframes arspin{to{transform:rotate(360deg);}}
 .msug{display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:8px 12px; background:var(--panel2); border:1px solid var(--line); border-radius:12px; font-size:13px;} .msug span{flex:1; min-width:0; overflow-wrap:anywhere;}
 .mlist{display:grid; gap:6px; margin:0 0 12px; max-height:44vh; overflow:auto;} .mrow{display:flex; gap:6px;} .mrow input{flex:1; min-width:0; margin:0!important;} .mrow button{flex:0 0 auto;}
 .dlg .mnote{font-size:12px; color:var(--dim); line-height:1.55; margin:0 0 12px;} .dlg .mon{display:flex; gap:8px; align-items:center; margin:0 0 12px; font-size:14px;}
@@ -510,7 +510,7 @@ function mName(id){ var m=models.filter(function(x){ return x.id===id; })[0]; re
 function arenaOpen(on){ $('arena').hidden=!on; $('pick').hidden=on; $('hero').hidden=on; if(on){ arenaFill(); $('arQ').focus(); } }
 $('arenaBtn').onclick=function(){ arenaOpen(true); };
 $('arenaBack').onclick=function(){ if(arRun){ arGen++; FFAI.stop(); arRun=false; setArBusy(false); } arenaOpen(false); };
-function setArBusy(b){ arRun=b; $('arGo').textContent=T(b?'멈추기':'대결!'); $('arGo').type=b?'button':'submit'; }
+function setArBusy(b){ var r=$('ares'); if(!b&&r.classList.contains('busy')) r.textContent=''; r.classList.toggle('busy',b); arRun=b; $('arGo').textContent=T(b?'멈추기':'대결!'); $('arGo').type=b?'button':'submit'; }
 function arOne(mid,q,el,g){
   return FFAI.ask({model:mid, quiet:true, prose:true, chat:true, maxTokens:LEN[1].tok, facts:true, question:q, history:[], system:baseSys(LEN[1].ask), prompt:q,
     }).then(function(r){ return String(typeof r==='string'?r:(r&&r.text)||'').trim(); },function(){ return ''; });
@@ -525,7 +525,7 @@ function arenaRun(q,pair){
     return;
   }
   arSide={l:L, r:R, q:q, lt:'', rt:''}; setArBusy(true);
-  $('ares').textContent=''; $('acards').hidden=true; ['acL','acR'].forEach(function(id){ $(id).classList.remove('pick','win'); $(id).tabIndex=-1; });   // 둘 다 끝나기 전에는 아무것도 안 보여요 (불러오는 모습도, 글자가 올라오는 모습도)
+  $('ares').textContent=T('답변을 준비하고 있어요'); $('acards').hidden=true; ['acL','acR'].forEach(function(id){ $(id).classList.remove('pick','win'); $(id).tabIndex=-1; });   // 둘 다 끝나기 전에는 아무것도 안 보여요 (불러오는 모습도, 글자가 올라오는 모습도)
   arOne(L,q,null,g).then(function(t){ if(g!==arGen) return; arSide.lt=t;
     return arOne(R,q,null,g).then(function(t2){ if(g!==arGen) return; arSide.rt=t2; }); })
   .then(function(){ if(g!==arGen) return; setArBusy(false);

@@ -18,3 +18,4 @@ patchnotes/docs.json | 커서 항목 (en만) | docs v7 | 2026-10-29
 patchnotes/ai.json | tarius 1.7 항목 (en만) | ai v53 | 2026-10-29
 patchnotes/ai.json | tarius·premus 1.8 항목 (en만) | ai v54 | 2026-10-30
 patchnotes/ai.json | AI 대결장 항목 (en만), ai-chat/index.html 새 문구 2개(더 나은 답변을 눌러 골라 주세요 등 zh/pt/ru/tr/nw/gk 빠짐) | ai v55 | 2026-10-30
+patchnotes/ai.json | AI 대결장 준비 표시 항목 (en만), ai-chat/index.html 새 문구(답변을 준비하고 있어요) | ai v56 | 2026-10-30
