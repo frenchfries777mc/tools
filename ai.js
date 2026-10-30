@@ -339,11 +339,13 @@ function withFacts(c,o){ // only for our own models, and only for free answers t
 }
 function send(c,o){ return c.local?askLocal(c,o):c.provider==='claude'?askClaude(c,o):c.provider==='openai'?askOpenAI(c,o):askGemini(c,o); }
 function ask(o){
-  quiet=false;
+  quiet=!!o.quiet;   // quiet: a page that hides which model answers (ai-chat/ arena) asks for no progress bar
   var c=cfg();
   if(o.model&&TUNED[o.model]) c={provider:'local', key:'', model:o.model, local:true, localOk:true}; // a page that lets people pick one of our models (ai-chat/) leaves the saved AI setting alone
   if(c.local?!c.localOk:!c.key) return new Promise(function(res,rej){ settings(function(){ ask(o).then(res,rej); },function(){ rej(AIError(c.local?T('자체 AI를 쓰려면 AI 설정에서 저장을 눌러 주세요'):T('AI를 쓰려면 먼저 API 키를 넣어 주세요'),'nokey')); }); });
-  return withFacts(c,o).then(function(o2){ return send(c,o2); });
+  var run=withFacts(c,o).then(function(o2){ return send(c,o2); });
+  if(o.quiet) run.then(function(){ quiet=false; },function(){ quiet=false; });
+  return run;
 }
 function parseJSON(t){
   t=String(t||'').trim(); var m=/```(?:json)?\s*([\s\S]*?)```/.exec(t); if(m) t=m[1].trim();
