@@ -21,8 +21,8 @@ const GROUPS={ // pct of N; replay tasks are earlier task names; new tasks are l
   docs:{pct:8, tasks:['docs17']},
   python:{pct:4, tasks:['py17']},
   labask:{pct:0.7, tasks:['labask17']}, labdraft:{pct:0.5, tasks:['labdraft17']}, labset:{pct:0.8, tasks:['labset17']}, labfind:{pct:1, tasks:['labfind17']},   // lab 3
-  anyjoke:{pct:40, tasks:['joke19'], big:1},                          // owner 10-30: 40% any-joke requests (every joke 18x, 2-3 turn chats)
-  joke:{pct:30, tasks:['joke19q','joke16','joke16x'], big:1},         // owner 10-30: 30% specific jokes (riddle asked, its own punchline)
+  anyjoke:{pct:30, tasks:['joke19'], big:1},                          // owner 10-30: 30% any-joke requests (every joke 18x, 2-3 turn chats)
+  joke:{pct:20, tasks:['joke19q','joke16','joke16x'], big:1},         // owner 10-30: 20% specific jokes (riddle asked, its own punchline)
   jokereview:{pct:10, tasks:['joke18'], big:1},                       // owner 10-30: 10% review of the earlier joke rounds
   use:{pct:7, tasks:['use18']},                                       // what each Tools program is for and how to use it
   talk:{pct:10, tasks:['chat18']},                                  // everyday talk, 800 rows
@@ -33,7 +33,7 @@ const GROUPS={ // pct of N; replay tasks are earlier task names; new tasks are l
   unknown:{pct:1.3, tasks:['newunknown','ask4u']},
   chat:{pct:2, tasks:['ask','fun','ask4','spell','explain']}
 };
-{ const S=Object.values(GROUPS).filter(G=>!G.big).reduce((a,G)=>a+G.pct,0), F=20/S; for(const G of Object.values(GROUPS)) if(!G.big) G.pct*=F; }   // owner 10-30: jokes 80% (any 40, specific 30, review 10), everything else only enough not to be forgotten (20%)
+{ const S=Object.values(GROUPS).filter(G=>!G.big).reduce((a,G)=>a+G.pct,0), F=40/S; for(const G of Object.values(GROUPS)) if(!G.big) G.pct*=F; }   // owner 10-30: jokes 60% (any 30, specific 20, review 10), everything else enough not to be forgotten (40%)
 const NEW=new Set(['newcode','newformula','newcalc','newtable','newunknown','newself','joke16','joke19','joke19q','use18','chat18','word18','newslides','word16','docs17','py17','labask17','labdraft17','labset17','labfind17']);
 const HUMOR='You are cheerful and a little funny: when you chat you add a short, kind joke, but answers about tables, formulas and code stay exact and serious.';
 const WHO={who:'You are FF777 '+VER+' lectus, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 4B. Your name is the end of the Latin word intellectus ("understanding"). '+HUMOR, fill:{NAME:'FF777 '+VER+' lectus', BASE:'Qwen3 4B', LATIN:'intellectus', MEANING_KO:'이해력', MEANING_EN:'understanding'}};
