@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@400;700&family=Nanum+Gothic:wght@400;700&family=Nanum+Myeongjo:wght@400;700&family=Nanum+Pen+Script&family=Gowun+Dodum&family=Black+Han+Sans&family=Jua&display=swap" rel="stylesheet">
 <script src="../i18n.js"></script>
-<script src="strings.js?v=d5"></script>
+<script src="strings.js?v=d6"></script>
 <style>
 :root{ --bg:#08090d; --panel:#10131b; --panel2:#151925; --line:#222837; --text:#eef0f5; --dim:#8a93a6; --fry:#ffc93c; --fry2:#ff8a3d; --desk:#0b0d13; }
 html[data-ff-theme=light]{ --bg:#f6f3ec; --panel:#ffffff; --panel2:#f1ede4; --line:#e2dccf; --text:#1f1b14; --dim:#6d6658; --desk:#e6e1d6; }
@@ -180,7 +180,7 @@ body.painting #page{cursor:copy;}
 <header class="top">
   <a class="home" href="../" aria-label="도구 목록">🍟</a>
   <span class="brand" data-notr>FRY <b>DOCS</b></span>
-  <input id="docName" aria-label="문서 이름" spellcheck="false" autocomplete="off" data-notr>
+  <input id="docName" aria-label="문서 이름" spellcheck="false" autocomplete="off">
   <span class="saved" id="saved"></span>
   <span class="sp"></span>
   <button class="tbtn" id="mineBtn" type="button"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span class="lb">내 문서</span></button>
@@ -268,11 +268,11 @@ body.painting #page{cursor:copy;}
   </span>
 </nav>
 <div class="findbar" id="findBar" hidden>
-  <input id="fQ" placeholder="찾을 글자" aria-label="찾을 글자" data-notr autocomplete="off"><span id="fN" class="fn"></span>
+  <input id="fQ" placeholder="찾을 글자" aria-label="찾을 글자" autocomplete="off"><span id="fN" class="fn"></span>
   <button class="ib" id="fPrev" title="이전 (Shift+Enter)" aria-label="이전"><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></button>
   <button class="ib" id="fNext" title="다음 (Enter)" aria-label="다음"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
   <label class="fcase"><input type="checkbox" id="fCase">대소문자</label>
-  <input id="fR" placeholder="바꿀 글자" aria-label="바꿀 글자" data-notr autocomplete="off">
+  <input id="fR" placeholder="바꿀 글자" aria-label="바꿀 글자" autocomplete="off">
   <button class="ib" id="fRep"><span class="lb">바꾸기</span></button>
   <button class="ib" id="fAll"><span class="lb">모두 바꾸기</span></button>
   <button class="x" id="fClose" aria-label="닫기">×</button>
@@ -374,7 +374,7 @@ body.painting #page{cursor:copy;}
 </div></div>
 <div class="ov" id="cmpDlg"><div class="dlg" style="width:min(640px,100%)">
   <div class="dh"><h3>문서 비교</h3><button class="x" data-close aria-label="닫기">×</button></div>
-  <div class="dbody"><label class="fl">비교할 문서 (지금 문서와 견줘요)<select id="cmpSel"></select></label><div class="cmpout" id="cmpOut" data-notr>고른 문서와 지금 문서의 다른 곳이 여기에 나와요. <ins>초록</ins>은 지금 문서에만 있는 글, <del>빨강</del>은 고른 문서에만 있는 글이에요.</div></div>
+  <div class="dbody"><label class="fl">비교할 문서 (지금 문서와 견줘요)<select id="cmpSel"></select></label><div class="cmpout" id="cmpOut"><span>고른 문서와 지금 문서의 다른 곳이 여기에 나와요. <ins>초록</ins>은 지금 문서에만 있는 글, <del>빨강</del>은 고른 문서에만 있는 글이에요.</span></div></div>
   <div class="dfoot"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="cmpGo">비교하기</button></div>
 </div></div>
 <div class="menu" id="aiMenu">
@@ -442,11 +442,11 @@ body.painting #page{cursor:copy;}
       <label>여백<select id="pgMar"><option value="n">보통 (2.54cm)</option><option value="s">좁게 (1.27cm)</option><option value="m">조금 좁게 (1.91cm)</option><option value="w">넓게 (3.18cm)</option></select></label>
       <label>단<select id="pgCols"><option value="1">1단</option><option value="2">2단</option><option value="3">3단</option></select></label>
     </div>
-    <label class="fl">머리글 (쪽 맨 위)<input id="pgHd" data-notr autocomplete="off" placeholder="예: 과학 보고서"></label>
-    <label class="fl">바닥글 (쪽 맨 아래)<input id="pgFt" data-notr autocomplete="off" placeholder="예: 3학년 2반 김철수"></label>
+    <label class="fl">머리글 (쪽 맨 위)<input id="pgHd" autocomplete="off" placeholder="예: 과학 보고서"></label>
+    <label class="fl">바닥글 (쪽 맨 아래)<input id="pgFt" autocomplete="off" placeholder="예: 3학년 2반 김철수"></label>
     <div class="num2">
       <label>쪽 번호<select id="pgPn"><option value="">없음</option><option value="bc">아래 가운데</option><option value="br">아래 오른쪽</option><option value="bl">아래 왼쪽</option><option value="tr">위 오른쪽</option></select></label>
-      <label>워터마크<input id="pgWm" data-notr autocomplete="off" placeholder="예: 초안"></label>
+      <label>워터마크<input id="pgWm" autocomplete="off" placeholder="예: 초안"></label>
     </div>
     <p>머리글, 바닥글, 쪽 번호는 PDF와 Word 문서로 받을 때 쪽마다 들어가요. 워터마크는 화면과 PDF에 보여요.</p>
   </div>
@@ -464,9 +464,9 @@ body.painting #page{cursor:copy;}
 <script src="../ai-prompts.js"></script>
 <script src="../versions.js?v=2"></script>
 <script src="../undotoast.js"></script>
-<script src="../objpick.js?v=47"></script>
+<script src="../objpick.js?v=48"></script>
 <script src="docx.js?v=d4"></script>
-<script src="app.js?v=d8"></script>
+<script src="app.js?v=d9"></script>
 <script src="../pwa.js" defer></script>
 <script src="../ping.js" defer></script>
 </body>
