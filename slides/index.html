@@ -506,7 +506,7 @@ body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body
       <div id="canvasWrap"><div id="slideHost"></div><div id="waitMsg" hidden></div><div class="selBar hint" id="selBar" hidden></div>
         <div id="busy" hidden><div class="bx"><div class="spin"></div><span id="busyTxt">AI가 쓰는 중…</span><button class="tbtn" id="busyStop">멈추기</button></div></div>
       </div>
-      <div class="notesWrap"><textarea id="notes" data-notr spellcheck="false" placeholder="발표자 메모 (발표할 때 할 말을 적어 두세요)" aria-label="발표자 메모"></textarea></div>
+      <div class="notesWrap"><textarea id="notes" spellcheck="false" placeholder="발표자 메모 (발표할 때 할 말을 적어 두세요)" aria-label="발표자 메모"></textarea></div>
     </div>
   </section>
 </div>
@@ -549,7 +549,7 @@ body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body
       <div class="maRow"><b>로고 그림</b><button class="tbtn" id="maLogoPick">로고 그림 고르기</button><button class="tbtn dang" id="maLogoDel" hidden>로고 빼기</button><img id="maLogoPrev" alt="" hidden></div>
       <div class="maRow" id="maLrow"><label>로고 위치 <select id="maLpos"><option value="tl">왼쪽 위</option><option value="tr">오른쪽 위</option><option value="bl">왼쪽 아래</option><option value="br">오른쪽 아래</option></select></label>
         <label>로고 크기 <select id="maLsz"><option value="sm">작은 로고</option><option value="md">보통 로고</option><option value="lg">큰 로고</option></select></label></div>
-      <div class="maRow"><b>바닥글</b><input class="fieldIn" id="maFoot" data-notr spellcheck="false" autocomplete="off" placeholder="예: 3학년 2반 · 김하늘" style="flex:1;min-width:0"></div>
+      <div class="maRow"><b>바닥글</b><input class="fieldIn" id="maFoot" spellcheck="false" autocomplete="off" placeholder="예: 3학년 2반 · 김하늘" style="flex:1;min-width:0"></div>
       <div class="maRow"><label>바닥글 위치 <select id="maFpos"><option value="l">왼쪽</option><option value="c">가운데</option><option value="r">오른쪽</option></select></label></div>
       <div class="maRow"><label class="csvChk"><input type="checkbox" id="maNum"> 슬라이드 번호 넣기</label>
         <label>번호 위치 <select id="maNpos"><option value="l">왼쪽</option><option value="c">가운데</option><option value="r">오른쪽</option></select></label></div>
@@ -621,7 +621,7 @@ body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body
     <label class="csvChk"><input type="checkbox" id="shNotes"> 발표자 메모도 넣기</label>
     <label class="csvChk"><input type="checkbox" id="shAns"> 퀴즈 정답도 넣기</label>
     <label class="csvChk"><input type="checkbox" id="shCur"> 지금 슬라이드부터 열기</label>
-    <textarea id="shLink" data-notr readonly spellcheck="false" aria-label="공유 링크" style="min-height:74px;width:100%;resize:vertical;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12px;line-height:1.4;font-family:ui-monospace,Consolas,monospace;word-break:break-all"></textarea>
+    <textarea id="shLink" readonly spellcheck="false" aria-label="공유 링크" style="min-height:74px;width:100%;resize:vertical;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12px;line-height:1.4;font-family:ui-monospace,Consolas,monospace;word-break:break-all"></textarea>
     <p id="shInfo" style="color:var(--fry)"></p>
     <div class="csvRow"><button class="tbtn pri" id="shCopy">링크 복사</button><button class="tbtn" id="shOpen">새 탭에서 열어 보기</button><button class="tbtn" id="shShare" hidden>공유하기…</button></div>
     <div class="shQr" id="shQrBox" hidden><canvas id="shQr" aria-label="QR 코드"></canvas><div><p id="shQrMsg"></p><button class="tbtn" id="shQrSave">QR 그림 저장</button></div></div>
@@ -631,7 +631,7 @@ body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body
       <div id="coOff"><p>링크를 받은 사람과 같은 발표 자료를 함께 고칠 수 있어요. 위의 읽기 전용 링크와 달리 자료가 서버에 올라가고, 서로 고친 것이 몇 초 안에 합쳐져요.</p>
         <div class="csvRow"><button class="tbtn" id="coLogin" hidden>로그인</button><button class="tbtn pri" id="coMake" hidden>같이 고치는 링크 만들기</button></div></div>
       <div id="coOn" hidden><p>이 링크를 열면 누구나 이 자료를 함께 고칠 수 있어요. 고친 것은 몇 초마다 서로에게 합쳐져요.</p>
-        <input id="coLink" data-notr readonly spellcheck="false" aria-label="같이 고치는 링크">
+        <input id="coLink" readonly spellcheck="false" aria-label="같이 고치는 링크">
         <div class="csvRow"><button class="tbtn pri" id="coCopy">링크 복사</button><button class="tbtn dang" id="coStop">같이 고치기 끝내기</button></div></div>
       <p class="coMsg" id="coMsg"></p>
     </div>
@@ -758,7 +758,7 @@ body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body
 <div class="cmdRes" id="cmdRes" role="listbox" aria-label="기능 찾기" hidden></div>
 <script src="../ai.js?v=ai35.l13"></script>
 <script src="../ai-prompts.js"></script>
-<script src="../objpick.js?v=47"></script>
+<script src="../objpick.js?v=48"></script>
 <script src="qr.js"></script>
 <script src="../versions.js?v=2"></script>
 <script src="lq-net.js?v=s26"></script>

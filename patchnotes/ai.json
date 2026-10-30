@@ -13,6 +13,50 @@
     "en": {
      "title": "AI Arena busy indicator",
      "items": ["A spinner and 'Getting the answers ready' while the answers are being written"]
+    },
+    "es": {
+     "title": "Indicador de ocupado en la Arena IA",
+     "items": ["Un indicador giratorio y «Preparando las respuestas» mientras se escriben las respuestas"]
+    },
+    "fr": {
+     "title": "Indicateur d’attente de l’Arène IA",
+     "items": ["Une animation et « Préparation des réponses » pendant la rédaction des réponses"]
+    },
+    "de": {
+     "title": "Ladeanzeige der KI-Arena",
+     "items": ["Ein Drehsymbol und „Antworten werden vorbereitet“, während die Antworten geschrieben werden"]
+    },
+    "ja": {
+     "title": "AI対決場の準備表示",
+     "items": ["答えを作成している間、くるくる回る表示と「答えを準備しています」を表示"]
+    },
+    "zh": {
+     "title": "AI 对决场准备提示",
+     "items": ["答案生成期间显示旋转图标和“正在准备答案”"]
+    },
+    "pt": {
+     "title": "Indicador de ocupado na Arena de IA",
+     "items": ["Um giratório e “Preparando as respostas” enquanto as respostas são escritas"]
+    },
+    "ru": {
+     "title": "Индикатор занятости ИИ-арены",
+     "items": ["Пока ответы пишутся, показываются вращающийся значок и надпись «Готовим ответы»"]
+    },
+    "tr": {
+     "title": "YZ Arenası hazırlanma göstergesi",
+     "items": ["Yanıtlar yazılırken dönen bir simge ve “Yanıtlar hazırlanıyor” yazısı"]
+    },
+    "it": {
+     "title": "Indicatore di attesa dell’Arena IA",
+     "items": ["Un indicatore rotante e «Preparazione delle risposte» mentre le risposte vengono scritte"]
+    },
+    "pl": {
+     "title": "Wskaźnik zajętości Areny AI",
+     "items": ["Kręcące się kółko i napis „Przygotowuję odpowiedzi” podczas pisania odpowiedzi"]
+    },
+    "ar": {
+     "title": "مؤشر الانشغال في ساحة الذكاء الاصطناعي",
+     "items": ["دوّامة ونص «جارٍ تجهيز الإجابات» أثناء كتابة الإجابات"]
     }
    }
   },
@@ -29,6 +73,50 @@
     "en": {
      "title": "AI Arena changes",
      "items": ["Two random models compete; you no longer pick them", "Both answers appear together once they are ready; loading and model names stay hidden while they are written", "Tap the answer you like instead of a button, and the models are revealed then"]
+    },
+    "es": {
+     "title": "Cambios en el Duelo de IA",
+     "items": ["Compiten dos modelos al azar; ya no los eliges tú", "Las dos respuestas aparecen juntas cuando están listas; mientras se escriben, la carga y los nombres de los modelos quedan ocultos", "Toca la respuesta que te guste en lugar de un botón, y entonces se revelan los modelos"]
+    },
+    "fr": {
+     "title": "Changements de l’Arène IA",
+     "items": ["Deux modèles au hasard s’affrontent ; tu ne les choisis plus", "Les deux réponses apparaissent ensemble une fois prêtes ; le chargement et les noms des modèles restent cachés pendant leur rédaction", "Touche la réponse que tu préfères au lieu d’un bouton, et les modèles sont alors révélés"]
+    },
+    "de": {
+     "title": "Änderungen an der KI-Arena",
+     "items": ["Zwei zufällige Modelle treten gegeneinander an; du wählst sie nicht mehr selbst", "Beide Antworten erscheinen gemeinsam, sobald sie fertig sind; Ladeanzeige und Modellnamen bleiben beim Schreiben verborgen", "Tippe auf die Antwort, die dir gefällt, statt auf einen Button; dann werden die Modelle aufgedeckt"]
+    },
+    "ja": {
+     "title": "AI対決場を変更",
+     "items": ["ランダムな2つのモデルが対戦。モデルはもう選べません", "両方の答えが揃ったら一緒に表示。作成中は読み込み表示もモデル名も隠します", "ボタンの代わりに気に入った答えをタップすると、そのときモデルが公開されます"]
+    },
+    "zh": {
+     "title": "AI 对决场变更",
+     "items": ["由两个随机模型对战，不再需要自己选择", "两个答案都准备好后一起显示；生成过程中加载画面和模型名称都会隐藏", "点击喜欢的答案而不是按钮，此时才会公开模型"]
+    },
+    "pt": {
+     "title": "Mudanças na Arena de IA",
+     "items": ["Dois modelos aleatórios competem; você não escolhe mais os modelos", "As duas respostas aparecem juntas quando ficam prontas; o carregamento e os nomes dos modelos ficam ocultos enquanto são escritas", "Toque na resposta de que gostar, em vez de um botão, e então os modelos são revelados"]
+    },
+    "ru": {
+     "title": "Изменения в ИИ-арене",
+     "items": ["Сражаются две случайные модели; выбирать их больше не нужно", "Оба ответа появляются вместе, когда готовы; загрузка и названия моделей скрыты, пока ответы пишутся", "Нажмите на понравившийся ответ вместо кнопки, и тогда модели откроются"]
+    },
+    "tr": {
+     "title": "YZ Arenası değişiklikleri",
+     "items": ["İki rastgele model yarışır; artık modelleri sen seçmezsin", "İki yanıt da hazır olunca birlikte görünür; yazılırken yükleme ve model adları gizli kalır", "Düğme yerine beğendiğin yanıta dokun; modeller o zaman açıklanır"]
+    },
+    "it": {
+     "title": "Modifiche all’Arena IA",
+     "items": ["Due modelli casuali si sfidano; non li scegli più tu", "Entrambe le risposte compaiono insieme quando sono pronte; caricamento e nomi dei modelli restano nascosti mentre vengono scritte", "Tocca la risposta che preferisci invece di un pulsante: solo allora i modelli vengono rivelati"]
+    },
+    "pl": {
+     "title": "Zmiany w Arenie AI",
+     "items": ["Rywalizują dwa losowe modele; nie wybierasz ich już sam", "Obie odpowiedzi pojawiają się razem, gdy są gotowe; podczas pisania ukryte są wczytywanie i nazwy modeli", "Stuknij odpowiedź, która ci się podoba, zamiast przycisku, a wtedy modele się ujawnią"]
+    },
+    "ar": {
+     "title": "تغييرات ساحة الذكاء الاصطناعي",
+     "items": ["يتنافس نموذجان عشوائيان؛ لم يعد عليك اختيارهما", "تظهر الإجابتان معًا بعد أن تجهزا؛ ويبقى التحميل وأسماء النماذج مخفية أثناء كتابتهما", "اضغط على الإجابة التي تعجبك بدلًا من الزر، وعندها تُكشف النماذج"]
     }
    }
   },
@@ -47,6 +135,50 @@
       "Swapped the lightest model for FF777 1.8 tarius and the smartest model for FF777 1.8 premus",
       "Trained on more any-dad-joke requests, word chain, how to use each tool, and everyday talk"
      ]
+    },
+    "es": {
+     "title": "Actualizado a tarius y premus 1.8",
+     "items": ["Cambiados el modelo más ligero por FF777 1.8 tarius y el más inteligente por FF777 1.8 premus", "Entrenado con más peticiones de chistes de papá, cadena de palabras, uso de cada herramienta y charla cotidiana"]
+    },
+    "fr": {
+     "title": "Mise à jour tarius et premus 1.8",
+     "items": ["Modèle le plus léger remplacé par FF777 1.8 tarius et le plus malin par FF777 1.8 premus", "Entraîné davantage sur toutes les demandes de blagues de papa, le jeu des mots en chaîne, l’usage de chaque outil et la conversation du quotidien"]
+    },
+    "de": {
+     "title": "tarius und premus 1.8 Update",
+     "items": ["Leichtestes Modell durch FF777 1.8 tarius und das klügste durch FF777 1.8 premus ersetzt", "Zusätzlich trainiert auf beliebige Dad-Joke-Anfragen, Wortketten, die Nutzung jedes Werkzeugs und Alltagsgespräche"]
+    },
+    "ja": {
+     "title": "tarius・premus 1.8 反映",
+     "items": ["いちばん軽いモデルをFF777 1.8 tarius、いちばん賢いモデルをFF777 1.8 premusに入れ替え", "おやじギャグのリクエスト、しりとり、各ツールの使い方、日常会話をさらに学習"]
+    },
+    "zh": {
+     "title": "tarius·premus 1.8 更新",
+     "items": ["将最轻量的模型换成 FF777 1.8 tarius，最聪明的模型换成 FF777 1.8 premus", "新增学习更多冷笑话请求、接龙游戏、各工具的使用方法和日常聊天"]
+    },
+    "pt": {
+     "title": "Atualização tarius e premus 1.8",
+     "items": ["Modelo mais leve trocado pelo FF777 1.8 tarius e o mais inteligente pelo FF777 1.8 premus", "Treinado com mais pedidos de piadas de tio, palavras encadeadas, uso de cada ferramenta e conversa do dia a dia"]
+    },
+    "ru": {
+     "title": "Обновление tarius и premus 1.8",
+     "items": ["Самую лёгкую модель заменили на FF777 1.8 tarius, самую умную — на FF777 1.8 premus", "Дополнительно обучена на любых запросах папиных шуток, игре в слова, работе с каждым инструментом и бытовом общении"]
+    },
+    "tr": {
+     "title": "tarius ve premus 1.8 güncellemesi",
+     "items": ["En hafif model FF777 1.8 tarius, en akıllı model FF777 1.8 premus ile değiştirildi", "Her türlü baba şakası isteği, kelime zinciri, her aracın kullanımı ve günlük sohbetler üzerine ek eğitim verildi"]
+    },
+    "it": {
+     "title": "Aggiornamento tarius e premus 1.8",
+     "items": ["Il modello più leggero sostituito con FF777 1.8 tarius e quello più intelligente con FF777 1.8 premus", "Addestrato in più su qualsiasi richiesta di barzellette da papà, gioco delle parole a catena, uso di ogni strumento e chiacchiere quotidiane"]
+    },
+    "pl": {
+     "title": "Aktualizacja tarius i premus 1.8",
+     "items": ["Najlżejszy model zastąpiono przez FF777 1.8 tarius, a najmądrzejszy przez FF777 1.8 premus", "Dodatkowo wytrenowano na dowolnych prośbach o żarty w stylu taty, grze w słowa łańcuchowe, obsłudze każdego narzędzia i codziennych rozmowach"]
+    },
+    "ar": {
+     "title": "تحديث tarius وpremus 1.8",
+     "items": ["استبدال أخف النماذج بالنموذج FF777 1.8 tarius، وأذكى النماذج بالنموذج FF777 1.8 premus", "تدريب إضافي على أي طلب لنكتة قديمة، ولعبة تسلسل الكلمات، واستخدام كل أداة، والأحاديث اليومية"]
     }
    }
   },

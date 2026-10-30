@@ -824,7 +824,7 @@ function diffHtml(a,b){ var A=a.split(/(\s+)/).filter(Boolean), B=b.split(/(\s+)
   while(x<n){ o+='<del>'+esc(A[x++])+'</del>'; } while(y<m){ o+='<ins>'+esc(B[y++])+'</ins>'; } return o; }
 function openCmp(){ saveNow(); var sel=$('cmpSel'); sel.innerHTML=''; idx.docs.filter(function(d){ return d!==doc; }).forEach(function(d){ var o=document.createElement('option'); o.value=d.id; o.textContent=d.name||T('제목 없는 문서'); sel.appendChild(o); });
   if(!sel.firstChild){ toast('비교할 다른 문서가 없어요. 내 문서에서 새 문서를 만들어 주세요'); return; } openDlg('cmpDlg'); }
-$('cmpGo').onclick=function(){ var id=$('cmpSel').value; if(!id) return; var other=plainOf(readDoc(id)), cur=page.innerText; $('cmpOut').innerHTML=diffHtml(other,cur); };
+$('cmpGo').onclick=function(){ var id=$('cmpSel').value; if(!id) return; var other=plainOf(readDoc(id)), cur=page.innerText; $('cmpOut').innerHTML='<div data-notr>'+diffHtml(other,cur)+'</div>'; };
 hb('review','🔍 문서 비교','cmpBtn',openCmp);
 
 /* ---------- start ---------- */
