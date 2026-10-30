@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # Tools 자체 AI 학습 (내 컴퓨터용). 설치와 실행 방법은 train/local/README.md 에 있어요. train/make_local.py 가 만든 파일이라 직접 고치지 마세요.
-# 설정은 환경 변수로 바꿔요: MODEL=smart|basic|premus  VERSION=1.8  CONTINUE=1  MAX_LEN=2048  MAX_TRAIN_HOURS=12
+# 설정은 환경 변수로 바꿔요: MODEL=smart|basic|premus  VERSION=1.9  CONTINUE=1  MAX_LEN=2048  MAX_TRAIN_HOURS=12
 import os
 def _env(name, default): return os.environ.get(name, default)
 MODEL = _env("MODEL", "smart")
-VERSION = _env("VERSION", "1.8")
+VERSION = _env("VERSION", "1.9")
 HF_TOKEN = ""
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"   # unsloth uses one GPU (T4 x2: the second one stays unused)
@@ -21,15 +21,15 @@ EVAL_MINUTES = int(_env("EVAL_MINUTES", "45"))   # the test after the upload sto
 
 # Where the training data is. A file name is read from DATA_DIR; a full https:// address or a file path also works.
 DATA_DIR = "https://raw.githubusercontent.com/frenchfries777mc/tools/main/train/data/"
-TRAIN_FILE = ""  # empty = v18-<model>.jsonl (1.8), v17-<model>.jsonl (1.7), v16-<model>.jsonl (1.6), v15-smart.jsonl (premus 1.5), v14-basic.jsonl or v14-smart.jsonl (by MODEL and VERSION)
+TRAIN_FILE = ""  # empty = v19-<model>.jsonl (1.9), v18-<model>.jsonl (1.8), v17-<model>.jsonl (1.7), v16-<model>.jsonl (1.6), v15-smart.jsonl (premus 1.5), v14-basic.jsonl or v14-smart.jsonl (by MODEL and VERSION)
 TEST_FILE = ""   # empty = v15-test.jsonl or v14-test.jsonl (by VERSION; held out, never trained on)
 
 REPO_RAW = "https://raw.githubusercontent.com/frenchfries777mc/tools/main/train/data/"   # block catalog and the real-request list
 import os, urllib.request, urllib.error
-FILES = {"1.8": ("v18-{}.jsonl", "v18-test.jsonl"), "1.7": ("v17-{}.jsonl", "v17-test.jsonl"), "1.6": ("v16-{}.jsonl", "v16-test.jsonl"), "1.5": ("v15-{}.jsonl", "v15-test.jsonl"), "1.4": ("v14-{}.jsonl", "v14-test.jsonl"), "1.3": ("v13-{}.jsonl", "v13-test.jsonl")}[VERSION]
+FILES = {"1.9": ("v19-{}.jsonl", "v19-test.jsonl"), "1.8": ("v18-{}.jsonl", "v18-test.jsonl"), "1.7": ("v17-{}.jsonl", "v17-test.jsonl"), "1.6": ("v16-{}.jsonl", "v16-test.jsonl"), "1.5": ("v15-{}.jsonl", "v15-test.jsonl"), "1.4": ("v14-{}.jsonl", "v14-test.jsonl"), "1.3": ("v13-{}.jsonl", "v13-test.jsonl")}[VERSION]
 TRAIN_FILE = TRAIN_FILE or FILES[0].format("smart" if MODEL == "premus" else MODEL)   # premus (Qwen3 8B) learns the same data as lectus
 TEST_FILE = TEST_FILE or FILES[1]
-if VERSION in ("1.5", "1.6", "1.7", "1.8") and MODEL == "basic" and not TEST_FILE.startswith(("http", "/")): TEST_FILE = "v" + VERSION.replace(".", "") + "-basic-test.jsonl"   # the test names tarius, not lectus
+if VERSION in ("1.5", "1.6", "1.7", "1.8", "1.9") and MODEL == "basic" and not TEST_FILE.startswith(("http", "/")): TEST_FILE = "v" + VERSION.replace(".", "") + "-basic-test.jsonl"   # the test names tarius, not lectus
 CFG = {   # 1.4 (plan D): fresh from the base Qwen3, the duplicate-free data seen twice
   "basic": dict(base="unsloth/Qwen3-1.7B", size="1.7B", name="tarius", data=[TRAIN_FILE], epochs=2, r=8,  lr=2e-4),
   "smart": dict(base="unsloth/Qwen3-4B",   size="4B",   name="lectus", data=[TRAIN_FILE], epochs=2, r=16, lr=1.5e-4),
@@ -41,6 +41,8 @@ if CONTINUE and VERSION == "1.4":
     print("1.4는 바탕 Qwen3에서 처음부터 학습해요. CONTINUE를 끄고 계속해요."); CONTINUE = False
 if CONTINUE and VERSION in ("1.5", "1.6"):   # 1.5 / 1.6: keep training the 1.4 model already on Hugging Face (private) with the new data, a gentler learning rate
     CFG.update(base=f"Frenchfries777/FF-Tools-{CFG['size']}-merged", epochs=2, lr=1e-4)
+if CONTINUE and VERSION == "1.9":   # 1.9: keep training the 1.8 model already on Hugging Face (private, FF-Tools-<size>-merged-1.8)
+    CFG.update(base=f"Frenchfries777/FF-Tools-{CFG['size']}-merged-1.8", epochs=2, lr=1e-4)
 if CONTINUE and VERSION == "1.8":   # 1.8: keep training the 1.7 model already on Hugging Face (private, FF-Tools-<size>-merged-1.7)
     CFG.update(base=f"Frenchfries777/FF-Tools-{CFG['size']}-merged-1.7", epochs=2, lr=1e-4)
 if CONTINUE and VERSION == "1.7":   # 1.7: keep training the 1.6 model already on Hugging Face (private, FF-Tools-<size>-merged-1.6)
@@ -347,7 +349,7 @@ shutil.rmtree("merged", ignore_errors=True)   # never upload an older model left
 model.save_pretrained_merged("merged", tokenizer, save_method="merged_16bit")
 from huggingface_hub import HfApi
 api = HfApi(token=HF_TOKEN); user = api.whoami()["name"]
-rid = f"{user}/FF-Tools-{CFG['size']}-merged" + ("-" + VERSION if VERSION in ("1.5", "1.6", "1.7", "1.8") else "")   # 1.5 and 1.6 go to their own repos, so 1.4 stays as a fallback
+rid = f"{user}/FF-Tools-{CFG['size']}-merged" + ("-" + VERSION if VERSION in ("1.5", "1.6", "1.7", "1.8", "1.9") else "")   # 1.5 and 1.6 go to their own repos, so 1.4 stays as a fallback
 api.create_repo(rid, private=True, exist_ok=True)
 api.upload_folder(folder_path="merged", repo_id=rid, commit_message="Tools fine-tune")
 print("올렸어요:", rid)
