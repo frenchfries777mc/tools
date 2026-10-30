@@ -4,6 +4,20 @@
  "notes": [
   {
    "date": "2026-10-30",
+   "build": "v56",
+   "title": "AI 대결장 준비 표시",
+   "items": [
+    "답변을 만드는 동안 '답변을 준비하고 있어요'와 돌아가는 표시"
+   ],
+   "tr": {
+    "en": {
+     "title": "AI Arena busy indicator",
+     "items": ["A spinner and 'Getting the answers ready' while the answers are being written"]
+    }
+   }
+  },
+  {
+   "date": "2026-10-30",
    "build": "v55",
    "title": "AI 대결장 바꿈",
    "items": [
