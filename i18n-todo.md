@@ -16,3 +16,4 @@ patchnotes/slides.json·docs.json | 일러스트 넣기 항목 (en만) | slides 
 objpick.js·slides/ribbon.js·docs/index.html | 새 문구 (일러스트 버튼, 일러스트·오브젝트 창) | slides v32, docs v6 | 2026-10-29
 patchnotes/docs.json | 커서 항목 (en만) | docs v7 | 2026-10-29
 patchnotes/ai.json | tarius 1.7 항목 (en만) | ai v53 | 2026-10-29
+patchnotes/ai.json | tarius·premus 1.8 항목 (en만) | ai v54 | 2026-10-30

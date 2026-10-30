@@ -3,6 +3,24 @@
  "name": "자체 AI (FF777)",
  "notes": [
   {
+   "date": "2026-10-30",
+   "build": "v54",
+   "title": "tarius·premus 1.8 반영",
+   "items": [
+    "가장 가벼운 모델을 FF777 1.8 tarius로, 가장 똑똑한 모델을 FF777 1.8 premus로 교체",
+    "아무거나 아재개그 요청, 끝말잇기, 프로그램 사용법, 일상 대화를 더 많이 학습"
+   ],
+   "tr": {
+    "en": {
+     "title": "tarius and premus 1.8 update",
+     "items": [
+      "Swapped the lightest model for FF777 1.8 tarius and the smartest model for FF777 1.8 premus",
+      "Trained on more any-dad-joke requests, word chain, how to use each tool, and everyday talk"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-10-29",
    "build": "v53",
    "title": "tarius 1.7 반영",
