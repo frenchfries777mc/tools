@@ -1,135 +1,140 @@
 {
- "built": "2026-10-30T09:24:02.424Z",
- "total": 6173,
- "filled": {},
- "newRows": 5582,
+ "built": "2026-10-30T10:58:11.080Z",
+ "total": 6000,
+ "filled": {
+  "und": 2
+ },
+ "newRows": 5279,
  "take": {
   "blocks": {
-   "want": 660,
-   "rows": 660,
-   "new": 528
+   "want": 171,
+   "rows": 171,
+   "new": 171
   },
   "formula": {
-   "want": 216,
-   "rows": 216,
-   "new": 216
+   "want": 56,
+   "rows": 56,
+   "new": 56
   },
   "calc": {
-   "want": 120,
-   "rows": 120,
-   "new": 120
+   "want": 31,
+   "rows": 31,
+   "new": 31
   },
   "cell": {
-   "want": 72,
-   "rows": 72,
+   "want": 19,
+   "rows": 19,
    "new": 0
   },
   "table": {
-   "want": 120,
-   "rows": 120,
-   "new": 120
+   "want": 31,
+   "rows": 31,
+   "new": 31
   },
   "graph": {
-   "want": 108,
-   "rows": 108,
+   "want": 28,
+   "rows": 28,
    "new": 0
   },
   "tr": {
-   "want": 84,
-   "rows": 84,
+   "want": 22,
+   "rows": 22,
    "new": 0
   },
   "slides": {
-   "want": 480,
-   "rows": 480,
-   "new": 480
+   "want": 125,
+   "rows": 125,
+   "new": 125
   },
   "docs": {
-   "want": 480,
-   "rows": 480,
-   "new": 480
+   "want": 125,
+   "rows": 125,
+   "new": 125
   },
   "python": {
-   "want": 240,
-   "rows": 240,
-   "new": 240
+   "want": 62,
+   "rows": 62,
+   "new": 62
   },
   "labask": {
-   "want": 42,
-   "rows": 42,
-   "new": 42
+   "want": 11,
+   "rows": 11,
+   "new": 11
   },
   "labdraft": {
-   "want": 30,
-   "rows": 30,
-   "new": 30
+   "want": 8,
+   "rows": 8,
+   "new": 8
   },
   "labset": {
-   "want": 48,
-   "rows": 48,
-   "new": 48
+   "want": 12,
+   "rows": 12,
+   "new": 12
   },
   "labfind": {
-   "want": 60,
-   "rows": 60,
-   "new": 60
+   "want": 16,
+   "rows": 16,
+   "new": 16
   },
   "anyjoke": {
-   "want": 1440,
-   "rows": 1421,
-   "new": 1421
+   "want": 2400,
+   "rows": 2400,
+   "new": 2400
   },
   "joke": {
-   "want": 135,
-   "rows": 135,
-   "new": 135
+   "want": 1800,
+   "rows": 1800,
+   "new": 1800
   },
-  "use": {
-   "want": 420,
-   "rows": 420,
-   "new": 420
-  },
-  "talk": {
+  "jokereview": {
    "want": 600,
    "rows": 600,
-   "new": 600
+   "new": 0
+  },
+  "use": {
+   "want": 109,
+   "rows": 109,
+   "new": 109
+  },
+  "talk": {
+   "want": 156,
+   "rows": 156,
+   "new": 156
   },
   "word": {
-   "want": 360,
-   "rows": 360,
-   "new": 360
+   "want": 93,
+   "rows": 93,
+   "new": 93
   },
   "oldword": {
-   "want": 60,
-   "rows": 60,
-   "new": 60
+   "want": 16,
+   "rows": 16,
+   "new": 16
   },
   "self": {
-   "want": 150,
-   "rows": 150,
-   "new": 150
+   "want": 39,
+   "rows": 39,
+   "new": 39
   },
   "und": {
-   "want": 75,
-   "rows": 75,
+   "want": 19,
+   "rows": 19,
    "new": 0
   },
   "unknown": {
-   "want": 78,
-   "rows": 78,
-   "new": 78
+   "want": 20,
+   "rows": 20,
+   "new": 20
   },
   "chat": {
-   "want": 120,
-   "rows": 120,
+   "want": 31,
+   "rows": 31,
    "new": 0
   }
  },
- "short": {
-  "anyjoke": 19
- },
- "blocked": 76,
- "repeatedRows": 8,
+ "short": {},
+ "blocked": 77,
+ "repeatedRows": 81,
  "pool": {
   "formula": 484,
   "tr": 893,
@@ -169,7 +174,9 @@
   "use18": 808,
   "word18": 428,
   "chat18": 800,
+  "joke18": 833,
   "newself": 469,
-  "joke19": 1421
+  "joke19q": 462,
+  "joke19": 2473
  }
 }

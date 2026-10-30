@@ -21,8 +21,9 @@ const GROUPS={ // pct of N; replay tasks are earlier task names; new tasks are l
   docs:{pct:8, tasks:['docs17']},
   python:{pct:4, tasks:['py17']},
   labask:{pct:0.7, tasks:['labask17']}, labdraft:{pct:0.5, tasks:['labdraft17']}, labset:{pct:0.8, tasks:['labset17']}, labfind:{pct:1, tasks:['labfind17']},   // lab 3
-  anyjoke:{pct:24, tasks:['joke19']},                                 // 845 rows: every joke 5x
-  joke:{pct:2.25, tasks:['joke16']},                                  // specific jokes (replay)
+  anyjoke:{pct:40, tasks:['joke19'], big:1},                          // owner 10-30: 40% any-joke requests (every joke 18x, 2-3 turn chats)
+  joke:{pct:30, tasks:['joke19q','joke16','joke16x'], big:1},         // owner 10-30: 30% specific jokes (riddle asked, its own punchline)
+  jokereview:{pct:10, tasks:['joke18'], big:1},                       // owner 10-30: 10% review of the earlier joke rounds
   use:{pct:7, tasks:['use18']},                                       // what each Tools program is for and how to use it
   talk:{pct:10, tasks:['chat18']},                                  // everyday talk, 800 rows
   word:{pct:6, tasks:['word18']},                                     // word chain, whole games
@@ -32,7 +33,8 @@ const GROUPS={ // pct of N; replay tasks are earlier task names; new tasks are l
   unknown:{pct:1.3, tasks:['newunknown','ask4u']},
   chat:{pct:2, tasks:['ask','fun','ask4','spell','explain']}
 };
-const NEW=new Set(['newcode','newformula','newcalc','newtable','newunknown','newself','joke16','joke19','use18','chat18','word18','newslides','word16','docs17','py17','labask17','labdraft17','labset17','labfind17']);
+{ const S=Object.values(GROUPS).filter(G=>!G.big).reduce((a,G)=>a+G.pct,0), F=20/S; for(const G of Object.values(GROUPS)) if(!G.big) G.pct*=F; }   // owner 10-30: jokes 80% (any 40, specific 30, review 10), everything else only enough not to be forgotten (20%)
+const NEW=new Set(['newcode','newformula','newcalc','newtable','newunknown','newself','joke16','joke19','joke19q','use18','chat18','word18','newslides','word16','docs17','py17','labask17','labdraft17','labset17','labfind17']);
 const HUMOR='You are cheerful and a little funny: when you chat you add a short, kind joke, but answers about tables, formulas and code stay exact and serious.';
 const WHO={who:'You are FF777 '+VER+' lectus, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 4B. Your name is the end of the Latin word intellectus ("understanding"). '+HUMOR, fill:{NAME:'FF777 '+VER+' lectus', BASE:'Qwen3 4B', LATIN:'intellectus', MEANING_KO:'이해력', MEANING_EN:'understanding'}};
 if(BASIC){ WHO.who='You are FF777 '+VER+' tarius, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 1.7B. Your name is the end of the Latin word elementarius ("basic"). '+HUMOR;
@@ -64,7 +66,7 @@ for(const r of jl(path.join(OUT,'v14-smart.jsonl'))){
   if(t==='self'||t==='self7') continue;       // rebuilt below from all self files
   put(t,r.messages);
 }
-for(const r of jl(path.join(OUT,'v17-smart.jsonl')).concat(jl(path.join(OUT,'v18-smart.jsonl')))){ if(/^(self|self7|newself|joke18)$/.test(r.task)) continue; put(r.task==='joke17'?'joke16x':r.task,r.messages); }   // 1.7 rows: put() drops repeats
+for(const r of jl(path.join(OUT,'v17-smart.jsonl')).concat(jl(path.join(OUT,'v18-smart.jsonl')))){ if(/^(self|self7|newself)$/.test(r.task)) continue; put(r.task==='joke17'?'joke16x':r.task,r.messages); }   // 1.7 rows: put() drops repeats
 /* older raw rows the 1.4 build did not take (check.js passes only the right ones; put() drops repeats) */
 for(const [kind,pat,task] of [['tr',/^tr-\d+\.jsonl$/,'tr'],['table',/^table-[123]\.jsonl$/,'table'],['formula',/^formula-[1-4]\.jsonl$/,'formula']])
   for(const f of fs.readdirSync(RAW).filter(f=>pat.test(f))) for(const x of checked(kind,f.replace('.jsonl',''))) put(task,x.messages);
@@ -80,7 +82,7 @@ for(const it of jl(path.join(RAW,'calc-2.jsonl'))) put('newcalc',[{role:'system'
     selfAll.push(m.map((y,i)=>i===0&&rnd()<0.5?{role:y.role,content:y.content+'\n\n'+WHO.who}:y)); }
   for(const m of selfAll) put('newself',m); }
 for(const r of jl(path.join(OUT,'v16-word.jsonl'))) put('word16',r.messages);
-for(const r of jl(path.join(OUT,'v19-anyjoke.jsonl'))) put('joke19',r.messages);
+for(const r of jl(path.join(OUT,'v19-anyjoke.jsonl'))) put(r.task,r.messages);
 for(const r of jl(path.join(OUT,'v18-new.jsonl'))) put(r.task,r.messages);
 for(const r of jl(path.join(OUT,'v16-joke.jsonl'))) put('joke16',r.messages);   // genjoke16.js: 1,440 rows, every joke under 3 prompts; 1.7 takes 135 of them
 const heldOut=[]; { const W=jl(path.join(OUT,'v18-word.jsonl')); for(const r of W.slice(-12)) heldOut.push(r); for(const r of W.slice(0,-12)) put('word18',r.messages); }

@@ -37,8 +37,8 @@ const user=(s,u)=> s===P.askSys?'(No table selected.)\n\nQuestion: '+u:u;
 const rows=[]; const add=(j,u)=>{ const s=sys(); rows.push({task:'joke19',messages:msgs(s,user(s,u),answer(j))}); };
 const reqs=shuffle(REQ); let k=0;
 const nextReq=()=>{ if(k%reqs.length===0) shuffle(REQ).forEach((x,n)=>reqs[n]=x); return reqs[k++%reqs.length]; };
-// every joke 6 times as a single-turn answer to a different wording
-const order=[]; for(let r=0;r<6;r++) order.push(...shuffle(J.map((_,i)=>i)));
+// every joke 18 times as a single-turn answer to a different wording
+const order=[]; for(let r=0;r<18;r++) order.push(...shuffle(J.map((_,i)=>i)));
 for(const i of order) add(J[i],nextReq());
 // every wording at least 4 times
 const seen={}; rows.forEach(r=>{ const u=r.messages.find(m=>m.role==='user').content.replace(/^\(No table selected\.\)\n\nQuestion: /,''); seen[u]=(seen[u]||0)+1; });
@@ -51,10 +51,10 @@ for(const i of second){ let j; do{ j=Math.floor(rnd()*J.length); }while(j===i); 
 // a third turn for some
 for(let n=0;n<40;n++){ const [a,b,c]=shuffle(J.map((_,i)=>i)).slice(0,3); const s=sys(); const m=multi(J[a],J[b],nextReq(),pick(MORE),s); m.messages.push({role:'user',content:user(s,pick(MORE))},{role:'assistant',content:answer(J[c])}); rows.push(m); }
 
-// the riddle itself asked in the site's prompt: every joke 3 times, answer = its own punchline
+// the riddle itself asked in the site's prompt: every joke 5 times, answer = its own punchline
 const ASKQ=['','','퀴즈! ','맞혀 봐. ','문제: '];
 const ANSQ=j=>'정답은 '+j[1]+'!'+pick(TAIL);
-for(let r=0;r<3;r++) for(let i=0;i<J.length;i++){ const s=siteSys(); rows.push({task:'joke19',messages:msgs(s,pick(ASKQ)+J[i][0],ANSQ(J[i]))}); }
+for(let r=0;r<5;r++) for(let i=0;i<J.length;i++){ const s=siteSys(); rows.push({task:'joke19q',messages:msgs(s,pick(ASKQ)+J[i][0],ANSQ(J[i]))}); }
 // a joke request after a short everyday chat turn
 const CH=[['안녕','안녕하세요! 반가워요. 무슨 얘기 하고 싶으세요?'],['오늘 뭐 하지?','가볍게 산책을 해 보는 건 어때요? 바람 쐬면 기분이 한결 나아져요.'],['심심해','저도 얘기 나누니 좋아요! 뭐든 편하게 물어보세요.'],['배고파','간단하게 샌드위치나 김밥은 어때요? 금방 먹을 수 있어요.']];
 for(let n=0;n<150;n++){ const [u0,a0]=pick(CH), j=J[Math.floor(rnd()*J.length)], s=siteSys(); rows.push({task:'joke19',messages:[{role:'system',content:s},{role:'user',content:u0},{role:'assistant',content:a0},{role:'user',content:nextReq()},{role:'assistant',content:answer(j)}]}); }
