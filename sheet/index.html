@@ -219,7 +219,7 @@ button,input,select{font:inherit; color:inherit;}
 .keyGrid .kh{grid-column:1/-1; color:var(--fry); font-size:12px; font-weight:700; margin-top:10px;}
 @media print{
   html,body{height:auto!important; overflow:visible!important; background:#fff!important; color:#000!important; display:block!important;}
-  .top,.rtabs,.ribbon,.cmdList,.fbar,.foot,#drawer,.more,#selBox,#actBox,#fillBox,#refBox,#fillH,#cellEd,#toast,#acBox,.menu,.ov,#splBox{display:none!important;}
+  .top,.rtabs,.ribbon,.cmdList,.fbar,.foot,#drawer,.more,#selBox,#actBox,.rsel,#fillBox,#refBox,#fillH,#cellEd,#toast,#acBox,.menu,.ov,#splBox{display:none!important;}
   .main,#gridWrap,#gridIn{display:block!important; overflow:visible!important; position:static!important; width:auto!important; background:#fff!important;}
   #grid{zoom:1;} #grid th,#grid td{border-color:#bbb!important; color:#000!important; background:#fff!important; position:static!important;}
   #grid thead th,#grid tbody th{background:#eee!important; color:#333!important;}
@@ -284,6 +284,11 @@ button,input,select{font:inherit; color:inherit;}
 #aiDlg .dlg{width:min(620px,100%);}
 #aiDlg .dh .tbtn{margin-right:4px;}
 .aiCtx{color:var(--dim); font-size:12.5px; margin-bottom:6px; font-family:'JetBrains Mono',monospace;}
+#coBtn{position:relative;} #coBtn.on{border-color:var(--fry); color:var(--fry);} #coN{font-size:11px; background:var(--fry); color:#1c1405; border-radius:9px; padding:0 6px; line-height:16px;}
+.coRow{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:10px 0;} .coRow span{color:var(--dim); font-size:13px;} .coRow input{flex:1; min-width:120px;}
+.coCode{font:700 30px 'JetBrains Mono',monospace; letter-spacing:6px; color:var(--fry); text-align:center; padding:10px 0;}
+.coP{display:flex; align-items:center; gap:8px; padding:6px 0; border-bottom:1px solid var(--line);} .coP i{width:12px; height:12px; border-radius:50%; flex:none;} .coP em{color:var(--dim); font-size:12px; font-style:normal; margin-left:auto;}
+.rsel{position:absolute; border:2px solid; pointer-events:none; z-index:1;} .rsel i{position:absolute; font-style:normal; left:-2px; top:-17px; font-size:11px; font-weight:600; line-height:15px; padding:0 5px; color:#fff; border-radius:3px 3px 3px 0; white-space:nowrap; max-width:140px; overflow:hidden; text-overflow:ellipsis;} .rsel.lo i{top:auto; bottom:-17px; border-radius:0 3px 3px 3px;}
 #ocrOut{width:100%; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:10px 12px; resize:vertical; min-height:120px; font:inherit; color:inherit; white-space:pre;}
 .ocrbar{height:8px; border-radius:4px; background:var(--bg); border:1px solid var(--line); overflow:hidden; margin-top:10px;} .ocrbar i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--fry),var(--fry2)); transition:width .2s;}
 #aiQ{width:100%; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:10px 12px; resize:vertical; min-height:70px; font:inherit; color:inherit;}
@@ -327,6 +332,7 @@ button,input,select{font:inherit; color:inherit;}
   <input id="docName" value="새 시트" aria-label="문서 이름" spellcheck="false">
   <span class="saved" id="saved"></span>
   <button class="tbtn" id="verBtn" type="button" title="저장해 둔 예전 버전으로 되돌려요"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 8v4l3 2"/></svg><span class="lb">버전</span></button>
+  <button class="tbtn" id="coBtn" type="button" title="여럿이 한 시트를 같이 고쳐요"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M17 14.2c2.4 0 4 1.8 4 4.3"/></svg><span class="lb">같이 고치기</span><b id="coN" hidden data-notr></b></button>
   <span class="sp"></span>
   <div class="cmdS"><button class="cmdIco" id="cmdBtn" type="button" aria-label="기능 찾기" title="기능 찾기 (Ctrl+K)"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></button><input id="cmdQ" type="search" placeholder="기능 찾기" aria-label="기능 찾기" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off" enterkeyhint="go"><kbd class="cmdK" id="cmdK" data-notr>Ctrl K</kbd></div>
   <button class="tbtn" id="fileBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg><span class="lb">파일</span></button>
@@ -378,6 +384,7 @@ button,input,select{font:inherit; color:inherit;}
   <button data-f="print">인쇄 (PDF 저장)</button>
   <hr>
   <button data-f="docs">문서 관리…</button>
+  <button data-f="co">같이 고치기…</button>
   <div class="mh">내 문서</div>
   <div id="docList"></div>
   <hr>
@@ -469,6 +476,21 @@ button,input,select{font:inherit; color:inherit;}
   <div class="acts"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="ocrOk" disabled>칸에 넣기</button></div>
 </div></div>
 <input type="file" id="ocrFile" accept="image/*" hidden>
+<div class="ov" id="coDlg"><div class="dlg">
+  <div class="dh"><h3>같이 고치기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody">
+    <div id="coOff"><label for="coName">내 이름</label><input type="text" id="coName" maxlength="20" data-notr><div class="aiCtx" id="coAcc"></div>
+      <div class="coRow"><button class="tbtn pri" id="coMake">방 만들기</button><span>내 시트를 보여 주고 같이 고쳐요</span></div>
+      <label for="coCode">초대 코드나 링크로 들어가기</label>
+      <div class="coRow"><input type="text" id="coCode" maxlength="80" placeholder="예: K7M2QX" data-notr><button class="tbtn" id="coJoin">들어가기</button></div>
+      <p>한 방에 8명까지 들어올 수 있어요. 방을 만든 사람의 시트가 기준이 되고, 들어온 사람은 그 시트의 사본을 내 문서로 받아요. 방을 만든 사람이 창을 닫으면 끝나요.</p></div>
+    <div id="coOn" hidden><div class="coCode" id="coBig" data-notr></div>
+      <div class="coRow"><button class="tbtn" id="coLink">링크 복사</button><button class="tbtn" id="coCopy">코드 복사</button></div>
+      <label>같이 고치는 사람</label><div id="coPeers"></div></div>
+    <p id="coSt" hidden></p>
+  </div>
+  <div class="acts"><button class="tbtn" data-close>닫기</button><button class="tbtn" id="coEnd" hidden>나가기</button></div>
+</div></div>
 <div class="ov" id="keyDlg"><div class="dlg">
   <div class="dh"><h3>단축키</h3><button class="x" data-close aria-label="닫기">×</button></div>
   <div class="dbody"><div class="keyGrid">
@@ -710,10 +732,12 @@ button,input,select{font:inherit; color:inherit;}
 <script src="diary.js?v=35"></script>
 <script src="../versions.js?v=2"></script>
 <script src="../ocr.js?v=1"></script>
+<script src="../peer-room.js?v=1"></script>
 <script src="calc.js"></script>
 <script src="commands.js?v=40"></script>
 <script src="../undotoast.js"></script>
 <script src="app.js?v=39"></script>
+<script src="coedit.js?v=1"></script>
 <script src="viz.js"></script>
 <script src="../ai.js?v=ai36.l14"></script>
 <script src="../ai-wrong.js?v=4.l13"></script>
