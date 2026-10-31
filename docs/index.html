@@ -52,11 +52,14 @@ button,input,select,textarea{font:inherit; color:inherit;}
 body.pv #page{background-image:repeating-linear-gradient(to bottom,transparent 0,transparent calc(var(--ph,1123px) - 3px),rgba(255,160,40,.55) calc(var(--ph,1123px) - 3px),rgba(255,160,40,.55) var(--ph,1123px));}
 /* docs v5 */
 #page .fxs{text-shadow:2px 2px 3px rgba(0,0,0,.45);} #page .fxo{-webkit-text-stroke:1px #1b1b1b; color:transparent;} #page .fxo[style*="color"]{-webkit-text-stroke-color:currentColor;} #page .fxl{letter-spacing:.25em;} #page .fxt{letter-spacing:-.05em;}
-#page .pbx{border:2px solid #555; padding:.4em .7em; border-radius:6px;} #page .pbg{background:#fff3b0; padding:.3em .6em; border-radius:4px;} #page .pbl{border-left:5px solid #f0a000; padding:.2em .8em; background:#fff8e6;}
+#page .pbx{border:2px solid #555; padding:.4em .7em; border-radius:6px;} #page p.pbd::first-letter{float:left; font-size:3.4em; line-height:.85; font-weight:700; padding:.04em .12em 0 0;}
+#page .pbg{background:#fff3b0; padding:.3em .6em; border-radius:4px;} #page .pbl{border-left:5px solid #f0a000; padding:.2em .8em; background:#fff8e6;}
 #page ul.ls1{list-style-type:circle;} #page ul.ls2{list-style-type:square;} #page ol.ls3,#page ul.ls3{list-style-type:lower-alpha;} #page ol.ls4,#page ul.ls4{list-style-type:upper-alpha;} #page ol.ls5,#page ul.ls5{list-style-type:lower-roman;} #page ol.ls6,#page ul.ls6{list-style-type:upper-roman;} #page ol.ls7,#page ul.ls7{list-style-type:hangul;} #page ol.ls8,#page ul.ls8{list-style-type:hangul-consonant;} #page ol.ls9,#page ul.ls9{list-style-type:decimal-leading-zero;}
 #page table.ts1 tr:nth-child(even) td{background:#f1f5fb;} #page table.ts1 th{background:#cfe0f5;} #page table.ts2 td,#page table.ts2 th{border:0;} #page table.ts3 td,#page table.ts3 th{border:0; border-bottom:1px solid #9a9a9a;} #page table.ts3 th{background:#fff; border-bottom:2px solid #333;}
 #page img.ib{border:3px solid #444;} #page img.ir{border-radius:18px;} #page img.is{box-shadow:4px 4px 12px rgba(0,0,0,.4);} #page img.iwl{float:left; margin:0 14px 8px 0; max-width:50%;} #page img.iwr{float:right; margin:0 0 8px 14px; max-width:50%;}
 #page span.bm::before{content:"🔖"; font-size:.8em; opacity:.7;} #page span.bl{color:#1a56db; text-decoration:underline; cursor:pointer;}
+.ocrbar{height:8px; border-radius:4px; background:var(--bg); border:1px solid var(--line); overflow:hidden;} .ocrbar i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--fry),var(--fry2)); transition:width .2s;}
+.swg{display:flex; flex-wrap:wrap; gap:6px; padding:4px 10px 8px; max-width:230px;} .menu button.sw{width:24px; height:24px; padding:0; border:1px solid var(--line); border-radius:6px; flex:0 0 auto;} .menu button.sw:hover{outline:2px solid var(--fry);} .menu p.mn{margin:0; padding:2px 12px 8px; color:var(--dim); font-size:12px; max-width:230px; white-space:normal;} body.picking #page img{cursor:crosshair;}
 .cmpout{max-height:50vh; overflow:auto; background:var(--bg); border:1px solid var(--line); border-radius:9px; padding:10px 12px; font-size:14px; line-height:1.7; white-space:pre-wrap;} .cmpout ins{background:rgba(60,200,100,.25); text-decoration:none;} .cmpout del{background:rgba(255,90,90,.25);}
 .bmrow{display:flex; align-items:center; gap:6px; padding:5px 0; border-bottom:1px solid var(--line);} .bmrow span{flex:1;}
 /* toolbar */
@@ -168,12 +171,13 @@ body.painting #page{cursor:copy;}
 #page span.ck{cursor:pointer; user-select:none; font-size:1.1em; margin-right:.1em;} #page span.ck.on{color:#0a7d33;}
 .eqprev{min-height:56px; padding:12px; margin-top:8px; border:1px solid var(--line); border-radius:10px; background:#fff; color:#111; font-family:"Times New Roman",serif; font-size:22px; overflow:auto;} .eqprev i{font-style:italic;}
 .shprev{margin-top:8px; padding:12px; border:1px solid var(--line); border-radius:10px; background:#fff; text-align:center;}
+#navPanel{position:fixed; left:10px; top:112px; bottom:44px; width:240px; z-index:40; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px; overflow:auto; box-shadow:0 14px 40px rgba(0,0,0,.45);} #navPanel[hidden]{display:none;} #navPanel p{color:var(--dim); font-size:13px;} .navi{display:block; width:100%; text-align:left; padding:6px 8px; border:0; background:transparent; border-radius:7px; cursor:pointer; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;} .navi:hover{background:var(--panel2);} .navi.n2{padding-left:20px;} .navi.n3{padding-left:32px; color:var(--dim);} #lockBadge{color:var(--fry); margin-right:12px;} #lockBadge[hidden]{display:none;}
 #cmPanel{position:fixed; right:10px; top:112px; bottom:44px; width:270px; z-index:40; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px; overflow:auto; box-shadow:0 14px 40px rgba(0,0,0,.45);} #cmPanel[hidden]{display:none;}
 .cmh{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;} .cmi{border:1px solid var(--line); border-radius:10px; padding:8px 10px; margin-bottom:8px; cursor:pointer; background:var(--panel2);} .cmq{font-size:12px; color:var(--dim); border-left:3px solid #f0b400; padding-left:6px; margin-bottom:4px;} .cmt{white-space:pre-wrap; word-break:break-word;} .cmb{display:flex; gap:6px; margin-top:6px;} .cmb button{border:1px solid var(--line); background:transparent; color:inherit; border-radius:8px; padding:3px 9px; cursor:pointer;}
 #cmEmpty{color:var(--dim); font-size:13px;} #cmEmpty[hidden]{display:none;}
 #trkPop{position:fixed; z-index:70; display:flex; gap:6px; padding:6px; background:var(--panel); border:1px solid var(--line); border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,.5);} #trkPop[hidden]{display:none;} #trkPop button{border:0; border-radius:8px; padding:6px 10px; cursor:pointer; background:var(--panel2); color:inherit;}
 #trkBadge{color:#ffb74d; margin-right:12px;} #trkBadge[hidden]{display:none;}
-@media print{ #page span.cm{background:none!important; border:0!important;} #page span.ti{color:inherit; text-decoration:none;} #page span.td{display:none;} #cmPanel,#trkPop{display:none!important;} }
+@media print{ #page span.cm{background:none!important; border:0!important;} #page span.ti{color:inherit; text-decoration:none;} #page span.td{display:none;} #cmPanel,#navPanel,#trkPop{display:none!important;} }
 </style>
 </head>
 <body>
@@ -245,6 +249,8 @@ body.painting #page{cursor:copy;}
   <span class="ctx" id="tblCtx" hidden><span class="sep"></span><b>표</b>
     <button class="ib" data-t="rowAdd" title="아래에 줄 넣기"><span class="lb">+ 줄</span></button>
     <button class="ib" data-t="colAdd" title="오른쪽에 칸 넣기"><span class="lb">+ 칸</span></button>
+    <button class="ib" data-t="rowUp" title="위에 줄 넣기"><span class="lb">+ 위 줄</span></button>
+    <button class="ib" data-t="colLeft" title="왼쪽에 칸 넣기"><span class="lb">+ 왼쪽 칸</span></button>
     <button class="ib" data-t="rowDel" title="이 줄 지우기"><span class="lb">− 줄</span></button>
     <button class="ib" data-t="colDel" title="이 칸 지우기"><span class="lb">− 칸</span></button>
     <button class="ib" data-t="merge" title="오른쪽 칸과 합치기"><span class="lb">칸 합치기</span></button>
@@ -278,8 +284,9 @@ body.painting #page{cursor:copy;}
   <button class="x" id="fClose" aria-label="닫기">×</button>
 </div>
 <main id="desk"><div class="band" id="hdBand" hidden data-notr></div><div id="page" contenteditable="true" spellcheck="false" data-ph="여기에 글을 쓰세요" data-notr></div><div class="band" id="ftBand" hidden data-notr></div></main>
-<div class="foot"><span id="cnt"></span><span class="sp"></span><span id="trkBadge" hidden>✏️ 변경 추적 중</span><span id="hint">A4</span></div>
+<div class="foot"><span id="cnt"></span><span class="sp"></span><span id="lockBadge" hidden>🔒 편집 잠김</span><span id="trkBadge" hidden>✏️ 변경 추적 중</span><span id="hint">A4</span></div>
 
+<div class="menu" id="clrMenu"></div>
 <div class="menu" id="revMenu">
   <div class="mh">검토</div>
   <button data-rv="memo">💬 메모 달기 (고른 글자에)</button>
@@ -328,6 +335,7 @@ body.painting #page{cursor:copy;}
     <div class="shprev"><img id="shImg" alt=""></div></div>
   <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="shOk">넣기</button></div>
 </div></div>
+<aside id="navPanel" hidden><div class="cmh"><b>제목 탐색</b><button class="x" id="navClose" aria-label="닫기">×</button></div><div id="navList"></div><p id="navEmpty">아직 제목이 없어요. 문단 모양에서 제목 1, 2, 3을 고르면 여기에 나와요.</p></aside>
 <aside id="cmPanel" hidden><div class="cmh"><b>메모</b><button class="x" id="cmClose" aria-label="닫기">×</button></div><div id="cmList"></div><p id="cmEmpty">아직 메모가 없어요. 글자를 고르고 검토 → 메모 달기를 누르세요.</p></aside>
 <div id="trkPop" hidden><button id="trkAcc">받아들이기</button><button id="trkRej">되돌리기</button></div>
 <div class="menu" id="expMenu">
@@ -347,6 +355,7 @@ body.painting #page{cursor:copy;}
   <button data-n="capImg">🖼️ 그림 설명 (그림 1.)</button>
   <button data-n="capTbl">▦ 표 설명 (표 1.)</button>
   <button data-n="box">▢ 글상자</button>
+  <button data-n="ocr">🔤 사진 속 글자 읽기</button>
   <hr>
   <button data-n="pb">📄 쪽 나누기 <small>Ctrl+Enter</small></button>
 </div>
@@ -354,7 +363,7 @@ body.painting #page{cursor:copy;}
   <button data-fx="fxs">▨ 그림자</button><button data-fx="fxo">◌ 윤곽선 글자</button><button data-fx="fxl">↔ 글자 사이 넓게</button><button data-fx="fxt">⇥ 글자 사이 좁게</button><hr><button data-fx="clr">효과 지우기</button>
 </div>
 <div class="menu" id="pbMenu">
-  <button data-pb="pbx">▭ 테두리 상자</button><button data-pb="pbg">🟨 노랑 배경</button><button data-pb="pbl">▌ 왼쪽 막대</button><hr><button data-pb="clr">꾸밈 지우기</button>
+  <button data-pb="pbx">▭ 테두리 상자</button><button data-pb="pbg">🟨 노랑 배경</button><button data-pb="pbl">▌ 왼쪽 막대</button><button data-pb="pbd">Ａ 첫 글자 크게</button><hr><button data-pb="clr">꾸밈 지우기</button>
 </div>
 <div class="menu" id="lsMenu">
   <div class="mh">글머리 모양</div><button data-ls="0">● 기본 (동그라미)</button><button data-ls="1">○ 빈 동그라미</button><button data-ls="2">■ 네모</button>
@@ -452,12 +461,33 @@ body.painting #page{cursor:copy;}
   </div>
   <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="pgOk">적용</button></div>
 </div></div>
+<div class="ov" id="parDlg"><div class="dlg" style="width:min(440px,100%)">
+  <div class="dh"><h3>문단 설정</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><div class="num2">
+    <label>왼쪽 들여쓰기 (pt)<input type="number" id="parL" min="0" max="270" step="1"></label>
+    <label>첫 줄<select id="parK"><option value="none">보통</option><option value="first">들여쓰기</option><option value="hang">내어쓰기</option></select></label>
+    <label>첫 줄 크기 (pt)<input type="number" id="parA" min="0" max="144" step="1"></label>
+    <label>문단 앞 간격 (pt)<input type="number" id="parB" min="0" max="144" step="1"></label>
+    <label>문단 뒤 간격 (pt)<input type="number" id="parF" min="0" max="144" step="1" placeholder="기본"></label>
+    <label>줄 간격<select id="parLh"><option value="">기본 (1.7)</option><option value="1">1.0</option><option value="1.15">1.15</option><option value="1.5">1.5</option><option value="2">2.0</option><option value="2.5">2.5</option><option value="3">3.0</option></select></label></div>
+    <p>고른 문단(안 고르면 지금 문단)에 적용돼요. Word 문서로 받을 때도 그대로 들어가요.</p></div>
+  <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="parOk">적용</button></div>
+</div></div>
 <div class="ov" id="aiDlg"><div class="dlg">
   <div class="dh"><h3 id="aiTitle">AI 도우미</h3><button class="x" data-close aria-label="닫기">×</button></div>
   <div class="dbody"><div id="aiOut" data-notr></div><p class="aiWarn">AI가 쓴 글은 틀릴 수 있어요. 넣기 전에 읽어 보세요.</p></div>
   <div class="dfoot"><button class="tbtn" id="aiStop">멈추기</button><button class="tbtn" id="aiBelow" disabled>아래에 넣기</button><button class="tbtn pri" id="aiRep" disabled>바꾸기</button></div>
 </div></div>
+<div class="ov" id="ocrDlg"><div class="dlg" style="width:min(520px,100%)">
+  <div class="dh"><h3>사진 속 글자 읽기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button class="tbtn" id="ocrPick">사진 고르기</button><span id="ocrName" data-notr></span></div>
+    <div class="ocrbar" id="ocrBar" hidden><i id="ocrFill"></i></div><p id="ocrSt" hidden></p>
+    <label class="fl" id="ocrOutL" hidden>읽은 글 (넣기 전에 고칠 수 있어요)<textarea id="ocrOut" rows="8" data-notr></textarea></label>
+    <p>한국어와 영어를 읽어요. 사진은 이 기기 안에서만 읽고 어디로도 보내지 않아요. 처음에는 글자 데이터를 내려받느라 조금 걸려요.</p></div>
+  <div class="dfoot"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="ocrOk" disabled>문서에 넣기</button></div>
+</div></div>
 <input type="file" id="imgFile" accept="image/*" hidden>
+<input type="file" id="ocrFile" accept="image/*" hidden>
 <input type="file" id="openFile" accept=".docx,.html,.htm,.txt,.md" hidden>
 <div id="toast" role="status"></div>
 <script src="../ai.js?v=ai36.l14"></script>
@@ -465,8 +495,9 @@ body.painting #page{cursor:copy;}
 <script src="../versions.js?v=2"></script>
 <script src="../undotoast.js"></script>
 <script src="../objpick.js?v=48"></script>
-<script src="docx.js?v=d4"></script>
-<script src="app.js?v=d9"></script>
+<script src="../ocr.js?v=1"></script>
+<script src="docx.js?v=d5"></script>
+<script src="app.js?v=d13"></script>
 <script src="../pwa.js" defer></script>
 <script src="../ping.js" defer></script>
 </body>

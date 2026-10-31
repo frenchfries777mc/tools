@@ -3,6 +3,21 @@
  "name": "Tools 사이트",
  "notes": [
   {
+   "date": "2026-10-31",
+   "build": "v45",
+   "title": "내 작업 백업",
+   "items": [
+    "첫 화면 아래 '내 작업 백업'에서 문서·시트·슬라이드·블록·파이썬·랩 저장을 파일 하나로 받기",
+    "다른 기기에서 그 파일을 불러와 이어서 쓰기 (로그인 정보와 AI 열쇠는 제외)"
+   ],
+   "tr": {
+    "en": {
+     "title": "Backup of my work",
+     "items": ["'내 작업 백업' at the bottom of the home page saves documents, sheets, slides, block projects, Python and Lab work into one file", "Load that file on another device to keep working (login info and AI keys are left out)"]
+    }
+   }
+  },
+  {
    "date": "2026-10-28",
    "build": "v44",
    "title": "더블터치 확대 막음",
