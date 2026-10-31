@@ -3,6 +3,21 @@
  "name": "자체 AI (FF777)",
  "notes": [
   {
+   "date": "2026-10-31",
+   "build": "v57",
+   "title": "lectus 1.8 반영",
+   "items": [
+    "균형 잡힌 기본 모델이 FF777 1.8 lectus로 바뀜",
+    "아무거나 아재개그·끝말잇기·프로그램 사용법·일상 대화를 더 학습"
+   ],
+   "tr": {
+    "en": {
+     "title": "lectus 1.8 applied",
+     "items": ["The balanced default model is now FF777 1.8 lectus", "Trained more on any dad joke, word chain, how to use the programs and everyday talk"]
+    }
+   }
+  },
+  {
    "date": "2026-10-30",
    "build": "v56",
    "title": "AI 대결장 준비 표시",
