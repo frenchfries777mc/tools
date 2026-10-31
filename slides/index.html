@@ -233,7 +233,8 @@ button,input,select,textarea{font:inherit; color:inherit;}
 .sl .bh{visibility:hidden;}
 .animGrid{display:grid; grid-template-columns:1fr 1fr; gap:6px 12px;} .animGrid label.lab{margin-top:10px;} .animGrid .full{grid-column:1/-1;} .animPv{margin-top:14px;}
 @media(max-width:520px){ .animGrid{grid-template-columns:1fr;} }
-.selBar{position:absolute; left:8px; right:8px; bottom:6px; height:36px; display:flex; align-items:center; justify-content:center; gap:6px; overflow-x:auto; overflow-y:hidden; scrollbar-width:none; z-index:3;}
+.selBar{position:absolute; left:8px; right:8px; bottom:6px; height:36px; display:flex; align-items:center; justify-content:flex-start; gap:6px; overflow-x:auto; overflow-y:hidden; scrollbar-width:none; z-index:3;}
+.selBar>:first-child{margin-left:auto;} .selBar>:last-child{margin-right:auto;}
 .selBar::-webkit-scrollbar{display:none;}
 .selBar .tbtn{height:32px; padding:0 11px; font-size:13px; flex:0 0 auto;} .selBar .tbtn.on{border-color:#8a5ce0; color:#c9b3ff;} .selBar .tbtn.dang{color:#ff8b8b;}
 .selBar.hint{color:var(--dim); font-size:12.5px; white-space:nowrap; justify-content:center;}
@@ -762,9 +763,9 @@ body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body
 <script src="qr.js"></script>
 <script src="../versions.js?v=2"></script>
 <script src="lq-net.js?v=s26"></script>
-<script src="ribbon.js?v=s31"></script>
+<script src="ribbon.js?v=s32"></script>
 <script src="../undotoast.js"></script>
-<script src="app.js?v=s32"></script>
+<script src="app.js?v=s33"></script>
 <script src="collab.js?v=s22"></script>
 <script src="ai-slides.js"></script>
 <script src="../pwa.js" defer></script>
