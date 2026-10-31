@@ -4,6 +4,21 @@
  "notes": [
   {
    "date": "2026-10-31",
+   "build": "v58",
+   "title": "AI 대결장 모두의 순위",
+   "items": [
+    "대결장 아래에 모두의 투표를 모은 모델별 승률 표시",
+    "서버 설정 전에는 표시가 나오지 않음"
+   ],
+   "tr": {
+    "en": {
+     "title": "AI Arena: everyone's ranking",
+     "items": ["Win rate per model from everyone's votes shown under the arena", "Nothing is shown until the server is set up"]
+    }
+   }
+  },
+  {
+   "date": "2026-10-31",
    "build": "v57",
    "title": "lectus 1.8 반영",
    "items": [
