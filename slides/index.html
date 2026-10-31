@@ -202,7 +202,8 @@ button,input,select,textarea{font:inherit; color:inherit;}
 /* free placement: the frame and handles of the picked box (sizes times --hk so they look the same at any zoom), shapes, builds */
 .sl.edit [data-bk]{touch-action:none;}
 .sl.edit .pic:not(.empty),.sl.edit .shp{cursor:move;}
-.sl .shp{position:absolute;} .sl .shp svg{position:absolute; left:0; top:0; overflow:visible; pointer-events:none; transform-origin:50% 50%;}
+.sl .shp{position:absolute;} .sl .coTag{position:absolute; border:3px solid; border-radius:4px; pointer-events:none; z-index:6;} .sl .coTag span{position:absolute; left:-3px; top:-28px; padding:2px 8px; border-radius:6px 6px 6px 0; color:#fff; font:600 16px/20px system-ui,sans-serif; white-space:nowrap; max-width:260px; overflow:hidden; text-overflow:ellipsis;}
+.sl .shp svg{position:absolute; left:0; top:0; overflow:visible; pointer-events:none; transform-origin:50% 50%;}
 .sl .shp.ln{pointer-events:none;} .sl .shp.ln svg .hit{pointer-events:stroke;}
 .sl .stx{position:absolute; display:flex; flex-direction:column; justify-content:center; overflow:hidden; text-align:center;}
 .emg{display:grid; grid-template-columns:repeat(8,1fr); gap:2px; padding:4px;} .emg button{font-size:22px; line-height:1; padding:6px 0; border-radius:8px;} .emg button:hover{background:var(--hov,rgba(255,255,255,.1));}
@@ -222,7 +223,7 @@ button,input,select,textarea{font:inherit; color:inherit;}
 .coSt{border:1px solid var(--line); background:transparent; color:var(--fry); border-radius:999px; padding:3px 10px; font-size:12px; cursor:pointer; white-space:nowrap; max-width:46vw; overflow:hidden; text-overflow:ellipsis;} .coSt.off,.coSt.sql,.coSt.big,.coSt.gone{color:#ff8b8b;} .coSt.wait{color:var(--dim);}
 @media(max-width:760px){ .coSt{display:none;} }
 .coBox{border:1px solid var(--line); border-radius:12px; padding:4px 14px 12px; margin:12px 0;} .coBox h4{margin:10px 0 4px; font-size:15px;} .coBox h4 small{font-weight:400; color:var(--dim); font-size:12px;}
-#coLink{width:100%; box-sizing:border-box; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:8px 10px; font-size:12px; color:inherit; font-family:ui-monospace,Consolas,monospace; margin:6px 0;}
+#coLink,#rtLink{width:100%; box-sizing:border-box; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:8px 10px; font-size:12px; color:inherit; font-family:ui-monospace,Consolas,monospace; margin:6px 0;}
 .coMsg{margin:6px 0 0; font-size:13px; color:var(--fry);} .coMsg.bad{color:#ff8b8b;} .coMsg:empty{display:none;}
 .sl .guide{position:absolute; z-index:29; pointer-events:none; background:#ff3bd4;} .sl .guide.v{top:0; bottom:0; width:calc(1px * var(--hk,1));} .sl .guide.h{left:0; right:0; height:calc(1px * var(--hk,1));}
 .sl .gsp{position:absolute; z-index:29; pointer-events:none; background:#ff3bd4;} .sl .gsp.x{height:calc(2px * var(--hk,1)); margin-top:calc(-1px * var(--hk,1));} .sl .gsp.y{width:calc(2px * var(--hk,1)); margin-left:calc(-1px * var(--hk,1));}
@@ -473,6 +474,7 @@ body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body
   <input id="deckName" aria-label="발표 자료 이름" spellcheck="false" autocomplete="off">
   <span class="saved" id="saved"></span>
   <button class="tbtn" id="verBtn" type="button" title="저장해 둔 예전 버전으로 되돌려요"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 8v4l3 2"/></svg><span class="lb">버전</span></button>
+  <button class="coSt" id="rtSt" type="button" hidden title="실시간 함께 편집"></button>
   <button class="coSt" id="coSt" type="button" hidden title="같이 고치기"></button>
   <span class="sp"></span>
   <div class="cmdk" id="cmdk"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg><input id="cmdQ" type="search" placeholder="기능 찾기" aria-label="기능 찾기" title="기능 찾기 (Ctrl+K)" autocomplete="off" spellcheck="false" enterkeyhint="go" role="combobox" aria-expanded="false" aria-autocomplete="list"><kbd>Ctrl K</kbd></div>
@@ -627,6 +629,16 @@ body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body
     <div class="csvRow"><button class="tbtn pri" id="shCopy">링크 복사</button><button class="tbtn" id="shOpen">새 탭에서 열어 보기</button><button class="tbtn" id="shShare" hidden>공유하기…</button></div>
     <div class="shQr" id="shQrBox" hidden><canvas id="shQr" aria-label="QR 코드"></canvas><div><p id="shQrMsg"></p><button class="tbtn" id="shQrSave">QR 그림 저장</button></div></div>
     <p class="shWarn" id="shWarn" hidden></p>
+    <div class="coBox" id="rtBox">
+      <h4>실시간 함께 편집 <small>(서로 고친 것이 바로 보여요)</small></h4>
+      <div id="rtOff"><p>방을 만든 사람의 자료를 여러 사람이 동시에 고쳐요. 고친 것이 바로 서로에게 보이고, 누가 어느 상자를 골랐는지 이름표로 알려 줘요. 서버에 올리지 않고 브라우저끼리 직접 이어서, 방을 만든 사람의 화면이 열려 있는 동안만 이어져요.</p>
+        <div class="csvRow"><button class="tbtn pri" id="rtMake">방 만들기</button></div>
+        <div class="csvRow"><input class="fieldIn" id="rtCode" data-notr maxlength="6" spellcheck="false" autocomplete="off" placeholder="들어갈 방 코드 (6글자)" aria-label="방 코드" style="max-width:220px"><button class="tbtn" id="rtJoin">방에 들어가기</button></div></div>
+      <div id="rtOn" hidden><p id="rtWho" data-notr></p>
+        <input id="rtLink" data-notr readonly spellcheck="false" aria-label="방 링크">
+        <div class="csvRow"><button class="tbtn pri" id="rtCopy">링크 복사</button><button class="tbtn dang" id="rtStop">방 닫기</button></div></div>
+      <p class="coMsg" id="rtMsg"></p>
+    </div>
     <div class="coBox" id="coBox">
       <h4>같이 고치기 <small>(두 사람이 같은 자료를 함께 고쳐요)</small></h4>
       <div id="coOff"><p>링크를 받은 사람과 같은 발표 자료를 함께 고칠 수 있어요. 위의 읽기 전용 링크와 달리 자료가 서버에 올라가고, 서로 고친 것이 몇 초 안에 합쳐져요.</p>
@@ -765,8 +777,9 @@ body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body
 <script src="lq-net.js?v=s26"></script>
 <script src="ribbon.js?v=s33"></script>
 <script src="../undotoast.js"></script>
-<script src="app.js?v=s35"></script>
+<script src="app.js?v=s36"></script>
 <script src="collab.js?v=s22"></script>
+<script src="../peer-room.js?v=1"></script><script src="coedit.js?v=s1"></script>
 <script src="ai-slides.js"></script>
 <script src="../pwa.js" defer></script>
 <script src="../ping.js" defer></script>

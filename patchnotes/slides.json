@@ -4,6 +4,20 @@
  "notes": [
   {
    "date": "2026-10-31",
+   "build": "v36",
+   "title": "실시간 함께 편집 (바로 보여요)",
+   "items": [
+    "공유 창에 '실시간 함께 편집' 추가: 방을 만들면 코드와 링크가 나오고, 들어온 사람들이 같은 발표 자료를 동시에 고침 (방은 8명까지)",
+    "서버에 올리지 않고 브라우저끼리 직접 이어서 SQL 설정 없이 바로 쓸 수 있음, 로그인 없이 방을 만들 수 있고 로그인했다면 계정 이름이 이름표로 쓰임",
+    "고친 것은 슬라이드·도형·그림 하나하나 단위로 0.5초쯤 안에 서로 보이고, 방장의 순서가 모두에게 같게 맞춰짐",
+    "다른 사람이 고른 상자에 그 사람 이름표가 색깔 테두리로 표시, 위쪽에 '실시간 함께 편집 · 몇 명' 표시",
+    "글을 쓰거나 도형을 끌고 있는 동안 그 칸에 온 다른 사람의 변경은 잠깐 기다렸다가 반영, 되돌리기는 다른 사람이 고친 것을 되살리지 않음",
+    "그림이 있는 큰 자료도 조각으로 나눠 보내서 들어올 때 통째로 받음"
+   ],
+   "tr": {"en": {"title": "Real-time co-editing", "items": ["Share window: 'Real-time co-editing': make a room, share the code or link, and everyone edits the same deck at once (up to 8 people)", "Browsers connect directly with no server storage and no SQL; no sign-in needed, and a signed-in account name is used as the name tag", "Changes go out per slide, shape and picture and show up within about half a second; the host's order is the one everybody gets", "Boxes other people picked get a coloured name tag; the top bar shows 'Real-time co-editing · N people'", "A change to the box you are typing in or dragging waits until you stop; undo never brings back what others changed", "Big decks with pictures are cut into pieces and received whole when you join"]}}
+  },
+  {
+   "date": "2026-10-31",
    "build": "v35",
    "title": "색 스포이트, 내 색 모음, 빛나기·뒤집기·점선",
    "items": [
