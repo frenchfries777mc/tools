@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-10-31",
+   "build": "v10",
+   "title": "문단 설정과 첫 글자 크게",
+   "items": [
+    "레이아웃 탭에 문단 설정 (왼쪽 들여쓰기, 첫 줄 들여쓰기·내어쓰기, 문단 앞뒤 간격, 줄 간격)",
+    "문단 꾸미기에 첫 글자 크게",
+    "Word 문서로 받고 열 때 문단 간격과 첫 줄 들여쓰기·내어쓰기 유지"
+   ],
+   "tr": {
+    "en": {
+     "title": "Paragraph settings and drop cap",
+     "items": [
+      "Paragraph settings in the Layout tab (left indent, first-line indent or hanging, spacing before and after, line spacing)",
+      "Drop cap in paragraph looks",
+      "Paragraph spacing and first-line indent or hanging are kept when saving and opening Word files"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-10-31",
    "build": "v9",
    "title": "색 스포이트와 내 색 모음",
    "items": [
