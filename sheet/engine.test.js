@@ -129,5 +129,14 @@ test('v23 fast path leaves the rest to the AI',()=>eq(['A열 평균에서 5 빼�
 test('v23 typed formulas pass through, unit words map to codes',()=>eq([fastF('SUM(B2:B5)*2'),fastF('=A1/3'),C.unitCode('inch'),C.unitCode('킬로그램'),C.unitCode('°F'),C.unitCode('Gibyte'),C.unitCode('banana')],['=SUM(B2:B5)*2','=A1/3','in','kg','F','Gibyte',null]));
 test('v23 Korean number words',()=>eq(['삼백오십','2만5천','3.5만','십이','일억'].map(C.koNum),[350,25000,35000,12,1e8]));
 
+test('v42 outlineHidden: a folded summary hides the deeper run before it',()=>{
+  eq(Object.keys(E.outlineHidden({1:1,2:1,3:1},{4:1})).map(Number).sort(),[1,2,3]);
+  eq(Object.keys(E.outlineHidden({1:1,2:2,3:2,4:1},{4:1})).map(Number).sort(),[1,2,3]);
+  eq(Object.keys(E.outlineHidden({1:1,2:2,3:2,4:1},{4:1})).length,3);
+  eq(Object.keys(E.outlineHidden({1:1,2:2,3:2,4:1},{4:1,3:1})).map(Number).sort(),[1,2,3]);
+  eq(Object.keys(E.outlineHidden({1:1,2:2,3:2},{3:1})).map(Number).sort(),[2]);
+  eq(Object.keys(E.outlineHidden({1:1,2:1,4:1},{3:1})).map(Number).sort(),[1,2]);
+  eq(Object.keys(E.outlineHidden({1:1},{0:1})),[]); eq(Object.keys(E.outlineHidden(null,{1:1})),[]); });
+
 console.log(pass+' passed, '+failed+' failed');
 process.exit(failed?1:0);
