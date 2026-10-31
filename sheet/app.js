@@ -36,7 +36,7 @@ function loadDoc(id){
   lsSet(LSL,docId); $('docName').value=doc.name; switchSheet(doc.active,true);
 }
 var saveT=null;
-function saveSoon(){ $('saved').textContent=''; clearTimeout(saveT); saveT=setTimeout(saveNow,400); }
+function saveSoon(){ if(window.FSCo) FSCo.touch(); $('saved').textContent=''; clearTimeout(saveT); saveT=setTimeout(saveNow,400); }
 function saveNow(){
   clearTimeout(saveT);
   var ok=lsSet(LSD+docId,JSON.stringify(doc)); var idx=docIndex().filter(function(x){ return x.id!==docId; });
@@ -52,7 +52,7 @@ function restore(s){ var o=JSON.parse(s); doc.sheets=o.s; doc.names=o.n||[]; doc
 $('verBtn').onclick=function(){ commitEdit(); if(window.FFVer) FFVer.open({key:'sheet.'+docId,title:'버전 기록',get:snap,toast:toast,
   put:function(d){ pushUndo(); restore(d); },
   describe:function(d){ var o=JSON.parse(d), n=0; o.s.forEach(function(x){ n+=Object.keys(x.cells||{}).length; }); return F('시트 {0}개, 칸 {1}개',o.s.length,n); }}); };
-function undo(){ commitEdit(); if(!undoS.length) return toast(T('되돌릴 작업이 없어요')); redoS.push(snap()); restore(undoS.pop()); }
+function undo(){ commitEdit(); if(!undoS.length) return toast(T('되돌릴 작업이 없어요')); if(window.FSCo&&FSCo.warnUndo()) toast(T('같이 고치는 중이라 그 사이 다른 사람이 고친 칸도 같이 되돌아갈 수 있어요')); redoS.push(snap()); restore(undoS.pop()); }
 function redo(){ commitEdit(); if(!redoS.length) return; undoS.push(snap()); restore(redoS.pop()); }
 
 /* ---------- grid build ---------- */
@@ -234,7 +234,7 @@ function overlay(){
   hl.forEach(function(t){ t.classList.remove('hl'); }); hl=[];
   for(var r=sel.r1;r<=Math.min(sel.r2,sel.r1+400);r++){ var th=gbody.rows[r]&&gbody.rows[r].cells[0]; if(th){ th.classList.add('hl'); hl.push(th); } }
   if(!editing) placeGhost();
-  placeDv(); stats();
+  placeDv(); stats(); if(window.FSCo) FSCo.sel();
 }
 var hl=[];
 function scrollTo(r,c){
@@ -1312,6 +1312,7 @@ function fileCmd(f){
   else if(f==='csv') exportCSV();
   else if(f==='print') cmd('print');
   else if(f==='docs') openDocMgr();
+  else if(f==='co') openDlg('coDlg');
   else if(f==='del') deleteDoc(docId);
 }
 $('docName').addEventListener('input',function(){ doc.name=this.value; saveSoon(); });
@@ -2081,5 +2082,11 @@ window.FSAPI={run:runCmd, get doc(){ return doc; }, get eng(){ return eng; }, ge
   drawChart:drawChart, chartData:chartData, PAL:PAL, toast:toast, download:download, commitEdit:commitEdit, uid:uid, pushUndo:pushUndo, saveSoon:saveSoon, openDrawer:openDrawer, renderCharts:renderCharts,
   markAI:function(r1,c1,r2,c2){ for(var r=r1;r<=r2;r++) for(var c=c1;c<=c2;c++){ var x=sh.cells[K(r,c)]; if(x&&x.v!=null&&x.v!==''){ x.ai=1; delete x.ar; } } },
   changed:changed, setRaw:function(r,c,v){ if(locked(r,c)) return toast(T('잠긴 칸이라 고칠 수 없어요. 데이터 메뉴에서 잠금을 풀 수 있어요')); return setRaw(r,c,v); }, pasteText:pasteText, selectRange:selectRange, select:select, forSel:forSel};
+/* the part of the grid that sheet/coedit.js (같이 고치기) reaches into */
+window.FSHost={get doc(){ return doc; }, get sheet(){ return sh; }, uid:uid, fix:fixDoc, changed:changed, toast:toast, box:box, gin:gin, saveNow:saveNow, name:function(){ return doc.name; },
+  rebuild:function(){ buildGrid(); overlay(); changed(); },
+  sheetsChanged:function(sid){ eng=new E.Engine(doc); var i=-1; doc.sheets.forEach(function(s,j){ if(s.sid===sid) i=j; }); if(i<0) switchSheet(0,true); else { doc.active=i; sh=doc.sheets[i]; renderTabs(); changed(); } },
+  openCopy:function(d){ saveNow(); var id=uid(); if(!lsSet(LSD+id,JSON.stringify(d))) return false; loadDoc(id); saveNow(); return true; },
+  rect:function(r1,c1,r2,c2){ return tdAt(r1,c1)&&tdAt(r2,c2)?{r1:r1,c1:c1,r2:r2,c2:c2}:null; }, sel:function(){ return {r1:sel.r1,c1:sel.c1,r2:sel.r2,c2:sel.c2}; }};
 window.__fs={urlOpt:urlOpt, parseCSV:parseCSV, sniffDelim:sniffDelim, csvRaw:csvRaw, get doc(){ return doc; }, get eng(){ return eng; }, select:select, cmd:cmd, run:runCmd, sel:function(){ return sel; }, act:function(){ return act; }, setRaw:setRaw, changed:changed, startEdit:startEdit, commitEdit:commitEdit};
 })();
