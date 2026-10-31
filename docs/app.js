@@ -910,6 +910,33 @@ function sortBlocks(dir){ var bs=blocksInSel(); if(bs.length<2){ toast('정렬�
 hb('home','↓ 가나다 정렬','srtA',function(){ sortBlocks(1); });
 hb('home','↑ 거꾸로 정렬','srtD',function(){ sortBlocks(-1); });
 
+/* ---------- Docs v13: charts (drawn as a picture) ---------- */
+var CHC=['#4c6ef5','#f08c00','#2f9e44','#e03131','#7048e8','#1098ad','#d6336c','#868e96'];
+function chartRows(t){ var out=[]; String(t||'').split(/\n/).forEach(function(l){ var m=/^(.*?)[\s,:\t]+(-?\d+(?:\.\d+)?)\s*$/.exec(l.trim()); if(m&&m[1].trim()) out.push([m[1].trim().slice(0,14),parseFloat(m[2])]); }); return out.slice(0,24); }
+function chartPNG(kind,title,rows){ var w=640, h=380, sc=2, c=document.createElement('canvas'); c.width=w*sc; c.height=h*sc; var g=c.getContext('2d'); g.scale(sc,sc); g.fillStyle='#fff'; g.fillRect(0,0,w,h);
+  var F='"Noto Sans KR","Malgun Gothic",sans-serif'; g.textAlign='center'; g.fillStyle='#222'; g.font='700 18px '+F; g.fillText(title,w/2,28);
+  if(!rows.length){ g.font='15px '+F; g.fillStyle='#888'; g.fillText('data',w/2,h/2); return c.toDataURL('image/png'); }
+  var x0=64, x1=w-24, y0=52, y1=h-52, vals=rows.map(function(r){ return r[1]; });
+  if(kind==='pie'){ var tot=vals.reduce(function(a,v){ return a+Math.max(0,v); },0)||1, cx=190, cy=(y0+y1)/2+8, R=Math.min(130,(y1-y0)/2), a=-Math.PI/2; g.textAlign='left'; g.font='14px '+F;
+    rows.forEach(function(r,i){ var d=Math.max(0,r[1])/tot*Math.PI*2; g.fillStyle=CHC[i%CHC.length]; g.beginPath(); g.moveTo(cx,cy); g.arc(cx,cy,R,a,a+d); g.closePath(); g.fill(); g.strokeStyle='#fff'; g.lineWidth=2; g.stroke(); a+=d;
+      g.fillStyle=CHC[i%CHC.length]; g.fillRect(360,y0+i*22,12,12); g.fillStyle='#222'; g.fillText(r[0]+'  '+Math.round(Math.max(0,r[1])/tot*1000)/10+'%',380,y0+10+i*22); }); return c.toDataURL('image/png'); }
+  var mx=Math.max.apply(null,vals.concat([0])), mn=Math.min.apply(null,vals.concat([0])); if(mx===mn) mx=mn+1; var step=Math.pow(10,Math.floor(Math.log10((mx-mn)/4))), nice=[1,2,5,10].map(function(k){ return k*step; }).filter(function(k){ return (mx-mn)/k<=6; })[0]||step*10;
+  var top=Math.ceil(mx/nice)*nice, bot=Math.floor(mn/nice)*nice, Y=function(v){ return y1-(v-bot)/(top-bot)*(y1-y0); };
+  g.font='12px '+F; g.textAlign='right'; g.lineWidth=1; for(var v=bot;v<=top+1e-9;v+=nice){ g.strokeStyle='#e4e4e4'; g.beginPath(); g.moveTo(x0,Y(v)); g.lineTo(x1,Y(v)); g.stroke(); g.fillStyle='#666'; g.fillText(String(Math.round(v*100)/100),x0-6,Y(v)+4); }
+  var n=rows.length, bw=(x1-x0)/n; g.textAlign='center';
+  rows.forEach(function(r,i){ var cx=x0+bw*(i+.5); g.fillStyle='#444'; g.font='12px '+F; g.fillText(r[0],cx,y1+18);
+    if(kind==='bar'){ g.fillStyle=CHC[0]; var yy=Y(Math.max(0,r[1])), hh=Math.abs(Y(0)-Y(r[1])); g.fillRect(cx-bw*.3,r[1]>=0?yy:Y(0),bw*.6,hh); g.fillStyle='#222'; g.fillText(String(r[1]),cx,(r[1]>=0?yy:Y(r[1]))-(r[1]>=0?6:-14)); } });
+  if(kind==='line'){ g.strokeStyle=CHC[0]; g.lineWidth=3; g.beginPath(); rows.forEach(function(r,i){ var cx=x0+bw*(i+.5); g[i?'lineTo':'moveTo'](cx,Y(r[1])); }); g.stroke();
+    rows.forEach(function(r,i){ var cx=x0+bw*(i+.5); g.fillStyle='#fff'; g.beginPath(); g.arc(cx,Y(r[1]),5,0,7); g.fill(); g.strokeStyle=CHC[0]; g.lineWidth=2.5; g.stroke(); g.fillStyle='#222'; g.font='12px '+F; g.fillText(String(r[1]),cx,Y(r[1])-10); }); }
+  g.strokeStyle='#888'; g.lineWidth=1.5; g.beginPath(); g.moveTo(x0,y0); g.lineTo(x0,y1); g.moveTo(x0,Y(0)); g.lineTo(x1,Y(0)); g.stroke();
+  return c.toDataURL('image/png'); }
+var chR=null;
+function chPrev(){ $('chImg').src=chartPNG($('chKind').value,$('chTitle').value.trim(),chartRows($('chData').value)); $('chImg').width=360; }
+['chKind','chTitle','chData'].forEach(function(id){ $(id).addEventListener('input',chPrev); $(id).addEventListener('change',chPrev); });
+hb('insert','📊 차트','chBtn',function(){ var r=curRange(); chR=r?r.cloneRange():null; chPrev(); openDlg('chDlg'); });
+$('chOk').onclick=function(){ if(!chartRows($('chData').value).length){ toast('이름과 숫자를 한 줄에 하나씩 써 주세요'); $('chData').focus(); return; } closeDlg('chDlg'); page.focus(); if(chR&&page.contains(chR.commonAncestorContainer)){ var s=getSelection(); s.removeAllRanges(); s.addRange(chR); }
+  exec('insertHTML','<img src="'+$('chImg').src+'" width="480">'); };
+
 /* ---------- start ---------- */
 (function(){ var d=idx.docs.filter(function(x){ return x.id===idx.last; })[0]||idx.docs[0]; if(d) openDoc(d); else newDoc(); })();
 window.addEventListener('pagehide',saveNow);
