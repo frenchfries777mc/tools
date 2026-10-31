@@ -25,6 +25,7 @@ var IC={
   ungroup:'<rect x="3" y="3" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/>', layer:'<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>',
   align:'<path d="M4 3v18"/><rect x="8" y="6" width="12" height="4" rx="1"/><rect x="8" y="14" width="7" height="4" rx="1"/>', find:'<circle cx="10" cy="10" r="6"/><path d="M14.5 14.5L20 20"/>',
   picfx:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 9"/><path d="M16 4v4M14 6h4"/>', alt:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10M7 13h6M7 16.5h3"/>',
+  bold:'<path d="M7 5h6a3.5 3.5 0 0 1 0 7H7zM7 12h7a3.5 3.5 0 0 1 0 7H7z"/>', ital:'<path d="M10 5h8M6 19h8M14 5l-4 14"/>', under:'<path d="M7 4v7a5 5 0 0 0 10 0V4M5 20h14"/>', strike:'<path d="M4 12h16M8 7a4 4 0 0 1 4-2c2 0 4 1 4 3M8 17c1 1.5 2.5 2 4 2 2.4 0 4-1.2 4-3"/>', tcol:'<path d="M6 16L12 3l6 13M8.5 11h7"/><path d="M5 21h14" stroke-width="3"/>',
   keys:'<rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/>', pic:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 9"/>',
   conn:'<rect x="2" y="3" width="8" height="7" rx="1"/><rect x="14" y="14" width="8" height="7" rx="1"/><path d="M7 10l9 4"/><path d="M13 14h3v-3"/>', shape:'<rect x="3" y="11" width="10" height="10" rx="1"/><circle cx="16" cy="8" r="5"/>', emoji:'<circle cx="12" cy="12" r="9"/><path d="M8.5 14.5c1 1.6 2.2 2.3 3.5 2.3s2.5-.7 3.5-2.3M9 9.5h.01M15 9.5h.01"/>',
   text:'<path d="M5 6h14M12 6v13M9 19h6"/>', table:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16"/>', chart:'<path d="M5 20V11M10 20V5M15 20v-7M20 20v-4M3 20h18"/>',
@@ -50,7 +51,7 @@ var IC={
 var LAYS=[['title','제목'],['section','구역 제목'],['bullets','글머리표'],['two','두 칸'],['stat','큰 숫자'],['quote','인용'],['closing','마무리'],['image','그림'],['agenda','차례'],['timeline','타임라인'],['table','표'],['chart','그래프'],['quiz','퀴즈'],['timer','타이머'],['live','살아있는 화면']];
 var MSG={slide:'먼저 슬라이드를 만들어 주세요', busy:'AI가 다 만들 때까지 기다려 주세요', sel:'슬라이드에서 글상자·그림·도형을 먼저 골라 주세요', many:'도형을 두 개 이상 골라 주세요 (Shift를 누르고 누르기)',
   grp:'묶은 도형을 먼저 골라 주세요', shape:'슬라이드에서 도형을 먼저 골라 주세요', fillx:'선과 화살표에는 채우기가 없어요', conn:'이어 줄 도형·그림·글상자를 먼저 하나 골라 주세요', data:'표나 그래프 슬라이드에서 쓸 수 있어요',
-  link:'시트와 연결한 슬라이드에서 쓸 수 있어요', quiz:'퀴즈 슬라이드에서 쓸 수 있어요', ai:'AI가 고칠 수 있는 슬라이드를 먼저 골라 주세요', clip:'복사한 도형이 없어요', els:'고를 수 있는 도형이 없어요', pic:'슬라이드에서 그림을 먼저 골라 주세요', alt:'슬라이드에서 그림·도형·동영상을 먼저 골라 주세요'};
+  link:'시트와 연결한 슬라이드에서 쓸 수 있어요', quiz:'퀴즈 슬라이드에서 쓸 수 있어요', ai:'AI가 고칠 수 있는 슬라이드를 먼저 골라 주세요', clip:'복사한 도형이 없어요', els:'고를 수 있는 도형이 없어요', txt:'슬라이드에서 글이 있는 상자나 도형을 먼저 골라 주세요', pic:'슬라이드에서 그림을 먼저 골라 주세요', alt:'슬라이드에서 그림·도형·동영상을 먼저 골라 주세요'};
 
 var S=function(){ return window.FSLC?FSLC.state():{}; }, C=function(){ return window.FSLC; }, AI=function(){ return window.FSLAI; };
 /* need checks: return '' when the command can run now, or a MSG key */
@@ -58,6 +59,7 @@ var nSlide=function(st){ return st.busy?'busy':!st.slide?'slide':''; };
 var nSel=function(st){ return nSlide(st)||(!st.sel?'sel':''); };
 var nEl=function(st){ return nSlide(st)||(!st.nSel?'sel':''); };
 var nShape=function(st){ return nSlide(st)||(!st.shape?'shape':''); };
+var nTxt=function(st){ return nSlide(st)||(!st.txt?'txt':''); };
 var nPic=function(st){ return nSlide(st)||(!st.pic?'pic':''); };
 var nAlt=function(st){ return nSlide(st)||(!st.alt?'alt':''); };
 var nConn=function(st){ return nSlide(st)||(!st.conn?'conn':''); };
@@ -89,6 +91,12 @@ var CMDS=[
  {id:'sort', tab:'home', el:'sortBtn', ic:'grid', lb:'모아보기', t:'슬라이드 모아보기', k:'정리 순서 바꾸기 한눈에 여러 장'},
  {id:'hide', tab:'home', ic:'hide', lb:'건너뛰기', t:'발표할 때 건너뛰기', sc:'H', k:'숨기기 숨김 감추기', need:nSlide, on:function(st){ return st.hide; }, run:function(){ C().opt('hide'); }},
  {id:'opt', tab:'home', el:'optBtn', ic:'dots', lb:'옵션', t:'슬라이드 옵션', menu:1, k:'설정 더 보기 맨 앞으로 보내기 맨 뒤로 보내기'},
+ {g:1},
+ {id:'tfb', tab:'home', ic:'bold', lb:'굵게', t:'글자 굵게', k:'볼드 진하게 글씨 굵기 bold', need:nTxt, on:function(st){ return st.tf&&st.tf.b; }, run:function(){ C().tfToggle('b'); }},
+ {id:'tfi', tab:'home', ic:'ital', lb:'기울임', t:'글자 기울임', k:'이탤릭 비스듬히 italic', need:nTxt, on:function(st){ return st.tf&&st.tf.i; }, run:function(){ C().tfToggle('i'); }},
+ {id:'tfu', tab:'home', ic:'under', lb:'밑줄', t:'글자 밑줄', k:'언더라인 줄 긋기 underline', need:nTxt, on:function(st){ return st.tf&&st.tf.u; }, run:function(){ C().tfToggle('u'); }},
+ {id:'tfs', tab:'home', ic:'strike', lb:'취소선', t:'글자 취소선', k:'가운데 줄 지우기 줄 긋기 strike', need:nTxt, on:function(st){ return st.tf&&st.tf.s; }, run:function(){ C().tfToggle('s'); }},
+ {id:'tfc', tab:'home', ic:'tcol', lb:'글자 색', t:'글자 색과 글자 모양', menu:1, k:'글씨 색 폰트 색 색깔 글자 모양 서식', need:nTxt, run:function(b){ C().elMenu('tf',b); }},
  {g:1},
  {id:'copy', tab:'home', ic:'copy', lb:'복사', t:'고른 도형 복사', sc:'Ctrl+C', k:'도형 복사하기', need:nEl, run:function(){ C().copy(); }},
  {id:'paste', tab:'home', ic:'paste', lb:'붙여넣기', t:'붙여넣기', sc:'Ctrl+V', k:'도형 붙이기', need:function(st){ return nSlide(st)||(!st.clip?'clip':''); }, run:function(){ C().paste(); }},

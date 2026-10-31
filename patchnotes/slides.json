@@ -4,6 +4,17 @@
  "notes": [
   {
    "date": "2026-10-31",
+   "build": "v34",
+   "title": "글자 굵게·기울임·밑줄·글자 색",
+   "items": [
+    "홈 탭에 굵게, 기울임, 밑줄, 취소선, 글자 색 단추 추가 (글 상자와 글이 있는 도형에 쓰고, 여러 개를 골라 한꺼번에도 가능)",
+    "고른 상자 아래 막대에 '글자 모양' 메뉴 추가",
+    "글자 모양은 저장·복사·되돌리기·발표·PDF에 그대로 반영, PPTX에도 굵게·기울임·밑줄·취소선·색 반영"
+   ],
+   "tr": {"en": {"title": "Bold, italic, underline and text colour", "items": ["Bold, italic, underline, strikethrough and text colour buttons on the Home tab (for text boxes and shapes with text, several at once too)", "A text style menu on the bar under a picked box", "Text styles are kept when saving, copying, undoing, presenting and printing, and written into the PPTX"]}}
+  },
+  {
+   "date": "2026-10-31",
    "build": "v33",
    "title": "그림 여러 장 넣기, 그림 효과, 대체 텍스트",
    "items": [
