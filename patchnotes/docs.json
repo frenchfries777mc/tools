@@ -4,6 +4,32 @@
  "notes": [
   {
    "date": "2026-10-31",
+   "build": "v11",
+   "title": "제목 탐색, 소리 내어 읽기, 편집 잠금",
+   "items": [
+    "보기 탭에 제목 탐색 창 (제목을 누르면 그 자리로 이동)",
+    "소리 내어 읽기 (고른 글 또는 문서 전체)",
+    "맞춤법 밑줄 켜기·끄기",
+    "검토 탭에 편집 잠금",
+    "홈 탭에 문단 가나다순·거꾸로 정렬",
+    "표에 위에 줄 넣기, 왼쪽에 칸 넣기"
+   ],
+   "tr": {
+    "en": {
+     "title": "Navigation, read aloud and edit lock",
+     "items": [
+      "Navigation pane in the View tab (click a heading to jump to it)",
+      "Read aloud for the selection or the whole document",
+      "Spell check underline on or off",
+      "Edit lock in the Review tab",
+      "Sort paragraphs A to Z or backwards in the Home tab",
+      "Insert a row above and a column to the left in tables"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-10-31",
    "build": "v10",
    "title": "문단 설정과 첫 글자 크게",
    "items": [
