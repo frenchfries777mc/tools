@@ -14,6 +14,74 @@
     "en": {
      "title": "AI Arena: everyone's ranking",
      "items": ["Win rate per model from everyone's votes shown under the arena", "Nothing is shown until the server is set up"]
+    },
+    "es": {
+     "title": "Arena IA: ranking de todos",
+     "items": [
+      "Tasa de victorias por modelo según los votos de todos, mostrada debajo de la arena",
+      "Nada se muestra hasta que se configure el servidor"
+     ]
+    },
+    "fr": {
+     "title": "Arène IA : classement de tout le monde",
+     "items": [
+      "Taux de victoire par modèle selon les votes de tout le monde, affiché sous l'arène",
+      "Rien n'est affiché tant que le serveur n'est pas configuré"
+     ]
+    },
+    "de": {
+     "title": "KI-Arena: Rangliste aller",
+     "items": [
+      "Siegquote je Modell basierend auf den Stimmen aller, unter der Arena angezeigt",
+      "Es wird nichts angezeigt, bis der Server eingerichtet ist"
+     ]
+    },
+    "ja": {
+     "title": "AIアリーナ: みんなのランキング",
+     "items": ["みんなの投票をもとにしたモデル別の勝率をアリーナの下に表示", "サーバーを設定するまでは何も表示されません"]
+    },
+    "zh": {
+     "title": "AI竞技场：大家的排名",
+     "items": ["根据大家投票汇总的各模型胜率，显示在竞技场下方", "服务器设置完成前不显示任何内容"]
+    },
+    "pt": {
+     "title": "Arena de IA: ranking de todos",
+     "items": [
+      "Taxa de vitórias por modelo com base nos votos de todos, mostrada abaixo da arena",
+      "Nada é exibido até que o servidor seja configurado"
+     ]
+    },
+    "ru": {
+     "title": "Арена ИИ: общий рейтинг",
+     "items": [
+      "Процент побед каждой модели по голосам всех, показывается под ареной",
+      "Пока сервер не настроен, ничего не показывается"
+     ]
+    },
+    "tr": {
+     "title": "Yapay Zeka Arenası: herkesin sıralaması",
+     "items": [
+      "Herkesin oylarından elde edilen model başına kazanma oranı, arenanın altında gösterilir",
+      "Sunucu kurulana kadar hiçbir şey gösterilmez"
+     ]
+    },
+    "it": {
+     "title": "Arena IA: classifica di tutti",
+     "items": [
+      "Percentuale di vittorie per modello basata sui voti di tutti, mostrata sotto l'arena",
+      "Non viene mostrato nulla finché il server non è configurato"
+     ]
+    },
+    "pl": {
+     "title": "Arena AI: ranking wszystkich",
+     "items": [
+      "Wskaźnik wygranych modeli z głosów wszystkich, pokazany pod areną",
+      "Dopóki serwer nie zostanie skonfigurowany, nic nie jest wyświetlane"
+     ]
+    },
+    "ar": {
+     "title": "ساحة الذكاء الاصطناعي: ترتيب الجميع",
+     "items": ["نسبة الفوز لكل نموذج من أصوات الجميع، وتظهر أسفل الساحة", "لا يظهر شيء حتى يتم إعداد الخادم"]
     }
    }
   },
@@ -28,7 +96,81 @@
    "tr": {
     "en": {
      "title": "lectus 1.8 applied",
-     "items": ["The balanced default model is now FF777 1.8 lectus", "Trained more on any dad joke, word chain, how to use the programs and everyday talk"]
+     "items": [
+      "The balanced default model is now FF777 1.8 lectus",
+      "Trained more on any dad joke, word chain, how to use the programs and everyday talk"
+     ]
+    },
+    "es": {
+     "title": "lectus 1.8 aplicado",
+     "items": [
+      "El modelo base equilibrado pasa a ser FF777 1.8 lectus",
+      "Más entrenamiento en chistes malos, juegos de palabras, uso de los programas y conversación cotidiana"
+     ]
+    },
+    "fr": {
+     "title": "lectus 1.8 appliqué",
+     "items": [
+      "Le modèle équilibré par défaut devient FF777 1.8 lectus",
+      "Entraînement renforcé sur les blagues, les jeux de mots, l'usage des programmes et la conversation du quotidien"
+     ]
+    },
+    "de": {
+     "title": "lectus 1.8 übernommen",
+     "items": [
+      "Das ausgewogene Standardmodell ist jetzt FF777 1.8 lectus",
+      "Mehr Training bei Kalauern, Wortketten, der Bedienung der Programme und Alltagsgesprächen"
+     ]
+    },
+    "ja": {
+     "title": "lectus 1.8 を反映",
+     "items": ["標準のバランス型モデルが FF777 1.8 lectus に変わりました", "くだらないダジャレ・しりとり・プログラムの使い方・日常会話をさらに学習"]
+    },
+    "zh": {
+     "title": "已应用 lectus 1.8",
+     "items": ["默认的均衡模型已换为 FF777 1.8 lectus", "加强了冷笑话、接龙、程序使用方法和日常闲聊的学习"]
+    },
+    "pt": {
+     "title": "lectus 1.8 aplicado",
+     "items": [
+      "O modelo padrão equilibrado agora é o FF777 1.8 lectus",
+      "Mais treinamento em piadas bobas, jogos de palavras, uso dos programas e conversas do dia a dia"
+     ]
+    },
+    "ru": {
+     "title": "Применён lectus 1.8",
+     "items": [
+      "Сбалансированная базовая модель стала FF777 1.8 lectus",
+      "Больше обучения на шутках, словесных играх, работе с программами и обычном разговоре"
+     ]
+    },
+    "tr": {
+     "title": "lectus 1.8 uygulandı",
+     "items": [
+      "Dengeli varsayılan model artık FF777 1.8 lectus",
+      "Her türlü espri, kelime zinciri, program kullanımı ve günlük sohbet konusunda daha fazla eğitim"
+     ]
+    },
+    "it": {
+     "title": "lectus 1.8 applicato",
+     "items": [
+      "Il modello di base bilanciato è ora FF777 1.8 lectus",
+      "Più addestramento su battute, giochi di parole, uso dei programmi e conversazione quotidiana"
+     ]
+    },
+    "pl": {
+     "title": "Zastosowano lectus 1.8",
+     "items": [
+      "Zrównoważony model domyślny to teraz FF777 1.8 lectus",
+      "Więcej treningu na żartach, łańcuchach słów, obsłudze programów i zwykłych rozmowach"
+     ]
+    },
+    "ar": {
+     "title": "تم تطبيق lectus 1.8",
+     "items": [
+      "أصبح النموذج الافتراضي المتوازن هو FF777 1.8 lectus",
+      "تدريب أكبر على النكات البسيطة وألعاب الكلمات وطريقة استخدام البرامج والحديث اليومي"
+     ]
     }
    }
   },
@@ -102,19 +244,35 @@
    "tr": {
     "en": {
      "title": "AI Arena changes",
-     "items": ["Two random models compete; you no longer pick them", "Both answers appear together once they are ready; loading and model names stay hidden while they are written", "Tap the answer you like instead of a button, and the models are revealed then"]
+     "items": [
+      "Two random models compete; you no longer pick them",
+      "Both answers appear together once they are ready; loading and model names stay hidden while they are written",
+      "Tap the answer you like instead of a button, and the models are revealed then"
+     ]
     },
     "es": {
      "title": "Cambios en el Duelo de IA",
-     "items": ["Compiten dos modelos al azar; ya no los eliges tú", "Las dos respuestas aparecen juntas cuando están listas; mientras se escriben, la carga y los nombres de los modelos quedan ocultos", "Toca la respuesta que te guste en lugar de un botón, y entonces se revelan los modelos"]
+     "items": [
+      "Compiten dos modelos al azar; ya no los eliges tú",
+      "Las dos respuestas aparecen juntas cuando están listas; mientras se escriben, la carga y los nombres de los modelos quedan ocultos",
+      "Toca la respuesta que te guste en lugar de un botón, y entonces se revelan los modelos"
+     ]
     },
     "fr": {
      "title": "Changements de l’Arène IA",
-     "items": ["Deux modèles au hasard s’affrontent ; tu ne les choisis plus", "Les deux réponses apparaissent ensemble une fois prêtes ; le chargement et les noms des modèles restent cachés pendant leur rédaction", "Touche la réponse que tu préfères au lieu d’un bouton, et les modèles sont alors révélés"]
+     "items": [
+      "Deux modèles au hasard s’affrontent ; tu ne les choisis plus",
+      "Les deux réponses apparaissent ensemble une fois prêtes ; le chargement et les noms des modèles restent cachés pendant leur rédaction",
+      "Touche la réponse que tu préfères au lieu d’un bouton, et les modèles sont alors révélés"
+     ]
     },
     "de": {
      "title": "Änderungen an der KI-Arena",
-     "items": ["Zwei zufällige Modelle treten gegeneinander an; du wählst sie nicht mehr selbst", "Beide Antworten erscheinen gemeinsam, sobald sie fertig sind; Ladeanzeige und Modellnamen bleiben beim Schreiben verborgen", "Tippe auf die Antwort, die dir gefällt, statt auf einen Button; dann werden die Modelle aufgedeckt"]
+     "items": [
+      "Zwei zufällige Modelle treten gegeneinander an; du wählst sie nicht mehr selbst",
+      "Beide Antworten erscheinen gemeinsam, sobald sie fertig sind; Ladeanzeige und Modellnamen bleiben beim Schreiben verborgen",
+      "Tippe auf die Antwort, die dir gefällt, statt auf einen Button; dann werden die Modelle aufgedeckt"
+     ]
     },
     "ja": {
      "title": "AI対決場を変更",
@@ -126,27 +284,51 @@
     },
     "pt": {
      "title": "Mudanças na Arena de IA",
-     "items": ["Dois modelos aleatórios competem; você não escolhe mais os modelos", "As duas respostas aparecem juntas quando ficam prontas; o carregamento e os nomes dos modelos ficam ocultos enquanto são escritas", "Toque na resposta de que gostar, em vez de um botão, e então os modelos são revelados"]
+     "items": [
+      "Dois modelos aleatórios competem; você não escolhe mais os modelos",
+      "As duas respostas aparecem juntas quando ficam prontas; o carregamento e os nomes dos modelos ficam ocultos enquanto são escritas",
+      "Toque na resposta de que gostar, em vez de um botão, e então os modelos são revelados"
+     ]
     },
     "ru": {
      "title": "Изменения в ИИ-арене",
-     "items": ["Сражаются две случайные модели; выбирать их больше не нужно", "Оба ответа появляются вместе, когда готовы; загрузка и названия моделей скрыты, пока ответы пишутся", "Нажмите на понравившийся ответ вместо кнопки, и тогда модели откроются"]
+     "items": [
+      "Сражаются две случайные модели; выбирать их больше не нужно",
+      "Оба ответа появляются вместе, когда готовы; загрузка и названия моделей скрыты, пока ответы пишутся",
+      "Нажмите на понравившийся ответ вместо кнопки, и тогда модели откроются"
+     ]
     },
     "tr": {
      "title": "YZ Arenası değişiklikleri",
-     "items": ["İki rastgele model yarışır; artık modelleri sen seçmezsin", "İki yanıt da hazır olunca birlikte görünür; yazılırken yükleme ve model adları gizli kalır", "Düğme yerine beğendiğin yanıta dokun; modeller o zaman açıklanır"]
+     "items": [
+      "İki rastgele model yarışır; artık modelleri sen seçmezsin",
+      "İki yanıt da hazır olunca birlikte görünür; yazılırken yükleme ve model adları gizli kalır",
+      "Düğme yerine beğendiğin yanıta dokun; modeller o zaman açıklanır"
+     ]
     },
     "it": {
      "title": "Modifiche all’Arena IA",
-     "items": ["Due modelli casuali si sfidano; non li scegli più tu", "Entrambe le risposte compaiono insieme quando sono pronte; caricamento e nomi dei modelli restano nascosti mentre vengono scritte", "Tocca la risposta che preferisci invece di un pulsante: solo allora i modelli vengono rivelati"]
+     "items": [
+      "Due modelli casuali si sfidano; non li scegli più tu",
+      "Entrambe le risposte compaiono insieme quando sono pronte; caricamento e nomi dei modelli restano nascosti mentre vengono scritte",
+      "Tocca la risposta che preferisci invece di un pulsante: solo allora i modelli vengono rivelati"
+     ]
     },
     "pl": {
      "title": "Zmiany w Arenie AI",
-     "items": ["Rywalizują dwa losowe modele; nie wybierasz ich już sam", "Obie odpowiedzi pojawiają się razem, gdy są gotowe; podczas pisania ukryte są wczytywanie i nazwy modeli", "Stuknij odpowiedź, która ci się podoba, zamiast przycisku, a wtedy modele się ujawnią"]
+     "items": [
+      "Rywalizują dwa losowe modele; nie wybierasz ich już sam",
+      "Obie odpowiedzi pojawiają się razem, gdy są gotowe; podczas pisania ukryte są wczytywanie i nazwy modeli",
+      "Stuknij odpowiedź, która ci się podoba, zamiast przycisku, a wtedy modele się ujawnią"
+     ]
     },
     "ar": {
      "title": "تغييرات ساحة الذكاء الاصطناعي",
-     "items": ["يتنافس نموذجان عشوائيان؛ لم يعد عليك اختيارهما", "تظهر الإجابتان معًا بعد أن تجهزا؛ ويبقى التحميل وأسماء النماذج مخفية أثناء كتابتهما", "اضغط على الإجابة التي تعجبك بدلًا من الزر، وعندها تُكشف النماذج"]
+     "items": [
+      "يتنافس نموذجان عشوائيان؛ لم يعد عليك اختيارهما",
+      "تظهر الإجابتان معًا بعد أن تجهزا؛ ويبقى التحميل وأسماء النماذج مخفية أثناء كتابتهما",
+      "اضغط على الإجابة التي تعجبك بدلًا من الزر، وعندها تُكشف النماذج"
+     ]
     }
    }
   },
@@ -168,15 +350,24 @@
     },
     "es": {
      "title": "Actualizado a tarius y premus 1.8",
-     "items": ["Cambiados el modelo más ligero por FF777 1.8 tarius y el más inteligente por FF777 1.8 premus", "Entrenado con más peticiones de chistes de papá, cadena de palabras, uso de cada herramienta y charla cotidiana"]
+     "items": [
+      "Cambiados el modelo más ligero por FF777 1.8 tarius y el más inteligente por FF777 1.8 premus",
+      "Entrenado con más peticiones de chistes de papá, cadena de palabras, uso de cada herramienta y charla cotidiana"
+     ]
     },
     "fr": {
      "title": "Mise à jour tarius et premus 1.8",
-     "items": ["Modèle le plus léger remplacé par FF777 1.8 tarius et le plus malin par FF777 1.8 premus", "Entraîné davantage sur toutes les demandes de blagues de papa, le jeu des mots en chaîne, l’usage de chaque outil et la conversation du quotidien"]
+     "items": [
+      "Modèle le plus léger remplacé par FF777 1.8 tarius et le plus malin par FF777 1.8 premus",
+      "Entraîné davantage sur toutes les demandes de blagues de papa, le jeu des mots en chaîne, l’usage de chaque outil et la conversation du quotidien"
+     ]
     },
     "de": {
      "title": "tarius und premus 1.8 Update",
-     "items": ["Leichtestes Modell durch FF777 1.8 tarius und das klügste durch FF777 1.8 premus ersetzt", "Zusätzlich trainiert auf beliebige Dad-Joke-Anfragen, Wortketten, die Nutzung jedes Werkzeugs und Alltagsgespräche"]
+     "items": [
+      "Leichtestes Modell durch FF777 1.8 tarius und das klügste durch FF777 1.8 premus ersetzt",
+      "Zusätzlich trainiert auf beliebige Dad-Joke-Anfragen, Wortketten, die Nutzung jedes Werkzeugs und Alltagsgespräche"
+     ]
     },
     "ja": {
      "title": "tarius・premus 1.8 反映",
@@ -188,27 +379,45 @@
     },
     "pt": {
      "title": "Atualização tarius e premus 1.8",
-     "items": ["Modelo mais leve trocado pelo FF777 1.8 tarius e o mais inteligente pelo FF777 1.8 premus", "Treinado com mais pedidos de piadas de tio, palavras encadeadas, uso de cada ferramenta e conversa do dia a dia"]
+     "items": [
+      "Modelo mais leve trocado pelo FF777 1.8 tarius e o mais inteligente pelo FF777 1.8 premus",
+      "Treinado com mais pedidos de piadas de tio, palavras encadeadas, uso de cada ferramenta e conversa do dia a dia"
+     ]
     },
     "ru": {
      "title": "Обновление tarius и premus 1.8",
-     "items": ["Самую лёгкую модель заменили на FF777 1.8 tarius, самую умную — на FF777 1.8 premus", "Дополнительно обучена на любых запросах папиных шуток, игре в слова, работе с каждым инструментом и бытовом общении"]
+     "items": [
+      "Самую лёгкую модель заменили на FF777 1.8 tarius, самую умную — на FF777 1.8 premus",
+      "Дополнительно обучена на любых запросах папиных шуток, игре в слова, работе с каждым инструментом и бытовом общении"
+     ]
     },
     "tr": {
      "title": "tarius ve premus 1.8 güncellemesi",
-     "items": ["En hafif model FF777 1.8 tarius, en akıllı model FF777 1.8 premus ile değiştirildi", "Her türlü baba şakası isteği, kelime zinciri, her aracın kullanımı ve günlük sohbetler üzerine ek eğitim verildi"]
+     "items": [
+      "En hafif model FF777 1.8 tarius, en akıllı model FF777 1.8 premus ile değiştirildi",
+      "Her türlü baba şakası isteği, kelime zinciri, her aracın kullanımı ve günlük sohbetler üzerine ek eğitim verildi"
+     ]
     },
     "it": {
      "title": "Aggiornamento tarius e premus 1.8",
-     "items": ["Il modello più leggero sostituito con FF777 1.8 tarius e quello più intelligente con FF777 1.8 premus", "Addestrato in più su qualsiasi richiesta di barzellette da papà, gioco delle parole a catena, uso di ogni strumento e chiacchiere quotidiane"]
+     "items": [
+      "Il modello più leggero sostituito con FF777 1.8 tarius e quello più intelligente con FF777 1.8 premus",
+      "Addestrato in più su qualsiasi richiesta di barzellette da papà, gioco delle parole a catena, uso di ogni strumento e chiacchiere quotidiane"
+     ]
     },
     "pl": {
      "title": "Aktualizacja tarius i premus 1.8",
-     "items": ["Najlżejszy model zastąpiono przez FF777 1.8 tarius, a najmądrzejszy przez FF777 1.8 premus", "Dodatkowo wytrenowano na dowolnych prośbach o żarty w stylu taty, grze w słowa łańcuchowe, obsłudze każdego narzędzia i codziennych rozmowach"]
+     "items": [
+      "Najlżejszy model zastąpiono przez FF777 1.8 tarius, a najmądrzejszy przez FF777 1.8 premus",
+      "Dodatkowo wytrenowano na dowolnych prośbach o żarty w stylu taty, grze w słowa łańcuchowe, obsłudze każdego narzędzia i codziennych rozmowach"
+     ]
     },
     "ar": {
      "title": "تحديث tarius وpremus 1.8",
-     "items": ["استبدال أخف النماذج بالنموذج FF777 1.8 tarius، وأذكى النماذج بالنموذج FF777 1.8 premus", "تدريب إضافي على أي طلب لنكتة قديمة، ولعبة تسلسل الكلمات، واستخدام كل أداة، والأحاديث اليومية"]
+     "items": [
+      "استبدال أخف النماذج بالنموذج FF777 1.8 tarius، وأذكى النماذج بالنموذج FF777 1.8 premus",
+      "تدريب إضافي على أي طلب لنكتة قديمة، ولعبة تسلسل الكلمات، واستخدام كل أداة، والأحاديث اليومية"
+     ]
     }
    }
   },
@@ -251,17 +460,11 @@
     },
     "ja": {
      "title": "tarius 1.7 反映",
-     "items": [
-      "いちばん軽いモデルをFF777 1.7 tariusに入れ替え",
-      "Docs・Python・LabのAI課題と、おやじギャグのリクエストを追加で学習"
-     ]
+     "items": ["いちばん軽いモデルをFF777 1.7 tariusに入れ替え", "Docs・Python・LabのAI課題と、おやじギャグのリクエストを追加で学習"]
     },
     "zh": {
      "title": "tarius 1.7 更新",
-     "items": [
-      "将最轻量的模型换成 FF777 1.7 tarius",
-      "新增学习文档、Python 和 Lab 的 AI 任务，以及任意冷笑话请求"
-     ]
+     "items": ["将最轻量的模型换成 FF777 1.7 tarius", "新增学习文档、Python 和 Lab 的 AI 任务，以及任意冷笑话请求"]
     },
     "pt": {
      "title": "Atualização tarius 1.7",
@@ -346,17 +549,11 @@
     },
     "ja": {
      "title": "lectus・premus 1.7 反映",
-     "items": [
-      "バランス型をFF777 1.7 lectusに、いちばん賢いモデルをFF777 1.7 premusに入れ替え",
-      "Docs・Python・LabのAI課題と、おやじギャグのリクエストを追加で学習"
-     ]
+     "items": ["バランス型をFF777 1.7 lectusに、いちばん賢いモデルをFF777 1.7 premusに入れ替え", "Docs・Python・LabのAI課題と、おやじギャグのリクエストを追加で学習"]
     },
     "zh": {
      "title": "lectus·premus 1.7 更新",
-     "items": [
-      "将均衡模型换成 FF777 1.7 lectus，最聪明的模型换成 FF777 1.7 premus",
-      "新增学习文档、Python 和 Lab 的 AI 任务，以及任意冷笑话请求"
-     ]
+     "items": ["将均衡模型换成 FF777 1.7 lectus，最聪明的模型换成 FF777 1.7 premus", "新增学习文档、Python 和 Lab 的 AI 任务，以及任意冷笑话请求"]
     },
     "pt": {
      "title": "Atualização lectus e premus 1.7",
@@ -413,101 +610,59 @@
    "tr": {
     "en": {
      "title": "lectus 1.6 update",
-     "items": [
-      "Swapped the balanced model for FF777 1.6 lectus",
-      "Dad-joke check training 113/115"
-     ]
+     "items": ["Swapped the balanced model for FF777 1.6 lectus", "Dad-joke check training 113/115"]
     },
     "es": {
      "title": "Actualización lectus 1.6",
-     "items": [
-      "El modelo equilibrado pasa a ser FF777 1.6 lectus",
-      "Entrenamiento de chistes de papá 113/115"
-     ]
+     "items": ["El modelo equilibrado pasa a ser FF777 1.6 lectus", "Entrenamiento de chistes de papá 113/115"]
     },
     "fr": {
      "title": "Mise à jour lectus 1.6",
-     "items": [
-      "Le modèle équilibré est remplacé par FF777 1.6 lectus",
-      "Entraînement des blagues de papa 113/115"
-     ]
+     "items": ["Le modèle équilibré est remplacé par FF777 1.6 lectus", "Entraînement des blagues de papa 113/115"]
     },
     "de": {
      "title": "lectus 1.6 Update",
-     "items": [
-      "Das ausgewogene Modell wurde durch FF777 1.6 lectus ersetzt",
-      "Dad-Joke-Prüfung trainiert 113/115"
-     ]
+     "items": ["Das ausgewogene Modell wurde durch FF777 1.6 lectus ersetzt", "Dad-Joke-Prüfung trainiert 113/115"]
     },
     "ja": {
      "title": "lectus 1.6 反映",
-     "items": [
-      "バランス型モデルを FF777 1.6 lectus に交換",
-      "おやじギャグ確認の学習 113/115"
-     ]
+     "items": ["バランス型モデルを FF777 1.6 lectus に交換", "おやじギャグ確認の学習 113/115"]
     },
     "zh": {
      "title": "lectus 1.6 更新",
-     "items": [
-      "均衡模型换成了 FF777 1.6 lectus",
-      "冷笑话检查学习 113/115"
-     ]
+     "items": ["均衡模型换成了 FF777 1.6 lectus", "冷笑话检查学习 113/115"]
     },
     "pt": {
      "title": "Atualização lectus 1.6",
-     "items": [
-      "O modelo equilibrado foi trocado pelo FF777 1.6 lectus",
-      "Treino de piadas bobas 113/115"
-     ]
+     "items": ["O modelo equilibrado foi trocado pelo FF777 1.6 lectus", "Treino de piadas bobas 113/115"]
     },
     "ru": {
      "title": "Обновление lectus 1.6",
-     "items": [
-      "Сбалансированную модель заменили на FF777 1.6 lectus",
-      "Обучение на проверку шуток 113/115"
-     ]
+     "items": ["Сбалансированную модель заменили на FF777 1.6 lectus", "Обучение на проверку шуток 113/115"]
     },
     "tr": {
      "title": "lectus 1.6 güncellemesi",
-     "items": [
-      "Dengeli model FF777 1.6 lectus ile değiştirildi",
-      "Baba şakası kontrolü öğrenimi 113/115"
-     ]
+     "items": ["Dengeli model FF777 1.6 lectus ile değiştirildi", "Baba şakası kontrolü öğrenimi 113/115"]
     },
     "it": {
      "title": "Aggiornamento lectus 1.6",
-     "items": [
-      "Il modello bilanciato è stato sostituito con FF777 1.6 lectus",
-      "Addestramento battute 113/115"
-     ]
+     "items": ["Il modello bilanciato è stato sostituito con FF777 1.6 lectus", "Addestramento battute 113/115"]
     },
     "pl": {
      "title": "Aktualizacja lectus 1.6",
-     "items": [
-      "Zrównoważony model zamieniono na FF777 1.6 lectus",
-      "Nauka sprawdzania żartów 113/115"
-     ]
+     "items": ["Zrównoważony model zamieniono na FF777 1.6 lectus", "Nauka sprawdzania żartów 113/115"]
     },
     "ar": {
      "title": "تحديث lectus 1.6",
-     "items": [
-      "استبدال النموذج المتوازن بـ FF777 1.6 lectus",
-      "تدريب فحص النكات 113/115"
-     ]
+     "items": ["استبدال النموذج المتوازن بـ FF777 1.6 lectus", "تدريب فحص النكات 113/115"]
     },
     "nw": {
      "title": "lectus 1.6 upgrade",
-     "items": [
-      "Balanced model swapped to FF777 1.6 lectus",
-      "Joke-check learning 113/115"
-     ]
+     "items": ["Balanced model swapped to FF777 1.6 lectus", "Joke-check learning 113/115"]
     },
     "gk": {
      "title": "lectus 1.6 비추다",
-     "items": [
-      "균형 모델 을 FF777 1.6 lectus 로 바꾸다",
-      "아재개그 점검 배우다 113/115"
-     ]
+     "items": ["균형 모델 을 FF777 1.6 lectus 로 바꾸다", "아재개그 점검 배우다 113/115"]
     }
    }
   },
@@ -522,17 +677,11 @@
    "tr": {
     "en": {
      "title": "premus 1.6 update",
-     "items": [
-      "Swapped the smartest model for FF777 1.6 premus",
-      "Dad-joke check training 115/115, chat 114/115"
-     ]
+     "items": ["Swapped the smartest model for FF777 1.6 premus", "Dad-joke check training 115/115, chat 114/115"]
     },
     "es": {
      "title": "Actualización premus 1.6",
-     "items": [
-      "El modelo más inteligente pasa a ser FF777 1.6 premus",
-      "Entrenamiento de chistes de papá 115/115, chat 114/115"
-     ]
+     "items": ["El modelo más inteligente pasa a ser FF777 1.6 premus", "Entrenamiento de chistes de papá 115/115, chat 114/115"]
     },
     "fr": {
      "title": "Mise à jour premus 1.6",
@@ -543,45 +692,27 @@
     },
     "de": {
      "title": "premus 1.6 Update",
-     "items": [
-      "Das klügste Modell wurde durch FF777 1.6 premus ersetzt",
-      "Dad-Joke-Prüfung trainiert 115/115, Chat 114/115"
-     ]
+     "items": ["Das klügste Modell wurde durch FF777 1.6 premus ersetzt", "Dad-Joke-Prüfung trainiert 115/115, Chat 114/115"]
     },
     "ja": {
      "title": "premus 1.6 反映",
-     "items": [
-      "最も賢いモデルを FF777 1.6 premus に交換",
-      "おやじギャグ確認の学習 115/115、会話 114/115"
-     ]
+     "items": ["最も賢いモデルを FF777 1.6 premus に交換", "おやじギャグ確認の学習 115/115、会話 114/115"]
     },
     "zh": {
      "title": "premus 1.6 更新",
-     "items": [
-      "最聪明的模型换成了 FF777 1.6 premus",
-      "冷笑话检查学习 115/115，对话 114/115"
-     ]
+     "items": ["最聪明的模型换成了 FF777 1.6 premus", "冷笑话检查学习 115/115，对话 114/115"]
     },
     "pt": {
      "title": "Atualização premus 1.6",
-     "items": [
-      "O modelo mais inteligente foi trocado pelo FF777 1.6 premus",
-      "Treino de piadas bobas 115/115, chat 114/115"
-     ]
+     "items": ["O modelo mais inteligente foi trocado pelo FF777 1.6 premus", "Treino de piadas bobas 115/115, chat 114/115"]
     },
     "ru": {
      "title": "Обновление premus 1.6",
-     "items": [
-      "Самую умную модель заменили на FF777 1.6 premus",
-      "Обучение на проверку шуток 115/115, диалог 114/115"
-     ]
+     "items": ["Самую умную модель заменили на FF777 1.6 premus", "Обучение на проверку шуток 115/115, диалог 114/115"]
     },
     "tr": {
      "title": "premus 1.6 güncellemesi",
-     "items": [
-      "En akıllı model FF777 1.6 premus ile değiştirildi",
-      "Baba şakası kontrolü öğrenimi 115/115, sohbet 114/115"
-     ]
+     "items": ["En akıllı model FF777 1.6 premus ile değiştirildi", "Baba şakası kontrolü öğrenimi 115/115, sohbet 114/115"]
     },
     "it": {
      "title": "Aggiornamento premus 1.6",
@@ -592,31 +723,19 @@
     },
     "pl": {
      "title": "Aktualizacja premus 1.6",
-     "items": [
-      "Najmądrzejszy model zamieniono na FF777 1.6 premus",
-      "Nauka sprawdzania żartów 115/115, rozmowa 114/115"
-     ]
+     "items": ["Najmądrzejszy model zamieniono na FF777 1.6 premus", "Nauka sprawdzania żartów 115/115, rozmowa 114/115"]
     },
     "ar": {
      "title": "تحديث premus 1.6",
-     "items": [
-      "استبدال النموذج الأذكى بـ FF777 1.6 premus",
-      "تدريب فحص النكات 115/115، والمحادثة 114/115"
-     ]
+     "items": ["استبدال النموذج الأذكى بـ FF777 1.6 premus", "تدريب فحص النكات 115/115، والمحادثة 114/115"]
     },
     "nw": {
      "title": "premus 1.6 upgrade",
-     "items": [
-      "Smartest model swapped to FF777 1.6 premus",
-      "Joke-check learning 115/115, chat 114/115"
-     ]
+     "items": ["Smartest model swapped to FF777 1.6 premus", "Joke-check learning 115/115, chat 114/115"]
     },
     "gk": {
      "title": "premus 1.6 비추다",
-     "items": [
-      "가장 똑똑하다 모델 을 FF777 1.6 premus 로 바꾸다",
-      "아재개그 점검 배우다 115/115, 대화 114/115"
-     ]
+     "items": ["가장 똑똑하다 모델 을 FF777 1.6 premus 로 바꾸다", "아재개그 점검 배우다 115/115, 대화 114/115"]
     }
    }
   },
@@ -664,19 +783,11 @@
     },
     "ja": {
      "title": "今すぐ答えるボタンとモデル選択ボタン",
-     "items": [
-      "「今すぐ投票」ボタンの名前を「今すぐ答える」に",
-      "答えの数と投票の説明文を整理",
-      "会話画面の左上にモデル選択へ戻るボタン"
-     ]
+     "items": ["「今すぐ投票」ボタンの名前を「今すぐ答える」に", "答えの数と投票の説明文を整理", "会話画面の左上にモデル選択へ戻るボタン"]
     },
     "zh": {
      "title": "“立即回答”和选择模型按钮",
-     "items": [
-      "“立即投票”按钮改名为“立即回答”",
-      "整理回答数量和投票说明文字",
-      "对话框左上角新增返回选择模型的按钮"
-     ]
+     "items": ["“立即投票”按钮改名为“立即回答”", "整理回答数量和投票说明文字", "对话框左上角新增返回选择模型的按钮"]
     },
     "pt": {
      "title": "Botões Responder agora e escolher modelo",
@@ -736,11 +847,7 @@
     },
     "gk": {
      "title": "대답 지금 그리고 모델 따기 단추들",
-     "items": [
-      "그 투표 지금 단추 이다 이름 바뀐 대답 지금",
-      "정돈된 위로 그 대답 백작 그리고 투표하는 글자",
-      "하나의 단추 에 그 위 왼쪽 의 그 수다 에게 가다 뒤로 에게 고르는 하나의 모델"
-     ]
+     "items": ["그 투표 지금 단추 이다 이름 바뀐 대답 지금", "정돈된 위로 그 대답 백작 그리고 투표하는 글자", "하나의 단추 에 그 위 왼쪽 의 그 수다 에게 가다 뒤로 에게 고르는 하나의 모델"]
     }
    }
   },
@@ -788,19 +895,11 @@
     },
     "ja": {
      "title": "今すぐ投票ボタン",
-     "items": [
-      "普通・努力モードで答えを作っている間、入力欄の上に今すぐ投票ボタンを追加",
-      "答えが1つ以上できていれば、押すと残りの答え作りを止めてすぐ投票して答える",
-      "できた答えの数を表示（例 2/7）"
-     ]
+     "items": ["普通・努力モードで答えを作っている間、入力欄の上に今すぐ投票ボタンを追加", "答えが1つ以上できていれば、押すと残りの答え作りを止めてすぐ投票して答える", "できた答えの数を表示（例 2/7）"]
     },
     "zh": {
      "title": "“立即投票”按钮",
-     "items": [
-      "标准和用心模式生成回答时，在输入框上方显示“立即投票”按钮",
-      "已生成至少一个回答时，按下即停止生成其余回答并立刻投票作答",
-      "显示已生成的回答数（例如 2/7）"
-     ]
+     "items": ["标准和用心模式生成回答时，在输入框上方显示“立即投票”按钮", "已生成至少一个回答时，按下即停止生成其余回答并立刻投票作答", "显示已生成的回答数（例如 2/7）"]
     },
     "pt": {
      "title": "Botão Votar agora",
@@ -879,10 +978,7 @@
    "tr": {
     "en": {
      "title": "AI Chat logo",
-     "items": [
-      "New logo on the AI Chat start screen",
-      "The chat screen shown before picking a model uses the same new logo"
-     ]
+     "items": ["New logo on the AI Chat start screen", "The chat screen shown before picking a model uses the same new logo"]
     },
     "es": {
      "title": "Logo de AI Chat",
@@ -907,38 +1003,23 @@
     },
     "ja": {
      "title": "AI体験のロゴ",
-     "items": [
-      "AI体験の最初の画面のロゴを新しいロゴに交換",
-      "モデルを選ぶ前の会話画面のロゴも同じロゴに交換"
-     ]
+     "items": ["AI体験の最初の画面のロゴを新しいロゴに交換", "モデルを選ぶ前の会話画面のロゴも同じロゴに交換"]
     },
     "zh": {
      "title": "AI 体验标志",
-     "items": [
-      "AI 体验首页换成新标志",
-      "选择模型前的对话界面也换成同一标志"
-     ]
+     "items": ["AI 体验首页换成新标志", "选择模型前的对话界面也换成同一标志"]
     },
     "pt": {
      "title": "Logo do AI Chat",
-     "items": [
-      "Novo logo na tela inicial do AI Chat",
-      "A tela de conversa antes de escolher o modelo usa o mesmo logo novo"
-     ]
+     "items": ["Novo logo na tela inicial do AI Chat", "A tela de conversa antes de escolher o modelo usa o mesmo logo novo"]
     },
     "ru": {
      "title": "Логотип AI Chat",
-     "items": [
-      "Новый логотип на стартовом экране AI Chat",
-      "На экране чата до выбора модели тот же новый логотип"
-     ]
+     "items": ["Новый логотип на стартовом экране AI Chat", "На экране чата до выбора модели тот же новый логотип"]
     },
     "tr": {
      "title": "AI Chat logosu",
-     "items": [
-      "AI Chat açılış ekranında yeni logo",
-      "Model seçmeden önceki sohbet ekranında da aynı yeni logo"
-     ]
+     "items": ["AI Chat açılış ekranında yeni logo", "Model seçmeden önceki sohbet ekranında da aynı yeni logo"]
     },
     "it": {
      "title": "Logo di AI Chat",
@@ -949,31 +1030,19 @@
     },
     "pl": {
      "title": "Logo AI Chat",
-     "items": [
-      "Nowe logo na ekranie startowym AI Chat",
-      "Ekran czatu przed wyborem modelu ma to samo nowe logo"
-     ]
+     "items": ["Nowe logo na ekranie startowym AI Chat", "Ekran czatu przed wyborem modelu ma to samo nowe logo"]
     },
     "ar": {
      "title": "شعار AI Chat",
-     "items": [
-      "شعار جديد في شاشة البداية لـ AI Chat",
-      "شاشة المحادثة قبل اختيار النموذج تستخدم الشعار الجديد نفسه"
-     ]
+     "items": ["شعار جديد في شاشة البداية لـ AI Chat", "شاشة المحادثة قبل اختيار النموذج تستخدم الشعار الجديد نفسه"]
     },
     "nw": {
      "title": "AI Chat mark",
-     "items": [
-      "New mark on AI Chat startscreen",
-      "Chat screen before model pick has same new mark"
-     ]
+     "items": ["New mark on AI Chat startscreen", "Chat screen before model pick has same new mark"]
     },
     "gk": {
      "title": "AI 수다 통나무",
-     "items": [
-      "새로운 통나무 위에 그 AI 수다 시작 화면",
-      "그 수다 화면 보여진 전에 따는 하나의 모델 사용하다 그 같은 새로운 통나무"
-     ]
+     "items": ["새로운 통나무 위에 그 AI 수다 시작 화면", "그 수다 화면 보여진 전에 따는 하나의 모델 사용하다 그 같은 새로운 통나무"]
     }
    }
   },
@@ -1016,17 +1085,11 @@
     },
     "ja": {
      "title": "FF777 1.6 tarius",
-     "items": [
-      "軽いモデルをFF777 1.6 tariusに変更（親父ギャグ1,339行としりとりを追加で学習したQwen3 1.7B）",
-      "親父ギャグテストの正解数が4から64に増加（115問、テスト方式基準）"
-     ]
+     "items": ["軽いモデルをFF777 1.6 tariusに変更（親父ギャグ1,339行としりとりを追加で学習したQwen3 1.7B）", "親父ギャグテストの正解数が4から64に増加（115問、テスト方式基準）"]
     },
     "zh": {
      "title": "FF777 1.6 tarius",
-     "items": [
-      "轻量模型换成 FF777 1.6 tarius（额外学习了 1,339 行冷笑话和词语接龙的 Qwen3 1.7B）",
-      "冷笑话测试答对数从 4 增至 64（共 115 题，按测试规则）"
-     ]
+     "items": ["轻量模型换成 FF777 1.6 tarius（额外学习了 1,339 行冷笑话和词语接龙的 Qwen3 1.7B）", "冷笑话测试答对数从 4 增至 64（共 115 题，按测试规则）"]
     },
     "pt": {
      "title": "FF777 1.6 tarius",
@@ -1277,11 +1340,7 @@
     },
     "zh": {
      "title": "对话命名与模型/模式显示",
-     "items": [
-      "AI 体验的对话可以命名（在过去的对话列表或对话顶部的按钮里命名和改名）",
-      "有名字的对话即使很久也不会删除，并在列表中标 ★",
-      "对话最上方用一行显示本次对话使用的模型和回答模式"
-     ]
+     "items": ["AI 体验的对话可以命名（在过去的对话列表或对话顶部的按钮里命名和改名）", "有名字的对话即使很久也不会删除，并在列表中标 ★", "对话最上方用一行显示本次对话使用的模型和回答模式"]
     },
     "pt": {
      "title": "Nomes de conversa e linha de modelo/modo",
@@ -1388,17 +1447,11 @@
     },
     "ja": {
      "title": "「間違い」の理由を選ぶ",
-     "items": [
-      "👎 間違いを押すとき、事実が違う・口調や形式がおかしい・質問と関係ない答え・同じ言葉を繰り返す から理由を選べるように",
-      "選んだ理由は学習データの分類に使えるよう、教えるページと自動収集に一緒に保存"
-     ]
+     "items": ["👎 間違いを押すとき、事実が違う・口調や形式がおかしい・質問と関係ない答え・同じ言葉を繰り返す から理由を選べるように", "選んだ理由は学習データの分類に使えるよう、教えるページと自動収集に一緒に保存"]
     },
     "zh": {
      "title": "选择“答错了”的原因",
-     "items": [
-      "按 👎 答错了时可以选择原因：事实错误、语气或格式奇怪、答非所问、一直重复",
-      "所选原因会随报告保存到教学页面和自动收集中，用于分类训练数据"
-     ]
+     "items": ["按 👎 答错了时可以选择原因：事实错误、语气或格式奇怪、答非所问、一直重复", "所选原因会随报告保存到教学页面和自动收集中，用于分类训练数据"]
     },
     "pt": {
      "title": "Escolher o motivo de Errado",
@@ -1474,51 +1527,35 @@
     },
     "es": {
      "title": "El modo de respuesta por defecto ahora es Normal",
-     "items": [
-      "El modo de respuesta por defecto de AI Chat pasa de Esfuerzo a Normal (quien ya eligió uno lo mantiene)"
-     ]
+     "items": ["El modo de respuesta por defecto de AI Chat pasa de Esfuerzo a Normal (quien ya eligió uno lo mantiene)"]
     },
     "fr": {
      "title": "Mode de réponse par défaut : Normale",
-     "items": [
-      "Le mode de réponse par défaut d’AI Chat passe d’Effort à Normale (ceux qui en ont déjà choisi un le gardent)"
-     ]
+     "items": ["Le mode de réponse par défaut d’AI Chat passe d’Effort à Normale (ceux qui en ont déjà choisi un le gardent)"]
     },
     "de": {
      "title": "Standard-Antwortmodus jetzt Normal",
-     "items": [
-      "Der Standard-Antwortmodus in AI Chat wechselt von Mühe zu Normal (wer schon gewählt hat, behält seine Wahl)"
-     ]
+     "items": ["Der Standard-Antwortmodus in AI Chat wechselt von Mühe zu Normal (wer schon gewählt hat, behält seine Wahl)"]
     },
     "ja": {
      "title": "基本の答え方を普通に",
-     "items": [
-      "AI体験の基本の答え方を努力から普通に変更（すでに自分で選んだ人はそのまま）"
-     ]
+     "items": ["AI体験の基本の答え方を努力から普通に変更（すでに自分で選んだ人はそのまま）"]
     },
     "zh": {
      "title": "默认回答模式改为标准",
-     "items": [
-      "AI 体验的默认回答模式从用心改为标准（已自行选择的人保持不变）"
-     ]
+     "items": ["AI 体验的默认回答模式从用心改为标准（已自行选择的人保持不变）"]
     },
     "pt": {
      "title": "Modo de resposta padrão agora é Normal",
-     "items": [
-      "O modo de resposta padrão do AI Chat mudou de Esforço para Normal (quem já escolheu mantém a escolha)"
-     ]
+     "items": ["O modo de resposta padrão do AI Chat mudou de Esforço para Normal (quem já escolheu mantém a escolha)"]
     },
     "ru": {
      "title": "Режим ответа по умолчанию — «Обычный»",
-     "items": [
-      "Режим ответа по умолчанию в AI Chat сменился со «Старания» на «Обычный» (у тех, кто уже выбрал, всё остаётся)"
-     ]
+     "items": ["Режим ответа по умолчанию в AI Chat сменился со «Старания» на «Обычный» (у тех, кто уже выбрал, всё остаётся)"]
     },
     "tr": {
      "title": "Varsayılan yanıt modu artık Normal",
-     "items": [
-      "AI Chat’in varsayılan yanıt modu Özen’den Normal’e değişti (zaten seçmiş olanlarınki aynı kalır)"
-     ]
+     "items": ["AI Chat’in varsayılan yanıt modu Özen’den Normal’e değişti (zaten seçmiş olanlarınki aynı kalır)"]
     },
     "it": {
      "title": "La modalità predefinita ora è Normale",
@@ -1528,27 +1565,19 @@
     },
     "pl": {
      "title": "Domyślny tryb odpowiedzi to teraz Normalny",
-     "items": [
-      "Domyślny tryb odpowiedzi w AI Chat zmienił się ze Starannego na Normalny (kto już wybrał, zachowuje wybór)"
-     ]
+     "items": ["Domyślny tryb odpowiedzi w AI Chat zmienił się ze Starannego na Normalny (kto już wybrał, zachowuje wybór)"]
     },
     "ar": {
      "title": "الوضع الافتراضي للإجابة صار «عادي»",
-     "items": [
-      "تغيّر وضع الإجابة الافتراضي في AI Chat من «جهد» إلى «عادي» (من اختار وضعًا بنفسه يبقى عليه)"
-     ]
+     "items": ["تغيّر وضع الإجابة الافتراضي في AI Chat من «جهد» إلى «عادي» (من اختار وضعًا بنفسه يبقى عليه)"]
     },
     "nw": {
      "title": "Default answer mode now Good",
-     "items": [
-      "AI Chat default mode changed from Effort to Good (those who picked keep pick)"
-     ]
+     "items": ["AI Chat default mode changed from Effort to Good (those who picked keep pick)"]
     },
     "gk": {
      "title": "기본 대답 방식 이다 지금 정상",
-     "items": [
-      "그 기본 대답 방식 안에 AI 수다 바뀐 부터 노력 에게 정상 (사람들 누구 이미 땄다 하나 유지하다 그들의 선택)"
-     ]
+     "items": ["그 기본 대답 방식 안에 AI 수다 바뀐 부터 노력 에게 정상 (사람들 누구 이미 땄다 하나 유지하다 그들의 선택)"]
     }
    }
   },
@@ -1586,15 +1615,11 @@
     },
     "ja": {
      "title": "不確かの表示の基準をゆるく",
-     "items": [
-      "AI体験で「答えが不確かかもしれません」がよく出すぎる問題を修正（同じ答えとみなす基準をゆるくし、同じ答えが40%未満のときだけ表示）"
-     ]
+     "items": ["AI体験で「答えが不確かかもしれません」がよく出すぎる問題を修正（同じ答えとみなす基準をゆるくし、同じ答えが40%未満のときだけ表示）"]
     },
     "zh": {
      "title": "放宽“不确定”提示标准",
-     "items": [
-      "修正 AI 体验中“回答可能不确定”出现过于频繁的问题（放宽相同回答的判定，相同回答不足 40% 时才显示）"
-     ]
+     "items": ["修正 AI 体验中“回答可能不确定”出现过于频繁的问题（放宽相同回答的判定，相同回答不足 40% 时才显示）"]
     },
     "pt": {
      "title": "Aviso de incerteza aparece menos",
@@ -1634,15 +1659,11 @@
     },
     "nw": {
      "title": "Unsure notice shows less",
-     "items": [
-      "Fixed AI Chat unsure notice showing too much (looser sameness, shows only under 40% same)"
-     ]
+     "items": ["Fixed AI Chat unsure notice showing too much (looser sameness, shows only under 40% same)"]
     },
     "gk": {
      "title": "불확실한 공지 보여진 덜 자주",
-     "items": [
-      "고정된 그 \"이 대답 할 수 있다 이다 불확실한\" 공지 안에 AI 수다 보여주는 너무 자주 (대답들 어울린 더 느슨하게, 그리고 그것 쇼들 오직 언제 아래에 40% 동의하다)"
-     ]
+     "items": ["고정된 그 \"이 대답 할 수 있다 이다 불확실한\" 공지 안에 AI 수다 보여주는 너무 자주 (대답들 어울린 더 느슨하게, 그리고 그것 쇼들 오직 언제 아래에 40% 동의하다)"]
     }
    }
   },
@@ -1656,87 +1677,59 @@
    "tr": {
     "en": {
      "title": "Answer mode names changed",
-     "items": [
-      "The answer length buttons in AI Chat were renamed from Short/Normal/Long to Quick/Normal/Effort"
-     ]
+     "items": ["The answer length buttons in AI Chat were renamed from Short/Normal/Long to Quick/Normal/Effort"]
     },
     "es": {
      "title": "Nuevos nombres de los modos",
-     "items": [
-      "Los botones de longitud de respuesta de AI Chat pasan de Corta/Normal/Larga a Rápido/Normal/Esfuerzo"
-     ]
+     "items": ["Los botones de longitud de respuesta de AI Chat pasan de Corta/Normal/Larga a Rápido/Normal/Esfuerzo"]
     },
     "fr": {
      "title": "Noms des modes de réponse changés",
-     "items": [
-      "Les boutons de longueur de réponse d’AI Chat passent de Courte/Normale/Longue à Rapide/Normale/Effort"
-     ]
+     "items": ["Les boutons de longueur de réponse d’AI Chat passent de Courte/Normale/Longue à Rapide/Normale/Effort"]
     },
     "de": {
      "title": "Namen der Antwortmodi geändert",
-     "items": [
-      "Die Antwortlängen-Buttons in AI Chat heißen jetzt Schnell/Normal/Mühe statt Kurz/Normal/Lang"
-     ]
+     "items": ["Die Antwortlängen-Buttons in AI Chat heißen jetzt Schnell/Normal/Mühe statt Kurz/Normal/Lang"]
     },
     "ja": {
      "title": "答え方の名前を変更",
-     "items": [
-      "AI体験の答えの長さボタンを 短く・普通・長く から 迅速・普通・努力 に名前変更"
-     ]
+     "items": ["AI体験の答えの長さボタンを 短く・普通・長く から 迅速・普通・努力 に名前変更"]
     },
     "zh": {
      "title": "回答模式改名",
-     "items": [
-      "AI 体验的回答长度按钮从“简短/标准/详细”改名为“快速/标准/用心”"
-     ]
+     "items": ["AI 体验的回答长度按钮从“简短/标准/详细”改名为“快速/标准/用心”"]
     },
     "pt": {
      "title": "Nomes dos modos mudaram",
-     "items": [
-      "Os botões de tamanho da resposta do AI Chat passaram de Curta/Normal/Longa para Rápido/Normal/Esforço"
-     ]
+     "items": ["Os botões de tamanho da resposta do AI Chat passaram de Curta/Normal/Longa para Rápido/Normal/Esforço"]
     },
     "ru": {
      "title": "Новые названия режимов",
-     "items": [
-      "Кнопки длины ответа в AI Chat переименованы с «Коротко/Обычно/Длинно» на «Быстрый/Обычный/Старание»"
-     ]
+     "items": ["Кнопки длины ответа в AI Chat переименованы с «Коротко/Обычно/Длинно» на «Быстрый/Обычный/Старание»"]
     },
     "tr": {
      "title": "Yanıt modu adları değişti",
-     "items": [
-      "AI Chat’teki yanıt uzunluğu düğmeleri Kısa/Normal/Uzun yerine Çabuk/Normal/Özen oldu"
-     ]
+     "items": ["AI Chat’teki yanıt uzunluğu düğmeleri Kısa/Normal/Uzun yerine Çabuk/Normal/Özen oldu"]
     },
     "it": {
      "title": "Nuovi nomi delle modalità",
-     "items": [
-      "I pulsanti di lunghezza della risposta di AI Chat passano da Breve/Normale/Lunga a Rapido/Normale/Impegno"
-     ]
+     "items": ["I pulsanti di lunghezza della risposta di AI Chat passano da Breve/Normale/Lunga a Rapido/Normale/Impegno"]
     },
     "pl": {
      "title": "Zmienione nazwy trybów",
-     "items": [
-      "Przyciski długości odpowiedzi w AI Chat zmieniono z Krótko/Normalnie/Długo na Szybki/Normalny/Staranny"
-     ]
+     "items": ["Przyciski długości odpowiedzi w AI Chat zmieniono z Krótko/Normalnie/Długo na Szybki/Normalny/Staranny"]
     },
     "ar": {
      "title": "تغيير أسماء أوضاع الإجابة",
-     "items": [
-      "تغيّرت أسماء أزرار طول الإجابة في AI Chat من قصير/عادي/طويل إلى سريع/عادي/جهد"
-     ]
+     "items": ["تغيّرت أسماء أزرار طول الإجابة في AI Chat من قصير/عادي/طويل إلى سريع/عادي/جهد"]
     },
     "nw": {
      "title": "Answer mode names changed",
-     "items": [
-      "AI Chat length buttons renamed from Short/Good/Long to Fast/Good/Effort"
-     ]
+     "items": ["AI Chat length buttons renamed from Short/Good/Long to Fast/Good/Effort"]
     },
     "gk": {
      "title": "대답 방식 이름들 바뀐",
-     "items": [
-      "그 대답 길이 단추들 안에 AI 수다 이었다 이름 바뀐 부터 짧은/정상/긴 에게 빠른/정상/노력"
-     ]
+     "items": ["그 대답 길이 단추들 안에 AI 수다 이었다 이름 바뀐 부터 짧은/정상/긴 에게 빠른/정상/노력"]
     }
    }
   },
@@ -1779,17 +1772,11 @@
     },
     "ja": {
      "title": "リストの答えも実際に読み込んでから1文字ずつ",
-     "items": [
-      "AI体験で、リストの答えもモデルが読み込まれていなければ実際に読み込み、考え中の点を見せてから1文字ずつ出力",
-      "答えを1単語ずつではなく1文字ずつ出力"
-     ]
+     "items": ["AI体験で、リストの答えもモデルが読み込まれていなければ実際に読み込み、考え中の点を見せてから1文字ずつ出力", "答えを1単語ずつではなく1文字ずつ出力"]
     },
     "zh": {
      "title": "列表回答也先真正加载模型再逐字输出",
-     "items": [
-      "AI 体验中，若模型未加载，列表回答也会先真正加载模型，显示思考中的点，再逐字输出",
-      "回答改为逐字输出，而不是逐词"
-     ]
+     "items": ["AI 体验中，若模型未加载，列表回答也会先真正加载模型，显示思考中的点，再逐字输出", "回答改为逐字输出，而不是逐词"]
     },
     "pt": {
      "title": "Respostas de lista também carregam o modelo e saem letra por letra",
@@ -1883,15 +1870,11 @@
     },
     "ja": {
      "title": "不確かなときだけ表示",
-     "items": [
-      "AI体験で「何回中何回が同じ」の表示をなくし、答えが分かれたときだけ「答えが不確かかもしれません」を表示"
-     ]
+     "items": ["AI体験で「何回中何回が同じ」の表示をなくし、答えが分かれたときだけ「答えが不確かかもしれません」を表示"]
     },
     "zh": {
      "title": "仅在不确定时显示",
-     "items": [
-      "AI 体验不再显示“几次中有几次相同”，只在回答出现分歧时显示“回答可能不确定”"
-     ]
+     "items": ["AI 体验不再显示“几次中有几次相同”，只在回答出现分歧时显示“回答可能不确定”"]
     },
     "pt": {
      "title": "Mostrado só quando há dúvida",
@@ -1907,9 +1890,7 @@
     },
     "tr": {
      "title": "Yalnızca belirsizken gösterilir",
-     "items": [
-      "AI Chat artık “Y’de X aynı” göstermiyor; yalnızca yanıtlar ayrıştığında “Bu yanıt belirsiz olabilir” gösterir"
-     ]
+     "items": ["AI Chat artık “Y’de X aynı” göstermiyor; yalnızca yanıtlar ayrıştığında “Bu yanıt belirsiz olabilir” gösterir"]
     },
     "it": {
      "title": "Mostrato solo se incerto",
@@ -1925,21 +1906,15 @@
     },
     "ar": {
      "title": "يظهر فقط عند عدم اليقين",
-     "items": [
-      "لم يعد AI Chat يعرض «X من Y متطابقة»، ويعرض «قد تكون الإجابة غير مؤكدة» فقط عند اختلاف الإجابات"
-     ]
+     "items": ["لم يعد AI Chat يعرض «X من Y متطابقة»، ويعرض «قد تكون الإجابة غير مؤكدة» فقط عند اختلاف الإجابات"]
     },
     "nw": {
      "title": "Shown only when unsure",
-     "items": [
-      "AI Chat unshows “X of Y same”; shows “answer may be unsure” only when answers unagree"
-     ]
+     "items": ["AI Chat unshows “X of Y same”; shows “answer may be unsure” only when answers unagree"]
     },
     "gk": {
      "title": "보여진 오직 언제 불확실한",
-     "items": [
-      "AI 수다 아니다 더 이상 쇼들 \"X 밖으로 의 Y 이었다 그 같은\"; 그것 쇼들 \"이 대답 할 수 있다 이다 불확실한\" 오직 언제 대답들 동의하지 않다"
-     ]
+     "items": ["AI 수다 아니다 더 이상 쇼들 \"X 밖으로 의 Y 이었다 그 같은\"; 그것 쇼들 \"이 대답 할 수 있다 이다 불확실한\" 오직 언제 대답들 동의하지 않다"]
     }
    }
   },
@@ -1953,15 +1928,11 @@
    "tr": {
     "en": {
      "title": "“Thinking” text removed",
-     "items": [
-      "While AI Chat makes several answers, the “thinking about answer N” text is gone; only the thinking dots show"
-     ]
+     "items": ["While AI Chat makes several answers, the “thinking about answer N” text is gone; only the thinking dots show"]
     },
     "es": {
      "title": "Se quitó el texto “pensando”",
-     "items": [
-      "Mientras AI Chat genera varias respuestas ya no aparece “pensando en la respuesta N”; solo los puntos"
-     ]
+     "items": ["Mientras AI Chat genera varias respuestas ya no aparece “pensando en la respuesta N”; solo los puntos"]
     },
     "fr": {
      "title": "Texte « réflexion » retiré",
@@ -1977,63 +1948,43 @@
     },
     "ja": {
      "title": "「考え中」の文字を削除",
-     "items": [
-      "AI体験で複数の答えを作る間の「何個目を考え中」の文字をなくし、考え中の点だけ表示"
-     ]
+     "items": ["AI体験で複数の答えを作る間の「何個目を考え中」の文字をなくし、考え中の点だけ表示"]
     },
     "zh": {
      "title": "删除“思考中”文字",
-     "items": [
-      "AI 体验生成多个回答时，不再显示“正在思考第 N 个”，只显示思考中的点"
-     ]
+     "items": ["AI 体验生成多个回答时，不再显示“正在思考第 N 个”，只显示思考中的点"]
     },
     "pt": {
      "title": "Texto “pensando” removido",
-     "items": [
-      "Enquanto o AI Chat cria várias respostas, sumiu o texto “pensando na resposta N”; só aparecem os pontinhos"
-     ]
+     "items": ["Enquanto o AI Chat cria várias respostas, sumiu o texto “pensando na resposta N”; só aparecem os pontinhos"]
     },
     "ru": {
      "title": "Убран текст «думает»",
-     "items": [
-      "Пока AI Chat создаёт несколько ответов, текста «думает над ответом N» больше нет — только точки"
-     ]
+     "items": ["Пока AI Chat создаёт несколько ответов, текста «думает над ответом N» больше нет — только точки"]
     },
     "tr": {
      "title": "“Düşünüyor” yazısı kaldırıldı",
-     "items": [
-      "AI Chat birkaç yanıt üretirken “N. yanıtı düşünüyor” yazısı kalktı; yalnızca düşünme noktaları görünür"
-     ]
+     "items": ["AI Chat birkaç yanıt üretirken “N. yanıtı düşünüyor” yazısı kalktı; yalnızca düşünme noktaları görünür"]
     },
     "it": {
      "title": "Tolto il testo “sta pensando”",
-     "items": [
-      "Mentre AI Chat crea più risposte non compare più “sta pensando alla risposta N”; restano solo i puntini"
-     ]
+     "items": ["Mentre AI Chat crea più risposte non compare più “sta pensando alla risposta N”; restano solo i puntini"]
     },
     "pl": {
      "title": "Usunięto napis „myśli”",
-     "items": [
-      "Gdy AI Chat tworzy kilka odpowiedzi, nie ma już napisu „myśli nad odpowiedzią N”; zostają tylko kropki"
-     ]
+     "items": ["Gdy AI Chat tworzy kilka odpowiedzi, nie ma już napisu „myśli nad odpowiedzią N”; zostają tylko kropki"]
     },
     "ar": {
      "title": "إزالة نص «يفكّر»",
-     "items": [
-      "أثناء إنشاء AI Chat عدة إجابات لم يعد يظهر نص «يفكّر في الإجابة رقم N»، بل نقاط التفكير فقط"
-     ]
+     "items": ["أثناء إنشاء AI Chat عدة إجابات لم يعد يظهر نص «يفكّر في الإجابة رقم N»، بل نقاط التفكير فقط"]
     },
     "nw": {
      "title": "“Thinking” speakwrite unshown",
-     "items": [
-      "While AI Chat makes many answers, “thinking N” is gone; only think dots show"
-     ]
+     "items": ["While AI Chat makes many answers, “thinking N” is gone; only think dots show"]
     },
     "gk": {
      "title": "\"생각하는\" 글자 제거된",
-     "items": [
-      "동안 AI 수다 만들다 여러 대답들, 그 \"생각하는 에 대한 대답 N\" 글자 이다 간; 오직 그 생각하는 점들 보여 주다"
-     ]
+     "items": ["동안 AI 수다 만들다 여러 대답들, 그 \"생각하는 에 대한 대답 N\" 글자 이다 간; 오직 그 생각하는 점들 보여 주다"]
     }
    }
   },
@@ -2083,10 +2034,7 @@
     },
     "zh": {
      "title": "生成所有回答并投票后再回复",
-     "items": [
-      "AI 体验在回答画面中先生成全部回答（标准 3 个、详细 7 个），投票结束后只逐词输出得票最多的一个（删除先显示再确认的方式）",
-      "回答时显示正在思考第几个；按停止则用已收集的回答决定"
-     ]
+     "items": ["AI 体验在回答画面中先生成全部回答（标准 3 个、详细 7 个），投票结束后只逐词输出得票最多的一个（删除先显示再确认的方式）", "回答时显示正在思考第几个；按停止则用已收集的回答决定"]
     },
     "pt": {
      "title": "Criar todas as respostas e votar antes de responder",
@@ -2185,17 +2133,11 @@
     },
     "ja": {
      "title": "リストの答えもモデルのように出す",
-     "items": [
-      "AI体験で親父ギャグと自己紹介の答えも5〜10秒考え中の点を見せてから1単語ずつ出るように修正",
-      "考え中や書いている途中でも止めるボタンで止められる"
-     ]
+     "items": ["AI体験で親父ギャグと自己紹介の答えも5〜10秒考え中の点を見せてから1単語ずつ出るように修正", "考え中や書いている途中でも止めるボタンで止められる"]
     },
     "zh": {
      "title": "列表回答也像模型一样输出",
-     "items": [
-      "AI 体验中的冷笑话和自我介绍回答也会先显示 5–10 秒思考中的点，再逐词输出",
-      "思考或书写中都可以用停止按钮停下"
-     ]
+     "items": ["AI 体验中的冷笑话和自我介绍回答也会先显示 5–10 秒思考中的点，再逐词输出", "思考或书写中都可以用停止按钮停下"]
     },
     "pt": {
      "title": "Respostas de lista agem como o modelo",
@@ -2294,17 +2236,11 @@
     },
     "ja": {
      "title": "「間違い」の自動収集",
-     "items": [
-      "サーバーにたまった「間違い」を3時間ごとに自動で集める（学習データを作るときに読み、処理したものはサーバーから削除）",
-      "教える画面の「間違い」をファイルに書き出すボタンと書き出したN件を消すボタンを削除（自動に変更）"
-     ]
+     "items": ["サーバーにたまった「間違い」を3時間ごとに自動で集める（学習データを作るときに読み、処理したものはサーバーから削除）", "教える画面の「間違い」をファイルに書き出すボタンと書き出したN件を消すボタンを削除（自動に変更）"]
     },
     "zh": {
      "title": "自动收集“答错了”报告",
-     "items": [
-      "服务器上的“答错了”报告每 3 小时自动收集（制作训练数据时阅读，处理过的从服务器删除）",
-      "删除教学页面中导出“答错了”文件和删除已导出 N 条的按钮（改为自动）"
-     ]
+     "items": ["服务器上的“答错了”报告每 3 小时自动收集（制作训练数据时阅读，处理过的从服务器删除）", "删除教学页面中导出“答错了”文件和删除已导出 N 条的按钮（改为自动）"]
     },
     "pt": {
      "title": "Coleta automática dos avisos de Errado",
@@ -2410,10 +2346,7 @@
     },
     "zh": {
      "title": "模型图标",
-     "items": [
-      "tarius、lectus、premus 各有不同的图标（薯条杯，每个模型的杯子颜色和薯条数量不同）",
-      "图标显示在 AI 设置的模型名左侧、AI 体验的模型选择卡片、对话顶部和回答者头像上"
-     ]
+     "items": ["tarius、lectus、premus 各有不同的图标（薯条杯，每个模型的杯子颜色和薯条数量不同）", "图标显示在 AI 设置的模型名左侧、AI 体验的模型选择卡片、对话顶部和回答者头像上"]
     },
     "pt": {
      "title": "Ícones dos modelos",
@@ -2899,17 +2832,11 @@
     },
     "ja": {
      "title": "モデルの容量と1行説明",
-     "items": [
-      "AI設定の自前AIモデル一覧にダウンロード容量を表示（tarius 約1GB、lectus 約2.5GB、premus 約5GB）",
-      "すべてのAIモデルに1行説明を追加（選ぶと下の案内文の先頭に表示）"
-     ]
+     "items": ["AI設定の自前AIモデル一覧にダウンロード容量を表示（tarius 約1GB、lectus 約2.5GB、premus 約5GB）", "すべてのAIモデルに1行説明を追加（選ぶと下の案内文の先頭に表示）"]
     },
     "zh": {
      "title": "模型大小和一句话介绍",
-     "items": [
-      "AI 设置的自带模型列表显示下载大小（tarius 约 1GB、lectus 约 2.5GB、premus 约 5GB）",
-      "所有 AI 模型都加了一句话介绍（选中后显示在下方说明文字开头）"
-     ]
+     "items": ["AI 设置的自带模型列表显示下载大小（tarius 约 1GB、lectus 约 2.5GB、premus 约 5GB）", "所有 AI 模型都加了一句话介绍（选中后显示在下方说明文字开头）"]
     },
     "pt": {
      "title": "Tamanhos dos modelos e descrição de uma linha",
@@ -2979,87 +2906,59 @@
    "tr": {
     "en": {
      "title": "Wrong button in more places",
-     "items": [
-      "Added the Wrong button to the Fry Lab AI helper and Block HTML block explanations too"
-     ]
+     "items": ["Added the Wrong button to the Fry Lab AI helper and Block HTML block explanations too"]
     },
     "es": {
      "title": "Botón Incorrecto en más sitios",
-     "items": [
-      "El botón Incorrecto llega también al asistente de IA de Fry Lab y a las explicaciones de bloques de Block HTML"
-     ]
+     "items": ["El botón Incorrecto llega también al asistente de IA de Fry Lab y a las explicaciones de bloques de Block HTML"]
     },
     "fr": {
      "title": "Bouton Faux à plus d’endroits",
-     "items": [
-      "Le bouton Faux arrive aussi dans l’assistant IA de Fry Lab et les explications de blocs de Block HTML"
-     ]
+     "items": ["Le bouton Faux arrive aussi dans l’assistant IA de Fry Lab et les explications de blocs de Block HTML"]
     },
     "de": {
      "title": "Falsch-Button an mehr Stellen",
-     "items": [
-      "Der Falsch-Button gibt es jetzt auch beim KI-Helfer von Fry Lab und bei den Blockerklärungen von Block HTML"
-     ]
+     "items": ["Der Falsch-Button gibt es jetzt auch beim KI-Helfer von Fry Lab und bei den Blockerklärungen von Block HTML"]
     },
     "ja": {
      "title": "「間違い」ボタンを拡大",
-     "items": [
-      "Fry Lab のAIヘルパーと Block HTML のブロック説明にも「間違い」ボタンを追加"
-     ]
+     "items": ["Fry Lab のAIヘルパーと Block HTML のブロック説明にも「間違い」ボタンを追加"]
     },
     "zh": {
      "title": "“答错了”按钮扩展",
-     "items": [
-      "Fry Lab 的 AI 助手和 Block HTML 的积木说明也加上了“答错了”按钮"
-     ]
+     "items": ["Fry Lab 的 AI 助手和 Block HTML 的积木说明也加上了“答错了”按钮"]
     },
     "pt": {
      "title": "Botão Errado em mais lugares",
-     "items": [
-      "O botão Errado chegou também ao assistente de IA do Fry Lab e às explicações de blocos do Block HTML"
-     ]
+     "items": ["O botão Errado chegou também ao assistente de IA do Fry Lab e às explicações de blocos do Block HTML"]
     },
     "ru": {
      "title": "Кнопка «Неверно» в новых местах",
-     "items": [
-      "Кнопка «Неверно» появилась и в ИИ-помощнике Fry Lab, и в объяснениях блоков Block HTML"
-     ]
+     "items": ["Кнопка «Неверно» появилась и в ИИ-помощнике Fry Lab, и в объяснениях блоков Block HTML"]
     },
     "tr": {
      "title": "Yanlış düğmesi daha çok yerde",
-     "items": [
-      "Yanlış düğmesi Fry Lab yapay zekâ yardımcısına ve Block HTML blok açıklamalarına da eklendi"
-     ]
+     "items": ["Yanlış düğmesi Fry Lab yapay zekâ yardımcısına ve Block HTML blok açıklamalarına da eklendi"]
     },
     "it": {
      "title": "Pulsante Sbagliato in più punti",
-     "items": [
-      "Il pulsante Sbagliato arriva anche nell’assistente IA di Fry Lab e nelle spiegazioni dei blocchi di Block HTML"
-     ]
+     "items": ["Il pulsante Sbagliato arriva anche nell’assistente IA di Fry Lab e nelle spiegazioni dei blocchi di Block HTML"]
     },
     "pl": {
      "title": "Przycisk „Źle” w kolejnych miejscach",
-     "items": [
-      "Przycisk „Źle” dodano też do pomocnika AI w Fry Lab i objaśnień bloków w Block HTML"
-     ]
+     "items": ["Przycisk „Źle” dodano też do pomocnika AI w Fry Lab i objaśnień bloków w Block HTML"]
     },
     "ar": {
      "title": "زر «خطأ» في أماكن أكثر",
-     "items": [
-      "أُضيف زر «خطأ» أيضًا إلى مساعد Fry Lab وشروح الكتل في Block HTML"
-     ]
+     "items": ["أُضيف زر «خطأ» أيضًا إلى مساعد Fry Lab وشروح الكتل في Block HTML"]
     },
     "nw": {
      "title": "Ungood button in more places",
-     "items": [
-      "Plusadded Ungood button to Fry Lab AI helper plus Block HTML block tells"
-     ]
+     "items": ["Plusadded Ungood button to Fry Lab AI helper plus Block HTML block tells"]
     },
     "gk": {
      "title": "틀린 단추 안에 더 장소들",
-     "items": [
-      "더하다 그 틀린 단추 에게 그 튀김 실험실 AI 도우미 그리고 구역 HTML 구역 설명들 너무"
-     ]
+     "items": ["더하다 그 틀린 단추 에게 그 튀김 실험실 AI 도우미 그리고 구역 HTML 구역 설명들 너무"]
     }
    }
   },
@@ -3671,11 +3570,7 @@
     },
     "zh": {
      "title": "打开时预先加载",
-     "items": [
-      "AI 设置新增“打开时预先加载”开关（默认关闭）",
-      "开启后，打开页面时会在后台加载已下载的自带 AI，第一次提问更快",
-      "会持续占用显存（VRAM），只建议需要的人开启"
-     ]
+     "items": ["AI 设置新增“打开时预先加载”开关（默认关闭）", "开启后，打开页面时会在后台加载已下载的自带 AI，第一次提问更快", "会持续占用显存（VRAM），只建议需要的人开启"]
     },
     "pt": {
      "title": "Pré-carregar ao abrir",
@@ -4060,17 +3955,11 @@
     },
     "ja": {
      "title": "長い繰り返しも止める",
-     "items": [
-      "ブロック数個をまるごと繰り返して書く長い繰り返しも3回目で検知して止める",
-      "止めた後、もう一度落ち着いて受け取り直す（従来どおり）"
-     ]
+     "items": ["ブロック数個をまるごと繰り返して書く長い繰り返しも3回目で検知して止める", "止めた後、もう一度落ち着いて受け取り直す（従来どおり）"]
     },
     "zh": {
      "title": "长重复也会停止",
-     "items": [
-      "整段重复写好几个积木的长重复，也会在第 3 次时检测并停止",
-      "停止后再冷静地重新获取一次（与之前相同）"
-     ]
+     "items": ["整段重复写好几个积木的长重复，也会在第 3 次时检测并停止", "停止后再冷静地重新获取一次（与之前相同）"]
     },
     "pt": {
      "title": "Parar também repetições longas",
@@ -4123,10 +4012,7 @@
     },
     "gk": {
      "title": "멈추다 긴 고리들 너무",
-     "items": [
-      "긴 고리들 그것 다시 쓰다 여러 블록들 위에 그리고 위에 이다 발견된 그리고 멈춘 위에 그 3번째 반복",
-      "뒤에 멈추는, 그것 가져오다 한 번 더 조용하게 (처럼 전에)"
-     ]
+     "items": ["긴 고리들 그것 다시 쓰다 여러 블록들 위에 그리고 위에 이다 발견된 그리고 멈춘 위에 그 3번째 반복", "뒤에 멈추는, 그것 가져오다 한 번 더 조용하게 (처럼 전에)"]
     }
    }
   },
@@ -4169,17 +4055,11 @@
     },
     "ja": {
      "title": "自前AIは FF777 のみ",
-     "items": [
-      "自前AIのモデル一覧から基本の Qwen3 を外し、FF777 tarius と lectus だけを表示",
-      "以前選んだ Qwen3 は自動で tarius に切り替え"
-     ]
+     "items": ["自前AIのモデル一覧から基本の Qwen3 を外し、FF777 tarius と lectus だけを表示", "以前選んだ Qwen3 は自動で tarius に切り替え"]
     },
     "zh": {
      "title": "自带 AI 只保留 FF777",
-     "items": [
-      "从自带 AI 模型列表中移除基础 Qwen3，只显示 FF777 tarius 和 lectus",
-      "以前选的 Qwen3 会自动切换为 tarius"
-     ]
+     "items": ["从自带 AI 模型列表中移除基础 Qwen3，只显示 FF777 tarius 和 lectus", "以前选的 Qwen3 会自动切换为 tarius"]
     },
     "pt": {
      "title": "IA integrada só FF777",
@@ -4232,10 +4112,7 @@
     },
     "gk": {
      "title": "지어진-안에 AI 이다 FF777 오직",
-     "items": [
-      "치웠다 기지 Qwen3 부터 그 모형 목록; 오직 FF777 tarius 그리고 lectus 보여진",
-      "하나의 이전에 고른 Qwen3 전환하다 에게 tarius 자동적으로"
-     ]
+     "items": ["치웠다 기지 Qwen3 부터 그 모형 목록; 오직 FF777 tarius 그리고 lectus 보여진", "하나의 이전에 고른 Qwen3 전환하다 에게 tarius 자동적으로"]
     }
    }
   },
@@ -4249,87 +4126,59 @@
    "tr": {
     "en": {
      "title": "lectus stays at 1.0",
-     "items": [
-      "lectus name kept as FF777 1.0 lectus (versions will match tarius at the 1.3 update)"
-     ]
+     "items": ["lectus name kept as FF777 1.0 lectus (versions will match tarius at the 1.3 update)"]
     },
     "es": {
      "title": "lectus se queda en 1.0",
-     "items": [
-      "El nombre de lectus sigue siendo FF777 1.0 lectus (se igualará con tarius en la versión 1.3)"
-     ]
+     "items": ["El nombre de lectus sigue siendo FF777 1.0 lectus (se igualará con tarius en la versión 1.3)"]
     },
     "fr": {
      "title": "lectus reste en 1.0",
-     "items": [
-      "Le nom reste FF777 1.0 lectus (les versions rejoindront tarius à la mise à jour 1.3)"
-     ]
+     "items": ["Le nom reste FF777 1.0 lectus (les versions rejoindront tarius à la mise à jour 1.3)"]
     },
     "de": {
      "title": "lectus bleibt bei 1.0",
-     "items": [
-      "Name bleibt FF777 1.0 lectus (Versionen werden beim 1.3-Update an tarius angeglichen)"
-     ]
+     "items": ["Name bleibt FF777 1.0 lectus (Versionen werden beim 1.3-Update an tarius angeglichen)"]
     },
     "ja": {
      "title": "lectus は 1.0 のまま",
-     "items": [
-      "lectus の名前は FF777 1.0 lectus のまま（1.3 更新時に tarius とバージョンをそろえる）"
-     ]
+     "items": ["lectus の名前は FF777 1.0 lectus のまま（1.3 更新時に tarius とバージョンをそろえる）"]
     },
     "zh": {
      "title": "lectus 保持 1.0",
-     "items": [
-      "lectus 名称保持 FF777 1.0 lectus（1.3 更新时与 tarius 版本对齐）"
-     ]
+     "items": ["lectus 名称保持 FF777 1.0 lectus（1.3 更新时与 tarius 版本对齐）"]
     },
     "pt": {
      "title": "lectus fica em 1.0",
-     "items": [
-      "Nome mantido como FF777 1.0 lectus (versões se igualam ao tarius na atualização 1.3)"
-     ]
+     "items": ["Nome mantido como FF777 1.0 lectus (versões se igualam ao tarius na atualização 1.3)"]
     },
     "ru": {
      "title": "lectus остаётся 1.0",
-     "items": [
-      "Имя остаётся FF777 1.0 lectus (версии сравняются с tarius в обновлении 1.3)"
-     ]
+     "items": ["Имя остаётся FF777 1.0 lectus (версии сравняются с tarius в обновлении 1.3)"]
     },
     "tr": {
      "title": "lectus 1.0'da kalıyor",
-     "items": [
-      "Ad FF777 1.0 lectus olarak kaldı (1.3 güncellemesinde sürüm tarius ile eşitlenecek)"
-     ]
+     "items": ["Ad FF777 1.0 lectus olarak kaldı (1.3 güncellemesinde sürüm tarius ile eşitlenecek)"]
     },
     "it": {
      "title": "lectus resta alla 1.0",
-     "items": [
-      "Il nome resta FF777 1.0 lectus (le versioni si allineeranno a tarius con l'aggiornamento 1.3)"
-     ]
+     "items": ["Il nome resta FF777 1.0 lectus (le versioni si allineeranno a tarius con l'aggiornamento 1.3)"]
     },
     "pl": {
      "title": "lectus zostaje na 1.0",
-     "items": [
-      "Nazwa pozostaje FF777 1.0 lectus (wersje zrównają się z tarius przy aktualizacji 1.3)"
-     ]
+     "items": ["Nazwa pozostaje FF777 1.0 lectus (wersje zrównają się z tarius przy aktualizacji 1.3)"]
     },
     "ar": {
      "title": "يبقى lectus على 1.0",
-     "items": [
-      "بقي الاسم FF777 1.0 lectus (ستتطابق النسخة مع tarius في تحديث 1.3)"
-     ]
+     "items": ["بقي الاسم FF777 1.0 lectus (ستتطابق النسخة مع tarius في تحديث 1.3)"]
     },
     "nw": {
      "title": "lectus stays 1.0",
-     "items": [
-      "Name kept FF777 1.0 lectus (versions samed with tarius at 1.3 update)"
-     ]
+     "items": ["Name kept FF777 1.0 lectus (versions samed with tarius at 1.3 update)"]
     },
     "gk": {
      "title": "lectus 머무르다 에 1.0",
-     "items": [
-      "이름 지켜진 처럼 FF777 1.0 lectus (버전들 의지 성냥 tarius 에 그 1.3 갱신)"
-     ]
+     "items": ["이름 지켜진 처럼 FF777 1.0 lectus (버전들 의지 성냥 tarius 에 그 1.3 갱신)"]
     }
    }
   },
@@ -4372,17 +4221,11 @@
     },
     "ja": {
      "title": "FF777 1.2 tarius",
-     "items": [
-      "tarius の3回目の学習を反映し、名前を FF777 1.2 tarius に変更",
-      "コード作成、依頼の理解、おやじギャグ、数式案内の学習を強化"
-     ]
+     "items": ["tarius の3回目の学習を反映し、名前を FF777 1.2 tarius に変更", "コード作成、依頼の理解、おやじギャグ、数式案内の学習を強化"]
     },
     "zh": {
      "title": "FF777 1.2 tarius",
-     "items": [
-      "应用 tarius 第 3 轮训练，改名为 FF777 1.2 tarius",
-      "加强写代码、理解请求、冷笑话和公式说明的训练"
-     ]
+     "items": ["应用 tarius 第 3 轮训练，改名为 FF777 1.2 tarius", "加强写代码、理解请求、冷笑话和公式说明的训练"]
     },
     "pt": {
      "title": "FF777 1.2 tarius",
@@ -4435,10 +4278,7 @@
     },
     "gk": {
      "title": "FF777 1.2 tarius",
-     "items": [
-      "적용했다 tarius의 3번째 기차 타는 둥근; 다시 이름 지었다 에게 FF777 1.2 tarius",
-      "더 기차 타는 위에 만드는 암호, 이해하는 요청들, 아빠 농담들 그리고 공식 도움"
-     ]
+     "items": ["적용했다 tarius의 3번째 기차 타는 둥근; 다시 이름 지었다 에게 FF777 1.2 tarius", "더 기차 타는 위에 만드는 암호, 이해하는 요청들, 아빠 농담들 그리고 공식 도움"]
     }
    }
   },
@@ -4452,87 +4292,59 @@
    "tr": {
     "en": {
      "title": "lectus training data restored",
-     "items": [
-      "Restored using all of lectus's first training data"
-     ]
+     "items": ["Restored using all of lectus's first training data"]
     },
     "es": {
      "title": "Datos de entrenamiento de lectus restaurados",
-     "items": [
-      "Se vuelve a usar todo el primer conjunto de entrenamiento de lectus"
-     ]
+     "items": ["Se vuelve a usar todo el primer conjunto de entrenamiento de lectus"]
     },
     "fr": {
      "title": "Données d'entraînement de lectus rétablies",
-     "items": [
-      "Toutes les premières données d'entraînement de lectus sont de nouveau utilisées"
-     ]
+     "items": ["Toutes les premières données d'entraînement de lectus sont de nouveau utilisées"]
     },
     "de": {
      "title": "Trainingsdaten von lectus wiederhergestellt",
-     "items": [
-      "Wieder alle ersten Trainingsdaten von lectus verwendet"
-     ]
+     "items": ["Wieder alle ersten Trainingsdaten von lectus verwendet"]
     },
     "ja": {
      "title": "lectus の学習データを元どおりに",
-     "items": [
-      "lectus の最初の学習データを全部使うように戻した"
-     ]
+     "items": ["lectus の最初の学習データを全部使うように戻した"]
     },
     "zh": {
      "title": "lectus 训练资料恢复原样",
-     "items": [
-      "恢复使用 lectus 第一批全部训练资料"
-     ]
+     "items": ["恢复使用 lectus 第一批全部训练资料"]
     },
     "pt": {
      "title": "Dados de treino do lectus restaurados",
-     "items": [
-      "Volta a usar todos os primeiros dados de treino do lectus"
-     ]
+     "items": ["Volta a usar todos os primeiros dados de treino do lectus"]
     },
     "ru": {
      "title": "Данные обучения lectus восстановлены",
-     "items": [
-      "Снова используются все первые данные обучения lectus"
-     ]
+     "items": ["Снова используются все первые данные обучения lectus"]
     },
     "tr": {
      "title": "lectus eğitim verisi eski haline döndü",
-     "items": [
-      "lectus'un ilk eğitim verisinin tamamı yeniden kullanılıyor"
-     ]
+     "items": ["lectus'un ilk eğitim verisinin tamamı yeniden kullanılıyor"]
     },
     "it": {
      "title": "Dati di addestramento di lectus ripristinati",
-     "items": [
-      "Si usano di nuovo tutti i primi dati di addestramento di lectus"
-     ]
+     "items": ["Si usano di nuovo tutti i primi dati di addestramento di lectus"]
     },
     "pl": {
      "title": "Przywrócono dane treningowe lectus",
-     "items": [
-      "Znów używane są wszystkie pierwsze dane treningowe lectus"
-     ]
+     "items": ["Znów używane są wszystkie pierwsze dane treningowe lectus"]
     },
     "ar": {
      "title": "استعادة بيانات تدريب lectus",
-     "items": [
-      "عاد استخدام كل بيانات التدريب الأولى لـ lectus"
-     ]
+     "items": ["عاد استخدام كل بيانات التدريب الأولى لـ lectus"]
     },
     "nw": {
      "title": "lectus learn data unchanged back",
-     "items": [
-      "All first lectus learn data used again"
-     ]
+     "items": ["All first lectus learn data used again"]
     },
     "gk": {
      "title": "lectus 기차 타는 자료 복원된",
-     "items": [
-      "복원했다 사용하는 모든 의 lectus의 첫 번째 기차 타는 자료"
-     ]
+     "items": ["복원했다 사용하는 모든 의 lectus의 첫 번째 기차 타는 자료"]
     }
    }
   },
@@ -4547,17 +4359,11 @@
    "tr": {
     "en": {
      "title": "Kaggle training notebook",
-     "items": [
-      "Added a notebook for training on Kaggle",
-      "Reads the token from Kaggle secrets; resumes training if cut off"
-     ]
+     "items": ["Added a notebook for training on Kaggle", "Reads the token from Kaggle secrets; resumes training if cut off"]
     },
     "es": {
      "title": "Cuaderno de entrenamiento en Kaggle",
-     "items": [
-      "Añadido un cuaderno para entrenar en Kaggle",
-      "Lee el token de los secretos de Kaggle; continúa si se corta"
-     ]
+     "items": ["Añadido un cuaderno para entrenar en Kaggle", "Lee el token de los secretos de Kaggle; continúa si se corta"]
     },
     "fr": {
      "title": "Notebook d'entraînement Kaggle",
@@ -4568,38 +4374,23 @@
     },
     "de": {
      "title": "Kaggle-Trainingsnotebook",
-     "items": [
-      "Notebook zum Trainieren auf Kaggle hinzugefügt",
-      "Liest das Token aus Kaggle-Secrets; setzt nach Abbruch fort"
-     ]
+     "items": ["Notebook zum Trainieren auf Kaggle hinzugefügt", "Liest das Token aus Kaggle-Secrets; setzt nach Abbruch fort"]
     },
     "ja": {
      "title": "Kaggle 学習ノート",
-     "items": [
-      "Kaggle で学習させるノートを追加",
-      "Kaggle のシークレットからトークンを読み、切れたら続きから学習"
-     ]
+     "items": ["Kaggle で学習させるノートを追加", "Kaggle のシークレットからトークンを読み、切れたら続きから学習"]
     },
     "zh": {
      "title": "Kaggle 训练笔记本",
-     "items": [
-      "新增在 Kaggle 上训练的笔记本",
-      "从 Kaggle 机密读取令牌，中断后可继续训练"
-     ]
+     "items": ["新增在 Kaggle 上训练的笔记本", "从 Kaggle 机密读取令牌，中断后可继续训练"]
     },
     "pt": {
      "title": "Notebook de treino no Kaggle",
-     "items": [
-      "Adicionado notebook para treinar no Kaggle",
-      "Lê o token dos segredos do Kaggle; continua o treino se cair"
-     ]
+     "items": ["Adicionado notebook para treinar no Kaggle", "Lê o token dos segredos do Kaggle; continua o treino se cair"]
     },
     "ru": {
      "title": "Блокнот обучения на Kaggle",
-     "items": [
-      "Добавлен блокнот для обучения на Kaggle",
-      "Токен берётся из секретов Kaggle; при обрыве обучение продолжается"
-     ]
+     "items": ["Добавлен блокнот для обучения на Kaggle", "Токен берётся из секретов Kaggle; при обрыве обучение продолжается"]
     },
     "tr": {
      "title": "Kaggle eğitim not defteri",
@@ -4624,24 +4415,15 @@
     },
     "ar": {
      "title": "دفتر التدريب على Kaggle",
-     "items": [
-      "أُضيف دفتر للتدريب على Kaggle",
-      "يقرأ الرمز من أسرار Kaggle ويستأنف التدريب إذا انقطع"
-     ]
+     "items": ["أُضيف دفتر للتدريب على Kaggle", "يقرأ الرمز من أسرار Kaggle ويستأنف التدريب إذا انقطع"]
     },
     "nw": {
      "title": "Kaggle learn notebook",
-     "items": [
-      "Added notebook for learning on Kaggle",
-      "Reads token from Kaggle secrets; goes on if cut"
-     ]
+     "items": ["Added notebook for learning on Kaggle", "Reads token from Kaggle secrets; goes on if cut"]
     },
     "gk": {
      "title": "Kaggle 기차 타는 공책",
-     "items": [
-      "더했다 하나의 공책 위해 기차 타는 위에 Kaggle",
-      "읽다 그 토큰 부터 Kaggle 비밀들; 다시 시작하다 만약 잘린 떨어져"
-     ]
+     "items": ["더했다 하나의 공책 위해 기차 타는 위에 Kaggle", "읽다 그 토큰 부터 Kaggle 비밀들; 다시 시작하다 만약 잘린 떨어져"]
     }
    }
   },
@@ -4656,59 +4438,35 @@
    "tr": {
     "en": {
      "title": "More data for 3rd training",
-     "items": [
-      "Added dad-joke training data",
-      "Notebook changed to use only 3/5 of lectus's first training data"
-     ]
+     "items": ["Added dad-joke training data", "Notebook changed to use only 3/5 of lectus's first training data"]
     },
     "es": {
      "title": "Más datos para el 3.er entrenamiento",
-     "items": [
-      "Añadidos datos de chistes malos",
-      "El cuaderno usa solo 3/5 del primer conjunto de lectus"
-     ]
+     "items": ["Añadidos datos de chistes malos", "El cuaderno usa solo 3/5 del primer conjunto de lectus"]
     },
     "fr": {
      "title": "Plus de données pour le 3e entraînement",
-     "items": [
-      "Ajout de données de blagues de papa",
-      "Le notebook n'utilise plus que 3/5 des premières données de lectus"
-     ]
+     "items": ["Ajout de données de blagues de papa", "Le notebook n'utilise plus que 3/5 des premières données de lectus"]
     },
     "de": {
      "title": "Mehr Daten für das 3. Training",
-     "items": [
-      "Flachwitz-Trainingsdaten hinzugefügt",
-      "Notebook nutzt nur noch 3/5 der ersten lectus-Daten"
-     ]
+     "items": ["Flachwitz-Trainingsdaten hinzugefügt", "Notebook nutzt nur noch 3/5 der ersten lectus-Daten"]
     },
     "ja": {
      "title": "3回目の学習データを強化",
-     "items": [
-      "おやじギャグの学習データを追加",
-      "lectus の最初の学習データを 3/5 だけ使うようにノートブックを修正"
-     ]
+     "items": ["おやじギャグの学習データを追加", "lectus の最初の学習データを 3/5 だけ使うようにノートブックを修正"]
     },
     "zh": {
      "title": "补充第 3 轮训练资料",
-     "items": [
-      "新增冷笑话训练资料",
-      "笔记本改为只使用 lectus 第一批资料的 3/5"
-     ]
+     "items": ["新增冷笑话训练资料", "笔记本改为只使用 lectus 第一批资料的 3/5"]
     },
     "pt": {
      "title": "Mais dados para o 3.º treino",
-     "items": [
-      "Adicionados dados de piadas de tiozão",
-      "Notebook passa a usar só 3/5 dos primeiros dados do lectus"
-     ]
+     "items": ["Adicionados dados de piadas de tiozão", "Notebook passa a usar só 3/5 dos primeiros dados do lectus"]
     },
     "ru": {
      "title": "Больше данных для 3-го обучения",
-     "items": [
-      "Добавлены данные с «бородатыми» шутками",
-      "Блокнот использует только 3/5 первых данных lectus"
-     ]
+     "items": ["Добавлены данные с «бородатыми» шутками", "Блокнот использует только 3/5 первых данных lectus"]
     },
     "tr": {
      "title": "3. eğitim için ek veri",
@@ -4719,38 +4477,23 @@
     },
     "it": {
      "title": "Più dati per il 3° addestramento",
-     "items": [
-      "Aggiunti dati di battute da papà",
-      "Il notebook usa solo 3/5 dei primi dati di lectus"
-     ]
+     "items": ["Aggiunti dati di battute da papà", "Il notebook usa solo 3/5 dei primi dati di lectus"]
     },
     "pl": {
      "title": "Więcej danych do 3. treningu",
-     "items": [
-      "Dodano dane z sucharami",
-      "Notatnik używa tylko 3/5 pierwszych danych lectus"
-     ]
+     "items": ["Dodano dane z sucharami", "Notatnik używa tylko 3/5 pierwszych danych lectus"]
     },
     "ar": {
      "title": "بيانات إضافية للتدريب الثالث",
-     "items": [
-      "أُضيفت بيانات تدريب للنكات السخيفة",
-      "عُدّل الدفتر ليستخدم 3/5 فقط من بيانات lectus الأولى"
-     ]
+     "items": ["أُضيفت بيانات تدريب للنكات السخيفة", "عُدّل الدفتر ليستخدم 3/5 فقط من بيانات lectus الأولى"]
     },
     "nw": {
      "title": "Plusmore data for 3rd learning",
-     "items": [
-      "Added old-man joke data",
-      "Notebook uses only 3/5 of first lectus data"
-     ]
+     "items": ["Added old-man joke data", "Notebook uses only 3/5 of first lectus data"]
     },
     "gk": {
      "title": "더 자료 위해 3번째 기차 타는",
-     "items": [
-      "더했다 아빠-농담 기차 타는 자료",
-      "공책 바뀐 에게 사용하다 오직 3/5 의 lectus의 첫 번째 자료"
-     ]
+     "items": ["더했다 아빠-농담 기차 타는 자료", "공책 바뀐 에게 사용하다 오직 3/5 의 lectus의 첫 번째 자료"]
     }
    }
   },
@@ -4765,17 +4508,11 @@
    "tr": {
     "en": {
      "title": "AI request history",
-     "items": [
-      "Each project's requests to the AI listed in the AI window",
-      "Click one to reuse it; delete one or all"
-     ]
+     "items": ["Each project's requests to the AI listed in the AI window", "Click one to reuse it; delete one or all"]
     },
     "es": {
      "title": "Historial de pedidos a la IA",
-     "items": [
-      "Los pedidos de cada proyecto se listan en la ventana de IA",
-      "Pulsa uno para reutilizarlo; borra uno o todos"
-     ]
+     "items": ["Los pedidos de cada proyecto se listan en la ventana de IA", "Pulsa uno para reutilizarlo; borra uno o todos"]
     },
     "fr": {
      "title": "Historique des demandes IA",
@@ -4793,24 +4530,15 @@
     },
     "ja": {
      "title": "AI 依頼の履歴",
-     "items": [
-      "プロジェクトごとに AI への依頼履歴を AI 画面に一覧表示",
-      "履歴を押すと再利用、1つずつまたは全部削除"
-     ]
+     "items": ["プロジェクトごとに AI への依頼履歴を AI 画面に一覧表示", "履歴を押すと再利用、1つずつまたは全部削除"]
     },
     "zh": {
      "title": "AI 请求记录",
-     "items": [
-      "每个项目向 AI 发出的请求以列表显示在 AI 窗口",
-      "点击记录可再次使用，可逐条或全部删除"
-     ]
+     "items": ["每个项目向 AI 发出的请求以列表显示在 AI 窗口", "点击记录可再次使用，可逐条或全部删除"]
     },
     "pt": {
      "title": "Histórico de pedidos à IA",
-     "items": [
-      "Pedidos de cada projeto listados na janela de IA",
-      "Clique para reutilizar; apague um ou todos"
-     ]
+     "items": ["Pedidos de cada projeto listados na janela de IA", "Clique para reutilizar; apague um ou todos"]
     },
     "ru": {
      "title": "История запросов к ИИ",
@@ -4828,17 +4556,11 @@
     },
     "it": {
      "title": "Cronologia richieste IA",
-     "items": [
-      "Le richieste di ogni progetto sono elencate nella finestra IA",
-      "Clic per riusarle; elimina una o tutte"
-     ]
+     "items": ["Le richieste di ogni progetto sono elencate nella finestra IA", "Clic per riusarle; elimina una o tutte"]
     },
     "pl": {
      "title": "Historia próśb do AI",
-     "items": [
-      "Prośby każdego projektu wyświetlane w oknie AI",
-      "Kliknij, aby użyć ponownie; usuń jedną lub wszystkie"
-     ]
+     "items": ["Prośby każdego projektu wyświetlane w oknie AI", "Kliknij, aby użyć ponownie; usuń jedną lub wszystkie"]
     },
     "ar": {
      "title": "سجل طلبات الذكاء الاصطناعي",
@@ -4849,17 +4571,11 @@
     },
     "nw": {
      "title": "AI ask record",
-     "items": [
-      "Each project's AI asks listed in AI window",
-      "Click to use again; delete one or all"
-     ]
+     "items": ["Each project's AI asks listed in AI window", "Click to use again; delete one or all"]
     },
     "gk": {
      "title": "AI 요청 역사",
-     "items": [
-      "각각 프로젝트의 요청들 에게 그 AI 목록된 안에 그 AI 창문",
-      "딸깍 하나 에게 재사용 그것; 지우다 하나 또는 모두"
-     ]
+     "items": ["각각 프로젝트의 요청들 에게 그 AI 목록된 안에 그 AI 창문", "딸깍 하나 에게 재사용 그것; 지우다 하나 또는 모두"]
     }
    }
   },
@@ -4907,19 +4623,11 @@
     },
     "ja": {
      "title": "間違いを教える",
-     "items": [
-      "AI 画面に「間違っている所を教えてください」欄を追加",
-      "書いた内容だけ AI が直し、他のブロックはそのまま",
-      "「AI の前に戻す」で修正を取り消せる"
-     ]
+     "items": ["AI 画面に「間違っている所を教えてください」欄を追加", "書いた内容だけ AI が直し、他のブロックはそのまま", "「AI の前に戻す」で修正を取り消せる"]
     },
     "zh": {
      "title": "指出错误",
-     "items": [
-      "AI 窗口新增“请告诉我哪里错了”栏",
-      "AI 只修改你写的内容，其他积木保持不变",
-      "可用“恢复到 AI 之前”撤销修改"
-     ]
+     "items": ["AI 窗口新增“请告诉我哪里错了”栏", "AI 只修改你写的内容，其他积木保持不变", "可用“恢复到 AI 之前”撤销修改"]
     },
     "pt": {
      "title": "Apontar erros",
@@ -5045,12 +4753,7 @@
     },
     "zh": {
      "title": "准备第 3 轮训练资料",
-     "items": [
-      "新增编程、设计以及区分新建和修改的训练资料",
-      "为每个请求例句新增完美答案资料",
-      "新增礼貌谦虚和当前版本名（1.2）的资料",
-      "新增 Fry Slides AI 训练资料"
-     ]
+     "items": ["新增编程、设计以及区分新建和修改的训练资料", "为每个请求例句新增完美答案资料", "新增礼貌谦虚和当前版本名（1.2）的资料", "新增 Fry Slides AI 训练资料"]
     },
     "pt": {
      "title": "Preparando dados do 3.º treino",
@@ -5136,87 +4839,59 @@
    "tr": {
     "en": {
      "title": "AI window closing fixed",
-     "items": [
-      "AI settings window now closes only with the X button"
-     ]
+     "items": ["AI settings window now closes only with the X button"]
     },
     "es": {
      "title": "Cierre de la ventana de IA corregido",
-     "items": [
-      "La ventana de ajustes de IA solo se cierra con el botón X"
-     ]
+     "items": ["La ventana de ajustes de IA solo se cierra con el botón X"]
     },
     "fr": {
      "title": "Fermeture de la fenêtre IA corrigée",
-     "items": [
-      "La fenêtre des réglages IA ne se ferme plus qu'avec le bouton X"
-     ]
+     "items": ["La fenêtre des réglages IA ne se ferme plus qu'avec le bouton X"]
     },
     "de": {
      "title": "Schließen des KI-Fensters behoben",
-     "items": [
-      "Das KI-Einstellungsfenster schließt nur noch mit dem X-Knopf"
-     ]
+     "items": ["Das KI-Einstellungsfenster schließt nur noch mit dem X-Knopf"]
     },
     "ja": {
      "title": "AI 画面を閉じる動作を修正",
-     "items": [
-      "AI 設定画面は X ボタンでのみ閉じるように修正"
-     ]
+     "items": ["AI 設定画面は X ボタンでのみ閉じるように修正"]
     },
     "zh": {
      "title": "修正 AI 窗口关闭",
-     "items": [
-      "AI 设置窗口只能用 X 按钮关闭"
-     ]
+     "items": ["AI 设置窗口只能用 X 按钮关闭"]
     },
     "pt": {
      "title": "Fechamento da janela de IA corrigido",
-     "items": [
-      "A janela de configurações de IA só fecha pelo botão X"
-     ]
+     "items": ["A janela de configurações de IA só fecha pelo botão X"]
     },
     "ru": {
      "title": "Исправлено закрытие окна ИИ",
-     "items": [
-      "Окно настроек ИИ закрывается только кнопкой X"
-     ]
+     "items": ["Окно настроек ИИ закрывается только кнопкой X"]
     },
     "tr": {
      "title": "AI penceresinin kapanması düzeltildi",
-     "items": [
-      "AI ayarları penceresi yalnızca X düğmesiyle kapanır"
-     ]
+     "items": ["AI ayarları penceresi yalnızca X düğmesiyle kapanır"]
     },
     "it": {
      "title": "Chiusura della finestra IA corretta",
-     "items": [
-      "La finestra delle impostazioni IA si chiude solo con il pulsante X"
-     ]
+     "items": ["La finestra delle impostazioni IA si chiude solo con il pulsante X"]
     },
     "pl": {
      "title": "Poprawiono zamykanie okna AI",
-     "items": [
-      "Okno ustawień AI zamyka się tylko przyciskiem X"
-     ]
+     "items": ["Okno ustawień AI zamyka się tylko przyciskiem X"]
     },
     "ar": {
      "title": "إصلاح إغلاق نافذة الذكاء الاصطناعي",
-     "items": [
-      "أصبحت نافذة إعدادات الذكاء الاصطناعي تُغلق بزر X فقط"
-     ]
+     "items": ["أصبحت نافذة إعدادات الذكاء الاصطناعي تُغلق بزر X فقط"]
     },
     "nw": {
      "title": "AI window close fixed",
-     "items": [
-      "AI Rules window closes only with X button"
-     ]
+     "items": ["AI Rules window closes only with X button"]
     },
     "gk": {
      "title": "AI 창문 닫는 고정된",
-     "items": [
-      "AI 설정들 창문 지금 닫다 오직 와 함께 그 X 단추"
-     ]
+     "items": ["AI 설정들 창문 지금 닫다 오직 와 함께 그 X 단추"]
     }
    }
   },
@@ -5264,19 +4939,11 @@
     },
     "ja": {
      "title": "コーディング中心の3回目の学習資料",
-     "items": [
-      "新しいブロックと修正、依頼理解のコーディング資料を約350個追加",
-      "学習ノートで3回目の資料を選べるように",
-      "AI に送るブロック一覧で「触れた？」ブロックの表記を修正"
-     ]
+     "items": ["新しいブロックと修正、依頼理解のコーディング資料を約350個追加", "学習ノートで3回目の資料を選べるように", "AI に送るブロック一覧で「触れた？」ブロックの表記を修正"]
     },
     "zh": {
      "title": "以编程为主的第 3 轮训练资料",
-     "items": [
-      "新增约 350 条新积木、修改和理解请求的编程资料",
-      "训练笔记本可选择第 3 轮资料",
-      "修正发给 AI 的积木列表中“碰到了吗？”积木的写法"
-     ]
+     "items": ["新增约 350 条新积木、修改和理解请求的编程资料", "训练笔记本可选择第 3 轮资料", "修正发给 AI 的积木列表中“碰到了吗？”积木的写法"]
     },
     "pt": {
      "title": "Dados do 3.º treino focados em código",
@@ -5355,24 +5022,15 @@
    "tr": {
     "en": {
      "title": "Saving during training",
-     "items": [
-      "Training notebook saves to Google Drive every 100 steps",
-      "Interrupted training resumes from the saved point"
-     ]
+     "items": ["Training notebook saves to Google Drive every 100 steps", "Interrupted training resumes from the saved point"]
     },
     "es": {
      "title": "Guardado durante el entrenamiento",
-     "items": [
-      "El cuaderno guarda en Google Drive cada 100 pasos",
-      "El entrenamiento cortado continúa desde lo guardado"
-     ]
+     "items": ["El cuaderno guarda en Google Drive cada 100 pasos", "El entrenamiento cortado continúa desde lo guardado"]
     },
     "fr": {
      "title": "Sauvegarde pendant l'entraînement",
-     "items": [
-      "Le notebook sauvegarde sur Google Drive tous les 100 pas",
-      "Un entraînement coupé reprend au point sauvegardé"
-     ]
+     "items": ["Le notebook sauvegarde sur Google Drive tous les 100 pas", "Un entraînement coupé reprend au point sauvegardé"]
     },
     "de": {
      "title": "Zwischenspeichern beim Training",
@@ -5383,73 +5041,43 @@
     },
     "ja": {
      "title": "学習の途中保存",
-     "items": [
-      "学習ノートブックが100ステップごとに Google ドライブへ保存",
-      "途切れた学習を保存した所から続ける"
-     ]
+     "items": ["学習ノートブックが100ステップごとに Google ドライブへ保存", "途切れた学習を保存した所から続ける"]
     },
     "zh": {
      "title": "训练中途保存",
-     "items": [
-      "训练笔记本每 100 步保存到 Google 云端硬盘",
-      "中断的训练从保存处继续"
-     ]
+     "items": ["训练笔记本每 100 步保存到 Google 云端硬盘", "中断的训练从保存处继续"]
     },
     "pt": {
      "title": "Salvamento durante o treino",
-     "items": [
-      "O notebook salva no Google Drive a cada 100 passos",
-      "Treino interrompido continua do ponto salvo"
-     ]
+     "items": ["O notebook salva no Google Drive a cada 100 passos", "Treino interrompido continua do ponto salvo"]
     },
     "ru": {
      "title": "Сохранение во время обучения",
-     "items": [
-      "Блокнот сохраняет на Google Диск каждые 100 шагов",
-      "Прерванное обучение продолжается с сохранённого места"
-     ]
+     "items": ["Блокнот сохраняет на Google Диск каждые 100 шагов", "Прерванное обучение продолжается с сохранённого места"]
     },
     "tr": {
      "title": "Eğitim sırasında kaydetme",
-     "items": [
-      "Not defteri her 100 adımda Google Drive'a kaydeder",
-      "Kesilen eğitim kaydedilen yerden sürer"
-     ]
+     "items": ["Not defteri her 100 adımda Google Drive'a kaydeder", "Kesilen eğitim kaydedilen yerden sürer"]
     },
     "it": {
      "title": "Salvataggio durante l'addestramento",
-     "items": [
-      "Il notebook salva su Google Drive ogni 100 passi",
-      "L'addestramento interrotto riprende dal punto salvato"
-     ]
+     "items": ["Il notebook salva su Google Drive ogni 100 passi", "L'addestramento interrotto riprende dal punto salvato"]
     },
     "pl": {
      "title": "Zapisywanie w trakcie treningu",
-     "items": [
-      "Notatnik zapisuje na Dysk Google co 100 kroków",
-      "Przerwany trening wznawia się od zapisu"
-     ]
+     "items": ["Notatnik zapisuje na Dysk Google co 100 kroków", "Przerwany trening wznawia się od zapisu"]
     },
     "ar": {
      "title": "الحفظ أثناء التدريب",
-     "items": [
-      "يحفظ دفتر التدريب في Google Drive كل 100 خطوة",
-      "يُستأنف التدريب المنقطع من نقطة الحفظ"
-     ]
+     "items": ["يحفظ دفتر التدريب في Google Drive كل 100 خطوة", "يُستأنف التدريب المنقطع من نقطة الحفظ"]
     },
     "nw": {
      "title": "Saving midlearn",
-     "items": [
-      "Learn notebook saves to Google Drive each 100 steps",
-      "Cut learning goes on from save"
-     ]
+     "items": ["Learn notebook saves to Google Drive each 100 steps", "Cut learning goes on from save"]
     },
     "gk": {
      "title": "구하는 동안 기차 타는",
-     "items": [
-      "기차 타는 공책 구하다 에게 구글 운전 모든 100 계단들",
-      "방해된 기차 타는 다시 시작하다 부터 그 구한 점"
-     ]
+     "items": ["기차 타는 공책 구하다 에게 구글 운전 모든 100 계단들", "방해된 기차 타는 다시 시작하다 부터 그 구한 점"]
     }
    }
   },
@@ -5492,17 +5120,11 @@
     },
     "ja": {
      "title": "tarius 1.1 とモデル名の表示",
-     "items": [
-      "tarius のバージョンを 1.1 に変更",
-      "読み込み文言にモデル名を表示（自前AI準備中 → モデル名 準備中）"
-     ]
+     "items": ["tarius のバージョンを 1.1 に変更", "読み込み文言にモデル名を表示（自前AI準備中 → モデル名 準備中）"]
     },
     "zh": {
      "title": "tarius 1.1 并显示模型名称",
-     "items": [
-      "tarius 版本改为 1.1",
-      "加载文字显示模型名称（自带 AI 准备中 → 模型名称 准备中）"
-     ]
+     "items": ["tarius 版本改为 1.1", "加载文字显示模型名称（自带 AI 准备中 → 模型名称 准备中）"]
     },
     "pt": {
      "title": "tarius 1.1 e nome do modelo visível",
@@ -5548,17 +5170,11 @@
     },
     "nw": {
      "title": "tarius 1.1 plus model name shown",
-     "items": [
-      "tarius version now 1.1",
-      "Loading words show model name (Built-in AI readying → model name readying)"
-     ]
+     "items": ["tarius version now 1.1", "Loading words show model name (Built-in AI readying → model name readying)"]
     },
     "gk": {
      "title": "tarius 1.1 그리고 모형 이름 보여진",
-     "items": [
-      "tarius 버전 바뀌었다 에게 1.1",
-      "짐 싣는 글자 보여 주다 그 모형 이름 (지어진-안에 AI 준비하는 → 모형 이름 준비하는)"
-     ]
+     "items": ["tarius 버전 바뀌었다 에게 1.1", "짐 싣는 글자 보여 주다 그 모형 이름 (지어진-안에 AI 준비하는 → 모형 이름 준비하는)"]
     }
    }
   },
@@ -5596,15 +5212,11 @@
     },
     "ja": {
      "title": "tarius 2回目の学習",
-     "items": [
-      "質問・要約の答え、発表資料、自分の名前、グラフ、依頼理解、コーディングを追加学習（1,443例）"
-     ]
+     "items": ["質問・要約の答え、発表資料、自分の名前、グラフ、依頼理解、コーディングを追加学習（1,443例）"]
     },
     "zh": {
      "title": "tarius 第 2 轮训练",
-     "items": [
-      "追加训练提问·总结回答、演示文稿、自己的名字、图表、理解请求和编程（1,443 个示例）"
-     ]
+     "items": ["追加训练提问·总结回答、演示文稿、自己的名字、图表、理解请求和编程（1,443 个示例）"]
     },
     "pt": {
      "title": "2.º treino do tarius",
@@ -5620,9 +5232,7 @@
     },
     "tr": {
      "title": "tarius 2. eğitim",
-     "items": [
-      "Soru-özet cevapları, sunumlar, kendi adı, grafikler, istek anlama ve kodlama üzerine ek eğitim (1.443 örnek)"
-     ]
+     "items": ["Soru-özet cevapları, sunumlar, kendi adı, grafikler, istek anlama ve kodlama üzerine ek eğitim (1.443 örnek)"]
     },
     "it": {
      "title": "2° addestramento di tarius",
@@ -5638,21 +5248,15 @@
     },
     "ar": {
      "title": "التدريب الثاني لـ tarius",
-     "items": [
-      "تدريب إضافي على الأسئلة والتلخيص والعروض واسمه وعلى المخططات وفهم الطلبات والبرمجة (1,443 مثالًا)"
-     ]
+     "items": ["تدريب إضافي على الأسئلة والتلخيص والعروض واسمه وعلى المخططات وفهم الطلبات والبرمجة (1,443 مثالًا)"]
     },
     "nw": {
      "title": "tarius 2nd learning",
-     "items": [
-      "Plusmore learning on ask plus sum answers, slides, own name, charts, request knowing, code (1,443 examples)"
-     ]
+     "items": ["Plusmore learning on ask plus sum answers, slides, own name, charts, request knowing, code (1,443 examples)"]
     },
     "gk": {
      "title": "tarius 2번째 기차 타는",
-     "items": [
-      "여분 기차 타는 위에 질문-그리고-대답 그리고 요약 대답들, 발표들, 그것의 자신의 이름, 해도들, 이해하는 요청들 그리고 암호 짜기 (1,443 예시들)"
-     ]
+     "items": ["여분 기차 타는 위에 질문-그리고-대답 그리고 요약 대답들, 발표들, 그것의 자신의 이름, 해도들, 이해하는 요청들 그리고 암호 짜기 (1,443 예시들)"]
     }
    }
   },
@@ -5695,17 +5299,11 @@
     },
     "ja": {
      "title": "AI に教える",
-     "items": [
-      "開発者だけが事実を入力する教えるページを追加",
-      "自前AIが自分の名前と教わった事実を知るように"
-     ]
+     "items": ["開発者だけが事実を入力する教えるページを追加", "自前AIが自分の名前と教わった事実を知るように"]
     },
     "zh": {
      "title": "教 AI",
-     "items": [
-      "新增只有开发者能输入事实的教学页",
-      "自带 AI 知道自己的名字和学到的事实"
-     ]
+     "items": ["新增只有开发者能输入事实的教学页", "自带 AI 知道自己的名字和学到的事实"]
     },
     "pt": {
      "title": "Ensinar a IA",
@@ -5751,17 +5349,11 @@
     },
     "nw": {
      "title": "Teaching the AI",
-     "items": [
-      "Added Teach page where only makers enter facts",
-      "Built-in AI now knows own name plus taught facts"
-     ]
+     "items": ["Added Teach page where only makers enter facts", "Built-in AI now knows own name plus taught facts"]
     },
     "gk": {
      "title": "가르치는 그 AI",
-     "items": [
-      "더했다 하나의 가르치다 페이지 어디 오직 개발자들 들어가다 사실들",
-      "그 지어진-안에 AI 지금 알다 그것의 자신의 이름 그리고 그 사실들 그것 이었다 가르친"
-     ]
+     "items": ["더했다 하나의 가르치다 페이지 어디 오직 개발자들 들어가다 사실들", "그 지어진-안에 AI 지금 알다 그것의 자신의 이름 그리고 그 사실들 그것 이었다 가르친"]
     }
    }
   },
@@ -5776,24 +5368,15 @@
    "tr": {
     "en": {
      "title": "tarius available",
-     "items": [
-      "Trained tarius converted for the browser and uploaded",
-      "Added training and conversion tools"
-     ]
+     "items": ["Trained tarius converted for the browser and uploaded", "Added training and conversion tools"]
     },
     "es": {
      "title": "tarius disponible",
-     "items": [
-      "tarius entrenado, convertido para el navegador y subido",
-      "Añadidas herramientas de entrenamiento y conversión"
-     ]
+     "items": ["tarius entrenado, convertido para el navegador y subido", "Añadidas herramientas de entrenamiento y conversión"]
     },
     "fr": {
      "title": "tarius disponible",
-     "items": [
-      "tarius entraîné, converti pour le navigateur et mis en ligne",
-      "Ajout d'outils d'entraînement et de conversion"
-     ]
+     "items": ["tarius entraîné, converti pour le navigateur et mis en ligne", "Ajout d'outils d'entraînement et de conversion"]
     },
     "de": {
      "title": "tarius verfügbar",
@@ -5804,73 +5387,43 @@
     },
     "ja": {
      "title": "tarius が使えるように",
-     "items": [
-      "学習した tarius をブラウザ用に変換してアップロード",
-      "学習・変換ツールを追加"
-     ]
+     "items": ["学習した tarius をブラウザ用に変換してアップロード", "学習・変換ツールを追加"]
     },
     "zh": {
      "title": "tarius 可以使用",
-     "items": [
-      "训练好的 tarius 已转换为浏览器版并上传",
-      "新增训练和转换工具"
-     ]
+     "items": ["训练好的 tarius 已转换为浏览器版并上传", "新增训练和转换工具"]
     },
     "pt": {
      "title": "tarius disponível",
-     "items": [
-      "tarius treinado, convertido para o navegador e enviado",
-      "Adicionadas ferramentas de treino e conversão"
-     ]
+     "items": ["tarius treinado, convertido para o navegador e enviado", "Adicionadas ferramentas de treino e conversão"]
     },
     "ru": {
      "title": "tarius доступен",
-     "items": [
-      "Обученный tarius переведён для браузера и загружен",
-      "Добавлены инструменты обучения и конвертации"
-     ]
+     "items": ["Обученный tarius переведён для браузера и загружен", "Добавлены инструменты обучения и конвертации"]
     },
     "tr": {
      "title": "tarius kullanılabilir",
-     "items": [
-      "Eğitilen tarius tarayıcı için dönüştürülüp yüklendi",
-      "Eğitim ve dönüştürme araçları eklendi"
-     ]
+     "items": ["Eğitilen tarius tarayıcı için dönüştürülüp yüklendi", "Eğitim ve dönüştürme araçları eklendi"]
     },
     "it": {
      "title": "tarius disponibile",
-     "items": [
-      "tarius addestrato, convertito per il browser e caricato",
-      "Aggiunti strumenti di addestramento e conversione"
-     ]
+     "items": ["tarius addestrato, convertito per il browser e caricato", "Aggiunti strumenti di addestramento e conversione"]
     },
     "pl": {
      "title": "tarius dostępny",
-     "items": [
-      "Wytrenowany tarius przekonwertowany dla przeglądarki i wgrany",
-      "Dodano narzędzia treningu i konwersji"
-     ]
+     "items": ["Wytrenowany tarius przekonwertowany dla przeglądarki i wgrany", "Dodano narzędzia treningu i konwersji"]
     },
     "ar": {
      "title": "tarius متاح",
-     "items": [
-      "حُوِّل tarius المدرَّب للمتصفح ورُفع",
-      "أُضيفت أدوات التدريب والتحويل"
-     ]
+     "items": ["حُوِّل tarius المدرَّب للمتصفح ورُفع", "أُضيفت أدوات التدريب والتحويل"]
     },
     "nw": {
      "title": "tarius usable",
-     "items": [
-      "Learned tarius made for browser plus uploaded",
-      "Added learn plus convert tools"
-     ]
+     "items": ["Learned tarius made for browser plus uploaded", "Added learn plus convert tools"]
     },
     "gk": {
      "title": "tarius 이용 가능한",
-     "items": [
-      "기차 탄 tarius 바뀐 위해 그 브라우저 그리고 위로 짐 실었다",
-      "더했다 기차 타는 그리고 개종 도구들"
-     ]
+     "items": ["기차 탄 tarius 바뀐 위해 그 브라우저 그리고 위로 짐 실었다", "더했다 기차 타는 그리고 개종 도구들"]
     }
    }
   },
@@ -5885,10 +5438,7 @@
    "tr": {
     "en": {
      "title": "FF777 1.0 tarius and lectus added",
-     "items": [
-      "Added tool-trained models tarius (default) and lectus (smart) to AI settings",
-      "Shown as preparing until ready"
-     ]
+     "items": ["Added tool-trained models tarius (default) and lectus (smart) to AI settings", "Shown as preparing until ready"]
     },
     "es": {
      "title": "Añadidos FF777 1.0 tarius y lectus",
@@ -5913,17 +5463,11 @@
     },
     "ja": {
      "title": "FF777 1.0 tarius、lectus を追加",
-     "items": [
-      "ツール専用に学習したモデル tarius（基本）と lectus（賢い）を AI 設定に追加",
-      "準備ができるまでは準備中と表示"
-     ]
+     "items": ["ツール専用に学習したモデル tarius（基本）と lectus（賢い）を AI 設定に追加", "準備ができるまでは準備中と表示"]
     },
     "zh": {
      "title": "新增 FF777 1.0 tarius 和 lectus",
-     "items": [
-      "在 AI 设置中加入专为工具训练的模型 tarius（默认）和 lectus（聪明）",
-      "准备好之前显示为准备中"
-     ]
+     "items": ["在 AI 设置中加入专为工具训练的模型 tarius（默认）和 lectus（聪明）", "准备好之前显示为准备中"]
     },
     "pt": {
      "title": "FF777 1.0 tarius e lectus adicionados",
@@ -5969,17 +5513,11 @@
     },
     "nw": {
      "title": "FF777 1.0 tarius plus lectus added",
-     "items": [
-      "Added tool-learned models tarius (default) plus lectus (smart) to AI Rules",
-      "Shown as readying until ready"
-     ]
+     "items": ["Added tool-learned models tarius (default) plus lectus (smart) to AI Rules", "Shown as readying until ready"]
     },
     "gk": {
      "title": "FF777 1.0 tarius 그리고 lectus 더해진",
-     "items": [
-      "더했다 도구-기차 탄 모형들 tarius (기본) 그리고 lectus (똑똑한) 에게 AI 설정들",
-      "보여진 처럼 준비하는 까지 준비된"
-     ]
+     "items": ["더했다 도구-기차 탄 모형들 tarius (기본) 그리고 lectus (똑똑한) 에게 AI 설정들", "보여진 처럼 준비하는 까지 준비된"]
     }
    }
   },
@@ -6022,17 +5560,11 @@
     },
     "ja": {
      "title": "自前AI公開",
-     "items": [
-      "ブラウザ内で動く Qwen3 モデルを追加（キー不要）",
-      "自前AI専用の短い依頼文を使用"
-     ]
+     "items": ["ブラウザ内で動く Qwen3 モデルを追加（キー不要）", "自前AI専用の短い依頼文を使用"]
     },
     "zh": {
      "title": "自带 AI 上线",
-     "items": [
-      "新增在浏览器内运行的 Qwen3 模型（无需密钥）",
-      "使用自带 AI 专用的简短提示词"
-     ]
+     "items": ["新增在浏览器内运行的 Qwen3 模型（无需密钥）", "使用自带 AI 专用的简短提示词"]
     },
     "pt": {
      "title": "IA integrada lançada",
@@ -6071,24 +5603,15 @@
     },
     "ar": {
      "title": "إطلاق الذكاء الاصطناعي المدمج",
-     "items": [
-      "أُضيف نموذج Qwen3 يعمل داخل المتصفح (بلا مفتاح)",
-      "يستخدم طلبًا قصيرًا مخصصًا للذكاء الاصطناعي المدمج"
-     ]
+     "items": ["أُضيف نموذج Qwen3 يعمل داخل المتصفح (بلا مفتاح)", "يستخدم طلبًا قصيرًا مخصصًا للذكاء الاصطناعي المدمج"]
     },
     "nw": {
      "title": "Built-in AI out",
-     "items": [
-      "Added Qwen3 model running in browser (no key needed)",
-      "Uses short ask made only for built-in AI"
-     ]
+     "items": ["Added Qwen3 model running in browser (no key needed)", "Uses short ask made only for built-in AI"]
     },
     "gk": {
      "title": "지어진-안에 AI 풀려난",
-     "items": [
-      "더했다 하나의 Qwen3 모형 그것 달리다 안쪽 그 브라우저 (아니 열쇠 필요한)",
-      "사용하다 하나의 짧은 재촉 만든 그냥 위해 그 지어진-안에 AI"
-     ]
+     "items": ["더했다 하나의 Qwen3 모형 그것 달리다 안쪽 그 브라우저 (아니 열쇠 필요한)", "사용하다 하나의 짧은 재촉 만든 그냥 위해 그 지어진-안에 AI"]
     }
    }
   },
@@ -6103,10 +5626,7 @@
    "tr": {
     "en": {
      "title": "API key connection",
-     "items": [
-      "Added AI settings for using Claude, Gemini and OpenAI keys",
-      "Keys are stored only in this browser"
-     ]
+     "items": ["Added AI settings for using Claude, Gemini and OpenAI keys", "Keys are stored only in this browser"]
     },
     "es": {
      "title": "Conexión con clave API",
@@ -6131,17 +5651,11 @@
     },
     "ja": {
      "title": "API キー接続",
-     "items": [
-      "Claude、Gemini、OpenAI のキーを入れて使う AI 設定を追加",
-      "キーはこのブラウザにだけ保存"
-     ]
+     "items": ["Claude、Gemini、OpenAI のキーを入れて使う AI 設定を追加", "キーはこのブラウザにだけ保存"]
     },
     "zh": {
      "title": "连接 API 密钥",
-     "items": [
-      "新增使用 Claude、Gemini、OpenAI 密钥的 AI 设置",
-      "密钥只保存在此浏览器中"
-     ]
+     "items": ["新增使用 Claude、Gemini、OpenAI 密钥的 AI 设置", "密钥只保存在此浏览器中"]
     },
     "pt": {
      "title": "Conexão por chave de API",
@@ -6152,10 +5666,7 @@
     },
     "ru": {
      "title": "Подключение API-ключа",
-     "items": [
-      "Добавлены настройки ИИ для ключей Claude, Gemini и OpenAI",
-      "Ключи хранятся только в этом браузере"
-     ]
+     "items": ["Добавлены настройки ИИ для ключей Claude, Gemini и OpenAI", "Ключи хранятся только в этом браузере"]
     },
     "tr": {
      "title": "API anahtarı bağlantısı",
@@ -6173,31 +5684,19 @@
     },
     "pl": {
      "title": "Połączenie kluczem API",
-     "items": [
-      "Dodano ustawienia AI do kluczy Claude, Gemini i OpenAI",
-      "Klucze są zapisywane tylko w tej przeglądarce"
-     ]
+     "items": ["Dodano ustawienia AI do kluczy Claude, Gemini i OpenAI", "Klucze są zapisywane tylko w tej przeglądarce"]
     },
     "ar": {
      "title": "ربط مفتاح API",
-     "items": [
-      "أُضيفت إعدادات للذكاء الاصطناعي لاستخدام مفاتيح Claude وGemini وOpenAI",
-      "تُحفظ المفاتيح في هذا المتصفح فقط"
-     ]
+     "items": ["أُضيفت إعدادات للذكاء الاصطناعي لاستخدام مفاتيح Claude وGemini وOpenAI", "تُحفظ المفاتيح في هذا المتصفح فقط"]
     },
     "nw": {
      "title": "API key link",
-     "items": [
-      "Added AI Rules for Claude, Gemini, OpenAI keys",
-      "Keys kept only in this browser"
-     ]
+     "items": ["Added AI Rules for Claude, Gemini, OpenAI keys", "Keys kept only in this browser"]
     },
     "gk": {
      "title": "API 열쇠 연결",
-     "items": [
-      "더했다 AI 설정들 위해 사용하는 Claude, Gemini 그리고 OpenAI 열쇠들",
-      "열쇠들 이다 저장된 오직 안에 이것 브라우저"
-     ]
+     "items": ["더했다 AI 설정들 위해 사용하는 Claude, Gemini 그리고 OpenAI 열쇠들", "열쇠들 이다 저장된 오직 안에 이것 브라우저"]
     }
    }
   }
