@@ -12,3 +12,4 @@ patchnotes/docs.json | 색 스포이트와 내 색 모음 항목 (en만) | Docs 
 docs/app.js | ↕ 문단 설정 / 설정할 문단 안을 먼저 누르세요 | Docs v10 | 2026-10-31
 docs/index.html | 문단 설정 / 왼쪽 들여쓰기 (pt) / 첫 줄 / 보통 / 들여쓰기 / 내어쓰기 / 첫 줄 크기 (pt) / 문단 앞 간격 (pt) / 문단 뒤 간격 (pt) / 기본 / 기본 (1.7) / 고른 문단(안 고르면 지금 문단)에 적용돼요. Word 문서로 받을 때도 그대로 들어가요. / Ａ 첫 글자 크게 | Docs v10 | 2026-10-31
 patchnotes/docs.json | 문단 설정과 첫 글자 크게 항목 (en만) | Docs v10 | 2026-10-31
+sheet/strings.js | 시간·날짜·참조·배열·행렬·재무·공학·통계 함수 약 110개의 설명 (예: TIME, XMATCH, LET, MAP, TAKE, RATE, XIRR, DEC2BIN, T.TEST, AGGREGATE …) | Sheet v41 | 2026-10-31

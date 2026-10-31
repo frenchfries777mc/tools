@@ -3,6 +3,22 @@
  "name": "Fry Sheet",
  "notes": [
   {
+   "date": "2026-10-31",
+   "build": "v41",
+   "title": "함수 130개 더",
+   "items": [
+    "INDIRECT, OFFSET, ADDRESS, XMATCH, FORMULATEXT, CELL 같은 참조 함수 추가",
+    "LET과 LAMBDA, MAP·REDUCE·SCAN·BYROW·BYCOL·MAKEARRAY 추가",
+    "TAKE, DROP, CHOOSEROWS, CHOOSECOLS, EXPAND, TOCOL, TOROW, WRAPROWS, WRAPCOLS, RANDARRAY, FREQUENCY, TREND, LINEST 추가",
+    "시간(TIME, HOUR, MINUTE, SECOND), DAYS360, YEARFRAC, NETWORKDAYS.INTL, WORKDAY.INTL 추가",
+    "재무 함수 RATE, IPMT, PPMT, CUMIPMT, CUMPRINC, XNPV, XIRR, MIRR, DB, DDB, SYD 외 추가",
+    "2진·8진·16진 변환, 비트 함수, 행렬 함수(MMULT, MDETERM, MINVERSE), t·카이제곱 분포, T.TEST, Z.TEST, AGGREGATE 추가",
+    "ROW(B5)와 COLUMN(B5)가 오류로 나오던 문제 고침",
+    "LET 같은 새 함수는 엑셀 파일로 저장할 때 값으로 저장 (엑셀에서 열면 깨지지 않게)"
+   ],
+   "tr": {"en": {"title": "130 more functions", "items": ["Reference functions: INDIRECT, OFFSET, ADDRESS, XMATCH, FORMULATEXT, CELL", "LET and LAMBDA with MAP, REDUCE, SCAN, BYROW, BYCOL, MAKEARRAY", "TAKE, DROP, CHOOSEROWS, CHOOSECOLS, EXPAND, TOCOL, TOROW, WRAPROWS, WRAPCOLS, RANDARRAY, FREQUENCY, TREND, LINEST", "Time (TIME, HOUR, MINUTE, SECOND), DAYS360, YEARFRAC, NETWORKDAYS.INTL, WORKDAY.INTL", "Finance: RATE, IPMT, PPMT, CUMIPMT, CUMPRINC, XNPV, XIRR, MIRR, DB, DDB, SYD and more", "Base conversion, bit functions, matrices (MMULT, MDETERM, MINVERSE), t and chi-square distributions, T.TEST, Z.TEST, AGGREGATE", "Fixed ROW(B5) and COLUMN(B5) returning an error", "Newer functions like LET are saved as values in .xlsx so Excel opens the file cleanly"]}}
+  },
+  {
    "date": "2026-10-25",
    "build": "v40",
    "title": "리본 탭 정리",

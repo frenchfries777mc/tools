@@ -123,7 +123,8 @@ function write(doc, ctx){
       if(mg&&(mg.r1!==r||mg.c1!==c)) continue;
       var has=x.v!=null&&x.v!=='', o={x:x};
       if(has){ var raw=String(x.v);
-        if(raw[0]==='='&&x.nf!=='t'){ var v=ctx.val(si,r,c); o.f=E.toXl?E.toXl(raw.slice(1)):raw.slice(1); if(spAt[r+','+c]){ o.arr=rng(spAt[r+','+c]); dynArr=true; }
+        if(raw[0]==='='&&x.nf!=='t'){ var v=ctx.val(si,r,c); var nl=/\b(LET|LAMBDA|MAP|REDUCE|SCAN|BYROW|BYCOL|MAKEARRAY)\s*\(/i.test(raw); // Excel wants _xlpm. names inside these: saved as values instead
+          o.f=nl?null:E.toXl?E.toXl(raw.slice(1)):raw.slice(1); if(!nl&&spAt[r+','+c]){ o.arr=rng(spAt[r+','+c]); dynArr=true; }
           if(E.isErr(v)){ o.t='e'; o.v=v.e; } else if(typeof v==='number'){ o.t='n'; o.v=isFinite(v)?String(v):'0'; } else if(typeof v==='boolean'){ o.t='b'; o.v=v?'1':'0'; } else { o.t='str'; o.v=v==null?'':String(v); } }
         else { var l=x.nf==='t'?raw:E.literal(raw); if(typeof l==='number'&&isFinite(l)){ o.t='n'; o.v=String(l); } else if(typeof l==='boolean'){ o.t='b'; o.v=l?'1':'0'; } else { o.t='s'; o.v=S(String(l==null?'':l)); } } }
       else if(!cellFmt(x)&&!x.nt) continue;

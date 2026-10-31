@@ -894,8 +894,8 @@ function openFn(){
 var fnTarget=false;
 function drawFns(q){
   q=q.trim().toLowerCase(); var h='', cat=null;
-  FNDOC.forEach(function(f){ var desc=FFT.lang==='ko'?f[3]:f[4];
-    if(q&&f[1].toLowerCase().indexOf(q)<0&&f[3].toLowerCase().indexOf(q)<0&&String(f[4]).toLowerCase().indexOf(q)<0) return;
+  FNDOC.forEach(function(f){ var desc=FFT.lang==='ko'?f[3]:(f[4]||f[3]);
+    if(q&&f[1].toLowerCase().indexOf(q)<0&&f[3].toLowerCase().indexOf(q)<0&&String(f[4]||'').toLowerCase().indexOf(q)<0) return;
     if(f[0]!==cat){ cat=f[0]; h+='<div class="fnCat">'+T(cat)+'</div>'; }
     h+='<button class="fn" data-fn="'+f[1]+'" data-notr><code>'+f[2].replace(/</g,'&lt;')+'</code><span>'+desc+'</span></button>'; });
   $('fnList').innerHTML=h||'<div class="empty">'+T('찾는 함수가 없어요')+'</div>';
@@ -1372,7 +1372,7 @@ function acUpdate(){
   var nms=doc.names.filter(function(n){ var u=n.name.toUpperCase(); return u.indexOf(q)===0&&u!==q; }).map(function(n){ var rt=n.ref.replace(/\$/g,''); return ['이름 범위',n.name,n.name,T('이름 범위')+' · '+rt,T('이름 범위')+' · '+rt,true]; });
   acItems=nms.concat(FNDOC.filter(function(f){ return f[1].indexOf(q)===0&&f[1]!==q; })).slice(0,6);
   if(!acItems.length){ acHide(); return; } acIdx=0; var box=$('acBox');
-  box.innerHTML=acItems.map(function(f,i){ var d=FFT.lang==='ko'?f[3]:f[4]; return '<button data-i="'+i+'"'+(i?'':' class="on"')+' data-notr><code>'+f[2].replace(/</g,'&lt;')+'</code><span>'+String(d).replace(/</g,'&lt;')+'</span></button>'; }).join('');
+  box.innerHTML=acItems.map(function(f,i){ var d=FFT.lang==='ko'?f[3]:(f[4]||f[3]); return '<button data-i="'+i+'"'+(i?'':' class="on"')+' data-notr><code>'+f[2].replace(/</g,'&lt;')+'</code><span>'+String(d).replace(/</g,'&lt;')+'</span></button>'; }).join('');
   box.classList.add('open'); var r=inp.getBoundingClientRect(), w=box.offsetWidth, h=box.offsetHeight;
   var x=Math.min(Math.max(8,r.left),innerWidth-w-8), y=r.bottom+4; if(y+h>innerHeight-8) y=Math.max(8,r.top-h-4);
   box.style.left=x+'px'; box.style.top=y+'px';
