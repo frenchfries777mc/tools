@@ -518,7 +518,7 @@ function toBlocks(){ var out=[], list=0;
   return out; }
 /* blocks -> page (opening a .docx) */
 function esc(s){ return String(s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
-function runsHTML(rs){ return (rs||[]).map(function(r){ if(r.br) return '<br>'; var h=esc(r.t||'').replace(/\t/g,'&emsp;'), css='';
+function runsHTML(rs){ return (rs||[]).map(function(r){ if(r.br) return '<br>'; if(r.imgSrc) return '<img src="'+esc(r.imgSrc)+'"'+(r.w?' width="'+Math.min(r.w,602)+'"':'')+'>'; var h=esc(r.t||'').replace(/\t/g,'&emsp;'), css='';
   if(r.color) css+='color:#'+r.color+';'; if(r.sz) css+='font-size:'+r.sz+'px;'; if(r.face&&faceOf(r.face)) css+='font-family:&quot;'+esc(faceOf(r.face))+'&quot;;'; if(r.bg) css+='background-color:#'+r.bg+';';
   if(css) h='<span style="'+css+'">'+h+'</span>'; if(r.sup) h='<sup>'+h+'</sup>'; if(r.sub) h='<sub>'+h+'</sub>';
   if(r.s) h='<s>'+h+'</s>'; if(r.u) h='<u>'+h+'</u>'; if(r.i) h='<i>'+h+'</i>'; if(r.b) h='<b>'+h+'</b>'; if(r.link&&safeUrl(r.link)) h='<a href="'+esc(safeUrl(r.link))+'">'+h+'</a>'; return h; }).join(''); }
@@ -533,6 +533,12 @@ function fromBlocks(bs){ var h='', open=null, openId=null;
   if(open) h+='</'+open+'>'; return h; }
 
 /* ---------- export / open ---------- */
+/* pictures of an opened .docx are shrunk like inserted ones, so the saved document stays small */
+function shrinkAll(bs){ var jobs=[]; function each(rs){ (rs||[]).forEach(function(r){ if(r.imgSrc) jobs.push(shrinkSrc(r.imgSrc).then(function(o){ r.imgSrc=o.src; r.w=Math.min(r.w||o.w,o.w); },function(){ r.imgSrc=''; r.w=0; })); }); }
+  bs.forEach(function(b){ each(b.runs); if(b.rows) b.rows.forEach(function(row){ row.forEach(each); }); }); return Promise.all(jobs).then(function(){ return bs; }); }
+function shrinkSrc(src){ return new Promise(function(res,rej){ var im=new Image(); im.onerror=rej; im.onload=function(){ var w=im.naturalWidth, h=im.naturalHeight, k=Math.min(1,1200/w), cv=document.createElement('canvas'); cv.width=Math.round(w*k); cv.height=Math.round(h*k);
+  var g=cv.getContext('2d'), png=/^data:image\/(png|gif|webp)/.test(src); if(!png){ g.fillStyle='#fff'; g.fillRect(0,0,cv.width,cv.height); } g.drawImage(im,0,0,cv.width,cv.height); res({src:cv.toDataURL(png?'image/png':'image/jpeg',.85), w:cv.width}); }; im.src=src; }); }
+
 function fname(ext){ return (($('docName').value.trim()||T('제목 없는 문서')).replace(/[\\/:*?"<>|]+/g,' ').trim()||'document')+'.'+ext; }
 function download(data,type,name){ var a=document.createElement('a'), u=URL.createObjectURL(new Blob([data],{type:type})); a.href=u; a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){ URL.revokeObjectURL(u); },4000); }
 function doExport(k){ closeMenus(); selImg(null); saveNow();
@@ -545,7 +551,7 @@ Array.prototype.forEach.call(document.querySelectorAll('[data-x]'),function(b){ 
 $('openBtn').onclick=function(){ $('openFile').value=''; $('openFile').click(); };
 function openFile(f){ var name=f.name.replace(/\.[^.]+$/,''), ext=(/\.([^.]+)$/.exec(f.name)||[])[1]||'';
   ext=ext.toLowerCase();
-  if(ext==='docx'){ f.arrayBuffer().then(function(b){ return FFDocx.read(new Uint8Array(b)); }).then(function(bs){ newDoc(name,clean(fromBlocks(bs))); toast('Word 문서를 열었어요 (그림은 빠져요)'); },function(e){ console.error(e); toast('이 Word 문서는 열지 못했어요'); }); }
+  if(ext==='docx'){ f.arrayBuffer().then(function(b){ return FFDocx.read(new Uint8Array(b)); }).then(shrinkAll).then(function(bs){ newDoc(name,clean(fromBlocks(bs))); toast('Word 문서를 열었어요'); },function(e){ console.error(e); toast('이 Word 문서는 열지 못했어요'); }); }
   else f.text().then(function(t){ var h; if(ext==='html'||ext==='htm'){ var m=/<body[^>]*>([\s\S]*)<\/body>/i.exec(t); h=clean(m?m[1]:t); }
     else h=t.split(/\r?\n/).map(function(l){ var m=/^(#{1,3})\s+(.*)$/.exec(l); if(ext==='md'&&m) return '<h'+m[1].length+'>'+esc(m[2])+'</h'+m[1].length+'>'; return '<p>'+(esc(l)||'<br>')+'</p>'; }).join('');
     newDoc(name,h); toast('파일을 열었어요'); }); }
