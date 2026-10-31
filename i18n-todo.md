@@ -20,3 +20,6 @@ docs/index.html | 제목 탐색 / 아직 제목이 없어요. 문단 모양에�
 patchnotes/docs.json | 제목 탐색, 소리 내어 읽기, 편집 잠금 항목 (en만) | Docs v11 | 2026-10-31
 docs/app.js | Word 문서를 열었어요 (그림도 함께 열려서 안내에서 "그림은 빠져요" 삭제) | Docs v12 | 2026-10-31
 patchnotes/docs.json | Word 문서 그림 열기 항목 (en만) | Docs v12 | 2026-10-31
+docs/app.js | 📊 차트 / 이름과 숫자를 한 줄에 하나씩 써 주세요 | Docs v13 | 2026-10-31
+docs/index.html | 차트 / 종류 / 막대 그래프 / 꺾은선 그래프 / 원 그래프 / 제목 / 월별 판매량 / 자료 (한 줄에 이름과 숫자 하나씩) / 차트는 그림으로 들어가요. 숫자를 바꾸려면 지우고 다시 만들어 주세요. | Docs v13 | 2026-10-31
+patchnotes/docs.json | 차트 넣기 항목 (en만) | Docs v13 | 2026-10-31
