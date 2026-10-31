@@ -449,7 +449,7 @@ FFT.add({
   </section>
 
   <p id="installHint" class="inst" hidden>아이폰이나 아이패드는 Safari 아래쪽 공유 버튼을 누르고 '홈 화면에 추가'를 눌러요. 한 번 열어 본 도구는 인터넷 없이도 열려요.</p>
-  <footer><span>Made by Frenchfries777 with Claude AI</span> <span class="ff-copy">© 2026 Frenchfries777 · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.ko" target="_blank" rel="noopener">CC BY-NC-ND 4.0</a></span><a href="patchnotes/">패치노트</a><a id="teachLink" href="teach/" hidden>AI 가르치기</a><a id="installLink" href="#" hidden>앱으로 설치</a><a href="https://frenchfries777mc.github.io/hub/settings/">설정</a><a href="https://github.com/frenchfries777mc" target="_blank" rel="noopener">github.com/frenchfries777mc</a></footer>
+  <footer><span>Made by Frenchfries777 with Claude AI</span> <span class="ff-copy">© 2026 Frenchfries777 · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.ko" target="_blank" rel="noopener">CC BY-NC-ND 4.0</a></span><a href="patchnotes/">패치노트</a><a id="backupLink" href="#">내 작업 백업</a><a id="teachLink" href="teach/" hidden>AI 가르치기</a><a id="installLink" href="#" hidden>앱으로 설치</a><a href="https://frenchfries777mc.github.io/hub/settings/">설정</a><a href="https://github.com/frenchfries777mc" target="_blank" rel="noopener">github.com/frenchfries777mc</a></footer>
 </div>
 <script src="https://frenchfries777mc.github.io/games/ff-auth.js?v=20261028e"></script>
 <script src="https://frenchfries777mc.github.io/games/ff-online.js?v=20261026a"></script>
@@ -502,6 +502,8 @@ FFT.add({
     else if(e.key==='Escape') close(); });
 })();
 </script>
+<script src="backup.js?v=1" defer></script>
+<script>document.getElementById('backupLink').onclick=function(e){ e.preventDefault(); if(window.FFBackup) FFBackup.open(); };</script>
 <script src="pwa.js" defer></script>
 <script src="ping.js" defer></script>
 <script src="https://frenchfries777mc.github.io/games/ff-splash.js" defer></script>
