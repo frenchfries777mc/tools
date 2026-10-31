@@ -1,8 +1,8 @@
 /* Fry Docs: .docx writer and reader without libraries.
    write(blocks) -> Uint8Array (a stored, uncompressed ZIP with the Word XML parts)
-   read(bytes) -> Promise of blocks (unzips with DecompressionStream, keeps headings, lists, tables and bold/italic/underline/strike/colour)
+   read(bytes) -> Promise of blocks (unzips with DecompressionStream, keeps headings, lists, tables, pictures (png, jpeg, gif, webp) and bold/italic/underline/strike/colour)
    A block is {type:'p'|'h1'|'h2'|'h3'|'quote'|'li'|'oli'|'hr'|'pb'|'table', align, lh (line height), ind (left indent px), box (table drawn as a framed box),
-     runs:[{t, b, i, u, s, sup, sub, color, bg, sz (px), face, link, br, img:{bytes, ext, w, h}}], rows:[[runs]], list:n}
+     runs:[{t, b, i, u, s, sup, sub, color, bg, sz (px), face, link, br, img:{bytes, ext, w, h} (write), imgSrc (a data: URL) and w (read)}], rows:[[runs]], list:n}
    write(blocks, opts) opts: {paper:'A4'|'A5'|'B5'|'Letter'|'Legal', land, mar (twips), cols, hd, ft, pn:'bc'|'br'|'bl'|'tr'}
    Works in the browser (FFDocx) and in Node (module.exports) for the tests. */
 (function(root){
@@ -130,10 +130,12 @@ function numFormats(xml,NS){ // numId -> 'bullet' | 'decimal' | ...
     if(a) out[n.getAttributeNS(NS,'numId')||n.getAttribute('w:numId')]=abs[a.getAttributeNS(NS,'val')||a.getAttribute('w:val')]; });
   return out; }
 function read(bytes){
-  var fmts={}, rels={}, NSW='http://schemas.openxmlformats.org/wordprocessingml/2006/main';
+  var fmts={}, rels={}, imgRel={}, media={}, NSW='http://schemas.openxmlformats.org/wordprocessingml/2006/main';
   return unzipEntry(bytes,'word/numbering.xml').then(function(nb){ if(nb) try{ fmts=numFormats(new DOMParser().parseFromString(new TextDecoder().decode(nb),'application/xml'),NSW); }catch(e){} },function(){})
   .then(function(){ return unzipEntry(bytes,'word/_rels/document.xml.rels'); }).then(function(rb){ if(rb) try{ var rx=new DOMParser().parseFromString(new TextDecoder().decode(rb),'application/xml');
-      Array.prototype.forEach.call(rx.getElementsByTagName('Relationship'),function(r){ if(/hyperlink$/.test(r.getAttribute('Type')||'')) rels[r.getAttribute('Id')]=r.getAttribute('Target'); }); }catch(e){} },function(){})
+      Array.prototype.forEach.call(rx.getElementsByTagName('Relationship'),function(r){ if(/hyperlink$/.test(r.getAttribute('Type')||'')) rels[r.getAttribute('Id')]=r.getAttribute('Target'); else if(/\/image$/.test(r.getAttribute('Type')||'')) imgRel[r.getAttribute('Id')]=r.getAttribute('Target'); }); }catch(e){} },function(){})
+  .then(function(){ return Promise.all(Object.keys(imgRel).map(function(id){ var m=/\.(png|jpe?g|gif|webp)$/i.exec(imgRel[id]); if(!m) return null; var ext=m[1].toLowerCase().replace('jpg','jpeg');
+    return unzipEntry(bytes,'word/'+imgRel[id].replace(/^\/?(word\/)?/,'')).then(function(d){ if(d&&d.length<12e6) media[id]='data:image/'+ext+';base64,'+b64(d); },function(){}); })); })
   .then(function(){ return unzipEntry(bytes,'word/document.xml'); }).then(function(d){ if(!d) throw new Error('docx');
     var xml=new DOMParser().parseFromString(new TextDecoder().decode(d),'application/xml'), NS='http://schemas.openxmlformats.org/wordprocessingml/2006/main', out=[], lid=0, lastList=null;
     function kids(el,name){ var a=[]; for(var c=el.firstChild;c;c=c.nextSibling) if(c.nodeType===1&&c.localName===name&&c.namespaceURI===NS) a.push(c); return a; }
@@ -148,7 +150,8 @@ function read(bytes){
           var HL={yellow:'FFFF00',green:'00FF00',cyan:'00FFFF',magenta:'FF00FF',red:'FF0000',blue:'0000FF',lightGray:'D3D3D3',darkYellow:'808000'}; if(hl&&HL[val(hl)]) st.bg=HL[val(hl)];
           if(rf){ var fn=rf.getAttributeNS(NS,'eastAsia')||rf.getAttribute('w:eastAsia')||rf.getAttributeNS(NS,'ascii')||rf.getAttribute('w:ascii'); if(fn) st.face=fn; } }
         if(link){ st.link=link; if(st.color&&st.color.toUpperCase()==='1A56DB') delete st.color; st.u=false; }
-        for(var t=c.firstChild;t;t=t.nextSibling){ if(t.nodeType!==1) continue; if(t.localName==='t'){ var o={t:t.textContent}; for(var k in st) if(st[k]) o[k]=st[k]; rs.push(o); } else if(t.localName==='br'&&(t.getAttributeNS(NS,'type')||t.getAttribute('w:type'))==='page') rs.push({pb:true}); else if(t.localName==='br'||t.localName==='cr') rs.push({br:true}); else if(t.localName==='tab') rs.push({t:'\t'}); } }
+        for(var t=c.firstChild;t;t=t.nextSibling){ if(t.nodeType!==1) continue; if(t.localName==='t'){ var o={t:t.textContent}; for(var k in st) if(st[k]) o[k]=st[k]; rs.push(o); } else if(t.localName==='br'&&(t.getAttributeNS(NS,'type')||t.getAttribute('w:type'))==='page') rs.push({pb:true}); else if(t.localName==='br'||t.localName==='cr') rs.push({br:true}); else if(t.localName==='tab') rs.push({t:'\t'}); else if(t.localName==='drawing'||t.localName==='AlternateContent'){ var dr=t.localName==='drawing'?t:t.getElementsByTagNameNS(NS,'drawing')[0], bl=dr&&dr.getElementsByTagNameNS('http://schemas.openxmlformats.org/drawingml/2006/main','blip')[0], rid=bl&&(bl.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','embed')||bl.getAttribute('r:embed')), ex=dr&&dr.getElementsByTagNameNS('http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing','extent')[0];
+          if(rid&&media[rid]) rs.push({imgSrc:media[rid], w:ex?Math.round(+ex.getAttribute('cx')/9525)||0:0}); } } }
       else if(c.localName==='hyperlink'){ var rid=c.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','id')||c.getAttribute('r:id'); walk(c,rels[rid]||link); }
       else if(c.localName==='ins'||c.localName==='smartTag'||c.localName==='sdt'||c.localName==='sdtContent'||c.localName==='fldSimple') walk(c,link); } })(p,link); return rs; }
     var body=xml.getElementsByTagNameNS(NS,'body')[0]; if(!body) return out;
@@ -168,6 +171,7 @@ function read(bytes){
           pieces.forEach(function(rs,k){ if(k) out.push({type:'pb'}); if(rs.length||(!k&&pieces.length===1)){ var c2={}; for(var key in b) c2[key]=b[key]; c2.runs=rs; out.push(c2); } }); } }
       else if(c.localName==='tbl'){ lastList=null; var rows=kids(c,'tr').map(function(tr){ return kids(tr,'tc').map(function(tc){ var rs=[]; kids(tc,'p').forEach(function(p,k){ if(k) rs.push({br:true}); rs=rs.concat(runs(p)); }); return rs; }); }); var tp=one(c,'tblPr'), tsh=tp&&one(tp,'shd'), tf=tsh&&(tsh.getAttributeNS(NS,'fill')||tsh.getAttribute('w:fill')); out.push({type:'table',rows:rows,box:/^FFFBEA$/i.test(tf||'')?1:0}); } }
     return out; }); }
+function b64(d){ var s='', n=0x8000; for(var i=0;i<d.length;i+=n) s+=String.fromCharCode.apply(null,d.subarray(i,i+n)); return btoa(s); }
 var api={write:write, read:read, zip:zip, crc32:crc32};
 if(typeof module!=='undefined'&&module.exports) module.exports=api; else root.FFDocx=api;
 })(typeof window!=='undefined'?window:this);
