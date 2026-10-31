@@ -614,6 +614,26 @@ document.addEventListener('copy',function(e){ if(editing||isOtherInput(document.
 document.addEventListener('cut',function(e){ if(editing||isOtherInput(document.activeElement)) return; e.preventDefault(); e.clipboardData.setData('text/plain',grab(true)); toast(T('잘라냈어요. 붙여넣을 곳을 고르세요')); });
 document.addEventListener('paste',function(e){ if(editing||isOtherInput(document.activeElement)) return; e.preventDefault(); doPaste(e.clipboardData.getData('text/plain')); });
 
+/* ---------- photo text: FFOCR (../ocr.js) reads the picture, each line is a row, tabs or 2+ spaces split the columns ---------- */
+var ocrJob=0, OCRS={load:'읽는 도구를 불러오는 중…',lang:'글자 데이터를 내려받는 중…',read:'글자를 읽는 중…'};
+function ocrRows(t){ return String(t).replace(/\r\n?/g,'\n').split('\n').filter(function(l){ return l.trim(); }).map(function(l){ return l.trim().split(l.indexOf('\t')>=0?/\t+/:/ {2,}/).map(function(v){ return v.trim(); }); }); }
+function ocrCount(){ var rs=ocrRows($('ocrOut').value), w=Math.max.apply(null,[0].concat(rs.map(function(r){ return r.length; })));
+  $('ocrInfo').textContent=rs.length?F('{0}행 × {1}열로 들어가요',rs.length,w):''; $('ocrOk').disabled=!rs.length; }
+function openOcr(){ ocrJob++; $('ocrName').textContent=''; $('ocrBar').hidden=true; $('ocrSt').hidden=true; $('ocrOutL').hidden=true; $('ocrOut').value=''; $('ocrOk').disabled=true; $('ocrPick').disabled=false; openDlg('ocrDlg'); }
+$('ocrPick').onclick=function(){ $('ocrFile').value=''; $('ocrFile').click(); };
+$('ocrFile').onchange=function(){ var f=this.files[0]; if(!f) return; var job=++ocrJob; $('ocrName').textContent=f.name; $('ocrOutL').hidden=true; $('ocrOk').disabled=true; $('ocrPick').disabled=true;
+  $('ocrBar').hidden=false; $('ocrFill').style.width='0'; $('ocrSt').hidden=false; $('ocrSt').textContent=T(OCRS.load);
+  if(!window.FFOCR){ $('ocrSt').textContent=T('글자 읽는 도구를 불러오지 못했어요'); $('ocrPick').disabled=false; return; }
+  FFOCR.read(f,function(p,st){ if(job!==ocrJob) return; $('ocrFill').style.width=Math.round(p*100)+'%'; $('ocrSt').textContent=T(OCRS[st]||OCRS.read)+' '+Math.round(p*100)+'%'; })
+    .then(function(t){ if(job!==ocrJob) return; $('ocrPick').disabled=false; $('ocrBar').hidden=true; $('ocrOutL').hidden=false; $('ocrOut').value=t; ocrCount();
+      $('ocrSt').textContent=T(t?'다 읽었어요. 틀린 곳은 고친 뒤 넣어 주세요':'읽은 글자가 없어요. 글자가 또렷한 사진으로 다시 해 보세요'); },
+      function(){ if(job!==ocrJob) return; $('ocrPick').disabled=false; $('ocrBar').hidden=true; $('ocrSt').textContent=T('사진을 읽지 못했어요. 인터넷이 연결됐는지 보고 다시 해 보세요'); }); };
+$('ocrOut').addEventListener('input',ocrCount);
+$('ocrOk').onclick=function(){ var rows=ocrRows($('ocrOut').value); if(!rows.length) return; var w=Math.max.apply(null,rows.map(function(r){ return r.length; }));
+  if(guard({r1:act.r,c1:act.c,r2:act.r+rows.length-1,c2:act.c+w-1})) return;
+  ocrJob++; closeDlgs(); pushUndo(); rows.forEach(function(row,i){ row.forEach(function(v,j){ setRaw(act.r+i,act.c+j,v); }); });
+  growTo(act.r+rows.length-1,act.c+w-1); sel={r1:act.r,c1:act.c,r2:Math.min(sh.rows-1,act.r+rows.length-1),c2:Math.min(sh.cols-1,act.c+w-1)}; changed(); toast(F('읽은 글을 {0}행에 넣었어요',rows.length)); };
+
 /* ---------- commands ---------- */
 function fmtSel(fn){ if(guard(sel)) return; pushUndo(); forSel(function(r,c){ var k=K(r,c), x=sh.cells[k]||(sh.cells[k]={}); fn(x); if(x.v==null&&!hasFmt(x)) delete sh.cells[k]; }); changed(); }
 function cmd(n){
@@ -637,6 +657,7 @@ function cmd(n){
     case 'painter': return startPaint();
     case 'link': return editLink();
     case 'img': $('imgPick').value=''; return $('imgPick').click();
+    case 'ocr': return openOcr();
     case 'check': { var on=!cur.cb; return fmtSel(function(x){ if(on){ x.cb=1; var l=E.literal(x.v); if(typeof l!=='boolean'&&String(x.v||'')[0]!=='=') x.v='FALSE'; } else { delete x.cb; } }); }
     case 'sum': return autoSum();
     case 'fn': return openFn();

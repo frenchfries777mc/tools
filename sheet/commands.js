@@ -120,6 +120,7 @@ var C=[
   {id:'note',tab:'insert',g:3,ic:I.note,lb:'메모',kw:'note comment 메모 댓글 주석',el:'bNote'},
   {id:'link',tab:'insert',g:3,ic:SV('<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>'),lb:'링크',tt:'링크 넣기 (Ctrl+누르면 열려요)',kw:'hyperlink link url 링크 주소 하이퍼링크 연결'},
   {id:'img',tab:'insert',g:3,ic:SV('<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-5-5-9 8"/>'),lb:'그림',tt:'그림 넣기',kw:'image picture photo 그림 사진 이미지'},
+  {id:'ocr',tab:'insert',g:3,ic:SV('<path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M8 9h8M12 9v7"/>'),lb:'사진 글자',tt:'사진 속 표나 목록을 읽어 칸에 넣기',kw:'ocr photo picture text scan table 사진 글자 읽기 스캔 표 인식'},
   {id:'d.xref',tab:'insert',g:4,ic:I.xref,lb:'다른 시트 참조',tt:'다른 시트 참조 만들기',kw:'reference other sheet link 시트 참조 연결'},
   {id:'d.names',tab:'insert',g:4,ic:I.names,lb:'이름 범위',tt:'이름 범위 관리',kw:'named range name 이름 정의 이름표'},
 
