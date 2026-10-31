@@ -599,6 +599,23 @@ button,input,select{font:inherit; color:inherit;}
   </div>
   <div class="acts"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="nmSave">저장</button></div>
 </div></div>
+<div class="ov" id="psDlg"><div class="dlg">
+  <div class="dh"><h3>선택하여 붙여넣기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><label>붙여넣을 것</label>
+    <label class="chkRow"><input type="radio" name="psW" value="all" checked><span>모두 (값과 서식)</span></label>
+    <label class="chkRow"><input type="radio" name="psW" value="formulas"><span>수식과 값만 (서식은 그대로)</span></label>
+    <label class="chkRow"><input type="radio" name="psW" value="values"><span>계산된 값만</span></label>
+    <label class="chkRow"><input type="radio" name="psW" value="formats"><span>서식만</span></label>
+    <label>이미 있는 값과 계산</label>
+    <label class="chkRow"><input type="radio" name="psO" value="none" checked><span>없음 (덮어쓰기)</span></label>
+    <label class="chkRow"><input type="radio" name="psO" value="add"><span>더하기</span></label>
+    <label class="chkRow"><input type="radio" name="psO" value="sub"><span>빼기</span></label>
+    <label class="chkRow"><input type="radio" name="psO" value="mul"><span>곱하기</span></label>
+    <label class="chkRow"><input type="radio" name="psO" value="div"><span>나누기</span></label>
+    <label class="chkRow"><input type="checkbox" id="psSkip"><span>빈 칸은 건너뛰기</span></label>
+    <label class="chkRow"><input type="checkbox" id="psTr"><span>행과 열 바꾸기 (수식은 값으로 들어가요)</span></label></div>
+  <div class="acts"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="psOk">붙여넣기</button></div>
+</div></div>
 <div class="ov" id="xrDlg"><div class="dlg">
   <div class="dh"><h3>다른 시트 참조</h3><button class="x" data-close aria-label="닫기">×</button></div>
   <div class="dbody">
