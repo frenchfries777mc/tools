@@ -52,7 +52,8 @@ button,input,select,textarea{font:inherit; color:inherit;}
 body.pv #page{background-image:repeating-linear-gradient(to bottom,transparent 0,transparent calc(var(--ph,1123px) - 3px),rgba(255,160,40,.55) calc(var(--ph,1123px) - 3px),rgba(255,160,40,.55) var(--ph,1123px));}
 /* docs v5 */
 #page .fxs{text-shadow:2px 2px 3px rgba(0,0,0,.45);} #page .fxo{-webkit-text-stroke:1px #1b1b1b; color:transparent;} #page .fxo[style*="color"]{-webkit-text-stroke-color:currentColor;} #page .fxl{letter-spacing:.25em;} #page .fxt{letter-spacing:-.05em;}
-#page .pbx{border:2px solid #555; padding:.4em .7em; border-radius:6px;} #page .pbg{background:#fff3b0; padding:.3em .6em; border-radius:4px;} #page .pbl{border-left:5px solid #f0a000; padding:.2em .8em; background:#fff8e6;}
+#page .pbx{border:2px solid #555; padding:.4em .7em; border-radius:6px;} #page p.pbd::first-letter{float:left; font-size:3.4em; line-height:.85; font-weight:700; padding:.04em .12em 0 0;}
+#page .pbg{background:#fff3b0; padding:.3em .6em; border-radius:4px;} #page .pbl{border-left:5px solid #f0a000; padding:.2em .8em; background:#fff8e6;}
 #page ul.ls1{list-style-type:circle;} #page ul.ls2{list-style-type:square;} #page ol.ls3,#page ul.ls3{list-style-type:lower-alpha;} #page ol.ls4,#page ul.ls4{list-style-type:upper-alpha;} #page ol.ls5,#page ul.ls5{list-style-type:lower-roman;} #page ol.ls6,#page ul.ls6{list-style-type:upper-roman;} #page ol.ls7,#page ul.ls7{list-style-type:hangul;} #page ol.ls8,#page ul.ls8{list-style-type:hangul-consonant;} #page ol.ls9,#page ul.ls9{list-style-type:decimal-leading-zero;}
 #page table.ts1 tr:nth-child(even) td{background:#f1f5fb;} #page table.ts1 th{background:#cfe0f5;} #page table.ts2 td,#page table.ts2 th{border:0;} #page table.ts3 td,#page table.ts3 th{border:0; border-bottom:1px solid #9a9a9a;} #page table.ts3 th{background:#fff; border-bottom:2px solid #333;}
 #page img.ib{border:3px solid #444;} #page img.ir{border-radius:18px;} #page img.is{box-shadow:4px 4px 12px rgba(0,0,0,.4);} #page img.iwl{float:left; margin:0 14px 8px 0; max-width:50%;} #page img.iwr{float:right; margin:0 0 8px 14px; max-width:50%;}
@@ -358,7 +359,7 @@ body.painting #page{cursor:copy;}
   <button data-fx="fxs">▨ 그림자</button><button data-fx="fxo">◌ 윤곽선 글자</button><button data-fx="fxl">↔ 글자 사이 넓게</button><button data-fx="fxt">⇥ 글자 사이 좁게</button><hr><button data-fx="clr">효과 지우기</button>
 </div>
 <div class="menu" id="pbMenu">
-  <button data-pb="pbx">▭ 테두리 상자</button><button data-pb="pbg">🟨 노랑 배경</button><button data-pb="pbl">▌ 왼쪽 막대</button><hr><button data-pb="clr">꾸밈 지우기</button>
+  <button data-pb="pbx">▭ 테두리 상자</button><button data-pb="pbg">🟨 노랑 배경</button><button data-pb="pbl">▌ 왼쪽 막대</button><button data-pb="pbd">Ａ 첫 글자 크게</button><hr><button data-pb="clr">꾸밈 지우기</button>
 </div>
 <div class="menu" id="lsMenu">
   <div class="mh">글머리 모양</div><button data-ls="0">● 기본 (동그라미)</button><button data-ls="1">○ 빈 동그라미</button><button data-ls="2">■ 네모</button>
@@ -456,6 +457,18 @@ body.painting #page{cursor:copy;}
   </div>
   <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="pgOk">적용</button></div>
 </div></div>
+<div class="ov" id="parDlg"><div class="dlg" style="width:min(440px,100%)">
+  <div class="dh"><h3>문단 설정</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><div class="num2">
+    <label>왼쪽 들여쓰기 (pt)<input type="number" id="parL" min="0" max="270" step="1"></label>
+    <label>첫 줄<select id="parK"><option value="none">보통</option><option value="first">들여쓰기</option><option value="hang">내어쓰기</option></select></label>
+    <label>첫 줄 크기 (pt)<input type="number" id="parA" min="0" max="144" step="1"></label>
+    <label>문단 앞 간격 (pt)<input type="number" id="parB" min="0" max="144" step="1"></label>
+    <label>문단 뒤 간격 (pt)<input type="number" id="parF" min="0" max="144" step="1" placeholder="기본"></label>
+    <label>줄 간격<select id="parLh"><option value="">기본 (1.7)</option><option value="1">1.0</option><option value="1.15">1.15</option><option value="1.5">1.5</option><option value="2">2.0</option><option value="2.5">2.5</option><option value="3">3.0</option></select></label></div>
+    <p>고른 문단(안 고르면 지금 문단)에 적용돼요. Word 문서로 받을 때도 그대로 들어가요.</p></div>
+  <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="parOk">적용</button></div>
+</div></div>
 <div class="ov" id="aiDlg"><div class="dlg">
   <div class="dh"><h3 id="aiTitle">AI 도우미</h3><button class="x" data-close aria-label="닫기">×</button></div>
   <div class="dbody"><div id="aiOut" data-notr></div><p class="aiWarn">AI가 쓴 글은 틀릴 수 있어요. 넣기 전에 읽어 보세요.</p></div>
@@ -479,8 +492,8 @@ body.painting #page{cursor:copy;}
 <script src="../undotoast.js"></script>
 <script src="../objpick.js?v=48"></script>
 <script src="../ocr.js?v=1"></script>
-<script src="docx.js?v=d4"></script>
-<script src="app.js?v=d11"></script>
+<script src="docx.js?v=d5"></script>
+<script src="app.js?v=d12"></script>
 <script src="../pwa.js" defer></script>
 <script src="../ping.js" defer></script>
 </body>

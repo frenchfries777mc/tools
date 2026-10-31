@@ -57,8 +57,8 @@ function write(blocks,opts){ opts=opts||{};
     return out; }
   function para(b,extra){ var pp=extra||'';
     var st={h1:'Heading1',h2:'Heading2',h3:'Heading3',quote:'Quote'}[b.type]; if(st) pp='<w:pStyle w:val="'+st+'"/>'+pp;
-    if(b.lh>0) pp+='<w:spacing w:line="'+Math.round(b.lh*240)+'" w:lineRule="auto"/>';
-    if(b.ind>0) pp+='<w:ind w:left="'+Math.round(b.ind*15)+'"/>';
+    var sp=(b.spB!=null?' w:before="'+Math.round(b.spB*20)+'"':'')+(b.spA!=null?' w:after="'+Math.round(b.spA*20)+'"':'')+(b.lh>0?' w:line="'+Math.round(b.lh*240)+'" w:lineRule="auto"':''); if(sp) pp+='<w:spacing'+sp+'/>';
+    if(b.ind>0||b.fi) pp+='<w:ind w:left="'+Math.round((b.ind||0)*15)+'"'+(b.fi>0?' w:firstLine="'+Math.round(b.fi*20)+'"':b.fi<0?' w:hanging="'+Math.round(-b.fi*20)+'"':'')+'/>';
     if(b.align&&/^(center|right|both)$/.test(b.align)) pp+='<w:jc w:val="'+b.align+'"/>';
     return '<w:p>'+(pp?'<w:pPr>'+pp+'</w:pPr>':'')+(b.runs||[]).map(run).join('')+'</w:p>'; }
   blocks.forEach(function(b){
@@ -159,7 +159,9 @@ function read(bytes){
         if(jc==='center'||jc==='right'||jc==='both') b.align=jc;
         var sp=pr?one(pr,'spacing'):null, ind=pr?one(pr,'ind'):null, ln=sp&&+(sp.getAttributeNS(NS,'line')||sp.getAttribute('w:line')), lr=sp&&(sp.getAttributeNS(NS,'lineRule')||sp.getAttribute('w:lineRule'));
         if(ln&&(!lr||lr==='auto')){ var lh=Math.round(ln/240*100)/100; if(lh>=.8&&lh<=4&&ln!==276) b.lh=lh; }
-        var il=ind&&+(ind.getAttributeNS(NS,'left')||ind.getAttribute('w:left')||ind.getAttributeNS(NS,'start')||ind.getAttribute('w:start')); if(il>0&&!num&&b.type!=='quote') b.ind=Math.min(360,Math.round(il/15/36)*36||36);
+        var il=ind&&+(ind.getAttributeNS(NS,'left')||ind.getAttribute('w:left')||ind.getAttributeNS(NS,'start')||ind.getAttribute('w:start')); if(il>0&&!num&&b.type!=='quote') b.ind=Math.min(480,Math.round(il/15)||1);
+        function at(el,n){ var v=el&&(el.getAttributeNS(NS,n)||el.getAttribute('w:'+n)); return v==null||v===''?null:+v; }
+        if(!num&&b.type==='p'||b.type==='quote'&&!num){ var bf=at(sp,'before'), af=at(sp,'after'), fl=at(ind,'firstLine'), hg=at(ind,'hanging'); if(bf>0) b.spB=Math.round(bf/2)/10; if(af!=null&&af!==120&&af>=0) b.spA=Math.round(af/2)/10; if(fl>0) b.fi=Math.round(fl/2)/10; else if(hg>0) b.fi=-Math.round(hg/2)/10; }
         var cut=b.runs.map(function(r){ return !!r.pb; }).indexOf(true);
         if(cut<0) out.push(b);
         else { var pieces=[[]]; b.runs.forEach(function(r){ if(r.pb) pieces.push([]); else pieces[pieces.length-1].push(r); });
