@@ -4,6 +4,18 @@
  "notes": [
   {
    "date": "2026-10-31",
+   "build": "v43",
+   "title": "사진 속 글자 읽기",
+   "items": [
+    "넣기 탭에 사진 글자 단추 추가, 표나 목록 사진을 읽어서 칸에 넣기",
+    "한 줄은 한 행으로, 탭이나 띄어쓰기 두 칸 이상으로 떨어진 글은 다음 열로 나누어 넣기",
+    "넣기 전에 읽은 글을 고칠 수 있고 몇 행 몇 열로 들어가는지 미리 표시",
+    "사진은 이 기기 안에서만 읽고 어디로도 보내지 않음"
+   ],
+   "tr": {"en": {"title": "Read text from a photo", "items": ["New Photo text button on the Insert tab: reads a photo of a table or list into cells", "Each line becomes a row; text separated by a tab or two or more spaces goes into the next column", "The text can be corrected before it goes in, with a preview of rows and columns", "The photo is read on this device only and is never sent anywhere"]}}
+  },
+  {
+   "date": "2026-10-31",
    "build": "v42",
    "title": "행·열 묶기",
    "items": [
