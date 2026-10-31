@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-10-31",
+   "build": "v12",
+   "title": "Word 문서 그림 열기",
+   "items": [
+    "Word 문서(.docx)를 열 때 그림(png, jpeg, gif, webp)도 함께 열림",
+    "열 때 큰 그림은 문서 크기에 맞게 줄임"
+   ],
+   "tr": {
+    "en": {
+     "title": "Pictures when opening Word files",
+     "items": [
+      "Pictures (png, jpeg, gif, webp) now open together with the text of a Word (.docx) file",
+      "Large pictures are shrunk when opening so the saved document stays small"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-10-31",
    "build": "v11",
    "title": "제목 탐색, 소리 내어 읽기, 편집 잠금",
    "items": [
