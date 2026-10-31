@@ -171,12 +171,13 @@ body.painting #page{cursor:copy;}
 #page span.ck{cursor:pointer; user-select:none; font-size:1.1em; margin-right:.1em;} #page span.ck.on{color:#0a7d33;}
 .eqprev{min-height:56px; padding:12px; margin-top:8px; border:1px solid var(--line); border-radius:10px; background:#fff; color:#111; font-family:"Times New Roman",serif; font-size:22px; overflow:auto;} .eqprev i{font-style:italic;}
 .shprev{margin-top:8px; padding:12px; border:1px solid var(--line); border-radius:10px; background:#fff; text-align:center;}
+#navPanel{position:fixed; left:10px; top:112px; bottom:44px; width:240px; z-index:40; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px; overflow:auto; box-shadow:0 14px 40px rgba(0,0,0,.45);} #navPanel[hidden]{display:none;} #navPanel p{color:var(--dim); font-size:13px;} .navi{display:block; width:100%; text-align:left; padding:6px 8px; border:0; background:transparent; border-radius:7px; cursor:pointer; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;} .navi:hover{background:var(--panel2);} .navi.n2{padding-left:20px;} .navi.n3{padding-left:32px; color:var(--dim);} #lockBadge{color:var(--fry); margin-right:12px;} #lockBadge[hidden]{display:none;}
 #cmPanel{position:fixed; right:10px; top:112px; bottom:44px; width:270px; z-index:40; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px; overflow:auto; box-shadow:0 14px 40px rgba(0,0,0,.45);} #cmPanel[hidden]{display:none;}
 .cmh{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;} .cmi{border:1px solid var(--line); border-radius:10px; padding:8px 10px; margin-bottom:8px; cursor:pointer; background:var(--panel2);} .cmq{font-size:12px; color:var(--dim); border-left:3px solid #f0b400; padding-left:6px; margin-bottom:4px;} .cmt{white-space:pre-wrap; word-break:break-word;} .cmb{display:flex; gap:6px; margin-top:6px;} .cmb button{border:1px solid var(--line); background:transparent; color:inherit; border-radius:8px; padding:3px 9px; cursor:pointer;}
 #cmEmpty{color:var(--dim); font-size:13px;} #cmEmpty[hidden]{display:none;}
 #trkPop{position:fixed; z-index:70; display:flex; gap:6px; padding:6px; background:var(--panel); border:1px solid var(--line); border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,.5);} #trkPop[hidden]{display:none;} #trkPop button{border:0; border-radius:8px; padding:6px 10px; cursor:pointer; background:var(--panel2); color:inherit;}
 #trkBadge{color:#ffb74d; margin-right:12px;} #trkBadge[hidden]{display:none;}
-@media print{ #page span.cm{background:none!important; border:0!important;} #page span.ti{color:inherit; text-decoration:none;} #page span.td{display:none;} #cmPanel,#trkPop{display:none!important;} }
+@media print{ #page span.cm{background:none!important; border:0!important;} #page span.ti{color:inherit; text-decoration:none;} #page span.td{display:none;} #cmPanel,#navPanel,#trkPop{display:none!important;} }
 </style>
 </head>
 <body>
@@ -248,6 +249,8 @@ body.painting #page{cursor:copy;}
   <span class="ctx" id="tblCtx" hidden><span class="sep"></span><b>표</b>
     <button class="ib" data-t="rowAdd" title="아래에 줄 넣기"><span class="lb">+ 줄</span></button>
     <button class="ib" data-t="colAdd" title="오른쪽에 칸 넣기"><span class="lb">+ 칸</span></button>
+    <button class="ib" data-t="rowUp" title="위에 줄 넣기"><span class="lb">+ 위 줄</span></button>
+    <button class="ib" data-t="colLeft" title="왼쪽에 칸 넣기"><span class="lb">+ 왼쪽 칸</span></button>
     <button class="ib" data-t="rowDel" title="이 줄 지우기"><span class="lb">− 줄</span></button>
     <button class="ib" data-t="colDel" title="이 칸 지우기"><span class="lb">− 칸</span></button>
     <button class="ib" data-t="merge" title="오른쪽 칸과 합치기"><span class="lb">칸 합치기</span></button>
@@ -281,7 +284,7 @@ body.painting #page{cursor:copy;}
   <button class="x" id="fClose" aria-label="닫기">×</button>
 </div>
 <main id="desk"><div class="band" id="hdBand" hidden data-notr></div><div id="page" contenteditable="true" spellcheck="false" data-ph="여기에 글을 쓰세요" data-notr></div><div class="band" id="ftBand" hidden data-notr></div></main>
-<div class="foot"><span id="cnt"></span><span class="sp"></span><span id="trkBadge" hidden>✏️ 변경 추적 중</span><span id="hint">A4</span></div>
+<div class="foot"><span id="cnt"></span><span class="sp"></span><span id="lockBadge" hidden>🔒 편집 잠김</span><span id="trkBadge" hidden>✏️ 변경 추적 중</span><span id="hint">A4</span></div>
 
 <div class="menu" id="clrMenu"></div>
 <div class="menu" id="revMenu">
@@ -332,6 +335,7 @@ body.painting #page{cursor:copy;}
     <div class="shprev"><img id="shImg" alt=""></div></div>
   <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="shOk">넣기</button></div>
 </div></div>
+<aside id="navPanel" hidden><div class="cmh"><b>제목 탐색</b><button class="x" id="navClose" aria-label="닫기">×</button></div><div id="navList"></div><p id="navEmpty">아직 제목이 없어요. 문단 모양에서 제목 1, 2, 3을 고르면 여기에 나와요.</p></aside>
 <aside id="cmPanel" hidden><div class="cmh"><b>메모</b><button class="x" id="cmClose" aria-label="닫기">×</button></div><div id="cmList"></div><p id="cmEmpty">아직 메모가 없어요. 글자를 고르고 검토 → 메모 달기를 누르세요.</p></aside>
 <div id="trkPop" hidden><button id="trkAcc">받아들이기</button><button id="trkRej">되돌리기</button></div>
 <div class="menu" id="expMenu">
@@ -469,6 +473,17 @@ body.painting #page{cursor:copy;}
     <p>고른 문단(안 고르면 지금 문단)에 적용돼요. Word 문서로 받을 때도 그대로 들어가요.</p></div>
   <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="parOk">적용</button></div>
 </div></div>
+<div class="ov" id="chDlg"><div class="dlg" style="width:min(560px,100%)">
+  <div class="dh"><h3>차트</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><div class="num2"><label>종류<select id="chKind"><option value="bar">막대 그래프</option><option value="line">꺾은선 그래프</option><option value="pie">원 그래프</option></select></label>
+    <label>제목<input id="chTitle" data-notr autocomplete="off" maxlength="40" value="월별 판매량"></label></div>
+    <label class="fl">자료 (한 줄에 이름과 숫자 하나씩)<textarea id="chData" rows="6" data-notr>1월 30
+2월 45
+3월 38
+4월 60</textarea></label>
+    <div class="shprev"><img id="chImg" alt=""></div><p>차트는 그림으로 들어가요. 숫자를 바꾸려면 지우고 다시 만들어 주세요.</p></div>
+  <div class="dfoot"><button class="tbtn" data-close>취소</button><button class="tbtn pri" id="chOk">넣기</button></div>
+</div></div>
 <div class="ov" id="aiDlg"><div class="dlg">
   <div class="dh"><h3 id="aiTitle">AI 도우미</h3><button class="x" data-close aria-label="닫기">×</button></div>
   <div class="dbody"><div id="aiOut" data-notr></div><p class="aiWarn">AI가 쓴 글은 틀릴 수 있어요. 넣기 전에 읽어 보세요.</p></div>
@@ -492,8 +507,8 @@ body.painting #page{cursor:copy;}
 <script src="../undotoast.js"></script>
 <script src="../objpick.js?v=48"></script>
 <script src="../ocr.js?v=1"></script>
-<script src="docx.js?v=d5"></script>
-<script src="app.js?v=d12"></script>
+<script src="docx.js?v=d6"></script>
+<script src="app.js?v=d15"></script>
 <script src="../pwa.js" defer></script>
 <script src="../ping.js" defer></script>
 </body>
