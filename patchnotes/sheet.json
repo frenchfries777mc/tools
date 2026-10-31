@@ -4,6 +4,18 @@
  "notes": [
   {
    "date": "2026-10-31",
+   "build": "v45",
+   "title": "선택하여 붙여넣기",
+   "items": [
+    "홈 탭에 선택하여 붙여넣기 단추 추가, 복사한 칸을 모두, 수식과 값만, 계산된 값만, 서식만 골라 붙여넣기",
+    "이미 있는 값에 더하기, 빼기, 곱하기, 나누기를 하며 붙여넣기",
+    "빈 칸 건너뛰기와 행·열 바꾸기 (수식은 값으로 들어감) 선택",
+    "붙여넣기 뒤 되돌리기 가능"
+   ],
+   "tr": {"en": {"title": "Paste special", "items": ["New Paste special button on the Home tab: paste all, formulas and values only, calculated values only, or formats only", "Paste while adding, subtracting, multiplying or dividing the values already there", "Options to skip blanks and to swap rows and columns (formulas go in as values)", "Undo works after pasting"]}}
+  },
+  {
+   "date": "2026-10-31",
    "build": "v44",
    "title": "같이 고치기",
    "items": [
