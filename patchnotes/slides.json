@@ -4,6 +4,19 @@
  "notes": [
   {
    "date": "2026-10-31",
+   "build": "v35",
+   "title": "색 스포이트, 내 색 모음, 빛나기·뒤집기·점선",
+   "items": [
+    "색 스포이트 추가: 슬라이드의 그림에서 색을 집어 채우기·테두리·글자 색·그림 테두리에 바로 칠함 (스포이트가 없는 브라우저에서는 그림을 눌러서 집기)",
+    "내 색 모음 추가: 집은 색이 이 브라우저에 12개까지 모여서 채우기·테두리·글자 색 메뉴에서 다시 고르기, 모음 비우기",
+    "효과 메뉴에 빛나기(은은하게·환하게)와 좌우·위아래 뒤집기 추가 (도형과 그림)",
+    "테두리 메뉴에 선 모양 추가: 실선, 점선, 동그란 점선 (선·화살표·도형 테두리)",
+    "PPTX에 뒤집기와 점선 반영 (빛나기는 화면과 PDF에서만 보임)"
+   ],
+   "tr": {"en": {"title": "Eyedropper, my colours, glow, flip, dashed lines", "items": ["Eyedropper: pick a colour from a picture on the slide and paint it on fill, outline, text colour or picture border (in browsers without an eyedropper, tap the picture)", "My colours: up to 12 picked colours are kept in this browser and listed in the fill, outline and text colour menus; clear the list any time", "Glow (soft, bright) and flip left-right or up-down in the effects menu for shapes and pictures", "Line style in the outline menu: solid, dashed, dotted (lines, arrows, shape outlines)", "Flip and dashes are kept in the PPTX (glow shows on screen and in PDF only)"]}}
+  },
+  {
+   "date": "2026-10-31",
    "build": "v34",
    "title": "글자 굵게·기울임·밑줄·글자 색",
    "items": [
