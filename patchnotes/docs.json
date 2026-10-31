@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-10-31",
+   "build": "v13",
+   "title": "차트 넣기",
+   "items": [
+    "삽입 탭에 차트 (막대, 꺾은선, 원 그래프)",
+    "이름과 숫자만 쓰면 그림으로 넣어 주고 Word 문서로도 받을 수 있음"
+   ],
+   "tr": {
+    "en": {
+     "title": "Insert charts",
+     "items": [
+      "Charts in the Insert tab (bar, line and pie)",
+      "Type names and numbers and the chart goes in as a picture that also saves to Word files"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-10-31",
    "build": "v12",
    "title": "Word 문서 그림 열기",
    "items": [
