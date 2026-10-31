@@ -3,6 +3,24 @@
  "name": "Fry Docs",
  "notes": [
   {
+   "date": "2026-10-31",
+   "build": "v8",
+   "title": "사진 속 글자 읽기",
+   "items": [
+    "사진 속 글자(한국어·영어)를 읽어 문서에 넣기",
+    "읽는 도구는 Fry Sheet와 함께 쓰는 공용 파일"
+   ],
+   "tr": {
+    "en": {
+     "title": "Read text in photos",
+     "items": [
+      "Read Korean and English text in a photo and insert it into the document",
+      "The reader is a shared file that Fry Sheet can use too"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-10-29",
    "build": "v7",
    "title": "일러스트 넣을 때 커서",

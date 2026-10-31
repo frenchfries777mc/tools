@@ -320,7 +320,7 @@ Array.prototype.forEach.call(document.querySelectorAll('[data-n]'),function(b){ 
   else if(k==='toc') makeToc();
   else if(k==='fn'){ backSel(); var s2=getSelection(); fnR=s2.rangeCount?s2.getRangeAt(0).cloneRange():null; if(fnR) fnR.collapse(false); $('fnTxt').value=''; openDlg('fnDlg'); setTimeout(function(){ $('fnTxt').focus(); },30); }
   else if(k==='capImg') caption('img'); else if(k==='capTbl') caption('tbl');
-  else if(k==='box') insBox(); else if(k==='pb') insBreak(); }; });
+  else if(k==='box') insBox(); else if(k==='pb') insBreak(); else if(k==='ocr') openOcr(); }; });
 
 /* ---------- page setup: paper, margins, columns, header, footer, page numbers, watermark ---------- */
 var PAPER={A4:[794,1123],A5:[559,794],B5:[665,945],Letter:[816,1056],Legal:[816,1344]}, MAR={n:96,s:48,m:72,w:120}, PNL={bc:'아래 가운데',br:'아래 오른쪽',bl:'아래 왼쪽',tr:'위 오른쪽'};
@@ -716,6 +716,20 @@ function cellColor(c){ var td=cellOf(); if(!td){ toast('표 안의 칸을 먼저
 function headRow(){ var td=cellOf(); if(!td){ toast('표 안의 칸을 먼저 누르세요'); return; } var tr=td.parentNode.parentNode.rows[0]; mark(true); var toTh=tr.cells[0].tagName==='TD';
   Array.prototype.slice.call(tr.cells).forEach(function(c){ var n=document.createElement(toTh?'th':'td'); while(c.firstChild) n.appendChild(c.firstChild); if(c.getAttribute('style')) n.setAttribute('style',c.getAttribute('style')); if(c.getAttribute('colspan')) n.setAttribute('colspan',c.getAttribute('colspan')); tr.replaceChild(n,c); }); after(); }
 
+/* ---------- reading the text in a photo (shared ../ocr.js) ---------- */
+var ocrR=null, ocrJob=0, OCRS={load:'읽는 도구를 불러오는 중…',lang:'글자 데이터를 내려받는 중…',read:'글자를 읽는 중…'};
+function openOcr(){ backSel(); var s=getSelection(); ocrR=s.rangeCount&&inPage()?s.getRangeAt(0).cloneRange():null; ocrJob++; $('ocrName').textContent=''; $('ocrBar').hidden=true; $('ocrSt').hidden=true; $('ocrOutL').hidden=true; $('ocrOut').value=''; $('ocrOk').disabled=true; openDlg('ocrDlg'); }
+$('ocrPick').onclick=function(){ $('ocrFile').value=''; $('ocrFile').click(); };
+$('ocrFile').onchange=function(){ var f=this.files[0]; if(!f) return; var job=++ocrJob; $('ocrName').textContent=f.name; $('ocrOutL').hidden=true; $('ocrOk').disabled=true; $('ocrPick').disabled=true;
+  $('ocrBar').hidden=false; $('ocrFill').style.width='0'; $('ocrSt').hidden=false; $('ocrSt').textContent=T(OCRS.load);
+  if(!window.FFOCR){ $('ocrSt').textContent=T('글자 읽는 도구를 불러오지 못했어요'); $('ocrPick').disabled=false; return; }
+  FFOCR.read(f,function(p,st){ if(job!==ocrJob) return; $('ocrFill').style.width=Math.round(p*100)+'%'; $('ocrSt').textContent=T(OCRS[st]||OCRS.read)+' '+Math.round(p*100)+'%'; })
+    .then(function(t){ if(job!==ocrJob) return; $('ocrPick').disabled=false; $('ocrBar').hidden=true; $('ocrOutL').hidden=false; $('ocrOut').value=t;
+      $('ocrSt').textContent=T(t?'다 읽었어요. 틀린 곳은 고친 뒤 넣어 주세요':'읽은 글자가 없어요. 글자가 또렷한 사진으로 다시 해 보세요'); $('ocrOk').disabled=!t; if(t) $('ocrOut').focus(); },
+      function(){ if(job!==ocrJob) return; $('ocrPick').disabled=false; $('ocrBar').hidden=true; $('ocrSt').textContent=T('사진을 읽지 못했어요. 인터넷이 연결됐는지 보고 다시 해 보세요'); }); };
+$('ocrOk').onclick=function(){ var t=$('ocrOut').value.trim(); if(!t) return; ocrJob++; closeDlg('ocrDlg'); backTo(ocrR); mark(true);
+  document.execCommand('insertHTML',false,paras(t)); fixTop(); count(); saveSoon(); toast('읽은 글을 넣었어요'); };
+
 /* the review & tools menu */
 var rvB=$('revBtn'); rvB.addEventListener('mousedown',keepSel); rvB.onclick=function(){ trkUI(); popMenu($('revMenu'),this); };
 Array.prototype.forEach.call(document.querySelectorAll('[data-rv]'),function(b){ b.addEventListener('mousedown',function(e){ e.preventDefault(); }); b.onclick=function(){ closeMenus(); var k=b.dataset.rv;
@@ -725,7 +739,7 @@ Array.prototype.forEach.call(document.querySelectorAll('[data-rv]'),function(b){
 
 /* ---------- ribbon tabs: home / insert / layout / review / AI / view ---------- */
 (function(){ var bar=$('bar'), BTNS={
-  insert:[['[data-n=link]','🔗 링크'],['[data-n=sym]','Ω 특수 문자'],['[data-n=date]','📅 날짜'],['[data-n=time]','🕒 시각'],['[data-n=toc]','📑 목차'],['[data-n=fn]','¹ 각주'],['[data-n=capImg]','🖼️ 그림 설명'],['[data-n=capTbl]','▦ 표 설명'],['[data-n=box]','▢ 글상자'],['[data-rv=eq]','∑ 수식'],['[data-rv=ck]','☑ 체크'],['[data-rv=shape]','⬟ 도형'],['[data-n=pb]','📄 쪽 나누기']],
+  insert:[['[data-n=link]','🔗 링크'],['[data-n=sym]','Ω 특수 문자'],['[data-n=date]','📅 날짜'],['[data-n=time]','🕒 시각'],['[data-n=toc]','📑 목차'],['[data-n=fn]','¹ 각주'],['[data-n=capImg]','🖼️ 그림 설명'],['[data-n=capTbl]','▦ 표 설명'],['[data-n=box]','▢ 글상자'],['[data-n=ocr]','🔤 사진 속 글자'],['[data-rv=eq]','∑ 수식'],['[data-rv=ck]','☑ 체크'],['[data-rv=shape]','⬟ 도형'],['[data-n=pb]','📄 쪽 나누기']],
   review:[['[data-rv=memo]','💬 메모 달기'],['[data-rv=memos]','🗒️ 메모 모음'],['[data-rv=trk]','✏️ 변경 추적'],['[data-rv=acc]','✔️ 모두 받아들이기'],['[data-rv=rej]','↩️ 모두 되돌리기'],['[data-rv=up]','ABC 대문자'],['[data-rv=low]','abc 소문자'],['[data-rv=cap]','Abc 첫 글자만'],['[data-rv=head]','▤ 제목 줄']],
   ai:[['[data-a=fix]','✍️ 맞춤법'],['[data-a=easy]','🧒 쉽게'],['[data-a=formal]','🎩 격식'],['[data-a=soft]','🙂 부드럽게'],['[data-a=short]','➖ 줄이기'],['[data-a=long]','➕ 늘이기'],['[data-a=sum]','✂️ 요약'],['[data-a=bullets]','• 목록으로'],['[data-a=cont]','➕ 이어 쓰기'],['[data-a=title]','🏷️ 제목 추천'],['[data-a=outline]','🗂️ 개요'],['[data-a=en]','🌐 영어'],['[data-a=ko]','🌐 한국어'],['[data-a=ja]','🌐 일본어'],['[data-a=ask]','❓ 문서에 질문'],['[data-a=draft]','📝 초안 쓰기'],['[data-a=set]','⚙️ AI 설정']]};
   var ctx=bar.querySelector('.ctx');

@@ -57,6 +57,7 @@ body.pv #page{background-image:repeating-linear-gradient(to bottom,transparent 0
 #page table.ts1 tr:nth-child(even) td{background:#f1f5fb;} #page table.ts1 th{background:#cfe0f5;} #page table.ts2 td,#page table.ts2 th{border:0;} #page table.ts3 td,#page table.ts3 th{border:0; border-bottom:1px solid #9a9a9a;} #page table.ts3 th{background:#fff; border-bottom:2px solid #333;}
 #page img.ib{border:3px solid #444;} #page img.ir{border-radius:18px;} #page img.is{box-shadow:4px 4px 12px rgba(0,0,0,.4);} #page img.iwl{float:left; margin:0 14px 8px 0; max-width:50%;} #page img.iwr{float:right; margin:0 0 8px 14px; max-width:50%;}
 #page span.bm::before{content:"🔖"; font-size:.8em; opacity:.7;} #page span.bl{color:#1a56db; text-decoration:underline; cursor:pointer;}
+.ocrbar{height:8px; border-radius:4px; background:var(--bg); border:1px solid var(--line); overflow:hidden;} .ocrbar i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--fry),var(--fry2)); transition:width .2s;}
 .cmpout{max-height:50vh; overflow:auto; background:var(--bg); border:1px solid var(--line); border-radius:9px; padding:10px 12px; font-size:14px; line-height:1.7; white-space:pre-wrap;} .cmpout ins{background:rgba(60,200,100,.25); text-decoration:none;} .cmpout del{background:rgba(255,90,90,.25);}
 .bmrow{display:flex; align-items:center; gap:6px; padding:5px 0; border-bottom:1px solid var(--line);} .bmrow span{flex:1;}
 /* toolbar */
@@ -347,6 +348,7 @@ body.painting #page{cursor:copy;}
   <button data-n="capImg">🖼️ 그림 설명 (그림 1.)</button>
   <button data-n="capTbl">▦ 표 설명 (표 1.)</button>
   <button data-n="box">▢ 글상자</button>
+  <button data-n="ocr">🔤 사진 속 글자 읽기</button>
   <hr>
   <button data-n="pb">📄 쪽 나누기 <small>Ctrl+Enter</small></button>
 </div>
@@ -457,7 +459,16 @@ body.painting #page{cursor:copy;}
   <div class="dbody"><div id="aiOut" data-notr></div><p class="aiWarn">AI가 쓴 글은 틀릴 수 있어요. 넣기 전에 읽어 보세요.</p></div>
   <div class="dfoot"><button class="tbtn" id="aiStop">멈추기</button><button class="tbtn" id="aiBelow" disabled>아래에 넣기</button><button class="tbtn pri" id="aiRep" disabled>바꾸기</button></div>
 </div></div>
+<div class="ov" id="ocrDlg"><div class="dlg" style="width:min(520px,100%)">
+  <div class="dh"><h3>사진 속 글자 읽기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button class="tbtn" id="ocrPick">사진 고르기</button><span id="ocrName" data-notr></span></div>
+    <div class="ocrbar" id="ocrBar" hidden><i id="ocrFill"></i></div><p id="ocrSt" hidden></p>
+    <label class="fl" id="ocrOutL" hidden>읽은 글 (넣기 전에 고칠 수 있어요)<textarea id="ocrOut" rows="8" data-notr></textarea></label>
+    <p>한국어와 영어를 읽어요. 사진은 이 기기 안에서만 읽고 어디로도 보내지 않아요. 처음에는 글자 데이터를 내려받느라 조금 걸려요.</p></div>
+  <div class="dfoot"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="ocrOk" disabled>문서에 넣기</button></div>
+</div></div>
 <input type="file" id="imgFile" accept="image/*" hidden>
+<input type="file" id="ocrFile" accept="image/*" hidden>
 <input type="file" id="openFile" accept=".docx,.html,.htm,.txt,.md" hidden>
 <div id="toast" role="status"></div>
 <script src="../ai.js?v=ai36.l14"></script>
@@ -465,8 +476,9 @@ body.painting #page{cursor:copy;}
 <script src="../versions.js?v=2"></script>
 <script src="../undotoast.js"></script>
 <script src="../objpick.js?v=48"></script>
+<script src="../ocr.js?v=1"></script>
 <script src="docx.js?v=d4"></script>
-<script src="app.js?v=d9"></script>
+<script src="app.js?v=d10"></script>
 <script src="../pwa.js" defer></script>
 <script src="../ping.js" defer></script>
 </body>
