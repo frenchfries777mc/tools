@@ -157,7 +157,7 @@ button,input,select,textarea{font:inherit; color:inherit;}
 #slideHost{position:absolute; border-radius:6px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,.45); background:#fff;}
 #slideHost .sl{transform-origin:0 0;}
 #slideHost.cnOn,#slideHost.cnOn *{cursor:crosshair!important;} #slideHost.cnOn [data-bk]{cursor:alias!important;}
-#slideHost.fpOn,#slideHost.fpOn *{cursor:crosshair!important;} #slideHost.fpOn [data-bk]{cursor:copy!important;}
+#slideHost.eyeOn,#slideHost.eyeOn *{cursor:crosshair!important;} #slideHost.fpOn,#slideHost.fpOn *{cursor:crosshair!important;} #slideHost.fpOn [data-bk]{cursor:copy!important;}
 #waitMsg{position:absolute; inset:0; display:grid; place-items:center; color:var(--dim); font-size:15px; text-align:center; padding:20px;}
 #busy{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(5,6,10,.45); z-index:4;}
 #busy .bx{display:flex; align-items:center; gap:12px; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:12px 14px 12px 18px; box-shadow:0 12px 40px rgba(0,0,0,.5);}
@@ -202,7 +202,7 @@ button,input,select,textarea{font:inherit; color:inherit;}
 /* free placement: the frame and handles of the picked box (sizes times --hk so they look the same at any zoom), shapes, builds */
 .sl.edit [data-bk]{touch-action:none;}
 .sl.edit .pic:not(.empty),.sl.edit .shp{cursor:move;}
-.sl .shp{position:absolute;} .sl .shp svg{position:absolute; left:0; top:0; overflow:visible; pointer-events:none;}
+.sl .shp{position:absolute;} .sl .shp svg{position:absolute; left:0; top:0; overflow:visible; pointer-events:none; transform-origin:50% 50%;}
 .sl .shp.ln{pointer-events:none;} .sl .shp.ln svg .hit{pointer-events:stroke;}
 .sl .stx{position:absolute; display:flex; flex-direction:column; justify-content:center; overflow:hidden; text-align:center;}
 .emg{display:grid; grid-template-columns:repeat(8,1fr); gap:2px; padding:4px;} .emg button{font-size:22px; line-height:1; padding:6px 0; border-radius:8px;} .emg button:hover{background:var(--hov,rgba(255,255,255,.1));}
@@ -765,7 +765,7 @@ body.mode-pv .top,body.mode-pv .main,body.mode-pv .rbar,body.mode-view .top,body
 <script src="lq-net.js?v=s26"></script>
 <script src="ribbon.js?v=s33"></script>
 <script src="../undotoast.js"></script>
-<script src="app.js?v=s34"></script>
+<script src="app.js?v=s35"></script>
 <script src="collab.js?v=s22"></script>
 <script src="ai-slides.js"></script>
 <script src="../pwa.js" defer></script>
