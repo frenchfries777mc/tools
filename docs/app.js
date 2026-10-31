@@ -140,7 +140,7 @@ Array.prototype.forEach.call(document.querySelectorAll('[data-cmd]'),function(b)
 $('undoBtn').onclick=undo; $('redoBtn').onclick=redo;
 $('blockSel').onchange=function(){ var v=this.value; exec('formatBlock','<'+v+'>'); };
 $('colorIn').addEventListener('input',function(){ $('colorBar').style.background=this.value; });
-$('colorIn').addEventListener('change',function(){ $('colorBar').style.background=this.value; exec('foreColor',this.value); });
+$('colorIn').addEventListener('change',function(){ $('colorBar').style.background=this.value; exec('foreColor',this.value); if(!noMy) addMy(this.value); });
 $('colorIn').parentNode.addEventListener('mousedown',keepSel);
 function setFont(f,quiet){ $('fontSel').value=f; page.classList.toggle('serif',f==='serif'); if(doc){ doc.font=f; if(!quiet){ writeIdx(); saveSoon(); } } }
 $('fontSel').onchange=function(){ setFont(this.value); };
@@ -193,8 +193,33 @@ $('sizeSel').onchange=function(){ var v=+this.value; if(v) applySize(v); page.fo
 $('faceSel').onchange=function(){ var v=this.value; backSel(); if(v==='-'){ mark(true); spansInSel('fontFamily').forEach(function(x){ x.style.fontFamily=''; if(!x.getAttribute('style')) unwrap(x); }); after(); }
   else if(v) exec('fontName',v); page.focus(); };
 $('hiIn').addEventListener('input',function(){ $('hiBar').style.background=this.value; });
-$('hiIn').addEventListener('change',function(){ var v=this.value; $('hiBar').style.background=v; if(/^#fff(fff)?$/i.test(v)){ backSel(); mark(true); raw('hiliteColor','transparent'); spansInSel('backgroundColor').forEach(function(x){ x.style.backgroundColor=''; if(!x.getAttribute('style')) unwrap(x); }); after(); } else exec('hiliteColor',v); });
+$('hiIn').addEventListener('change',function(){ var v=this.value; $('hiBar').style.background=v; if(!noMy&&!/^#fff(fff)?$/i.test(v)) addMy(v); if(/^#fff(fff)?$/i.test(v)){ backSel(); mark(true); raw('hiliteColor','transparent'); spansInSel('backgroundColor').forEach(function(x){ x.style.backgroundColor=''; if(!x.getAttribute('style')) unwrap(x); }); after(); } else exec('hiliteColor',v); });
 $('hiIn').parentNode.title=T('형광펜 (흰색을 고르면 형광펜을 지워요)');
+
+/* ---------- colour palette: presets, "내 색 모음" (kept in this browser), eyedropper ---------- */
+var PRESET=['#000000','#434343','#e03131','#f08c00','#ffe066','#2f9e44','#1c7ed6','#7048e8','#d6336c','#ffffff'], myCol=[], clrMode='fore', pickImg=false, noMy=false;
+try{ myCol=(JSON.parse(localStorage.getItem('fd.mycolors')||'[]')||[]).filter(function(c){ return /^#[0-9a-f]{6}$/i.test(c); }).slice(0,12); }catch(e){}
+function addMy(c){ c=String(c).toLowerCase(); myCol=[c].concat(myCol.filter(function(x){ return x!==c; })).slice(0,12); try{ localStorage.setItem('fd.mycolors',JSON.stringify(myCol)); }catch(e){} }
+function useClr(c,skip){ var inp=$(clrMode==='hi'?'hiIn':'colorIn'); noMy=!!skip; inp.value=c; inp.dispatchEvent(new Event('change')); noMy=false; }
+function drawClr(){ var m=$('clrMenu'); m.innerHTML='';
+  function head(t){ var d=document.createElement('div'); d.className='mh'; d.textContent=T(t); m.appendChild(d); }
+  function grid(list,skip){ var g=document.createElement('div'); g.className='swg'; list.forEach(function(c){ var b=document.createElement('button'); b.type='button'; b.className='sw'; b.style.background=c; b.title=c.toUpperCase(); b.setAttribute('aria-label',c); b.addEventListener('mousedown',function(e){ e.preventDefault(); }); b.onclick=function(){ closeMenus(); useClr(c,skip); }; g.appendChild(b); }); m.appendChild(g); }
+  function act(t,fn){ var b=document.createElement('button'); b.type='button'; b.textContent=T(t); b.addEventListener('mousedown',function(e){ e.preventDefault(); }); b.onclick=fn; m.appendChild(b); }
+  head(clrMode==='hi'?'형광펜 색':'글자 색'); grid(PRESET,true); head('내 색 모음');
+  if(myCol.length) grid(myCol,true); else { var p=document.createElement('p'); p.className='mn'; p.textContent=T('아직 없어요. 스포이트나 직접 고른 색이 여기에 쌓여요.'); m.appendChild(p); }
+  m.appendChild(document.createElement('hr'));
+  act('🎯 스포이트로 색 따오기',function(){ closeMenus(); dropper(); });
+  act('🎨 색 직접 고르기',function(){ closeMenus(); $(clrMode==='hi'?'hiIn':'colorIn').click(); });
+  if(myCol.length) act('내 색 모음 비우기',function(){ myCol=[]; try{ localStorage.removeItem('fd.mycolors'); }catch(e){} drawClr(); }); }
+function dropper(){ if(window.EyeDropper){ var mode=clrMode; new EyeDropper().open().then(function(r){ clrMode=mode; addMy(r.sRGBHex); useClr(r.sRGBHex,true); },function(){}); return; }
+  pickImg=true; document.body.classList.add('picking'); toast('색을 따올 그림을 누르세요'); }
+page.addEventListener('click',function(e){ if(!pickImg) return; pickImg=false; document.body.classList.remove('picking'); var im=e.target; e.preventDefault(); e.stopPropagation();
+  if(!im||im.tagName!=='IMG'){ toast('색 따오기를 그만뒀어요'); return; }
+  var w=im.naturalWidth, h=im.naturalHeight, r=im.getBoundingClientRect(), c=document.createElement('canvas'), d; c.width=w; c.height=h; var g=c.getContext('2d'); g.drawImage(im,0,0);
+  try{ d=g.getImageData(Math.min(w-1,Math.max(0,Math.floor((e.clientX-r.left)/r.width*w))),Math.min(h-1,Math.max(0,Math.floor((e.clientY-r.top)/r.height*h))),1,1).data; }catch(x){ toast('이 그림에서는 색을 따올 수 없어요'); return; }
+  if(d[3]<10){ toast('투명한 곳이에요. 다른 곳을 눌러 보세요'); return; }
+  var col='#'+[d[0],d[1],d[2]].map(function(v){ return ('0'+v.toString(16)).slice(-2); }).join(''); addMy(col); useClr(col,true); toast(T('색을 따왔어요')+': '+col.toUpperCase()); },true);
+['colorIn','hiIn'].forEach(function(id){ var lab=$(id).parentNode; $(id).style.pointerEvents='none'; lab.addEventListener('click',function(e){ e.preventDefault(); clrMode=id==='hiIn'?'hi':'fore'; drawClr(); popMenu($('clrMenu'),lab); }); });
 
 /* ---------- line spacing and indent (whole paragraphs) ---------- */
 function blocksInSel(){ backSel(); var s=getSelection(); if(!s.rangeCount) return []; var r=s.getRangeAt(0), out=[];
