@@ -179,7 +179,7 @@ form.in textarea:focus{outline:none;}
 .acards{display:grid; grid-template-columns:1fr 1fr; gap:12px;} @media(max-width:620px){ .acards{grid-template-columns:1fr;} }
 .ac{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:12px 14px; min-height:120px;} .ac.pick{cursor:pointer;} .ac.pick:hover,.ac.pick:focus-visible{border-color:var(--fry,#ffc93c); outline:none;} .ac h3{margin:0 0 6px; font-size:14px; color:var(--dim);} .ac .atx{white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.65;}
 .ac.win{border-color:var(--good,#5fd38d);}
-.ares{font-size:13px; color:var(--dim); line-height:1.7;} .ares.busy{display:flex; align-items:center; gap:8px; color:var(--fg,inherit);} .ares.busy::before{content:''; width:14px; height:14px; border-radius:50%; border:2px solid var(--line); border-top-color:var(--fry,#ffc93c); animation:arspin .8s linear infinite;} @keyframes arspin{to{transform:rotate(360deg);}}
+.ares{font-size:13px; color:var(--dim); line-height:1.7;} .arrank{font-size:13px; color:var(--dim); line-height:1.7; margin-top:8px;} .arrank b{color:var(--fg,inherit);} .ares.busy{display:flex; align-items:center; gap:8px; color:var(--fg,inherit);} .ares.busy::before{content:''; width:14px; height:14px; border-radius:50%; border:2px solid var(--line); border-top-color:var(--fry,#ffc93c); animation:arspin .8s linear infinite;} @keyframes arspin{to{transform:rotate(360deg);}}
 .msug{display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:8px 12px; background:var(--panel2); border:1px solid var(--line); border-radius:12px; font-size:13px;} .msug span{flex:1; min-width:0; overflow-wrap:anywhere;}
 .mlist{display:grid; gap:6px; margin:0 0 12px; max-height:44vh; overflow:auto;} .mrow{display:flex; gap:6px;} .mrow input{flex:1; min-width:0; margin:0!important;} .mrow button{flex:0 0 auto;}
 .dlg .mnote{font-size:12px; color:var(--dim); line-height:1.55; margin:0 0 12px;} .dlg .mon{display:flex; gap:8px; align-items:center; margin:0 0 12px; font-size:14px;}
@@ -214,6 +214,7 @@ form.in textarea:focus{outline:none;}
     <form class="in" id="arForm"><textarea id="arQ" rows="1" maxlength="300" placeholder="두 모델에게 물어볼 질문"></textarea><button class="btn" id="arGo" type="submit">대결!</button></form>
     <div class="acards" id="acards" hidden><div class="ac" id="acL" role="button" tabindex="-1"><h3></h3><div class="atx" data-notr></div></div><div class="ac" id="acR" role="button" tabindex="-1"><h3></h3><div class="atx" data-notr></div></div></div>
     <div class="ares" id="ares" data-notr></div>
+    <div class="arrank" id="arRank" data-notr hidden></div>
     <p class="hint">모델을 번갈아 불러와서 처음에는 시간이 걸려요. 결과는 이 기기에 남고, 로그인했다면 개발자에게도 전해져요.</p>
   </section>
   <section class="chat" id="chat" hidden>
@@ -235,7 +236,7 @@ form.in textarea:focus{outline:none;}
 <script src="jokes.js?v=2.l13"></script>
 <script src="vote.js?v=2"></script>
 <script src="memo.js?v=1"></script>
-<script src="arena.js?v=1"></script>
+<script src="arena.js?v=2"></script>
 <script src="https://frenchfries777mc.github.io/games/ff-lang.js"></script>
 <script src="https://frenchfries777mc.github.io/games/ff-auth.js?v=20261028e"></script>
 <script>
@@ -508,7 +509,15 @@ function arenaPair(){   // 준비된 모델 중 서로 다른 둘을 무작위�
   return Math.random()<0.5?[a.id,b.id]:[b.id,a.id];
 }
 function mName(id){ var m=models.filter(function(x){ return x.id===id; })[0]; return m?String(m.name).split(' ').pop():id; }
-function arenaOpen(on){ $('arena').hidden=!on; $('pick').hidden=on; $('hero').hidden=on; if(on){ arenaFill(); $('arQ').focus(); } }
+function arRankFill(){   // 모두의 순위 (서버 합계가 있을 때만 보여요)
+  FFArena.rank().then(function(l){
+    var rows=l.filter(function(x){ return x&&x.games>0; }).map(function(x){ var d=x.games-x.nones, pct=d>0?Math.round(100*(x.wins+x.ties/2)/d):0; return {n:mName(x.model), pct:pct, g:x.games}; });
+    var el=$('arRank'); if(!rows.length){ el.hidden=true; return; }
+    rows.sort(function(a,b){ return b.pct-a.pct; });
+    el.textContent=T('모두의 순위')+': '+rows.map(function(r){ return r.n+' '+F('승률 {0}%',r.pct)+' ('+F('{0}판',r.g)+')'; }).join(' · '); el.hidden=false;
+  });
+}
+function arenaOpen(on){ $('arena').hidden=!on; $('pick').hidden=on; $('hero').hidden=on; if(on){ arenaFill(); arRankFill(); $('arQ').focus(); } }
 $('arenaBtn').onclick=function(){ arenaOpen(true); };
 $('arenaBack').onclick=function(){ if(arRun){ arGen++; FFAI.stop(); arRun=false; setArBusy(false); } arenaOpen(false); };
 function setArBusy(b){ var r=$('ares'); if(!b&&r.classList.contains('busy')) r.textContent=''; r.classList.toggle('busy',b); arRun=b; $('arGo').textContent=T(b?'멈추기':'대결!'); $('arGo').type=b?'button':'submit'; }
@@ -544,7 +553,7 @@ function arPick(side){   // 답변 창을 눌러 고르면 그때서야 두 모�
   $('acL').querySelector('h3').textContent=mName(arSide.l); $('acR').querySelector('h3').textContent=mName(arSide.r);
   $(side==='l'?'acL':'acR').classList.add('win');
   var tl=FFArena.tally(), line=[arSide.l,arSide.r].map(function(id){ var x=tl[id]||{win:0,lose:0,tie:0,none:0,games:0}; return mName(id)+' '+F('{0}승 {1}무 {2}패',x.win,x.tie,x.lose)+' ('+F('{0}판',x.games)+')'; }).join(' · ');
-  $('ares').textContent=T('투표 고마워요! 이 기기에서의 전적')+': '+line;
+  $('ares').textContent=T('투표 고마워요! 이 기기에서의 전적')+': '+line; setTimeout(arRankFill,1500);
 }
 [['acL','l'],['acR','r']].forEach(function(x){ var c=$(x[0]); c.onclick=function(){ arPick(x[1]); }; c.onkeydown=function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); arPick(x[1]); } }; });
 
