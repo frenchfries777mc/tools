@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-10-31",
+   "build": "v9",
+   "title": "색 스포이트와 내 색 모음",
+   "items": [
+    "글자 색·형광펜을 누르면 색 목록, 내 색 모음, 스포이트가 열림",
+    "스포이트로 화면이나 그림에서 색을 따옴 (스포이트가 없는 브라우저는 문서 속 그림을 눌러 따옴)",
+    "내 색 모음은 이 브라우저에 저장"
+   ],
+   "tr": {
+    "en": {
+     "title": "Eyedropper and My colours",
+     "items": [
+      "Text colour and highlighter now open a palette with My colours and an eyedropper",
+      "The eyedropper picks a colour from the screen or from a picture (browsers without it pick from a picture in the document)",
+      "My colours are saved in this browser"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-10-31",
    "build": "v8",
    "title": "사진 속 글자 읽기",
    "items": [
