@@ -36,7 +36,7 @@ function loadDoc(id){
   lsSet(LSL,docId); $('docName').value=doc.name; switchSheet(doc.active,true);
 }
 var saveT=null;
-function saveSoon(){ $('saved').textContent=''; clearTimeout(saveT); saveT=setTimeout(saveNow,400); }
+function saveSoon(){ if(window.FSCo) FSCo.touch(); $('saved').textContent=''; clearTimeout(saveT); saveT=setTimeout(saveNow,400); }
 function saveNow(){
   clearTimeout(saveT);
   var ok=lsSet(LSD+docId,JSON.stringify(doc)); var idx=docIndex().filter(function(x){ return x.id!==docId; });
@@ -52,16 +52,24 @@ function restore(s){ var o=JSON.parse(s); doc.sheets=o.s; doc.names=o.n||[]; doc
 $('verBtn').onclick=function(){ commitEdit(); if(window.FFVer) FFVer.open({key:'sheet.'+docId,title:'버전 기록',get:snap,toast:toast,
   put:function(d){ pushUndo(); restore(d); },
   describe:function(d){ var o=JSON.parse(d), n=0; o.s.forEach(function(x){ n+=Object.keys(x.cells||{}).length; }); return F('시트 {0}개, 칸 {1}개',o.s.length,n); }}); };
-function undo(){ commitEdit(); if(!undoS.length) return toast(T('되돌릴 작업이 없어요')); redoS.push(snap()); restore(undoS.pop()); }
+function undo(){ commitEdit(); if(!undoS.length) return toast(T('되돌릴 작업이 없어요')); if(window.FSCo&&FSCo.warnUndo()) toast(T('같이 고치는 중이라 그 사이 다른 사람이 고친 칸도 같이 되돌아갈 수 있어요')); redoS.push(snap()); restore(undoS.pop()); }
 function redo(){ commitEdit(); if(!redoS.length) return; undoS.push(snap()); restore(redoS.pop()); }
 
 /* ---------- grid build ---------- */
-function cw(c){ return sh.hc&&sh.hc[c]?5:(sh.cw[c]||DEF_W); }
+/* v42: groups. sh.ro / sh.co hold outline levels, sh.rx / sh.cx the folded summary rows / columns; folding hides through the same flags as hiding */
+var hcAll={};
+function hrAll(){ return Object.assign({},sh.hr,E.outlineHidden(sh.ro,sh.rx)); }
+function cw(c){ return hcAll[c]?5:(sh.cw[c]||DEF_W); }
+function lvl(isRow,i){ var m=isRow?sh.ro:sh.co; return m&&m[i]||0; }
+function isSummary(isRow,i){ return i>0&&lvl(isRow,i-1)>lvl(isRow,i); }
+function gutter(isRow,i){ var l=lvl(isRow,i), tog=isSummary(isRow,i), f=(isRow?sh.rx:sh.cx)||{};
+  return {st:l?' style="'+(isRow?'border-left':'border-top')+':'+Math.min(l,7)*3+'px solid #ffc93c"':'', tg:tog?'<b class="gtg" data-gt="'+i+'" title="'+T(f[i]?'펼치기':'접기')+'">'+(f[i]?'+':'−')+'</b>':''}; }
 function buildGrid(){
+  hcAll=Object.assign({},sh.hc,E.outlineHidden(sh.co,sh.cx));
   var h='<col style="width:46px">'; for(var c=0;c<sh.cols;c++) h+='<col style="width:'+cw(c)+'px">'; colsEl.innerHTML=h;
-  h='<th class="corner"></th>'; for(c=0;c<sh.cols;c++) h+='<th data-c="'+c+'"'+(sh.hc&&sh.hc[c]?' class="hidc" title="'+T('숨긴 열')+'"':'')+'>'+E.colName(c)+'<span class="rz" data-rz="'+c+'"></span></th>'; hrow.innerHTML=h;
+  h='<th class="corner"></th>'; for(c=0;c<sh.cols;c++){ var gc=gutter(false,c); h+='<th data-c="'+c+'"'+(hcAll[c]?' class="hidc" title="'+T('숨긴 열')+'"':'')+gc.st+'>'+E.colName(c)+gc.tg+'<span class="rz" data-rz="'+c+'"></span></th>'; } hrow.innerHTML=h;
   var rowTpl=''; for(c=0;c<sh.cols;c++) rowTpl+='<td></td>';
-  var parts=[]; for(var r=0;r<sh.rows;r++) parts.push('<tr><th>'+(r+1)+'</th>'+rowTpl+'</tr>');
+  var parts=[]; for(var r=0;r<sh.rows;r++) { var gr=gutter(true,r); parts.push('<tr><th'+gr.st+'>'+(r+1)+gr.tg+'</th>'+rowTpl+'</tr>'); }
   gbody.innerHTML=parts.join(''); painted=new Set(); applyFreeze(); applyMerges(); paintAll(); applyFilter(); drawImgs();
 }
 /* freeze: first sh.fr rows and sh.fc columns stay put while scrolling */
@@ -226,7 +234,7 @@ function overlay(){
   hl.forEach(function(t){ t.classList.remove('hl'); }); hl=[];
   for(var r=sel.r1;r<=Math.min(sel.r2,sel.r1+400);r++){ var th=gbody.rows[r]&&gbody.rows[r].cells[0]; if(th){ th.classList.add('hl'); hl.push(th); } }
   if(!editing) placeGhost();
-  placeDv(); stats();
+  placeDv(); stats(); if(window.FSCo) FSCo.sel();
 }
 var hl=[];
 function scrollTo(r,c){
@@ -606,6 +614,26 @@ document.addEventListener('copy',function(e){ if(editing||isOtherInput(document.
 document.addEventListener('cut',function(e){ if(editing||isOtherInput(document.activeElement)) return; e.preventDefault(); e.clipboardData.setData('text/plain',grab(true)); toast(T('잘라냈어요. 붙여넣을 곳을 고르세요')); });
 document.addEventListener('paste',function(e){ if(editing||isOtherInput(document.activeElement)) return; e.preventDefault(); doPaste(e.clipboardData.getData('text/plain')); });
 
+/* ---------- photo text: FFOCR (../ocr.js) reads the picture, each line is a row, tabs or 2+ spaces split the columns ---------- */
+var ocrJob=0, OCRS={load:'읽는 도구를 불러오는 중…',lang:'글자 데이터를 내려받는 중…',read:'글자를 읽는 중…'};
+function ocrRows(t){ return String(t).replace(/\r\n?/g,'\n').split('\n').filter(function(l){ return l.trim(); }).map(function(l){ return l.trim().split(l.indexOf('\t')>=0?/\t+/:/ {2,}/).map(function(v){ return v.trim(); }); }); }
+function ocrCount(){ var rs=ocrRows($('ocrOut').value), w=Math.max.apply(null,[0].concat(rs.map(function(r){ return r.length; })));
+  $('ocrInfo').textContent=rs.length?F('{0}행 × {1}열로 들어가요',rs.length,w):''; $('ocrOk').disabled=!rs.length; }
+function openOcr(){ ocrJob++; $('ocrName').textContent=''; $('ocrBar').hidden=true; $('ocrSt').hidden=true; $('ocrOutL').hidden=true; $('ocrOut').value=''; $('ocrOk').disabled=true; $('ocrPick').disabled=false; openDlg('ocrDlg'); }
+$('ocrPick').onclick=function(){ $('ocrFile').value=''; $('ocrFile').click(); };
+$('ocrFile').onchange=function(){ var f=this.files[0]; if(!f) return; var job=++ocrJob; $('ocrName').textContent=f.name; $('ocrOutL').hidden=true; $('ocrOk').disabled=true; $('ocrPick').disabled=true;
+  $('ocrBar').hidden=false; $('ocrFill').style.width='0'; $('ocrSt').hidden=false; $('ocrSt').textContent=T(OCRS.load);
+  if(!window.FFOCR){ $('ocrSt').textContent=T('글자 읽는 도구를 불러오지 못했어요'); $('ocrPick').disabled=false; return; }
+  FFOCR.read(f,function(p,st){ if(job!==ocrJob) return; $('ocrFill').style.width=Math.round(p*100)+'%'; $('ocrSt').textContent=T(OCRS[st]||OCRS.read)+' '+Math.round(p*100)+'%'; })
+    .then(function(t){ if(job!==ocrJob) return; $('ocrPick').disabled=false; $('ocrBar').hidden=true; $('ocrOutL').hidden=false; $('ocrOut').value=t; ocrCount();
+      $('ocrSt').textContent=T(t?'다 읽었어요. 틀린 곳은 고친 뒤 넣어 주세요':'읽은 글자가 없어요. 글자가 또렷한 사진으로 다시 해 보세요'); },
+      function(){ if(job!==ocrJob) return; $('ocrPick').disabled=false; $('ocrBar').hidden=true; $('ocrSt').textContent=T('사진을 읽지 못했어요. 인터넷이 연결됐는지 보고 다시 해 보세요'); }); };
+$('ocrOut').addEventListener('input',ocrCount);
+$('ocrOk').onclick=function(){ var rows=ocrRows($('ocrOut').value); if(!rows.length) return; var w=Math.max.apply(null,rows.map(function(r){ return r.length; }));
+  if(guard({r1:act.r,c1:act.c,r2:act.r+rows.length-1,c2:act.c+w-1})) return;
+  ocrJob++; closeDlgs(); pushUndo(); rows.forEach(function(row,i){ row.forEach(function(v,j){ setRaw(act.r+i,act.c+j,v); }); });
+  growTo(act.r+rows.length-1,act.c+w-1); sel={r1:act.r,c1:act.c,r2:Math.min(sh.rows-1,act.r+rows.length-1),c2:Math.min(sh.cols-1,act.c+w-1)}; changed(); toast(F('읽은 글을 {0}행에 넣었어요',rows.length)); };
+
 /* ---------- commands ---------- */
 function fmtSel(fn){ if(guard(sel)) return; pushUndo(); forSel(function(r,c){ var k=K(r,c), x=sh.cells[k]||(sh.cells[k]={}); fn(x); if(x.v==null&&!hasFmt(x)) delete sh.cells[k]; }); changed(); }
 function cmd(n){
@@ -629,6 +657,7 @@ function cmd(n){
     case 'painter': return startPaint();
     case 'link': return editLink();
     case 'img': $('imgPick').value=''; return $('imgPick').click();
+    case 'ocr': return openOcr();
     case 'check': { var on=!cur.cb; return fmtSel(function(x){ if(on){ x.cb=1; var l=E.literal(x.v); if(typeof l!=='boolean'&&String(x.v||'')[0]!=='=') x.v='FALSE'; } else { delete x.cb; } }); }
     case 'sum': return autoSum();
     case 'fn': return openFn();
@@ -753,6 +782,8 @@ function structural(isRow,at,count){
   doc.sheets.forEach(function(s){ if(s.pv) s.pv.ref=E.adjustFormula('='+s.pv.ref,'',name,isRow,at,count).slice(1); });
   doc.sheets.forEach(function(s){ for(var k in s.cells){ var cl=s.cells[k]; if(cl.v&&String(cl.v)[0]==='=') cl.v=E.adjustFormula(cl.v,s.name,name,isRow,at,count); } });
   ['hr','hc'].forEach(function(key){ if(!sh[key]||(key==='hr')!==isRow) return; var o={}; for(var q in sh[key]){ var x=+q; if(count>0){ if(x>=at) x+=count; } else { if(x>=at&&x<at-count) continue; if(x>=at-count) x+=count; } o[x]=1; } sh[key]=o; });
+  var sm=isRow?['hr','ro','rx']:['hc','co','cx'];
+  sm.forEach(function(p){ if(!sh[p]) return; var o={}; for(var k in sh[p]){ var x=+k; if(count>0){ if(x>=at) x+=count; } else { if(x>=at&&x<at-count) continue; if(x>=at-count) x+=count; } o[x]=sh[p][k]; } if(Object.keys(o).length) sh[p]=o; else delete sh[p]; });
   if(!isRow){ var cwn={}; for(var c in sh.cw){ var x=+c; if(count>0){ if(x>=at) x+=count; } else { if(x>=at&&x<at-count) continue; if(x>=at-count) x+=count; } cwn[x]=sh.cw[c]; } sh.cw=cwn; }
   function adj(o){ var a=isRow?'r1':'c1', b=isRow?'r2':'c2';
     if(count>0){ if(o[a]>=at) o[a]+=count; if(o[b]>=at) o[b]+=count; return true; }
@@ -790,7 +821,16 @@ function rowCmd(n){
   else if(n==='fitCol'){ fitCols(sel.c1,sel.c2); return; }
   else if(n==='hideRow'){ if(sel.r1===0&&sel.r2>=sh.rows-1){ toast(T('모든 행을 숨길 수는 없어요')); return; } sh.hr=sh.hr||{}; for(var hr0=sel.r1;hr0<=sel.r2;hr0++) sh.hr[hr0]=1; applyFilter(); overlay(); saveSoon(); toast(F('{0}개 행을 숨겼어요 · 숨기기 취소로 다시 보여요',sel.r2-sel.r1+1)); return; }
   else if(n==='hideCol'){ if(sel.c1===0&&sel.c2>=sh.cols-1){ toast(T('모든 열을 숨길 수는 없어요')); return; } sh.hc=sh.hc||{}; for(var hc0=sel.c1;hc0<=sel.c2;hc0++) sh.hc[hc0]=1; buildGrid(); overlay(); saveSoon(); toast(F('{0}개 열을 숨겼어요 · 숨기기 취소로 다시 보여요',sel.c2-sel.c1+1)); return; }
-  else if(n==='unhide'){ var had=Object.keys(sh.hr||{}).length+Object.keys(sh.hc||{}).length; delete sh.hr; delete sh.hc; buildGrid(); overlay(); saveSoon(); toast(had?T('숨긴 행·열을 모두 보이게 했어요'):T('숨긴 행·열이 없어요')); return; }
+  else if(n==='grpRow'||n==='grpCol'){ var gR=n==='grpRow', lo=gR?sel.r1:sel.c1, hi=gR?sel.r2:sel.c2, key=gR?'ro':'co', mm=sh[key]||(sh[key]={}), top=0;
+    for(var gi=lo;gi<=hi;gi++) top=Math.max(top,mm[gi]||0); if(top>=7){ toast(T('묶기는 7단계까지 할 수 있어요')); return; }
+    for(gi=lo;gi<=hi;gi++) mm[gi]=Math.min(7,(mm[gi]||0)+1); buildGrid(); overlay(); saveSoon(); toast(F(gR?'{0}개 행을 묶었어요. 아래 칸의 −를 누르면 접혀요':'{0}개 열을 묶었어요. 오른쪽 칸의 −를 누르면 접혀요',hi-lo+1)); return; }
+  else if(n==='ungrpRow'||n==='ungrpCol'){ var uR=n==='ungrpRow', ul=uR?sel.r1:sel.c1, uh=uR?sel.r2:sel.c2, ukey=uR?'ro':'co', um=sh[ukey], was=0;
+    if(um) for(var ui=ul;ui<=uh;ui++) if(um[ui]){ was++; if(--um[ui]<=0) delete um[ui]; }
+    if(um&&!Object.keys(um).length) delete sh[ukey]; dropFolds(uR); buildGrid(); overlay(); saveSoon(); toast(was?T('묶기를 풀었어요'):T('묶은 곳이 아니에요')); return; }
+  else if(n==='foldAll'||n==='unfoldAll'){ var fo=n==='foldAll'; ['ro','co'].forEach(function(k,ix){ var xk=ix?'cx':'rx', m=sh[k]; if(!m) return; delete sh[xk];
+      if(fo){ var mx=Math.max.apply(null,Object.keys(m).map(function(i){ return +i; }))+1; for(var i=1;i<=mx;i++) if(isSummary(!ix,i)&&lvl(!ix,i)===0){ (sh[xk]||(sh[xk]={}))[i]=1; } } });
+    buildGrid(); overlay(); saveSoon(); toast(fo?T('묶음을 모두 접었어요'):T('묶음을 모두 폈어요')); return; }
+  else if(n==='unhide'){ var had=Object.keys(sh.hr||{}).length+Object.keys(sh.hc||{}).length; delete sh.hr; delete sh.hc; delete sh.rx; delete sh.cx; buildGrid(); overlay(); saveSoon(); toast(had?T('숨긴 행·열을 모두 보이게 했어요'):T('숨긴 행·열이 없어요')); return; }
   else if(n==='fzRow'){ sh.fr=act.r+1; buildGrid(); toast(F('{0}행까지 고정했어요',act.r+1)); }
   else if(n==='fzCol'){ sh.fc=act.c+1; buildGrid(); toast(F('{0}열까지 고정했어요',E.colName(act.c))); }
   else if(n==='fzTop'){ sh.fr=1; buildGrid(); toast(F('{0}행까지 고정했어요',1)); }
@@ -830,6 +870,11 @@ $('rowMenu').addEventListener('click',function(e){ var b=e.target.closest('[data
   rowCmd(r); });
 $('addRows').onclick=function(){ commitEdit(); if(sh.rows>=MAXR) return; sh.rows=Math.min(MAXR,sh.rows+50); buildGrid(); overlay(); saveSoon(); };
 $('addCols').onclick=function(){ commitEdit(); if(sh.cols>=MAXC) return; sh.cols=Math.min(MAXC,sh.cols+10); buildGrid(); overlay(); saveSoon(); };
+
+/* folding: the − / + in a summary row's or column's header. A fold whose group has gone (levels changed) is dropped */
+function dropFolds(isRow){ var x=isRow?'rx':'cx', f=sh[x]; if(!f) return; for(var k in f) if(!isSummary(isRow,+k)) delete f[k]; if(!Object.keys(f).length) delete sh[x]; }
+function toggleFold(isRow,i){ var x=isRow?'rx':'cx', f=sh[x]||(sh[x]={}); if(f[i]) delete f[i]; else f[i]=1; if(!Object.keys(f).length) delete sh[x]; buildGrid(); overlay(); saveSoon(); }
+$('gridWrap').addEventListener('pointerdown',function(e){ var g=e.target.closest&&e.target.closest('.gtg'); if(!g) return; e.preventDefault(); e.stopPropagation(); commitEdit(); toggleFold(!!g.closest('tbody'),+g.dataset.gt); },true);
 
 /* ---------- sheets ---------- */
 function switchSheet(i,rebuild){
@@ -1221,7 +1266,11 @@ function applyXlsxExtras(X,wb,s,ex,dateAt){
     for(var sd in x.bx){ var f=FACE[sd], nr=rc[0]+f[0], nc=rc[1]+f[1]; if(nr<0||nc<0||nr>=MAXR||nc>=MAXC||(s.merges.length&&inMerge(nr,nc))) continue;
       var nk=K(nr,nc), nx=s.cells[nk]||(s.cells[nk]={}); nx.bx=nx.bx||{}; if(!nx.bx[f[2]]) nx.bx[f[2]]={c:x.bx[sd].c,w:x.bx[sd].w}; } });
   Object.keys(ex.cw).forEach(function(c){ if(+c<MAXC) s.cw[c]=ex.cw[c]; });
+  if(ex.ro){ s.ro={}; Object.keys(ex.ro).forEach(function(r){ if(+r<MAXR) s.ro[r]=ex.ro[r]; }); } if(ex.co){ s.co={}; Object.keys(ex.co).forEach(function(c){ if(+c<MAXC) s.co[c]=ex.co[c]; }); }
+  if(ex.rx){ s.rx={}; Object.keys(ex.rx).forEach(function(r){ s.rx[r]=1; }); } if(ex.cx){ s.cx={}; Object.keys(ex.cx).forEach(function(c){ s.cx[c]=1; }); }
   if(ex.hc){ s.hc={}; Object.keys(ex.hc).forEach(function(c){ if(+c<MAXC) s.hc[c]=1; }); } if(ex.hr){ s.hr={}; Object.keys(ex.hr).forEach(function(r){ if(+r<MAXR) s.hr[r]=1; }); }
+  { var fr=E.outlineHidden(s.ro,s.rx), fc=E.outlineHidden(s.co,s.cx); // a row or column a fold hides is not also hidden by hand
+    Object.keys(fr).forEach(function(r){ if(s.hr) delete s.hr[r]; }); Object.keys(fc).forEach(function(c){ if(s.hc) delete s.hc[c]; }); if(s.hr&&!Object.keys(s.hr).length) delete s.hr; if(s.hc&&!Object.keys(s.hc).length) delete s.hc; }
   s.fr=Math.min(ex.fr,500); s.fc=Math.min(ex.fc,50);
   if(ex.flt&&ex.flt.g.r1<MAXR&&ex.flt.g.c1<MAXC){ var fg=ex.flt.g; s.flt={r1:fg.r1,c1:fg.c1,r2:Math.min(fg.r2,fg.r1+4000,MAXR-1),c2:Math.min(fg.c2,MAXC-1),h:{},xshow:ex.flt.cols}; }
   ex.cfs.slice(0,200).forEach(function(f){ if(f.r1>=MAXR||f.c1>=MAXC) return; f.r2=Math.min(f.r2,f.r1+2000,MAXR-1); f.c2=Math.min(f.c2,MAXC-1); s.cfs.push(f); });
@@ -1263,6 +1312,7 @@ function fileCmd(f){
   else if(f==='csv') exportCSV();
   else if(f==='print') cmd('print');
   else if(f==='docs') openDocMgr();
+  else if(f==='co') openDlg('coDlg');
   else if(f==='del') deleteDoc(docId);
 }
 $('docName').addEventListener('input',function(){ doc.name=this.value; saveSoon(); });
@@ -1461,7 +1511,7 @@ function cellText(r,c){ var x=sh.cells[K(r,c)], v=eng.value(doc.active,r,c); ret
 function applyFilter(){
   var f=sh.flt, rows=gbody.rows, r;
   for(r=0;r<rows.length;r++) if(rows[r].style.display) rows[r].style.display='';
-  if(sh.hr) for(var hk in sh.hr){ if(rows[+hk]) rows[+hk].style.display='none'; }
+  var hh=hrAll(); for(var hk in hh){ if(rows[+hk]) rows[+hk].style.display='none'; }
   if(!f) return; f.h=f.h||{}; var shown=0;
   for(r=f.r1+1;r<=f.r2&&r<rows.length;r++){ var hide=false;
     for(var c in f.h){ var hv=f.h[c]; if(hv&&hv.length&&hv.indexOf(cellText(r,+c))>=0){ hide=true; break; } }
@@ -2032,5 +2082,11 @@ window.FSAPI={run:runCmd, get doc(){ return doc; }, get eng(){ return eng; }, ge
   drawChart:drawChart, chartData:chartData, PAL:PAL, toast:toast, download:download, commitEdit:commitEdit, uid:uid, pushUndo:pushUndo, saveSoon:saveSoon, openDrawer:openDrawer, renderCharts:renderCharts,
   markAI:function(r1,c1,r2,c2){ for(var r=r1;r<=r2;r++) for(var c=c1;c<=c2;c++){ var x=sh.cells[K(r,c)]; if(x&&x.v!=null&&x.v!==''){ x.ai=1; delete x.ar; } } },
   changed:changed, setRaw:function(r,c,v){ if(locked(r,c)) return toast(T('잠긴 칸이라 고칠 수 없어요. 데이터 메뉴에서 잠금을 풀 수 있어요')); return setRaw(r,c,v); }, pasteText:pasteText, selectRange:selectRange, select:select, forSel:forSel};
+/* the part of the grid that sheet/coedit.js (같이 고치기) reaches into */
+window.FSHost={get doc(){ return doc; }, get sheet(){ return sh; }, uid:uid, fix:fixDoc, changed:changed, toast:toast, box:box, gin:gin, saveNow:saveNow, name:function(){ return doc.name; },
+  rebuild:function(){ buildGrid(); overlay(); changed(); },
+  sheetsChanged:function(sid){ eng=new E.Engine(doc); var i=-1; doc.sheets.forEach(function(s,j){ if(s.sid===sid) i=j; }); if(i<0) switchSheet(0,true); else { doc.active=i; sh=doc.sheets[i]; renderTabs(); changed(); } },
+  openCopy:function(d){ saveNow(); var id=uid(); if(!lsSet(LSD+id,JSON.stringify(d))) return false; loadDoc(id); saveNow(); return true; },
+  rect:function(r1,c1,r2,c2){ return tdAt(r1,c1)&&tdAt(r2,c2)?{r1:r1,c1:c1,r2:r2,c2:c2}:null; }, sel:function(){ return {r1:sel.r1,c1:sel.c1,r2:sel.r2,c2:sel.c2}; }};
 window.__fs={urlOpt:urlOpt, parseCSV:parseCSV, sniffDelim:sniffDelim, csvRaw:csvRaw, get doc(){ return doc; }, get eng(){ return eng; }, select:select, cmd:cmd, run:runCmd, sel:function(){ return sel; }, act:function(){ return act; }, setRaw:setRaw, changed:changed, startEdit:startEdit, commitEdit:commitEdit};
 })();

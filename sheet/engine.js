@@ -1111,7 +1111,14 @@ Engine.prototype.calc=function(si,raw){
   catch(e){ return isErr(e)?e:new Err('#ERROR!'); }
 };
 
-var api={K:K,RC:RC,KC:KC,colName:colName,colIdx:colIdx,addr:addr,parseAddr:parseAddr,parseRange:parseRange,rangeStr:rangeStr,
+/* v42: row/column groups. levels {index: 1-7}; folded {summary index: 1}. A folded summary (the row below / column right of a group)
+   hides the run of lines just before it that sit deeper than it. Returns {index: 1} of the lines that are hidden by folding. */
+function outlineHidden(levels,folded){
+  var out={}; if(!levels||!folded) return out;
+  Object.keys(folded).forEach(function(k){ var s=+k, L=levels[s]||0, i=s-1; while(i>=0&&(levels[i]||0)>L){ out[i]=1; i--; } });
+  return out;
+}
+var api={outlineHidden:outlineHidden,K:K,RC:RC,KC:KC,colName:colName,colIdx:colIdx,addr:addr,parseAddr:parseAddr,parseRange:parseRange,rangeStr:rangeStr,
   tokenize:tokenize,rebuild:rebuild,parse:parse,literal:literal,shiftFormula:shiftFormula,adjustFormula:adjustFormula,renameSheetInFormula:renameSheetInFormula,
   Engine:Engine,Err:Err,errHint:errHint,isErr:isErr,formatValue:formatValue,fmtGeneral:fmtGeneral,cmpVals:cmpVals,pivot:pivot,lockHit:lockHit,lockAny:lockAny,lockCut:lockCut,renameNameInFormula:renameNameInFormula,iconFor:iconFor,sparkSvg:sparkSvg,ICOL:ICOL,Arr:Arr,toXl:toXl,fromXl:fromXl,trimText:trimText,splitText:splitText,dedupeRows:dedupeRows,parseNameRef:parseNameRef,nameRef:nameRef,validName:validName,refText:refText,asDate:asDate,dateStr:dateStr,FN:FN,quoteSheet:quoteSheet,unitOf:unitOf,convertUnit:convertUnit};
 if(typeof module!=='undefined'&&module.exports) module.exports=api; else root.FSE=api;
