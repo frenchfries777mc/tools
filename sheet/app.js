@@ -588,7 +588,8 @@ function selTSV(){ var rows=[]; for(var r=sel.r1;r<=sel.r2;r++){ var a=[]; for(v
 function spillCopy(r,c){ if(!splAt(r,c)) return null; var v=eng.value(doc.active,r,c); if(v==null||E.isErr(v)) return null; var t=E.formatValue(v); return {v:typeof v==='string'&&E.literal(t)!==t?"'"+t:t}; }
 function grab(cut){
   var cells=[]; for(var r=sel.r1;r<=sel.r2;r++){ var row=[]; for(var c=sel.c1;c<=sel.c2;c++){ var x=sh.cells[K(r,c)]; row.push(x?JSON.parse(JSON.stringify(x)):spillCopy(r,c)); } cells.push(row); }
-  clip={cells:cells,r:sel.r1,c:sel.c1,tsv:selTSV(),cut:cut?{si:doc.active,g:Object.assign({},sel)}:null};
+  var vals=[]; for(r=sel.r1;r<=sel.r2;r++){ var vr=[]; for(c=sel.c1;c<=sel.c2;c++) vr.push(eng.value(doc.active,r,c)); vals.push(vr); }
+  clip={cells:cells,vals:vals,r:sel.r1,c:sel.c1,tsv:selTSV(),cut:cut?{si:doc.active,g:Object.assign({},sel)}:null};
   return clip.tsv;
 }
 function pasteInternal(){
@@ -609,6 +610,29 @@ function pasteText(text){
   var w=Math.max.apply(null,rows.map(function(r){ return r.length; }));
   growTo(act.r+rows.length-1,act.c+w-1); sel={r1:act.r,c1:act.c,r2:Math.min(sh.rows-1,act.r+rows.length-1),c2:Math.min(sh.cols-1,act.c+w-1)}; changed();
 }
+/* v45: paste special. what: all / formulas / values / formats; op: + - * / on the cells already there; skip: leave cells under blank ones alone; tr: swap rows and columns (formulas go in as values) */
+var PSF=['b','i','u','s','fz','ff','fc','bg','al','nf','cb','bd','bx'];
+function psVal(v){ if(v==null||(typeof v==='object'&&!E.isErr(v))) return ''; if(E.isErr(v)) return v.e; if(typeof v==='boolean') return v?'TRUE':'FALSE'; if(typeof v==='number') return String(v); var t=E.formatValue(v); return E.literal(t)!==t?"'"+t:t; }
+function pasteSpecial(o){
+  if(!clip) return toast(T('먼저 복사하거나 잘라낸 칸이 있어야 해요'));
+  var h=clip.cells.length, w=clip.cells[0].length, H=o.tr?w:h, W=o.tr?h:w;
+  if(guard({r1:act.r,c1:act.c,r2:act.r+H-1,c2:act.c+W-1})) return;
+  pushUndo(); var dr=act.r-clip.r, dc=act.c-clip.c;
+  for(var i=0;i<H;i++) for(var j=0;j<W;j++){
+    var si=o.tr?j:i, sj=o.tr?i:j, src=clip.cells[si][sj], val=clip.vals[si][sj], r=act.r+i, c=act.c+j, k=K(r,c), sv=src&&src.v!=null?String(src.v):'', isF=sv[0]==='=';
+    if(o.skip&&(o.what==='formats'?!src:sv==='')) continue;
+    if(o.what==='formats'){ var d=sh.cells[k]||(sh.cells[k]={}); PSF.forEach(function(p){ if(src&&src[p]!=null) d[p]=src[p]; else delete d[p]; }); if(d.v==null&&!hasFmt(d)) delete sh.cells[k]; continue; }
+    var nv=o.what==='values'||(o.tr&&isF)?psVal(val):(isF?E.shiftFormula(sv,dr,dc):sv);
+    if(o.op){ if(typeof val!=='number') continue; var cur=sh.cells[k], dv=cur&&cur.v!=null?String(cur.v):'', dn=dv===''?0:E.literal(dv), sym={add:'+',sub:'-',mul:'*',div:'/'}[o.op];
+      if(dv[0]==='=') nv='=('+dv.slice(1)+')'+sym+val; else if(typeof dn==='number') nv=o.op==='div'&&val===0?'=0/0':String(o.op==='add'?dn+val:o.op==='sub'?dn-val:o.op==='mul'?dn*val:dn/val); else continue;
+      setRaw(r,c,nv); continue; }
+    if(o.what==='all'){ var n=src?JSON.parse(JSON.stringify(src)):null; if(n&&n.v!=null) n.v=nv; if(n) sh.cells[k]=n; else delete sh.cells[k]; }
+    else setRaw(r,c,nv);
+  }
+  growTo(act.r+H-1,act.c+W-1); sel={r1:act.r,c1:act.c,r2:Math.min(sh.rows-1,act.r+H-1),c2:Math.min(sh.cols-1,act.c+W-1)}; changed();
+}
+$('psOk').onclick=function(){ var g=function(n){ return document.querySelector('input[name="'+n+'"]:checked').value; }; closeDlgs();
+  pasteSpecial({what:g('psW'),op:g('psO')==='none'?'':g('psO'),skip:$('psSkip').checked,tr:$('psTr').checked}); };
 function doPaste(text){ if(clip&&(text==null||text.replace(/\r/g,'')===clip.tsv)) pasteInternal(); else if(text!=null&&text!=='') pasteText(text); }
 document.addEventListener('copy',function(e){ if(editing||isOtherInput(document.activeElement)) return; e.preventDefault(); e.clipboardData.setData('text/plain',grab(false)); toast(T('복사했어요')); });
 document.addEventListener('cut',function(e){ if(editing||isOtherInput(document.activeElement)) return; e.preventDefault(); e.clipboardData.setData('text/plain',grab(true)); toast(T('잘라냈어요. 붙여넣을 곳을 고르세요')); });
@@ -644,6 +668,7 @@ function cmd(n){
     case 'redo': return redo();
     case 'copy': { var t=grab(false); try{ navigator.clipboard.writeText(t).catch(function(){}); }catch(e){} return toast(T('복사했어요')); }
     case 'cut': { var t2=grab(true); try{ navigator.clipboard.writeText(t2).catch(function(){}); }catch(e){} return toast(T('잘라냈어요. 붙여넣을 곳을 고르세요')); }
+    case 'pastesp': if(!clip) return toast(T('먼저 복사하거나 잘라낸 칸이 있어야 해요')); { document.querySelector('input[name="psW"][value="all"]').checked=true; document.querySelector('input[name="psO"][value="none"]').checked=true; $('psSkip').checked=$('psTr').checked=false; return openDlg('psDlg'); }
     case 'paste': {
       if(clip) return doPaste(null);
       try{ navigator.clipboard.readText().then(function(t){ doPaste(t); },function(){ toast(T('붙여넣을 내용이 없어요')); }); }catch(e){ toast(T('붙여넣을 내용이 없어요')); }

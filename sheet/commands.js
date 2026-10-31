@@ -82,6 +82,7 @@ var C=[
   {id:'copy',tab:'home',g:2,ic:I.copy,lb:'복사',kw:'copy 복사하기',key:'Ctrl+C',sel:1},
   {id:'cut',tab:'home',g:2,ic:I.cut,lb:'잘라내기',kw:'cut 오려두기 잘라',key:'Ctrl+X',sel:1},
   {id:'paste',tab:'home',g:2,ic:I.paste,lb:'붙여넣기',kw:'paste 붙이기',key:'Ctrl+V',sel:1},
+  {id:'pastesp',tab:'home',g:2,ic:SV('<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M9 11h6M9 15h4"/>'),lb:'선택하여 붙여넣기',tt:'값만, 서식만, 계산하며, 행·열 바꿔 붙여넣기',kw:'paste special values formats transpose 선택하여 붙여넣기 값만 서식만 행열 바꾸기 연산',sel:1},
   {id:'bold',tab:'home',g:3,ic:I.bold,lb:'굵게',kw:'bold 진하게 굵은 글씨',key:'Ctrl+B',sel:1,el:'bBold'},
   {id:'italic',tab:'home',g:3,ic:I.italic,lb:'기울임',kw:'italic 이탤릭 기울게',key:'Ctrl+I',sel:1,el:'bItal'},
   {id:'under',tab:'home',g:3,ic:'<u style="font-size:15px">U</u>',lb:'밑줄',kw:'underline 밑줄 줄',key:'Ctrl+U',sel:1,el:'bUnder'},
