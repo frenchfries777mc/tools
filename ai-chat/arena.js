@@ -1,6 +1,7 @@
 /* AI 체험의 "AI 대결장": 같은 질문에 두 모델이 답하고, 사람이 더 나은 쪽을 골라요. 결과는 이 브라우저에 남고 (localStorage 'ffchat.arena.v1', 최근 200개),
    로그인한 사람은 서버 표 ff_ai_arena 에도 가요 (supabase-ff-ai-arena.sql 을 실행하기 전에는 서버에 안 가요, 오류는 조용히 넘겨요).
    FFArena.record({q, a:{model,text}, b:{model,text}, win:'a'|'b'|'tie'|'none'}) -> 저장
+   FFArena.rank() -> Promise<[{model,games,wins,ties,losses,nones}]> (모두의 합계)
    FFArena.tally(list) -> {모델: {win, lose, tie, none, games}}    Node에서도 돌아가요. */
 (function(root){
 'use strict';
@@ -36,6 +37,15 @@ function tally(l){
   });
   return t;
 }
-var api={record:record, list:list, tally:tally, CAP:CAP, _use:function(s){ mem=s; }};
+/* 모두의 순위: 서버 함수 ff_ai_arena_rank (supabase-ff-ai-arena-rank.sql) 의 합계. 실행 전이거나 오류면 빈 목록이에요 */
+function rank(){
+  try{
+    if(!root.FFAuth||!root.FFAuth.ready) return Promise.resolve([]);
+    return root.FFAuth.ready.then(function(sb){ if(!sb) return [];
+      return sb.rpc('ff_ai_arena_rank').then(function(r){ return Array.isArray(r&&r.data)?r.data:[]; });
+    }).then(null,function(){ return []; });
+  }catch(x){ return Promise.resolve([]); }
+}
+var api={record:record, list:list, tally:tally, rank:rank, CAP:CAP, _use:function(s){ mem=s; }};
 if(typeof module!=='undefined'&&module.exports) module.exports=api; else root.FFArena=api;
 })(typeof window!=='undefined'?window:globalThis);
