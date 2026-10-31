@@ -4,6 +4,30 @@
  "notes": [
   {
    "date": "2026-10-31",
+   "build": "v15",
+   "title": "같이 고치기 (실시간)",
+   "items": [
+    "검토 탭의 '같이 고치기'로 방을 만들고 코드나 링크로 여러 사람이 한 문서를 동시에 고침",
+    "이름은 계정 이름이나 직접 쓴 이름, 로그인 없이도 들어올 수 있음",
+    "색깔 이름표와 글자 위치로 누가 어디를 고치는지 보임",
+    "서로 다른 문단·목록 항목·표 칸은 동시에 고쳐도 글이 사라지지 않음",
+    "방장이 방을 닫으면 들어온 사람은 자기 기기의 복사본을 그대로 가짐"
+   ],
+   "tr": {
+    "en": {
+     "title": "Real-time co-editing",
+     "items": [
+      "Create a room with 'Edit together' in the Review tab and let several people edit one document at the same time by code or link",
+      "Use your account name or type a name, and join without logging in",
+      "Coloured name tags and carets show who is editing where",
+      "Edits to different paragraphs, list items or table cells never lose text",
+      "When the host closes the room, guests keep their own copy"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-10-31",
    "build": "v14",
    "title": "같이 고치기 준비",
    "items": [
