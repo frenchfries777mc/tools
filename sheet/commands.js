@@ -182,6 +182,7 @@ var C=[
   {id:'f.xlsx',tab:'file',lb:'엑셀 파일로 저장 (.xlsx)',kw:'save export excel xlsx download 저장 내보내기 다운로드 엑셀'},
   {id:'f.csv',tab:'file',lb:'이 시트를 CSV로 저장',kw:'csv export save 저장 내보내기'},
   {id:'f.docs',tab:'file',lb:'문서 관리',kw:'documents manage files 문서 목록 관리 휴지통'},
+  {id:'f.co',tab:'file',lb:'같이 고치기',kw:'collaborate share together realtime coedit room 같이 고치기 공동 편집 함께 공유 초대 방'},
   {id:'f.del',tab:'file',lb:'이 문서 지우기',kw:'delete document 문서 삭제 지우기'},
   {id:'t.add',tab:'sheet',lb:'시트 추가',kw:'add sheet new tab 시트 탭 추가 새 시트'},
   {id:'t.rename',tab:'sheet',lb:'시트 이름 바꾸기',kw:'rename sheet 시트 이름 바꾸기 변경'},
