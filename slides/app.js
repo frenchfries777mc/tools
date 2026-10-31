@@ -799,7 +799,15 @@ function setAnim(a){ var s=deck.slides[cur]; if(!s||!selK) return; var ks=selKey
 /* a list (bullets, left, right) can show one line per press instead of the whole box at once */
 function setLines(){ var s=deck.slides[cur]; if(!s||!selK||LISTS.indexOf(selK)<0) return; pushUndo(); var i=buildIx(s,selK); if(i<0) s.build.push({k:selK, a:'fade', l:1}); else if(s.build[i].l) delete s.build[i].l; else s.build[i].l=1; changed(); }
 function moveBuild(d){ var s=deck.slides[cur], i=s?buildIx(s,selKeys(s)[0]):-1, j=i+d; if(i<0||j<0||j>=s.build.length) return; pushUndo(); var x=s.build.splice(i,1)[0]; s.build.splice(j,0,x); changed(); }
-function selBar(){ selBar0(); if(window.FRB) FRB.sync(); }
+function selBar(){ selBar0(); if(window.FRB) FRB.sync(); coSelect(); coTags(); }
+/* live co-editing (coedit.js): what this browser has picked goes to the others, and the boxes the others picked get a coloured name tag */
+function coSelect(){ if(!window.FSLX||!FSLX.onSel) return; var s=deck&&deck.slides[cur], a=s&&selK?selEls(s):[]; FSLX.onSel(s?s.id:'',s&&selK?(a.length?a.map(function(e){ return 'e:'+e.id; }):[selK]):[]); }
+function coTags(){ var el=host.querySelector('.sl'), s=deck&&deck.slides[cur]; if(!el) return; [].forEach.call(el.querySelectorAll('.coTag'),function(x){ x.remove(); });
+  if(!s||!window.FSLX||!FSLX.peers) return;
+  FSLX.peers(s.id).forEach(function(u){ u.k.forEach(function(k){ var r=keyBox(s,k); if(!r) return; var d=document.createElement('div'), n=document.createElement('span'); d.className='coTag'; d.dataset.u=u.id; d.style.cssText='left:'+Math.min(r.x,r.x+r.w)+'px;top:'+Math.min(r.y,r.y+r.h)+'px;width:'+Math.abs(r.w)+'px;height:'+Math.abs(r.h)+'px;border-color:'+u.c+';';
+    n.textContent=u.n; n.style.background=u.c; d.appendChild(n); el.appendChild(d); }); }); }
+/* the undo steps get the others' changes too, so undoing does not bring back what they changed meanwhile */
+function patchUndo(fn){ [undo,redo].forEach(function(st){ if(st.length>12) st.splice(0,st.length-12); for(var i=0;i<st.length;i++){ try{ var o=JSON.parse(st[i]); fn(o.s); st[i]=JSON.stringify(o); }catch(err){} } }); }
 function selBar0(){ var b=$('selBar'), s=deck&&deck.slides[cur]; b.innerHTML=''; b.hidden=!s||gen||busyOn;
   if(!selK){ b.className='selBar hint'; b.textContent=T('글상자·그림·도형을 누르면 끌어서 옮기고 모서리로 크기를 바꿀 수 있어요. 빈 곳을 끌거나 Shift를 누르고 누르면 여러 개를 고를 수 있어요'); if(readClip()){ var pb=document.createElement('button'); pb.className='tbtn'; pb.dataset.sb='paste'; pb.textContent=T('붙여넣기'); b.appendChild(pb); } return; }
   b.className='selBar'; var e=selShape(), mem=selEls(s), bi=mem.length?buildIx(s,'e:'+mem[0].id):buildIx(s,selK), many=isMany(selK);
@@ -2147,8 +2155,10 @@ if(MODE==='pv') startPV(); else if(MODE==='view') startView(); else openDeck(fir
 
 /* used by collab.js (editing the same deck together through a share link; the editor only) */
 window.FSLX={ mode:MODE, get deck(){ return deck; }, get store(){ return store; }, get cur(){ return cur; }, setCur:function(i){ cur=Math.max(0,Math.min(i,deck.slides.length-1)); },
-  fixDeck:fixDeck, fixSlide:fixSlide, uid:uid, toast:toast, confirmDlg:confirmDlg, refresh:refresh, saveSoon:saveSoon, saveNow:saveNow, openDeck:openDeck, onSaved:null,
+  fixDeck:fixDeck, fixSlide:fixSlide, redrawTags:coTags, patchUndo:patchUndo, peers:null, onSel:null, resel:coSelect, uid:uid, toast:toast, confirmDlg:confirmDlg, refresh:refresh, saveSoon:saveSoon, saveNow:saveNow, openDeck:openDeck, onSaved:null,
   /* remote changes wait while something is being typed or dragged, presenting or generating */
+  editing:function(){ var a=document.activeElement, n=a&&a.closest&&a.closest('[data-bk]'); return {all:!!(drg||mq), k:a&&a.id==='notes'?'notes':a&&a.isContentEditable&&n?n.dataset.bk:''}; },
+  drawList:drawList, still:function(){ return !pr.on&&!gen&&!busyOn&&!document.querySelector('.ov.open:not(#shareDlg)'); },
   quiet:function(){ var a=document.activeElement; return !pr.on&&!drg&&!mq&&!gen&&!busyOn&&!(a&&(a.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)))&&!document.querySelector('.ov.open:not(#shareDlg)'); } };
 /* used by ai-slides.js */
 window.FSL={
