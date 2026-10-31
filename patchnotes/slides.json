@@ -3,6 +3,20 @@
  "name": "Fry Slides",
  "notes": [
   {
+   "date": "2026-10-31",
+   "build": "v33",
+   "title": "그림 여러 장 넣기, 그림 효과, 대체 텍스트",
+   "items": [
+    "그림을 슬라이드 어디에나 여러 장 넣기: 글이 있는 슬라이드에도 넣고, 끌어서 옮기고, 크기와 돌리기, 그림자, 링크, 복사·묶기 (일러스트도 같음)",
+    "그림 효과 추가: 밝기, 대비, 흑백, 세피아와 그림 안에서 보이는 곳 옮기기",
+    "모양 자르기와 테두리를 슬라이드에 놓은 그림마다 쓰기, 원래 비율로 되돌리기, 그림 바꾸기",
+    "대체 텍스트 추가: 그림·도형·동영상에 설명을 달면 PPTX 그림에도 들어감",
+    "디자인 탭에 그림 효과·모양 자르기·대체 텍스트 단추 추가",
+    "고른 상자 아래 막대의 단추가 많아도 왼쪽 끝이 잘리지 않고 옆으로 밀어서 볼 수 있게 고침"
+   ],
+   "tr": {"en": {"title": "Free pictures, picture effects, alt text", "items": ["Add several pictures anywhere on a slide, even on slides with text: move, resize, rotate, shadow, link, copy and group them (illustrations too)", "Picture effects: brightness, contrast, grayscale, sepia and moving the visible part inside the picture", "Crop to shape and border now work on every picture on a slide, plus original ratio and replace picture", "Alt text for pictures, shapes and videos; it is kept for pictures in the PPTX", "Picture effects, crop to shape and alt text buttons on the Design tab", "The bar under a picked box no longer cuts off its left end when there are many buttons; scroll sideways"]}}
+  },
+  {
    "date": "2026-10-29",
    "build": "v32",
    "title": "일러스트 넣기",

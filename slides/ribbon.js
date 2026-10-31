@@ -24,6 +24,7 @@ var IC={
   brush:'<path d="M18 3l3 3-8.5 8.5-3-3z"/><path d="M9.5 11.5c-2.6 0-4 1.6-4 3.8 0 1.4-.8 2.6-2 3.2 3.4 1.4 8 .4 8.5-3.2"/>', paste:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6"/>', group:'<rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="3 3"/><rect x="7" y="7" width="6" height="6"/><rect x="11" y="11" width="6" height="6"/>',
   ungroup:'<rect x="3" y="3" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/>', layer:'<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>',
   align:'<path d="M4 3v18"/><rect x="8" y="6" width="12" height="4" rx="1"/><rect x="8" y="14" width="7" height="4" rx="1"/>', find:'<circle cx="10" cy="10" r="6"/><path d="M14.5 14.5L20 20"/>',
+  picfx:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 9"/><path d="M16 4v4M14 6h4"/>', alt:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10M7 13h6M7 16.5h3"/>',
   keys:'<rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/>', pic:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 9"/>',
   conn:'<rect x="2" y="3" width="8" height="7" rx="1"/><rect x="14" y="14" width="8" height="7" rx="1"/><path d="M7 10l9 4"/><path d="M13 14h3v-3"/>', shape:'<rect x="3" y="11" width="10" height="10" rx="1"/><circle cx="16" cy="8" r="5"/>', emoji:'<circle cx="12" cy="12" r="9"/><path d="M8.5 14.5c1 1.6 2.2 2.3 3.5 2.3s2.5-.7 3.5-2.3M9 9.5h.01M15 9.5h.01"/>',
   text:'<path d="M5 6h14M12 6v13M9 19h6"/>', table:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16"/>', chart:'<path d="M5 20V11M10 20V5M15 20v-7M20 20v-4M3 20h18"/>',
@@ -49,7 +50,7 @@ var IC={
 var LAYS=[['title','제목'],['section','구역 제목'],['bullets','글머리표'],['two','두 칸'],['stat','큰 숫자'],['quote','인용'],['closing','마무리'],['image','그림'],['agenda','차례'],['timeline','타임라인'],['table','표'],['chart','그래프'],['quiz','퀴즈'],['timer','타이머'],['live','살아있는 화면']];
 var MSG={slide:'먼저 슬라이드를 만들어 주세요', busy:'AI가 다 만들 때까지 기다려 주세요', sel:'슬라이드에서 글상자·그림·도형을 먼저 골라 주세요', many:'도형을 두 개 이상 골라 주세요 (Shift를 누르고 누르기)',
   grp:'묶은 도형을 먼저 골라 주세요', shape:'슬라이드에서 도형을 먼저 골라 주세요', fillx:'선과 화살표에는 채우기가 없어요', conn:'이어 줄 도형·그림·글상자를 먼저 하나 골라 주세요', data:'표나 그래프 슬라이드에서 쓸 수 있어요',
-  link:'시트와 연결한 슬라이드에서 쓸 수 있어요', quiz:'퀴즈 슬라이드에서 쓸 수 있어요', ai:'AI가 고칠 수 있는 슬라이드를 먼저 골라 주세요', clip:'복사한 도형이 없어요', els:'고를 수 있는 도형이 없어요'};
+  link:'시트와 연결한 슬라이드에서 쓸 수 있어요', quiz:'퀴즈 슬라이드에서 쓸 수 있어요', ai:'AI가 고칠 수 있는 슬라이드를 먼저 골라 주세요', clip:'복사한 도형이 없어요', els:'고를 수 있는 도형이 없어요', pic:'슬라이드에서 그림을 먼저 골라 주세요', alt:'슬라이드에서 그림·도형·동영상을 먼저 골라 주세요'};
 
 var S=function(){ return window.FSLC?FSLC.state():{}; }, C=function(){ return window.FSLC; }, AI=function(){ return window.FSLAI; };
 /* need checks: return '' when the command can run now, or a MSG key */
@@ -57,6 +58,8 @@ var nSlide=function(st){ return st.busy?'busy':!st.slide?'slide':''; };
 var nSel=function(st){ return nSlide(st)||(!st.sel?'sel':''); };
 var nEl=function(st){ return nSlide(st)||(!st.nSel?'sel':''); };
 var nShape=function(st){ return nSlide(st)||(!st.shape?'shape':''); };
+var nPic=function(st){ return nSlide(st)||(!st.pic?'pic':''); };
+var nAlt=function(st){ return nSlide(st)||(!st.alt?'alt':''); };
 var nConn=function(st){ return nSlide(st)||(!st.conn?'conn':''); };
 var nData=function(st){ return nSlide(st)||(st.lay!=='table'&&st.lay!=='chart'?'data':''); };
 var nLink=function(st){ return nSlide(st)||(!st.link?'link':''); };
@@ -126,6 +129,9 @@ var CMDS=[
  {id:'footer', tab:'des', ic:'footer', lb:'바닥글', t:'바닥글 쓰기', k:'꼬리말 아래 글 푸터', need:nSlide, on:function(st){ return st.footer; }, run:function(){ C().deck('footer'); }},
  {g:1},
  {id:'fill', tab:'des', ic:'fill', lb:'채우기', t:'도형 채우기 색·투명도', menu:1, k:'채우기 색 도형 색 투명도', need:function(st){ return nShape(st)||(st.line?'fillx':''); }, run:function(b){ C().elMenu('fill',b); }},
+ {id:'picfx', tab:'des', ic:'picfx', lb:'그림 효과', t:'그림 효과 (밝기·대비·흑백·세피아)', menu:1, k:'사진 밝기 대비 흑백 세피아 보정 색 효과 필터 그림 보정', need:nPic, run:function(b){ C().elMenu('pfx',b); }},
+ {id:'pcrop', tab:'des', ic:'pic', lb:'모양 자르기', t:'그림을 모양대로 자르기', menu:1, k:'그림 자르기 동그랗게 하트 별 원 모양 크롭 프레임', need:function(st){ return nSlide(st)||(!st.pimg?'pic':''); }, run:function(b){ C().elMenu('pshape',b); }},
+ {id:'alt', tab:'des', ic:'alt', lb:'대체 텍스트', t:'대체 텍스트 (그림·도형 설명)', k:'접근성 설명 alt 시각장애 화면 읽기 그림 설명', need:nAlt, run:function(){ C().alt(); }},
  {id:'border', tab:'des', ic:'border', lb:'테두리', t:'테두리·선 색과 굵기', menu:1, k:'선 색 굵기 테두리 외곽선', need:nShape, run:function(b){ C().elMenu('line',b); }},
 
  {id:'play', tab:'pres', el:'playBtn', ic:'play', lb:'발표하기', t:'처음부터 발표하기', sc:'F5', cls:'play', k:'발표 시작 슬라이드 쇼 재생 전체 화면 펜 칠판 레이저 형광펜'},
