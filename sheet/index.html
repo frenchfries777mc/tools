@@ -284,6 +284,8 @@ button,input,select{font:inherit; color:inherit;}
 #aiDlg .dlg{width:min(620px,100%);}
 #aiDlg .dh .tbtn{margin-right:4px;}
 .aiCtx{color:var(--dim); font-size:12.5px; margin-bottom:6px; font-family:'JetBrains Mono',monospace;}
+#ocrOut{width:100%; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:10px 12px; resize:vertical; min-height:120px; font:inherit; color:inherit; white-space:pre;}
+.ocrbar{height:8px; border-radius:4px; background:var(--bg); border:1px solid var(--line); overflow:hidden; margin-top:10px;} .ocrbar i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--fry),var(--fry2)); transition:width .2s;}
 #aiQ{width:100%; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:10px 12px; resize:vertical; min-height:70px; font:inherit; color:inherit;}
 .aiRow{display:flex; gap:8px; align-items:center; justify-content:flex-end; margin-top:8px; flex-wrap:wrap;}
 .aiIntro{margin:0; padding:8px 14px 0; color:var(--dim); font-size:12.5px; line-height:1.5;}
@@ -458,6 +460,15 @@ button,input,select{font:inherit; color:inherit;}
   <div class="dh"><h3>문서 관리</h3><button class="tbtn pri" id="dmNew" style="height:32px">+ 새 문서</button><button class="x" data-close aria-label="닫기">×</button></div>
   <div class="dbody"><div id="dmList"></div><div id="dmTrashBox"><div class="dmH">최근 삭제한 문서 (최대 5개)</div><div id="dmTrash"></div></div></div>
 </div></div>
+<div class="ov" id="ocrDlg"><div class="dlg">
+  <div class="dh"><h3>사진 속 글자 읽기</h3><button class="x" data-close aria-label="닫기">×</button></div>
+  <div class="dbody"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button class="tbtn" id="ocrPick">사진 고르기</button><span id="ocrName" data-notr></span></div>
+    <div class="ocrbar" id="ocrBar" hidden><i id="ocrFill"></i></div><p id="ocrSt" hidden></p>
+    <div id="ocrOutL" hidden><label for="ocrOut">읽은 글 (넣기 전에 고칠 수 있어요)</label><textarea id="ocrOut" rows="8" wrap="off" data-notr></textarea><div class="aiCtx" id="ocrInfo" data-notr></div></div>
+    <p>한 줄이 한 행이 되고, 탭이나 띄어쓰기 두 칸 이상으로 떨어진 글은 다음 열로 들어가요. 사진은 이 기기 안에서만 읽고 어디로도 보내지 않아요. 처음에는 글자 데이터를 내려받느라 조금 걸려요.</p></div>
+  <div class="acts"><button class="tbtn" data-close>닫기</button><button class="tbtn pri" id="ocrOk" disabled>칸에 넣기</button></div>
+</div></div>
+<input type="file" id="ocrFile" accept="image/*" hidden>
 <div class="ov" id="keyDlg"><div class="dlg">
   <div class="dh"><h3>단축키</h3><button class="x" data-close aria-label="닫기">×</button></div>
   <div class="dbody"><div class="keyGrid">
@@ -698,6 +709,7 @@ button,input,select{font:inherit; color:inherit;}
 <script src="explain.js?v=33.1"></script>
 <script src="diary.js?v=35"></script>
 <script src="../versions.js?v=2"></script>
+<script src="../ocr.js?v=1"></script>
 <script src="calc.js"></script>
 <script src="commands.js?v=40"></script>
 <script src="../undotoast.js"></script>
