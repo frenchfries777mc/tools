@@ -4,6 +4,18 @@
  "notes": [
   {
    "date": "2026-10-31",
+   "build": "v42",
+   "title": "행·열 묶기",
+   "items": [
+    "행·열 탭에 행 묶기, 열 묶기, 묶기 풀기, 모두 접기, 모두 펴기 단추 추가",
+    "묶은 줄 아래(오른쪽) 머리글의 −, + 단추로 접고 펴기, 묶은 단계는 머리글 옆 띠로 표시 (7단계까지)",
+    "엑셀 파일로 저장하고 열어도 묶음과 접힌 상태 그대로 (outline)",
+    "행·열을 넣거나 지울 때 숨긴 줄과 묶음이 같이 움직이도록 고침"
+   ],
+   "tr": {"en": {"title": "Row and column groups", "items": ["New buttons on the Rows & columns tab: group rows, group columns, ungroup, collapse all, expand all", "Fold and unfold with the − and + button in the header after a group; levels (up to 7) show as a bar beside the header", "Groups and their folded state are kept when saving to and opening .xlsx (outline)", "Hidden lines and groups now move along when rows or columns are inserted or deleted"]}}
+  },
+  {
+   "date": "2026-10-31",
    "build": "v41",
    "title": "함수 130개 더",
    "items": [
