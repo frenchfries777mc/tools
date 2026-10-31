@@ -206,5 +206,15 @@ test('v41 EFFECT, NOMINAL, RRI, SYD, DDB, DB, ISPMT, DOLLARDE, DOLLARFR',()=>{ n
 test('v41 ENCODEURL, ARRAYTOTEXT, VALUETOTEXT',()=>eq([ev1('=ENCODEURL("a b&c/한")'),ev1('=ARRAYTOTEXT(C1:C3)',{C1:'1',C2:'a',C3:'TRUE'}),ev1('=ARRAYTOTEXT(C1:C3,1)',{C1:'1',C2:'a',C3:'TRUE'}),ev1('=VALUETOTEXT("x",1)')],['a%20b%26c%2F%ED%95%9C','1, a, TRUE','1, "a", TRUE','"x"']));
 test('v41 new functions get the _xlfn prefix in .xlsx and lose it again',()=>{ eq(E.toXl('LET(x,1,x)+XMATCH(1,A1:A2)+NETWORKDAYS.INTL(A1,B1)'),'_xlfn.LET(x,1,x)+_xlfn.XMATCH(1,A1:A2)+NETWORKDAYS.INTL(A1,B1)'); eq(E.fromXl('_xlfn.LET(x,1,x)'),'LET(x,1,x)'); });
 
+test('v42 outlineHidden: a folded summary hides the deeper run before it',()=>{
+  const h=(l,f)=>Object.keys(E.outlineHidden(l,f)).map(Number).sort();
+  eq(h({1:1,2:1,3:1},{4:1}),[1,2,3]);
+  eq(h({1:1,2:2,3:2,4:1},{4:1}),[2,3]);
+  eq(h({0:1,1:2,2:2,3:1,4:1,5:0},{5:1}),[0,1,2,3,4]);
+  eq(h({1:1,2:2,3:2},{3:1}),[]);
+  eq(h({1:1,2:2,3:2},{1:1,4:1}),[1,2,3]);
+  eq(h({1:1,2:1,4:1},{3:1}),[1,2]);
+  eq(h({1:1},{0:1}),[]); eq(h(null,{1:1}),[]); });
+
 console.log(pass+' passed, '+failed+' failed');
 process.exit(failed?1:0);

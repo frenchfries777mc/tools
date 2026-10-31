@@ -99,7 +99,7 @@ function openDoc(d){
   if(doc&&doc!==d){ saveNow(); if(isEmptyDoc(doc)){ var old=doc; idx.docs=idx.docs.filter(function(x){ return x!==old; }); try{ localStorage.removeItem(DOC+old.id); }catch(e){} } }
   doc=d; if(idx.docs.indexOf(d)<0) idx.docs.unshift(d);
   $('docName').value=d.name||''; page.innerHTML=clean(readDoc(d.id))||'<p><br></p>'; setFont(d.font||'sans',true); applyPg(); trkUI(); drawMemos();
-  hist=[]; fut=[]; lastHist=0; updUR(); count(); saveNow(); }
+  hist=[]; fut=[]; lastHist=0; updUR(); count(); saveNow(); if(window.FDOCS&&FDOCS.onDoc) FDOCS.onDoc(d); }
 function newDoc(name,html){ var d={id:uid(), name:name||T('제목 없는 문서'), t:Date.now()};
   try{ localStorage.setItem(DOC+d.id,html||''); }catch(e){ toast('저장 공간이 부족해요'); } idx.docs.unshift(d); openDoc(d); return d; }
 
@@ -110,7 +110,7 @@ function setCaret(off){ if(off<0) return; var w=document.createTreeWalker(page,N
   while((n=w.nextNode())){ if(n.length>=left){ var r=document.createRange(); r.setStart(n,left); r.collapse(true); var s=getSelection(); s.removeAllRanges(); s.addRange(r); return; } left-=n.length; } }
 function mark(force){ var now=Date.now(); if(!force&&now-lastHist<900){ lastHist=now; return; } lastHist=now;
   var h=page.innerHTML; if(hist.length&&hist[hist.length-1].h===h) return; hist.push({h:h,c:caretOffset()}); if(hist.length>150) hist.shift(); fut=[]; updUR(); }
-function back(from,to){ if(!from.length) return; to.push({h:page.innerHTML,c:caretOffset()}); var s=from.pop(); page.innerHTML=s.h; page.focus(); setCaret(s.c); lastHist=0; selImg(null); updUR(); count(); saveSoon(); }
+function back(from,to){ if(window.FDOCS&&FDOCS.inRoom&&FDOCS.inRoom()){ toast('같이 고치는 동안에는 되돌리기를 쓸 수 없어요'); return; } if(!from.length) return; to.push({h:page.innerHTML,c:caretOffset()}); var s=from.pop(); page.innerHTML=s.h; page.focus(); setCaret(s.c); lastHist=0; selImg(null); updUR(); count(); saveSoon(); }
 function undo(){ back(hist,fut); } function redo(){ back(fut,hist); }
 function updUR(){ $('undoBtn').disabled=!hist.length; $('redoBtn').disabled=!fut.length; }
 page.addEventListener('beforeinput',function(e){ if(e.inputType==='historyUndo'){ e.preventDefault(); undo(); return; } if(e.inputType==='historyRedo'){ e.preventDefault(); redo(); return; } mark(/^(insertParagraph|insertFromPaste|deleteByCut|insertFromDrop)$/.test(e.inputType)); });
@@ -545,7 +545,7 @@ function doExport(k){ closeMenus(); selImg(null); saveNow();
   if(k==='docx'){ try{ var g=pg(); cmOut=[]; var bl=toBlocks(), cms=cmOut; cmOut=null; download(FFDocx.write(bl,{comments:cms, paper:g.paper||'A4', land:g.land, mar:(MAR[g.mar]||96)*15, cols:g.cols||1, hd:g.hd||'', ft:g.ft||'', pn:g.pn||''}),'application/vnd.openxmlformats-officedocument.wordprocessingml.document',fname('docx')); toast('Word 문서로 받았어요'); }catch(e){ console.error(e); toast('Word 문서를 만들지 못했어요'); } }
   else if(k==='pdf'){ toast('인쇄 창에서 "PDF로 저장"을 고르세요'); setTimeout(function(){ window.print(); },300); }
   else if(k==='html'){ var css='body{font-family:"Noto Sans KR","Malgun Gothic",sans-serif;max-width:760px;margin:40px auto;padding:0 20px;line-height:1.7;color:#1b1b1b}table{border-collapse:collapse;width:100%}td,th{border:1px solid #999;padding:6px 8px}th{background:#f2f2f2}blockquote{border-left:4px solid #ccc;margin:0;padding-left:1em;color:#555;font-style:italic}img{max-width:100%}a{color:#1a56db}hr.pb{border:0;border-top:1px dashed #bbb;page-break-after:always}hr.fn{width:35%;margin:2em 0 .6em}p.fn{font-size:12.5px}p.toc.tt{font-weight:700;font-size:18px}table.tb{width:auto;margin:.6em auto;border:2px solid #444;background:#fffbea}table.tb td{border:0;padding:10px 14px}';
-    download('<!DOCTYPE html>\n<html lang="ko"><head><meta charset="UTF-8"><title>'+esc($('docName').value)+'</title><style>'+css+'</style></head><body>\n'+revFree().innerHTML.replace(/ class="sel"/g,'')+'\n</body></html>','text/html',fname('html')); }
+    download('<!DOCTYPE html>\n<html lang="ko"><head><meta charset="UTF-8"><title>'+esc($('docName').value)+'</title><style>'+css+'</style></head><body>\n'+revFree().innerHTML.replace(/ class="sel"/g,'').replace(/ data-b="[^"]*"/g,'')+'\n</body></html>','text/html',fname('html')); }
   else if(k==='txt') download(revText(),'text/plain;charset=utf-8',fname('txt')); }
 Array.prototype.forEach.call(document.querySelectorAll('[data-x]'),function(b){ b.onclick=function(){ doExport(b.dataset.x); }; });
 $('openBtn').onclick=function(){ $('openFile').value=''; $('openFile').click(); };
@@ -941,5 +941,5 @@ $('chOk').onclick=function(){ if(!chartRows($('chData').value).length){ toast('�
 (function(){ var d=idx.docs.filter(function(x){ return x.id===idx.last; })[0]||idx.docs[0]; if(d) openDoc(d); else newDoc(); })();
 window.addEventListener('pagehide',saveNow);
 document.addEventListener('visibilitychange',function(){ if(document.hidden) saveNow(); });
-window.FDOCS={toBlocks:toBlocks, fromBlocks:fromBlocks, clean:clean}; // for the tests
+window.FDOCS={toBlocks:toBlocks, fromBlocks:fromBlocks, clean:clean, page:page, getDoc:function(){ return doc; }, newDoc:newDoc, applyPg:applyPg, setFont:setFont, saveNow:saveNow, saveSoon:saveSoon, count:count, toast:toast, openDlg:openDlg, closeDlg:closeDlg, hb:hb, esc:esc, sync:sync}; // for the tests and room.js
 })();

@@ -4,6 +4,44 @@
  "notes": [
   {
    "date": "2026-10-31",
+   "build": "v44",
+   "title": "같이 고치기",
+   "items": [
+    "위쪽 같이 고치기 단추와 파일 메뉴에 같이 고치기 추가, 방 만들기로 초대 코드와 링크 만들기",
+    "코드나 링크로 들어오면 방장의 시트 사본을 받아 내 문서로 저장 (한 방에 8명까지)",
+    "칸 값, 서식, 열 너비, 행·열 넣기와 지우기, 시트 추가·삭제·순서까지 모두 실시간으로 함께 바뀜",
+    "다른 사람이 고른 칸에 그 사람 색 테두리와 이름표 표시, 같이 고치는 사람 목록 표시",
+    "방장이 기준이라 같은 칸을 동시에 고쳐도 모두 같은 값으로 맞춰지고, 잠긴 칸은 방장이 막음",
+    "Frenchfries777 계정 이름을 기본 이름으로 사용, 되돌리기는 다른 사람이 그 사이 고친 칸까지 되돌릴 수 있다고 안내"
+   ],
+   "tr": {"en": {"title": "Edit together", "items": ["New Edit together button at the top and in the File menu: make a room with an invite code and link", "Joining with the code or link gives a copy of the host's sheet, saved as your own document (up to 8 people per room)", "Cell values, formats, column widths, inserting and deleting rows and columns, and adding, deleting and ordering sheets all change live for everyone", "Cells other people select get a frame in their colour with their name, and a list of who is editing", "The host's copy is the reference: when two people edit one cell at once everyone ends up with the same value, and locked cells are refused by the host", "The Frenchfries777 account name is the default name; Undo warns that it can also undo cells others changed in the meantime"]}}
+  },
+  {
+   "date": "2026-10-31",
+   "build": "v43",
+   "title": "사진 속 글자 읽기",
+   "items": [
+    "넣기 탭에 사진 글자 단추 추가, 표나 목록 사진을 읽어서 칸에 넣기",
+    "한 줄은 한 행으로, 탭이나 띄어쓰기 두 칸 이상으로 떨어진 글은 다음 열로 나누어 넣기",
+    "넣기 전에 읽은 글을 고칠 수 있고 몇 행 몇 열로 들어가는지 미리 표시",
+    "사진은 이 기기 안에서만 읽고 어디로도 보내지 않음"
+   ],
+   "tr": {"en": {"title": "Read text from a photo", "items": ["New Photo text button on the Insert tab: reads a photo of a table or list into cells", "Each line becomes a row; text separated by a tab or two or more spaces goes into the next column", "The text can be corrected before it goes in, with a preview of rows and columns", "The photo is read on this device only and is never sent anywhere"]}}
+  },
+  {
+   "date": "2026-10-31",
+   "build": "v42",
+   "title": "행·열 묶기",
+   "items": [
+    "행·열 탭에 행 묶기, 열 묶기, 묶기 풀기, 모두 접기, 모두 펴기 단추 추가",
+    "묶은 줄 아래(오른쪽) 머리글의 −, + 단추로 접고 펴기, 묶은 단계는 머리글 옆 띠로 표시 (7단계까지)",
+    "엑셀 파일로 저장하고 열어도 묶음과 접힌 상태 그대로 (outline)",
+    "행·열을 넣거나 지울 때 숨긴 줄과 묶음이 같이 움직이도록 고침"
+   ],
+   "tr": {"en": {"title": "Row and column groups", "items": ["New buttons on the Rows & columns tab: group rows, group columns, ungroup, collapse all, expand all", "Fold and unfold with the − and + button in the header after a group; levels (up to 7) show as a bar beside the header", "Groups and their folded state are kept when saving to and opening .xlsx (outline)", "Hidden lines and groups now move along when rows or columns are inserted or deleted"]}}
+  },
+  {
+   "date": "2026-10-31",
    "build": "v41",
    "title": "함수 130개 더",
    "items": [
