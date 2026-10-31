@@ -12,7 +12,111 @@
     "빈 칸 건너뛰기와 행·열 바꾸기 (수식은 값으로 들어감) 선택",
     "붙여넣기 뒤 되돌리기 가능"
    ],
-   "tr": {"en": {"title": "Paste special", "items": ["New Paste special button on the Home tab: paste all, formulas and values only, calculated values only, or formats only", "Paste while adding, subtracting, multiplying or dividing the values already there", "Options to skip blanks and to swap rows and columns (formulas go in as values)", "Undo works after pasting"]}}
+   "tr": {
+    "en": {
+     "title": "Paste special",
+     "items": [
+      "New Paste special button on the Home tab: paste all, formulas and values only, calculated values only, or formats only",
+      "Paste while adding, subtracting, multiplying or dividing the values already there",
+      "Options to skip blanks and to swap rows and columns (formulas go in as values)",
+      "Undo works after pasting"
+     ]
+    },
+    "es": {
+     "title": "Pegado especial",
+     "items": [
+      "Nuevo botón Pegado especial en la pestaña Inicio: pega todo, solo fórmulas y valores, solo valores calculados o solo formatos",
+      "Pegar sumando, restando, multiplicando o dividiendo sobre los valores que ya hay",
+      "Opciones para omitir las celdas vacías y para intercambiar filas y columnas (las fórmulas se pegan como valores)",
+      "Se puede deshacer después de pegar"
+     ]
+    },
+    "fr": {
+     "title": "Collage spécial",
+     "items": [
+      "Nouveau bouton Collage spécial dans l'onglet Accueil : coller tout, seulement les formules et valeurs, seulement les valeurs calculées ou seulement les formats",
+      "Coller en ajoutant, soustrayant, multipliant ou divisant les valeurs déjà présentes",
+      "Options pour ignorer les cellules vides et intervertir lignes et colonnes (les formules sont collées en valeurs)",
+      "Annulation possible après le collage"
+     ]
+    },
+    "de": {
+     "title": "Inhalte einfügen",
+     "items": [
+      "Neue Schaltfläche Inhalte einfügen im Tab Start: alles, nur Formeln und Werte, nur berechnete Werte oder nur Formate einfügen",
+      "Einfügen unter Addieren, Subtrahieren, Multiplizieren oder Dividieren der vorhandenen Werte",
+      "Optionen zum Überspringen leerer Zellen und zum Vertauschen von Zeilen und Spalten (Formeln werden als Werte eingefügt)",
+      "Nach dem Einfügen ist Rückgängig möglich"
+     ]
+    },
+    "ja": {
+     "title": "形式を選んで貼り付け",
+     "items": [
+      "ホームタブに「形式を選んで貼り付け」ボタンを追加：すべて、数式と値のみ、計算された値のみ、書式のみを選んで貼り付け",
+      "すでに入っている値に足す・引く・掛ける・割って貼り付け",
+      "空欄をスキップする、行と列を入れ替えるオプション（数式は値として貼り付け）",
+      "貼り付け後に元に戻せます"
+     ]
+    },
+    "zh": {
+     "title": "选择性粘贴",
+     "items": ["“开始”选项卡新增“选择性粘贴”按钮：可选择粘贴全部、仅公式和值、仅计算后的值或仅格式", "在已有数值上进行加、减、乘、除后粘贴", "可选择跳过空白单元格、行列转置（公式以数值形式粘贴）", "粘贴后可以撤销"]
+    },
+    "pt": {
+     "title": "Colar especial",
+     "items": [
+      "Novo botão Colar especial na aba Página Inicial: cola tudo, só fórmulas e valores, só valores calculados ou só formatos",
+      "Colar somando, subtraindo, multiplicando ou dividindo sobre os valores já existentes",
+      "Opções para pular células vazias e trocar linhas por colunas (as fórmulas entram como valores)",
+      "Desfazer funciona após colar"
+     ]
+    },
+    "ru": {
+     "title": "Специальная вставка",
+     "items": [
+      "Новая кнопка «Специальная вставка» на вкладке «Главная»: вставка всего, только формул и значений, только вычисленных значений или только форматов",
+      "Вставка с сложением, вычитанием, умножением или делением на уже имеющиеся значения",
+      "Параметры пропуска пустых ячеек и замены строк и столбцов местами (формулы вставляются как значения)",
+      "После вставки можно отменить действие"
+     ]
+    },
+    "tr": {
+     "title": "Özel yapıştır",
+     "items": [
+      "Giriş sekmesinde yeni Özel yapıştır düğmesi: her şeyi, yalnızca formülleri ve değerleri, yalnızca hesaplanan değerleri veya yalnızca biçimleri yapıştırın",
+      "Mevcut değerlerin üzerine toplayarak, çıkararak, çarparak veya bölerek yapıştırma",
+      "Boş hücreleri atlama ve satır-sütunları değiştirme seçenekleri (formüller değer olarak yapıştırılır)",
+      "Yapıştırdıktan sonra geri alınabilir"
+     ]
+    },
+    "it": {
+     "title": "Incolla speciale",
+     "items": [
+      "Nuovo pulsante Incolla speciale nella scheda Home: incolla tutto, solo formule e valori, solo valori calcolati o solo formati",
+      "Incolla sommando, sottraendo, moltiplicando o dividendo sui valori già presenti",
+      "Opzioni per saltare le celle vuote e scambiare righe e colonne (le formule entrano come valori)",
+      "Si può annullare dopo aver incollato"
+     ]
+    },
+    "pl": {
+     "title": "Wklej specjalnie",
+     "items": [
+      "Nowy przycisk Wklej specjalnie na karcie Narzędzia główne: wklej wszystko, tylko formuły i wartości, tylko obliczone wartości lub tylko formaty",
+      "Wklejanie z dodawaniem, odejmowaniem, mnożeniem lub dzieleniem istniejących wartości",
+      "Opcje pomijania pustych komórek i zamiany wierszy z kolumnami (formuły wklejane są jako wartości)",
+      "Po wklejeniu można cofnąć"
+     ]
+    },
+    "ar": {
+     "title": "لصق خاص",
+     "items": [
+      "زر \"لصق خاص\" جديد في تبويب الصفحة الرئيسية: لصق الكل، أو الصيغ والقيم فقط، أو القيم المحسوبة فقط، أو التنسيقات فقط",
+      "اللصق مع الجمع أو الطرح أو الضرب أو القسمة على القيم الموجودة",
+      "خيارات لتخطي الخلايا الفارغة وتبديل الصفوف والأعمدة (تُلصق الصيغ كقيم)",
+      "يمكن التراجع بعد اللصق"
+     ]
+    }
+   }
   },
   {
    "date": "2026-10-31",
@@ -26,7 +130,140 @@
     "방장이 기준이라 같은 칸을 동시에 고쳐도 모두 같은 값으로 맞춰지고, 잠긴 칸은 방장이 막음",
     "Frenchfries777 계정 이름을 기본 이름으로 사용, 되돌리기는 다른 사람이 그 사이 고친 칸까지 되돌릴 수 있다고 안내"
    ],
-   "tr": {"en": {"title": "Edit together", "items": ["New Edit together button at the top and in the File menu: make a room with an invite code and link", "Joining with the code or link gives a copy of the host's sheet, saved as your own document (up to 8 people per room)", "Cell values, formats, column widths, inserting and deleting rows and columns, and adding, deleting and ordering sheets all change live for everyone", "Cells other people select get a frame in their colour with their name, and a list of who is editing", "The host's copy is the reference: when two people edit one cell at once everyone ends up with the same value, and locked cells are refused by the host", "The Frenchfries777 account name is the default name; Undo warns that it can also undo cells others changed in the meantime"]}}
+   "tr": {
+    "en": {
+     "title": "Edit together",
+     "items": [
+      "New Edit together button at the top and in the File menu: make a room with an invite code and link",
+      "Joining with the code or link gives a copy of the host's sheet, saved as your own document (up to 8 people per room)",
+      "Cell values, formats, column widths, inserting and deleting rows and columns, and adding, deleting and ordering sheets all change live for everyone",
+      "Cells other people select get a frame in their colour with their name, and a list of who is editing",
+      "The host's copy is the reference: when two people edit one cell at once everyone ends up with the same value, and locked cells are refused by the host",
+      "The Frenchfries777 account name is the default name; Undo warns that it can also undo cells others changed in the meantime"
+     ]
+    },
+    "es": {
+     "title": "Editar juntos",
+     "items": [
+      "Nuevo botón Editar juntos arriba y en el menú Archivo: crea una sala con código de invitación y enlace",
+      "Quien entra con el código o el enlace recibe una copia de la hoja del anfitrión, que se guarda como documento propio (hasta 8 personas por sala)",
+      "Valores de celdas, formatos, anchos de columna, insertar y eliminar filas y columnas, y añadir, borrar u ordenar hojas: todo cambia en directo para todos",
+      "Las celdas que otros seleccionan muestran un marco de su color con su nombre, y aparece una lista de quién está editando",
+      "El anfitrión es la referencia: si dos personas editan la misma celda a la vez, todos quedan con el mismo valor, y el anfitrión bloquea las celdas bloqueadas",
+      "El nombre de la cuenta de Frenchfries777 es el nombre predeterminado; Deshacer advierte que también puede deshacer las celdas que otros cambiaron entretanto"
+     ]
+    },
+    "fr": {
+     "title": "Modifier ensemble",
+     "items": [
+      "Nouveau bouton Modifier ensemble en haut et dans le menu Fichier : créez un salon avec un code d'invitation et un lien",
+      "Qui entre avec le code ou le lien reçoit une copie de la feuille de l'hôte, enregistrée comme document personnel (jusqu'à 8 personnes par salon)",
+      "Valeurs de cellules, formats, largeurs de colonnes, insertion et suppression de lignes et colonnes, ajout, suppression et ordre des feuilles : tout change en direct pour tout le monde",
+      "Les cellules sélectionnées par d'autres affichent un cadre à leur couleur avec leur nom, et une liste indique qui modifie",
+      "L'hôte fait référence : si deux personnes modifient la même cellule en même temps, tout le monde finit avec la même valeur, et l'hôte refuse les cellules verrouillées",
+      "Le nom du compte Frenchfries777 sert de nom par défaut ; Annuler prévient qu'il peut aussi annuler les cellules modifiées entre-temps par d'autres"
+     ]
+    },
+    "de": {
+     "title": "Gemeinsam bearbeiten",
+     "items": [
+      "Neue Schaltfläche Gemeinsam bearbeiten oben und im Menü Datei: Raum mit Einladungscode und Link erstellen",
+      "Wer mit Code oder Link beitritt, erhält eine Kopie der Tabelle des Gastgebers, die als eigenes Dokument gespeichert wird (bis zu 8 Personen pro Raum)",
+      "Zellwerte, Formate, Spaltenbreiten, Zeilen- und Spalteneinfügen und -löschen sowie Blätter hinzufügen, löschen und sortieren: alles ändert sich live für alle",
+      "Zellen, die andere auswählen, zeigen einen Rahmen in deren Farbe mit Namen, und eine Liste zeigt, wer bearbeitet",
+      "Der Gastgeber ist die Referenz: Bearbeiten zwei Personen dieselbe Zelle gleichzeitig, haben alle denselben Wert, und gesperrte Zellen blockiert der Gastgeber",
+      "Der Kontoname von Frenchfries777 ist der Standardname; Rückgängig weist darauf hin, dass dabei auch Zellen zurückgesetzt werden können, die andere inzwischen geändert haben"
+     ]
+    },
+    "ja": {
+     "title": "一緒に編集",
+     "items": [
+      "上部とファイルメニューに「一緒に編集」ボタンを追加：招待コードとリンク付きの部屋を作成",
+      "コードかリンクで入ると、ホストのシートのコピーを受け取り、自分の文書として保存されます（1つの部屋につき最大8人）",
+      "セルの値・書式・列の幅、行と列の挿入・削除、シートの追加・削除・並べ替えまで、すべてリアルタイムで全員に反映されます",
+      "他の人が選んだセルには、その人の色の枠と名前が表示され、編集中の人の一覧も出ます",
+      "ホストが基準です。同じセルを同時に編集しても全員が同じ値になり、ロックされたセルはホストが拒否します",
+      "Frenchfries777のアカウント名が既定の名前になります。元に戻すは、その間に他の人が変えたセルも戻せるという注意が表示されます"
+     ]
+    },
+    "zh": {
+     "title": "一起编辑",
+     "items": [
+      "顶部和“文件”菜单新增“一起编辑”按钮：创建带邀请码和链接的房间",
+      "通过代码或链接加入的人会获得房主表格的副本，并保存为自己的文档（每个房间最多 8 人）",
+      "单元格数值、格式、列宽、插入和删除行列，以及添加、删除、排序工作表，全部实时同步给所有人",
+      "他人选中的单元格会显示其颜色的边框和名字，并显示正在编辑的人员列表",
+      "房主为准：两人同时编辑同一单元格时，所有人最终都会得到相同的值，锁定的单元格由房主拒绝修改",
+      "Frenchfries777 账号名作为默认名称；“撤销”会提示它也可能撤销其他人在此期间修改的单元格"
+     ]
+    },
+    "pt": {
+     "title": "Editar juntos",
+     "items": [
+      "Novo botão Editar juntos no topo e no menu Arquivo: crie uma sala com código de convite e link",
+      "Quem entra com o código ou o link recebe uma cópia da planilha do anfitrião, salva como documento próprio (até 8 pessoas por sala)",
+      "Valores de células, formatos, larguras de coluna, inserir e excluir linhas e colunas, e adicionar, excluir ou ordenar planilhas: tudo muda em tempo real para todos",
+      "As células que outras pessoas selecionam ganham uma moldura na cor delas com o nome, e aparece a lista de quem está editando",
+      "O anfitrião é a referência: se duas pessoas editarem a mesma célula ao mesmo tempo, todos ficam com o mesmo valor, e o anfitrião bloqueia as células travadas",
+      "O nome da conta Frenchfries777 é o nome padrão; Desfazer avisa que também pode desfazer células que outros alteraram nesse meio-tempo"
+     ]
+    },
+    "ru": {
+     "title": "Редактировать вместе",
+     "items": [
+      "Новая кнопка «Редактировать вместе» сверху и в меню «Файл»: создайте комнату с кодом приглашения и ссылкой",
+      "Вошедший по коду или ссылке получает копию таблицы хозяина, которая сохраняется как его документ (до 8 человек в комнате)",
+      "Значения ячеек, форматы, ширина столбцов, вставка и удаление строк и столбцов, добавление, удаление и порядок листов — всё меняется в реальном времени у всех",
+      "Ячейки, которые выбирают другие, получают рамку их цвета с именем, и показывается список тех, кто редактирует",
+      "Хозяин — эталон: если двое меняют одну ячейку одновременно, у всех в итоге одинаковое значение, а заблокированные ячейки хозяин не пропускает",
+      "Имя аккаунта Frenchfries777 используется по умолчанию; «Отменить» предупреждает, что может отменить и ячейки, которые в это время изменили другие"
+     ]
+    },
+    "tr": {
+     "title": "Birlikte düzenle",
+     "items": [
+      "Üstte ve Dosya menüsünde yeni Birlikte düzenle düğmesi: davet kodu ve bağlantıyla oda oluşturun",
+      "Kod veya bağlantıyla katılan, ev sahibinin çalışma sayfasının bir kopyasını alır ve kendi belgesi olarak kaydeder (oda başına en fazla 8 kişi)",
+      "Hücre değerleri, biçimler, sütun genişlikleri, satır ve sütun ekleme-silme, sayfa ekleme, silme ve sıralama; hepsi herkes için canlı değişir",
+      "Başkalarının seçtiği hücreler, o kişinin renginde bir çerçeve ve adıyla görünür; düzenleyenlerin listesi de gösterilir",
+      "Ev sahibi referanstır: iki kişi aynı hücreyi aynı anda düzenlerse herkeste aynı değer olur ve kilitli hücreleri ev sahibi engeller",
+      "Hesap adı varsayılan ad olarak kullanılır; Geri al, bu sırada başkalarının değiştirdiği hücreleri de geri alabileceğini uyarır"
+     ]
+    },
+    "it": {
+     "title": "Modifica insieme",
+     "items": [
+      "Nuovo pulsante Modifica insieme in alto e nel menu File: crea una stanza con codice di invito e link",
+      "Chi entra con il codice o il link riceve una copia del foglio dell'host, salvata come documento personale (fino a 8 persone per stanza)",
+      "Valori delle celle, formati, larghezze di colonna, inserimento ed eliminazione di righe e colonne, aggiunta, eliminazione e ordinamento dei fogli: tutto cambia in tempo reale per tutti",
+      "Le celle selezionate da altri ricevono un bordo del loro colore con il nome, e compare un elenco di chi sta modificando",
+      "L'host è il riferimento: se due persone modificano la stessa cella contemporaneamente, tutti ottengono lo stesso valore, e le celle bloccate vengono respinte dall'host",
+      "Il nome dell'account Frenchfries777 è il nome predefinito; Annulla avvisa che può annullare anche le celle che altri hanno cambiato nel frattempo"
+     ]
+    },
+    "pl": {
+     "title": "Edytuj razem",
+     "items": [
+      "Nowy przycisk Edytuj razem u góry i w menu Plik: utwórz pokój z kodem zaproszenia i linkiem",
+      "Kto dołączy kodem lub linkiem, dostaje kopię arkusza gospodarza zapisaną jako własny dokument (do 8 osób w pokoju)",
+      "Wartości komórek, formaty, szerokości kolumn, wstawianie i usuwanie wierszy i kolumn oraz dodawanie, usuwanie i sortowanie arkuszy: wszystko zmienia się na żywo u wszystkich",
+      "Komórki zaznaczone przez innych dostają ramkę w ich kolorze z imieniem, a pojawia się lista osób edytujących",
+      "Gospodarz jest wzorcem: gdy dwie osoby edytują tę samą komórkę naraz, wszyscy mają tę samą wartość, a zablokowanych komórek gospodarz nie przepuszcza",
+      "Nazwa konta Frenchfries777 jest domyślną nazwą; Cofnij ostrzega, że może też cofnąć komórki zmienione w międzyczasie przez innych"
+     ]
+    },
+    "ar": {
+     "title": "تحرير معًا",
+     "items": [
+      "زر \"تحرير معًا\" جديد في الأعلى وفي قائمة ملف: أنشئ غرفة برمز دعوة ورابط",
+      "من ينضم بالرمز أو الرابط يحصل على نسخة من جدول المضيف تُحفظ كمستند خاص به (حتى 8 أشخاص في الغرفة)",
+      "قيم الخلايا والتنسيقات وعروض الأعمدة وإدراج الصفوف والأعمدة وحذفها وإضافة الأوراق وحذفها وترتيبها: كل ذلك يتغير مباشرة عند الجميع",
+      "تحصل الخلايا التي يحددها الآخرون على إطار بلونهم واسمهم، وتظهر قائمة بمن يحرّر",
+      "المضيف هو المرجع: إذا عدّل شخصان الخلية نفسها في الوقت ذاته ينتهي الجميع إلى القيمة نفسها، ويمنع المضيف تعديل الخلايا المقفلة",
+      "اسم حساب Frenchfries777 هو الاسم الافتراضي، وتنبّه \"التراجع\" إلى أنه قد يتراجع أيضًا عن خلايا غيّرها آخرون في الأثناء"
+     ]
+    }
+   }
   },
   {
    "date": "2026-10-31",
@@ -38,7 +275,116 @@
     "넣기 전에 읽은 글을 고칠 수 있고 몇 행 몇 열로 들어가는지 미리 표시",
     "사진은 이 기기 안에서만 읽고 어디로도 보내지 않음"
    ],
-   "tr": {"en": {"title": "Read text from a photo", "items": ["New Photo text button on the Insert tab: reads a photo of a table or list into cells", "Each line becomes a row; text separated by a tab or two or more spaces goes into the next column", "The text can be corrected before it goes in, with a preview of rows and columns", "The photo is read on this device only and is never sent anywhere"]}}
+   "tr": {
+    "en": {
+     "title": "Read text from a photo",
+     "items": [
+      "New Photo text button on the Insert tab: reads a photo of a table or list into cells",
+      "Each line becomes a row; text separated by a tab or two or more spaces goes into the next column",
+      "The text can be corrected before it goes in, with a preview of rows and columns",
+      "The photo is read on this device only and is never sent anywhere"
+     ]
+    },
+    "es": {
+     "title": "Leer texto de una foto",
+     "items": [
+      "Nuevo botón Texto de foto en la pestaña Insertar: lee una foto de una tabla o lista y la mete en las celdas",
+      "Cada línea se convierte en una fila; el texto separado por tabulador o por dos o más espacios va a la columna siguiente",
+      "El texto leído se puede corregir antes de meterlo, con una vista previa de las filas y columnas",
+      "La foto se lee solo en este dispositivo y nunca se envía a ningún lugar"
+     ]
+    },
+    "fr": {
+     "title": "Lire le texte d'une photo",
+     "items": [
+      "Nouveau bouton Texte de photo dans l'onglet Insertion : lit la photo d'un tableau ou d'une liste et la met dans les cellules",
+      "Chaque ligne devient une ligne du tableau ; le texte séparé par une tabulation ou deux espaces ou plus passe dans la colonne suivante",
+      "Le texte lu peut être corrigé avant insertion, avec un aperçu des lignes et colonnes",
+      "La photo n'est lue que sur cet appareil et n'est jamais envoyée ailleurs"
+     ]
+    },
+    "de": {
+     "title": "Text aus einem Foto lesen",
+     "items": [
+      "Neue Schaltfläche Fototext im Tab Einfügen: liest ein Foto einer Tabelle oder Liste und trägt es in die Zellen ein",
+      "Jede Zeile wird eine Zeile; Text, der durch Tabulator oder zwei oder mehr Leerzeichen getrennt ist, kommt in die nächste Spalte",
+      "Der erkannte Text lässt sich vor dem Einfügen korrigieren, mit einer Vorschau der Zeilen und Spalten",
+      "Das Foto wird nur auf diesem Gerät gelesen und niemals irgendwohin gesendet"
+     ]
+    },
+    "ja": {
+     "title": "写真から文字を読み取る",
+     "items": [
+      "挿入タブに「写真の文字」ボタンを追加：表やリストの写真を読み取り、セルに入れます",
+      "1行が1行になり、タブや2つ以上の空白で区切られた文字は次の列に入ります",
+      "読み取った文字は、入れる前に修正でき、何行何列に入るかプレビューで確認できます",
+      "写真はこの端末の中だけで読み取られ、どこにも送信されません"
+     ]
+    },
+    "zh": {
+     "title": "从照片读取文字",
+     "items": [
+      "“插入”选项卡新增“照片文字”按钮：读取表格或列表照片并填入单元格",
+      "每一行变成一行，用制表符或两个以上空格分隔的文字进入下一列",
+      "读取的文字可在填入前修改，并预览会占用的行数和列数",
+      "照片仅在本设备上读取，绝不会发送到任何地方"
+     ]
+    },
+    "pt": {
+     "title": "Ler texto de uma foto",
+     "items": [
+      "Novo botão Texto da foto na aba Inserir: lê uma foto de tabela ou lista e a coloca nas células",
+      "Cada linha vira uma linha; o texto separado por tabulação ou dois ou mais espaços vai para a coluna seguinte",
+      "O texto lido pode ser corrigido antes de entrar, com uma prévia das linhas e colunas",
+      "A foto é lida apenas neste dispositivo e nunca é enviada para lugar nenhum"
+     ]
+    },
+    "ru": {
+     "title": "Чтение текста с фото",
+     "items": [
+      "Новая кнопка «Текст с фото» на вкладке «Вставка»: читает фото таблицы или списка и заносит в ячейки",
+      "Каждая строка становится строкой таблицы; текст, разделённый табуляцией или двумя и более пробелами, попадает в следующий столбец",
+      "Прочитанный текст можно исправить до вставки; видно, сколько строк и столбцов займёт",
+      "Фото читается только на этом устройстве и никуда не отправляется"
+     ]
+    },
+    "tr": {
+     "title": "Fotoğraftan metin okuma",
+     "items": [
+      "Ekle sekmesinde yeni Fotoğraf metni düğmesi: bir tablo veya liste fotoğrafını okuyup hücrelere yerleştirir",
+      "Her satır bir satır olur; sekme veya iki ya da daha fazla boşlukla ayrılmış metin sonraki sütuna gider",
+      "Okunan metin, eklenmeden önce düzeltilebilir; satır ve sütunların önizlemesi gösterilir",
+      "Fotoğraf yalnızca bu cihazda okunur ve hiçbir yere gönderilmez"
+     ]
+    },
+    "it": {
+     "title": "Leggere il testo da una foto",
+     "items": [
+      "Nuovo pulsante Testo da foto nella scheda Inserisci: legge la foto di una tabella o di un elenco e la inserisce nelle celle",
+      "Ogni riga diventa una riga; il testo separato da tabulazione o da due o più spazi va nella colonna successiva",
+      "Il testo letto può essere corretto prima dell'inserimento, con un'anteprima di righe e colonne",
+      "La foto viene letta solo su questo dispositivo e non viene mai inviata da nessuna parte"
+     ]
+    },
+    "pl": {
+     "title": "Odczyt tekstu z obrazu",
+     "items": [
+      "Nowy przycisk Tekst ze zdjęcia na karcie Wstaw: odczytuje zdjęcie tabeli lub listy i wstawia je do komórek",
+      "Każda linia staje się wierszem; tekst oddzielony tabulatorem lub dwiema i więcej spacjami trafia do następnej kolumny",
+      "Odczytany tekst można poprawić przed wstawieniem, z podglądem wierszy i kolumn",
+      "Zdjęcie jest odczytywane tylko na tym urządzeniu i nigdzie nie jest wysyłane"
+     ]
+    },
+    "ar": {
+     "title": "قراءة نص من صورة",
+     "items": [
+      "زر \"نص الصورة\" جديد في تبويب إدراج: يقرأ صورة جدول أو قائمة ويضعها في الخلايا",
+      "يصبح كل سطر صفًا، والنص المفصول بجدولة أو بمسافتين فأكثر ينتقل إلى العمود التالي",
+      "يمكن تصحيح النص المقروء قبل إدراجه، مع معاينة للصفوف والأعمدة",
+      "تُقرأ الصورة على هذا الجهاز فقط ولا تُرسل إلى أي مكان"
+     ]
+    }
+   }
   },
   {
    "date": "2026-10-31",
@@ -50,7 +396,116 @@
     "엑셀 파일로 저장하고 열어도 묶음과 접힌 상태 그대로 (outline)",
     "행·열을 넣거나 지울 때 숨긴 줄과 묶음이 같이 움직이도록 고침"
    ],
-   "tr": {"en": {"title": "Row and column groups", "items": ["New buttons on the Rows & columns tab: group rows, group columns, ungroup, collapse all, expand all", "Fold and unfold with the − and + button in the header after a group; levels (up to 7) show as a bar beside the header", "Groups and their folded state are kept when saving to and opening .xlsx (outline)", "Hidden lines and groups now move along when rows or columns are inserted or deleted"]}}
+   "tr": {
+    "en": {
+     "title": "Row and column groups",
+     "items": [
+      "New buttons on the Rows & columns tab: group rows, group columns, ungroup, collapse all, expand all",
+      "Fold and unfold with the − and + button in the header after a group; levels (up to 7) show as a bar beside the header",
+      "Groups and their folded state are kept when saving to and opening .xlsx (outline)",
+      "Hidden lines and groups now move along when rows or columns are inserted or deleted"
+     ]
+    },
+    "es": {
+     "title": "Agrupar filas y columnas",
+     "items": [
+      "Nuevos botones en la pestaña Filas y columnas: agrupar filas, agrupar columnas, desagrupar, contraer todo y expandir todo",
+      "Se pliega y despliega con los botones − y + de la cabecera tras el grupo; los niveles (hasta 7) aparecen como una franja junto a la cabecera",
+      "Los grupos y su estado plegado se conservan al guardar y abrir archivos .xlsx (estructura)",
+      "Las líneas ocultas y los grupos se desplazan al insertar o borrar filas o columnas"
+     ]
+    },
+    "fr": {
+     "title": "Regrouper lignes et colonnes",
+     "items": [
+      "Nouveaux boutons dans l'onglet Lignes et colonnes : grouper les lignes, grouper les colonnes, dissocier, tout réduire et tout développer",
+      "Pliage et dépliage avec les boutons − et + de l'en-tête après le groupe ; les niveaux (jusqu'à 7) s'affichent sous forme de bande à côté de l'en-tête",
+      "Les groupes et leur état replié sont conservés à l'enregistrement et à l'ouverture des fichiers .xlsx (plan)",
+      "Les lignes masquées et les groupes suivent lorsqu'on insère ou supprime des lignes ou colonnes"
+     ]
+    },
+    "de": {
+     "title": "Zeilen und Spalten gruppieren",
+     "items": [
+      "Neue Schaltflächen im Tab Zeilen und Spalten: Zeilen gruppieren, Spalten gruppieren, Gruppierung aufheben, alles einklappen und alles ausklappen",
+      "Ein- und Ausklappen über die Schaltflächen − und + in der Kopfzeile nach der Gruppe; die Ebenen (bis zu 7) werden als Leiste neben der Kopfzeile angezeigt",
+      "Gruppen und ihr eingeklappter Zustand bleiben beim Speichern und Öffnen von .xlsx-Dateien erhalten (Gliederung)",
+      "Ausgeblendete Zeilen und Gruppen wandern beim Einfügen oder Löschen von Zeilen oder Spalten mit"
+     ]
+    },
+    "ja": {
+     "title": "行・列のグループ化",
+     "items": [
+      "「行・列」タブに、行のグループ化、列のグループ化、グループ解除、すべて折りたたむ、すべて展開のボタンを追加",
+      "グループの後ろのヘッダーにある − と + ボタンで折りたたみ・展開。階層（最大7段階）はヘッダー横の帯で表示されます",
+      "グループと折りたたみの状態は .xlsx ファイルの保存・読み込みでも保たれます（アウトライン）",
+      "行や列を挿入・削除するとき、非表示の行とグループも一緒に動くようになりました"
+     ]
+    },
+    "zh": {
+     "title": "行列分组",
+     "items": [
+      "“行和列”选项卡新增按钮：组合行、组合列、取消组合、全部折叠、全部展开",
+      "通过组后标题上的 − 和 + 按钮折叠和展开；层级（最多 7 级）以标题旁的色带显示",
+      "分组及其折叠状态在保存和打开 .xlsx 文件时保留（大纲）",
+      "插入或删除行列时，隐藏的行和分组会随之移动"
+     ]
+    },
+    "pt": {
+     "title": "Agrupar linhas e colunas",
+     "items": [
+      "Novos botões na aba Linhas e colunas: agrupar linhas, agrupar colunas, desagrupar, recolher tudo e expandir tudo",
+      "Recolhe e expande com os botões − e + no cabeçalho após o grupo; os níveis (até 7) aparecem como uma faixa ao lado do cabeçalho",
+      "Os grupos e o estado recolhido são mantidos ao salvar e abrir arquivos .xlsx (estrutura de tópicos)",
+      "Linhas ocultas e grupos acompanham quando linhas ou colunas são inseridas ou excluídas"
+     ]
+    },
+    "ru": {
+     "title": "Группировка строк и столбцов",
+     "items": [
+      "Новые кнопки на вкладке «Строки и столбцы»: группировать строки, группировать столбцы, разгруппировать, свернуть всё и развернуть всё",
+      "Сворачивание и разворачивание кнопками − и + в заголовке после группы; уровни (до 7) показываются полоской рядом с заголовком",
+      "Группы и их свёрнутое состояние сохраняются при сохранении и открытии файлов .xlsx (структура)",
+      "Скрытые строки и группы смещаются при вставке или удалении строк и столбцов"
+     ]
+    },
+    "tr": {
+     "title": "Satır ve sütunları gruplama",
+     "items": [
+      "Satırlar ve sütunlar sekmesinde yeni düğmeler: satırları grupla, sütunları grupla, grubu çöz, tümünü daralt ve tümünü genişlet",
+      "Grubun arkasındaki başlıktaki − ve + düğmeleriyle daraltılıp genişletilir; düzeyler (7'ye kadar) başlığın yanında bir şerit olarak gösterilir",
+      "Gruplar ve daraltılmış durumları .xlsx dosyalarını kaydederken ve açarken korunur (ana hat)",
+      "Satır ve sütun eklendiğinde veya silindiğinde gizli satırlar ve gruplar birlikte kayar"
+     ]
+    },
+    "it": {
+     "title": "Raggruppare righe e colonne",
+     "items": [
+      "Nuovi pulsanti nella scheda Righe e colonne: raggruppa righe, raggruppa colonne, separa, comprimi tutto ed espandi tutto",
+      "Si comprime ed espande con i pulsanti − e + nell'intestazione dopo il gruppo; i livelli (fino a 7) appaiono come una striscia accanto all'intestazione",
+      "I gruppi e il loro stato compresso vengono mantenuti quando si salvano e aprono file .xlsx (struttura)",
+      "Le righe nascoste e i gruppi si spostano quando si inseriscono o eliminano righe o colonne"
+     ]
+    },
+    "pl": {
+     "title": "Grupowanie wierszy i kolumn",
+     "items": [
+      "Nowe przyciski na karcie Wiersze i kolumny: grupuj wiersze, grupuj kolumny, rozgrupuj, zwiń wszystko i rozwiń wszystko",
+      "Zwijanie i rozwijanie przyciskami − i + w nagłówku za grupą; poziomy (do 7) pokazywane są jako pasek obok nagłówka",
+      "Grupy i ich zwinięty stan są zachowywane przy zapisie i otwieraniu plików .xlsx (konspekt)",
+      "Ukryte wiersze i grupy przesuwają się razem z wierszami i kolumnami przy ich wstawianiu lub usuwaniu"
+     ]
+    },
+    "ar": {
+     "title": "تجميع الصفوف والأعمدة",
+     "items": [
+      "أزرار جديدة في تبويب الصفوف والأعمدة: تجميع الصفوف، وتجميع الأعمدة، وإلغاء التجميع، وطيّ الكل، وفرد الكل",
+      "الطيّ والفرد بالزرين − و+ في الترويسة بعد المجموعة؛ وتظهر المستويات (حتى 7) كشريط بجانب الترويسة",
+      "تُحفظ المجموعات وحالة طيّها عند حفظ ملفات .xlsx وفتحها (المخطط التفصيلي)",
+      "تتحرك الصفوف المخفية والمجموعات معها عند إدراج الصفوف أو الأعمدة أو حذفها"
+     ]
+    }
+   }
   },
   {
    "date": "2026-10-31",
@@ -66,7 +521,164 @@
     "ROW(B5)와 COLUMN(B5)가 오류로 나오던 문제 고침",
     "LET 같은 새 함수는 엑셀 파일로 저장할 때 값으로 저장 (엑셀에서 열면 깨지지 않게)"
    ],
-   "tr": {"en": {"title": "130 more functions", "items": ["Reference functions: INDIRECT, OFFSET, ADDRESS, XMATCH, FORMULATEXT, CELL", "LET and LAMBDA with MAP, REDUCE, SCAN, BYROW, BYCOL, MAKEARRAY", "TAKE, DROP, CHOOSEROWS, CHOOSECOLS, EXPAND, TOCOL, TOROW, WRAPROWS, WRAPCOLS, RANDARRAY, FREQUENCY, TREND, LINEST", "Time (TIME, HOUR, MINUTE, SECOND), DAYS360, YEARFRAC, NETWORKDAYS.INTL, WORKDAY.INTL", "Finance: RATE, IPMT, PPMT, CUMIPMT, CUMPRINC, XNPV, XIRR, MIRR, DB, DDB, SYD and more", "Base conversion, bit functions, matrices (MMULT, MDETERM, MINVERSE), t and chi-square distributions, T.TEST, Z.TEST, AGGREGATE", "Fixed ROW(B5) and COLUMN(B5) returning an error", "Newer functions like LET are saved as values in .xlsx so Excel opens the file cleanly"]}}
+   "tr": {
+    "en": {
+     "title": "130 more functions",
+     "items": [
+      "Reference functions: INDIRECT, OFFSET, ADDRESS, XMATCH, FORMULATEXT, CELL",
+      "LET and LAMBDA with MAP, REDUCE, SCAN, BYROW, BYCOL, MAKEARRAY",
+      "TAKE, DROP, CHOOSEROWS, CHOOSECOLS, EXPAND, TOCOL, TOROW, WRAPROWS, WRAPCOLS, RANDARRAY, FREQUENCY, TREND, LINEST",
+      "Time (TIME, HOUR, MINUTE, SECOND), DAYS360, YEARFRAC, NETWORKDAYS.INTL, WORKDAY.INTL",
+      "Finance: RATE, IPMT, PPMT, CUMIPMT, CUMPRINC, XNPV, XIRR, MIRR, DB, DDB, SYD and more",
+      "Base conversion, bit functions, matrices (MMULT, MDETERM, MINVERSE), t and chi-square distributions, T.TEST, Z.TEST, AGGREGATE",
+      "Fixed ROW(B5) and COLUMN(B5) returning an error",
+      "Newer functions like LET are saved as values in .xlsx so Excel opens the file cleanly"
+     ]
+    },
+    "es": {
+     "title": "130 funciones más",
+     "items": [
+      "Funciones de referencia: INDIRECT, OFFSET, ADDRESS, XMATCH, FORMULATEXT, CELL",
+      "LET y LAMBDA, con MAP, REDUCE, SCAN, BYROW, BYCOL, MAKEARRAY",
+      "TAKE, DROP, CHOOSEROWS, CHOOSECOLS, EXPAND, TOCOL, TOROW, WRAPROWS, WRAPCOLS, RANDARRAY, FREQUENCY, TREND, LINEST",
+      "Hora y fecha: TIME, HOUR, MINUTE, SECOND, DAYS360, YEARFRAC, NETWORKDAYS.INTL, WORKDAY.INTL",
+      "Finanzas: RATE, IPMT, PPMT, CUMIPMT, CUMPRINC, XNPV, XIRR, MIRR, DB, DDB, SYD y más",
+      "Conversión de bases 2, 8 y 16, funciones de bits, matrices (MMULT, MDETERM, MINVERSE), distribuciones t y chi-cuadrado, T.TEST, Z.TEST, AGGREGATE",
+      "Corregido: ROW(B5) y COLUMN(B5) devolvían un error",
+      "Las funciones nuevas como LET se guardan como valores en .xlsx para que Excel abra el archivo sin errores"
+     ]
+    },
+    "fr": {
+     "title": "130 fonctions de plus",
+     "items": [
+      "Fonctions de référence : INDIRECT, OFFSET, ADDRESS, XMATCH, FORMULATEXT, CELL",
+      "LET et LAMBDA, avec MAP, REDUCE, SCAN, BYROW, BYCOL, MAKEARRAY",
+      "TAKE, DROP, CHOOSEROWS, CHOOSECOLS, EXPAND, TOCOL, TOROW, WRAPROWS, WRAPCOLS, RANDARRAY, FREQUENCY, TREND, LINEST",
+      "Heure et date : TIME, HOUR, MINUTE, SECOND, DAYS360, YEARFRAC, NETWORKDAYS.INTL, WORKDAY.INTL",
+      "Finance : RATE, IPMT, PPMT, CUMIPMT, CUMPRINC, XNPV, XIRR, MIRR, DB, DDB, SYD et d'autres",
+      "Conversion de bases 2, 8 et 16, fonctions binaires, matrices (MMULT, MDETERM, MINVERSE), lois t et khi-deux, T.TEST, Z.TEST, AGGREGATE",
+      "Correction : ROW(B5) et COLUMN(B5) renvoyaient une erreur",
+      "Les fonctions récentes comme LET sont enregistrées en valeurs dans les .xlsx pour qu'Excel ouvre le fichier sans erreur"
+     ]
+    },
+    "de": {
+     "title": "130 weitere Funktionen",
+     "items": [
+      "Referenzfunktionen: INDIRECT, OFFSET, ADDRESS, XMATCH, FORMULATEXT, CELL",
+      "LET und LAMBDA mit MAP, REDUCE, SCAN, BYROW, BYCOL, MAKEARRAY",
+      "TAKE, DROP, CHOOSEROWS, CHOOSECOLS, EXPAND, TOCOL, TOROW, WRAPROWS, WRAPCOLS, RANDARRAY, FREQUENCY, TREND, LINEST",
+      "Zeit und Datum: TIME, HOUR, MINUTE, SECOND, DAYS360, YEARFRAC, NETWORKDAYS.INTL, WORKDAY.INTL",
+      "Finanzen: RATE, IPMT, PPMT, CUMIPMT, CUMPRINC, XNPV, XIRR, MIRR, DB, DDB, SYD und weitere",
+      "Umrechnung von Zahlensystemen 2, 8 und 16, Bitfunktionen, Matrizen (MMULT, MDETERM, MINVERSE), t- und Chi-Quadrat-Verteilung, T.TEST, Z.TEST, AGGREGATE",
+      "Behoben: ROW(B5) und COLUMN(B5) lieferten einen Fehler",
+      "Neuere Funktionen wie LET werden in .xlsx-Dateien als Werte gespeichert, damit Excel die Datei fehlerfrei öffnet"
+     ]
+    },
+    "ja": {
+     "title": "さらに130の関数",
+     "items": [
+      "参照関数：INDIRECT、OFFSET、ADDRESS、XMATCH、FORMULATEXT、CELL",
+      "LET と LAMBDA、MAP・REDUCE・SCAN・BYROW・BYCOL・MAKEARRAY",
+      "TAKE、DROP、CHOOSEROWS、CHOOSECOLS、EXPAND、TOCOL、TOROW、WRAPROWS、WRAPCOLS、RANDARRAY、FREQUENCY、TREND、LINEST",
+      "時刻と日付：TIME、HOUR、MINUTE、SECOND、DAYS360、YEARFRAC、NETWORKDAYS.INTL、WORKDAY.INTL",
+      "財務：RATE、IPMT、PPMT、CUMIPMT、CUMPRINC、XNPV、XIRR、MIRR、DB、DDB、SYD など",
+      "2進・8進・16進の変換、ビット関数、行列（MMULT、MDETERM、MINVERSE）、t分布・カイ二乗分布、T.TEST、Z.TEST、AGGREGATE",
+      "ROW(B5) と COLUMN(B5) がエラーになる問題を修正",
+      "LET などの新しい関数は .xlsx 保存時に値として保存され、Excel で壊れずに開けます"
+     ]
+    },
+    "zh": {
+     "title": "新增 130 个函数",
+     "items": [
+      "引用函数：INDIRECT、OFFSET、ADDRESS、XMATCH、FORMULATEXT、CELL",
+      "LET 和 LAMBDA，以及 MAP、REDUCE、SCAN、BYROW、BYCOL、MAKEARRAY",
+      "TAKE、DROP、CHOOSEROWS、CHOOSECOLS、EXPAND、TOCOL、TOROW、WRAPROWS、WRAPCOLS、RANDARRAY、FREQUENCY、TREND、LINEST",
+      "时间与日期：TIME、HOUR、MINUTE、SECOND、DAYS360、YEARFRAC、NETWORKDAYS.INTL、WORKDAY.INTL",
+      "财务：RATE、IPMT、PPMT、CUMIPMT、CUMPRINC、XNPV、XIRR、MIRR、DB、DDB、SYD 等",
+      "2、8、16 进制转换、位函数、矩阵（MMULT、MDETERM、MINVERSE）、t 分布和卡方分布、T.TEST、Z.TEST、AGGREGATE",
+      "修复 ROW(B5) 和 COLUMN(B5) 返回错误的问题",
+      "LET 等新函数保存为 .xlsx 时以数值形式保存，使 Excel 能正常打开"
+     ]
+    },
+    "pt": {
+     "title": "130 funções a mais",
+     "items": [
+      "Funções de referência: INDIRECT, OFFSET, ADDRESS, XMATCH, FORMULATEXT, CELL",
+      "LET e LAMBDA, com MAP, REDUCE, SCAN, BYROW, BYCOL, MAKEARRAY",
+      "TAKE, DROP, CHOOSEROWS, CHOOSECOLS, EXPAND, TOCOL, TOROW, WRAPROWS, WRAPCOLS, RANDARRAY, FREQUENCY, TREND, LINEST",
+      "Hora e data: TIME, HOUR, MINUTE, SECOND, DAYS360, YEARFRAC, NETWORKDAYS.INTL, WORKDAY.INTL",
+      "Finanças: RATE, IPMT, PPMT, CUMIPMT, CUMPRINC, XNPV, XIRR, MIRR, DB, DDB, SYD e outras",
+      "Conversão de bases 2, 8 e 16, funções de bits, matrizes (MMULT, MDETERM, MINVERSE), distribuições t e qui-quadrado, T.TEST, Z.TEST, AGGREGATE",
+      "Corrigido ROW(B5) e COLUMN(B5) retornando erro",
+      "Funções novas como LET são salvas como valores em .xlsx para que o Excel abra o arquivo sem problemas"
+     ]
+    },
+    "ru": {
+     "title": "Ещё 130 функций",
+     "items": [
+      "Функции ссылок: INDIRECT, OFFSET, ADDRESS, XMATCH, FORMULATEXT, CELL",
+      "LET и LAMBDA, а также MAP, REDUCE, SCAN, BYROW, BYCOL, MAKEARRAY",
+      "TAKE, DROP, CHOOSEROWS, CHOOSECOLS, EXPAND, TOCOL, TOROW, WRAPROWS, WRAPCOLS, RANDARRAY, FREQUENCY, TREND, LINEST",
+      "Время и дата: TIME, HOUR, MINUTE, SECOND, DAYS360, YEARFRAC, NETWORKDAYS.INTL, WORKDAY.INTL",
+      "Финансовые: RATE, IPMT, PPMT, CUMIPMT, CUMPRINC, XNPV, XIRR, MIRR, DB, DDB, SYD и другие",
+      "Двоичная, восьмеричная и шестнадцатеричная системы, битовые функции, матрицы (MMULT, MDETERM, MINVERSE), распределения t и хи-квадрат, T.TEST, Z.TEST, AGGREGATE",
+      "Исправлено: ROW(B5) и COLUMN(B5) возвращали ошибку",
+      "Новые функции вроде LET сохраняются в .xlsx как значения, чтобы Excel открывал файл без ошибок"
+     ]
+    },
+    "tr": {
+     "title": "130 işlev daha",
+     "items": [
+      "Başvuru işlevleri: INDIRECT, OFFSET, ADDRESS, XMATCH, FORMULATEXT, CELL",
+      "LET ve LAMBDA; MAP, REDUCE, SCAN, BYROW, BYCOL, MAKEARRAY ile birlikte",
+      "TAKE, DROP, CHOOSEROWS, CHOOSECOLS, EXPAND, TOCOL, TOROW, WRAPROWS, WRAPCOLS, RANDARRAY, FREQUENCY, TREND, LINEST",
+      "Saat ve tarih: TIME, HOUR, MINUTE, SECOND, DAYS360, YEARFRAC, NETWORKDAYS.INTL, WORKDAY.INTL",
+      "Finans: RATE, IPMT, PPMT, CUMIPMT, CUMPRINC, XNPV, XIRR, MIRR, DB, DDB, SYD ve diğerleri",
+      "2, 8 ve 16 tabanlı dönüşümler, bit işlevleri, matrisler (MMULT, MDETERM, MINVERSE), t ve ki-kare dağılımları, T.TEST, Z.TEST, AGGREGATE",
+      "ROW(B5) ve COLUMN(B5) hata veren sorun düzeltildi",
+      "LET gibi yeni işlevler .xlsx olarak kaydedilirken değer olarak kaydedilir; böylece Excel dosyayı bozulmadan açar"
+     ]
+    },
+    "it": {
+     "title": "130 funzioni in più",
+     "items": [
+      "Funzioni di riferimento: INDIRECT, OFFSET, ADDRESS, XMATCH, FORMULATEXT, CELL",
+      "LET e LAMBDA, con MAP, REDUCE, SCAN, BYROW, BYCOL, MAKEARRAY",
+      "TAKE, DROP, CHOOSEROWS, CHOOSECOLS, EXPAND, TOCOL, TOROW, WRAPROWS, WRAPCOLS, RANDARRAY, FREQUENCY, TREND, LINEST",
+      "Ora e data: TIME, HOUR, MINUTE, SECOND, DAYS360, YEARFRAC, NETWORKDAYS.INTL, WORKDAY.INTL",
+      "Finanza: RATE, IPMT, PPMT, CUMIPMT, CUMPRINC, XNPV, XIRR, MIRR, DB, DDB, SYD e altre",
+      "Conversione delle basi 2, 8 e 16, funzioni sui bit, matrici (MMULT, MDETERM, MINVERSE), distribuzioni t e chi quadrato, T.TEST, Z.TEST, AGGREGATE",
+      "Corretto ROW(B5) e COLUMN(B5) che restituivano un errore",
+      "Nuove funzioni come LET vengono salvate come valori nei file .xlsx così Excel le apre senza errori"
+     ]
+    },
+    "pl": {
+     "title": "130 funkcji więcej",
+     "items": [
+      "Funkcje odwołań: INDIRECT, OFFSET, ADDRESS, XMATCH, FORMULATEXT, CELL",
+      "LET i LAMBDA, wraz z MAP, REDUCE, SCAN, BYROW, BYCOL, MAKEARRAY",
+      "TAKE, DROP, CHOOSEROWS, CHOOSECOLS, EXPAND, TOCOL, TOROW, WRAPROWS, WRAPCOLS, RANDARRAY, FREQUENCY, TREND, LINEST",
+      "Czas i data: TIME, HOUR, MINUTE, SECOND, DAYS360, YEARFRAC, NETWORKDAYS.INTL, WORKDAY.INTL",
+      "Finanse: RATE, IPMT, PPMT, CUMIPMT, CUMPRINC, XNPV, XIRR, MIRR, DB, DDB, SYD i inne",
+      "Konwersja systemów 2, 8 i 16, funkcje bitowe, macierze (MMULT, MDETERM, MINVERSE), rozkłady t i chi-kwadrat, T.TEST, Z.TEST, AGGREGATE",
+      "Naprawiono ROW(B5) i COLUMN(B5), które zwracały błąd",
+      "Nowsze funkcje, np. LET, zapisywane są w .xlsx jako wartości, aby Excel otwierał plik bez błędów"
+     ]
+    },
+    "ar": {
+     "title": "130 دالة إضافية",
+     "items": [
+      "دوال المراجع: INDIRECT وOFFSET وADDRESS وXMATCH وFORMULATEXT وCELL",
+      "LET وLAMBDA مع MAP وREDUCE وSCAN وBYROW وBYCOL وMAKEARRAY",
+      "TAKE, DROP, CHOOSEROWS, CHOOSECOLS, EXPAND, TOCOL, TOROW, WRAPROWS, WRAPCOLS, RANDARRAY, FREQUENCY, TREND, LINEST",
+      "الوقت والتاريخ: TIME وHOUR وMINUTE وSECOND وDAYS360 وYEARFRAC وNETWORKDAYS.INTL وWORKDAY.INTL",
+      "المالية: RATE وIPMT وPPMT وCUMIPMT وCUMPRINC وXNPV وXIRR وMIRR وDB وDDB وSYD وغيرها",
+      "تحويل الأنظمة الثنائي والثماني والسداسي عشر، ودوال البتات، والمصفوفات (MMULT وMDETERM وMINVERSE)، وتوزيعا t وكاي تربيع، وT.TEST وZ.TEST وAGGREGATE",
+      "تم إصلاح خطأ في ROW(B5) وCOLUMN(B5)",
+      "تُحفظ الدوال الحديثة مثل LET كقيم عند الحفظ بصيغة .xlsx حتى يفتح Excel الملف دون أخطاء"
+     ]
+    }
+   }
   },
   {
    "date": "2026-10-25",
@@ -100,17 +712,11 @@
     },
     "ja": {
      "title": "リボンタブを整理",
-     "items": [
-      "ホームタブに集まっていた機能を、書式・行・列・保護・印刷の各タブに分けました",
-      "データタブにあった非表示・ウィンドウ枠の固定・ロックを、行・列タブと保護・印刷タブへ移しました"
-     ]
+     "items": ["ホームタブに集まっていた機能を、書式・行・列・保護・印刷の各タブに分けました", "データタブにあった非表示・ウィンドウ枠の固定・ロックを、行・列タブと保護・印刷タブへ移しました"]
     },
     "zh": {
      "title": "整理功能区标签",
-     "items": [
-      "把开始标签中堆在一起的功能分到“格式”“行·列”“保护·打印”标签中",
-      "数据标签中的隐藏、冻结窗格和锁定分别移到“行·列”和“保护·打印”标签"
-     ]
+     "items": ["把开始标签中堆在一起的功能分到“格式”“行·列”“保护·打印”标签中", "数据标签中的隐藏、冻结窗格和锁定分别移到“行·列”和“保护·打印”标签"]
     },
     "pt": {
      "title": "Abas da faixa reorganizadas",
@@ -416,17 +1022,11 @@
     },
     "ja": {
      "title": "削除の確認画面をなくす",
-     "items": [
-      "シートと文書を消すとき確認画面を出さずにすぐ消す",
-      "消した後、画面下に元に戻す案内が7秒間出て、すぐ復元できる"
-     ]
+     "items": ["シートと文書を消すとき確認画面を出さずにすぐ消す", "消した後、画面下に元に戻す案内が7秒間出て、すぐ復元できる"]
     },
     "zh": {
      "title": "取消删除确认窗口",
-     "items": [
-      "删除表格和文档时不再弹出确认窗口，直接删除",
-      "删除后屏幕下方会显示 7 秒的撤销提示，可立即恢复"
-     ]
+     "items": ["删除表格和文档时不再弹出确认窗口，直接删除", "删除后屏幕下方会显示 7 秒的撤销提示，可立即恢复"]
     },
     "pt": {
      "title": "Sem janela de confirmação ao apagar",
@@ -479,10 +1079,7 @@
     },
     "gk": {
      "title": "지우는 확인 창 없애다",
-     "items": [
-      "시트 그리고 문서 지울 때 확인 창 없이 곧 지움",
-      "지운 뒤 화면 아래 되돌리기 안내 7 초 나오다 곧 되살리다"
-     ]
+     "items": ["시트 그리고 문서 지울 때 확인 창 없이 곧 지움", "지운 뒤 화면 아래 되돌리기 안내 7 초 나오다 곧 되살리다"]
     }
    }
   },
@@ -497,101 +1094,59 @@
    "tr": {
     "en": {
      "title": "17 languages",
-     "items": [
-      "Added Italian, Polish and Arabic text",
-      "Arabic is laid out right to left"
-     ]
+     "items": ["Added Italian, Polish and Arabic text", "Arabic is laid out right to left"]
     },
     "es": {
      "title": "17 idiomas",
-     "items": [
-      "Añadidos textos en italiano, polaco y árabe",
-      "El árabe se dispone de derecha a izquierda"
-     ]
+     "items": ["Añadidos textos en italiano, polaco y árabe", "El árabe se dispone de derecha a izquierda"]
     },
     "fr": {
      "title": "17 langues",
-     "items": [
-      "Ajout de l'italien, du polonais et de l'arabe",
-      "L'arabe est disposé de droite à gauche"
-     ]
+     "items": ["Ajout de l'italien, du polonais et de l'arabe", "L'arabe est disposé de droite à gauche"]
     },
     "de": {
      "title": "17 Sprachen",
-     "items": [
-      "Texte auf Italienisch, Polnisch und Arabisch hinzugefügt",
-      "Arabisch wird von rechts nach links gesetzt"
-     ]
+     "items": ["Texte auf Italienisch, Polnisch und Arabisch hinzugefügt", "Arabisch wird von rechts nach links gesetzt"]
     },
     "ja": {
      "title": "17言語",
-     "items": [
-      "イタリア語、ポーランド語、アラビア語の文言を追加",
-      "アラビア語は右から左に配置"
-     ]
+     "items": ["イタリア語、ポーランド語、アラビア語の文言を追加", "アラビア語は右から左に配置"]
     },
     "zh": {
      "title": "17 种语言",
-     "items": [
-      "新增意大利语、波兰语和阿拉伯语文字",
-      "阿拉伯语从右向左排版"
-     ]
+     "items": ["新增意大利语、波兰语和阿拉伯语文字", "阿拉伯语从右向左排版"]
     },
     "pt": {
      "title": "17 idiomas",
-     "items": [
-      "Adicionados textos em italiano, polonês e árabe",
-      "O árabe é disposto da direita para a esquerda"
-     ]
+     "items": ["Adicionados textos em italiano, polonês e árabe", "O árabe é disposto da direita para a esquerda"]
     },
     "ru": {
      "title": "17 языков",
-     "items": [
-      "Добавлены тексты на итальянском, польском и арабском",
-      "Арабский выводится справа налево"
-     ]
+     "items": ["Добавлены тексты на итальянском, польском и арабском", "Арабский выводится справа налево"]
     },
     "tr": {
      "title": "17 dil",
-     "items": [
-      "İtalyanca, Lehçe ve Arapça metinler eklendi",
-      "Arapça sağdan sola dizilir"
-     ]
+     "items": ["İtalyanca, Lehçe ve Arapça metinler eklendi", "Arapça sağdan sola dizilir"]
     },
     "it": {
      "title": "17 lingue",
-     "items": [
-      "Aggiunti testi in italiano, polacco e arabo",
-      "L'arabo è disposto da destra a sinistra"
-     ]
+     "items": ["Aggiunti testi in italiano, polacco e arabo", "L'arabo è disposto da destra a sinistra"]
     },
     "pl": {
      "title": "17 języków",
-     "items": [
-      "Dodano teksty po włosku, polsku i arabsku",
-      "Arabski układany jest od prawej do lewej"
-     ]
+     "items": ["Dodano teksty po włosku, polsku i arabsku", "Arabski układany jest od prawej do lewej"]
     },
     "ar": {
      "title": "17 لغة",
-     "items": [
-      "أُضيفت نصوص بالإيطالية والبولندية والعربية",
-      "تُرتَّب العربية من اليمين إلى اليسار"
-     ]
+     "items": ["أُضيفت نصوص بالإيطالية والبولندية والعربية", "تُرتَّب العربية من اليمين إلى اليسار"]
     },
     "nw": {
      "title": "17 speaks",
-     "items": [
-      "Added Italian, Polish, Arabic words",
-      "Arabic laid right to left"
-     ]
+     "items": ["Added Italian, Polish, Arabic words", "Arabic laid right to left"]
     },
     "gk": {
      "title": "17 언어들",
-     "items": [
-      "더했다 이탈리아어 광택제 아라비아어 글",
-      "아라비아어 오른쪽에서 왼쪽 배치"
-     ]
+     "items": ["더했다 이탈리아어 광택제 아라비아어 글", "아라비아어 오른쪽에서 왼쪽 배치"]
     }
    }
   },
@@ -653,12 +1208,7 @@
     },
     "zh": {
      "title": "版本记录",
-     "items": [
-      "点击顶部“版本”按钮打开旧版本列表并恢复",
-      "可以起名保存当前状态（最多 15 个）",
-      "过了 30 分钟且内容有变化时自动保存版本（自动版本保留最近 4 个）",
-      "恢复前的状态也会自动保存，可以再回来"
-     ]
+     "items": ["点击顶部“版本”按钮打开旧版本列表并恢复", "可以起名保存当前状态（最多 15 个）", "过了 30 分钟且内容有变化时自动保存版本（自动版本保留最近 4 个）", "恢复前的状态也会自动保存，可以再回来"]
     },
     "pt": {
      "title": "Histórico de versões",
@@ -786,11 +1336,7 @@
     },
     "zh": {
      "title": "单元格日记",
-     "items": [
-      "修改单元格的值时会记住旧值和修改时间（每个单元格最多 20 次，不含公式）",
-      "公式讲解窗口显示值变化记录（如“3 天前 85”）",
-      "“用故事总结”按钮：AI 简要说明什么时候从哪个值变成了哪个值"
-     ]
+     "items": ["修改单元格的值时会记住旧值和修改时间（每个单元格最多 20 次，不含公式）", "公式讲解窗口显示值变化记录（如“3 天前 85”）", "“用故事总结”按钮：AI 简要说明什么时候从哪个值变成了哪个值"]
     },
     "pt": {
      "title": "Diário da célula",
@@ -892,15 +1438,11 @@
     },
     "ja": {
      "title": "AI数式に理由メモ",
-     "items": [
-      "AI画面で数式を入れるとき、AIがなぜそう書いたかの一行説明をそのセルのメモとして一緒に入れる（すでにメモのあるセルはそのまま、セルにマウスを乗せると表示）"
-     ]
+     "items": ["AI画面で数式を入れるとき、AIがなぜそう書いたかの一行説明をそのセルのメモとして一緒に入れる（すでにメモのあるセルはそのまま、セルにマウスを乗せると表示）"]
     },
     "zh": {
      "title": "AI 公式附理由备注",
-     "items": [
-      "在 AI 窗口插入公式时，会把 AI 为什么这样写的一行说明作为该单元格的备注一并放入（已有备注的单元格保持不变，鼠标移到单元格上即可查看）"
-     ]
+     "items": ["在 AI 窗口插入公式时，会把 AI 为什么这样写的一行说明作为该单元格的备注一并放入（已有备注的单元格保持不变，鼠标移到单元格上即可查看）"]
     },
     "pt": {
      "title": "Notas com o motivo nas fórmulas de IA",
@@ -946,9 +1488,7 @@
     },
     "gk": {
      "title": "AI 수식에 이유 메모",
-     "items": [
-      "AI 창 수식 넣을 때 AI 왜 이렇게 썼는지 한 줄 설명 칸 메모로 같이 (이미 메모 있는 칸 그대로 마우스 올리면 보임)"
-     ]
+     "items": ["AI 창 수식 넣을 때 AI 왜 이렇게 썼는지 한 줄 설명 칸 메모로 같이 (이미 메모 있는 칸 그대로 마우스 올리면 보임)"]
     }
    }
   },
@@ -1468,17 +2008,11 @@
     },
     "ja": {
      "title": "チャートを Fry Slides へ",
-     "items": [
-      "チャート画面に「スライドへ」ボタンを追加（選んだ発表資料または新しい発表資料にグラフスライドとして直接入れる）",
-      "シートと連携して入れると、シートの値を直したときスライドのグラフも一緒に変わる"
-     ]
+     "items": ["チャート画面に「スライドへ」ボタンを追加（選んだ発表資料または新しい発表資料にグラフスライドとして直接入れる）", "シートと連携して入れると、シートの値を直したときスライドのグラフも一緒に変わる"]
     },
     "zh": {
      "title": "图表发送到 Fry Slides",
-     "items": [
-      "图表窗口新增“发送到幻灯片”按钮（把图表作为图表幻灯片直接放入所选或新的演示文稿）",
-      "与表格链接后放入时，修改表格的值，幻灯片中的图表也会跟着变化"
-     ]
+     "items": ["图表窗口新增“发送到幻灯片”按钮（把图表作为图表幻灯片直接放入所选或新的演示文稿）", "与表格链接后放入时，修改表格的值，幻灯片中的图表也会跟着变化"]
     },
     "pt": {
      "title": "Gráficos para o Fry Slides",
@@ -1531,10 +2065,7 @@
     },
     "gk": {
      "title": "차트를 프라이 슬라이드로",
-     "items": [
-      "차트 창 슬라이드로 단추 (고른 발표 자료나 새 발표 자료 그래프 슬라이드로 바로 넣기)",
-      "시트와 연결해서 넣으면 시트 값 고칠 때 슬라이드 그래프도 따라 바뀜"
-     ]
+     "items": ["차트 창 슬라이드로 단추 (고른 발표 자료나 새 발표 자료 그래프 슬라이드로 바로 넣기)", "시트와 연결해서 넣으면 시트 값 고칠 때 슬라이드 그래프도 따라 바뀜"]
     }
    }
   },
@@ -1716,17 +2247,11 @@
     },
     "ja": {
      "title": "名詞をすべて探す",
-     "items": [
-      "=AI(\"名詞\", セル) が文の名詞を漏らさずすべて拾う（今日・昨日のような時間を表す言葉も名詞）",
-      "=AI(\"代名詞\", セル) も同じ方法で、私・あなた・私たちのような代名詞をすべて拾う"
-     ]
+     "items": ["=AI(\"名詞\", セル) が文の名詞を漏らさずすべて拾う（今日・昨日のような時間を表す言葉も名詞）", "=AI(\"代名詞\", セル) も同じ方法で、私・あなた・私たちのような代名詞をすべて拾う"]
     },
     "zh": {
      "title": "找出所有名词",
-     "items": [
-      "=AI(\"名词\", 单元格) 不遗漏地挑出句子中的所有名词（今天、昨天这样的时间词也算名词）",
-      "=AI(\"代词\", 单元格) 同样挑出我、你、我们等所有代词"
-     ]
+     "items": ["=AI(\"名词\", 单元格) 不遗漏地挑出句子中的所有名词（今天、昨天这样的时间词也算名词）", "=AI(\"代词\", 单元格) 同样挑出我、你、我们等所有代词"]
     },
     "pt": {
      "title": "Encontrar todos os substantivos",
@@ -1779,10 +2304,7 @@
     },
     "gk": {
      "title": "명사 모두 찾기",
-     "items": [
-      "=AI(\"명사\", 칸) 문장의 명사 빠뜨리지 않고 모두 (오늘 어제 같은 시간 말도 명사)",
-      "=AI(\"대명사\", 칸) 같은 방식 나 너 우리 같은 대명사 모두"
-     ]
+     "items": ["=AI(\"명사\", 칸) 문장의 명사 빠뜨리지 않고 모두 (오늘 어제 같은 시간 말도 명사)", "=AI(\"대명사\", 칸) 같은 방식 나 너 우리 같은 대명사 모두"]
     }
    }
   },
@@ -1820,15 +2342,11 @@
     },
     "ja": {
      "title": "質問・要約の繰り返しを防ぐ",
-     "items": [
-      "質問・要約タブと =AI() 関数が自前AIの文の答え設定を使用（同じ言葉の繰り返し、漢字の混入、長すぎる答えを防ぐ）"
-     ]
+     "items": ["質問・要約タブと =AI() 関数が自前AIの文の答え設定を使用（同じ言葉の繰り返し、漢字の混入、長すぎる答えを防ぐ）"]
     },
     "zh": {
      "title": "防止提问·总结重复",
-     "items": [
-      "提问·总结标签页和 =AI() 函数使用自带 AI 的文字回答设置（防止重复同一句话、夹杂汉字和回答过长）"
-     ]
+     "items": ["提问·总结标签页和 =AI() 函数使用自带 AI 的文字回答设置（防止重复同一句话、夹杂汉字和回答过长）"]
     },
     "pt": {
      "title": "Evitar repetições em perguntas e resumos",
@@ -1874,9 +2392,7 @@
     },
     "gk": {
      "title": "질문 요약 반복 막기",
-     "items": [
-      "질문 요약 탭 =AI() 함수 자체 AI 글 답변 설정 사용 (같은 말 반복 한자 섞임 너무 긴 답 막기)"
-     ]
+     "items": ["질문 요약 탭 =AI() 함수 자체 AI 글 답변 설정 사용 (같은 말 반복 한자 섞임 너무 긴 답 막기)"]
     }
    }
   },
@@ -1914,15 +2430,11 @@
     },
     "ja": {
      "title": "AI関数の文の成分",
-     "items": [
-      "=AI(\"目的語\", B1) のように主語・目的語・補語・述語・連用修飾語・連体修飾語を書くと、AIにその成分の見分け方と例も一緒に送って混乱を減らす"
-     ]
+     "items": ["=AI(\"目的語\", B1) のように主語・目的語・補語・述語・連用修飾語・連体修飾語を書くと、AIにその成分の見分け方と例も一緒に送って混乱を減らす"]
     },
     "zh": {
      "title": "AI 函数的句子成分",
-     "items": [
-      "像 =AI(\"宾语\", B1) 这样写主语、宾语、补语、谓语、状语、定语时，会把识别该成分的方法和例子一起发给 AI，减少混淆"
-     ]
+     "items": ["像 =AI(\"宾语\", B1) 这样写主语、宾语、补语、谓语、状语、定语时，会把识别该成分的方法和例子一起发给 AI，减少混淆"]
     },
     "pt": {
      "title": "Partes da frase na função de IA",
@@ -1968,9 +2480,7 @@
     },
     "gk": {
      "title": "AI 함수 문장 성분",
-     "items": [
-      "=AI(\"목적어\", B1) 처럼 주어 목적어 보어 서술어 부사어 관형어 쓰면 AI에게 그 성분 알아보는 방법 예시 함께 보내 덜 헷갈리게"
-     ]
+     "items": ["=AI(\"목적어\", B1) 처럼 주어 목적어 보어 서술어 부사어 관형어 쓰면 AI에게 그 성분 알아보는 방법 예시 함께 보내 덜 헷갈리게"]
     }
    }
   },
@@ -2020,10 +2530,7 @@
     },
     "zh": {
      "title": "简写 AI 函数",
-     "items": [
-      "像 =AI(\"主语\", B1) 这样，任务只写“主语”“动词”“日期”“名字”“数字”之类的一个词，也能只挑出并填入那一部分",
-      "“只要主语”“找日期”“subject”等写法也按同样的意思处理"
-     ]
+     "items": ["像 =AI(\"主语\", B1) 这样，任务只写“主语”“动词”“日期”“名字”“数字”之类的一个词，也能只挑出并填入那一部分", "“只要主语”“找日期”“subject”等写法也按同样的意思处理"]
     },
     "pt": {
      "title": "Tarefas curtas na função de IA",
@@ -2076,10 +2583,7 @@
     },
     "gk": {
      "title": "AI 함수 짧게 쓰기",
-     "items": [
-      "=AI(\"주어\", B1) 처럼 할 일에 주어 동사 날짜 이름 숫자 같은 단어 하나만 써도 그 부분만 골라 채우기",
-      "주어만 날짜 찾기 subject 처럼 써도 같은 뜻으로 처리"
-     ]
+     "items": ["=AI(\"주어\", B1) 처럼 할 일에 주어 동사 날짜 이름 숫자 같은 단어 하나만 써도 그 부분만 골라 채우기", "주어만 날짜 찾기 subject 처럼 써도 같은 뜻으로 처리"]
     }
    }
   },
@@ -2445,17 +2949,11 @@
     },
     "ja": {
      "title": "Fry Lab の記録を開く",
-     "items": [
-      "Fry Lab から送った実験記録の文書をすぐ開く",
-      "チャートのある文書はチャート画面を広げた状態で開く"
-     ]
+     "items": ["Fry Lab から送った実験記録の文書をすぐ開く", "チャートのある文書はチャート画面を広げた状態で開く"]
     },
     "zh": {
      "title": "打开 Fry Lab 记录",
-     "items": [
-      "可直接打开从 Fry Lab 发送的实验记录文档",
-      "带图表的文档打开时图表窗口处于展开状态"
-     ]
+     "items": ["可直接打开从 Fry Lab 发送的实验记录文档", "带图表的文档打开时图表窗口处于展开状态"]
     },
     "pt": {
      "title": "Abrir registros do Fry Lab",
@@ -2494,24 +2992,15 @@
     },
     "ar": {
      "title": "فتح سجلات Fry Lab",
-     "items": [
-      "تُفتح فورًا مستندات سجلات التجارب المرسلة من Fry Lab",
-      "تُفتح المستندات التي فيها رسم بياني ونافذة الرسم مفتوحة"
-     ]
+     "items": ["تُفتح فورًا مستندات سجلات التجارب المرسلة من Fry Lab", "تُفتح المستندات التي فيها رسم بياني ونافذة الرسم مفتوحة"]
     },
     "nw": {
      "title": "Open Fry Lab records",
-     "items": [
-      "Open tryout record docs sent from Fry Lab at once",
-      "Docs with chart open with chart window spread"
-     ]
+     "items": ["Open tryout record docs sent from Fry Lab at once", "Docs with chart open with chart window spread"]
     },
     "gk": {
      "title": "프라이 랩 기록 열기",
-     "items": [
-      "프라이 랩에서 보낸 실험 기록 문서 바로 열기",
-      "차트 있는 문서 차트 창 펼친 채로 열기"
-     ]
+     "items": ["프라이 랩에서 보낸 실험 기록 문서 바로 열기", "차트 있는 문서 차트 창 펼친 채로 열기"]
     }
    }
   },
@@ -3280,19 +3769,11 @@
     },
     "ja": {
      "title": "AI数式・グラフ・表を前に",
-     "items": [
-      "AI画面のタブ順を数式作成、グラフ作成、表作成、質問・要約の順に変更",
-      "AI画面を開くと数式作成から表示",
-      "AI画面に得意なことと間違えやすいことの案内を追加"
-     ]
+     "items": ["AI画面のタブ順を数式作成、グラフ作成、表作成、質問・要約の順に変更", "AI画面を開くと数式作成から表示", "AI画面に得意なことと間違えやすいことの案内を追加"]
     },
     "zh": {
      "title": "AI 公式·图表·表格前置",
-     "items": [
-      "AI 窗口标签页顺序改为生成公式、生成图表、生成表格、提问·总结",
-      "打开 AI 窗口时先显示生成公式",
-      "AI 窗口新增擅长和容易出错之处的说明"
-     ]
+     "items": ["AI 窗口标签页顺序改为生成公式、生成图表、生成表格、提问·总结", "打开 AI 窗口时先显示生成公式", "AI 窗口新增擅长和容易出错之处的说明"]
     },
     "pt": {
      "title": "Fórmulas, gráficos e tabelas de IA em primeiro",
@@ -3352,11 +3833,7 @@
     },
     "gk": {
      "title": "AI 수식 그래프 표 앞으로",
-     "items": [
-      "AI 창 탭 순서 수식 만들기 그래프 만들기 표 만들기 질문 요약",
-      "AI 창 열면 수식 만들기부터 표시",
-      "AI 창 잘 맞는 일 틀릴 수 있는 일 안내"
-     ]
+     "items": ["AI 창 탭 순서 수식 만들기 그래프 만들기 표 만들기 질문 요약", "AI 창 열면 수식 만들기부터 표시", "AI 창 잘 맞는 일 틀릴 수 있는 일 안내"]
     }
    }
   },
@@ -3399,17 +3876,11 @@
     },
     "ja": {
      "title": "AI数式の翻訳依頼を修正",
-     "items": [
-      "翻訳の依頼にAI()関数の数式をすぐ作る",
-      "数式にならない依頼は無理に数式を作らず理由を知らせる"
-     ]
+     "items": ["翻訳の依頼にAI()関数の数式をすぐ作る", "数式にならない依頼は無理に数式を作らず理由を知らせる"]
     },
     "zh": {
      "title": "修复 AI 公式翻译请求",
-     "items": [
-      "翻译请求会立即生成 AI() 函数公式",
-      "无法写成公式的请求会说明原因，而不是勉强生成公式"
-     ]
+     "items": ["翻译请求会立即生成 AI() 函数公式", "无法写成公式的请求会说明原因，而不是勉强生成公式"]
     },
     "pt": {
      "title": "Corrigidos os pedidos de tradução com fórmula de IA",
@@ -3448,10 +3919,7 @@
     },
     "ar": {
      "title": "إصلاح طلبات الترجمة بصيغ الذكاء الاصطناعي",
-     "items": [
-      "يُنشأ لطلب الترجمة فورًا صيغة بدالة AI()",
-      "الطلبات التي لا تصلح أن تكون صيغة يُذكر لها السبب بدل صيغة مفروضة"
-     ]
+     "items": ["يُنشأ لطلب الترجمة فورًا صيغة بدالة AI()", "الطلبات التي لا تصلح أن تكون صيغة يُذكر لها السبب بدل صيغة مفروضة"]
     },
     "nw": {
      "title": "AI formula translate ask fixed",
@@ -3462,10 +3930,7 @@
     },
     "gk": {
      "title": "AI 수식 번역 요청 수정",
-     "items": [
-      "번역 수식 요청 AI() 함수 수식 바로 만들기",
-      "수식 안 되는 요청 억지 수식 대신 이유 알림"
-     ]
+     "items": ["번역 수식 요청 AI() 함수 수식 바로 만들기", "수식 안 되는 요청 억지 수식 대신 이유 알림"]
     }
    }
   },
@@ -3527,12 +3992,7 @@
     },
     "zh": {
      "title": "迷你条、迷你图、图标",
-     "items": [
-      "新增单元格内迷你条的条件格式",
-      "新增迷你图（把每行的值以折线或柱形画在另一列的单元格中）",
-      "新增图标集（箭头、红绿灯、分界标准和颜色反转）",
-      "可从功能区图标按钮和条件格式窗口打开，插入或删除行列时会跟着变化"
-     ]
+     "items": ["新增单元格内迷你条的条件格式", "新增迷你图（把每行的值以折线或柱形画在另一列的单元格中）", "新增图标集（箭头、红绿灯、分界标准和颜色反转）", "可从功能区图标按钮和条件格式窗口打开，插入或删除行列时会跟着变化"]
     },
     "pt": {
      "title": "Minibarras, sparklines e ícones",
@@ -3666,12 +4126,7 @@
     },
     "zh": {
      "title": "数据整理",
-     "items": [
-      "新增删除重复项（所选列相同即为重复，不区分大小写）",
-      "新增文本分列（按逗号、分号、制表符、空格或自定义分隔符，可预览）",
-      "新增清理空格（删除首尾和重复的空格）",
-      "都可以在数据菜单中撤销"
-     ]
+     "items": ["新增删除重复项（所选列相同即为重复，不区分大小写）", "新增文本分列（按逗号、分号、制表符、空格或自定义分隔符，可预览）", "新增清理空格（删除首尾和重复的空格）", "都可以在数据菜单中撤销"]
     },
     "pt": {
      "title": "Limpeza de dados",
@@ -4084,19 +4539,11 @@
     },
     "ja": {
      "title": "ピボットテーブル",
-     "items": [
-      "ピボットテーブルを追加（1つの列でグループ化して合計・個数・平均を計算、新しいシートに作成）",
-      "データツールメニューを追加（リボンのデータボタン）",
-      "グループ化の順序を選択（最初に出た順、名前順、値が大きい順）"
-     ]
+     "items": ["ピボットテーブルを追加（1つの列でグループ化して合計・個数・平均を計算、新しいシートに作成）", "データツールメニューを追加（リボンのデータボタン）", "グループ化の順序を選択（最初に出た順、名前順、値が大きい順）"]
     },
     "zh": {
      "title": "数据透视表",
-     "items": [
-      "新增数据透视表（按一列分组并计算合计、个数或平均值，在新表中生成）",
-      "新增数据工具菜单（功能区数据按钮）",
-      "可选择分组顺序（首次出现顺序、按名称、按值从大到小）"
-     ]
+     "items": ["新增数据透视表（按一列分组并计算合计、个数或平均值，在新表中生成）", "新增数据工具菜单（功能区数据按钮）", "可选择分组顺序（首次出现顺序、按名称、按值从大到小）"]
     },
     "pt": {
      "title": "Tabelas dinâmicas",
@@ -4156,11 +4603,7 @@
     },
     "gk": {
      "title": "피벗 테이블",
-     "items": [
-      "피벗 테이블 (한 열로 묶어 합계 개수 평균 계산 새 시트에 만들기)",
-      "데이터 도구 메뉴 (리본 데이터 단추)",
-      "묶는 순서 선택 (처음 나온 순서 이름순 값이 큰 순서)"
-     ]
+     "items": ["피벗 테이블 (한 열로 묶어 합계 개수 평균 계산 새 시트에 만들기)", "데이터 도구 메뉴 (리본 데이터 단추)", "묶는 순서 선택 (처음 나온 순서 이름순 값이 큰 순서)"]
     }
    }
   },
@@ -4677,87 +5120,59 @@
    "tr": {
     "en": {
      "title": "Translation example sentences replaced",
-     "items": [
-      "Translation examples replaced with easy sentences the model translates well"
-     ]
+     "items": ["Translation examples replaced with easy sentences the model translates well"]
     },
     "es": {
      "title": "Frases de ejemplo de traducción sustituidas",
-     "items": [
-      "Los ejemplos de traducción se cambiaron por frases fáciles que el modelo traduce bien"
-     ]
+     "items": ["Los ejemplos de traducción se cambiaron por frases fáciles que el modelo traduce bien"]
     },
     "fr": {
      "title": "Phrases d'exemple de traduction remplacées",
-     "items": [
-      "Les exemples de traduction sont remplacés par des phrases simples que le modèle traduit bien"
-     ]
+     "items": ["Les exemples de traduction sont remplacés par des phrases simples que le modèle traduit bien"]
     },
     "de": {
      "title": "Übersetzungsbeispiele ausgetauscht",
-     "items": [
-      "Die Übersetzungsbeispiele wurden durch einfache Sätze ersetzt, die das Modell gut übersetzt"
-     ]
+     "items": ["Die Übersetzungsbeispiele wurden durch einfache Sätze ersetzt, die das Modell gut übersetzt"]
     },
     "ja": {
      "title": "翻訳の例文を入れ替え",
-     "items": [
-      "翻訳の例を、モデルがうまく翻訳できる易しい文に入れ替え"
-     ]
+     "items": ["翻訳の例を、モデルがうまく翻訳できる易しい文に入れ替え"]
     },
     "zh": {
      "title": "更换翻译示例句",
-     "items": [
-      "翻译示例换成模型翻译得好的简单句子"
-     ]
+     "items": ["翻译示例换成模型翻译得好的简单句子"]
     },
     "pt": {
      "title": "Frases de exemplo de tradução trocadas",
-     "items": [
-      "Os exemplos de tradução foram trocados por frases fáceis que o modelo traduz bem"
-     ]
+     "items": ["Os exemplos de tradução foram trocados por frases fáceis que o modelo traduz bem"]
     },
     "ru": {
      "title": "Заменены примеры предложений для перевода",
-     "items": [
-      "Примеры перевода заменены простыми предложениями, которые модель хорошо переводит"
-     ]
+     "items": ["Примеры перевода заменены простыми предложениями, которые модель хорошо переводит"]
     },
     "tr": {
      "title": "Çeviri örnek cümleleri değiştirildi",
-     "items": [
-      "Çeviri örnekleri modelin iyi çevirdiği basit cümlelerle değiştirildi"
-     ]
+     "items": ["Çeviri örnekleri modelin iyi çevirdiği basit cümlelerle değiştirildi"]
     },
     "it": {
      "title": "Frasi d'esempio di traduzione sostituite",
-     "items": [
-      "Gli esempi di traduzione sono sostituiti da frasi semplici che il modello traduce bene"
-     ]
+     "items": ["Gli esempi di traduzione sono sostituiti da frasi semplici che il modello traduce bene"]
     },
     "pl": {
      "title": "Wymieniono przykładowe zdania do tłumaczenia",
-     "items": [
-      "Przykłady tłumaczenia zastąpiono prostymi zdaniami, które model dobrze tłumaczy"
-     ]
+     "items": ["Przykłady tłumaczenia zastąpiono prostymi zdaniami, które model dobrze tłumaczy"]
     },
     "ar": {
      "title": "استبدال جمل أمثلة الترجمة",
-     "items": [
-      "استُبدلت أمثلة الترجمة بجمل سهلة يترجمها النموذج جيدًا"
-     ]
+     "items": ["استُبدلت أمثلة الترجمة بجمل سهلة يترجمها النموذج جيدًا"]
     },
     "nw": {
      "title": "Translate example lines swapped",
-     "items": [
-      "Translate examples swapped for easy lines the model translates good"
-     ]
+     "items": ["Translate examples swapped for easy lines the model translates good"]
     },
     "gk": {
      "title": "번역 예시 문장 교체",
-     "items": [
-      "번역 예시 모델이 잘 번역하는 쉬운 문장으로 교체"
-     ]
+     "items": ["번역 예시 모델이 잘 번역하는 쉬운 문장으로 교체"]
     }
    }
   },
@@ -4800,17 +5215,11 @@
     },
     "ja": {
      "title": "AI画面を止める",
-     "items": [
-      "AIが答えている間、送信ボタンが停止ボタンに変わる",
-      "同じ言葉を繰り返し続けると自動で停止"
-     ]
+     "items": ["AIが答えている間、送信ボタンが停止ボタンに変わる", "同じ言葉を繰り返し続けると自動で停止"]
     },
     "zh": {
      "title": "停止 AI 窗口",
-     "items": [
-      "AI 回答期间，发送按钮会变成停止按钮",
-      "持续重复同样的话会自动停止"
-     ]
+     "items": ["AI 回答期间，发送按钮会变成停止按钮", "持续重复同样的话会自动停止"]
     },
     "pt": {
      "title": "Parar a janela de IA",
@@ -4828,10 +5237,7 @@
     },
     "tr": {
      "title": "AI penceresini durdurma",
-     "items": [
-      "AI cevap verirken gönder düğmesi durdur düğmesine dönüşür",
-      "Aynı sözleri sürekli tekrarlarsa otomatik durur"
-     ]
+     "items": ["AI cevap verirken gönder düğmesi durdur düğmesine dönüşür", "Aynı sözleri sürekli tekrarlarsa otomatik durur"]
     },
     "it": {
      "title": "Fermare la finestra IA",
@@ -4849,24 +5255,15 @@
     },
     "ar": {
      "title": "إيقاف نافذة الذكاء الاصطناعي",
-     "items": [
-      "أثناء إجابة الذكاء الاصطناعي يتحول زر الإرسال إلى زر إيقاف",
-      "إذا استمر في تكرار الكلام نفسه يتوقف تلقائيًا"
-     ]
+     "items": ["أثناء إجابة الذكاء الاصطناعي يتحول زر الإرسال إلى زر إيقاف", "إذا استمر في تكرار الكلام نفسه يتوقف تلقائيًا"]
     },
     "nw": {
      "title": "Stopping AI window",
-     "items": [
-      "While AI answers, send button becomes stop button",
-      "Same words over and over stops it auto"
-     ]
+     "items": ["While AI answers, send button becomes stop button", "Same words over and over stops it auto"]
     },
     "gk": {
      "title": "AI 창 멈추기",
-     "items": [
-      "AI 답하는 동안 보내기 단추 멈추기 단추로 변경",
-      "같은 말 계속 반복하면 자동 멈춤"
-     ]
+     "items": ["AI 답하는 동안 보내기 단추 멈추기 단추로 변경", "같은 말 계속 반복하면 자동 멈춤"]
     }
    }
   },
@@ -4880,9 +5277,7 @@
    "tr": {
     "en": {
      "title": "Built-in AI name and taught facts used",
-     "items": [
-      "In the ask and summary tab, the built-in AI uses its name and the facts developers taught it"
-     ]
+     "items": ["In the ask and summary tab, the built-in AI uses its name and the facts developers taught it"]
     },
     "es": {
      "title": "Se usan el nombre de la IA integrada y los datos enseñados",
@@ -4904,63 +5299,43 @@
     },
     "ja": {
      "title": "自前AIの名前と教えた事実を反映",
-     "items": [
-      "質問・要約タブで自前AIが自分の名前と開発者が教えた事実を活用"
-     ]
+     "items": ["質問・要約タブで自前AIが自分の名前と開発者が教えた事実を活用"]
     },
     "zh": {
      "title": "采用自带 AI 的名字和教过的事实",
-     "items": [
-      "在提问·总结标签页中，自带 AI 会使用自己的名字和开发者教给它的事实"
-     ]
+     "items": ["在提问·总结标签页中，自带 AI 会使用自己的名字和开发者教给它的事实"]
     },
     "pt": {
      "title": "Nome da IA integrada e fatos ensinados usados",
-     "items": [
-      "Na aba de perguntas e resumos, a IA integrada usa seu nome e os fatos que os desenvolvedores lhe ensinaram"
-     ]
+     "items": ["Na aba de perguntas e resumos, a IA integrada usa seu nome e os fatos que os desenvolvedores lhe ensinaram"]
     },
     "ru": {
      "title": "Учитываются имя встроенного ИИ и выученные факты",
-     "items": [
-      "На вкладке вопросов и пересказов встроенный ИИ использует своё имя и факты, которым его научили разработчики"
-     ]
+     "items": ["На вкладке вопросов и пересказов встроенный ИИ использует своё имя и факты, которым его научили разработчики"]
     },
     "tr": {
      "title": "Yerleşik AI'nın adı ve öğretilen bilgiler kullanılıyor",
-     "items": [
-      "Soru-özet sekmesinde yerleşik AI kendi adını ve geliştiricilerin öğrettiği bilgileri kullanır"
-     ]
+     "items": ["Soru-özet sekmesinde yerleşik AI kendi adını ve geliştiricilerin öğrettiği bilgileri kullanır"]
     },
     "it": {
      "title": "Usati il nome dell'IA integrata e i fatti insegnati",
-     "items": [
-      "Nella scheda domande e riassunti l'IA integrata usa il proprio nome e i fatti insegnati dagli sviluppatori"
-     ]
+     "items": ["Nella scheda domande e riassunti l'IA integrata usa il proprio nome e i fatti insegnati dagli sviluppatori"]
     },
     "pl": {
      "title": "Wykorzystanie nazwy wbudowanego AI i wyuczonych faktów",
-     "items": [
-      "W karcie pytań i streszczeń wbudowane AI używa swojej nazwy i faktów, których nauczyli je deweloperzy"
-     ]
+     "items": ["W karcie pytań i streszczeń wbudowane AI używa swojej nazwy i faktów, których nauczyli je deweloperzy"]
     },
     "ar": {
      "title": "اعتماد اسم الذكاء الاصطناعي المدمج والحقائق التي تعلّمها",
-     "items": [
-      "في تبويب السؤال والتلخيص يستخدم الذكاء الاصطناعي المدمج اسمه والحقائق التي علّمه إياها المطورون"
-     ]
+     "items": ["في تبويب السؤال والتلخيص يستخدم الذكاء الاصطناعي المدمج اسمه والحقائق التي علّمه إياها المطورون"]
     },
     "nw": {
      "title": "Built-in AI name plus taught facts used",
-     "items": [
-      "In ask plus sum tab, built-in AI uses own name plus facts makers taught"
-     ]
+     "items": ["In ask plus sum tab, built-in AI uses own name plus facts makers taught"]
     },
     "gk": {
      "title": "자체 AI 이름 가르친 사실 반영",
-     "items": [
-      "질문 요약 탭 자체 AI 이름 개발자가 가르친 사실 활용"
-     ]
+     "items": ["질문 요약 탭 자체 AI 이름 개발자가 가르친 사실 활용"]
     }
    }
   },
@@ -5003,17 +5378,11 @@
     },
     "ja": {
      "title": "グラフ作成タブ",
-     "items": [
-      "AI画面にグラフ作成タブを追加",
-      "表からチャートの種類と範囲をAIが選んでチャートを入れる"
-     ]
+     "items": ["AI画面にグラフ作成タブを追加", "表からチャートの種類と範囲をAIが選んでチャートを入れる"]
     },
     "zh": {
      "title": "生成图表标签页",
-     "items": [
-      "AI 窗口新增生成图表标签页",
-      "AI 根据表格选择图表类型和范围并插入图表"
-     ]
+     "items": ["AI 窗口新增生成图表标签页", "AI 根据表格选择图表类型和范围并插入图表"]
     },
     "pt": {
      "title": "Aba Criar gráficos",
@@ -5031,10 +5400,7 @@
     },
     "tr": {
      "title": "Grafik yapma sekmesi",
-     "items": [
-      "AI penceresine Grafik yap sekmesi eklendi",
-      "AI tablodan grafik türünü ve aralığı seçip grafiği ekler"
-     ]
+     "items": ["AI penceresine Grafik yap sekmesi eklendi", "AI tablodan grafik türünü ve aralığı seçip grafiği ekler"]
     },
     "it": {
      "title": "Scheda Crea grafici",
@@ -5045,10 +5411,7 @@
     },
     "pl": {
      "title": "Karta Twórz wykresy",
-     "items": [
-      "Do okna AI dodano kartę Twórz wykresy",
-      "AI wybiera z tabeli typ wykresu i zakres i wstawia wykres"
-     ]
+     "items": ["Do okna AI dodano kartę Twórz wykresy", "AI wybiera z tabeli typ wykresu i zakres i wstawia wykres"]
     },
     "ar": {
      "title": "تبويب إنشاء الرسوم",
@@ -5059,17 +5422,11 @@
     },
     "nw": {
      "title": "Make charts tab",
-     "items": [
-      "Added Make charts tab to AI window",
-      "AI picks chart type plus range from table, puts chart in"
-     ]
+     "items": ["Added Make charts tab to AI window", "AI picks chart type plus range from table, puts chart in"]
     },
     "gk": {
      "title": "그래프 만들기 탭",
-     "items": [
-      "AI 창 그래프 만들기 탭 추가",
-      "표에서 차트 종류 범위 AI 골라 차트 넣기"
-     ]
+     "items": ["AI 창 그래프 만들기 탭 추가", "표에서 차트 종류 범위 AI 골라 차트 넣기"]
     }
    }
   },
@@ -5122,21 +5479,11 @@
     },
     "ja": {
      "title": "AIの例とリアルタイム回答",
-     "items": [
-      "AI画面に例のボタンを追加",
-      "答えが書かれる順にすぐ表示",
-      "送信中の停止に対応",
-      "=AI の翻訳の紹介と、一度に入れて試せる例を追加"
-     ]
+     "items": ["AI画面に例のボタンを追加", "答えが書かれる順にすぐ表示", "送信中の停止に対応", "=AI の翻訳の紹介と、一度に入れて試せる例を追加"]
     },
     "zh": {
      "title": "AI 示例和实时回答",
-     "items": [
-      "AI 窗口新增示例按钮",
-      "回答边写边显示",
-      "发送中可停止",
-      "新增 =AI 翻译介绍和可一次性放入尝试的示例"
-     ]
+     "items": ["AI 窗口新增示例按钮", "回答边写边显示", "发送中可停止", "新增 =AI 翻译介绍和可一次性放入尝试的示例"]
     },
     "pt": {
      "title": "Exemplos de IA e respostas ao vivo",
@@ -5203,12 +5550,7 @@
     },
     "gk": {
      "title": "AI 예시 실시간 답변",
-     "items": [
-      "AI 창 예시 단추",
-      "답이 쓰이는 대로 바로 표시",
-      "보내는 중 멈추기 지원",
-      "=AI 번역 소개 한 번에 넣어 보는 예시"
-     ]
+     "items": ["AI 창 예시 단추", "답이 쓰이는 대로 바로 표시", "보내는 중 멈추기 지원", "=AI 번역 소개 한 번에 넣어 보는 예시"]
     }
    }
   },
@@ -5256,19 +5598,11 @@
     },
     "ja": {
      "title": "AI連携",
-     "items": [
-      "=AI() セル関数を追加",
-      "AI画面を追加（質問・要約、数式作成、表作成）",
-      "開始時のサンプル表を削除"
-     ]
+     "items": ["=AI() セル関数を追加", "AI画面を追加（質問・要約、数式作成、表作成）", "開始時のサンプル表を削除"]
     },
     "zh": {
      "title": "连接 AI",
-     "items": [
-      "新增 =AI() 单元格函数",
-      "新增 AI 窗口（提问·总结、生成公式、生成表格）",
-      "移除起始示例表格"
-     ]
+     "items": ["新增 =AI() 单元格函数", "新增 AI 窗口（提问·总结、生成公式、生成表格）", "移除起始示例表格"]
     },
     "pt": {
      "title": "Conexão com IA",
@@ -5328,11 +5662,7 @@
     },
     "gk": {
      "title": "AI 연결",
-     "items": [
-      "=AI() 셀 함수 추가",
-      "AI 창 추가 (질문 요약 수식 만들기 표 만들기)",
-      "시작 샘플 표 제거"
-     ]
+     "items": ["=AI() 셀 함수 추가", "AI 창 추가 (질문 요약 수식 만들기 표 만들기)", "시작 샘플 표 제거"]
     }
    }
   },
@@ -5385,21 +5715,11 @@
     },
     "ja": {
      "title": "表の視覚化",
-     "items": [
-      "視覚化ボタンを追加（グラフ、整えた表、図、マインドマップ）",
-      "視覚化をPNGで保存",
-      "チャートに散布図の種類を追加",
-      "チャートのラベルを先頭の文字の列から取得"
-     ]
+     "items": ["視覚化ボタンを追加（グラフ、整えた表、図、マインドマップ）", "視覚化をPNGで保存", "チャートに散布図の種類を追加", "チャートのラベルを先頭の文字の列から取得"]
     },
     "zh": {
      "title": "表格可视化",
-     "items": [
-      "新增可视化按钮（图表、整理后的表格、图示、思维导图）",
-      "可视化结果可保存为 PNG",
-      "图表新增散点图类型",
-      "图表标签可取自最前面的文字列"
-     ]
+     "items": ["新增可视化按钮（图表、整理后的表格、图示、思维导图）", "可视化结果可保存为 PNG", "图表新增散点图类型", "图表标签可取自最前面的文字列"]
     },
     "pt": {
      "title": "Visualização de tabelas",
@@ -5466,12 +5786,7 @@
     },
     "gk": {
      "title": "표 시각화",
-     "items": [
-      "시각화 단추 (그래프 정돈된 표 다이어그램 마인드맵)",
-      "시각화 PNG 저장",
-      "차트 산점도 종류",
-      "차트 이름표 앞쪽 글자 열에서 가져오기"
-     ]
+     "items": ["시각화 단추 (그래프 정돈된 표 다이어그램 마인드맵)", "시각화 PNG 저장", "차트 산점도 종류", "차트 이름표 앞쪽 글자 열에서 가져오기"]
     }
    }
   },
@@ -5524,21 +5839,11 @@
     },
     "ja": {
      "title": "スプレッドシート公開",
-     "items": [
-      "SUM、IF、VLOOKUP など関数60余り",
-      "表を直すとすぐ変わるチャート、色段階、データバー、チェックボックス",
-      "Excel ファイルの読み込みと保存",
-      "iPad で指による範囲選択と塗りつぶし"
-     ]
+     "items": ["SUM、IF、VLOOKUP など関数60余り", "表を直すとすぐ変わるチャート、色段階、データバー、チェックボックス", "Excel ファイルの読み込みと保存", "iPad で指による範囲選択と塗りつぶし"]
     },
     "zh": {
      "title": "电子表格上线",
-     "items": [
-      "SUM、IF、VLOOKUP 等 60 多个函数",
-      "修改表格立即变化的图表、色阶、数据条和复选框",
-      "打开和保存 Excel 文件",
-      "在 iPad 上用手指选择范围和填充"
-     ]
+     "items": ["SUM、IF、VLOOKUP 等 60 多个函数", "修改表格立即变化的图表、色阶、数据条和复选框", "打开和保存 Excel 文件", "在 iPad 上用手指选择范围和填充"]
     },
     "pt": {
      "title": "Planilha lançada",
@@ -5605,12 +5910,7 @@
     },
     "gk": {
      "title": "스프레드시트 공개",
-     "items": [
-      "SUM IF VLOOKUP 등 함수 60여 개",
-      "표 고치면 바로 바뀌는 차트 색 단계 데이터 막대 체크박스",
-      "엑셀 파일 열기 저장",
-      "아이패드 손가락 범위 선택 채우기"
-     ]
+     "items": ["SUM IF VLOOKUP 등 함수 60여 개", "표 고치면 바로 바뀌는 차트 색 단계 데이터 막대 체크박스", "엑셀 파일 열기 저장", "아이패드 손가락 범위 선택 채우기"]
     }
    }
   }

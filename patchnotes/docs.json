@@ -23,6 +23,116 @@
       "Edits to different paragraphs, list items or table cells never lose text",
       "When the host closes the room, guests keep their own copy"
      ]
+    },
+    "es": {
+     "title": "Coedición en tiempo real",
+     "items": [
+      "Crea una sala con «Editar juntos» en la pestaña Revisar y deja que varias personas editen un mismo documento a la vez con código o enlace",
+      "Usa tu nombre de cuenta o escribe un nombre, y entra sin iniciar sesión",
+      "Los cambios de cada uno se distinguen con marcas de color y la posición del cursor",
+      "Las modificaciones en párrafos, elementos de lista o celdas de tabla distintos no borran texto aunque se hagan a la vez",
+      "Cuando el anfitrión cierra la sala, quienes entraron se quedan con su propia copia"
+     ]
+    },
+    "fr": {
+     "title": "Édition collaborative en temps réel",
+     "items": [
+      "Créez un salon avec « Modifier ensemble » dans l'onglet Révision et laissez plusieurs personnes modifier le même document en même temps grâce à un code ou un lien",
+      "Utilisez le nom de votre compte ou saisissez un nom, et entrez sans vous connecter",
+      "Les marques de couleur et la position du curseur indiquent qui modifie où",
+      "Les modifications sur des paragraphes, éléments de liste ou cellules de tableau différents ne font jamais disparaître de texte, même simultanément",
+      "Lorsque l'hôte ferme le salon, les invités gardent leur propre copie"
+     ]
+    },
+    "de": {
+     "title": "Gemeinsames Bearbeiten in Echtzeit",
+     "items": [
+      "Im Tab Überprüfen mit „Gemeinsam bearbeiten“ einen Raum erstellen; mehrere Personen bearbeiten dann dasselbe Dokument gleichzeitig per Code oder Link",
+      "Kontoname verwenden oder einen Namen eingeben und ohne Anmeldung beitreten",
+      "Farbige Namensmarken und Textmarken zeigen, wer wo bearbeitet",
+      "Gleichzeitige Änderungen an verschiedenen Absätzen, Listenpunkten oder Tabellenzellen löschen nie Text",
+      "Schließt der Gastgeber den Raum, behalten die Gäste ihre eigene Kopie"
+     ]
+    },
+    "ja": {
+     "title": "リアルタイム共同編集",
+     "items": [
+      "校閲タブの「一緒に編集」で部屋を作り、コードかリンクで複数人が同じ文書を同時に編集できます",
+      "アカウント名を使うか名前を入力し、ログインなしで参加できます",
+      "色つきの名前札と文字の位置で、誰がどこを編集しているかわかります",
+      "異なる段落・リスト項目・表のセルを同時に編集しても文字が消えることはありません",
+      "ホストが部屋を閉じると、参加した人は自分の機器にあるコピーをそのまま持ちます"
+     ]
+    },
+    "zh": {
+     "title": "实时共同编辑",
+     "items": [
+      "在“审阅”选项卡用“一起编辑”创建房间，通过代码或链接让多人同时编辑同一文档",
+      "可使用账号名或自行输入名字，无需登录即可加入",
+      "通过彩色名牌和光标位置显示谁在哪里编辑",
+      "同时修改不同的段落、列表项或表格单元格，文字也不会丢失",
+      "房主关闭房间后，加入的人会保留自己设备上的副本"
+     ]
+    },
+    "pt": {
+     "title": "Edição em tempo real",
+     "items": [
+      "Crie uma sala com \"Editar juntos\" na aba Revisão e deixe várias pessoas editarem o mesmo documento ao mesmo tempo, por código ou link",
+      "Use o nome da sua conta ou digite um nome, e entre sem fazer login",
+      "Etiquetas de nome coloridas e a posição do cursor mostram quem edita onde",
+      "Edições em parágrafos, itens de lista ou células de tabela diferentes nunca apagam texto, mesmo ao mesmo tempo",
+      "Quando o anfitrião fecha a sala, quem entrou fica com a própria cópia"
+     ]
+    },
+    "ru": {
+     "title": "Совместное редактирование в реальном времени",
+     "items": [
+      "Создайте комнату кнопкой «Редактировать вместе» на вкладке «Рецензирование», и несколько человек смогут одновременно править один документ по коду или ссылке",
+      "Можно использовать имя аккаунта или ввести своё, и войти без входа в аккаунт",
+      "Цветные метки с именами и положение курсора показывают, кто где редактирует",
+      "Одновременные правки разных абзацев, пунктов списка или ячеек таблицы не стирают текст",
+      "Когда хозяин закрывает комнату, гости сохраняют свою копию"
+     ]
+    },
+    "tr": {
+     "title": "Gerçek zamanlı birlikte düzenleme",
+     "items": [
+      "İnceleme sekmesindeki \"Birlikte düzenle\" ile bir oda oluşturun; kod veya bağlantıyla birden çok kişi aynı belgeyi aynı anda düzenleyebilir",
+      "Hesap adınızı kullanın ya da bir ad yazın; oturum açmadan katılabilirsiniz",
+      "Renkli isim etiketleri ve imleç konumu kimin nerede düzenlediğini gösterir",
+      "Farklı paragraf, liste öğesi veya tablo hücrelerinde aynı anda yapılan değişiklikler metni asla silmez",
+      "Oda sahibi odayı kapattığında, katılanlar kendi kopyalarını korur"
+     ]
+    },
+    "it": {
+     "title": "Modifica condivisa in tempo reale",
+     "items": [
+      "Crea una stanza con «Modifica insieme» nella scheda Revisione e lascia che più persone modifichino lo stesso documento contemporaneamente tramite codice o link",
+      "Usa il nome del tuo account o scrivine uno, ed entra senza accedere",
+      "Etichette colorate con il nome e la posizione del cursore mostrano chi modifica dove",
+      "Modifiche a paragrafi, elementi di elenco o celle di tabella diversi non fanno mai perdere testo, anche se fatte insieme",
+      "Quando l'host chiude la stanza, gli ospiti conservano la propria copia"
+     ]
+    },
+    "pl": {
+     "title": "Wspólna edycja w czasie rzeczywistym",
+     "items": [
+      "Utwórz pokój przyciskiem „Edytuj razem” na karcie Recenzja i pozwól kilku osobom edytować ten sam dokument jednocześnie, za pomocą kodu lub linku",
+      "Użyj nazwy konta lub wpisz własną, i dołącz bez logowania",
+      "Kolorowe etykiety z nazwiskiem i położenie kursora pokazują, kto gdzie edytuje",
+      "Zmiany w różnych akapitach, pozycjach list lub komórkach tabeli nigdy nie kasują tekstu, nawet jeśli są wykonane jednocześnie",
+      "Gdy gospodarz zamknie pokój, goście zachowują swoją kopię"
+     ]
+    },
+    "ar": {
+     "title": "التحرير المشترك في الوقت الفعلي",
+     "items": [
+      "أنشئ غرفة بزر \"تحرير معًا\" في تبويب المراجعة، ويمكن لعدة أشخاص تحرير المستند نفسه في الوقت ذاته بالرمز أو الرابط",
+      "استخدم اسم حسابك أو اكتب اسمًا، وادخل دون تسجيل الدخول",
+      "تُظهر بطاقات الأسماء الملونة وموضع المؤشر من يحرّر وأين",
+      "التعديلات على فقرات أو عناصر قائمة أو خلايا جدول مختلفة لا تُفقد النص أبدًا حتى وإن تمت في الوقت نفسه",
+      "عند إغلاق المضيف للغرفة، يحتفظ المنضمون بنسختهم على أجهزتهم"
+     ]
     }
    }
   },
@@ -40,6 +150,77 @@
      "items": [
       "Added the shared room tool (peer-room.js) that lets several people work in one room",
       "Fry Sheet can use the same tool"
+     ]
+    },
+    "es": {
+     "title": "Preparación para editar juntos",
+     "items": [
+      "Se añadió la herramienta de sala compartida (peer-room.js) para que varias personas trabajen juntas en una misma sala",
+      "Fry Sheet también puede usar la misma herramienta"
+     ]
+    },
+    "fr": {
+     "title": "Préparation à l'édition collaborative",
+     "items": [
+      "Ajout de l'outil de salon partagé (peer-room.js) qui permet à plusieurs personnes de travailler dans un même salon",
+      "Fry Sheet peut utiliser le même outil"
+     ]
+    },
+    "de": {
+     "title": "Vorbereitung für gemeinsames Bearbeiten",
+     "items": [
+      "Das gemeinsame Raum-Werkzeug (peer-room.js) wurde hinzugefügt, damit mehrere Personen in einem Raum arbeiten können",
+      "Auch Fry Sheet kann dasselbe Werkzeug verwenden"
+     ]
+    },
+    "ja": {
+     "title": "一緒に編集するための準備",
+     "items": ["複数人が1つの部屋で作業できる共有ルーム用ツール（peer-room.js）を追加", "Fry Sheetも同じツールを使えます"]
+    },
+    "zh": {
+     "title": "共同编辑的准备工作",
+     "items": ["新增共享房间工具（peer-room.js），让多人在同一房间中协作", "Fry Sheet 也可以使用同一工具"]
+    },
+    "pt": {
+     "title": "Preparação para editar juntos",
+     "items": [
+      "Adicionada a ferramenta de sala compartilhada (peer-room.js) para que várias pessoas trabalhem em uma mesma sala",
+      "O Fry Sheet também pode usar a mesma ferramenta"
+     ]
+    },
+    "ru": {
+     "title": "Подготовка к совместному редактированию",
+     "items": [
+      "Добавлен инструмент общей комнаты (peer-room.js), с которым несколько человек работают в одной комнате",
+      "Fry Sheet тоже может использовать тот же инструмент"
+     ]
+    },
+    "tr": {
+     "title": "Birlikte düzenlemeye hazırlık",
+     "items": [
+      "Birden çok kişinin aynı odada çalışmasını sağlayan ortak oda aracı (peer-room.js) eklendi",
+      "Fry Sheet de aynı aracı kullanabilir"
+     ]
+    },
+    "it": {
+     "title": "Preparazione alla modifica condivisa",
+     "items": [
+      "Aggiunto lo strumento di stanza condivisa (peer-room.js) che permette a più persone di lavorare nella stessa stanza",
+      "Anche Fry Sheet può usare lo stesso strumento"
+     ]
+    },
+    "pl": {
+     "title": "Przygotowanie do wspólnej edycji",
+     "items": [
+      "Dodano wspólne narzędzie pokoju (peer-room.js), dzięki któremu kilka osób pracuje w jednym pokoju",
+      "Fry Sheet może korzystać z tego samego narzędzia"
+     ]
+    },
+    "ar": {
+     "title": "الاستعداد للتحرير المشترك",
+     "items": [
+      "تمت إضافة أداة الغرفة المشتركة (peer-room.js) التي تتيح لعدة أشخاص العمل في غرفة واحدة",
+      "يمكن لـ Fry Sheet استخدام الأداة نفسها"
      ]
     }
    }
@@ -59,6 +240,77 @@
       "Charts in the Insert tab (bar, line and pie)",
       "Type names and numbers and the chart goes in as a picture that also saves to Word files"
      ]
+    },
+    "es": {
+     "title": "Insertar gráficos",
+     "items": [
+      "Gráficos en la pestaña Insertar (de barras, de líneas y circulares)",
+      "Escribe nombres y números y el gráfico se inserta como imagen, que también se guarda en archivos de Word"
+     ]
+    },
+    "fr": {
+     "title": "Insérer des graphiques",
+     "items": [
+      "Graphiques dans l'onglet Insertion (à barres, courbes et secteurs)",
+      "Saisissez des noms et des nombres, et le graphique est inséré comme image, enregistrable aussi dans les fichiers Word"
+     ]
+    },
+    "de": {
+     "title": "Diagramme einfügen",
+     "items": [
+      "Diagramme im Tab Einfügen (Balken, Linien und Kreis)",
+      "Namen und Zahlen eingeben, dann wird das Diagramm als Bild eingefügt, das sich auch in Word-Dateien speichert"
+     ]
+    },
+    "ja": {
+     "title": "グラフの挿入",
+     "items": ["挿入タブのグラフ（棒、折れ線、円）", "名前と数字を入力すると、グラフが画像として入り、Wordファイルにも保存できます"]
+    },
+    "zh": {
+     "title": "插入图表",
+     "items": ["“插入”选项卡中的图表（柱形图、折线图和饼图）", "输入名称和数字即可插入图表（以图片形式），也可保存到 Word 文件中"]
+    },
+    "pt": {
+     "title": "Inserir gráficos",
+     "items": [
+      "Gráficos na aba Inserir (de barras, de linhas e de pizza)",
+      "Digite nomes e números e o gráfico entra como imagem, que também é salva em arquivos Word"
+     ]
+    },
+    "ru": {
+     "title": "Вставка диаграмм",
+     "items": [
+      "Диаграммы на вкладке «Вставка» (столбчатые, линейные и круговые)",
+      "Введите названия и числа, и диаграмма вставится как рисунок, который сохраняется и в файлы Word"
+     ]
+    },
+    "tr": {
+     "title": "Grafik ekleme",
+     "items": [
+      "Ekle sekmesinde grafikler (çubuk, çizgi ve pasta)",
+      "İsim ve sayıları yazın; grafik resim olarak eklenir ve Word dosyalarına da kaydedilebilir"
+     ]
+    },
+    "it": {
+     "title": "Inserire grafici",
+     "items": [
+      "Grafici nella scheda Inserisci (a barre, a linee e a torta)",
+      "Scrivi nomi e numeri e il grafico viene inserito come immagine, salvabile anche nei file Word"
+     ]
+    },
+    "pl": {
+     "title": "Wstawianie wykresów",
+     "items": [
+      "Wykresy na karcie Wstaw (słupkowe, liniowe i kołowe)",
+      "Wpisz nazwy i liczby, a wykres wstawi się jako obraz, który zapisze się także w plikach Word"
+     ]
+    },
+    "ar": {
+     "title": "إدراج المخططات",
+     "items": [
+      "مخططات في تبويب إدراج (أعمدة وخطوط ودائرية)",
+      "اكتب الأسماء والأرقام وسيُدرج المخطط كصورة، ويُحفظ أيضًا في ملفات Word"
+     ]
     }
    }
   },
@@ -76,6 +328,77 @@
      "items": [
       "Pictures (png, jpeg, gif, webp) now open together with the text of a Word (.docx) file",
       "Large pictures are shrunk when opening so the saved document stays small"
+     ]
+    },
+    "es": {
+     "title": "Imágenes al abrir archivos de Word",
+     "items": [
+      "Al abrir un documento de Word (.docx), las imágenes (png, jpeg, gif, webp) también se abren junto con el texto",
+      "Las imágenes grandes se reducen al abrirlas para que el documento guardado siga siendo pequeño"
+     ]
+    },
+    "fr": {
+     "title": "Images à l'ouverture des fichiers Word",
+     "items": [
+      "Lors de l'ouverture d'un document Word (.docx), les images (png, jpeg, gif, webp) s'ouvrent aussi avec le texte",
+      "Les grandes images sont réduites à l'ouverture pour que le document enregistré reste léger"
+     ]
+    },
+    "de": {
+     "title": "Bilder beim Öffnen von Word-Dateien",
+     "items": [
+      "Beim Öffnen eines Word-Dokuments (.docx) werden Bilder (png, jpeg, gif, webp) zusammen mit dem Text geöffnet",
+      "Große Bilder werden beim Öffnen verkleinert, damit das gespeicherte Dokument klein bleibt"
+     ]
+    },
+    "ja": {
+     "title": "Word ファイルを開くときの画像",
+     "items": ["Word文書（.docx）を開くと、画像（png、jpeg、gif、webp）も文字と一緒に開きます", "大きな画像は開くときに縮小され、保存した文書を小さく保てます"]
+    },
+    "zh": {
+     "title": "打开 Word 文件时的图片",
+     "items": ["打开 Word 文档（.docx）时，图片（png、jpeg、gif、webp）也会与文字一起打开", "大图片在打开时会自动缩小，以保持保存后的文档较小"]
+    },
+    "pt": {
+     "title": "Imagens ao abrir arquivos Word",
+     "items": [
+      "Ao abrir um documento Word (.docx), as imagens (png, jpeg, gif, webp) também abrem junto com o texto",
+      "Imagens grandes são reduzidas ao abrir, para que o documento salvo continue pequeno"
+     ]
+    },
+    "ru": {
+     "title": "Изображения при открытии файлов Word",
+     "items": [
+      "При открытии документа Word (.docx) изображения (png, jpeg, gif, webp) открываются вместе с текстом",
+      "Большие изображения уменьшаются при открытии, чтобы сохранённый документ оставался небольшим"
+     ]
+    },
+    "tr": {
+     "title": "Word dosyaları açılırken resimler",
+     "items": [
+      "Bir Word belgesi (.docx) açılırken resimler (png, jpeg, gif, webp) metinle birlikte açılır",
+      "Büyük resimler açılırken küçültülür, böylece kaydedilen belge küçük kalır"
+     ]
+    },
+    "it": {
+     "title": "Immagini all'apertura dei file Word",
+     "items": [
+      "Aprendo un documento Word (.docx), le immagini (png, jpeg, gif, webp) si aprono insieme al testo",
+      "Le immagini grandi vengono ridotte all'apertura, così il documento salvato resta leggero"
+     ]
+    },
+    "pl": {
+     "title": "Obrazy przy otwieraniu plików Word",
+     "items": [
+      "Podczas otwierania dokumentu Word (.docx) obrazy (png, jpeg, gif, webp) otwierają się razem z tekstem",
+      "Duże obrazy są pomniejszane przy otwieraniu, aby zapisany dokument pozostał mały"
+     ]
+    },
+    "ar": {
+     "title": "الصور عند فتح ملفات Word",
+     "items": [
+      "عند فتح مستند Word (.docx) تُفتح الصور (png وjpeg وgif وwebp) مع النص",
+      "تُصغَّر الصور الكبيرة عند الفتح حتى يبقى المستند المحفوظ صغيرًا"
      ]
     }
    }
@@ -103,6 +426,127 @@
       "Sort paragraphs A to Z or backwards in the Home tab",
       "Insert a row above and a column to the left in tables"
      ]
+    },
+    "es": {
+     "title": "Panel de navegación, lectura en voz alta y bloqueo de edición",
+     "items": [
+      "Panel de navegación en la pestaña Ver (haz clic en un título para ir a él)",
+      "Lectura en voz alta de la selección o de todo el documento",
+      "Activar o desactivar el subrayado de ortografía",
+      "Bloqueo de edición en la pestaña Revisar",
+      "Ordenar párrafos de la A a la Z o al revés en la pestaña Inicio",
+      "Insertar una fila encima y una columna a la izquierda en las tablas"
+     ]
+    },
+    "fr": {
+     "title": "Volet de navigation, lecture à voix haute et verrouillage",
+     "items": [
+      "Volet de navigation dans l'onglet Affichage (cliquez sur un titre pour y aller)",
+      "Lecture à voix haute de la sélection ou de tout le document",
+      "Activer ou désactiver le soulignement orthographique",
+      "Verrouillage de l'édition dans l'onglet Révision",
+      "Trier les paragraphes de A à Z ou à l'envers dans l'onglet Accueil",
+      "Insérer une ligne au-dessus et une colonne à gauche dans les tableaux"
+     ]
+    },
+    "de": {
+     "title": "Navigationsbereich, Vorlesen und Bearbeitungssperre",
+     "items": [
+      "Navigationsbereich im Tab Ansicht (Klick auf eine Überschrift springt dorthin)",
+      "Vorlesen der Auswahl oder des gesamten Dokuments",
+      "Rechtschreib-Unterstreichung ein- oder ausschalten",
+      "Bearbeitungssperre im Tab Überprüfen",
+      "Absätze von A bis Z oder umgekehrt sortieren im Tab Start",
+      "In Tabellen eine Zeile darüber und eine Spalte links einfügen"
+     ]
+    },
+    "ja": {
+     "title": "ナビゲーション、読み上げ、編集ロック",
+     "items": [
+      "表示タブのナビゲーション窓（見出しを押すとその位置へ移動）",
+      "選択範囲または文書全体の読み上げ",
+      "スペルチェックの下線のオン・オフ",
+      "校閲タブの編集ロック",
+      "ホームタブで段落を五十音順または逆順に並べ替え",
+      "表に上の行と左の列を挿入"
+     ]
+    },
+    "zh": {
+     "title": "导航窗格、朗读和编辑锁定",
+     "items": [
+      "“视图”选项卡中的导航窗格（点击标题即可跳转）",
+      "朗读所选内容或整篇文档",
+      "开启或关闭拼写检查下划线",
+      "校阅选项卡中的编辑锁定",
+      "在“开始”选项卡中按拼音或反向排列段落",
+      "表格中可在上方插入行、在左侧插入列"
+     ]
+    },
+    "pt": {
+     "title": "Painel de navegação, leitura em voz alta e bloqueio de edição",
+     "items": [
+      "Painel de navegação na aba Exibir (clique em um título para ir até ele)",
+      "Leitura em voz alta da seleção ou de todo o documento",
+      "Ativar ou desativar o sublinhado ortográfico",
+      "Bloqueio de edição na aba Revisão",
+      "Ordenar parágrafos de A a Z ou ao contrário na aba Página Inicial",
+      "Inserir uma linha acima e uma coluna à esquerda nas tabelas"
+     ]
+    },
+    "ru": {
+     "title": "Панель навигации, чтение вслух и блокировка правки",
+     "items": [
+      "Панель навигации на вкладке «Вид» (нажмите заголовок, чтобы перейти к нему)",
+      "Чтение вслух выделенного фрагмента или всего документа",
+      "Включение и выключение подчёркивания орфографии",
+      "Блокировка правки на вкладке «Рецензирование»",
+      "Сортировка абзацев по алфавиту или в обратном порядке на вкладке «Главная»",
+      "Вставка строки сверху и столбца слева в таблицах"
+     ]
+    },
+    "tr": {
+     "title": "Gezinti bölmesi, sesli okuma ve düzenleme kilidi",
+     "items": [
+      "Görünüm sekmesinde gezinti bölmesi (bir başlığa tıklayıp oraya gidin)",
+      "Seçilen metnin ya da tüm belgenin sesli okunması",
+      "Yazım denetimi alt çizgisini açma veya kapatma",
+      "İnceleme sekmesinde düzenleme kilidi",
+      "Giriş sekmesinde paragrafları A'dan Z'ye veya tersine sıralama",
+      "Tablolarda üste satır, sola sütun ekleme"
+     ]
+    },
+    "it": {
+     "title": "Riquadro di navigazione, lettura ad alta voce e blocco della modifica",
+     "items": [
+      "Riquadro di navigazione nella scheda Visualizza (clicca un titolo per andarci)",
+      "Lettura ad alta voce della selezione o dell'intero documento",
+      "Attivare o disattivare la sottolineatura ortografica",
+      "Blocco della modifica nella scheda Revisione",
+      "Ordinare i paragrafi dalla A alla Z o al contrario nella scheda Home",
+      "Inserire una riga sopra e una colonna a sinistra nelle tabelle"
+     ]
+    },
+    "pl": {
+     "title": "Panel nawigacji, czytanie na głos i blokada edycji",
+     "items": [
+      "Panel nawigacji na karcie Widok (kliknij nagłówek, aby przejść do niego)",
+      "Czytanie na głos zaznaczenia lub całego dokumentu",
+      "Włączanie i wyłączanie podkreślenia pisowni",
+      "Blokada edycji na karcie Recenzja",
+      "Sortowanie akapitów od A do Z lub odwrotnie na karcie Narzędzia główne",
+      "Wstawianie wiersza nad i kolumny po lewej w tabelach"
+     ]
+    },
+    "ar": {
+     "title": "جزء التنقل والقراءة بصوت عالٍ وقفل التحرير",
+     "items": [
+      "جزء التنقل في تبويب عرض (انقر عنوانًا للانتقال إليه)",
+      "القراءة بصوت عالٍ للتحديد أو للمستند كاملًا",
+      "تشغيل أو إيقاف تسطير الإملاء",
+      "قفل التحرير في تبويب المراجعة",
+      "فرز الفقرات أبجديًا أو عكسيًا في تبويب الصفحة الرئيسية",
+      "إدراج صف فوق وعمود إلى اليسار في الجداول"
+     ]
     }
    }
   },
@@ -122,6 +566,90 @@
       "Paragraph settings in the Layout tab (left indent, first-line indent or hanging, spacing before and after, line spacing)",
       "Drop cap in paragraph looks",
       "Paragraph spacing and first-line indent or hanging are kept when saving and opening Word files"
+     ]
+    },
+    "es": {
+     "title": "Ajustes de párrafo y letra capital",
+     "items": [
+      "Ajustes de párrafo en la pestaña Diseño (sangría izquierda, sangría de primera línea o francesa, espacio antes y después, interlineado)",
+      "Letra capital en las opciones de formato de párrafo",
+      "El espacio entre párrafos, la sangría de primera línea o francesa y el interlineado se conservan al guardar y abrir archivos de Word"
+     ]
+    },
+    "fr": {
+     "title": "Paramètres de paragraphe et lettrine",
+     "items": [
+      "Paramètres de paragraphe dans l'onglet Mise en page (retrait gauche, retrait de première ligne ou suspendu, espacements avant et après, interligne)",
+      "Lettrine dans les styles de paragraphe",
+      "L'espacement entre paragraphes, le retrait de première ligne ou suspendu et l'interligne sont conservés à l'enregistrement et à l'ouverture des fichiers Word"
+     ]
+    },
+    "de": {
+     "title": "Absatzeinstellungen und Initiale",
+     "items": [
+      "Absatzeinstellungen im Tab Layout (linker Einzug, Erstzeileneinzug oder hängender Einzug, Abstand davor und danach, Zeilenabstand)",
+      "Initiale in den Absatzoptionen",
+      "Absatzabstand, Erstzeilen- oder hängender Einzug bleiben beim Speichern und Öffnen von Word-Dateien erhalten"
+     ]
+    },
+    "ja": {
+     "title": "段落の設定とドロップキャップ",
+     "items": [
+      "レイアウトタブの段落設定（左インデント、初行インデントまたはぶら下げインデント、前後の間隔、行間）",
+      "段落の装飾にドロップキャップを追加",
+      "段落間隔、初行インデントまたはぶら下げインデント、行間は、Word ファイルの保存と読み込みでも維持されます"
+     ]
+    },
+    "zh": {
+     "title": "段落设置与首字下沉",
+     "items": ["“布局”选项卡中的段落设置（左缩进、首行缩进或悬挂缩进、段前段后间距、行距）", "段落样式中的首字下沉", "段落间距、首行缩进或悬挂缩进会在保存和打开 Word 文件时保留"]
+    },
+    "pt": {
+     "title": "Configurações de parágrafo e letra capitular",
+     "items": [
+      "Configurações de parágrafo na aba Layout (recuo à esquerda, recuo da primeira linha ou deslocado, espaço antes e depois, entrelinhamento)",
+      "Letra capitular nas opções de formatação de parágrafo",
+      "O espaçamento entre parágrafos, o recuo da primeira linha ou deslocado e o entrelinhamento são mantidos ao salvar e abrir arquivos Word"
+     ]
+    },
+    "ru": {
+     "title": "Настройки абзаца и буквица",
+     "items": [
+      "Настройки абзаца на вкладке «Макет» (отступ слева, отступ первой строки или выступ, интервалы до и после, междустрочный интервал)",
+      "Буквица в оформлении абзаца",
+      "Интервалы между абзацами, отступ первой строки или выступ и междустрочный интервал сохраняются при сохранении и открытии файлов Word"
+     ]
+    },
+    "tr": {
+     "title": "Paragraf ayarları ve büyük harf",
+     "items": [
+      "Düzen sekmesinde paragraf ayarları (sol girinti, ilk satır girintisi veya asılı girinti, önce ve sonra boşluk, satır aralığı)",
+      "Paragraf görünümlerinde büyük harf",
+      "Paragraf aralığı, ilk satır veya asılı girinti ve satır aralığı Word dosyalarını kaydederken ve açarken korunur"
+     ]
+    },
+    "it": {
+     "title": "Impostazioni del paragrafo e lettera capitale",
+     "items": [
+      "Impostazioni del paragrafo nella scheda Layout (rientro sinistro, rientro della prima riga o sporgenza, spaziatura prima e dopo, interlinea)",
+      "Lettera capitale nelle opzioni di stile del paragrafo",
+      "La spaziatura tra paragrafi, il rientro della prima riga o sporgenza e l'interlinea vengono mantenuti quando si salvano e aprono file Word"
+     ]
+    },
+    "pl": {
+     "title": "Ustawienia akapitu i inicjał",
+     "items": [
+      "Ustawienia akapitu na karcie Układ (wcięcie lewe, wcięcie pierwszego wiersza lub wiszące, odstępy przed i po, interlinia)",
+      "Inicjał w opcjach wyglądu akapitu",
+      "Odstępy między akapitami, wcięcie pierwszego wiersza lub wiszące oraz interlinia są zachowywane przy zapisywaniu i otwieraniu plików Word"
+     ]
+    },
+    "ar": {
+     "title": "إعدادات الفقرة والحرف المزخرف",
+     "items": [
+      "إعدادات الفقرة في تبويب التخطيط (مسافة بادئة يسارًا، ومسافة للسطر الأول أو المعلّق، والمسافات قبل الفقرة وبعدها، وتباعد الأسطر)",
+      "الحرف المزخرف في خيارات مظهر الفقرة",
+      "تُحفظ المسافات بين الفقرات والمسافة للسطر الأول أو المعلّق وتباعد الأسطر عند حفظ ملفات Word وفتحها"
      ]
     }
    }
@@ -143,6 +671,86 @@
       "The eyedropper picks a colour from the screen or from a picture (browsers without it pick from a picture in the document)",
       "My colours are saved in this browser"
      ]
+    },
+    "es": {
+     "title": "Cuentagotas y Mis colores",
+     "items": [
+      "El color del texto y el resaltador abren una paleta con Mis colores y un cuentagotas",
+      "El cuentagotas toma un color de la pantalla o de una imagen (en navegadores sin cuentagotas, se toma pulsando una imagen del documento)",
+      "Mis colores se guardan en este navegador"
+     ]
+    },
+    "fr": {
+     "title": "Pipette et Mes couleurs",
+     "items": [
+      "La couleur du texte et le surligneur ouvrent une palette avec Mes couleurs et une pipette",
+      "La pipette prend une couleur à l'écran ou dans une image (dans les navigateurs sans pipette, on la prend en cliquant sur une image du document)",
+      "Mes couleurs sont enregistrées dans ce navigateur"
+     ]
+    },
+    "de": {
+     "title": "Pipette und Meine Farben",
+     "items": [
+      "Textfarbe und Markierung öffnen eine Palette mit Meine Farben und einer Pipette",
+      "Die Pipette nimmt eine Farbe vom Bildschirm oder aus einem Bild (Browser ohne Pipette nehmen sie durch Klick auf ein Bild im Dokument auf)",
+      "Meine Farben werden in diesem Browser gespeichert"
+     ]
+    },
+    "ja": {
+     "title": "スポイトとマイカラー",
+     "items": ["文字の色と蛍光ペンを押すと、マイカラーとスポイトのあるパレットが開きます", "スポイトは画面や画像から色を取ります（スポイトのないブラウザでは、文書内の画像を押して取ります）", "マイカラーはこのブラウザに保存されます"]
+    },
+    "zh": {
+     "title": "吸管与我的颜色",
+     "items": ["文字颜色和荧光笔会打开包含“我的颜色”和吸管的调色板", "吸管可从屏幕或图片中取色（不支持吸管的浏览器则点击文档中的图片取色）", "“我的颜色”保存在此浏览器中"]
+    },
+    "pt": {
+     "title": "Conta-gotas e Minhas cores",
+     "items": [
+      "A cor do texto e o marca-texto abrem uma paleta com Minhas cores e um conta-gotas",
+      "O conta-gotas pega uma cor da tela ou de uma imagem (em navegadores sem conta-gotas, a cor é pega clicando em uma imagem do documento)",
+      "Minhas cores ficam salvas neste navegador"
+     ]
+    },
+    "ru": {
+     "title": "Пипетка и Мои цвета",
+     "items": [
+      "Цвет текста и маркер открывают палитру с «Моими цветами» и пипеткой",
+      "Пипетка берёт цвет с экрана или с картинки (в браузерах без пипетки цвет берётся нажатием на картинку в документе)",
+      "«Мои цвета» сохраняются в этом браузере"
+     ]
+    },
+    "tr": {
+     "title": "Damlalık ve Renklerim",
+     "items": [
+      "Metin rengi ve vurgulayıcı, Renklerim ve damlalık içeren bir palet açar",
+      "Damlalık ekrandan veya bir resimden renk alır (damlalığı olmayan tarayıcılarda belgedeki bir resme tıklayarak alınır)",
+      "Renklerim bu tarayıcıda kaydedilir"
+     ]
+    },
+    "it": {
+     "title": "Contagocce e I miei colori",
+     "items": [
+      "Il colore del testo e l'evidenziatore aprono una tavolozza con I miei colori e un contagocce",
+      "Il contagocce preleva un colore dallo schermo o da un'immagine (nei browser senza contagocce si preleva cliccando un'immagine del documento)",
+      "I miei colori sono salvati in questo browser"
+     ]
+    },
+    "pl": {
+     "title": "Pipeta i Moje kolory",
+     "items": [
+      "Kolor tekstu i zakreślacz otwierają paletę z Moimi kolorami i pipetą",
+      "Pipeta pobiera kolor z ekranu lub z obrazu (w przeglądarkach bez pipety kolor pobiera się, klikając obraz w dokumencie)",
+      "Moje kolory są zapisane w tej przeglądarce"
+     ]
+    },
+    "ar": {
+     "title": "القطارة وألواني",
+     "items": [
+      "لون النص والتمييز يفتحان لوحة فيها ألواني والقطارة",
+      "تلتقط القطارة لونًا من الشاشة أو من صورة (في المتصفحات التي لا تدعمها تلتقط اللون بالنقر على صورة في المستند)",
+      "تُحفظ ألواني في هذا المتصفح"
+     ]
     }
    }
   },
@@ -161,6 +769,74 @@
       "Read Korean and English text in a photo and insert it into the document",
       "The reader is a shared file that Fry Sheet can use too"
      ]
+    },
+    "es": {
+     "title": "Leer texto de fotos",
+     "items": [
+      "Lee texto en coreano e inglés de una foto y lo inserta en el documento",
+      "El lector es un archivo compartido que Fry Sheet también puede usar"
+     ]
+    },
+    "fr": {
+     "title": "Lire le texte des photos",
+     "items": [
+      "Lit le texte coréen et anglais d'une photo et l'insère dans le document",
+      "Le lecteur est un fichier partagé que Fry Sheet peut aussi utiliser"
+     ]
+    },
+    "de": {
+     "title": "Text aus Fotos lesen",
+     "items": [
+      "Liest koreanischen und englischen Text aus einem Foto und fügt ihn in das Dokument ein",
+      "Der Leser ist eine gemeinsame Datei, die auch Fry Sheet nutzen kann"
+     ]
+    },
+    "ja": {
+     "title": "写真の文字を読む",
+     "items": ["写真の韓国語と英語の文字を読み取り、文書に入れます", "読み取りツールは Fry Sheet も使える共有ファイルです"]
+    },
+    "zh": {
+     "title": "读取照片中的文字",
+     "items": ["读取照片中的韩语和英语文字并插入文档", "读取工具是一个共享文件，Fry Sheet 也可以使用"]
+    },
+    "pt": {
+     "title": "Ler texto em fotos",
+     "items": [
+      "Lê texto em coreano e inglês de uma foto e o insere no documento",
+      "O leitor é um arquivo compartilhado que o Fry Sheet também pode usar"
+     ]
+    },
+    "ru": {
+     "title": "Чтение текста с фотографий",
+     "items": [
+      "Читает корейский и английский текст с фотографии и вставляет его в документ",
+      "Средство чтения — общий файл, которым может пользоваться и Fry Sheet"
+     ]
+    },
+    "tr": {
+     "title": "Fotoğraftaki metni okuma",
+     "items": [
+      "Bir fotoğraftaki Korece ve İngilizce metni okuyup belgeye ekler",
+      "Okuyucu, Fry Sheet'in de kullanabildiği ortak bir dosyadır"
+     ]
+    },
+    "it": {
+     "title": "Leggere il testo nelle foto",
+     "items": [
+      "Legge il testo coreano e inglese da una foto e lo inserisce nel documento",
+      "Il lettore è un file condiviso che anche Fry Sheet può usare"
+     ]
+    },
+    "pl": {
+     "title": "Odczyt tekstu ze zdjęć",
+     "items": [
+      "Odczytuje tekst koreański i angielski ze zdjęcia i wstawia go do dokumentu",
+      "Czytnik to wspólny plik, z którego może korzystać także Fry Sheet"
+     ]
+    },
+    "ar": {
+     "title": "قراءة النص من الصور",
+     "items": ["يقرأ النص الكوري والإنجليزي من الصورة ويُدرجه في المستند", "القارئ ملف مشترك يمكن لـ Fry Sheet استخدامه أيضًا"]
     }
    }
   },
@@ -174,75 +850,51 @@
    "tr": {
     "en": {
      "title": "Cursor after illustrations",
-     "items": [
-      "The blinking text cursor no longer shows after inserting an illustration"
-     ]
+     "items": ["The blinking text cursor no longer shows after inserting an illustration"]
     },
     "es": {
      "title": "Cursor tras las ilustraciones",
-     "items": [
-      "El cursor de texto parpadeante ya no aparece tras insertar una ilustración"
-     ]
+     "items": ["El cursor de texto parpadeante ya no aparece tras insertar una ilustración"]
     },
     "fr": {
      "title": "Curseur après les illustrations",
-     "items": [
-      "Le curseur clignotant n'apparaît plus après l'insertion d'une illustration"
-     ]
+     "items": ["Le curseur clignotant n'apparaît plus après l'insertion d'une illustration"]
     },
     "de": {
      "title": "Cursor nach Illustrationen",
-     "items": [
-      "Der blinkende Textcursor erscheint nach dem Einfügen einer Illustration nicht mehr"
-     ]
+     "items": ["Der blinkende Textcursor erscheint nach dem Einfügen einer Illustration nicht mehr"]
     },
     "ja": {
      "title": "イラスト挿入後のカーソル",
-     "items": [
-      "イラストを入れても、点滅するカーソルが出なくなりました"
-     ]
+     "items": ["イラストを入れても、点滅するカーソルが出なくなりました"]
     },
     "zh": {
      "title": "插入插图后的光标",
-     "items": [
-      "插入插图后，不再显示闪烁的文字光标"
-     ]
+     "items": ["插入插图后，不再显示闪烁的文字光标"]
     },
     "pt": {
      "title": "Cursor após ilustrações",
-     "items": [
-      "O cursor de texto piscando não aparece mais depois de inserir uma ilustração"
-     ]
+     "items": ["O cursor de texto piscando não aparece mais depois de inserir uma ilustração"]
     },
     "ru": {
      "title": "Курсор после иллюстраций",
-     "items": [
-      "После вставки иллюстрации мигающий текстовый курсор больше не появляется"
-     ]
+     "items": ["После вставки иллюстрации мигающий текстовый курсор больше не появляется"]
     },
     "tr": {
      "title": "İllüstrasyon sonrası imleç",
-     "items": [
-      "Bir illüstrasyon ekledikten sonra yanıp sönen imleç çubuğu artık görünmüyor"
-     ]
+     "items": ["Bir illüstrasyon ekledikten sonra yanıp sönen imleç çubuğu artık görünmüyor"]
     },
     "it": {
      "title": "Cursore dopo le illustrazioni",
-     "items": [
-      "Il cursore lampeggiante non compare più dopo aver inserito un'illustrazione"
-     ]
+     "items": ["Il cursore lampeggiante non compare più dopo aver inserito un'illustrazione"]
     },
     "pl": {
      "title": "Kursor po ilustracjach",
-     "items": [
-      "Migający kursor tekstu nie pojawia się już po wstawieniu ilustracji"
-     ]
+     "items": ["Migający kursor tekstu nie pojawia się już po wstawieniu ilustracji"]
     },
     "ar": {
      "title": "المؤشر بعد الرسوم التوضيحية",
-     "items": [
-      "لم يعد مؤشر الكتابة الوامض يظهر بعد إدراج رسم توضيحي"
-     ]
+     "items": ["لم يعد مؤشر الكتابة الوامض يظهر بعد إدراج رسم توضيحي"]
     }
    }
   },
@@ -285,17 +937,11 @@
     },
     "ja": {
      "title": "イラスト",
-     "items": [
-      "挿入タブにイラストボタンを追加",
-      "Block HTMLのオブジェクトとイラスト660点から好きなものを画像として文書に入れられます"
-     ]
+     "items": ["挿入タブにイラストボタンを追加", "Block HTMLのオブジェクトとイラスト660点から好きなものを画像として文書に入れられます"]
     },
     "zh": {
      "title": "插图",
-     "items": [
-      "插入标签中新增插图按钮",
-      "可将 Block HTML 的 660 个对象和插图中的任意一个作为图片放入文档"
-     ]
+     "items": ["插入标签中新增插图按钮", "可将 Block HTML 的 660 个对象和插图中的任意一个作为图片放入文档"]
     },
     "pt": {
      "title": "Ilustrações",
@@ -334,10 +980,7 @@
     },
     "ar": {
      "title": "رسومات توضيحية",
-     "items": [
-      "زر الرسومات التوضيحية في تبويب إدراج",
-      "إدراج أي من الكائنات والرسومات الـ660 في Block HTML في المستند كصورة"
-     ]
+     "items": ["زر الرسومات التوضيحية في تبويب إدراج", "إدراج أي من الكائنات والرسومات الـ660 في Block HTML في المستند كصورة"]
     }
    }
   },
