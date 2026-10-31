@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-10-31",
+   "build": "v14",
+   "title": "같이 고치기 준비",
+   "items": [
+    "여러 사람이 한 방에서 함께 쓰는 공용 방 도구(peer-room.js) 추가",
+    "Fry Sheet도 같은 도구를 쓸 수 있음"
+   ],
+   "tr": {
+    "en": {
+     "title": "Getting ready for editing together",
+     "items": [
+      "Added the shared room tool (peer-room.js) that lets several people work in one room",
+      "Fry Sheet can use the same tool"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-10-31",
    "build": "v13",
    "title": "차트 넣기",
    "items": [
