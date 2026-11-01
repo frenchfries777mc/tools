@@ -3,6 +3,24 @@
  "name": "Tools 사이트",
  "notes": [
   {
+   "date": "2026-11-01",
+   "build": "v46",
+   "title": "이모티콘 로고",
+   "items": [
+    "모든 도구 페이지의 이모티콘이 직접 만든 로고로 바뀜 (174개)",
+    "글자 기호(➕ ➖ ⬆ ⬇ ☑)와 채팅 이모트는 그대로"
+   ],
+   "tr": {
+    "en": {
+     "title": "Emoji logos",
+     "items": [
+      "Emoji on every tool page are now our own logos (174 of them)",
+      "Text symbols (➕ ➖ ⬆ ⬇ ☑) and chat emotes stay as they were"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-10-31",
    "build": "v45",
    "title": "내 작업 백업",
@@ -47,7 +65,10 @@
     },
     "zh": {
      "title": "我的作品备份",
-     "items": ["首页底部的“我的作品备份”可把文档、表格、幻灯片、积木项目、Python 和 Lab 作品保存为一个文件", "在其他设备上加载该文件即可继续工作（不包括登录信息和 AI 密钥）"]
+     "items": [
+      "首页底部的“我的作品备份”可把文档、表格、幻灯片、积木项目、Python 和 Lab 作品保存为一个文件",
+      "在其他设备上加载该文件即可继续工作（不包括登录信息和 AI 密钥）"
+     ]
     },
     "pt": {
      "title": "Backup do meu trabalho",
@@ -103,51 +124,75 @@
    "tr": {
     "en": {
      "title": "Double-tap zoom disabled",
-     "items": ["Double-tapping no longer zooms the page on any tool page"]
+     "items": [
+      "Double-tapping no longer zooms the page on any tool page"
+     ]
     },
     "es": {
      "title": "Doble toque sin zoom",
-     "items": ["Al tocar dos veces ya no se amplía la página en ninguna herramienta"]
+     "items": [
+      "Al tocar dos veces ya no se amplía la página en ninguna herramienta"
+     ]
     },
     "fr": {
      "title": "Double tape sans zoom",
-     "items": ["Taper deux fois ne zoome plus la page sur aucun outil"]
+     "items": [
+      "Taper deux fois ne zoome plus la page sur aucun outil"
+     ]
     },
     "de": {
      "title": "Doppeltippen zoomt nicht mehr",
-     "items": ["Doppeltippen zoomt auf keiner Werkzeugseite mehr die Seite"]
+     "items": [
+      "Doppeltippen zoomt auf keiner Werkzeugseite mehr die Seite"
+     ]
     },
     "ja": {
      "title": "ダブルタップの拡大を停止",
-     "items": ["どのツールページでも、画面を2回タップしても拡大しなくなりました"]
+     "items": [
+      "どのツールページでも、画面を2回タップしても拡大しなくなりました"
+     ]
     },
     "zh": {
      "title": "取消双击放大",
-     "items": ["所有工具页面双击屏幕都不再放大"]
+     "items": [
+      "所有工具页面双击屏幕都不再放大"
+     ]
     },
     "pt": {
      "title": "Duplo toque sem zoom",
-     "items": ["Tocar duas vezes não amplia mais a página em nenhuma ferramenta"]
+     "items": [
+      "Tocar duas vezes não amplia mais a página em nenhuma ferramenta"
+     ]
     },
     "ru": {
      "title": "Двойное нажатие без увеличения",
-     "items": ["На всех страницах инструментов двойное нажатие больше не увеличивает страницу"]
+     "items": [
+      "На всех страницах инструментов двойное нажатие больше не увеличивает страницу"
+     ]
     },
     "tr": {
      "title": "Çift dokunmada yakınlaştırma kapatıldı",
-     "items": ["Hiçbir araç sayfasında çift dokunmak artık sayfayı yakınlaştırmaz"]
+     "items": [
+      "Hiçbir araç sayfasında çift dokunmak artık sayfayı yakınlaştırmaz"
+     ]
     },
     "it": {
      "title": "Doppio tocco senza zoom",
-     "items": ["Toccando due volte non si ingrandisce più la pagina in nessuno strumento"]
+     "items": [
+      "Toccando due volte non si ingrandisce più la pagina in nessuno strumento"
+     ]
     },
     "pl": {
      "title": "Podwójne stuknięcie bez powiększania",
-     "items": ["Podwójne stuknięcie nie powiększa już strony na żadnej stronie narzędzi"]
+     "items": [
+      "Podwójne stuknięcie nie powiększa już strony na żadnej stronie narzędzi"
+     ]
     },
     "ar": {
      "title": "إيقاف التكبير بالنقر المزدوج",
-     "items": ["لم يعد النقر المزدوج يكبّر الصفحة في أي صفحة أدوات"]
+     "items": [
+      "لم يعد النقر المزدوج يكبّر الصفحة في أي صفحة أدوات"
+     ]
     }
    }
   },
@@ -161,59 +206,87 @@
    "tr": {
     "en": {
      "title": "Brought back the slanted yellow text on the home page",
-     "items": ["The slanted yellow text beside the home page title is shown again"]
+     "items": [
+      "The slanted yellow text beside the home page title is shown again"
+     ]
     },
     "es": {
      "title": "Vuelve el texto amarillo inclinado de la portada",
-     "items": ["El texto amarillo inclinado junto al título de la portada vuelve a verse"]
+     "items": [
+      "El texto amarillo inclinado junto al título de la portada vuelve a verse"
+     ]
     },
     "fr": {
      "title": "Retour du texte jaune incliné sur l’accueil",
-     "items": ["Le texte jaune incliné à côté du titre de l’accueil s’affiche de nouveau"]
+     "items": [
+      "Le texte jaune incliné à côté du titre de l’accueil s’affiche de nouveau"
+     ]
     },
     "de": {
      "title": "Schräger gelber Text auf der Startseite wieder da",
-     "items": ["Der schräge gelbe Text neben dem Titel der Startseite wird wieder angezeigt"]
+     "items": [
+      "Der schräge gelbe Text neben dem Titel der Startseite wird wieder angezeigt"
+     ]
     },
     "ja": {
      "title": "トップページの斜めの黄色い文字を復活",
-     "items": ["トップページのタイトル横の斜めの黄色い文字をもう一度表示するようにしました"]
+     "items": [
+      "トップページのタイトル横の斜めの黄色い文字をもう一度表示するようにしました"
+     ]
     },
     "zh": {
      "title": "恢复首页倾斜的黄色文字",
-     "items": ["首页标题旁边倾斜的黄色文字重新显示"]
+     "items": [
+      "首页标题旁边倾斜的黄色文字重新显示"
+     ]
     },
     "pt": {
      "title": "Voltou o texto amarelo inclinado da página inicial",
-     "items": ["O texto amarelo inclinado ao lado do título da página inicial volta a aparecer"]
+     "items": [
+      "O texto amarelo inclinado ao lado do título da página inicial volta a aparecer"
+     ]
     },
     "ru": {
      "title": "Вернули наклонный жёлтый текст на главной",
-     "items": ["Наклонный жёлтый текст рядом с заголовком главной снова виден"]
+     "items": [
+      "Наклонный жёлтый текст рядом с заголовком главной снова виден"
+     ]
     },
     "tr": {
      "title": "Ana sayfadaki eğik sarı yazı geri getirildi",
-     "items": ["Ana sayfa başlığının yanındaki eğik sarı yazı yeniden gösteriliyor"]
+     "items": [
+      "Ana sayfa başlığının yanındaki eğik sarı yazı yeniden gösteriliyor"
+     ]
     },
     "it": {
      "title": "Ripristinato il testo giallo inclinato della home",
-     "items": ["Il testo giallo inclinato accanto al titolo della home torna visibile"]
+     "items": [
+      "Il testo giallo inclinato accanto al titolo della home torna visibile"
+     ]
     },
     "pl": {
      "title": "Przywrócono pochylony żółty tekst na stronie głównej",
-     "items": ["Pochylony żółty tekst obok tytułu strony głównej znów się wyświetla"]
+     "items": [
+      "Pochylony żółty tekst obok tytułu strony głównej znów się wyświetla"
+     ]
     },
     "ar": {
      "title": "إعادة النص الأصفر المائل في الصفحة الرئيسية",
-     "items": ["يظهر من جديد النص الأصفر المائل بجانب عنوان الصفحة الرئيسية"]
+     "items": [
+      "يظهر من جديد النص الأصفر المائل بجانب عنوان الصفحة الرئيسية"
+     ]
     },
     "nw": {
      "title": "Slantyellow words back on homepage",
-     "items": ["Slantyellow words by homepage title shown again"]
+     "items": [
+      "Slantyellow words by homepage title shown again"
+     ]
     },
     "gk": {
      "title": "첫 화면 의 비스듬하다 노랗다 글자 를 되살리다",
-     "items": ["첫 화면 제목 옆 비스듬하다 노랗다 글자 를 다시 보이다 하다"]
+     "items": [
+      "첫 화면 제목 옆 비스듬하다 노랗다 글자 를 다시 보이다 하다"
+     ]
     }
    }
   },
@@ -227,59 +300,87 @@
    "tr": {
     "en": {
      "title": "Removed the slanted yellow text on the home page",
-     "items": ["Removed the slanted yellow text floating beside the home page title"]
+     "items": [
+      "Removed the slanted yellow text floating beside the home page title"
+     ]
     },
     "es": {
      "title": "Quitado el texto amarillo inclinado de la portada",
-     "items": ["Quitado el texto amarillo inclinado que flotaba junto al título de la portada"]
+     "items": [
+      "Quitado el texto amarillo inclinado que flotaba junto al título de la portada"
+     ]
     },
     "fr": {
      "title": "Texte jaune incliné retiré de l’accueil",
-     "items": ["Texte jaune incliné qui flottait à côté du titre de l’accueil retiré"]
+     "items": [
+      "Texte jaune incliné qui flottait à côté du titre de l’accueil retiré"
+     ]
     },
     "de": {
      "title": "Schräger gelber Text auf der Startseite entfernt",
-     "items": ["Schräger gelber Text neben dem Titel der Startseite entfernt"]
+     "items": [
+      "Schräger gelber Text neben dem Titel der Startseite entfernt"
+     ]
     },
     "ja": {
      "title": "トップページの斜めの黄色い文字を削除",
-     "items": ["トップページのタイトル横に浮かんでいた斜めの黄色い文字を削除"]
+     "items": [
+      "トップページのタイトル横に浮かんでいた斜めの黄色い文字を削除"
+     ]
     },
     "zh": {
      "title": "移除首页的倾斜黄色文字",
-     "items": ["移除首页标题旁边悬浮的倾斜黄色文字"]
+     "items": [
+      "移除首页标题旁边悬浮的倾斜黄色文字"
+     ]
     },
     "pt": {
      "title": "Removido o texto amarelo inclinado da página inicial",
-     "items": ["Removido o texto amarelo inclinado que ficava ao lado do título da página inicial"]
+     "items": [
+      "Removido o texto amarelo inclinado que ficava ao lado do título da página inicial"
+     ]
     },
     "ru": {
      "title": "Убран наклонный жёлтый текст на главной",
-     "items": ["Убран наклонный жёлтый текст, который висел рядом с заголовком главной страницы"]
+     "items": [
+      "Убран наклонный жёлтый текст, который висел рядом с заголовком главной страницы"
+     ]
     },
     "tr": {
      "title": "Ana sayfadaki eğik sarı yazı kaldırıldı",
-     "items": ["Ana sayfa başlığının yanında duran eğik sarı yazı kaldırıldı"]
+     "items": [
+      "Ana sayfa başlığının yanında duran eğik sarı yazı kaldırıldı"
+     ]
     },
     "it": {
      "title": "Rimosso il testo giallo inclinato dalla home",
-     "items": ["Rimosso il testo giallo inclinato che fluttuava accanto al titolo della home"]
+     "items": [
+      "Rimosso il testo giallo inclinato che fluttuava accanto al titolo della home"
+     ]
     },
     "pl": {
      "title": "Usunięto pochylony żółty tekst ze strony głównej",
-     "items": ["Usunięto pochylony żółty tekst unoszący się obok tytułu strony głównej"]
+     "items": [
+      "Usunięto pochylony żółty tekst unoszący się obok tytułu strony głównej"
+     ]
     },
     "ar": {
      "title": "إزالة النص الأصفر المائل من الصفحة الرئيسية",
-     "items": ["إزالة النص الأصفر المائل الذي كان يطفو بجانب عنوان الصفحة الرئيسية"]
+     "items": [
+      "إزالة النص الأصفر المائل الذي كان يطفو بجانب عنوان الصفحة الرئيسية"
+     ]
     },
     "nw": {
      "title": "Slantyellow words gone from homepage",
-     "items": ["Slantyellow words that floated by homepage title gone"]
+     "items": [
+      "Slantyellow words that floated by homepage title gone"
+     ]
     },
     "gk": {
      "title": "첫 화면 의 비스듬하다 노랗다 글자 를 없애다",
-     "items": ["첫 화면 제목 옆 에 떠 있다 비스듬하다 노랗다 글자 를 없애다"]
+     "items": [
+      "첫 화면 제목 옆 에 떠 있다 비스듬하다 노랗다 글자 를 없애다"
+     ]
     }
    }
   },
@@ -315,11 +416,17 @@
     },
     "ja": {
      "title": "ログイン帯の見た目を統一",
-     "items": ["ログイン帯をGamesとEducationsと同じスクリプトにして、3つのサイトが同じ見た目に", "マイアカウントのチップをGamesと同じく削除"]
+     "items": [
+      "ログイン帯をGamesとEducationsと同じスクリプトにして、3つのサイトが同じ見た目に",
+      "マイアカウントのチップをGamesと同じく削除"
+     ]
     },
     "zh": {
      "title": "统一登录栏外观",
-     "items": ["登录栏改用与 Games 和 Educations 相同的脚本，三个站点外观一致", "与 Games 一样移除了“我的账户”标签"]
+     "items": [
+      "登录栏改用与 Games 和 Educations 相同的脚本，三个站点外观一致",
+      "与 Games 一样移除了“我的账户”标签"
+     ]
     },
     "pt": {
      "title": "Barra de acesso com o mesmo visual",
@@ -382,59 +489,87 @@
    "tr": {
     "en": {
      "title": "Photos of friends who are online",
-     "items": ["The online bar shows the profile photo, name and location of friends who are online now"]
+     "items": [
+      "The online bar shows the profile photo, name and location of friends who are online now"
+     ]
     },
     "es": {
      "title": "Fotos de los amigos conectados",
-     "items": ["La barra de conectados muestra la foto de perfil, el nombre y dónde está cada amigo conectado"]
+     "items": [
+      "La barra de conectados muestra la foto de perfil, el nombre y dónde está cada amigo conectado"
+     ]
     },
     "fr": {
      "title": "Photos des amis en ligne",
-     "items": ["La barre des connectés affiche la photo de profil, le nom et l'endroit où se trouvent les amis en ligne"]
+     "items": [
+      "La barre des connectés affiche la photo de profil, le nom et l'endroit où se trouvent les amis en ligne"
+     ]
     },
     "de": {
      "title": "Fotos von Freunden, die online sind",
-     "items": ["Die Online-Leiste zeigt Profilfoto, Namen und Aufenthaltsort der gerade online befindlichen Freunde"]
+     "items": [
+      "Die Online-Leiste zeigt Profilfoto, Namen und Aufenthaltsort der gerade online befindlichen Freunde"
+     ]
     },
     "ja": {
      "title": "オンラインの友だちの写真",
-     "items": ["オンラインバーに、今オンラインの友だちのプロフィール写真、名前、いる場所を表示"]
+     "items": [
+      "オンラインバーに、今オンラインの友だちのプロフィール写真、名前、いる場所を表示"
+     ]
     },
     "zh": {
      "title": "显示在线好友的头像",
-     "items": ["在线栏显示当前在线好友的头像、名字和所在位置"]
+     "items": [
+      "在线栏显示当前在线好友的头像、名字和所在位置"
+     ]
     },
     "pt": {
      "title": "Fotos dos amigos online",
-     "items": ["A barra de online mostra a foto de perfil, o nome e onde estão os amigos conectados agora"]
+     "items": [
+      "A barra de online mostra a foto de perfil, o nome e onde estão os amigos conectados agora"
+     ]
     },
     "ru": {
      "title": "Фото друзей, которые онлайн",
-     "items": ["В панели онлайн отображаются фото профиля, имя и местонахождение друзей, которые сейчас в сети"]
+     "items": [
+      "В панели онлайн отображаются фото профиля, имя и местонахождение друзей, которые сейчас в сети"
+     ]
     },
     "tr": {
      "title": "Çevrim içi arkadaşların fotoğrafları",
-     "items": ["Çevrim içi çubuğunda şu an çevrim içi olan arkadaşların profil fotoğrafı, adı ve bulundukları yer gösterilir"]
+     "items": [
+      "Çevrim içi çubuğunda şu an çevrim içi olan arkadaşların profil fotoğrafı, adı ve bulundukları yer gösterilir"
+     ]
     },
     "it": {
      "title": "Foto degli amici online",
-     "items": ["La barra degli utenti online mostra foto del profilo, nome e posizione degli amici online adesso"]
+     "items": [
+      "La barra degli utenti online mostra foto del profilo, nome e posizione degli amici online adesso"
+     ]
     },
     "pl": {
      "title": "Zdjęcia znajomych online",
-     "items": ["Pasek osób online pokazuje zdjęcie profilowe, imię i miejsce znajomych, którzy są teraz online"]
+     "items": [
+      "Pasek osób online pokazuje zdjęcie profilowe, imię i miejsce znajomych, którzy są teraz online"
+     ]
     },
     "ar": {
      "title": "صور الأصدقاء المتصلين",
-     "items": ["يعرض شريط المتصلين صورة الملف الشخصي واسم كل صديق متصل الآن ومكان وجوده"]
+     "items": [
+      "يعرض شريط المتصلين صورة الملف الشخصي واسم كل صديق متصل الآن ومكان وجوده"
+     ]
     },
     "nw": {
      "title": "Photos of comrades online",
-     "items": ["The online bar shows the profile photo, name and place of comrades online now"]
+     "items": [
+      "The online bar shows the profile photo, name and place of comrades online now"
+     ]
     },
     "gk": {
      "title": "접속 중이다 친구 사진",
-     "items": ["접속 줄에 지금 접속 중이다 친구의 프로필 사진, 이름, 있다 곳 보이다"]
+     "items": [
+      "접속 줄에 지금 접속 중이다 친구의 프로필 사진, 이름, 있다 곳 보이다"
+     ]
     }
    }
   },
@@ -449,7 +584,10 @@
    "tr": {
     "en": {
      "title": "Block HTML is now Fry Blocks",
-     "items": ["The tool name Block HTML is changed to Fry Blocks", "Autocomplete and a dictionary were added to Fry Python"]
+     "items": [
+      "The tool name Block HTML is changed to Fry Blocks",
+      "Autocomplete and a dictionary were added to Fry Python"
+     ]
     },
     "es": {
      "title": "Block HTML pasa a llamarse Fry Blocks",
@@ -474,11 +612,17 @@
     },
     "ja": {
      "title": "Block HTML の名前を Fry Blocks に",
-     "items": ["ツール名の Block HTML を Fry Blocks に変更", "Fry Python にオートコンプリートと辞書を追加"]
+     "items": [
+      "ツール名の Block HTML を Fry Blocks に変更",
+      "Fry Python にオートコンプリートと辞書を追加"
+     ]
     },
     "zh": {
      "title": "Block HTML 改名为 Fry Blocks",
-     "items": ["工具名称 Block HTML 改为 Fry Blocks", "Fry Python 新增自动补全和词典"]
+     "items": [
+      "工具名称 Block HTML 改为 Fry Blocks",
+      "Fry Python 新增自动补全和词典"
+     ]
     },
     "pt": {
      "title": "Block HTML passa a se chamar Fry Blocks",
@@ -489,11 +633,17 @@
     },
     "ru": {
      "title": "Block HTML теперь называется Fry Blocks",
-     "items": ["Название инструмента Block HTML изменено на Fry Blocks", "В Fry Python добавлены автодополнение и словарь"]
+     "items": [
+      "Название инструмента Block HTML изменено на Fry Blocks",
+      "В Fry Python добавлены автодополнение и словарь"
+     ]
     },
     "tr": {
      "title": "Block HTML'in adı Fry Blocks oldu",
-     "items": ["Araç adı Block HTML, Fry Blocks olarak değiştirildi", "Fry Python'a otomatik tamamlama ve sözlük eklendi"]
+     "items": [
+      "Araç adı Block HTML, Fry Blocks olarak değiştirildi",
+      "Fry Python'a otomatik tamamlama ve sözlük eklendi"
+     ]
     },
     "it": {
      "title": "Block HTML ora si chiama Fry Blocks",
@@ -504,19 +654,31 @@
     },
     "pl": {
      "title": "Block HTML zmienia nazwę na Fry Blocks",
-     "items": ["Nazwa narzędzia Block HTML zmieniona na Fry Blocks", "Do Fry Python dodano autouzupełnianie i słownik"]
+     "items": [
+      "Nazwa narzędzia Block HTML zmieniona na Fry Blocks",
+      "Do Fry Python dodano autouzupełnianie i słownik"
+     ]
     },
     "ar": {
      "title": "تغيير اسم Block HTML إلى Fry Blocks",
-     "items": ["تم تغيير اسم الأداة Block HTML إلى Fry Blocks", "إضافة الإكمال التلقائي وقاموس إلى Fry Python"]
+     "items": [
+      "تم تغيير اسم الأداة Block HTML إلى Fry Blocks",
+      "إضافة الإكمال التلقائي وقاموس إلى Fry Python"
+     ]
     },
     "nw": {
      "title": "Block HTML renamed Fry Blocks",
-     "items": ["The toolname Block HTML is changed to Fry Blocks", "Autocomplete and a commandbook added to Fry Python"]
+     "items": [
+      "The toolname Block HTML is changed to Fry Blocks",
+      "Autocomplete and a commandbook added to Fry Python"
+     ]
     },
     "gk": {
      "title": "Block HTML 이름을 Fry Blocks 로",
-     "items": ["도구 이름 Block HTML 을 Fry Blocks 로 바꾸다", "Fry Python 에 자동 완성과 사전 더하다"]
+     "items": [
+      "도구 이름 Block HTML 을 Fry Blocks 로 바꾸다",
+      "Fry Python 에 자동 완성과 사전 더하다"
+     ]
     }
    }
   },
@@ -530,11 +692,15 @@
    "tr": {
     "en": {
      "title": "More Emoji words",
-     "items": ["Fry Lab subjects and Sheet and Slides menu words that stayed English now turn into emoji"]
+     "items": [
+      "Fry Lab subjects and Sheet and Slides menu words that stayed English now turn into emoji"
+     ]
     },
     "es": {
      "title": "Más palabras en emoji",
-     "items": ["Las palabras que seguían en inglés, como las materias de Fry Lab o los menús de Sheet y Slides, pasan a emoji"]
+     "items": [
+      "Las palabras que seguían en inglés, como las materias de Fry Lab o los menús de Sheet y Slides, pasan a emoji"
+     ]
     },
     "fr": {
      "title": "Mots emoji renforcés",
@@ -544,39 +710,57 @@
     },
     "de": {
      "title": "Emoji-Wörter ergänzt",
-     "items": ["Wörter, die noch auf Englisch standen, etwa Fry-Lab-Fächer sowie Sheet- und Slides-Menüs, sind jetzt Emoji"]
+     "items": [
+      "Wörter, die noch auf Englisch standen, etwa Fry-Lab-Fächer sowie Sheet- und Slides-Menüs, sind jetzt Emoji"
+     ]
     },
     "ja": {
      "title": "絵文字語の単語を追加",
-     "items": ["Fry Labの教科やSheet・Slidesのメニューなど、英語のままだった言葉を絵文字に変更"]
+     "items": [
+      "Fry Labの教科やSheet・Slidesのメニューなど、英語のままだった言葉を絵文字に変更"
+     ]
     },
     "zh": {
      "title": "补充表情词",
-     "items": ["Fry Lab 科目、Sheet·Slides 菜单等仍为英文的词语改为了表情符号"]
+     "items": [
+      "Fry Lab 科目、Sheet·Slides 菜单等仍为英文的词语改为了表情符号"
+     ]
     },
     "pt": {
      "title": "Mais palavras em emoji",
-     "items": ["Palavras que ainda apareciam em inglês, como matérias do Fry Lab e menus do Sheet e Slides, viraram emoji"]
+     "items": [
+      "Palavras que ainda apareciam em inglês, como matérias do Fry Lab e menus do Sheet e Slides, viraram emoji"
+     ]
     },
     "ru": {
      "title": "Больше слов в эмодзи",
-     "items": ["Слова, которые оставались по-английски, например предметы Fry Lab и меню Sheet и Slides, заменены эмодзи"]
+     "items": [
+      "Слова, которые оставались по-английски, например предметы Fry Lab и меню Sheet и Slides, заменены эмодзи"
+     ]
     },
     "tr": {
      "title": "Emoji sözcükleri genişletildi",
-     "items": ["Fry Lab dersleri, Sheet ve Slides menüleri gibi İngilizce kalan sözcükler emojiye çevrildi"]
+     "items": [
+      "Fry Lab dersleri, Sheet ve Slides menüleri gibi İngilizce kalan sözcükler emojiye çevrildi"
+     ]
     },
     "it": {
      "title": "Parole emoji rafforzate",
-     "items": ["Le parole rimaste in inglese, come le materie di Fry Lab e i menu di Sheet e Slides, ora sono emoji"]
+     "items": [
+      "Le parole rimaste in inglese, come le materie di Fry Lab e i menu di Sheet e Slides, ora sono emoji"
+     ]
     },
     "pl": {
      "title": "Więcej słów w emoji",
-     "items": ["Słowa wciąż po angielsku, np. przedmioty Fry Lab i menu Sheet i Slides, zamieniono na emoji"]
+     "items": [
+      "Słowa wciąż po angielsku, np. przedmioty Fry Lab i menu Sheet i Slides, zamieniono na emoji"
+     ]
     },
     "ar": {
      "title": "تعزيز كلمات الرموز التعبيرية",
-     "items": ["استُبدلت الكلمات التي بقيت بالإنجليزية، مثل مواد Fry Lab وقوائم Sheet وSlides، بالرموز التعبيرية"]
+     "items": [
+      "استُبدلت الكلمات التي بقيت بالإنجليزية، مثل مواد Fry Lab وقوائم Sheet وSlides، بالرموز التعبيرية"
+     ]
     }
    }
   },
@@ -619,11 +803,17 @@
     },
     "ja": {
      "title": "オーラベッシュ・銀河標準語の文字",
-     "items": ["Block HTML、Fry Sheet、Fry Docs、Fry Slides、Fry Lab、Fry Pythonでもオーラベッシュや銀河標準語を選ぶと文字が変わる", "絵文字語を430個追加"]
+     "items": [
+      "Block HTML、Fry Sheet、Fry Docs、Fry Slides、Fry Lab、Fry Pythonでもオーラベッシュや銀河標準語を選ぶと文字が変わる",
+      "絵文字語を430個追加"
+     ]
     },
     "zh": {
      "title": "欧拉贝什与银河标准语字体",
-     "items": ["在 Block HTML、Fry Sheet、Fry Docs、Fry Slides、Fry Lab、Fry Python 中选择欧拉贝什或银河标准语，字母也会改变", "新增 430 个表情词"]
+     "items": [
+      "在 Block HTML、Fry Sheet、Fry Docs、Fry Slides、Fry Lab、Fry Python 中选择欧拉贝什或银河标准语，字母也会改变",
+      "新增 430 个表情词"
+     ]
     },
     "pt": {
      "title": "Letras aurebesh e galáctico",
@@ -679,59 +869,87 @@
    "tr": {
     "en": {
      "title": "My profile on the online bar",
-     "items": ["When you log in, your profile photo and name appear on the online bar"]
+     "items": [
+      "When you log in, your profile photo and name appear on the online bar"
+     ]
     },
     "es": {
      "title": "Mi perfil en la barra de conectados",
-     "items": ["Al iniciar sesión, tu foto de perfil y tu nombre aparecen en la barra de conectados"]
+     "items": [
+      "Al iniciar sesión, tu foto de perfil y tu nombre aparecen en la barra de conectados"
+     ]
     },
     "fr": {
      "title": "Mon profil dans la barre des connectés",
-     "items": ["Une fois connecté, votre photo de profil et votre nom apparaissent dans la barre des connectés"]
+     "items": [
+      "Une fois connecté, votre photo de profil et votre nom apparaissent dans la barre des connectés"
+     ]
     },
     "de": {
      "title": "Mein Profil in der Online-Leiste",
-     "items": ["Nach dem Anmelden erscheinen dein Profilfoto und dein Name in der Online-Leiste"]
+     "items": [
+      "Nach dem Anmelden erscheinen dein Profilfoto und dein Name in der Online-Leiste"
+     ]
     },
     "ja": {
      "title": "オンラインバーに自分のプロフィール",
-     "items": ["ログインすると、オンラインバーに自分のプロフィール写真と名前を表示"]
+     "items": [
+      "ログインすると、オンラインバーに自分のプロフィール写真と名前を表示"
+     ]
     },
     "zh": {
      "title": "在线栏显示我的资料",
-     "items": ["登录后，在线栏会显示我的头像和名字"]
+     "items": [
+      "登录后，在线栏会显示我的头像和名字"
+     ]
     },
     "pt": {
      "title": "Meu perfil na barra de online",
-     "items": ["Ao entrar na conta, sua foto de perfil e seu nome aparecem na barra de online"]
+     "items": [
+      "Ao entrar na conta, sua foto de perfil e seu nome aparecem na barra de online"
+     ]
     },
     "ru": {
      "title": "Мой профиль в панели онлайн",
-     "items": ["После входа в панели онлайн показываются ваше фото профиля и имя"]
+     "items": [
+      "После входа в панели онлайн показываются ваше фото профиля и имя"
+     ]
     },
     "tr": {
      "title": "Çevrim içi çubuğunda profilim",
-     "items": ["Giriş yapınca profil fotoğrafın ve adın çevrim içi çubuğunda görünür"]
+     "items": [
+      "Giriş yapınca profil fotoğrafın ve adın çevrim içi çubuğunda görünür"
+     ]
     },
     "it": {
      "title": "Il mio profilo nella barra degli utenti online",
-     "items": ["Dopo l'accesso, foto del profilo e nome appaiono nella barra degli utenti online"]
+     "items": [
+      "Dopo l'accesso, foto del profilo e nome appaiono nella barra degli utenti online"
+     ]
     },
     "pl": {
      "title": "Mój profil na pasku online",
-     "items": ["Po zalogowaniu na pasku online pojawia się Twoje zdjęcie profilowe i imię"]
+     "items": [
+      "Po zalogowaniu na pasku online pojawia się Twoje zdjęcie profilowe i imię"
+     ]
     },
     "ar": {
      "title": "ملفي الشخصي في شريط المتصلين",
-     "items": ["عند تسجيل الدخول تظهر صورة ملفك الشخصي واسمك في شريط المتصلين"]
+     "items": [
+      "عند تسجيل الدخول تظهر صورة ملفك الشخصي واسمك في شريط المتصلين"
+     ]
     },
     "nw": {
      "title": "My profile on the online bar",
-     "items": ["After Selfgive, my profile photo and name show on the online bar"]
+     "items": [
+      "After Selfgive, my profile photo and name show on the online bar"
+     ]
     },
     "gk": {
      "title": "접속 줄에 내 프로필",
-     "items": ["로그인하다 접속 줄에 내 프로필 사진과 이름 보이다"]
+     "items": [
+      "로그인하다 접속 줄에 내 프로필 사진과 이름 보이다"
+     ]
     }
    }
   },
@@ -774,11 +992,17 @@
     },
     "ja": {
      "title": "Fry Python を追加",
-     "items": ["新しいツール Fry Python（ブラウザでPythonを実行）のカードを一番前に配置", "数字の行のツール数を6個に"]
+     "items": [
+      "新しいツール Fry Python（ブラウザでPythonを実行）のカードを一番前に配置",
+      "数字の行のツール数を6個に"
+     ]
     },
     "zh": {
      "title": "新增 Fry Python",
-     "items": ["新工具 Fry Python（在浏览器中运行 Python）的卡片排在最前面", "数字行中的工具数量变为 6 个"]
+     "items": [
+      "新工具 Fry Python（在浏览器中运行 Python）的卡片排在最前面",
+      "数字行中的工具数量变为 6 个"
+     ]
     },
     "pt": {
      "title": "Fry Python adicionado",
@@ -817,7 +1041,10 @@
     },
     "ar": {
      "title": "إضافة Fry Python",
-     "items": ["أداة جديدة Fry Python (تشغيل Python في المتصفح) وبطاقتها في المقدمة", "أصبح عدد الأدوات في صف الأرقام 6"]
+     "items": [
+      "أداة جديدة Fry Python (تشغيل Python في المتصفح) وبطاقتها في المقدمة",
+      "أصبح عدد الأدوات في صف الأرقام 6"
+     ]
     },
     "nw": {
      "title": "Fry Python added",
@@ -828,7 +1055,10 @@
     },
     "gk": {
      "title": "Fry Python 더하다",
-     "items": ["새 도구 Fry Python (브라우저에서 파이썬 실행하다) 카드를 맨 앞에", "숫자 줄 도구 수 6개"]
+     "items": [
+      "새 도구 Fry Python (브라우저에서 파이썬 실행하다) 카드를 맨 앞에",
+      "숫자 줄 도구 수 6개"
+     ]
     }
    }
   },
@@ -884,7 +1114,11 @@
     },
     "zh": {
      "title": "新增 Fry Docs",
-     "items": ["新工具卡片 Fry Docs（像 Word 一样写文档）", "工具卡片顺序调整（Block HTML、Fry Sheet、Fry Docs、Fry Slides、Fry Lab）", "数字条中的工具数为 5"]
+     "items": [
+      "新工具卡片 Fry Docs（像 Word 一样写文档）",
+      "工具卡片顺序调整（Block HTML、Fry Sheet、Fry Docs、Fry Slides、Fry Lab）",
+      "数字条中的工具数为 5"
+     ]
     },
     "pt": {
      "title": "Fry Docs adicionado",
@@ -986,11 +1220,15 @@
     },
     "ja": {
      "title": "オンライン人数にToolsを追加",
-     "items": ["ログインしたままToolsを使うと1分ごとに接続信号（ハブやゲームサイトのオンライン人数にToolsを含む）"]
+     "items": [
+      "ログインしたままToolsを使うと1分ごとに接続信号（ハブやゲームサイトのオンライン人数にToolsを含む）"
+     ]
     },
     "zh": {
      "title": "在线人数计入 Tools",
-     "items": ["登录后使用 Tools 时每分钟发送一次在线信号（中心和游戏网站的在线人数包含 Tools）"]
+     "items": [
+      "登录后使用 Tools 时每分钟发送一次在线信号（中心和游戏网站的在线人数包含 Tools）"
+     ]
     },
     "pt": {
      "title": "Tools na contagem de online",
@@ -1000,11 +1238,15 @@
     },
     "ru": {
      "title": "Tools в счётчике онлайна",
-     "items": ["Во время входа Tools каждую минуту отправляет сигнал (Tools теперь учитывается в онлайне хаба и сайта игр)"]
+     "items": [
+      "Во время входа Tools каждую минуту отправляет сигнал (Tools теперь учитывается в онлайне хаба и сайта игр)"
+     ]
     },
     "tr": {
      "title": "Çevrimiçi sayısına Tools eklendi",
-     "items": ["Giriş yapmışken Tools her dakika çevrimiçi sinyali gönderir (hub ve oyun sitesi sayılarına Tools da girer)"]
+     "items": [
+      "Giriş yapmışken Tools her dakika çevrimiçi sinyali gönderir (hub ve oyun sitesi sayılarına Tools da girer)"
+     ]
     },
     "it": {
      "title": "Tools nel conteggio online",
@@ -1020,15 +1262,21 @@
     },
     "ar": {
      "title": "إدراج Tools في عدد المتصلين",
-     "items": ["عند تسجيل الدخول يرسل Tools إشارة كل دقيقة (صار Tools يُحسب في عدد المتصلين في المركز وموقع الألعاب)"]
+     "items": [
+      "عند تسجيل الدخول يرسل Tools إشارة كل دقيقة (صار Tools يُحسب في عدد المتصلين في المركز وموقع الألعاب)"
+     ]
     },
     "nw": {
      "title": "Tools in herenow count",
-     "items": ["Selfgiven Tools sends herenow signal every minute (Tools counts in hub plus games herenow numbers)"]
+     "items": [
+      "Selfgiven Tools sends herenow signal every minute (Tools counts in hub plus games herenow numbers)"
+     ]
     },
     "gk": {
      "title": "도구들 안에 그 온라인 백작",
-     "items": ["언제 통나무 안에, 도구들 보내다 하나의 온라인 신호 모든 분 (도구들 지금 세다 안에 그 바퀴통 그리고 게임들 장소 온라인 숫자들)"]
+     "items": [
+      "언제 통나무 안에, 도구들 보내다 하나의 온라인 신호 모든 분 (도구들 지금 세다 안에 그 바퀴통 그리고 게임들 장소 온라인 숫자들)"
+     ]
     }
    }
   },
@@ -1042,59 +1290,87 @@
    "tr": {
     "en": {
      "title": "Online now bar",
-     "items": ["The home page shows the same online-now bar as the hub and the games site (total, per game, hub)"]
+     "items": [
+      "The home page shows the same online-now bar as the hub and the games site (total, per game, hub)"
+     ]
     },
     "es": {
      "title": "Barra de conectados",
-     "items": ["La portada muestra la misma barra de conectados que el hub y el sitio de juegos (total, por juego, hub)"]
+     "items": [
+      "La portada muestra la misma barra de conectados que el hub y el sitio de juegos (total, por juego, hub)"
+     ]
     },
     "fr": {
      "title": "Barre des connectés",
-     "items": ["L’accueil affiche la même barre des connectés que le hub et le site de jeux (total, par jeu, hub)"]
+     "items": [
+      "L’accueil affiche la même barre des connectés que le hub et le site de jeux (total, par jeu, hub)"
+     ]
     },
     "de": {
      "title": "Online-Leiste",
-     "items": ["Die Startseite zeigt dieselbe Online-Leiste wie der Hub und die Spieleseite (gesamt, pro Spiel, Hub)"]
+     "items": [
+      "Die Startseite zeigt dieselbe Online-Leiste wie der Hub und die Spieleseite (gesamt, pro Spiel, Hub)"
+     ]
     },
     "ja": {
      "title": "オンライン人数の表示",
-     "items": ["トップページにハブやゲームサイトと同じオンライン人数の帯を表示（全体・ゲーム別・ハブ）"]
+     "items": [
+      "トップページにハブやゲームサイトと同じオンライン人数の帯を表示（全体・ゲーム別・ハブ）"
+     ]
     },
     "zh": {
      "title": "在线人数条",
-     "items": ["首页显示与中心和游戏网站相同的在线人数条（总数、各游戏、中心）"]
+     "items": [
+      "首页显示与中心和游戏网站相同的在线人数条（总数、各游戏、中心）"
+     ]
     },
     "pt": {
      "title": "Barra de quem está online",
-     "items": ["A página inicial mostra a mesma barra de pessoas online do hub e do site de jogos (total, por jogo, hub)"]
+     "items": [
+      "A página inicial mostra a mesma barra de pessoas online do hub e do site de jogos (total, por jogo, hub)"
+     ]
     },
     "ru": {
      "title": "Полоса «сейчас онлайн»",
-     "items": ["На главной та же полоса онлайна, что в хабе и на сайте игр (всего, по играм, хаб)"]
+     "items": [
+      "На главной та же полоса онлайна, что в хабе и на сайте игр (всего, по играм, хаб)"
+     ]
     },
     "tr": {
      "title": "Çevrimiçi şeridi",
-     "items": ["Ana sayfada hub ve oyun sitesindeki ile aynı çevrimiçi kişi şeridi (toplam, oyun başına, hub)"]
+     "items": [
+      "Ana sayfada hub ve oyun sitesindeki ile aynı çevrimiçi kişi şeridi (toplam, oyun başına, hub)"
+     ]
     },
     "it": {
      "title": "Barra degli utenti online",
-     "items": ["La home mostra la stessa barra degli utenti online dell’hub e del sito dei giochi (totale, per gioco, hub)"]
+     "items": [
+      "La home mostra la stessa barra degli utenti online dell’hub e del sito dei giochi (totale, per gioco, hub)"
+     ]
     },
     "pl": {
      "title": "Pasek osób online",
-     "items": ["Strona główna pokazuje ten sam pasek osób online co hub i strona z grami (razem, na grę, hub)"]
+     "items": [
+      "Strona główna pokazuje ten sam pasek osób online co hub i strona z grami (razem, na grę, hub)"
+     ]
     },
     "ar": {
      "title": "شريط المتصلين الآن",
-     "items": ["تعرض الصفحة الرئيسية شريط المتصلين نفسه الموجود في المركز وموقع الألعاب (الإجمالي، لكل لعبة، المركز)"]
+     "items": [
+      "تعرض الصفحة الرئيسية شريط المتصلين نفسه الموجود في المركز وموقع الألعاب (الإجمالي، لكل لعبة، المركز)"
+     ]
     },
     "nw": {
      "title": "Herenow bar",
-     "items": ["Homepage shows same herenow bar as hub plus games site (all, per game, hub)"]
+     "items": [
+      "Homepage shows same herenow bar as hub plus games site (all, per game, hub)"
+     ]
     },
     "gk": {
      "title": "온라인 지금 막대기",
-     "items": ["그 집 페이지 쇼들 그 같은 온라인-지금 막대기 처럼 그 바퀴통 그리고 그 게임들 장소 (합계, 당 게임, 바퀴통)"]
+     "items": [
+      "그 집 페이지 쇼들 그 같은 온라인-지금 막대기 처럼 그 바퀴통 그리고 그 게임들 장소 (합계, 당 게임, 바퀴통)"
+     ]
     }
    }
   },
@@ -1108,59 +1384,87 @@
    "tr": {
     "en": {
      "title": "Three tool cards per row",
-     "items": ["Home page tool cards now sit three per row (two on tablets, one on phones)"]
+     "items": [
+      "Home page tool cards now sit three per row (two on tablets, one on phones)"
+     ]
     },
     "es": {
      "title": "Tres tarjetas por fila",
-     "items": ["Las tarjetas de la portada ahora van de tres en tres por fila (dos en tableta, una en el móvil)"]
+     "items": [
+      "Las tarjetas de la portada ahora van de tres en tres por fila (dos en tableta, una en el móvil)"
+     ]
     },
     "fr": {
      "title": "Trois cartes par ligne",
-     "items": ["Les cartes d’outils de l’accueil s’affichent par trois (deux sur tablette, une sur téléphone)"]
+     "items": [
+      "Les cartes d’outils de l’accueil s’affichent par trois (deux sur tablette, une sur téléphone)"
+     ]
     },
     "de": {
      "title": "Drei Karten pro Reihe",
-     "items": ["Die Werkzeugkarten der Startseite stehen jetzt zu dritt in einer Reihe (zwei auf Tablets, eine auf Handys)"]
+     "items": [
+      "Die Werkzeugkarten der Startseite stehen jetzt zu dritt in einer Reihe (zwei auf Tablets, eine auf Handys)"
+     ]
     },
     "ja": {
      "title": "ツールカードを1列に3つ",
-     "items": ["トップページのツールカードを1列に3つずつ配置（タブレットは2つ、スマホは1つ）"]
+     "items": [
+      "トップページのツールカードを1列に3つずつ配置（タブレットは2つ、スマホは1つ）"
+     ]
     },
     "zh": {
      "title": "每行三张工具卡",
-     "items": ["首页工具卡片改为每行 3 张（平板 2 张，手机 1 张）"]
+     "items": [
+      "首页工具卡片改为每行 3 张（平板 2 张，手机 1 张）"
+     ]
     },
     "pt": {
      "title": "Três cartões por linha",
-     "items": ["Os cartões de ferramentas da página inicial agora ficam três por linha (dois no tablet, um no celular)"]
+     "items": [
+      "Os cartões de ferramentas da página inicial agora ficam três por linha (dois no tablet, um no celular)"
+     ]
     },
     "ru": {
      "title": "Три карточки в ряд",
-     "items": ["Карточки инструментов на главной теперь стоят по три в ряд (на планшете по две, на телефоне по одной)"]
+     "items": [
+      "Карточки инструментов на главной теперь стоят по три в ряд (на планшете по две, на телефоне по одной)"
+     ]
     },
     "tr": {
      "title": "Satırda üç araç kartı",
-     "items": ["Ana sayfadaki araç kartları artık satırda üç tane (tablette iki, telefonda bir)"]
+     "items": [
+      "Ana sayfadaki araç kartları artık satırda üç tane (tablette iki, telefonda bir)"
+     ]
     },
     "it": {
      "title": "Tre schede per riga",
-     "items": ["Le schede degli strumenti in home ora sono tre per riga (due su tablet, una su telefono)"]
+     "items": [
+      "Le schede degli strumenti in home ora sono tre per riga (due su tablet, una su telefono)"
+     ]
     },
     "pl": {
      "title": "Trzy karty w rzędzie",
-     "items": ["Karty narzędzi na stronie głównej są teraz po trzy w rzędzie (dwie na tablecie, jedna na telefonie)"]
+     "items": [
+      "Karty narzędzi na stronie głównej są teraz po trzy w rzędzie (dwie na tablecie, jedna na telefonie)"
+     ]
     },
     "ar": {
      "title": "ثلاث بطاقات في كل صف",
-     "items": ["صارت بطاقات الأدوات في الصفحة الرئيسية ثلاثًا في كل صف (اثنتان على الجهاز اللوحي وواحدة على الهاتف)"]
+     "items": [
+      "صارت بطاقات الأدوات في الصفحة الرئيسية ثلاثًا في كل صف (اثنتان على الجهاز اللوحي وواحدة على الهاتف)"
+     ]
     },
     "nw": {
      "title": "Three toolcards a row",
-     "items": ["Homepage toolcards now go three a row (two on flatpads, one on speakphones)"]
+     "items": [
+      "Homepage toolcards now go three a row (two on flatpads, one on speakphones)"
+     ]
     },
     "gk": {
      "title": "세 도구 카드들 당 노 젓다",
-     "items": ["집 페이지 도구 카드들 지금 앉다 셋 당 노 젓다 (둘 위에 알약들, 하나 위에 전화들)"]
+     "items": [
+      "집 페이지 도구 카드들 지금 앉다 셋 당 노 젓다 (둘 위에 알약들, 하나 위에 전화들)"
+     ]
     }
    }
   },
@@ -1174,7 +1478,9 @@
    "tr": {
     "en": {
      "title": "Block types back",
-     "items": ["Added the 235 block types back to the home page number strip (tools, experiments, block types, languages)"]
+     "items": [
+      "Added the 235 block types back to the home page number strip (tools, experiments, block types, languages)"
+     ]
     },
     "es": {
      "title": "Vuelven los tipos de bloques",
@@ -1196,11 +1502,15 @@
     },
     "ja": {
      "title": "ブロックの種類を再表示",
-     "items": ["トップページの数字の帯にブロックの種類 235 を再び追加（ツール・実験の種類・ブロックの種類・言語）"]
+     "items": [
+      "トップページの数字の帯にブロックの種類 235 を再び追加（ツール・実験の種類・ブロックの種類・言語）"
+     ]
     },
     "zh": {
      "title": "重新显示积木种类",
-     "items": ["首页数字条重新加入 235 种积木（工具、实验种类、积木种类、语言）"]
+     "items": [
+      "首页数字条重新加入 235 种积木（工具、实验种类、积木种类、语言）"
+     ]
     },
     "pt": {
      "title": "Tipos de blocos de volta",
@@ -1210,11 +1520,15 @@
     },
     "ru": {
      "title": "Виды блоков снова на месте",
-     "items": ["На полосу с цифрами на главной вернулись 235 видов блоков (инструменты, эксперименты, виды блоков, языки)"]
+     "items": [
+      "На полосу с цифрами на главной вернулись 235 видов блоков (инструменты, эксперименты, виды блоков, языки)"
+     ]
     },
     "tr": {
      "title": "Blok türleri geri geldi",
-     "items": ["Ana sayfa sayı şeridine 235 blok türü yeniden eklendi (araçlar, deneyler, blok türleri, diller)"]
+     "items": [
+      "Ana sayfa sayı şeridine 235 blok türü yeniden eklendi (araçlar, deneyler, blok türleri, diller)"
+     ]
     },
     "it": {
      "title": "Tornano i tipi di blocchi",
@@ -1224,19 +1538,27 @@
     },
     "pl": {
      "title": "Rodzaje bloków wróciły",
-     "items": ["Na pasek liczb na stronie głównej wróciło 235 rodzajów bloków (narzędzia, eksperymenty, rodzaje bloków, języki)"]
+     "items": [
+      "Na pasek liczb na stronie głównej wróciło 235 rodzajów bloków (narzędzia, eksperymenty, rodzaje bloków, języki)"
+     ]
     },
     "ar": {
      "title": "عودة أنواع الكتل",
-     "items": ["أُعيدت أنواع الكتل الـ235 إلى شريط الأرقام في الصفحة الرئيسية (الأدوات، التجارب، أنواع الكتل، اللغات)"]
+     "items": [
+      "أُعيدت أنواع الكتل الـ235 إلى شريط الأرقام في الصفحة الرئيسية (الأدوات، التجارب، أنواع الكتل، اللغات)"
+     ]
     },
     "nw": {
      "title": "Blockthings back",
-     "items": ["Plusadded 235 blockthings back to homepage numberstrip (tools, tryouts, blockthings, speaks)"]
+     "items": [
+      "Plusadded 235 blockthings back to homepage numberstrip (tools, tryouts, blockthings, speaks)"
+     ]
     },
     "gk": {
      "title": "구역 유형들 등",
-     "items": ["더하다 그 235 구역 유형들 등 에게 그 집 페이지 숫자 벗기다 (도구들, 실험들, 구역 유형들, 언어들)"]
+     "items": [
+      "더하다 그 235 구역 유형들 등 에게 그 집 페이지 숫자 벗기다 (도구들, 실험들, 구역 유형들, 언어들)"
+     ]
     }
    }
   },
@@ -1284,11 +1606,19 @@
     },
     "ja": {
      "title": "パッチノート検索",
-     "items": ["パッチノートに検索欄を追加", "ビルド番号（v60、60、ビルド 60）や内容で検索", "見つかった数を表示"]
+     "items": [
+      "パッチノートに検索欄を追加",
+      "ビルド番号（v60、60、ビルド 60）や内容で検索",
+      "見つかった数を表示"
+     ]
     },
     "zh": {
      "title": "更新日志搜索",
-     "items": ["更新日志新增搜索框", "可按构建号（v60、60、构建 60）或内容查找", "显示找到的数量"]
+     "items": [
+      "更新日志新增搜索框",
+      "可按构建号（v60、60、构建 60）或内容查找",
+      "显示找到的数量"
+     ]
     },
     "pt": {
      "title": "Busca nas notas",
@@ -1348,7 +1678,11 @@
     },
     "gk": {
      "title": "반창고 메모 수색",
-     "items": ["더하다 하나의 수색 권투 에게 그 반창고 메모들", "찾다 메모들 에 의해 짓다 숫자 (v60, 60, 짓다 60) 또는 에 의해 만족한", "쇼들 어떻게 많은 이었다 설립된"]
+     "items": [
+      "더하다 하나의 수색 권투 에게 그 반창고 메모들",
+      "찾다 메모들 에 의해 짓다 숫자 (v60, 60, 짓다 60) 또는 에 의해 만족한",
+      "쇼들 어떻게 많은 이었다 설립된"
+     ]
     }
    }
   },
@@ -1396,11 +1730,19 @@
     },
     "ja": {
      "title": "絵文字語を追加",
-     "items": ["架空の言語に絵文字語 😀💬 を追加（文字を絵文字に変えて表示し、マウスを乗せると元の文）", "シート・スライド・ブロック・実験室でも絵文字語が使える", "言語数 18"]
+     "items": [
+      "架空の言語に絵文字語 😀💬 を追加（文字を絵文字に変えて表示し、マウスを乗せると元の文）",
+      "シート・スライド・ブロック・実験室でも絵文字語が使える",
+      "言語数 18"
+     ]
     },
     "zh": {
      "title": "新增表情语",
-     "items": ["虚构语言新增表情语 😀💬（文字以表情符号显示，鼠标悬停可看原文）", "表格、幻灯片、积木和实验室也能用表情语", "共 18 种语言"]
+     "items": [
+      "虚构语言新增表情语 😀💬（文字以表情符号显示，鼠标悬停可看原文）",
+      "表格、幻灯片、积木和实验室也能用表情语",
+      "共 18 种语言"
+     ]
     },
     "pt": {
      "title": "Idioma emoji adicionado",
@@ -1507,11 +1849,17 @@
     },
     "ja": {
      "title": "トップページの数字の帯",
-     "items": ["ブロックの種類の数を外し、実験の種類の数を追加（Fry Lab の実験数をコードから数えて表示）", "数字の順番をツール、実験の種類、言語に変更"]
+     "items": [
+      "ブロックの種類の数を外し、実験の種類の数を追加（Fry Lab の実験数をコードから数えて表示）",
+      "数字の順番をツール、実験の種類、言語に変更"
+     ]
     },
     "zh": {
      "title": "首页数字条",
-     "items": ["去掉积木种类数，改为显示实验种类数（从 Fry Lab 代码中统计）", "数字顺序改为：工具、实验种类、语言"]
+     "items": [
+      "去掉积木种类数，改为显示实验种类数（从 Fry Lab 代码中统计）",
+      "数字顺序改为：工具、实验种类、语言"
+     ]
     },
     "pt": {
      "title": "Faixa de números da página inicial",
@@ -1550,7 +1898,10 @@
     },
     "ar": {
      "title": "شريط الأرقام في الصفحة الرئيسية",
-     "items": ["استُبدل عدد أنواع الكتل بعدد التجارب (يُحسب من شيفرة Fry Lab)", "ترتيب الأرقام: الأدوات، التجارب، اللغات"]
+     "items": [
+      "استُبدل عدد أنواع الكتل بعدد التجارب (يُحسب من شيفرة Fry Lab)",
+      "ترتيب الأرقام: الأدوات، التجارب، اللغات"
+     ]
     },
     "nw": {
      "title": "Homepage numberstrip",
@@ -1561,7 +1912,10 @@
     },
     "gk": {
      "title": "집 페이지 숫자 벗기다",
-     "items": ["대체된 그 구역 유형 백작 와 함께 하나의 실험 백작 (튀김 실험실 실험들 세어진 부터 그 암호)", "숫자들 지금 가다: 도구들, 실험들, 언어들"]
+     "items": [
+      "대체된 그 구역 유형 백작 와 함께 하나의 실험 백작 (튀김 실험실 실험들 세어진 부터 그 암호)",
+      "숫자들 지금 가다: 도구들, 실험들, 언어들"
+     ]
     }
    }
   },
@@ -1575,59 +1929,87 @@
    "tr": {
     "en": {
      "title": "Tool card logos",
-     "items": ["Added logos to the Fry Sheet, Block HTML, Fry Slides and Fry Lab cards"]
+     "items": [
+      "Added logos to the Fry Sheet, Block HTML, Fry Slides and Fry Lab cards"
+     ]
     },
     "es": {
      "title": "Logos en las tarjetas",
-     "items": ["Se añadieron logos a las tarjetas de Fry Sheet, Block HTML, Fry Slides y Fry Lab"]
+     "items": [
+      "Se añadieron logos a las tarjetas de Fry Sheet, Block HTML, Fry Slides y Fry Lab"
+     ]
     },
     "fr": {
      "title": "Logos des cartes",
-     "items": ["Ajout de logos sur les cartes Fry Sheet, Block HTML, Fry Slides et Fry Lab"]
+     "items": [
+      "Ajout de logos sur les cartes Fry Sheet, Block HTML, Fry Slides et Fry Lab"
+     ]
     },
     "de": {
      "title": "Logos auf den Karten",
-     "items": ["Logos auf den Karten von Fry Sheet, Block HTML, Fry Slides und Fry Lab hinzugefügt"]
+     "items": [
+      "Logos auf den Karten von Fry Sheet, Block HTML, Fry Slides und Fry Lab hinzugefügt"
+     ]
     },
     "ja": {
      "title": "ツールカードのロゴ",
-     "items": ["Fry Sheet、Block HTML、Fry Slides、Fry Lab のカードにロゴを追加"]
+     "items": [
+      "Fry Sheet、Block HTML、Fry Slides、Fry Lab のカードにロゴを追加"
+     ]
     },
     "zh": {
      "title": "工具卡片标志",
-     "items": ["为 Fry Sheet、Block HTML、Fry Slides 和 Fry Lab 卡片加上标志"]
+     "items": [
+      "为 Fry Sheet、Block HTML、Fry Slides 和 Fry Lab 卡片加上标志"
+     ]
     },
     "pt": {
      "title": "Logos nos cartões",
-     "items": ["Adicionados logos aos cartões do Fry Sheet, Block HTML, Fry Slides e Fry Lab"]
+     "items": [
+      "Adicionados logos aos cartões do Fry Sheet, Block HTML, Fry Slides e Fry Lab"
+     ]
     },
     "ru": {
      "title": "Логотипы на карточках",
-     "items": ["Добавлены логотипы на карточки Fry Sheet, Block HTML, Fry Slides и Fry Lab"]
+     "items": [
+      "Добавлены логотипы на карточки Fry Sheet, Block HTML, Fry Slides и Fry Lab"
+     ]
     },
     "tr": {
      "title": "Araç kartı logoları",
-     "items": ["Fry Sheet, Block HTML, Fry Slides ve Fry Lab kartlarına logo eklendi"]
+     "items": [
+      "Fry Sheet, Block HTML, Fry Slides ve Fry Lab kartlarına logo eklendi"
+     ]
     },
     "it": {
      "title": "Loghi delle schede",
-     "items": ["Aggiunti i loghi alle schede di Fry Sheet, Block HTML, Fry Slides e Fry Lab"]
+     "items": [
+      "Aggiunti i loghi alle schede di Fry Sheet, Block HTML, Fry Slides e Fry Lab"
+     ]
     },
     "pl": {
      "title": "Logo na kartach",
-     "items": ["Dodano logo na kartach Fry Sheet, Block HTML, Fry Slides i Fry Lab"]
+     "items": [
+      "Dodano logo na kartach Fry Sheet, Block HTML, Fry Slides i Fry Lab"
+     ]
     },
     "ar": {
      "title": "شعارات بطاقات الأدوات",
-     "items": ["أُضيفت شعارات إلى بطاقات Fry Sheet وBlock HTML وFry Slides وFry Lab"]
+     "items": [
+      "أُضيفت شعارات إلى بطاقات Fry Sheet وBlock HTML وFry Slides وFry Lab"
+     ]
     },
     "nw": {
      "title": "Toolcard marks",
-     "items": ["Plusadded marks to Fry Sheet, Block HTML, Fry Slides plus Fry Lab cards"]
+     "items": [
+      "Plusadded marks to Fry Sheet, Block HTML, Fry Slides plus Fry Lab cards"
+     ]
     },
     "gk": {
      "title": "도구 카드 통나무들",
-     "items": ["더하다 통나무들 에게 그 튀김 시트, 구역 HTML, 튀김 미끄럼틀 그리고 튀김 실험실 카드들"]
+     "items": [
+      "더하다 통나무들 에게 그 튀김 시트, 구역 HTML, 튀김 미끄럼틀 그리고 튀김 실험실 카드들"
+     ]
     }
    }
   },
@@ -1643,59 +2025,115 @@
    "tr": {
     "en": {
      "title": "17 languages",
-     "items": ["Added Italian, Polish and Arabic", "Arabic is laid out right to left", "17 languages"]
+     "items": [
+      "Added Italian, Polish and Arabic",
+      "Arabic is laid out right to left",
+      "17 languages"
+     ]
     },
     "es": {
      "title": "17 idiomas",
-     "items": ["Se añadieron italiano, polaco y árabe", "El árabe se muestra de derecha a izquierda", "17 idiomas"]
+     "items": [
+      "Se añadieron italiano, polaco y árabe",
+      "El árabe se muestra de derecha a izquierda",
+      "17 idiomas"
+     ]
     },
     "fr": {
      "title": "17 langues",
-     "items": ["Ajout de l’italien, du polonais et de l’arabe", "L’arabe s’affiche de droite à gauche", "17 langues"]
+     "items": [
+      "Ajout de l’italien, du polonais et de l’arabe",
+      "L’arabe s’affiche de droite à gauche",
+      "17 langues"
+     ]
     },
     "de": {
      "title": "17 Sprachen",
-     "items": ["Italienisch, Polnisch und Arabisch hinzugefügt", "Arabisch wird von rechts nach links angezeigt", "17 Sprachen"]
+     "items": [
+      "Italienisch, Polnisch und Arabisch hinzugefügt",
+      "Arabisch wird von rechts nach links angezeigt",
+      "17 Sprachen"
+     ]
     },
     "ja": {
      "title": "17言語",
-     "items": ["イタリア語、ポーランド語、アラビア語を追加", "アラビア語は右から左に表示", "言語数 17"]
+     "items": [
+      "イタリア語、ポーランド語、アラビア語を追加",
+      "アラビア語は右から左に表示",
+      "言語数 17"
+     ]
     },
     "zh": {
      "title": "17 种语言",
-     "items": ["新增意大利语、波兰语和阿拉伯语", "阿拉伯语从右向左排列", "共 17 种语言"]
+     "items": [
+      "新增意大利语、波兰语和阿拉伯语",
+      "阿拉伯语从右向左排列",
+      "共 17 种语言"
+     ]
     },
     "pt": {
      "title": "17 idiomas",
-     "items": ["Adicionados italiano, polonês e árabe", "O árabe aparece da direita para a esquerda", "17 idiomas"]
+     "items": [
+      "Adicionados italiano, polonês e árabe",
+      "O árabe aparece da direita para a esquerda",
+      "17 idiomas"
+     ]
     },
     "ru": {
      "title": "17 языков",
-     "items": ["Добавлены итальянский, польский и арабский", "Арабский отображается справа налево", "17 языков"]
+     "items": [
+      "Добавлены итальянский, польский и арабский",
+      "Арабский отображается справа налево",
+      "17 языков"
+     ]
     },
     "tr": {
      "title": "17 dil",
-     "items": ["İtalyanca, Lehçe ve Arapça eklendi", "Arapça sağdan sola dizilir", "17 dil"]
+     "items": [
+      "İtalyanca, Lehçe ve Arapça eklendi",
+      "Arapça sağdan sola dizilir",
+      "17 dil"
+     ]
     },
     "it": {
      "title": "17 lingue",
-     "items": ["Aggiunti italiano, polacco e arabo", "L’arabo si legge da destra a sinistra", "17 lingue"]
+     "items": [
+      "Aggiunti italiano, polacco e arabo",
+      "L’arabo si legge da destra a sinistra",
+      "17 lingue"
+     ]
     },
     "pl": {
      "title": "17 języków",
-     "items": ["Dodano włoski, polski i arabski", "Arabski jest wyświetlany od prawej do lewej", "17 języków"]
+     "items": [
+      "Dodano włoski, polski i arabski",
+      "Arabski jest wyświetlany od prawej do lewej",
+      "17 języków"
+     ]
     },
     "ar": {
      "title": "17 لغة",
-     "items": ["أُضيفت الإيطالية والبولندية والعربية", "تُعرض العربية من اليمين إلى اليسار", "17 لغة"]
+     "items": [
+      "أُضيفت الإيطالية والبولندية والعربية",
+      "تُعرض العربية من اليمين إلى اليسار",
+      "17 لغة"
+     ]
     },
     "nw": {
      "title": "17 speaks",
-     "items": ["Plusadded Italian, Polish plus Arabic", "Arabic goes unleftwise", "17 speaks"]
+     "items": [
+      "Plusadded Italian, Polish plus Arabic",
+      "Arabic goes unleftwise",
+      "17 speaks"
+     ]
     },
     "gk": {
      "title": "17 언어들",
-     "items": ["더하다 이탈리아인, 광택제 그리고 아라비아 숫자", "아라비아 숫자 이다 눕혀진 밖으로 옳은 에게 남은", "17 언어들"]
+     "items": [
+      "더하다 이탈리아인, 광택제 그리고 아라비아 숫자",
+      "아라비아 숫자 이다 눕혀진 밖으로 옳은 에게 남은",
+      "17 언어들"
+     ]
     }
    }
   },
@@ -1738,11 +2176,17 @@
     },
     "ja": {
      "title": "Standard Galactic を追加",
-     "items": ["架空の言語に Standard Galactic を追加（コマンダー・キーンやマインクラフトのエンチャント文字）", "言語数 14"]
+     "items": [
+      "架空の言語に Standard Galactic を追加（コマンダー・キーンやマインクラフトのエンチャント文字）",
+      "言語数 14"
+     ]
     },
     "zh": {
      "title": "新增 Standard Galactic",
-     "items": ["虚构语言新增 Standard Galactic（《指挥官基恩》和 Minecraft 附魔所用的文字）", "共 14 种语言"]
+     "items": [
+      "虚构语言新增 Standard Galactic（《指挥官基恩》和 Minecraft 附魔所用的文字）",
+      "共 14 种语言"
+     ]
     },
     "pt": {
      "title": "Standard Galactic adicionado",
@@ -1753,11 +2197,17 @@
     },
     "ru": {
      "title": "Добавлен Standard Galactic",
-     "items": ["В вымышленные языки добавлен Standard Galactic (буквы из Commander Keen и зачарований Minecraft)", "14 языков"]
+     "items": [
+      "В вымышленные языки добавлен Standard Galactic (буквы из Commander Keen и зачарований Minecraft)",
+      "14 языков"
+     ]
     },
     "tr": {
      "title": "Standard Galactic eklendi",
-     "items": ["Kurgusal dillere Standard Galactic eklendi (Commander Keen ve Minecraft büyü harfleri)", "14 dil"]
+     "items": [
+      "Kurgusal dillere Standard Galactic eklendi (Commander Keen ve Minecraft büyü harfleri)",
+      "14 dil"
+     ]
     },
     "it": {
      "title": "Aggiunto lo Standard Galactic",
@@ -1768,19 +2218,31 @@
     },
     "pl": {
      "title": "Dodano Standard Galactic",
-     "items": ["Dodano Standard Galactic do języków fikcyjnych (litery z Commander Keen i zaklęć z Minecrafta)", "14 języków"]
+     "items": [
+      "Dodano Standard Galactic do języków fikcyjnych (litery z Commander Keen i zaklęć z Minecrafta)",
+      "14 języków"
+     ]
     },
     "ar": {
      "title": "إضافة Standard Galactic",
-     "items": ["أُضيفت Standard Galactic إلى اللغات الخيالية (حروف Commander Keen وسحر Minecraft)", "14 لغة"]
+     "items": [
+      "أُضيفت Standard Galactic إلى اللغات الخيالية (حروف Commander Keen وسحر Minecraft)",
+      "14 لغة"
+     ]
     },
     "nw": {
      "title": "Standard Galactic plusadded",
-     "items": ["Plusadded Standard Galactic to unreal speaks (Commander Keen plus Minecraft spellmarks)", "14 speaks"]
+     "items": [
+      "Plusadded Standard Galactic to unreal speaks (Commander Keen plus Minecraft spellmarks)",
+      "14 speaks"
+     ]
     },
     "gk": {
      "title": "표준 은하의 더해진",
-     "items": ["더하다 표준 은하의 에게 허구의 언어들 (사령관 날카로운 / 마인크래프트 매혹하는 편지들)", "14 언어들"]
+     "items": [
+      "더하다 표준 은하의 에게 허구의 언어들 (사령관 날카로운 / 마인크래프트 매혹하는 편지들)",
+      "14 언어들"
+     ]
     }
    }
   },
@@ -1828,11 +2290,19 @@
     },
     "ja": {
      "title": "13言語",
-     "items": ["中国語（簡体字）、ポルトガル語（ブラジル）、ロシア語、トルコ語を追加", "架空の言語グループを追加：ニュースピーク、번역기 한국어、オーラベッシュ", "翻訳のない文は英語で表示"]
+     "items": [
+      "中国語（簡体字）、ポルトガル語（ブラジル）、ロシア語、トルコ語を追加",
+      "架空の言語グループを追加：ニュースピーク、번역기 한국어、オーラベッシュ",
+      "翻訳のない文は英語で表示"
+     ]
     },
     "zh": {
      "title": "13 种语言",
-     "items": ["新增简体中文、葡萄牙语（巴西）、俄语和土耳其语", "新增虚构语言组：新话、번역기 한국어 和奥瑞贝什文", "没有翻译的文字以英语显示"]
+     "items": [
+      "新增简体中文、葡萄牙语（巴西）、俄语和土耳其语",
+      "新增虚构语言组：新话、번역기 한국어 和奥瑞贝什文",
+      "没有翻译的文字以英语显示"
+     ]
     },
     "pt": {
      "title": "13 idiomas",
@@ -2042,11 +2512,15 @@
     },
     "ja": {
      "title": "スクロールバーを整える",
-     "items": ["白い標準のスクロールバーを暗いテーマに合う細いグレーのスクロールバーに変更（すべてのツール画面、会話一覧、ポップアップ）"]
+     "items": [
+      "白い標準のスクロールバーを暗いテーマに合う細いグレーのスクロールバーに変更（すべてのツール画面、会話一覧、ポップアップ）"
+     ]
     },
     "zh": {
      "title": "优化滚动条",
-     "items": ["把白色的默认滚动条换成适合深色主题的细灰色滚动条（所有工具界面、对话列表、弹窗）"]
+     "items": [
+      "把白色的默认滚动条换成适合深色主题的细灰色滚动条（所有工具界面、对话列表、弹窗）"
+     ]
     },
     "pt": {
      "title": "Barras de rolagem refinadas",
@@ -2086,11 +2560,15 @@
     },
     "nw": {
      "title": "Scrollbar tidy",
-     "items": ["Plain white scrollbar swapped for thin gray scrollbar fitting dark theme (all tool screens, talk lists, popups)"]
+     "items": [
+      "Plain white scrollbar swapped for thin gray scrollbar fitting dark theme (all tool screens, talk lists, popups)"
+     ]
     },
     "gk": {
      "title": "스크롤바 다듬기",
-     "items": ["하얀 기본 스크롤바 어두운 테마에 맞는 얇은 회색 스크롤바로 변경 (모든 도구 화면 대화 목록 팝업)"]
+     "items": [
+      "하얀 기본 스크롤바 어두운 테마에 맞는 얇은 회색 스크롤바로 변경 (모든 도구 화면 대화 목록 팝업)"
+     ]
     }
    }
   },
@@ -2146,7 +2624,11 @@
     },
     "zh": {
      "title": "保存 AI 体验对话",
-     "items": ["新增 AI 体验对话保存：对话会自动保存在本设备上，可在首页的“过往对话”中继续", "“清除对话”改为“新对话”，过往对话用删除按钮清除（按两次确认）", "继续之前，AI 会记得之前聊过的内容并据此回答"]
+     "items": [
+      "新增 AI 体验对话保存：对话会自动保存在本设备上，可在首页的“过往对话”中继续",
+      "“清除对话”改为“新对话”，过往对话用删除按钮清除（按两次确认）",
+      "继续之前，AI 会记得之前聊过的内容并据此回答"
+     ]
     },
     "pt": {
      "title": "Conversas do AI Chat salvas",
@@ -2253,11 +2735,17 @@
     },
     "ja": {
      "title": "AI体験がもっと話す",
-     "items": ["AI体験でAIがより長く親切に話すよう変更（基本は6～10文で例と聞き返し付き）", "会話の上に答えの長さの選択を追加：短く、普通、長く（選んだ値は記憶）"]
+     "items": [
+      "AI体験でAIがより長く親切に話すよう変更（基本は6～10文で例と聞き返し付き）",
+      "会話の上に答えの長さの選択を追加：短く、普通、長く（選んだ値は記憶）"
+     ]
     },
     "zh": {
      "title": "AI 体验话更多",
-     "items": ["AI 体验中 AI 说得更长更亲切（默认 6~10 句，并带示例和反问）", "对话上方新增回答长度选择：简短、普通、详细（所选值会被记住）"]
+     "items": [
+      "AI 体验中 AI 说得更长更亲切（默认 6~10 句，并带示例和反问）",
+      "对话上方新增回答长度选择：简短、普通、详细（所选值会被记住）"
+     ]
     },
     "pt": {
      "title": "AI Chat fala mais",
@@ -2310,7 +2798,10 @@
     },
     "gk": {
      "title": "AI 체험 말 많이 하기",
-     "items": ["AI 체험 AI 더 길고 친절하게 말함 (기본 6~10문장 예시 되묻기)", "대화 위쪽 답 길이 고르기: 짧게 보통 길게 (고른 값 기억)"]
+     "items": [
+      "AI 체험 AI 더 길고 친절하게 말함 (기본 6~10문장 예시 되묻기)",
+      "대화 위쪽 답 길이 고르기: 짧게 보통 길게 (고른 값 기억)"
+     ]
     }
    }
   },
@@ -2740,11 +3231,17 @@
     },
     "ja": {
      "title": "上部メニューからパッチノートを外す",
-     "items": ["右上のメニューをウィキ・コミュニティ・ラウンジ・設定の4つに整理（パッチノートはラウンジで見られる）", "Tools のパッチノートページはそのままで、下のリンクから開ける"]
+     "items": [
+      "右上のメニューをウィキ・コミュニティ・ラウンジ・設定の4つに整理（パッチノートはラウンジで見られる）",
+      "Tools のパッチノートページはそのままで、下のリンクから開ける"
+     ]
     },
     "zh": {
      "title": "顶部菜单移除更新日志",
-     "items": ["右上角菜单整理为百科、社区、休息室、设置四项（更新日志可在休息室查看）", "Tools 更新日志页面仍然保留，可从底部链接打开"]
+     "items": [
+      "右上角菜单整理为百科、社区、休息室、设置四项（更新日志可在休息室查看）",
+      "Tools 更新日志页面仍然保留，可从底部链接打开"
+     ]
     },
     "pt": {
      "title": "Notas de versão saem do menu superior",
@@ -2797,7 +3294,10 @@
     },
     "gk": {
      "title": "위쪽 메뉴에서 패치노트 빼기",
-     "items": ["위쪽 오른쪽 메뉴 위키 커뮤니티 라운지 설정 네 개 (패치노트 라운지에서 볼 수 있어요)", "Tools 패치노트 페이지 그대로 있고 아래쪽 링크에서 열려요"]
+     "items": [
+      "위쪽 오른쪽 메뉴 위키 커뮤니티 라운지 설정 네 개 (패치노트 라운지에서 볼 수 있어요)",
+      "Tools 패치노트 페이지 그대로 있고 아래쪽 링크에서 열려요"
+     ]
     }
    }
   },
@@ -3088,11 +3588,17 @@
     },
     "ja": {
      "title": "ロゴの位置",
-     "items": ["最初の画面上部のロゴを36pxに大きくして Games サイトと合わせる", "最初の画面の紹介欄の右に大きなロゴを追加（Games サイトと同じ位置と大きさ）"]
+     "items": [
+      "最初の画面上部のロゴを36pxに大きくして Games サイトと合わせる",
+      "最初の画面の紹介欄の右に大きなロゴを追加（Games サイトと同じ位置と大きさ）"
+     ]
     },
     "zh": {
      "title": "徽标位置",
-     "items": ["首页顶部徽标放大到 36px，与 Games 站点一致", "首页介绍框右侧新增大徽标（位置和大小与 Games 站点相同）"]
+     "items": [
+      "首页顶部徽标放大到 36px，与 Games 站点一致",
+      "首页介绍框右侧新增大徽标（位置和大小与 Games 站点相同）"
+     ]
     },
     "pt": {
      "title": "Posição do logo",
@@ -3145,7 +3651,10 @@
     },
     "gk": {
      "title": "로고 위치",
-     "items": ["첫 화면 위쪽 로고 36px로 키워 Games 사이트와 맞춤", "첫 화면 소개 칸 오른쪽 큰 로고 추가 (Games 사이트와 같은 위치 크기)"]
+     "items": [
+      "첫 화면 위쪽 로고 36px로 키워 Games 사이트와 맞춤",
+      "첫 화면 소개 칸 오른쪽 큰 로고 추가 (Games 사이트와 같은 위치 크기)"
+     ]
     }
    }
   },
@@ -3188,11 +3697,17 @@
     },
     "ja": {
      "title": "設定サイト",
-     "items": ["上部メニューの右端に「設定」の文字リンクを追加（ハブの設定サイトへ移動）", "設定サイトでダーク/ライト、言語、アカウント、通知を設定"]
+     "items": [
+      "上部メニューの右端に「設定」の文字リンクを追加（ハブの設定サイトへ移動）",
+      "設定サイトでダーク/ライト、言語、アカウント、通知を設定"
+     ]
     },
     "zh": {
      "title": "设置站点",
-     "items": ["顶部菜单最右侧新增“设置”文字链接（跳转到中心站点的设置站点）", "在设置站点中设置深色/浅色、语言、账号和通知"]
+     "items": [
+      "顶部菜单最右侧新增“设置”文字链接（跳转到中心站点的设置站点）",
+      "在设置站点中设置深色/浅色、语言、账号和通知"
+     ]
     },
     "pt": {
      "title": "Site de configurações",
@@ -3245,7 +3760,10 @@
     },
     "gk": {
      "title": "설정 사이트",
-     "items": ["위쪽 메뉴 오른쪽 끝 설정 글자 링크 (허브 설정 사이트로 이동)", "설정 사이트에서 다크/라이트 언어 계정 알림 설정"]
+     "items": [
+      "위쪽 메뉴 오른쪽 끝 설정 글자 링크 (허브 설정 사이트로 이동)",
+      "설정 사이트에서 다크/라이트 언어 계정 알림 설정"
+     ]
     }
    }
   },
@@ -3259,59 +3777,87 @@
    "tr": {
     "en": {
      "title": "Grouped top button background",
-     "items": ["The Settings, Notifications and Account buttons share one background"]
+     "items": [
+      "The Settings, Notifications and Account buttons share one background"
+     ]
     },
     "es": {
      "title": "Fondo común para los botones superiores",
-     "items": ["Los botones de Ajustes, Notificaciones y Cuenta comparten un mismo fondo"]
+     "items": [
+      "Los botones de Ajustes, Notificaciones y Cuenta comparten un mismo fondo"
+     ]
     },
     "fr": {
      "title": "Fond commun pour les boutons du haut",
-     "items": ["Les boutons Réglages, Notifications et Compte partagent un même fond"]
+     "items": [
+      "Les boutons Réglages, Notifications et Compte partagent un même fond"
+     ]
     },
     "de": {
      "title": "Gemeinsamer Hintergrund für obere Knöpfe",
-     "items": ["Die Knöpfe Einstellungen, Benachrichtigungen und Konto teilen sich einen Hintergrund"]
+     "items": [
+      "Die Knöpfe Einstellungen, Benachrichtigungen und Konto teilen sich einen Hintergrund"
+     ]
     },
     "ja": {
      "title": "上部ボタンの背景をまとめる",
-     "items": ["設定・通知・アカウントのボタンを1つの背景にまとめた"]
+     "items": [
+      "設定・通知・アカウントのボタンを1つの背景にまとめた"
+     ]
     },
     "zh": {
      "title": "合并顶部按钮背景",
-     "items": ["设置、通知、账号按钮合并为同一个背景"]
+     "items": [
+      "设置、通知、账号按钮合并为同一个背景"
+     ]
     },
     "pt": {
      "title": "Fundo único para os botões do topo",
-     "items": ["Os botões de Configurações, Notificações e Conta compartilham um só fundo"]
+     "items": [
+      "Os botões de Configurações, Notificações e Conta compartilham um só fundo"
+     ]
     },
     "ru": {
      "title": "Общий фон для верхних кнопок",
-     "items": ["Кнопки настроек, уведомлений и аккаунта теперь на одном общем фоне"]
+     "items": [
+      "Кнопки настроек, уведомлений и аккаунта теперь на одном общем фоне"
+     ]
     },
     "tr": {
      "title": "Üst düğmelerin arka planı birleştirildi",
-     "items": ["Ayarlar, Bildirimler ve Hesap düğmeleri tek bir arka planı paylaşır"]
+     "items": [
+      "Ayarlar, Bildirimler ve Hesap düğmeleri tek bir arka planı paylaşır"
+     ]
     },
     "it": {
      "title": "Sfondo unico per i pulsanti in alto",
-     "items": ["I pulsanti Impostazioni, Notifiche e Account condividono un solo sfondo"]
+     "items": [
+      "I pulsanti Impostazioni, Notifiche e Account condividono un solo sfondo"
+     ]
     },
     "pl": {
      "title": "Wspólne tło górnych przycisków",
-     "items": ["Przyciski Ustawienia, Powiadomienia i Konto mają jedno wspólne tło"]
+     "items": [
+      "Przyciski Ustawienia, Powiadomienia i Konto mają jedno wspólne tło"
+     ]
     },
     "ar": {
      "title": "توحيد خلفية الأزرار العليا",
-     "items": ["تشترك أزرار الإعدادات والإشعارات والحساب في خلفية واحدة"]
+     "items": [
+      "تشترك أزرار الإعدادات والإشعارات والحساب في خلفية واحدة"
+     ]
     },
     "nw": {
      "title": "Top buttons share ground",
-     "items": ["Rules, Notice, Account buttons share one ground"]
+     "items": [
+      "Rules, Notice, Account buttons share one ground"
+     ]
     },
     "gk": {
      "title": "위쪽 버튼 배경 묶기",
-     "items": ["설정 알림 계정 버튼 하나의 배경으로 묶음"]
+     "items": [
+      "설정 알림 계정 버튼 하나의 배경으로 묶음"
+     ]
     }
    }
   },
@@ -3326,39 +3872,66 @@
    "tr": {
     "en": {
      "title": "Choose language in settings",
-     "items": ["Added language selection to the ⚙️ settings window", "Removed the old language selector"]
+     "items": [
+      "Added language selection to the ⚙️ settings window",
+      "Removed the old language selector"
+     ]
     },
     "es": {
      "title": "Elegir el idioma en los ajustes",
-     "items": ["Selección de idioma añadida a la ventana de ajustes ⚙️", "Eliminado el selector de idioma anterior"]
+     "items": [
+      "Selección de idioma añadida a la ventana de ajustes ⚙️",
+      "Eliminado el selector de idioma anterior"
+     ]
     },
     "fr": {
      "title": "Choisir la langue dans les réglages",
-     "items": ["Ajout du choix de la langue dans la fenêtre de réglages ⚙️", "Suppression de l'ancien sélecteur de langue"]
+     "items": [
+      "Ajout du choix de la langue dans la fenêtre de réglages ⚙️",
+      "Suppression de l'ancien sélecteur de langue"
+     ]
     },
     "de": {
      "title": "Sprache in den Einstellungen wählen",
-     "items": ["Sprachauswahl im Einstellungsfenster ⚙️ hinzugefügt", "Altes Sprachauswahlfeld entfernt"]
+     "items": [
+      "Sprachauswahl im Einstellungsfenster ⚙️ hinzugefügt",
+      "Altes Sprachauswahlfeld entfernt"
+     ]
     },
     "ja": {
      "title": "設定で言語を選ぶ",
-     "items": ["⚙️ 設定ウィンドウに言語選択を追加", "従来の言語選択欄を削除"]
+     "items": [
+      "⚙️ 設定ウィンドウに言語選択を追加",
+      "従来の言語選択欄を削除"
+     ]
     },
     "zh": {
      "title": "在设置中选择语言",
-     "items": ["⚙️ 设置窗口新增语言选择", "移除原来的语言选择框"]
+     "items": [
+      "⚙️ 设置窗口新增语言选择",
+      "移除原来的语言选择框"
+     ]
     },
     "pt": {
      "title": "Escolher o idioma nas configurações",
-     "items": ["Seleção de idioma adicionada à janela de configurações ⚙️", "Removido o seletor de idioma antigo"]
+     "items": [
+      "Seleção de idioma adicionada à janela de configurações ⚙️",
+      "Removido o seletor de idioma antigo"
+     ]
     },
     "ru": {
      "title": "Выбор языка в настройках",
-     "items": ["В окно настроек ⚙️ добавлен выбор языка", "Прежнее поле выбора языка убрано"]
+     "items": [
+      "В окно настроек ⚙️ добавлен выбор языка",
+      "Прежнее поле выбора языка убрано"
+     ]
     },
     "tr": {
      "title": "Dili ayarlardan seçme",
-     "items": ["⚙️ ayarlar penceresine dil seçimi eklendi", "Eski dil seçme kutusu kaldırıldı"]
+     "items": [
+      "⚙️ ayarlar penceresine dil seçimi eklendi",
+      "Eski dil seçme kutusu kaldırıldı"
+     ]
     },
     "it": {
      "title": "Scegliere la lingua dalle impostazioni",
@@ -3369,19 +3942,31 @@
     },
     "pl": {
      "title": "Wybór języka w ustawieniach",
-     "items": ["Do okna ustawień ⚙️ dodano wybór języka", "Usunięto dawne pole wyboru języka"]
+     "items": [
+      "Do okna ustawień ⚙️ dodano wybór języka",
+      "Usunięto dawne pole wyboru języka"
+     ]
     },
     "ar": {
      "title": "اختيار اللغة من الإعدادات",
-     "items": ["أُضيف اختيار اللغة إلى نافذة الإعدادات ⚙️", "أُزيل مربع اختيار اللغة القديم"]
+     "items": [
+      "أُضيف اختيار اللغة إلى نافذة الإعدادات ⚙️",
+      "أُزيل مربع اختيار اللغة القديم"
+     ]
     },
     "nw": {
      "title": "Pick speak in Rules",
-     "items": ["Added speak pick to ⚙️ Rules window", "Removed old speak pick box"]
+     "items": [
+      "Added speak pick to ⚙️ Rules window",
+      "Removed old speak pick box"
+     ]
     },
     "gk": {
      "title": "설정에서 언어 선택",
-     "items": ["⚙️ 설정 창에서 언어 선택 추가", "기존 언어 선택칸 제거"]
+     "items": [
+      "⚙️ 설정 창에서 언어 선택 추가",
+      "기존 언어 선택칸 제거"
+     ]
     }
    }
   },
@@ -3395,59 +3980,87 @@
    "tr": {
     "en": {
      "title": "Splash text",
-     "items": ["Added a splash text tilted 30 degrees beside the big title (changes every visit)"]
+     "items": [
+      "Added a splash text tilted 30 degrees beside the big title (changes every visit)"
+     ]
     },
     "es": {
      "title": "Texto splash",
-     "items": ["Añadido un texto splash inclinado 30 grados junto al título grande (cambia en cada visita)"]
+     "items": [
+      "Añadido un texto splash inclinado 30 grados junto al título grande (cambia en cada visita)"
+     ]
     },
     "fr": {
      "title": "Texte splash",
-     "items": ["Ajout d'un texte splash incliné de 30 degrés à côté du grand titre (change à chaque visite)"]
+     "items": [
+      "Ajout d'un texte splash incliné de 30 degrés à côté du grand titre (change à chaque visite)"
+     ]
     },
     "de": {
      "title": "Splash-Text",
-     "items": ["Neben dem großen Titel wurde ein um 30 Grad geneigter Splash-Text ergänzt (wechselt bei jedem Besuch)"]
+     "items": [
+      "Neben dem großen Titel wurde ein um 30 Grad geneigter Splash-Text ergänzt (wechselt bei jedem Besuch)"
+     ]
     },
     "ja": {
      "title": "スプラッシュ文句",
-     "items": ["大きなタイトルの横に30度傾いたスプラッシュ文句を追加（入るたびに変わる）"]
+     "items": [
+      "大きなタイトルの横に30度傾いたスプラッシュ文句を追加（入るたびに変わる）"
+     ]
     },
     "zh": {
      "title": "闪屏语句",
-     "items": ["大标题旁新增倾斜 30 度的闪屏语句（每次进入都会变化）"]
+     "items": [
+      "大标题旁新增倾斜 30 度的闪屏语句（每次进入都会变化）"
+     ]
     },
     "pt": {
      "title": "Frase splash",
-     "items": ["Adicionada uma frase splash inclinada 30 graus ao lado do título grande (muda a cada visita)"]
+     "items": [
+      "Adicionada uma frase splash inclinada 30 graus ao lado do título grande (muda a cada visita)"
+     ]
     },
     "ru": {
      "title": "Фраза-заставка",
-     "items": ["Рядом с большим заголовком добавлена фраза-заставка, наклонённая на 30 градусов (меняется при каждом заходе)"]
+     "items": [
+      "Рядом с большим заголовком добавлена фраза-заставка, наклонённая на 30 градусов (меняется при каждом заходе)"
+     ]
     },
     "tr": {
      "title": "Açılış sloganı",
-     "items": ["Büyük başlığın yanına 30 derece eğik bir açılış sloganı eklendi (her girişte değişir)"]
+     "items": [
+      "Büyük başlığın yanına 30 derece eğik bir açılış sloganı eklendi (her girişte değişir)"
+     ]
     },
     "it": {
      "title": "Frase splash",
-     "items": ["Accanto al grande titolo è stata aggiunta una frase splash inclinata di 30 gradi (cambia a ogni visita)"]
+     "items": [
+      "Accanto al grande titolo è stata aggiunta una frase splash inclinata di 30 gradi (cambia a ogni visita)"
+     ]
     },
     "pl": {
      "title": "Tekst powitalny splash",
-     "items": ["Obok dużego tytułu dodano tekst splash nachylony o 30 stopni (zmienia się przy każdym wejściu)"]
+     "items": [
+      "Obok dużego tytułu dodano tekst splash nachylony o 30 stopni (zmienia się przy każdym wejściu)"
+     ]
     },
     "ar": {
      "title": "عبارة الترحيب المتغيرة",
-     "items": ["أُضيفت بجوار العنوان الكبير عبارة مائلة بزاوية 30 درجة (تتغير في كل دخول)"]
+     "items": [
+      "أُضيفت بجوار العنوان الكبير عبارة مائلة بزاوية 30 درجة (تتغير في كل دخول)"
+     ]
     },
     "nw": {
      "title": "Splash words",
-     "items": ["Added splash words tilted 30 degrees by big title (change each visit)"]
+     "items": [
+      "Added splash words tilted 30 degrees by big title (change each visit)"
+     ]
     },
     "gk": {
      "title": "스플래시 문구",
-     "items": ["큰 제목 옆 30도 기울어진 스플래시 문구 (들어올 때마다 바뀜)"]
+     "items": [
+      "큰 제목 옆 30도 기울어진 스플래시 문구 (들어올 때마다 바뀜)"
+     ]
     }
    }
   },
@@ -3461,59 +4074,87 @@
    "tr": {
     "en": {
      "title": "Frenchfries777 logo",
-     "items": ["Added the Frenchfries777 logo to the top menu and tab icon"]
+     "items": [
+      "Added the Frenchfries777 logo to the top menu and tab icon"
+     ]
     },
     "es": {
      "title": "Logotipo de Frenchfries777",
-     "items": ["Añadido el logotipo de Frenchfries777 al menú superior y al icono de la pestaña"]
+     "items": [
+      "Añadido el logotipo de Frenchfries777 al menú superior y al icono de la pestaña"
+     ]
     },
     "fr": {
      "title": "Logo de Frenchfries777",
-     "items": ["Ajout du logo de Frenchfries777 au menu du haut et à l'icône de l'onglet"]
+     "items": [
+      "Ajout du logo de Frenchfries777 au menu du haut et à l'icône de l'onglet"
+     ]
     },
     "de": {
      "title": "Frenchfries777-Logo",
-     "items": ["Das Frenchfries777-Logo wurde im oberen Menü und im Tab-Symbol ergänzt"]
+     "items": [
+      "Das Frenchfries777-Logo wurde im oberen Menü und im Tab-Symbol ergänzt"
+     ]
     },
     "ja": {
      "title": "Frenchfries777 のロゴ",
-     "items": ["上部メニューとタブのアイコンに Frenchfries777 のロゴを追加"]
+     "items": [
+      "上部メニューとタブのアイコンに Frenchfries777 のロゴを追加"
+     ]
     },
     "zh": {
      "title": "Frenchfries777 徽标",
-     "items": ["顶部菜单和标签页图标新增 Frenchfries777 徽标"]
+     "items": [
+      "顶部菜单和标签页图标新增 Frenchfries777 徽标"
+     ]
     },
     "pt": {
      "title": "Logo do Frenchfries777",
-     "items": ["Adicionado o logo do Frenchfries777 ao menu superior e ao ícone da aba"]
+     "items": [
+      "Adicionado o logo do Frenchfries777 ao menu superior e ao ícone da aba"
+     ]
     },
     "ru": {
      "title": "Логотип Frenchfries777",
-     "items": ["Логотип Frenchfries777 добавлен в верхнее меню и значок вкладки"]
+     "items": [
+      "Логотип Frenchfries777 добавлен в верхнее меню и значок вкладки"
+     ]
     },
     "tr": {
      "title": "Frenchfries777 logosu",
-     "items": ["Üst menüye ve sekme simgesine Frenchfries777 logosu eklendi"]
+     "items": [
+      "Üst menüye ve sekme simgesine Frenchfries777 logosu eklendi"
+     ]
     },
     "it": {
      "title": "Logo di Frenchfries777",
-     "items": ["Aggiunto il logo di Frenchfries777 al menu in alto e all'icona della scheda"]
+     "items": [
+      "Aggiunto il logo di Frenchfries777 al menu in alto e all'icona della scheda"
+     ]
     },
     "pl": {
      "title": "Logo Frenchfries777",
-     "items": ["Dodano logo Frenchfries777 do górnego menu i ikony karty"]
+     "items": [
+      "Dodano logo Frenchfries777 do górnego menu i ikony karty"
+     ]
     },
     "ar": {
      "title": "شعار Frenchfries777",
-     "items": ["أُضيف شعار Frenchfries777 إلى القائمة العليا وأيقونة التبويب"]
+     "items": [
+      "أُضيف شعار Frenchfries777 إلى القائمة العليا وأيقونة التبويب"
+     ]
     },
     "nw": {
      "title": "Frenchfries777 logo",
-     "items": ["Added Frenchfries777 logo to top menu plus tab icon"]
+     "items": [
+      "Added Frenchfries777 logo to top menu plus tab icon"
+     ]
     },
     "gk": {
      "title": "Frenchfries777 로고",
-     "items": ["위쪽 메뉴 탭 아이콘 Frenchfries777 로고 추가"]
+     "items": [
+      "위쪽 메뉴 탭 아이콘 Frenchfries777 로고 추가"
+     ]
     }
    }
   },
@@ -3569,7 +4210,11 @@
     },
     "zh": {
      "title": "AI 以 Fry Sheet 为中心",
-     "items": ["首页把 AI 介绍集中到 Fry Sheet 的公式·图表·表格生成上", "Block HTML、Fry Slides、Fry Lab 卡片上的 AI 说明改为低调的试验功能提示", "新增 AI 可能出错的提示"]
+     "items": [
+      "首页把 AI 介绍集中到 Fry Sheet 的公式·图表·表格生成上",
+      "Block HTML、Fry Slides、Fry Lab 卡片上的 AI 说明改为低调的试验功能提示",
+      "新增 AI 可能出错的提示"
+     ]
     },
     "pt": {
      "title": "IA centrada no Fry Sheet",
@@ -3647,59 +4292,87 @@
    "tr": {
     "en": {
      "title": "Patch notes page",
-     "items": ["Added a patch notes page per program"]
+     "items": [
+      "Added a patch notes page per program"
+     ]
     },
     "es": {
      "title": "Página de notas de versión",
-     "items": ["Añadida una página de notas de versión por programa"]
+     "items": [
+      "Añadida una página de notas de versión por programa"
+     ]
     },
     "fr": {
      "title": "Page des notes de version",
-     "items": ["Ajout d'une page de notes de version par programme"]
+     "items": [
+      "Ajout d'une page de notes de version par programme"
+     ]
     },
     "de": {
      "title": "Patchnotes-Seite",
-     "items": ["Patchnotes-Seite pro Programm hinzugefügt"]
+     "items": [
+      "Patchnotes-Seite pro Programm hinzugefügt"
+     ]
     },
     "ja": {
      "title": "パッチノートページ",
-     "items": ["プログラムごとのパッチノートページを追加"]
+     "items": [
+      "プログラムごとのパッチノートページを追加"
+     ]
     },
     "zh": {
      "title": "更新日志页面",
-     "items": ["新增按程序分类的更新日志页面"]
+     "items": [
+      "新增按程序分类的更新日志页面"
+     ]
     },
     "pt": {
      "title": "Página de notas de versão",
-     "items": ["Adicionada uma página de notas de versão por programa"]
+     "items": [
+      "Adicionada uma página de notas de versão por programa"
+     ]
     },
     "ru": {
      "title": "Страница заметок об обновлениях",
-     "items": ["Добавлена страница заметок об обновлениях для каждой программы"]
+     "items": [
+      "Добавлена страница заметок об обновлениях для каждой программы"
+     ]
     },
     "tr": {
      "title": "Yama notları sayfası",
-     "items": ["Program başına yama notları sayfası eklendi"]
+     "items": [
+      "Program başına yama notları sayfası eklendi"
+     ]
     },
     "it": {
      "title": "Pagina delle note di rilascio",
-     "items": ["Aggiunta una pagina delle note di rilascio per ogni programma"]
+     "items": [
+      "Aggiunta una pagina delle note di rilascio per ogni programma"
+     ]
     },
     "pl": {
      "title": "Strona informacji o aktualizacjach",
-     "items": ["Dodano stronę informacji o aktualizacjach dla każdego programu"]
+     "items": [
+      "Dodano stronę informacji o aktualizacjach dla każdego programu"
+     ]
     },
     "ar": {
      "title": "صفحة ملاحظات التحديث",
-     "items": ["أُضيفت صفحة ملاحظات تحديث لكل برنامج"]
+     "items": [
+      "أُضيفت صفحة ملاحظات تحديث لكل برنامج"
+     ]
     },
     "nw": {
      "title": "Patch notes page",
-     "items": ["Added patch notes page per program"]
+     "items": [
+      "Added patch notes page per program"
+     ]
     },
     "gk": {
      "title": "패치노트 페이지",
-     "items": ["프로그램별 패치노트 페이지 추가"]
+     "items": [
+      "프로그램별 패치노트 페이지 추가"
+     ]
     }
    }
   },
@@ -3713,59 +4386,87 @@
    "tr": {
     "en": {
      "title": "Wiki link",
-     "items": ["Added a wiki link to the header"]
+     "items": [
+      "Added a wiki link to the header"
+     ]
     },
     "es": {
      "title": "Enlace a la wiki",
-     "items": ["Añadido un enlace a la wiki en la cabecera"]
+     "items": [
+      "Añadido un enlace a la wiki en la cabecera"
+     ]
     },
     "fr": {
      "title": "Lien vers le wiki",
-     "items": ["Ajout d'un lien vers le wiki dans l'en-tête"]
+     "items": [
+      "Ajout d'un lien vers le wiki dans l'en-tête"
+     ]
     },
     "de": {
      "title": "Wiki-Link",
-     "items": ["Wiki-Link in der Kopfzeile hinzugefügt"]
+     "items": [
+      "Wiki-Link in der Kopfzeile hinzugefügt"
+     ]
     },
     "ja": {
      "title": "ウィキリンク",
-     "items": ["ヘッダーにウィキへのリンクを追加"]
+     "items": [
+      "ヘッダーにウィキへのリンクを追加"
+     ]
     },
     "zh": {
      "title": "百科链接",
-     "items": ["页眉新增百科链接"]
+     "items": [
+      "页眉新增百科链接"
+     ]
     },
     "pt": {
      "title": "Link da wiki",
-     "items": ["Adicionado um link da wiki no cabeçalho"]
+     "items": [
+      "Adicionado um link da wiki no cabeçalho"
+     ]
     },
     "ru": {
      "title": "Ссылка на вики",
-     "items": ["В шапку добавлена ссылка на вики"]
+     "items": [
+      "В шапку добавлена ссылка на вики"
+     ]
     },
     "tr": {
      "title": "Viki bağlantısı",
-     "items": ["Üst bilgiye viki bağlantısı eklendi"]
+     "items": [
+      "Üst bilgiye viki bağlantısı eklendi"
+     ]
     },
     "it": {
      "title": "Link alla wiki",
-     "items": ["Aggiunto un link alla wiki nell'intestazione"]
+     "items": [
+      "Aggiunto un link alla wiki nell'intestazione"
+     ]
     },
     "pl": {
      "title": "Link do wiki",
-     "items": ["W nagłówku dodano link do wiki"]
+     "items": [
+      "W nagłówku dodano link do wiki"
+     ]
     },
     "ar": {
      "title": "رابط الويكي",
-     "items": ["أُضيف رابط الويكي إلى الترويسة"]
+     "items": [
+      "أُضيف رابط الويكي إلى الترويسة"
+     ]
     },
     "nw": {
      "title": "Truthbook link",
-     "items": ["Added Truthbook link to header"]
+     "items": [
+      "Added Truthbook link to header"
+     ]
     },
     "gk": {
      "title": "위키 링크",
-     "items": ["머리말에 위키 링크 추가"]
+     "items": [
+      "머리말에 위키 링크 추가"
+     ]
     }
    }
   },
@@ -3780,7 +4481,10 @@
    "tr": {
     "en": {
      "title": "Open in the same window",
-     "items": ["Tools now open in the same window", "Added a 🍟 button to each tool that goes back to the site"]
+     "items": [
+      "Tools now open in the same window",
+      "Added a 🍟 button to each tool that goes back to the site"
+     ]
     },
     "es": {
      "title": "Abrir en la misma ventana",
@@ -3798,27 +4502,45 @@
     },
     "de": {
      "title": "Im selben Fenster öffnen",
-     "items": ["Werkzeuge öffnen sich jetzt im selben Fenster", "In jedem Werkzeug wurde ein 🍟-Knopf zurück zur Seite ergänzt"]
+     "items": [
+      "Werkzeuge öffnen sich jetzt im selben Fenster",
+      "In jedem Werkzeug wurde ein 🍟-Knopf zurück zur Seite ergänzt"
+     ]
     },
     "ja": {
      "title": "同じウィンドウで開く",
-     "items": ["ツールが同じウィンドウで開くように変更", "各ツールにサイトへ戻る 🍟 ボタンを追加"]
+     "items": [
+      "ツールが同じウィンドウで開くように変更",
+      "各ツールにサイトへ戻る 🍟 ボタンを追加"
+     ]
     },
     "zh": {
      "title": "在同一窗口打开",
-     "items": ["工具改为在同一窗口打开", "每个工具新增返回站点的 🍟 按钮"]
+     "items": [
+      "工具改为在同一窗口打开",
+      "每个工具新增返回站点的 🍟 按钮"
+     ]
     },
     "pt": {
      "title": "Abrir na mesma janela",
-     "items": ["As ferramentas agora abrem na mesma janela", "Adicionado a cada ferramenta um botão 🍟 para voltar ao site"]
+     "items": [
+      "As ferramentas agora abrem na mesma janela",
+      "Adicionado a cada ferramenta um botão 🍟 para voltar ao site"
+     ]
     },
     "ru": {
      "title": "Открытие в том же окне",
-     "items": ["Инструменты теперь открываются в том же окне", "В каждый инструмент добавлена кнопка 🍟 для возврата на сайт"]
+     "items": [
+      "Инструменты теперь открываются в том же окне",
+      "В каждый инструмент добавлена кнопка 🍟 для возврата на сайт"
+     ]
     },
     "tr": {
      "title": "Aynı pencerede açma",
-     "items": ["Araçlar artık aynı pencerede açılır", "Her araca siteye dönen 🍟 düğmesi eklendi"]
+     "items": [
+      "Araçlar artık aynı pencerede açılır",
+      "Her araca siteye dönen 🍟 düğmesi eklendi"
+     ]
     },
     "it": {
      "title": "Apri nella stessa finestra",
@@ -3829,19 +4551,31 @@
     },
     "pl": {
      "title": "Otwieranie w tym samym oknie",
-     "items": ["Narzędzia otwierają się teraz w tym samym oknie", "W każdym narzędziu dodano przycisk 🍟 powrotu do witryny"]
+     "items": [
+      "Narzędzia otwierają się teraz w tym samym oknie",
+      "W każdym narzędziu dodano przycisk 🍟 powrotu do witryny"
+     ]
     },
     "ar": {
      "title": "الفتح في النافذة نفسها",
-     "items": ["صارت الأدوات تُفتح في النافذة نفسها", "أُضيف إلى كل أداة زر 🍟 للعودة إلى الموقع"]
+     "items": [
+      "صارت الأدوات تُفتح في النافذة نفسها",
+      "أُضيف إلى كل أداة زر 🍟 للعودة إلى الموقع"
+     ]
     },
     "nw": {
      "title": "Open in same window",
-     "items": ["Tools now open in same window", "Added 🍟 button to each tool to go back to site"]
+     "items": [
+      "Tools now open in same window",
+      "Added 🍟 button to each tool to go back to site"
+     ]
     },
     "gk": {
      "title": "같은 창에서 열기",
-     "items": ["도구가 같은 창에서 열리도록 변경", "각 도구에 사이트로 돌아가는 🍟 단추"]
+     "items": [
+      "도구가 같은 창에서 열리도록 변경",
+      "각 도구에 사이트로 돌아가는 🍟 단추"
+     ]
     }
    }
   },
@@ -3855,59 +4589,87 @@
    "tr": {
     "en": {
      "title": "Tools added",
-     "items": ["Added Fry Slides and Fry Lab cards"]
+     "items": [
+      "Added Fry Slides and Fry Lab cards"
+     ]
     },
     "es": {
      "title": "Herramientas añadidas",
-     "items": ["Añadidas las tarjetas de Fry Slides y Fry Lab"]
+     "items": [
+      "Añadidas las tarjetas de Fry Slides y Fry Lab"
+     ]
     },
     "fr": {
      "title": "Outils ajoutés",
-     "items": ["Ajout des cartes Fry Slides et Fry Lab"]
+     "items": [
+      "Ajout des cartes Fry Slides et Fry Lab"
+     ]
     },
     "de": {
      "title": "Werkzeuge hinzugefügt",
-     "items": ["Karten für Fry Slides und Fry Lab hinzugefügt"]
+     "items": [
+      "Karten für Fry Slides und Fry Lab hinzugefügt"
+     ]
     },
     "ja": {
      "title": "ツールを追加",
-     "items": ["Fry Slides、Fry Lab のカードを追加"]
+     "items": [
+      "Fry Slides、Fry Lab のカードを追加"
+     ]
     },
     "zh": {
      "title": "新增工具",
-     "items": ["新增 Fry Slides 和 Fry Lab 卡片"]
+     "items": [
+      "新增 Fry Slides 和 Fry Lab 卡片"
+     ]
     },
     "pt": {
      "title": "Ferramentas adicionadas",
-     "items": ["Adicionados os cartões do Fry Slides e do Fry Lab"]
+     "items": [
+      "Adicionados os cartões do Fry Slides e do Fry Lab"
+     ]
     },
     "ru": {
      "title": "Добавлены инструменты",
-     "items": ["Добавлены карточки Fry Slides и Fry Lab"]
+     "items": [
+      "Добавлены карточки Fry Slides и Fry Lab"
+     ]
     },
     "tr": {
      "title": "Araçlar eklendi",
-     "items": ["Fry Slides ve Fry Lab kartları eklendi"]
+     "items": [
+      "Fry Slides ve Fry Lab kartları eklendi"
+     ]
     },
     "it": {
      "title": "Strumenti aggiunti",
-     "items": ["Aggiunte le schede di Fry Slides e Fry Lab"]
+     "items": [
+      "Aggiunte le schede di Fry Slides e Fry Lab"
+     ]
     },
     "pl": {
      "title": "Dodano narzędzia",
-     "items": ["Dodano karty Fry Slides i Fry Lab"]
+     "items": [
+      "Dodano karty Fry Slides i Fry Lab"
+     ]
     },
     "ar": {
      "title": "إضافة أدوات",
-     "items": ["أُضيفت بطاقتا Fry Slides وFry Lab"]
+     "items": [
+      "أُضيفت بطاقتا Fry Slides وFry Lab"
+     ]
     },
     "nw": {
      "title": "Tools added",
-     "items": ["Added Fry Slides plus Fry Lab cards"]
+     "items": [
+      "Added Fry Slides plus Fry Lab cards"
+     ]
     },
     "gk": {
      "title": "도구 추가",
-     "items": ["Fry Slides Fry Lab 카드 추가"]
+     "items": [
+      "Fry Slides Fry Lab 카드 추가"
+     ]
     }
    }
   },
@@ -3923,7 +4685,11 @@
    "tr": {
     "en": {
      "title": "Site released",
-     "items": ["The tools home page (Fry Sheet, Block HTML)", "A Games, Educations, Tools switch", "6 languages supported"]
+     "items": [
+      "The tools home page (Fry Sheet, Block HTML)",
+      "A Games, Educations, Tools switch",
+      "6 languages supported"
+     ]
     },
     "es": {
      "title": "Sitio publicado",
@@ -3951,15 +4717,27 @@
     },
     "ja": {
      "title": "サイト公開",
-     "items": ["ツール集の最初の画面（Fry Sheet、Block HTML）", "Games、Educations、Tools の切り替えスイッチ", "6言語対応"]
+     "items": [
+      "ツール集の最初の画面（Fry Sheet、Block HTML）",
+      "Games、Educations、Tools の切り替えスイッチ",
+      "6言語対応"
+     ]
     },
     "zh": {
      "title": "站点上线",
-     "items": ["工具合集首页（Fry Sheet、Block HTML）", "Games、Educations、Tools 切换开关", "支持 6 种语言"]
+     "items": [
+      "工具合集首页（Fry Sheet、Block HTML）",
+      "Games、Educations、Tools 切换开关",
+      "支持 6 种语言"
+     ]
     },
     "pt": {
      "title": "Site lançado",
-     "items": ["Página inicial das ferramentas (Fry Sheet, Block HTML)", "Seletor Games, Educations, Tools", "6 idiomas"]
+     "items": [
+      "Página inicial das ferramentas (Fry Sheet, Block HTML)",
+      "Seletor Games, Educations, Tools",
+      "6 idiomas"
+     ]
     },
     "ru": {
      "title": "Сайт открыт",
@@ -3971,7 +4749,11 @@
     },
     "tr": {
      "title": "Site yayında",
-     "items": ["Araçların ana sayfası (Fry Sheet, Block HTML)", "Games, Educations, Tools geçiş anahtarı", "6 dil desteği"]
+     "items": [
+      "Araçların ana sayfası (Fry Sheet, Block HTML)",
+      "Games, Educations, Tools geçiş anahtarı",
+      "6 dil desteği"
+     ]
     },
     "it": {
      "title": "Sito pubblicato",
@@ -3983,19 +4765,35 @@
     },
     "pl": {
      "title": "Witryna udostępniona",
-     "items": ["Strona główna narzędzi (Fry Sheet, Block HTML)", "Przełącznik Games, Educations, Tools", "Obsługa 6 języków"]
+     "items": [
+      "Strona główna narzędzi (Fry Sheet, Block HTML)",
+      "Przełącznik Games, Educations, Tools",
+      "Obsługa 6 języków"
+     ]
     },
     "ar": {
      "title": "إطلاق الموقع",
-     "items": ["الصفحة الرئيسية للأدوات (Fry Sheet وBlock HTML)", "مفتاح التبديل بين Games وEducations وTools", "دعم 6 لغات"]
+     "items": [
+      "الصفحة الرئيسية للأدوات (Fry Sheet وBlock HTML)",
+      "مفتاح التبديل بين Games وEducations وTools",
+      "دعم 6 لغات"
+     ]
     },
     "nw": {
      "title": "Site out",
-     "items": ["Tools home page (Fry Sheet, Block HTML)", "Games, Educations, Tools switch", "6 speaks"]
+     "items": [
+      "Tools home page (Fry Sheet, Block HTML)",
+      "Games, Educations, Tools switch",
+      "6 speaks"
+     ]
     },
     "gk": {
      "title": "사이트 공개",
-     "items": ["도구 모음 첫 화면 (Fry Sheet Block HTML)", "Games Educations Tools 전환 스위치", "6개 언어 지원"]
+     "items": [
+      "도구 모음 첫 화면 (Fry Sheet Block HTML)",
+      "Games Educations Tools 전환 스위치",
+      "6개 언어 지원"
+     ]
     }
    }
   }
