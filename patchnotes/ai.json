@@ -5,17 +5,17 @@
   {
    "date": "2026-11-01",
    "build": "v60",
-   "title": "tarius 1.9b",
+   "title": "tarius 1.9 (다시 학습)",
    "items": [
-    "tarius가 1.9b로 한 번 더 학습됨",
+    "tarius 1.9가 한 번 더 학습됨 (이름은 그대로 1.9)",
     "'아무거나 아재개그'를 30번 중 28번 성공 (1.9는 23번)",
     "아재개그 문제 115개 중 109개를 맞힘 (1.9는 94개)"
    ],
    "tr": {
     "en": {
-     "title": "tarius 1.9b",
+     "title": "tarius 1.9 (retrained)",
      "items": [
-      "tarius was trained once more as 1.9b",
+      "tarius 1.9 was trained once more (the name stays 1.9)",
       "Tells a dad joke on a bare request in 28 of 30 tries (1.9: 23)",
       "Answers 109 of the 115 dad-joke riddles (1.9: 94)"
      ]
