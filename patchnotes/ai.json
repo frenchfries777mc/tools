@@ -3,6 +3,24 @@
  "name": "자체 AI (FF777)",
  "notes": [
   {
+   "date": "2026-11-01",
+   "build": "v59",
+   "title": "tarius·premus 1.9",
+   "items": [
+    "tarius와 premus가 1.9로 새로 학습됨",
+    "'아무거나 아재개그'를 더 잘 말하고 끝말잇기·일상 대화를 더 학습함"
+   ],
+   "tr": {
+    "en": {
+     "title": "tarius and premus 1.9",
+     "items": [
+      "tarius and premus were retrained as 1.9",
+      "Better at telling any dad joke, plus more word chain and everyday chat training"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-10-31",
    "build": "v58",
    "title": "AI 대결장 모두의 순위",
