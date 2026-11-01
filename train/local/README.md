@@ -66,3 +66,12 @@ HF_TOKEN=hf_... python3 train/local/eval.py tarius
 - 끝나면 맨 아래에 한국어 요약이 나오고, `eval-out/baseline-results.json`과 `baseline-answers.jsonl`이 생겨요. 요약을 캡처해서 보내 주세요.
 - 처음 한 번은 코드 채점용 node/jsdom을 내려받아요. `QUICK=1`을 앞에 붙이면 과제마다 2문제만 풀어서 잘 도는지만 봐요.
 - Kaggle과 같은 시험지·채점기를 쓰지만 라이브러리 버전이 달라 점수가 조금 다를 수 있어요.
+
+## 이미 올려 둔 모델을 한 번 더 학습하기
+1.9처럼 이미 허깅페이스에 있는 모델 위에서 더 학습하려면 환경 변수를 더해요. (아재개그를 더 정확히 외우게 할 때 써요.)
+- `BASE_VERSION=1.9` 바탕을 FF-Tools-<크기>-merged-1.9 로 해요.
+- `LORA_R=32` `EPOCHS=3` `LR=2e-4` 학습 용량, 반복 횟수, 학습률을 바꿔요.
+- `JOKE_REPEAT=3` 아재개그 줄을 한 번에 3번씩 보게 해요.
+- `OUT_TAG=b` 올리는 이름 끝에 b를 붙여요(FF-Tools-1.7B-merged-1.9b). 이미 있는 1.9는 그대로 남아요.
+
+예: `MODEL=basic VERSION=1.9 CONTINUE=1 BASE_VERSION=1.9 LORA_R=32 EPOCHS=3 LR=2e-4 JOKE_REPEAT=3 OUT_TAG=b python3 train/local/run.py`
