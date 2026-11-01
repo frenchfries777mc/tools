@@ -50,6 +50,14 @@ if CONTINUE and VERSION == "1.7":   # 1.7: keep training the 1.6 model already o
 if CONTINUE and VERSION == "1.3":   # 1.3 only: keep training the model already on Hugging Face (only the second/third-round data), gently
     CFG.update(base=f"Frenchfries777/FF-Tools-{CFG['size']}-merged", data=[f"round{ROUND if MODEL == 'basic' else 2}-{MODEL}.jsonl"], epochs=1, lr=CFG["lr"] / 4)
 MAX_LEN = int(_env("MAX_LEN", "4096"))
+BASE_VERSION = _env("BASE_VERSION", "")
+if BASE_VERSION: CFG.update(base=f"Frenchfries777/FF-Tools-{CFG['size']}-merged-{BASE_VERSION}", epochs=2, lr=1e-4)
+if _env("LORA_R", ""): CFG["r"] = int(_env("LORA_R", ""))
+if _env("EPOCHS", ""): CFG["epochs"] = int(_env("EPOCHS", ""))
+if _env("LR", ""): CFG["lr"] = float(_env("LR", ""))
+JOKE_REPEAT = int(_env("JOKE_REPEAT", "1"))
+OUT_TAG = _env("OUT_TAG", "")
+print("바탕 모델:", CFG["base"], "| r", CFG["r"], "| 반복", CFG["epochs"], "| 학습률", CFG["lr"], "| 아재개그 줄 x", JOKE_REPEAT, "| 올릴 이름 끝 글자:", OUT_TAG or "(없음)")
 
 def data_url(name): return name if name.startswith(("http://", "https://", "/")) else DATA_DIR + name
 def data_there(name):
@@ -83,6 +91,9 @@ train_rows = [r for f in CFG["data"] for r in load(f)]; test_rows = load(TEST_FI
 _held = set(r["messages"][1]["content"].strip() for r in test_rows)   # the test is never trained on
 _n = len(train_rows); train_rows = [r for r in train_rows if r["messages"][1]["content"].strip() not in _held]
 if _n != len(train_rows): print("시험 문제와 같은 학습 줄", _n - len(train_rows), "개를 뺐어요")
+if JOKE_REPEAT > 1:
+    _jk = [r for r in train_rows if r["task"] in ("joke19", "joke19q", "joke18", "joke16", "joke16x")]
+    train_rows += _jk * (JOKE_REPEAT - 1); print("아재개그 줄", len(_jk), "개를", JOKE_REPEAT, "번씩 보게 했어요")
 
 # What the developer taught the AI on the site's 가르치기 page (public read; only the developer can write)
 ASK_SYS = 'You help someone with their spreadsheet. Answer the question about the table clearly and briefly in plain text (no markdown tables, no code fences). Use the language the question is written in.'
@@ -349,7 +360,7 @@ shutil.rmtree("merged", ignore_errors=True)   # never upload an older model left
 model.save_pretrained_merged("merged", tokenizer, save_method="merged_16bit")
 from huggingface_hub import HfApi
 api = HfApi(token=HF_TOKEN); user = api.whoami()["name"]
-rid = f"{user}/FF-Tools-{CFG['size']}-merged" + ("-" + VERSION if VERSION in ("1.5", "1.6", "1.7", "1.8", "1.9") else "")   # 1.5 and 1.6 go to their own repos, so 1.4 stays as a fallback
+rid = f"{user}/FF-Tools-{CFG['size']}-merged" + ("-" + VERSION if VERSION in ("1.5", "1.6", "1.7", "1.8", "1.9") else "") + OUT_TAG   # 1.5 and 1.6 go to their own repos, so 1.4 stays as a fallback
 api.create_repo(rid, private=True, exist_ok=True)
 api.upload_folder(folder_path="merged", repo_id=rid, commit_message="Tools fine-tune")
 print("올렸어요:", rid)
