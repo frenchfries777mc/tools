@@ -75,6 +75,36 @@ put(IDX['CKPT = "out"'], s)
 u = IDX['save_pretrained_merged']
 assert 'left over in this Colab' in src(u)
 put(u, src(u).replace('never upload an older model left over in this Colab', 'never upload an older model left over in this session'))
+# Settings for training a model again on top of a version already on Hugging Face (same knobs as train/local/run.py: BASE_VERSION, LORA_R, EPOCHS, LR, JOKE_REPEAT, OUT_TAG).
+# The defaults below are the tarius 1.9b round (1.9 stays on Hugging Face; the new model goes to FF-Tools-1.7B-merged-1.9b).
+def patch_cell(old, new, once=True):
+    for i, c in enumerate(C):
+        t = ''.join(c['source'])
+        if old in t:
+            put(i, t.replace(old, new, 1)); return
+    raise SystemExit('anchor not found: ' + old[:50])
+patch_cell('MODEL = "premus"  #@param', 'MODEL = "basic"  #@param')
+patch_cell('MAX_LEN = 4096\n', '''MAX_LEN = 4096
+BASE_VERSION = "1.9"   # start from FF-Tools-<size>-merged-<BASE_VERSION> ("" = the previous version, as before)
+LORA_R = 32            # 0 = the usual size of this model
+EPOCHS = 3             # 0 = the usual number of passes
+LR = 2e-4              # 0 = the usual learning rate
+JOKE_REPEAT = 3        # every dad-joke row is seen this many times per pass (1 = as in the data)
+OUT_TAG = "b"          # the upload goes to FF-Tools-<size>-merged-<VERSION><OUT_TAG>, so the version already there is not overwritten
+if BASE_VERSION: CFG.update(base=f"Frenchfries777/FF-Tools-{CFG['size']}-merged-{BASE_VERSION}", epochs=2, lr=1e-4)
+if LORA_R: CFG["r"] = LORA_R
+if EPOCHS: CFG["epochs"] = EPOCHS
+if LR: CFG["lr"] = LR
+print("바탕 모델:", CFG["base"], "| r", CFG["r"], "| 반복", CFG["epochs"], "| 학습률", CFG["lr"], "| 아재개그 줄 x", JOKE_REPEAT, "| 올릴 이름 끝 글자:", OUT_TAG or "(없음)")
+''')
+a2 = 'if _n != len(train_rows): print("시험 문제와 같은 학습 줄", _n - len(train_rows), "개를 뺐어요")\n'
+patch_cell(a2, a2 + '''if JOKE_REPEAT > 1:
+    _jk = [r for r in train_rows if r["task"] in ("joke19", "joke19q", "joke18", "joke16", "joke16x")]
+    train_rows += _jk * (JOKE_REPEAT - 1); print("아재개그 줄", len(_jk), "개를", JOKE_REPEAT, "번씩 보게 했어요")
+''')
+a3 = '("-" + VERSION if VERSION in ("1.5", "1.6", "1.7", "1.8", "1.9") else "")'
+patch_cell(a3, a3 + ' + OUT_TAG')
+C[0]['source'] = (''.join(C[0]['source']).replace('**프레무스 1.9 이어 학습 (지금 설정)**', '**타리우스 1.9b (1.9 위에 한 번 더, 지금 설정)**: 설정 칸이 이미 `MODEL = "basic"`, `VERSION = "1.9"`, `BASE_VERSION = "1.9"`, `LORA_R = 32`, `EPOCHS = 3`, `JOKE_REPEAT = 3`, `OUT_TAG = "b"` 로 되어 있어요. 올려 둔 타리우스 1.9 위에서 아재개그를 3번씩 더 보며 이어 학습하고, `FF-Tools-1.7B-merged-1.9b` 에 올려서 1.9는 그대로 남아요. 아래 프레무스 설명은 이전 라운드 것이에요.\n\n**(이전) 프레무스 1.9 이어 학습**')).splitlines(True)
 nb['metadata'] = {'kernelspec': {'display_name': 'Python 3', 'language': 'python', 'name': 'python3'}, 'language_info': {'name': 'python'}}
 json.dump(nb, open('train/kaggle.ipynb', 'w'), ensure_ascii=False, indent=1)
 print('ok')
