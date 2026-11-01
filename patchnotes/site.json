@@ -17,6 +17,83 @@
       "Emoji on every tool page are now our own logos (174 of them)",
       "Text symbols (➕ ➖ ⬆ ⬇ ☑) and chat emotes stay as they were"
      ]
+    },
+    "es": {
+     "title": "Logos de emoticonos",
+     "items": [
+      "Los emoticonos de todas las páginas de herramientas ahora son logos propios (174)",
+      "Los símbolos de texto (➕ ➖ ⬆ ⬇ ☑) y los emotes del chat siguen igual"
+     ]
+    },
+    "fr": {
+     "title": "Logos d'emojis",
+     "items": [
+      "Les emojis de toutes les pages d'outils sont maintenant nos propres logos (174)",
+      "Les symboles textuels (➕ ➖ ⬆ ⬇ ☑) et les émotes du chat restent inchangés"
+     ]
+    },
+    "de": {
+     "title": "Emoji-Logos",
+     "items": [
+      "Die Emojis auf allen Werkzeugseiten sind jetzt eigene Logos (174 Stück)",
+      "Textsymbole (➕ ➖ ⬆ ⬇ ☑) und Chat-Emotes bleiben wie bisher"
+     ]
+    },
+    "ja": {
+     "title": "絵文字ロゴ",
+     "items": [
+      "ツールの全ページの絵文字を独自のロゴに変更（174個）",
+      "文字記号（➕ ➖ ⬆ ⬇ ☑）とチャットのエモートはそのまま"
+     ]
+    },
+    "zh": {
+     "title": "表情符号徽标",
+     "items": [
+      "所有工具页面的表情符号已换成我们自制的徽标（共174个）",
+      "文字符号（➕ ➖ ⬆ ⬇ ☑）和聊天表情保持不变"
+     ]
+    },
+    "pt": {
+     "title": "Logos de emoji",
+     "items": [
+      "Os emojis de todas as páginas de ferramentas agora são logos próprios (174)",
+      "Os símbolos de texto (➕ ➖ ⬆ ⬇ ☑) e os emotes do chat continuam iguais"
+     ]
+    },
+    "ru": {
+     "title": "Логотипы эмодзи",
+     "items": [
+      "Эмодзи на всех страницах инструментов теперь наши собственные логотипы (174 шт.)",
+      "Текстовые символы (➕ ➖ ⬆ ⬇ ☑) и эмоции в чате остались прежними"
+     ]
+    },
+    "tr": {
+     "title": "Emoji logoları",
+     "items": [
+      "Tüm araç sayfalarındaki emojiler artık kendi yaptığımız logolar (174 adet)",
+      "Metin simgeleri (➕ ➖ ⬆ ⬇ ☑) ve sohbet ifadeleri eskisi gibi kaldı"
+     ]
+    },
+    "it": {
+     "title": "Loghi emoji",
+     "items": [
+      "Le emoji su tutte le pagine degli strumenti sono ora loghi realizzati da noi (174)",
+      "I simboli di testo (➕ ➖ ⬆ ⬇ ☑) e le emote della chat restano invariati"
+     ]
+    },
+    "pl": {
+     "title": "Logo emoji",
+     "items": [
+      "Emoji na wszystkich stronach narzędzi to teraz nasze własne logo (174)",
+      "Symbole tekstowe (➕ ➖ ⬆ ⬇ ☑) i emotki czatu pozostają bez zmian"
+     ]
+    },
+    "ar": {
+     "title": "شعارات الإيموجي",
+     "items": [
+      "الإيموجي في كل صفحات الأدوات صارت شعاراتنا الخاصة (174 شعارًا)",
+      "رموز النص (➕ ➖ ⬆ ⬇ ☑) وإيموجي الدردشة بقيت كما هي"
+     ]
     }
    }
   },

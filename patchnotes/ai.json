@@ -19,6 +19,94 @@
       "Tells a dad joke on a bare request in 28 of 30 tries (1.9: 23)",
       "Answers 109 of the 115 dad-joke riddles (1.9: 94)"
      ]
+    },
+    "es": {
+     "title": "tarius 1.9 (reentrenado)",
+     "items": [
+      "tarius 1.9 se ha reentrenado una vez más (el nombre sigue siendo 1.9)",
+      "Cuenta un chiste de papá con petición libre en 28 de 30 intentos (1.9: 23)",
+      "Acierta 109 de las 115 adivinanzas de chistes de papá (1.9: 94)"
+     ]
+    },
+    "fr": {
+     "title": "tarius 1.9 (réentraîné)",
+     "items": [
+      "tarius 1.9 a été réentraîné une fois de plus (le nom reste 1.9)",
+      "Raconte une blague de papa sur demande libre dans 28 essais sur 30 (1.9 : 23)",
+      "Trouve 109 des 115 devinettes de blagues de papa (1.9 : 94)"
+     ]
+    },
+    "de": {
+     "title": "tarius 1.9 (neu trainiert)",
+     "items": [
+      "tarius 1.9 wurde noch einmal trainiert (der Name bleibt 1.9)",
+      "Erzählt bei freier Anfrage in 28 von 30 Versuchen einen Papa-Witz (1.9: 23)",
+      "Löst 109 von 115 Papa-Witz-Rätseln richtig (1.9: 94)"
+     ]
+    },
+    "ja": {
+     "title": "tarius 1.9（再学習）",
+     "items": [
+      "tarius 1.9 をもう一度学習（名前は 1.9 のまま）",
+      "「なんでもダジャレ」を30回中28回成功（1.9 は23回）",
+      "ダジャレなぞなぞ115問中109問に正解（1.9 は94問）"
+     ]
+    },
+    "zh": {
+     "title": "tarius 1.9（重新训练）",
+     "items": [
+      "tarius 1.9 再训练了一次（名称仍为 1.9）",
+      "在“随便来个冷笑话”中 30 次成功 28 次（1.9 为 23 次）",
+      "正确回答 115 道冷笑话谜题中的 109 道（1.9 为 94 道）"
+     ]
+    },
+    "pt": {
+     "title": "tarius 1.9 (retreinado)",
+     "items": [
+      "tarius 1.9 foi treinado mais uma vez (o nome continua 1.9)",
+      "Conta uma piada de tio com pedido livre em 28 de 30 tentativas (1.9: 23)",
+      "Acerta 109 das 115 charadas de piada de tio (1.9: 94)"
+     ]
+    },
+    "ru": {
+     "title": "tarius 1.9 (переобучен)",
+     "items": [
+      "tarius 1.9 ещё раз переобучен (название остаётся 1.9)",
+      "Рассказывает «папину» шутку по свободному запросу в 28 из 30 попыток (1.9: 23)",
+      "Правильно отвечает на 109 из 115 загадок-шуток (1.9: 94)"
+     ]
+    },
+    "tr": {
+     "title": "tarius 1.9 (yeniden eğitildi)",
+     "items": [
+      "tarius 1.9 bir kez daha eğitildi (adı yine 1.9)",
+      "Serbest istekte 30 denemenin 28'inde babacan şaka yapıyor (1.9: 23)",
+      "115 babacan şaka bilmecesinin 109'unu doğru yanıtlıyor (1.9: 94)"
+     ]
+    },
+    "it": {
+     "title": "tarius 1.9 (riaddestrato)",
+     "items": [
+      "tarius 1.9 è stato riaddestrato ancora una volta (il nome resta 1.9)",
+      "Racconta una battuta da papà su richiesta libera in 28 prove su 30 (1.9: 23)",
+      "Risolve 109 delle 115 indovinelli-battuta da papà (1.9: 94)"
+     ]
+    },
+    "pl": {
+     "title": "tarius 1.9 (ponownie wytrenowany)",
+     "items": [
+      "tarius 1.9 został jeszcze raz wytrenowany (nazwa pozostaje 1.9)",
+      "Opowiada żart ojca na dowolne polecenie w 28 z 30 prób (1.9: 23)",
+      "Rozwiązuje 109 z 115 zagadek-żartów ojca (1.9: 94)"
+     ]
+    },
+    "ar": {
+     "title": "tarius 1.9 (إعادة تدريب)",
+     "items": [
+      "تم تدريب tarius 1.9 مرة أخرى (يبقى الاسم 1.9)",
+      "يروي نكتة أبوية عند الطلب الحر في 28 محاولة من 30 (1.9: 23)",
+      "يجيب بشكل صحيح على 109 من 115 لغزًا نكتيًا أبويًا (1.9: 94)"
+     ]
     }
    }
   },
@@ -36,6 +124,83 @@
      "items": [
       "tarius and premus were retrained as 1.9",
       "Better at telling any dad joke, plus more word chain and everyday chat training"
+     ]
+    },
+    "es": {
+     "title": "tarius·premus 1.9",
+     "items": [
+      "tarius y premus se reentrenaron como 1.9",
+      "Mejor contando cualquier chiste de papá, y más entrenamiento en palabras encadenadas y conversación cotidiana"
+     ]
+    },
+    "fr": {
+     "title": "tarius·premus 1.9",
+     "items": [
+      "tarius et premus ont été réentraînés en 1.9",
+      "Meilleur pour raconter n'importe quelle blague de papa, et davantage d'entraînement aux jeux de mots et à la conversation courante"
+     ]
+    },
+    "de": {
+     "title": "tarius·premus 1.9",
+     "items": [
+      "tarius und premus wurden neu auf 1.9 trainiert",
+      "Erzählt beliebige Papa-Witze besser und wurde zusätzlich im Wortketten-Spiel und bei Alltagsgesprächen trainiert"
+     ]
+    },
+    "ja": {
+     "title": "tarius·premus 1.9",
+     "items": [
+      "tarius と premus が 1.9 として再学習されました",
+      "「なんでもダジャレ」をより上手に言うようになり、しりとりや日常会話の学習も強化"
+     ]
+    },
+    "zh": {
+     "title": "tarius·premus 1.9",
+     "items": [
+      "tarius 和 premus 已重新训练为 1.9",
+      "讲任何冷笑话更拿手，并加强了接龙和日常聊天的训练"
+     ]
+    },
+    "pt": {
+     "title": "tarius·premus 1.9",
+     "items": [
+      "tarius e premus foram treinados de novo como 1.9",
+      "Melhor em contar qualquer piada de tio, com mais treino em jogos de palavras e conversa do dia a dia"
+     ]
+    },
+    "ru": {
+     "title": "tarius·premus 1.9",
+     "items": [
+      "tarius и premus переобучены как 1.9",
+      "Лучше рассказывает любые «папины» шутки, а также больше тренируется в игре в слова и обычном общении"
+     ]
+    },
+    "tr": {
+     "title": "tarius·premus 1.9",
+     "items": [
+      "tarius ve premus 1.9 olarak yeniden eğitildi",
+      "Herhangi bir babacan şakayı daha iyi anlatıyor; kelime zinciri ve günlük sohbet eğitimi de arttı"
+     ]
+    },
+    "it": {
+     "title": "tarius·premus 1.9",
+     "items": [
+      "tarius e premus sono stati riaddestrati come 1.9",
+      "Migliore nel raccontare qualsiasi battuta da papà, con più addestramento su catene di parole e conversazione quotidiana"
+     ]
+    },
+    "pl": {
+     "title": "tarius·premus 1.9",
+     "items": [
+      "tarius i premus zostali ponownie wytrenowani jako 1.9",
+      "Lepiej opowiada dowolne żarty ojców, a także więcej trenuje łańcuchy słów i codzienne rozmowy"
+     ]
+    },
+    "ar": {
+     "title": "tarius·premus 1.9",
+     "items": [
+      "تمت إعادة تدريب tarius وpremus كنسخة 1.9",
+      "أصبح أفضل في قول أي نكتة أبوية، مع تدريب أكثر على تسلسل الكلمات والحديث اليومي"
      ]
     }
    }
