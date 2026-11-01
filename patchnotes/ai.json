@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-11-01",
+   "build": "v61",
+   "title": "lectus 1.9",
+   "items": [
+    "lectus가 1.9로 새로 학습됨",
+    "아재개그 문제 115개를 모두 맞히고, '아무거나 아재개그'를 30번 중 28번 성공함"
+   ],
+   "tr": {
+    "en": {
+     "title": "lectus 1.9",
+     "items": [
+      "lectus was retrained as 1.9",
+      "Answers all 115 dad-joke riddles and tells a dad joke on a bare request in 28 of 30 tries"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-01",
    "build": "v60",
    "title": "tarius 1.9 (다시 학습)",
    "items": [
