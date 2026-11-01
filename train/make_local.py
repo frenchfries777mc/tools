@@ -42,6 +42,32 @@ t = 'SMALL_GPU = torch.cuda.get_device_properties(0).total_memory < 10 * 2**30  
 parts[i] = t
 
 src = '\n\n'.join(parts) + '\n'
+
+# Extra knobs for training a model again on top of a version that is already on Hugging Face (so a weak memory of the 115 jokes can be strengthened):
+#   BASE_VERSION=1.9   start from FF-Tools-<size>-merged-1.9 instead of the previous version
+#   LORA_R=32  EPOCHS=3  LR=2e-4   override the training size, passes and learning rate
+#   JOKE_REPEAT=3      every joke row is seen this many times per pass (copies are added)
+#   OUT_TAG=b          the upload goes to FF-Tools-<size>-merged-<VERSION><OUT_TAG> (1.9b), so the version already there is not overwritten
+a1 = 'MAX_LEN = int(_env("MAX_LEN", "4096"))\n'
+assert a1 in src
+src = src.replace(a1, a1 + '''BASE_VERSION = _env("BASE_VERSION", "")
+if BASE_VERSION: CFG.update(base=f"Frenchfries777/FF-Tools-{CFG['size']}-merged-{BASE_VERSION}", epochs=2, lr=1e-4)
+if _env("LORA_R", ""): CFG["r"] = int(_env("LORA_R", ""))
+if _env("EPOCHS", ""): CFG["epochs"] = int(_env("EPOCHS", ""))
+if _env("LR", ""): CFG["lr"] = float(_env("LR", ""))
+JOKE_REPEAT = int(_env("JOKE_REPEAT", "1"))
+OUT_TAG = _env("OUT_TAG", "")
+print("바탕 모델:", CFG["base"], "| r", CFG["r"], "| 반복", CFG["epochs"], "| 학습률", CFG["lr"], "| 아재개그 줄 x", JOKE_REPEAT, "| 올릴 이름 끝 글자:", OUT_TAG or "(없음)")
+''', 1)
+a2 = 'if _n != len(train_rows): print("시험 문제와 같은 학습 줄", _n - len(train_rows), "개를 뺐어요")\n'
+assert a2 in src
+src = src.replace(a2, a2 + '''if JOKE_REPEAT > 1:
+    _jk = [r for r in train_rows if r["task"] in ("joke19", "joke19q", "joke18", "joke16", "joke16x")]
+    train_rows += _jk * (JOKE_REPEAT - 1); print("아재개그 줄", len(_jk), "개를", JOKE_REPEAT, "번씩 보게 했어요")
+''', 1)
+a3 = '''("-" + VERSION if VERSION in ("1.5", "1.6", "1.7", "1.8", "1.9") else "")'''
+assert a3 in src
+src = src.replace(a3, a3 + " + OUT_TAG", 1)
 ast.parse(src)
 assert 'kaggle' not in src.lower().replace('kaggle drops', '') or True
 open('train/local/run.py', 'w', encoding='utf-8').write(src)
