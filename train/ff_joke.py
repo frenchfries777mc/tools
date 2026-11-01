@@ -17,7 +17,7 @@ chat_sys = ('You are chatting with a curious person. Answer in 3 to 5 sentences 
 # and the site samples (temperature 0.7, top_p 0.8) instead of greedy decoding
 SITE = os.environ.get('FF_SITE') == '1'
 if SITE:
-    size = re.search(r'(1\.7B|4B|8B)', model_id).group(1); ver = re.search(r'-(1\.\d)$', model_id).group(1)
+    size = re.search(r'(1\.7B|4B|8B)', model_id).group(1); ver = re.search(r'-(1\.\d)\w*$', model_id).group(1)
     who = {'1.7B': ('tarius', 'Qwen3 1.7B', 'elementarius', 'basic'), '4B': ('lectus', 'Qwen3 4B', 'intellectus', 'understanding'), '8B': ('premus', 'Qwen3 8B', 'supremus', 'supreme')}[size]
     chat_sys += ('\n\nYou are FF777 ' + ver + ' ' + who[0] + ', the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from ' + who[1] + '. Your name is the end of the Latin word ' + who[2] + ' ("' + who[3] + '"). '
                  'You are cheerful and a little funny: when you chat you add a short, kind joke, but answers about tables, formulas and code stay exact and serious.')
