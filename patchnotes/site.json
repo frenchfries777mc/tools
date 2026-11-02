@@ -3,6 +3,24 @@
  "name": "Tools 사이트",
  "notes": [
   {
+   "date": "2026-11-02",
+   "build": "v47",
+   "title": "이모티콘 로고 더 늘림",
+   "items": [
+    "허브 로고 45개를 더해서 이모티콘 219개가 로고로 보임",
+    "로고가 아직 없는 이모티콘만 기본 이모티콘으로 남음"
+   ],
+   "tr": {
+    "en": {
+     "title": "More emoji logos",
+     "items": [
+      "45 more hub logos added: 219 logos in place of system emoji",
+      "Only emoji without a logo yet still show as system emoji"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-01",
    "build": "v46",
    "title": "이모티콘 로고",
