@@ -1307,6 +1307,7 @@ $('deckMenu').addEventListener('click',function(e){
   var b=e.target.closest('[data-d]'); if(!b) return; closeMenus(); deckAct(b.dataset.d); });
 /* the deck commands (the ribbon's File, Insert and Design tabs and the command search use them too) */
 function deckAct(k){
+  if(k==='usage') return window.FFUsage&&FFUsage.open();
   if(k==='keys') return showKeys();
   if(gen&&k!=='print'&&k!=='md') return toast(T('AI가 다 만들 때까지 기다려 주세요'));
   if(k==='new') newDeckAction();
@@ -2149,6 +2150,8 @@ $('sUndo').onclick=function(){ if(!undo.length) return; redo.push(snap()); resto
 window.addEventListener('beforeunload',function(){ blurEdit(); saveNow(); });
 document.addEventListener('visibilitychange',function(){ if(document.hidden) saveNow(); });
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){ fitCache.clear(); if(MODE) return; if(deck&&deck.slides.length){ drawList(); drawMain(); } else if(deck) drawStart(); });
+var opn=/^#open=([a-z0-9]{4,40})$/.exec(location.hash||'');   // ../slides/#open=<id>: the usage window opens a deck in a new window
+if(opn){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} if(store.decks.some(function(d){ return d.id===opn[1]; })) store.last=opn[1]; }
 var first=null; store.decks.forEach(function(d){ if(d.id===store.last) first=d; });
 if(!first&&store.decks.length) first=store.decks.slice().sort(function(a,b){ return b.t-a.t; })[0];
 if(MODE==='pv') startPV(); else if(MODE==='view') startView(); else openDeck(first||newDeck());

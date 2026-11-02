@@ -196,7 +196,8 @@ document.addEventListener('mousedown',function(e){ if(!e.target.closest('.menu')
 $('exBtn').onclick=function(){ popMenu($('exMenu'),this); };
 $('fileBtn').onclick=function(){ popMenu($('fileMenu'),this); };
 Array.prototype.forEach.call(document.querySelectorAll('[data-f]'),function(b){ b.onclick=function(){ closeMenus(); var k=b.dataset.f;
-  if(k==='open'){ $('openFile').value=''; $('openFile').click(); }
+  if(k==='usage'){ if(window.FFUsage) FFUsage.open(); }
+  else if(k==='open'){ $('openFile').value=''; $('openFile').click(); }
   else if(k==='save'){ saveNow(); var a=document.createElement('a'), u=URL.createObjectURL(new Blob([code.value],{type:'text/x-python'})); a.href=u; a.download=(file.name.replace(/[\\/:*?"<>|]+/g,' ').trim()||'main').replace(/\.py$/,'')+'.py'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){ URL.revokeObjectURL(u); },4000); }
   else if(k==='ai'&&window.FFAI) FFAI.settings(); }; });
 $('openFile').onchange=function(){ var f=this.files[0]; if(!f) return; f.text().then(function(t){ newFile(f.name.replace(/\.(py|txt)$/,''),t); toast('파일을 열었어요'); }); };
@@ -350,7 +351,9 @@ function whyBox(er){ var box=document.createElement('div'); box.className='why';
         function(e){ ans.textContent=(e&&e.message)||T('AI가 답하지 못했어요'); b.disabled=false; }); }; }
 
 /* ---------- start ---------- */
-(function(){ var f=idx.files.filter(function(x){ return x.id===idx.last; })[0]||idx.files[0];
+(function(){ var op=/^#open=([a-z0-9]{4,40})$/.exec(location.hash||'');   // ../python/#open=<id>: the usage window opens a file in a new window
+  if(op){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} if(idx.files.some(function(x){ return x.id===op[1]; })) idx.last=op[1]; }
+  var f=idx.files.filter(function(x){ return x.id===idx.last; })[0]||idx.files[0];
   if(f) openFile(f); else { var ex=(window.FPY_EX||[])[0]; newFile(T('첫 파일'),ex?trCode(ex[1]):T('print("안녕하세요!")')+'\n'); } })();
 sys(T('▶ 실행(Ctrl+Enter)을 누르면 여기에 결과가 나와요. 처음 실행할 때는 파이썬(약 10MB)을 받느라 조금 걸려요.'));
 setTimeout(function(){ if(!worker) mkWorker(); },600);
