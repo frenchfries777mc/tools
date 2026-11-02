@@ -17,6 +17,83 @@
       "lectus was retrained as 1.9",
       "Answers all 115 dad-joke riddles and tells a dad joke on a bare request in 28 of 30 tries"
      ]
+    },
+    "es": {
+     "title": "lectus 1.9",
+     "items": [
+      "lectus se ha reentrenado como 1.9",
+      "Acierta los 115 acertijos de chistes de papá y cuenta un chiste de papá con una petición simple en 28 de 30 intentos"
+     ]
+    },
+    "fr": {
+     "title": "lectus 1.9",
+     "items": [
+      "lectus a été réentraîné en 1.9",
+      "Répond juste aux 115 devinettes de blagues de papa et raconte une blague de papa sur une simple demande dans 28 essais sur 30"
+     ]
+    },
+    "de": {
+     "title": "lectus 1.9",
+     "items": [
+      "lectus wurde als 1.9 neu trainiert",
+      "Beantwortet alle 115 Papa-Witz-Rätsel und erzählt bei einer schlichten Bitte in 28 von 30 Versuchen einen Papa-Witz"
+     ]
+    },
+    "ja": {
+     "title": "lectus 1.9",
+     "items": [
+      "lectusが1.9として再学習されました",
+      "おやじギャグのなぞなぞ115問をすべて正解し、「何でもいいから」の頼みに30回中28回おやじギャグで答えます"
+     ]
+    },
+    "zh": {
+     "title": "lectus 1.9",
+     "items": [
+      "lectus 已重新训练为 1.9",
+      "115 道冷笑话谜题全部答对，简单一句“随便来一个”时 30 次中有 28 次能讲出冷笑话"
+     ]
+    },
+    "pt": {
+     "title": "lectus 1.9",
+     "items": [
+      "lectus foi retreinado como 1.9",
+      "Acerta todos os 115 enigmas de piadas de pai e conta uma piada de pai a um pedido simples em 28 de 30 tentativas"
+     ]
+    },
+    "ru": {
+     "title": "lectus 1.9",
+     "items": [
+      "lectus переобучен до версии 1.9",
+      "Отгадывает все 115 загадок с папиными шутками и на простую просьбу рассказывает папину шутку в 28 из 30 попыток"
+     ]
+    },
+    "tr": {
+     "title": "lectus 1.9",
+     "items": [
+      "lectus 1.9 olarak yeniden eğitildi",
+      "115 baba şakası bilmecesinin tamamını yanıtlıyor ve çıplak bir istekte 30 denemenin 28'inde baba şakası anlatıyor"
+     ]
+    },
+    "it": {
+     "title": "lectus 1.9",
+     "items": [
+      "lectus è stato riaddestrato come 1.9",
+      "Risponde a tutti i 115 indovinelli di battute da papà e racconta una battuta da papà a una semplice richiesta in 28 tentativi su 30"
+     ]
+    },
+    "pl": {
+     "title": "lectus 1.9",
+     "items": [
+      "lectus został ponownie wytrenowany jako 1.9",
+      "Odpowiada na wszystkie 115 zagadek z żartami taty i opowiada żart taty na zwykłą prośbę w 28 z 30 prób"
+     ]
+    },
+    "ar": {
+     "title": "lectus 1.9",
+     "items": [
+      "تمت إعادة تدريب lectus على الإصدار 1.9",
+      "يجيب عن جميع الألغاز الـ115 للنكات الأبوية، ويروي نكتة أبوية عند طلب بسيط في 28 محاولة من أصل 30"
+     ]
     }
    }
   },
