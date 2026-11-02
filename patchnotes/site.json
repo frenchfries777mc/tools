@@ -4,6 +4,22 @@
  "notes": [
   {
    "date": "2026-11-02",
+   "build": "v48",
+   "title": "이모티콘 로고 27개 더",
+   "items": [
+    "자주 보이던 이모티콘 27개(🎩 🧽 🙂 💾 📚 🆕 🎯 등)도 로고로 바뀜"
+   ],
+   "tr": {
+    "en": {
+     "title": "27 more emoji logos",
+     "items": [
+      "27 more frequently seen emoji now show our own logos"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-02",
    "build": "v47",
    "title": "이모티콘 로고 더 늘림",
    "items": [
