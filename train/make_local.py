@@ -12,13 +12,13 @@ for s in cells:
 
 head = '''#!/usr/bin/env python3
 # Tools 자체 AI 학습 (내 컴퓨터용). 설치와 실행 방법은 train/local/README.md 에 있어요. train/make_local.py 가 만든 파일이라 직접 고치지 마세요.
-# 설정은 환경 변수로 바꿔요: MODEL=smart|basic|premus  VERSION=1.9  CONTINUE=1  MAX_LEN=2048  MAX_TRAIN_HOURS=12
+# 설정은 환경 변수로 바꿔요: MODEL=smart|basic|premus  VERSION=2.0  CONTINUE=1  MAX_LEN=2048  MAX_TRAIN_HOURS=12
 import os
 def _env(name, default): return os.environ.get(name, default)
 '''
 s = parts[0]   # settings cell
 s = s.replace('MODEL = "premus"  #@param ["basic", "smart", "premus"]', 'MODEL = _env("MODEL", "smart")')
-s = s.replace('VERSION = "1.9"  #@param ["1.9", "1.8", "1.7", "1.6", "1.5", "1.4", "1.3"]', 'VERSION = _env("VERSION", "1.9")')
+s = s.replace('VERSION = "2.0"  #@param ["2.0", "1.9", "1.8", "1.7", "1.6", "1.5", "1.4", "1.3"]', 'VERSION = _env("VERSION", "2.0")')
 s = s.replace('HF_TOKEN = ""  #@param {type:"string"}', 'HF_TOKEN = ""')
 s = s.replace('RUN_EVAL = True  #@param {type:"boolean"}', 'RUN_EVAL = _env("RUN_EVAL", "1") == "1"')
 s = s.replace('CONTINUE = True  #@param {type:"boolean"}', 'CONTINUE = _env("CONTINUE", "1") == "1"')
@@ -65,7 +65,7 @@ src = src.replace(a2, a2 + '''if JOKE_REPEAT > 1:
     _jk = [r for r in train_rows if r["task"] in ("joke19", "joke19q", "joke18", "joke16", "joke16x")]
     train_rows += _jk * (JOKE_REPEAT - 1); print("아재개그 줄", len(_jk), "개를", JOKE_REPEAT, "번씩 보게 했어요")
 ''', 1)
-a3 = '''("-" + VERSION if VERSION in ("1.5", "1.6", "1.7", "1.8", "1.9") else "")'''
+a3 = '''("-" + VERSION if VERSION in ("1.5", "1.6", "1.7", "1.8", "1.9", "2.0") else "")'''
 assert a3 in src
 src = src.replace(a3, a3 + " + OUT_TAG", 1)
 ast.parse(src)
