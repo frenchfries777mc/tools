@@ -17,6 +17,83 @@
       "Emoji logos no longer have a background",
       "61 more emoji used in Fry Lab now show our own logos"
      ]
+    },
+    "es": {
+     "title": "Logos de emoji sin fondo y 61 logos del laboratorio",
+     "items": [
+      "Los logos de emoji ahora son transparentes, sin fondo",
+      "También cambian a logo 61 emoji que se usaban en las imágenes del laboratorio"
+     ]
+    },
+    "fr": {
+     "title": "Logos d'emoji sans fond et 61 logos du labo",
+     "items": [
+      "Les logos d'emoji sont désormais transparents, sans fond",
+      "61 emoji utilisés dans les images du labo passent aussi en logos"
+     ]
+    },
+    "de": {
+     "title": "Emoji-Logos ohne Hintergrund, 61 Labor-Logos",
+     "items": [
+      "Emoji-Logos sind jetzt ohne Hintergrund transparent",
+      "Auch 61 Emoji, die in Labor-Bildern vorkamen, werden zu Logos"
+     ]
+    },
+    "ja": {
+     "title": "絵文字ロゴの背景を削除、実験室ロゴ61個",
+     "items": [
+      "絵文字ロゴの背景をなくし、透明になりました",
+      "実験室の絵に使われていた絵文字61個もロゴに変わりました"
+     ]
+    },
+    "zh": {
+     "title": "表情徽标去掉背景，实验室徽标 61 个",
+     "items": [
+      "表情徽标改为透明背景，不再有底色",
+      "实验室图片中使用的 61 个表情也变成了徽标"
+     ]
+    },
+    "pt": {
+     "title": "Logos de emoji sem fundo e 61 logos do laboratório",
+     "items": [
+      "Os logos de emoji agora são transparentes, sem fundo",
+      "61 emojis usados nas imagens do laboratório também viraram logos"
+     ]
+    },
+    "ru": {
+     "title": "Логотипы эмодзи без фона, 61 логотип лаборатории",
+     "items": [
+      "Логотипы эмодзи теперь прозрачные, без фона",
+      "61 эмодзи, которые использовались в картинках лаборатории, тоже стали логотипами"
+     ]
+    },
+    "tr": {
+     "title": "Emoji logolarında arka plan kaldırıldı, 61 laboratuvar logosu",
+     "items": [
+      "Emoji logoları artık arka planı olmadan şeffaf görünüyor",
+      "Laboratuvar resimlerinde kullanılan 61 emoji de logoya dönüştü"
+     ]
+    },
+    "it": {
+     "title": "Loghi emoji senza sfondo, 61 loghi del laboratorio",
+     "items": [
+      "I loghi delle emoji ora sono trasparenti, senza sfondo",
+      "Anche 61 emoji usate nelle immagini del laboratorio sono diventate loghi"
+     ]
+    },
+    "pl": {
+     "title": "Logo emoji bez tła i 61 logo laboratorium",
+     "items": [
+      "Logo emoji są teraz przezroczyste, bez tła",
+      "61 emoji używanych na obrazkach laboratorium także zmieniło się w logo"
+     ]
+    },
+    "ar": {
+     "title": "شعارات الرموز التعبيرية بلا خلفية و61 شعارًا للمختبر",
+     "items": [
+      "صارت شعارات الرموز التعبيرية شفافة بلا خلفية",
+      "تحولت أيضًا 61 رمزًا تعبيريًا كان يُستخدم في صور المختبر إلى شعارات"
+     ]
     }
    }
   },
@@ -32,6 +109,72 @@
      "title": "27 more emoji logos",
      "items": [
       "27 more frequently seen emoji now show our own logos"
+     ]
+    },
+    "es": {
+     "title": "27 logos de emoji más",
+     "items": [
+      "También cambian a logo 27 emoji de uso frecuente (🎩 🧽 🙂 💾 📚 🆕 🎯 etc.)"
+     ]
+    },
+    "fr": {
+     "title": "27 logos d'emoji de plus",
+     "items": [
+      "27 emoji souvent utilisés (🎩 🧽 🙂 💾 📚 🆕 🎯 etc.) passent aussi en logos"
+     ]
+    },
+    "de": {
+     "title": "27 weitere Emoji-Logos",
+     "items": [
+      "Auch 27 häufig angezeigte Emoji (🎩 🧽 🙂 💾 📚 🆕 🎯 usw.) werden zu Logos"
+     ]
+    },
+    "ja": {
+     "title": "絵文字ロゴ27個追加",
+     "items": [
+      "よく表示される絵文字27個（🎩 🧽 🙂 💾 📚 🆕 🎯 など）もロゴに変わりました"
+     ]
+    },
+    "zh": {
+     "title": "再增加 27 个表情徽标",
+     "items": [
+      "常见的 27 个表情（🎩 🧽 🙂 💾 📚 🆕 🎯 等）也变成了徽标"
+     ]
+    },
+    "pt": {
+     "title": "Mais 27 logos de emoji",
+     "items": [
+      "27 emojis que apareciam com frequência (🎩 🧽 🙂 💾 📚 🆕 🎯 etc.) também viraram logos"
+     ]
+    },
+    "ru": {
+     "title": "Еще 27 логотипов эмодзи",
+     "items": [
+      "27 часто встречавшихся эмодзи (🎩 🧽 🙂 💾 📚 🆕 🎯 и др.) тоже стали логотипами"
+     ]
+    },
+    "tr": {
+     "title": "27 emoji logosu daha",
+     "items": [
+      "Sık görünen 27 emoji (🎩 🧽 🙂 💾 📚 🆕 🎯 vb.) da logoya dönüştü"
+     ]
+    },
+    "it": {
+     "title": "27 loghi emoji in più",
+     "items": [
+      "Anche 27 emoji molto usate (🎩 🧽 🙂 💾 📚 🆕 🎯 ecc.) sono diventate loghi"
+     ]
+    },
+    "pl": {
+     "title": "27 kolejnych logo emoji",
+     "items": [
+      "Także 27 często widocznych emoji (🎩 🧽 🙂 💾 📚 🆕 🎯 itd.) zmieniło się w logo"
+     ]
+    },
+    "ar": {
+     "title": "27 شعارًا إضافيًا للرموز التعبيرية",
+     "items": [
+      "تحولت أيضًا 27 رمزًا تعبيريًا كثير الظهور (🎩 🧽 🙂 💾 📚 🆕 🎯 وغيرها) إلى شعارات"
      ]
     }
    }
@@ -50,6 +193,83 @@
      "items": [
       "45 more hub logos added: 219 logos in place of system emoji",
       "Only emoji without a logo yet still show as system emoji"
+     ]
+    },
+    "es": {
+     "title": "Más logos de emoji",
+     "items": [
+      "Se añaden 45 logos del hub, así que 219 emoji ya se muestran como logos",
+      "Solo siguen como emoji normales los que todavía no tienen logo"
+     ]
+    },
+    "fr": {
+     "title": "Plus de logos d'emoji",
+     "items": [
+      "45 logos du hub de plus, donc 219 emoji s'affichent maintenant en logos",
+      "Seuls les emoji sans logo restent des emoji normaux"
+     ]
+    },
+    "de": {
+     "title": "Mehr Emoji-Logos",
+     "items": [
+      "45 weitere Hub-Logos, dadurch werden jetzt 219 Emoji als Logos angezeigt",
+      "Nur Emoji ohne Logo bleiben normale Emoji"
+     ]
+    },
+    "ja": {
+     "title": "絵文字ロゴをさらに追加",
+     "items": [
+      "ハブのロゴを45個追加し、219個の絵文字がロゴで表示されるようになりました",
+      "まだロゴがない絵文字だけが通常の絵文字のまま残ります"
+     ]
+    },
+    "zh": {
+     "title": "表情徽标继续增加",
+     "items": [
+      "新增 45 个中心徽标，现在有 219 个表情以徽标显示",
+      "只有还没有徽标的表情会保持普通表情"
+     ]
+    },
+    "pt": {
+     "title": "Mais logos de emoji",
+     "items": [
+      "Mais 45 logos do hub, então 219 emojis agora aparecem como logos",
+      "Só os emojis que ainda não têm logo continuam como emojis normais"
+     ]
+    },
+    "ru": {
+     "title": "Больше логотипов эмодзи",
+     "items": [
+      "Добавлено еще 45 логотипов хаба, теперь 219 эмодзи показываются логотипами",
+      "Обычными эмодзи остаются только те, у которых еще нет логотипа"
+     ]
+    },
+    "tr": {
+     "title": "Emoji logoları daha da arttı",
+     "items": [
+      "Hub logosu 45 tane daha eklendi, böylece 219 emoji logo olarak görünüyor",
+      "Yalnızca henüz logosu olmayan emojiler normal emoji olarak kalır"
+     ]
+    },
+    "it": {
+     "title": "Più loghi per le emoji",
+     "items": [
+      "Altri 45 loghi dell'hub, quindi 219 emoji ora si vedono come loghi",
+      "Restano emoji normali solo quelle che non hanno ancora un logo"
+     ]
+    },
+    "pl": {
+     "title": "Więcej logo emoji",
+     "items": [
+      "Dodano 45 logo z hubu, więc 219 emoji wyświetla się jako logo",
+      "Zwykłe emoji zostają tylko te, które jeszcze nie mają logo"
+     ]
+    },
+    "ar": {
+     "title": "زيادة شعارات الرموز التعبيرية",
+     "items": [
+      "أُضيف 45 شعارًا من المركز، فصار 219 رمزًا تعبيريًا يظهر كشعار",
+      "تبقى الرموز التعبيرية العادية فقط لما ليس له شعار بعد"
      ]
     }
    }
