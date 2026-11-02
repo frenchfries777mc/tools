@@ -4,6 +4,22 @@
  "notes": [
   {
    "date": "2026-11-02",
+   "build": "v18",
+   "title": "저장 실패 이유 구분",
+   "items": [
+    "저장 공간이 부족할 때 서버에 연결하지 못했는지, 옮길 오래된 기록이 없는지 구분해서 알려 줌"
+   ],
+   "tr": {
+    "en": {
+     "title": "Clearer save failure reasons",
+     "items": [
+      "When storage is full, Docs now tells you whether the server could not be reached or there are no old versions to move"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-02",
    "build": "v17",
    "title": "오래된 기록은 서버로, AI 글 모양 유지",
    "items": [

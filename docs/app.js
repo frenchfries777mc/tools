@@ -96,7 +96,7 @@ function saveNow(){ clearTimeout(saveT); saveT=null; if(!doc) return; doc.t=Date
   else{ $('saved').textContent=''; var d0=doc;   // full: move old saved versions to the Oracle server (never delete them), then save again
     if(window.FFVer&&FFVer.offload){ toast('저장 공간이 부족해서 오래된 기록을 서버로 옮기고 있어요'); FFVer.offload(d0.id,8).then(function(n){
       if(n&&doc===d0){ try{ localStorage.setItem(DOC+d0.id,page.innerHTML); localStorage.setItem(LS,JSON.stringify(idx)); $('saved').textContent=T('저장됨'); return; }catch(e){} }
-      toast('저장 공간이 부족해서 저장하지 못했어요. 큰 그림을 줄이거나 지워 주세요'); }); }
+      toast(FFVer.why==='net'?'서버에 연결하지 못해서 오래된 기록을 옮기지 못했어요':FFVer.why==='none'?'옮길 오래된 기록이 없어요. 문서 자체가 공간을 차지해요. 큰 그림을 줄이거나 지워 주세요':'저장 공간이 부족해서 저장하지 못했어요. 큰 그림을 줄이거나 지워 주세요'); }); }
     else toast('저장 공간이 부족해서 저장하지 못했어요. 큰 그림을 줄이거나 지워 주세요'); }
   if(window.FFVer) FFVer.tick('docs.'+doc.id,snap); }
 function saveSoon(){ $('saved').textContent=''; clearTimeout(saveT); saveT=setTimeout(saveNow,600); }
