@@ -13,10 +13,10 @@ function write(key,list,st){
   try{ st.removeItem(PRE+key); }catch(e){} return false;
 }
 function trim(list){
-  var auto=0; list=list.filter(function(x){ if(!x.auto) return true; return ++auto<=MAXAUTO; });
-  return list.slice(0,MAX);
+  var auto=0; list=list.filter(function(x){ if(x.remote||!x.auto) return true; return ++auto<=MAXAUTO; });
+  var n=0; return list.filter(function(x){ return x.remote||++n<=MAX; });
 }
-function newId(){ return Date.now().toString(36)+Math.floor(Math.random()*1296).toString(36); }
+function newId(){ return Date.now().toString(36)+Math.floor(Math.random()*46656).toString(36)+Math.floor(Math.random()*1296).toString(36); }
 /* newest first. Returns the saved entry, or null when the data is too big or storage is full */
 function save(key,name,data,auto,st,now){
   data=String(data); if(data.length>MAXLEN) return null;
@@ -24,7 +24,7 @@ function save(key,name,data,auto,st,now){
   list.unshift(e); list=trim(list);
   return write(key,list,st)&&read(key,st).some(function(x){ return x.id===e.id; })?e:null;
 }
-function remove(key,id,st){ write(key,read(key,st).filter(function(x){ return x.id!==id; }),st); }
+function remove(key,id,st){ var was=read(key,st).filter(function(x){ return x.id===id&&x.remote; }).length; write(key,read(key,st).filter(function(x){ return x.id!==id; }),st); if(was&&root.fetch&&!st){ try{ net('DELETE',url(key,id)).catch(function(){}); }catch(e){} } }
 /* call after every save of the document: an automatic version is kept when the content changed and the last version is old enough */
 function tick(key,get,st,now){
   now=now||Date.now(); var list=read(key,st), last=list[0], d; if(last&&now-last.t<AUTO_MS) return false;
@@ -33,17 +33,23 @@ function tick(key,get,st,now){
 }
 function ago(t,now){ var s=Math.max(0,((now||Date.now())-t)/1000);
   if(s<60) return '방금'; if(s<3600) return Math.floor(s/60)+'분 전'; if(s<86400) return Math.floor(s/3600)+'시간 전'; if(s<86400*30) return Math.floor(s/86400)+'일 전'; return Math.floor(s/86400/30)+'달 전'; }
-/* storage is full: remove the oldest saved version of any document (automatic ones first, never the newest version of the document named by keepKey).
-   Returns true when something was removed, so the caller can try saving again. */
-function freeSpace(keepKey,st){
-  st=st||ls(); if(!st) return false; var all=[];
-  try{ for(var i=0;i<st.length;i++){ var k=st.key(i); if(k&&k.indexOf(PRE)===0){ var key=k.slice(PRE.length), list=read(key,st); list.forEach(function(x,j){ all.push({key:key,id:x.id,t:x.t,auto:!!x.auto,newest:j===0,own:keepKey&&key==='docs.'+keepKey}); }); } } }catch(e){ return false; }
-  all=all.filter(function(x){ return !(x.own&&x.newest); });
-  all.sort(function(a,b){ return (b.auto-a.auto)||(a.t-b.t); });   // automatic before manual, oldest first
-  if(!all.length) return false;
-  var g=all[0]; remove(g.key,g.id,st); return true;
+/* Oracle server store (server/fry-store): old versions move there when this browser is full. A moved version stays in the list as a small stub (remote:1, d:'') and is fetched back when restored. */
+var STORE='https://140-238-55-153.sslip.io';
+function owner(st){ st=st||ls(); try{ var o=st.getItem('ffstore.owner'); if(!/^[0-9a-f]{32}$/.test(o||'')){ o=''; for(var i=0;i<32;i++) o+=Math.floor(Math.random()*16).toString(16); st.setItem('ffstore.owner',o); } return o; }catch(e){ return ''; } }
+function url(key,id,st){ return STORE+'/v/'+owner(st)+'/'+encodeURIComponent(key)+(id?'/'+id:''); }
+function net(m,u,body){ return fetch(u,{method:m,headers:body?{'content-type':'application/json'}:undefined,body:body}).then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }); }
+/* storage is full: move the oldest saved versions (automatic ones first; never the newest version of the document named by keepKey) to the server.
+   A version is removed from this browser only after the server has it. Resolves to how many were moved. */
+function offload(keepKey,n,st){
+  st=st||ls(); if(!st||!root.fetch||!owner(st)) return Promise.resolve(0); var all=[];
+  try{ for(var i=0;i<st.length;i++){ var k=st.key(i); if(k&&k.indexOf(PRE)===0){ var key=k.slice(PRE.length); read(key,st).forEach(function(x,j){ if(x.remote||!x.d) return; all.push({key:key,x:x,newest:j===0,own:keepKey&&key==='docs.'+keepKey}); }); } } }catch(e){ return Promise.resolve(0); }
+  all=all.filter(function(g){ return !(g.own&&g.newest); }).sort(function(a,b){ return ((b.x.auto?1:0)-(a.x.auto?1:0))||(a.x.t-b.x.t); }).slice(0,n||8);
+  var done=0;
+  return all.reduce(function(p,g){ return p.then(function(){ return net('PUT',url(g.key,g.x.id,st),JSON.stringify({id:g.x.id,t:g.x.t,name:g.x.name||'',auto:g.x.auto?1:0,d:g.x.d})).then(function(){
+    var l=read(g.key,st).map(function(y){ return y.id===g.x.id?{id:y.id,t:y.t,name:y.name,auto:y.auto,remote:1,d:''}:y; }); write(g.key,l,st); done++; }); }); },Promise.resolve()).then(function(){ return done; },function(){ return done; });
 }
-var api={freeSpace:freeSpace,save:save,list:read,remove:remove,tick:tick,ago:ago,MAX:MAX,MAXAUTO:MAXAUTO,AUTO_MS:AUTO_MS};
+function fetchRemote(key,id,st){ return net('GET',url(key,id,st)).then(function(j){ return j.d; }); }
+var api={offload:offload,fetchRemote:fetchRemote,save:save,list:read,remove:remove,tick:tick,ago:ago,MAX:MAX,MAXAUTO:MAXAUTO,AUTO_MS:AUTO_MS};
 if(typeof module!=='undefined'&&module.exports){ module.exports=api; return; }
 
 /* ---------- dialog (browser only) ---------- */
@@ -61,6 +67,8 @@ if(root.FFT&&FFT.add) FFT.add({
 "저장하지 못했어요. 문서가 너무 크거나 저장 공간이 부족해요":["Could not save. The document is too big or storage is full", "No se pudo guardar. El documento es demasiado grande o no queda espacio", "Impossible d’enregistrer. Le document est trop gros ou l’espace de stockage est plein", "Speichern nicht möglich. Das Dokument ist zu groß oder der Speicher ist voll", "保存できませんでした。文書が大きすぎるか、保存容量が足りません", "无法保存。文档太大或存储空间不足", "Não foi possível salvar. O documento é grande demais ou o espaço acabou", "Не удалось сохранить. Документ слишком большой или хранилище заполнено", "Kaydedilemedi. Belge çok büyük ya da depolama alanı dolu", "Unkept. Doc too big or keepspace full", "할 수 있었다 아니다 구하다. 그 문서 이다 너무 큰 또는 저장 이다 가득한", "Impossibile salvare. Il documento è troppo grande o lo spazio è pieno", "Nie udało się zapisać. Dokument jest za duży albo brak miejsca", "تعذّر الحفظ. المستند كبير جدًا أو مساحة التخزين ممتلئة"],
 "자동 저장":["Autosave", "Guardado automático", "Enregistrement auto", "Automatisch gespeichert", "自動保存", "自动保存", "Salvamento automático", "Автосохранение", "Otomatik kayıt", "Autokeep", "자동차 구하다", "Salvataggio automatico", "Zapis automatyczny", "حفظ تلقائي"],
 "이름 없는 버전":["Unnamed version", "Versión sin nombre", "Version sans nom", "Unbenannte Version", "名前のないバージョン", "未命名版本", "Versão sem nome", "Версия без названия", "Adsız sürüm", "Unnamed version", "이름 지어지지 않은 버전", "Versione senza nome", "Wersja bez nazwy", "إصدار بلا اسم"],
+"서버에서 가져오지 못했어요":["Could not get it from the server", "No se pudo obtener del servidor", "Impossible de la récupérer sur le serveur", "Vom Server nicht abrufbar", "サーバーから取得できませんでした", "无法从服务器获取", "Não foi possível obter do servidor", "Не удалось получить с сервера", "Sunucudan alınamadı", "Could not get from server", "서버에서 못 가져옴", "Impossibile ottenere dal server", "Nie udało się pobrać z serwera", "تعذّر الجلب من الخادم"],
+"서버에 보관 중":["Stored on the server", "Guardada en el servidor", "Conservée sur le serveur", "Auf dem Server gespeichert", "サーバーに保管中", "已存放在服务器", "Guardada no servidor", "Хранится на сервере", "Sunucuda saklanıyor", "Kept on server", "서버에 보관 중", "Conservata sul server", "Przechowywana na serwerze", "محفوظة على الخادم"],
 "정말요?":["Sure?", "¿Seguro?", "Sûr ?", "Sicher?", "本当に？", "确定吗？", "Certeza?", "Точно?", "Emin misin?", "Plustrue?", "확실한?", "Sicuro?", "Na pewno?", "متأكد؟"],
 "되돌리기 전 상태":["Before going back", "Antes de restaurar", "Avant le retour", "Vor dem Zurücksetzen", "戻す前の状態", "恢复前的状态", "Antes de voltar", "До возврата", "Geri almadan önce", "Before goback", "전에 가는 뒤로", "Prima del ripristino", "Przed przywróceniem", "قبل الاستعادة"],
 "되돌리지 못했어요":["Could not go back", "No se pudo restaurar", "Impossible de revenir", "Zurücksetzen nicht möglich", "戻せませんでした", "无法恢复", "Não foi possível voltar", "Не удалось вернуть", "Geri alınamadı", "Ungoback", "할 수 있었다 아니다 가다 뒤로", "Impossibile ripristinare", "Nie udało się przywrócić", "تعذّرت الاستعادة"],
@@ -93,10 +101,11 @@ function open(o){
     ni.onkeydown=function(e){ if(e.key==='Enter') nb.click(); }; nr.appendChild(ni); nr.appendChild(nb); box.appendChild(nr);
     var ul=el('ul'), list=read(o.key); if(!list.length) ul.appendChild(el('li','ffve',T('아직 저장된 버전이 없어요')));
     list.forEach(function(v){ var li=el('li'), tx=el('div','ffvt'); tx.appendChild(el('b','',v.name||(v.auto?T('자동 저장'):T('이름 없는 버전'))));
-      var d=''; try{ d=o.describe?o.describe(v.d):''; }catch(e){} tx.appendChild(el('small','',T(ago(v.t))+(d?' · '+d:''))); li.appendChild(tx);
+      var d=''; try{ d=o.describe?o.describe(v.d):''; }catch(e){} tx.appendChild(el('small','',T(ago(v.t))+(v.remote?' · ☁️ '+T('서버에 보관 중'):d?' · '+d:''))); li.appendChild(tx);
       var rb=el('button','',T('되돌리기')), armed=false; rb.onclick=function(){
         if(!armed){ armed=true; rb.textContent=T('정말요?'); setTimeout(function(){ armed=false; rb.textContent=T('되돌리기'); },3000); return; }
-        save(o.key,T('되돌리기 전 상태'),o.get(),true); try{ o.put(v.d); }catch(e){ if(o.toast) o.toast(T('되돌리지 못했어요')); return; } if(o.toast) o.toast(T('이 버전으로 되돌렸어요')); close(); };
+        var go=function(d){ save(o.key,T('되돌리기 전 상태'),o.get(),true); try{ o.put(d); }catch(e){ if(o.toast) o.toast(T('되돌리지 못했어요')); return; } if(o.toast) o.toast(T('이 버전으로 되돌렸어요')); close(); };
+        if(v.remote) fetchRemote(o.key,v.id).then(go,function(){ if(o.toast) o.toast(T('서버에서 가져오지 못했어요')); }); else go(v.d); };
       var db=el('button','ffvd','✕'); db.title=T('지우기'); db.setAttribute('aria-label',T('지우기')); db.onclick=function(){ remove(o.key,v.id); draw(); };
       li.appendChild(rb); li.appendChild(db); ul.appendChild(li); });
     box.appendChild(ul); var x=el('div','ffvx'), cb=el('button','',T('닫기')); cb.onclick=close; x.appendChild(cb); box.appendChild(x); }
