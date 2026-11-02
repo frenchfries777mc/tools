@@ -49,3 +49,4 @@ sheet/index.html | 선택하여 붙여넣기 / 붙여넣을 것 / 모두 (값과
 sheet/app.js | 먼저 복사하거나 잘라낸 칸이 있어야 해요 | Sheet v45 | 2026-10-31
 patchnotes/ai.json | lectus 1.9 항목 (en만) | ai v61 | 2026-11-01
 patchnotes/site.json | 이모티콘 로고 더 늘림 항목 (en만) | site v47 | 2026-11-02
+patchnotes/site.json | 이모티콘 로고 27개 더 항목 (en만) | site v48 | 2026-11-02
