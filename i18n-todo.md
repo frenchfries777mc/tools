@@ -50,3 +50,4 @@ sheet/app.js | 먼저 복사하거나 잘라낸 칸이 있어야 해요 | Sheet 
 patchnotes/ai.json | lectus 1.9 항목 (en만) | ai v61 | 2026-11-01
 patchnotes/site.json | 이모티콘 로고 더 늘림 항목 (en만) | site v47 | 2026-11-02
 patchnotes/site.json | 이모티콘 로고 27개 더 항목 (en만) | site v48 | 2026-11-02
+patchnotes/site.json | 이모티콘 로고 배경 없앰·실험실 로고 61개 항목 (en만) | site v49 | 2026-11-02
