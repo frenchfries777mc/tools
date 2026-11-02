@@ -4,6 +4,22 @@
  "notes": [
   {
    "date": "2026-11-02",
+   "build": "v52",
+   "title": "원래 이모티콘으로 되돌림",
+   "items": [
+    "이모티콘을 로고로 바꾸던 기능을 모두 없애고 원래 이모티콘이 그대로 보이게 함"
+   ],
+   "tr": {
+    "en": {
+     "title": "Back to the original emoji",
+     "items": [
+      "Removed the emoji-to-logo swap everywhere so the original emoji show again"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-02",
    "build": "v51",
    "title": "맨 위 감자튀김은 이모티콘으로",
    "items": [
