@@ -44,12 +44,12 @@ function offload(keepKey,n,st){
   st=st||ls(); if(!st||!root.fetch||!owner(st)) return Promise.resolve(0); var all=[];
   try{ for(var i=0;i<st.length;i++){ var k=st.key(i); if(k&&k.indexOf(PRE)===0){ var key=k.slice(PRE.length); read(key,st).forEach(function(x,j){ if(x.remote||!x.d) return; all.push({key:key,x:x,newest:j===0,own:keepKey&&key==='docs.'+keepKey}); }); } } }catch(e){ return Promise.resolve(0); }
   all=all.filter(function(g){ return !(g.own&&g.newest); }).sort(function(a,b){ return ((b.x.auto?1:0)-(a.x.auto?1:0))||(a.x.t-b.x.t); }).slice(0,n||8);
-  var done=0;
+  var done=0; api.why=all.length?'':'none';
   return all.reduce(function(p,g){ return p.then(function(){ return net('PUT',url(g.key,g.x.id,st),JSON.stringify({id:g.x.id,t:g.x.t,name:g.x.name||'',auto:g.x.auto?1:0,d:g.x.d})).then(function(){
-    var l=read(g.key,st).map(function(y){ return y.id===g.x.id?{id:y.id,t:y.t,name:y.name,auto:y.auto,remote:1,d:''}:y; }); write(g.key,l,st); done++; }); }); },Promise.resolve()).then(function(){ return done; },function(){ return done; });
+    var l=read(g.key,st).map(function(y){ return y.id===g.x.id?{id:y.id,t:y.t,name:y.name,auto:y.auto,remote:1,d:''}:y; }); write(g.key,l,st); done++; }); }); },Promise.resolve()).then(function(){ return done; },function(){ api.why='net'; return done; });
 }
 function fetchRemote(key,id,st){ return net('GET',url(key,id,st)).then(function(j){ return j.d; }); }
-var api={offload:offload,fetchRemote:fetchRemote,save:save,list:read,remove:remove,tick:tick,ago:ago,MAX:MAX,MAXAUTO:MAXAUTO,AUTO_MS:AUTO_MS};
+var api={why:'',offload:offload,fetchRemote:fetchRemote,save:save,list:read,remove:remove,tick:tick,ago:ago,MAX:MAX,MAXAUTO:MAXAUTO,AUTO_MS:AUTO_MS};
 if(typeof module!=='undefined'&&module.exports){ module.exports=api; return; }
 
 /* ---------- dialog (browser only) ---------- */
