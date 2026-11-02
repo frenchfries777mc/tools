@@ -41,7 +41,7 @@ var css='.ffw-btn{display:inline-flex;align-items:center;gap:4px;margin:8px 0 0;
 var ov=null, cur=null, lastFocus=null;
 function addCSS(){ if(addCSS.on) return; addCSS.on=1; var st=document.createElement('style'); st.textContent=css; document.head.appendChild(st); }
 function load(){ var a=[]; try{ a=JSON.parse(localStorage.getItem(LS)||'[]'); }catch(e){} return Array.isArray(a)?a:[]; }
-function save(a){ try{ localStorage.setItem(LS,JSON.stringify(a)); return true; }catch(e){ return false; } }
+function save(a){ for(;;){ try{ localStorage.setItem(LS,JSON.stringify(a)); return true; }catch(e){ if(a.length<=1) return false; a=a.slice(1); } } }   // storage full: the oldest saved reports step aside one by one until the new one fits (logged-in people's reports are also with the developer)
 function cut(s,n){ s=String(s==null?'':s); return s.length>n?s.slice(0,n):s; }
 function modelId(){ try{ var c=window.FFAI&&FFAI.config&&FFAI.config(); return c?c.provider+':'+c.model:''; }catch(e){ return ''; } }
 function toast(t){
