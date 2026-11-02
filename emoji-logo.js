@@ -16,6 +16,7 @@
     '🛤':'road','🕯':'candle','🔺':'triangle','🏃':'runner','🐀':'rat','🗽':'liberty','🏮':'lantern','✈':'plane','🛩':'plane','🪔':'oillamp',
     '🌕':'fullmoon','🏳':'whiteflag','🔭':'telescope','☎':'telephone','🚗':'car','☢':'radiation','🌅':'sunrise','↩':'back','↶':'back',
     '🔔':'bell','⚫':'blackdot','🔵':'bluedot','🥉':'bronze','🐞':'bug','📷':'camera','🐔':'chick','🐥':'chick','👏':'clap','🕒':'clock','⏱':'clock','⏰':'clock','🕰':'clock','🎣':'fishing','🍟':'fries','👻':'ghost','🥇':'gold','🟢':'greendot','🏠':'house','🏘':'houses','🪪':'idcard','🏝':'island','😂':'laugh','🔒':'lock','🎨':'palette','🐾':'paw','🖼':'picture','📮':'postbox','🙋':'raisehand','📕':'redbook','🔴':'reddot','😢':'sad','🥈':'silver','🚚':'truck','⚪':'whitedot','😮':'wow','🟡':'yellowdot','⛵':'sailboat','🏅':'medal','🤚':'hand',
+    '🎩':'hat','🧽':'sponge','🙂':'smile','💾':'floppy','📚':'books','🆕':'new','🎯':'target','⭕':'circle','🧬':'dna','🔤':'abc2','🔀':'shuffle','❌':'cross','🤔':'thinking','🙌':'hands','😅':'sweat','💥':'boom2','🏁':'finish','😀':'grin','🤖':'robot','🔦':'torch','📦':'box','⚗':'flask','📍':'pin2','🚶':'walker','➗':'divide','🎬':'clapper','📤':'outbox',
     '⚔':'swords','⛰':'mountain','🚢':'ship','💉':'syringe','🥇':'medal','🧱':'brick','💣':'bomb','🏛':'temple','👑':'crown','🛡':'shield',
     '🤝':'handshake','🧭':'compass','🚨':'siren','⛪':'church','☮':'peace','🏭':'factory','🏦':'bank','🏙':'city','⛺':'tent','📰':'news','💍':'ring',
     '🔨':'hammer','🚫':'ban','⚓':'anchor','⚛':'atom','🗺':'compass'
