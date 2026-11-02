@@ -91,8 +91,13 @@ function snap(){ return JSON.stringify({n:doc.name, f:doc.font||'', pg:doc.pg||n
 function saveNow(){ clearTimeout(saveT); saveT=null; if(!doc) return; doc.t=Date.now(); doc.name=$('docName').value.trim()||T('제목 없는 문서'); idx.last=doc.id;
   if(idx.docs.indexOf(doc)<0) idx.docs.unshift(doc);
   var ok=false, html=page.innerHTML, js=JSON.stringify(idx);
-  for(var tries=0;tries<60&&!ok;tries++){ try{ localStorage.setItem(DOC+doc.id,html); localStorage.setItem(LS,js); ok=true; }catch(e){ if(!(window.FFVer&&FFVer.freeSpace&&FFVer.freeSpace(doc.id))) break; } }   // full: drop the oldest saved versions (not this document's newest) and try again
-  if(ok) $('saved').textContent=T('저장됨'); else{ $('saved').textContent=''; toast('저장 공간이 부족해서 저장하지 못했어요. 큰 그림을 줄이거나 지워 주세요'); }
+  try{ localStorage.setItem(DOC+doc.id,html); localStorage.setItem(LS,js); ok=true; }catch(e){}
+  if(ok) $('saved').textContent=T('저장됨');
+  else{ $('saved').textContent=''; var d0=doc;   // full: move old saved versions to the Oracle server (never delete them), then save again
+    if(window.FFVer&&FFVer.offload){ toast('저장 공간이 부족해서 오래된 기록을 서버로 옮기고 있어요'); FFVer.offload(d0.id,8).then(function(n){
+      if(n&&doc===d0){ try{ localStorage.setItem(DOC+d0.id,page.innerHTML); localStorage.setItem(LS,JSON.stringify(idx)); $('saved').textContent=T('저장됨'); return; }catch(e){} }
+      toast('저장 공간이 부족해서 저장하지 못했어요. 큰 그림을 줄이거나 지워 주세요'); }); }
+    else toast('저장 공간이 부족해서 저장하지 못했어요. 큰 그림을 줄이거나 지워 주세요'); }
   if(window.FFVer) FFVer.tick('docs.'+doc.id,snap); }
 function saveSoon(){ $('saved').textContent=''; clearTimeout(saveT); saveT=setTimeout(saveNow,600); }
 function isEmptyDoc(d){ return d&&!readDoc(d.id).replace(/<br>|<p><\/p>|<p><br><\/p>/g,'').trim()&&(!d.name||d.name===T('제목 없는 문서')); }
@@ -571,7 +576,8 @@ document.addEventListener('dragover',function(e){ if(e.dataTransfer&&Array.proto
 document.addEventListener('drop',function(e){ if(e.defaultPrevented) return; var f=e.dataTransfer&&e.dataTransfer.files[0]; if(f&&/\.(docx|html?|txt|md)$/i.test(f.name)){ e.preventDefault(); openFile(f); } });
 
 /* ---------- AI helper (shared ai.js) ---------- */
-var aiRange=null, aiJob=0, aiText='', aiTask='';
+var aiRange=null, aiJob=0, aiText='', aiTask='', aiSt='';   // aiSt: font size/face of the text the AI worked on, so its answer keeps them
+function aiStyle(r){ try{ var n=r&&r.startContainer; if(n&&n.nodeType===3) n=n.parentNode; if(!n||!page.contains(n)) return ''; var c=getComputedStyle(n), b=getComputedStyle(page), o=''; if(c.fontSize!==b.fontSize) o+='font-size:'+c.fontSize+';'; if(c.fontFamily!==b.fontFamily) o+='font-family:'+c.fontFamily.replace(/"/g,"'")+';'; return o; }catch(e){ return ''; } }
 var TASKS={
   fix:{title:'맞춤법 고치기', sys:'You fix Korean and English spelling, spacing and grammar. Keep the meaning, tone and language. Reply with only the corrected text.', pre:'Fix the spelling of this text:\n\n'},
   easy:{title:'더 쉽게', sys:'You rewrite text so a 10-year-old can understand it. Keep the language of the text. Reply with only the rewritten text.', pre:'Rewrite this more simply:\n\n'},
@@ -605,7 +611,7 @@ function runAI(task){ closeMenus(); if(!window.FFAI){ toast('AI를 불러오지 
   else if(task==='cont'&&!src){ var all=page.innerText.trim(); if(all){ var r0=document.createRange(); r0.selectNodeContents(page); r0.collapse(false); src={range:r0,text:all.slice(-1500)}; } }
   if(!src||!src.text.trim()){ toast('먼저 글을 고르거나 문단 안을 누르세요'); return; }
   goAI(task,src,t.pre+src.text.slice(0,task==='cont'?1500:4000)); }
-function goAI(task,src,prompt){ var t=TASKS[task], job=++aiJob; aiRange=src.range; aiTask=task; aiText='';
+function goAI(task,src,prompt){ var t=TASKS[task], job=++aiJob; aiRange=src.range; aiSt=aiStyle(aiRange); aiTask=task; aiText='';
   $('aiTitle').textContent=T(t.title); $('aiOut').textContent=T('AI가 쓰는 중…'); $('aiRep').disabled=true; $('aiBelow').disabled=true; $('aiStop').hidden=false;
   $('aiRep').hidden=!!t.norep||task==='cont'; openDlg('aiDlg');
   FFAI.ask({system:t.sys, prompt:prompt, prose:true, maxTokens:/^(sum|title|ask)$/.test(task)?300:900, onText:function(s){ if(job===aiJob){ aiText=s; $('aiOut').textContent=s; } }})
@@ -618,12 +624,12 @@ $('aiQOk').onclick=function(){ var q=$('aiQ').value.trim(); if(!q){ $('aiQ').foc
 $('aiQ').addEventListener('keydown',function(e){ if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){ e.preventDefault(); $('aiQOk').click(); } });
 Array.prototype.forEach.call(document.querySelectorAll('[data-a]'),function(b){ b.onclick=function(){ runAI(b.dataset.a); }; });
 $('aiStop').onclick=function(){ stopAI(); aiJob=0; $('aiStop').hidden=true; $('aiRep').disabled=$('aiBelow').disabled=!aiText; };
-function paras(t){ var ls=t.split(/\n+/).filter(function(l){ return l.trim(); }); if(ls.length>1&&ls.every(function(l){ return /^\s*[-•*]\s+/.test(l); })) return '<ul>'+ls.map(function(l){ return '<li>'+esc(l.replace(/^\s*[-•*]\s+/,'').trim())+'</li>'; }).join('')+'</ul>';
-  return t.split(/\n{2,}|\n/).filter(function(l){ return l.trim(); }).map(function(l){ return '<p>'+esc(l.trim())+'</p>'; }).join(''); }
+function paras(t,st){ var sa=st?' style="'+st+'"':''; var ls=t.split(/\n+/).filter(function(l){ return l.trim(); }); if(ls.length>1&&ls.every(function(l){ return /^\s*[-•*]\s+/.test(l); })) return '<ul>'+ls.map(function(l){ return '<li'+sa+'>'+esc(l.replace(/^\s*[-•*]\s+/,'').trim())+'</li>'; }).join('')+'</ul>';
+  return t.split(/\n{2,}|\n/).filter(function(l){ return l.trim(); }).map(function(l){ return '<p'+sa+'>'+esc(l.trim())+'</p>'; }).join(''); }
 $('aiRep').onclick=function(){ if(!aiRange||!aiText) return; closeDlg('aiDlg'); mark(true); var s=getSelection(); page.focus(); s.removeAllRanges(); s.addRange(aiRange);
-  if(/\n/.test(aiText)) document.execCommand('insertHTML',false,paras(aiText)); else document.execCommand('insertText',false,aiText); fixTop(); count(); saveSoon(); toast('바꿨어요 · Ctrl+Z로 되돌리기'); };
+  if(/\n/.test(aiText)) document.execCommand('insertHTML',false,paras(aiText,aiSt)); else if(aiSt) document.execCommand('insertHTML',false,'<span style="'+aiSt+'">'+esc(aiText)+'</span>'); else document.execCommand('insertText',false,aiText); fixTop(); count(); saveSoon(); toast('바꿨어요 · Ctrl+Z로 되돌리기'); };
 $('aiBelow').onclick=function(){ if(!aiRange||!aiText) return; closeDlg('aiDlg'); mark(true);
-  var n=aiRange.endContainer; while(n&&n.parentNode!==page) n=n.parentNode; var box=document.createElement('div'); box.innerHTML=paras(aiText);
+  var n=aiRange.endContainer; while(n&&n.parentNode!==page) n=n.parentNode; var box=document.createElement('div'); box.innerHTML=paras(aiText,aiSt);
   var after=n?n.nextSibling:null, last=null; while(box.firstChild){ last=box.firstChild; page.insertBefore(last,after); }
   if(last){ var r=document.createRange(); r.selectNodeContents(last); r.collapse(false); var s=getSelection(); s.removeAllRanges(); s.addRange(r); }
   count(); saveSoon(); toast('아래에 넣었어요'); };
