@@ -323,6 +323,7 @@ $('fileMenu').addEventListener('click',function(e){
   if(f==='projects') openProjs();
   else if(f==='new'){ createProject(T('나의 웹페이지'),blank); toast(T('새 프로젝트를 만들었어요')); }
   else if(f==='save'){ download(new Blob([JSON.stringify({app:'block-html',v:1,name:$('projName').value,ws:Blockly.serialization.workspaces.save(ws),imgs:BH.IMGS,snds:BH.SNDS},null,1)],{type:'application/json'}),fname('.json')); }
+  else if(f==='usage'){ if(window.FFUsage) FFUsage.open(); }
   else if(f==='importhtml') $('htmlIn').click();
   else if(f==='open') $('fileIn').click();
   else if(f==='html') downloadHTML();
@@ -687,6 +688,8 @@ $('playRerun').onclick=function(){ var d=PLAY&&PLAY.data; if(!d) return; var h=l
 P=readIdx(); if(!P){ P={cur:null,list:[]}; var old=null; try{ old=JSON.parse(lsGet(LS)||'null'); }catch(e){}
   if(old&&old.ws){ var oid=pid(); lsSet(PK+oid,JSON.stringify(old)); P.list.push({id:oid,name:old.name||T('나의 웹페이지'),t:Date.now()}); P.cur=oid; writeIdx(); } }
 P.list=P.list.filter(function(e){ return e&&e.id; });
+var opn=/^#open=([a-z0-9]{4,40})$/.exec(location.hash||'');   // ../blocks/#open=<id>: the usage window opens a project in a new window
+if(opn){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} if(entry(opn[1])) P.cur=opn[1]; }
 (function(){ var cand=[EMB||P.cur].concat(P.list.slice().sort(function(a,b){ return b.t-a.t; }).map(function(e){ return e.id; })), ok=false;
   for(var k=0;k<cand.length&&!ok;k++){ var id=cand[k], d=id&&entry(id)&&readProj(id); if(d&&d.ws){ P.cur=id; $('projName').value=d.name||T('나의 웹페이지'); setImgs(d.imgs); setSnds(d.snds); try{ loadJSON(d.ws); ok=true; }catch(e){ console.error(e); } } }
   if(!ok){ P.cur=null; createProject(T(BH_EXAMPLES[0].name),function(){ loadExample(BH_EXAMPLES[0]); }); } })();
