@@ -4,6 +4,22 @@
  "notes": [
   {
    "date": "2026-11-02",
+   "build": "v50",
+   "title": "맨 위 로고 정리",
+   "items": [
+    "각 도구 맨 위의 감자튀김 로고에서 주황색 네모를 없애고 로고를 크게 보이게 함"
+   ],
+   "tr": {
+    "en": {
+     "title": "Top logo cleanup",
+     "items": [
+      "Removed the orange square behind the fries logo at the top of each tool and made the logo bigger"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-02",
    "build": "v49",
    "title": "이모티콘 로고 배경 없앰, 실험실 로고 61개",
    "items": [
