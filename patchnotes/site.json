@@ -4,6 +4,22 @@
  "notes": [
   {
    "date": "2026-11-02",
+   "build": "v53",
+   "title": "Fry Lab 로고 유지",
+   "items": [
+    "Fry Lab에서는 이모티콘 로고를 다시 켬 (다른 도구는 원래 이모티콘)"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Lab keeps logos",
+     "items": [
+      "Emoji logos are back in Fry Lab only (other tools keep the original emoji)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-02",
    "build": "v52",
    "title": "원래 이모티콘으로 되돌림",
    "items": [
