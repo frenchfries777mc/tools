@@ -1,11 +1,11 @@
 /* Fry Store: keeps Fry Docs/Sheet/Slides old saved versions on the Oracle server (no packages needed, Node 18+).
    The browser makes a random secret ("owner", 32 hex) and uses it as its folder name; nobody can list other owners.
    PUT /v/<owner>/<key>/<id> (JSON body)   GET /v/<owner>/<key> (list)   GET /v/<owner>/<key>/<id>   DELETE /v/<owner>/<key>/<id>
-   Limits: 1 MB per version, 100 MB per owner, 3 GB all together. Listens on 127.0.0.1:8787; Caddy gives it https. */
+   Limits: 1 MB per version, 20 MB per owner (a few hundred documents), 3 GB all together. Listens on 127.0.0.1:8787; Caddy gives it https. */
 'use strict';
 const http=require('http'), fs=require('fs'), path=require('path');
 const DIR=process.env.STORE_DIR||'/var/lib/fry-store', PORT=+process.env.PORT||8787;
-const MAXV=1e6, MAXO=100e6, MAXALL=3e9;
+const MAXV=1e6, MAXO=20e6, MAXALL=3e9;
 const OK=/^[0-9a-f]{32}$/, KEY=/^[A-Za-z0-9._-]{1,80}$/, ID=/^[a-z0-9]{4,20}$/;
 fs.mkdirSync(DIR,{recursive:true});
 function size(d){ let n=0; try{ for(const f of fs.readdirSync(d,{withFileTypes:true})){ const p=path.join(d,f.name); n+=f.isDirectory()?size(p):fs.statSync(p).size; } }catch(e){} return n; }
