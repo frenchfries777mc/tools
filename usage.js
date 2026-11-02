@@ -36,15 +36,16 @@ if(typeof module!=='undefined'&&module.exports){ module.exports=api; return; }
 /* ---------- window (browser only) ---------- */
 var T=function(s){ return root.FFT&&FFT.T?FFT.T(s):s; };
 function css(){ if(document.getElementById('ffuCss')) return; var s=document.createElement('style'); s.id='ffuCss';
-  s.textContent='.ffu{position:fixed;inset:0;z-index:2147483000;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px}'+
-  '.ffu>div{background:Canvas;color:CanvasText;border:1px solid rgba(128,128,128,.4);border-radius:14px;width:min(460px,100%);max-height:86vh;display:flex;flex-direction:column;box-shadow:0 10px 40px rgba(0,0,0,.4);font:14px/1.4 system-ui,sans-serif}'+
-  '.ffu h3{margin:0;padding:14px 16px 6px;font-size:16px}.ffu .ffug{padding:6px 16px}.ffu .ffug b{display:flex;justify-content:space-between;font-weight:600}'+
-  '.ffu .ffub{height:12px;border-radius:7px;background:rgba(128,128,128,.25);overflow:hidden;margin:5px 0 3px}.ffu .ffub i{display:block;height:100%;border-radius:7px;background:#2ea043}'+
-  '.ffu .ffub i.w{background:#d4a017}.ffu .ffub i.r{background:#e5484d}.ffu small{opacity:.65}'+
-  '.ffu h4{margin:10px 16px 4px;font-size:13px}.ffu ul{list-style:none;margin:0;padding:0 16px;overflow:auto;flex:1}'+
-  '.ffu li{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid rgba(128,128,128,.25);cursor:pointer}.ffu li:hover{background:rgba(128,128,128,.1)}'+
-  '.ffu li .ffut{flex:1;min-width:0}.ffu li b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ffu .ffue{padding:12px 0;opacity:.65;text-align:center;cursor:default}'+
-  '.ffu .ffux{padding:10px 16px;text-align:right}.ffu button{padding:6px 12px;border-radius:8px;border:1px solid rgba(128,128,128,.5);background:ButtonFace;color:ButtonText;font:inherit;cursor:pointer}';
+  /* colours come from the page's own variables (same as its other windows); Canvas colours only when a page has none */
+  s.textContent='.ffu{position:fixed;inset:0;z-index:2147483000;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:12px}'+
+  '.ffu>div{background:var(--panel,Canvas);color:var(--text,CanvasText);border:1px solid var(--line,rgba(128,128,128,.4));border-radius:16px;width:min(460px,100%);max-height:86vh;display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.6);font:14px/1.4 inherit;font-family:inherit}'+
+  '.ffu h3{margin:0;padding:16px 18px 6px;font-size:17px}.ffu .ffug{padding:6px 18px}.ffu .ffug b{display:flex;justify-content:space-between;font-weight:600}'+
+  '.ffu .ffub{height:12px;border-radius:7px;background:var(--panel2,rgba(128,128,128,.25));border:1px solid var(--line,transparent);overflow:hidden;margin:5px 0 3px}.ffu .ffub i{display:block;height:100%;border-radius:7px;background:#2ea043}'+
+  '.ffu .ffub i.w{background:var(--fry,#d4a017)}.ffu .ffub i.r{background:#e5484d}.ffu small{color:var(--dim,inherit);opacity:.9}'+
+  '.ffu h4{margin:10px 18px 4px;font-size:13px}.ffu ul{list-style:none;margin:0;padding:0 18px;overflow:auto;flex:1}'+
+  '.ffu li{display:flex;align-items:center;gap:8px;padding:8px 10px;margin-bottom:6px;border:1px solid var(--line,rgba(128,128,128,.25));border-radius:10px;cursor:pointer}.ffu li:hover{border-color:var(--fry,#d4a017);background:var(--panel2,rgba(128,128,128,.1))}'+
+  '.ffu li .ffut{flex:1;min-width:0}.ffu li b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ffu .ffue{padding:12px 0;color:var(--dim,inherit);text-align:center;cursor:default;border:0}.ffu .ffue:hover{background:none}'+
+  '.ffu .ffux{padding:12px 18px;text-align:right}.ffu button{height:34px;padding:0 14px;border-radius:8px;border:1px solid var(--line,rgba(128,128,128,.5));background:var(--panel2,ButtonFace);color:var(--text,ButtonText);font:inherit;cursor:pointer}.ffu button:hover{border-color:var(--fry,#d4a017)}';
   document.head.appendChild(s); }
 function el(t,c,x){ var e=document.createElement(t); if(c) e.className=c; if(x!=null) e.textContent=x; return e; }
 function gauge(label,used,max,note){ var g=el('div','ffug'), p=Math.min(100,Math.round(used/max*100)), b=el('b'); b.appendChild(el('span','',label)); b.appendChild(el('span','',fmt(used)+' / '+fmt(max)+' ('+p+'%)')); g.appendChild(b);

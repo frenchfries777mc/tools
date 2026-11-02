@@ -4,6 +4,22 @@
  "notes": [
   {
    "date": "2026-11-02",
+   "build": "v56",
+   "title": "사용량 창 색 맞춤",
+   "items": [
+    "현재 사용량 창의 배경과 글자색을 다른 창과 같게 맞춤"
+   ],
+   "tr": {
+    "en": {
+     "title": "Usage window colours",
+     "items": [
+      "The usage window now uses the same background and text colours as the other windows"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-02",
    "build": "v55",
    "title": "현재 사용량 보기",
    "items": [
