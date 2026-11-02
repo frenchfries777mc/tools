@@ -3,6 +3,26 @@
  "name": "Fry Docs",
  "notes": [
   {
+   "date": "2026-11-02",
+   "build": "v16",
+   "title": "글꼴 유지·저장 공간·인쇄",
+   "items": [
+    "글을 모두 지운 뒤에도 마지막 글꼴과 글자 크기로 계속 써짐",
+    "저장 공간이 부족하면 오래된 저장 기록부터 자동으로 지워 문서가 저장됨",
+    "내보내기 메뉴에 '인쇄'를 따로 넣음"
+   ],
+   "tr": {
+    "en": {
+     "title": "Keep font, storage space, print",
+     "items": [
+      "After clearing all text, you keep typing in the last font and size",
+      "When storage runs out, the oldest saved versions are removed automatically so your document still saves",
+      "Added a separate 'Print' item to the export menu"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-10-31",
    "build": "v15",
    "title": "같이 고치기 (실시간)",
@@ -175,11 +195,17 @@
     },
     "ja": {
      "title": "一緒に編集するための準備",
-     "items": ["複数人が1つの部屋で作業できる共有ルーム用ツール（peer-room.js）を追加", "Fry Sheetも同じツールを使えます"]
+     "items": [
+      "複数人が1つの部屋で作業できる共有ルーム用ツール（peer-room.js）を追加",
+      "Fry Sheetも同じツールを使えます"
+     ]
     },
     "zh": {
      "title": "共同编辑的准备工作",
-     "items": ["新增共享房间工具（peer-room.js），让多人在同一房间中协作", "Fry Sheet 也可以使用同一工具"]
+     "items": [
+      "新增共享房间工具（peer-room.js），让多人在同一房间中协作",
+      "Fry Sheet 也可以使用同一工具"
+     ]
     },
     "pt": {
      "title": "Preparação para editar juntos",
@@ -264,11 +290,17 @@
     },
     "ja": {
      "title": "グラフの挿入",
-     "items": ["挿入タブのグラフ（棒、折れ線、円）", "名前と数字を入力すると、グラフが画像として入り、Wordファイルにも保存できます"]
+     "items": [
+      "挿入タブのグラフ（棒、折れ線、円）",
+      "名前と数字を入力すると、グラフが画像として入り、Wordファイルにも保存できます"
+     ]
     },
     "zh": {
      "title": "插入图表",
-     "items": ["“插入”选项卡中的图表（柱形图、折线图和饼图）", "输入名称和数字即可插入图表（以图片形式），也可保存到 Word 文件中"]
+     "items": [
+      "“插入”选项卡中的图表（柱形图、折线图和饼图）",
+      "输入名称和数字即可插入图表（以图片形式），也可保存到 Word 文件中"
+     ]
     },
     "pt": {
      "title": "Inserir gráficos",
@@ -353,11 +385,17 @@
     },
     "ja": {
      "title": "Word ファイルを開くときの画像",
-     "items": ["Word文書（.docx）を開くと、画像（png、jpeg、gif、webp）も文字と一緒に開きます", "大きな画像は開くときに縮小され、保存した文書を小さく保てます"]
+     "items": [
+      "Word文書（.docx）を開くと、画像（png、jpeg、gif、webp）も文字と一緒に開きます",
+      "大きな画像は開くときに縮小され、保存した文書を小さく保てます"
+     ]
     },
     "zh": {
      "title": "打开 Word 文件时的图片",
-     "items": ["打开 Word 文档（.docx）时，图片（png、jpeg、gif、webp）也会与文字一起打开", "大图片在打开时会自动缩小，以保持保存后的文档较小"]
+     "items": [
+      "打开 Word 文档（.docx）时，图片（png、jpeg、gif、webp）也会与文字一起打开",
+      "大图片在打开时会自动缩小，以保持保存后的文档较小"
+     ]
     },
     "pt": {
      "title": "Imagens ao abrir arquivos Word",
@@ -602,7 +640,11 @@
     },
     "zh": {
      "title": "段落设置与首字下沉",
-     "items": ["“布局”选项卡中的段落设置（左缩进、首行缩进或悬挂缩进、段前段后间距、行距）", "段落样式中的首字下沉", "段落间距、首行缩进或悬挂缩进会在保存和打开 Word 文件时保留"]
+     "items": [
+      "“布局”选项卡中的段落设置（左缩进、首行缩进或悬挂缩进、段前段后间距、行距）",
+      "段落样式中的首字下沉",
+      "段落间距、首行缩进或悬挂缩进会在保存和打开 Word 文件时保留"
+     ]
     },
     "pt": {
      "title": "Configurações de parágrafo e letra capitular",
@@ -698,11 +740,19 @@
     },
     "ja": {
      "title": "スポイトとマイカラー",
-     "items": ["文字の色と蛍光ペンを押すと、マイカラーとスポイトのあるパレットが開きます", "スポイトは画面や画像から色を取ります（スポイトのないブラウザでは、文書内の画像を押して取ります）", "マイカラーはこのブラウザに保存されます"]
+     "items": [
+      "文字の色と蛍光ペンを押すと、マイカラーとスポイトのあるパレットが開きます",
+      "スポイトは画面や画像から色を取ります（スポイトのないブラウザでは、文書内の画像を押して取ります）",
+      "マイカラーはこのブラウザに保存されます"
+     ]
     },
     "zh": {
      "title": "吸管与我的颜色",
-     "items": ["文字颜色和荧光笔会打开包含“我的颜色”和吸管的调色板", "吸管可从屏幕或图片中取色（不支持吸管的浏览器则点击文档中的图片取色）", "“我的颜色”保存在此浏览器中"]
+     "items": [
+      "文字颜色和荧光笔会打开包含“我的颜色”和吸管的调色板",
+      "吸管可从屏幕或图片中取色（不支持吸管的浏览器则点击文档中的图片取色）",
+      "“我的颜色”保存在此浏览器中"
+     ]
     },
     "pt": {
      "title": "Conta-gotas e Minhas cores",
@@ -793,11 +843,17 @@
     },
     "ja": {
      "title": "写真の文字を読む",
-     "items": ["写真の韓国語と英語の文字を読み取り、文書に入れます", "読み取りツールは Fry Sheet も使える共有ファイルです"]
+     "items": [
+      "写真の韓国語と英語の文字を読み取り、文書に入れます",
+      "読み取りツールは Fry Sheet も使える共有ファイルです"
+     ]
     },
     "zh": {
      "title": "读取照片中的文字",
-     "items": ["读取照片中的韩语和英语文字并插入文档", "读取工具是一个共享文件，Fry Sheet 也可以使用"]
+     "items": [
+      "读取照片中的韩语和英语文字并插入文档",
+      "读取工具是一个共享文件，Fry Sheet 也可以使用"
+     ]
     },
     "pt": {
      "title": "Ler texto em fotos",
@@ -836,7 +892,10 @@
     },
     "ar": {
      "title": "قراءة النص من الصور",
-     "items": ["يقرأ النص الكوري والإنجليزي من الصورة ويُدرجه في المستند", "القارئ ملف مشترك يمكن لـ Fry Sheet استخدامه أيضًا"]
+     "items": [
+      "يقرأ النص الكوري والإنجليزي من الصورة ويُدرجه في المستند",
+      "القارئ ملف مشترك يمكن لـ Fry Sheet استخدامه أيضًا"
+     ]
     }
    }
   },
@@ -850,51 +909,75 @@
    "tr": {
     "en": {
      "title": "Cursor after illustrations",
-     "items": ["The blinking text cursor no longer shows after inserting an illustration"]
+     "items": [
+      "The blinking text cursor no longer shows after inserting an illustration"
+     ]
     },
     "es": {
      "title": "Cursor tras las ilustraciones",
-     "items": ["El cursor de texto parpadeante ya no aparece tras insertar una ilustración"]
+     "items": [
+      "El cursor de texto parpadeante ya no aparece tras insertar una ilustración"
+     ]
     },
     "fr": {
      "title": "Curseur après les illustrations",
-     "items": ["Le curseur clignotant n'apparaît plus après l'insertion d'une illustration"]
+     "items": [
+      "Le curseur clignotant n'apparaît plus après l'insertion d'une illustration"
+     ]
     },
     "de": {
      "title": "Cursor nach Illustrationen",
-     "items": ["Der blinkende Textcursor erscheint nach dem Einfügen einer Illustration nicht mehr"]
+     "items": [
+      "Der blinkende Textcursor erscheint nach dem Einfügen einer Illustration nicht mehr"
+     ]
     },
     "ja": {
      "title": "イラスト挿入後のカーソル",
-     "items": ["イラストを入れても、点滅するカーソルが出なくなりました"]
+     "items": [
+      "イラストを入れても、点滅するカーソルが出なくなりました"
+     ]
     },
     "zh": {
      "title": "插入插图后的光标",
-     "items": ["插入插图后，不再显示闪烁的文字光标"]
+     "items": [
+      "插入插图后，不再显示闪烁的文字光标"
+     ]
     },
     "pt": {
      "title": "Cursor após ilustrações",
-     "items": ["O cursor de texto piscando não aparece mais depois de inserir uma ilustração"]
+     "items": [
+      "O cursor de texto piscando não aparece mais depois de inserir uma ilustração"
+     ]
     },
     "ru": {
      "title": "Курсор после иллюстраций",
-     "items": ["После вставки иллюстрации мигающий текстовый курсор больше не появляется"]
+     "items": [
+      "После вставки иллюстрации мигающий текстовый курсор больше не появляется"
+     ]
     },
     "tr": {
      "title": "İllüstrasyon sonrası imleç",
-     "items": ["Bir illüstrasyon ekledikten sonra yanıp sönen imleç çubuğu artık görünmüyor"]
+     "items": [
+      "Bir illüstrasyon ekledikten sonra yanıp sönen imleç çubuğu artık görünmüyor"
+     ]
     },
     "it": {
      "title": "Cursore dopo le illustrazioni",
-     "items": ["Il cursore lampeggiante non compare più dopo aver inserito un'illustrazione"]
+     "items": [
+      "Il cursore lampeggiante non compare più dopo aver inserito un'illustrazione"
+     ]
     },
     "pl": {
      "title": "Kursor po ilustracjach",
-     "items": ["Migający kursor tekstu nie pojawia się już po wstawieniu ilustracji"]
+     "items": [
+      "Migający kursor tekstu nie pojawia się już po wstawieniu ilustracji"
+     ]
     },
     "ar": {
      "title": "المؤشر بعد الرسوم التوضيحية",
-     "items": ["لم يعد مؤشر الكتابة الوامض يظهر بعد إدراج رسم توضيحي"]
+     "items": [
+      "لم يعد مؤشر الكتابة الوامض يظهر بعد إدراج رسم توضيحي"
+     ]
     }
    }
   },
@@ -937,11 +1020,17 @@
     },
     "ja": {
      "title": "イラスト",
-     "items": ["挿入タブにイラストボタンを追加", "Block HTMLのオブジェクトとイラスト660点から好きなものを画像として文書に入れられます"]
+     "items": [
+      "挿入タブにイラストボタンを追加",
+      "Block HTMLのオブジェクトとイラスト660点から好きなものを画像として文書に入れられます"
+     ]
     },
     "zh": {
      "title": "插图",
-     "items": ["插入标签中新增插图按钮", "可将 Block HTML 的 660 个对象和插图中的任意一个作为图片放入文档"]
+     "items": [
+      "插入标签中新增插图按钮",
+      "可将 Block HTML 的 660 个对象和插图中的任意一个作为图片放入文档"
+     ]
     },
     "pt": {
      "title": "Ilustrações",
@@ -980,7 +1069,10 @@
     },
     "ar": {
      "title": "رسومات توضيحية",
-     "items": ["زر الرسومات التوضيحية في تبويب إدراج", "إدراج أي من الكائنات والرسومات الـ660 في Block HTML في المستند كصورة"]
+     "items": [
+      "زر الرسومات التوضيحية في تبويب إدراج",
+      "إدراج أي من الكائنات والرسومات الـ660 في Block HTML في المستند كصورة"
+     ]
     }
    }
   },

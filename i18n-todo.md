@@ -51,3 +51,4 @@ patchnotes/ai.json | lectus 1.9 항목 (en만) | ai v61 | 2026-11-01
 patchnotes/site.json | 이모티콘 로고 더 늘림 항목 (en만) | site v47 | 2026-11-02
 patchnotes/site.json | 이모티콘 로고 27개 더 항목 (en만) | site v48 | 2026-11-02
 patchnotes/site.json | 이모티콘 로고 배경 없앰·실험실 로고 61개 항목 (en만) | site v49 | 2026-11-02
+patchnotes/docs.json | Fry Docs v16 글꼴 유지·저장 공간·인쇄 항목 (en만) | docs v16 | 2026-11-02
