@@ -54,3 +54,4 @@ patchnotes/site.json | 이모티콘 로고 배경 없앰·실험실 로고 61개
 patchnotes/docs.json | Fry Docs v16 글꼴 유지·저장 공간·인쇄 항목 (en만) | docs v16 | 2026-11-02
 patchnotes/docs.json | Fry Docs v17 오래된 기록 서버 보관·AI 글 모양 유지 항목 (en만) | docs v17 | 2026-11-02
 patchnotes/site.json | 맨 위 로고 정리 항목 (en만) | site v50 | 2026-11-02
+patchnotes/site.json | 맨 위 감자튀김은 이모티콘으로 항목 (en만) | site v51 | 2026-11-02
