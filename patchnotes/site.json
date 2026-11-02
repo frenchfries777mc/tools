@@ -4,6 +4,22 @@
  "notes": [
   {
    "date": "2026-11-02",
+   "build": "v51",
+   "title": "맨 위 감자튀김은 이모티콘으로",
+   "items": [
+    "각 도구 맨 위의 감자튀김을 로고 대신 이모티콘으로 되돌리고 주황 네모도 다시 넣음"
+   ],
+   "tr": {
+    "en": {
+     "title": "Top fries is an emoji again",
+     "items": [
+      "The fries at the top of each tool is an emoji again instead of the logo, with the orange square back"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-02",
    "build": "v50",
    "title": "맨 위 로고 정리",
    "items": [

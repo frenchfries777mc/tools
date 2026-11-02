@@ -26,7 +26,7 @@ button,input,select,textarea{font:inherit; color:inherit;}
 [hidden]{display:none!important;}
 .top{display:flex; align-items:center; gap:8px; padding:8px 12px; border-bottom:1px solid var(--line); background:var(--panel); flex:0 0 auto; overflow-x:auto; scrollbar-width:none;}
 .top::-webkit-scrollbar{display:none;} .top>*{flex-shrink:0;}
-.home{display:grid; place-items:center; width:36px; height:36px; border-radius:9px; background:none; text-decoration:none; font-size:30px;}
+.home{display:grid; place-items:center; width:34px; height:34px; border-radius:9px; background:linear-gradient(135deg,var(--fry),var(--fry2)); text-decoration:none; font-size:18px;}
 .brand{font-family:'Oswald',sans-serif; font-weight:700; font-size:18px; letter-spacing:.04em; white-space:nowrap;}
 .brand b{color:var(--fry);}
 #fileName{flex:1 1 120px; flex-shrink:1; min-width:60px; max-width:280px; background:transparent; border:1px solid transparent; border-radius:8px; padding:6px 8px; font-size:15px; font-weight:500;}
@@ -128,7 +128,7 @@ button,input,select,textarea{font:inherit; color:inherit;}
 </head>
 <body>
 <header class="top">
-  <a class="home" href="../" aria-label="도구 목록">🍟</a>
+  <a class="home" data-noemoji href="../" aria-label="도구 목록">🍟</a>
   <span class="brand" data-notr>FRY <b>PYTHON</b></span>
   <input id="fileName" aria-label="파일 이름" spellcheck="false" autocomplete="off" data-notr>
   <span class="saved" id="saved"></span>
