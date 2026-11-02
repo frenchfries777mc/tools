@@ -58,3 +58,4 @@ patchnotes/site.json | 맨 위 감자튀김은 이모티콘으로 항목 (en만)
 patchnotes/site.json | 원래 이모티콘으로 되돌림 항목 (en만) | site v52 | 2026-11-02
 patchnotes/site.json | Fry Lab 로고 유지 항목 (en만) | site v53 | 2026-11-02
 patchnotes/site.json | 틀렸어요 저장 고침 항목 (en만) | site v54 | 2026-11-02
+patchnotes/docs.json | Fry Docs v18 저장 실패 이유 구분 항목 (en만) | docs v18 | 2026-11-02
