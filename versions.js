@@ -33,7 +33,17 @@ function tick(key,get,st,now){
 }
 function ago(t,now){ var s=Math.max(0,((now||Date.now())-t)/1000);
   if(s<60) return '방금'; if(s<3600) return Math.floor(s/60)+'분 전'; if(s<86400) return Math.floor(s/3600)+'시간 전'; if(s<86400*30) return Math.floor(s/86400)+'일 전'; return Math.floor(s/86400/30)+'달 전'; }
-var api={save:save,list:read,remove:remove,tick:tick,ago:ago,MAX:MAX,MAXAUTO:MAXAUTO,AUTO_MS:AUTO_MS};
+/* storage is full: remove the oldest saved version of any document (automatic ones first, never the newest version of the document named by keepKey).
+   Returns true when something was removed, so the caller can try saving again. */
+function freeSpace(keepKey,st){
+  st=st||ls(); if(!st) return false; var all=[];
+  try{ for(var i=0;i<st.length;i++){ var k=st.key(i); if(k&&k.indexOf(PRE)===0){ var key=k.slice(PRE.length), list=read(key,st); list.forEach(function(x,j){ all.push({key:key,id:x.id,t:x.t,auto:!!x.auto,newest:j===0,own:keepKey&&key==='docs.'+keepKey}); }); } } }catch(e){ return false; }
+  all=all.filter(function(x){ return !(x.own&&x.newest); });
+  all.sort(function(a,b){ return (b.auto-a.auto)||(a.t-b.t); });   // automatic before manual, oldest first
+  if(!all.length) return false;
+  var g=all[0]; remove(g.key,g.id,st); return true;
+}
+var api={freeSpace:freeSpace,save:save,list:read,remove:remove,tick:tick,ago:ago,MAX:MAX,MAXAUTO:MAXAUTO,AUTO_MS:AUTO_MS};
 if(typeof module!=='undefined'&&module.exports){ module.exports=api; return; }
 
 /* ---------- dialog (browser only) ---------- */

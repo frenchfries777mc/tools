@@ -90,8 +90,9 @@ function writeIdx(){ try{ localStorage.setItem(LS,JSON.stringify(idx)); return t
 function snap(){ return JSON.stringify({n:doc.name, f:doc.font||'', pg:doc.pg||null, h:page.innerHTML}); }
 function saveNow(){ clearTimeout(saveT); saveT=null; if(!doc) return; doc.t=Date.now(); doc.name=$('docName').value.trim()||T('제목 없는 문서'); idx.last=doc.id;
   if(idx.docs.indexOf(doc)<0) idx.docs.unshift(doc);
-  try{ localStorage.setItem(DOC+doc.id,page.innerHTML); localStorage.setItem(LS,JSON.stringify(idx)); $('saved').textContent=T('저장됨'); }
-  catch(e){ $('saved').textContent=''; toast('저장 공간이 부족해서 저장하지 못했어요. 큰 그림을 줄이거나 지워 주세요'); }
+  var ok=false, html=page.innerHTML, js=JSON.stringify(idx);
+  for(var tries=0;tries<60&&!ok;tries++){ try{ localStorage.setItem(DOC+doc.id,html); localStorage.setItem(LS,js); ok=true; }catch(e){ if(!(window.FFVer&&FFVer.freeSpace&&FFVer.freeSpace(doc.id))) break; } }   // full: drop the oldest saved versions (not this document's newest) and try again
+  if(ok) $('saved').textContent=T('저장됨'); else{ $('saved').textContent=''; toast('저장 공간이 부족해서 저장하지 못했어요. 큰 그림을 줄이거나 지워 주세요'); }
   if(window.FFVer) FFVer.tick('docs.'+doc.id,snap); }
 function saveSoon(){ $('saved').textContent=''; clearTimeout(saveT); saveT=setTimeout(saveNow,600); }
 function isEmptyDoc(d){ return d&&!readDoc(d.id).replace(/<br>|<p><\/p>|<p><br><\/p>/g,'').trim()&&(!d.name||d.name===T('제목 없는 문서')); }
@@ -188,6 +189,15 @@ function applySize(px,noMark){ backSel(); var s=getSelection(); if(!s.rangeCount
     while(f.firstChild) sp.appendChild(f.firstChild); f.parentNode.replaceChild(sp,f);
     Array.prototype.slice.call(sp.querySelectorAll('span,font')).forEach(function(x){ if(x.tagName==='FONT'){ x.removeAttribute('size'); if(!x.attributes.length) unwrap(x); return; } x.style.fontSize=''; if(!x.getAttribute('style')) unwrap(x); }); });
   setSelOffsets(o); after(); }
+/* keep the font and size: when the text is cleared, the next typing continues in the last font and size used */
+var keepSt=null;
+function noteStyle(){ var s=getSelection(); if(!s.rangeCount||!s.isCollapsed||!inPage()) return; var n=s.anchorNode; if(!n||n.nodeType!==3||!n.nodeValue.replace(/\u200b/g,'')) return; var el=n.parentNode; if(!el||!page.contains(el)) return;
+  var cs=getComputedStyle(el); keepSt={px:Math.round(parseFloat(cs.fontSize))||0, face:cs.fontFamily}; }
+document.addEventListener('selectionchange',noteStyle);
+page.addEventListener('input',function(e){ if(!keepSt||!/^delete/.test(e.inputType||'')) return; var s=getSelection(); if(!s.rangeCount||!s.isCollapsed) return; var b=curBlock(), el=anchorEl(); if(!b||!el||b.textContent.replace(/\u200b/g,'')) return;
+  var cs=getComputedStyle(el), px=Math.round(parseFloat(cs.fontSize))||0; if(px===keepSt.px&&cs.fontFamily===keepSt.face) return;
+  var sp=document.createElement('span'); if(px!==keepSt.px) sp.style.fontSize=keepSt.px+'px'; if(cs.fontFamily!==keepSt.face) sp.style.fontFamily=keepSt.face; sp.textContent='\u200b';
+  var r=s.getRangeAt(0); r.insertNode(sp); var rr=document.createRange(); rr.setStart(sp.firstChild,1); rr.collapse(true); s.removeAllRanges(); s.addRange(rr); });
 function curPx(){ var el=anchorEl(); return el?Math.round(parseFloat(getComputedStyle(el).fontSize))||15:15; }
 function stepSize(d){ var px=curPx(), i; if(d>0){ for(i=0;i<SIZES.length&&SIZES[i]<=px;i++); applySize(SIZES[Math.min(i,SIZES.length-1)]); } else { for(i=SIZES.length-1;i>=0&&SIZES[i]>=px;i--); applySize(SIZES[Math.max(i,0)]); } }
 $('sizeSel').onchange=function(){ var v=+this.value; if(v) applySize(v); page.focus(); };
@@ -543,6 +553,7 @@ function fname(ext){ return (($('docName').value.trim()||T('제목 없는 문서
 function download(data,type,name){ var a=document.createElement('a'), u=URL.createObjectURL(new Blob([data],{type:type})); a.href=u; a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){ URL.revokeObjectURL(u); },4000); }
 function doExport(k){ closeMenus(); selImg(null); saveNow();
   if(k==='docx'){ try{ var g=pg(); cmOut=[]; var bl=toBlocks(), cms=cmOut; cmOut=null; download(FFDocx.write(bl,{comments:cms, paper:g.paper||'A4', land:g.land, mar:(MAR[g.mar]||96)*15, cols:g.cols||1, hd:g.hd||'', ft:g.ft||'', pn:g.pn||''}),'application/vnd.openxmlformats-officedocument.wordprocessingml.document',fname('docx')); toast('Word 문서로 받았어요'); }catch(e){ console.error(e); toast('Word 문서를 만들지 못했어요'); } }
+  else if(k==='print'){ setTimeout(function(){ window.print(); },200); }
   else if(k==='pdf'){ toast('인쇄 창에서 "PDF로 저장"을 고르세요'); setTimeout(function(){ window.print(); },300); }
   else if(k==='html'){ var css='body{font-family:"Noto Sans KR","Malgun Gothic",sans-serif;max-width:760px;margin:40px auto;padding:0 20px;line-height:1.7;color:#1b1b1b}table{border-collapse:collapse;width:100%}td,th{border:1px solid #999;padding:6px 8px}th{background:#f2f2f2}blockquote{border-left:4px solid #ccc;margin:0;padding-left:1em;color:#555;font-style:italic}img{max-width:100%}a{color:#1a56db}hr.pb{border:0;border-top:1px dashed #bbb;page-break-after:always}hr.fn{width:35%;margin:2em 0 .6em}p.fn{font-size:12.5px}p.toc.tt{font-weight:700;font-size:18px}table.tb{width:auto;margin:.6em auto;border:2px solid #444;background:#fffbea}table.tb td{border:0;padding:10px 14px}';
     download('<!DOCTYPE html>\n<html lang="ko"><head><meta charset="UTF-8"><title>'+esc($('docName').value)+'</title><style>'+css+'</style></head><body>\n'+revFree().innerHTML.replace(/ class="sel"/g,'').replace(/ data-b="[^"]*"/g,'')+'\n</body></html>','text/html',fname('html')); }
