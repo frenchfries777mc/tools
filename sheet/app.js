@@ -1337,6 +1337,7 @@ function fileCmd(f){
   else if(f==='csv') exportCSV();
   else if(f==='print') cmd('print');
   else if(f==='docs') openDocMgr();
+  else if(f==='usage'){ if(window.FFUsage) FFUsage.open(); }
   else if(f==='co') openDlg('coDlg');
   else if(f==='del') deleteDoc(docId);
 }
