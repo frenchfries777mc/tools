@@ -61,3 +61,4 @@ patchnotes/site.json | 틀렸어요 저장 고침 항목 (en만) | site v54 | 20
 patchnotes/docs.json | Fry Docs v18 저장 실패 이유 구분 항목 (en만) | docs v18 | 2026-11-02
 usage.js | 현재 사용량 창 문구 (현재 사용량, 이 브라우저, 서버 보관, Tools 사용분, 같은 사이트의 다른 게임·도구가 나머지를 써요, 저장 공간이 부족할 때 오래된 기록이 옮겨져요, 1주일 넘게 안 연 큰 파일, 1주일 넘게 안 연 파일이 없어요, 📊 현재 사용량 보기) | site v55 | 2026-11-02
 patchnotes/site.json | 현재 사용량 보기 항목 (en만) | site v55 | 2026-11-02
+patchnotes/site.json | 사용량 창 색 맞춤 항목 (en만) | site v56 | 2026-11-02
