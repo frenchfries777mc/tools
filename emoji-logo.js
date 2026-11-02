@@ -2,7 +2,7 @@
    The text stays in the page (transparent), so copy, search and code reading textContent still work. */
 (function(){
   var M={
-    '🔢':'numbers','🗂':'files','📄':'page','✍':'writing','✂':'scissors','🗒':'notepad','📝':'notepad','🧒':'child','🍎':'apple','🔗':'link',
+    '🔢':'numbers','🗂':'files','📄':'page','✍':'writing','✂':'scissors','🗒':'notepad','📝':'memo','🧒':'child','🍎':'apple','🔗':'link',
     '📐':'triruler','📏':'ruler','👆':'handup','🌈':'rainbow','🌙':'moon','📲':'phone','🔖':'bookmark','📑':'docs','🧮':'abacus','🥧':'pie',
     '🌡':'thermo','🌸':'blossom','🌑':'newmoon','🧺':'basket','🪣':'bucket','⚽':'ball','🔊':'speaker','🔇':'mute','🖨':'printer','🎚':'slider',
     '🐢':'turtle','📂':'folder','🎓':'student','🏫':'school','🥗':'salad','🔠':'abc','👾':'alien','☀':'sun','🔬':'microscope',
@@ -12,9 +12,10 @@
     '📣':'megaphone','✅':'okcheck','🔥':'fire','👍':'like','👎':'dislike','🚩':'flag','❤':'heart','⭐':'star','🧑':'person','⚖':'scale',
     '⏸':'pause','📖':'book','🗡':'dagger','💀':'skull','👀':'eye','👋':'wave','🎭':'mask','💎':'gem','✨':'sparkle','🌐':'globe','🌍':'globe',
     '🌀':'swirl','🪐':'planet','✋':'hand','❓':'question','⚙':'gear','⚡':'bolt','🎲':'dice','🧪':'potion','🛠':'tools','🔧':'tools','⚠':'warn',
-    '⏳':'hourglass','⌛':'hourglass','📌':'pin','🔄':'repeat2','📉':'chartdown','🍁':'mapleleaf','🌧':'rain','💊':'pill','🌳':'tree','🌲':'tree',
+    '⏳':'hourglass','⌛':'hourglass','📌':'pin','🔄':'repeat','📉':'chartdown','🍁':'mapleleaf','🌧':'rain','💊':'pill','🌳':'tree','🌲':'tree',
     '🛤':'road','🕯':'candle','🔺':'triangle','🏃':'runner','🐀':'rat','🗽':'liberty','🏮':'lantern','✈':'plane','🛩':'plane','🪔':'oillamp',
     '🌕':'fullmoon','🏳':'whiteflag','🔭':'telescope','☎':'telephone','🚗':'car','☢':'radiation','🌅':'sunrise','↩':'back','↶':'back',
+    '🔔':'bell','⚫':'blackdot','🔵':'bluedot','🥉':'bronze','🐞':'bug','📷':'camera','🐔':'chick','🐥':'chick','👏':'clap','🕒':'clock','⏱':'clock','⏰':'clock','🕰':'clock','🎣':'fishing','🍟':'fries','👻':'ghost','🥇':'gold','🟢':'greendot','🏠':'house','🏘':'houses','🪪':'idcard','🏝':'island','😂':'laugh','🔒':'lock','🎨':'palette','🐾':'paw','🖼':'picture','📮':'postbox','🙋':'raisehand','📕':'redbook','🔴':'reddot','😢':'sad','🥈':'silver','🚚':'truck','⚪':'whitedot','😮':'wow','🟡':'yellowdot','⛵':'sailboat','🏅':'medal','🤚':'hand',
     '⚔':'swords','⛰':'mountain','🚢':'ship','💉':'syringe','🥇':'medal','🧱':'brick','💣':'bomb','🏛':'temple','👑':'crown','🛡':'shield',
     '🤝':'handshake','🧭':'compass','🚨':'siren','⛪':'church','☮':'peace','🏭':'factory','🏦':'bank','🏙':'city','⛺':'tent','📰':'news','💍':'ring',
     '🔨':'hammer','🚫':'ban','⚓':'anchor','⚛':'atom','🗺':'compass'
@@ -27,6 +28,7 @@
   var st=document.createElement('style');
   st.textContent='.ffe{display:inline-block;width:1.15em;height:1.15em;line-height:1;overflow:hidden;white-space:nowrap;color:transparent!important;text-shadow:none!important;font-size:inherit;background:center/contain no-repeat;vertical-align:-.2em;-webkit-text-fill-color:transparent;user-select:text}';
   (document.head||document.documentElement).appendChild(st);
+  window.__ffeSeen=window.__ffeSeen||{};
   function skipped(n){
     for(var p=n.parentNode;p&&p.nodeType===1;p=p.parentNode){
       if(SKIP[p.nodeName.toUpperCase()]||p.isContentEditable||p.hasAttribute('data-notr')||p.classList.contains('ffe')||p.hasAttribute('data-noemoji')) return true;
