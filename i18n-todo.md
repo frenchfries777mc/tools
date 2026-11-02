@@ -56,3 +56,4 @@ patchnotes/docs.json | Fry Docs v17 오래된 기록 서버 보관·AI 글 모�
 patchnotes/site.json | 맨 위 로고 정리 항목 (en만) | site v50 | 2026-11-02
 patchnotes/site.json | 맨 위 감자튀김은 이모티콘으로 항목 (en만) | site v51 | 2026-11-02
 patchnotes/site.json | 원래 이모티콘으로 되돌림 항목 (en만) | site v52 | 2026-11-02
+patchnotes/site.json | Fry Lab 로고 유지 항목 (en만) | site v53 | 2026-11-02
