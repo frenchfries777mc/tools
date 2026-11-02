@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-11-02",
+   "build": "v49",
+   "title": "이모티콘 로고 배경 없앰, 실험실 로고 61개",
+   "items": [
+    "이모티콘 로고가 배경 없이 투명하게 바뀜",
+    "실험실 그림에 쓰이던 이모티콘 61개도 로고로 바뀜"
+   ],
+   "tr": {
+    "en": {
+     "title": "Transparent emoji logos, 61 Lab logos",
+     "items": [
+      "Emoji logos no longer have a background",
+      "61 more emoji used in Fry Lab now show our own logos"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-02",
    "build": "v48",
    "title": "이모티콘 로고 27개 더",
    "items": [
