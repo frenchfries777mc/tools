@@ -4,6 +4,22 @@
  "notes": [
   {
    "date": "2026-11-03",
+   "build": "v64",
+   "title": "AI 체험에 AI 설정",
+   "items": [
+    "AI 체험 화면 위쪽에 AI 설정 버튼 추가: 자체 AI 모델 고르기·받기·지우기만 나와요"
+   ],
+   "tr": {
+    "en": {
+     "title": "AI settings in AI Experience",
+     "items": [
+      "Added an AI settings button at the top of the AI Experience screen: it only shows the built-in AI (pick, download, delete a model)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-03",
    "build": "v63",
    "title": "premus 2.0",
    "items": [

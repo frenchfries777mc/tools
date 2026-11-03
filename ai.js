@@ -439,7 +439,7 @@ function fill(){
 }
 function close(){ ov.classList.remove('open'); }
 function cancel(){ close(); var f=onCancel; onOk=onCancel=null; if(f) f(); }
-function settings(ok,no){ if(!ov) build(); cur=load(); onOk=ok||null; onCancel=no||null; fill(); ov.classList.add('open'); setTimeout(function(){ var k=ov.querySelector('.k'); if(!k.value) k.focus(); },50); }
+function settings(ok,no,opt){ if(!ov) build(); cur=load(); onOk=ok||null; onCancel=no||null; var lo=!!(opt&&opt.localOnly); if(lo) cur.provider='local'; ov.querySelector('.ffai-seg').classList.toggle('ffai-hide',lo); ov.querySelector('.l-p').classList.toggle('ffai-hide',lo); fill(); ov.classList.add('open'); setTimeout(function(){ var k=ov.querySelector('.k'); if(!k.value) k.focus(); },50); }
 
 /* preload: with the switch on and the model already saved here, load it in the background when a page opens */
 function warm(){
