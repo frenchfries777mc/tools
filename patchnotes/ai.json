@@ -5,17 +5,15 @@
   {
    "date": "2026-11-01",
    "build": "v61",
-   "title": "lectus 1.9",
+   "title": "목록 답변 없애기",
    "items": [
-    "lectus가 1.9로 새로 학습됨",
-    "아재개그 문제 115개를 모두 맞히고, '아무거나 아재개그'를 30번 중 28번 성공함"
+    "AI 대결장 채팅이 목록에서 꺼내는 답을 모두 없앰: 아재개그·넌센스 문제·자기소개를 모델이 직접 답함"
    ],
    "tr": {
     "en": {
-     "title": "lectus 1.9",
+     "title": "No more list answers",
      "items": [
-      "lectus was retrained as 1.9",
-      "Answers all 115 dad-joke riddles and tells a dad joke on a bare request in 28 of 30 tries"
+      "The AI chat no longer answers from any list: dad jokes, riddles and the self introduction are all answered by the model itself"
      ]
     },
     "es": {
