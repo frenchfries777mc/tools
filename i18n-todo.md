@@ -30,3 +30,4 @@ patchnotes/site.json | 사용량 창: 서버 게이지만 항목 (en만) | site 
 patchnotes/site.json | 문서를 서버에만 보관 항목 (en만), serverstore.js 안내 문구 (서버에 연결할 수 없어요 …, 서버 저장 공간이 가득 차서 …, 문서가 너무 커서 …, 서버에 저장하지 못했어요 …)| site v60 | 2026-11-03
 patchnotes/ai.json | 목록 답변 없애기 항목 (en만) | ai v62 | 2026-11-03
 patchnotes/ai.json | AI가 화면을 끊지 않게 항목 (en만) | ai | 2026-11-03
+patchnotes/ai.json | premus 2.0 항목 (en만) | ai v63 | 2026-11-03
