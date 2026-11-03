@@ -220,7 +220,7 @@ form.in textarea:focus{outline:none;}
     <p class="hint">모델을 번갈아 불러와서 처음에는 시간이 걸려요. 결과는 이 기기에 남고, 로그인했다면 개발자에게도 전해져요.</p>
   </section>
   <section class="chat" id="chat" hidden>
-    <div class="bar"><button class="ghost" id="change" type="button">← 모델 선택</button><span class="cur"><img class="ci" id="curico" alt="" width="26" height="26"><span id="cur" data-notr></span></span><span class="sp"></span><span class="len" id="len" role="group" aria-label="답 방식"><button type="button" data-l="0">신속</button><button type="button" data-l="1">보통</button><button type="button" data-l="2">노력</button></span><button class="ghost" id="clear" type="button">새 대화</button><button class="ghost" id="nameBtn" type="button" disabled>이름 짓기</button><button class="ghost" id="memoBtn" type="button">메모장</button></div>
+    <div class="bar"><button class="ghost" id="change" type="button">← 모델 선택</button><span class="cur"><img class="ci" id="curico" alt="" width="26" height="26"><span id="cur" data-notr></span></span><span class="sp"></span><span class="len" id="len" role="group" aria-label="답 방식"><button type="button" data-l="0">신속</button><button type="button" data-l="1">보통</button><button type="button" data-l="2">노력</button></span><button class="ghost" id="aiSet" type="button">AI 설정</button><button class="ghost" id="clear" type="button">새 대화</button><button class="ghost" id="nameBtn" type="button" disabled>이름 짓기</button><button class="ghost" id="memoBtn" type="button">메모장</button></div>
     <div class="cmeta" id="cmeta" data-notr></div>
     <div class="log ff-em-keep" id="log" aria-live="polite"></div>
     <div class="chips" id="chips" aria-label="예시 질문"></div>
@@ -233,7 +233,7 @@ form.in textarea:focus{outline:none;}
   <p class="hint" id="loginHint" hidden>로그인한 상태로 틀렸어요를 누르면 질문과 답이 개발자에게도 전해져요.</p>
 </main>
 <script src="../ai-prompts.js"></script>
-<script src="../ai.js?v=ai36.l20"></script>
+<script src="../ai.js?v=ai36.l21"></script>
 <script src="../ai-wrong.js?v=4.l13"></script>
 <script src="vote.js?v=2"></script>
 <script src="memo.js?v=1"></script>
@@ -453,6 +453,7 @@ $('send').onclick=function(){ if(busy){ if(fake) fake.cancel(); else FFAI.stop()
 $('q').onkeydown=function(e){ if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){ e.preventDefault(); if(!busy) send($('q').value); } };
 Array.prototype.forEach.call(document.querySelectorAll('#len button'),function(b){ b.onclick=function(){ lv=+b.dataset.l; try{ localStorage.setItem('ffchat.len',String(lv)); }catch(e){} showLen(); renderMeta(); }; });
 showLen();
+$('aiSet').onclick=function(){ FFAI.settings(null,null,{localOnly:true}); };
 $('clear').onclick=function(){ if(fake) fake.cancel(); if(busy) FFAI.stop(); gen++; hist=[]; conv=null; greet(); $('chips').hidden=false; renderMeta(); hideSug(); };
 $('nameBtn').onclick=function(){ if(conv) convRename(conv); };
 $('change').onclick=function(){ if(fake) fake.cancel(); if(busy) FFAI.stop(); gen++; cur=null; hist=[]; conv=null; renderMeta(); renderRecent(); $('chat').hidden=true; $('pick').hidden=false; $('hero').hidden=false; };
