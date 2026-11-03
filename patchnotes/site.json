@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-03",
+   "build": "v60",
+   "title": "문서를 서버에만 보관",
+   "items": [
+    "Fry Docs·Sheet·Slides·Block HTML·Python의 문서가 이 브라우저가 아니라 서버에만 저장돼요 (문서 하나 4MB, 한 사람 16MB까지)",
+    "브라우저에 남아 있던 옛 문서는 처음 열 때 서버로 옮기고 브라우저에서는 지워요",
+    "서버에 연결되지 않으면 저장하지 않고 위쪽에 빨간 안내를 보여줘요 (서버의 문서가 빈 목록으로 덮어써지지 않게)"
+   ],
+   "tr": {
+    "en": {
+     "title": "Documents are kept only on the server",
+     "items": [
+      "Documents of Fry Docs, Sheet, Slides, Block HTML and Python are saved only on the server, not in this browser (4 MB per document, 16 MB per person)",
+      "Old documents still in this browser are moved to the server the first time you open a tool, then removed from the browser",
+      "When the server cannot be reached nothing is saved and a red notice shows at the top (so the documents on the server are never overwritten by an empty list)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-03",
    "build": "v59",
    "title": "사용량 창: 서버 게이지만",
    "items": [
