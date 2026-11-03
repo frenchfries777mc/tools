@@ -457,8 +457,12 @@ document.addEventListener('keydown',function(e){ var k=e.key.toLowerCase(), m=e.
   else if(document.activeElement===page&&e.altKey&&/^[123]$/.test(e.key)){ e.preventDefault(); exec('formatBlock','<h'+e.key+'>'); } });
 
 /* ---------- counts ---------- */
-function count(){ var t=page.innerText||'', ch=t.replace(/\s/g,'').length, w=(t.match(/\S+/g)||[]).length;
-  $('cnt').textContent=F('글자 {0} · 단어 {1}',ch.toLocaleString(),w.toLocaleString()); }
+/* a page is as tall as the paper; when the text fills it, the editor grows by one more page and a line marks where each page ends */
+function pages(){ var ph=parseFloat(page.style.getPropertyValue('--ph'))||1123, pgN=1;
+  if(window.matchMedia&&matchMedia('(max-width:840px)').matches||+(pg().cols)>1){ page.style.minHeight=''; return 1; }
+  page.style.minHeight=ph+'px'; pgN=Math.max(1,Math.ceil((page.scrollHeight-1)/ph)); page.style.minHeight=pgN*ph+'px'; return pgN; }
+function count(){ var t=page.innerText||'', ch=t.replace(/\s/g,'').length, w=(t.match(/\S+/g)||[]).length, n=pages();
+  $('cnt').textContent=F('글자 {0} · 단어 {1}',ch.toLocaleString(),w.toLocaleString())+(n>1?' · '+F('{0}쪽',n):''); }
 
 /* ---------- menus ---------- */
 function closeMenus(){ Array.prototype.forEach.call(document.querySelectorAll('.menu.open'),function(m){ m.classList.remove('open'); }); }
