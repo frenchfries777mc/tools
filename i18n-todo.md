@@ -28,3 +28,4 @@ patchnotes/site.json | 상단 로고를 🍟 이모티콘으로·게이지 황�
 patchnotes/site.json | 사용량 게이지 항상 황금색 항목 (en만) | site v58 | 2026-11-03
 patchnotes/site.json | 사용량 창: 서버 게이지만 항목 (en만) | site v59 | 2026-11-03
 patchnotes/site.json | 문서를 서버에만 보관 항목 (en만), serverstore.js 안내 문구 (서버에 연결할 수 없어요 …, 서버 저장 공간이 가득 차서 …, 문서가 너무 커서 …, 서버에 저장하지 못했어요 …)| site v60 | 2026-11-03
+patchnotes/ai.json | 아재개그는 모델이 직접 항목 (en만) | ai v62 | 2026-11-03
