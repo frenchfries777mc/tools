@@ -3,6 +3,22 @@
  "name": "자체 AI (FF777)",
  "notes": [
   {
+   "date": "2026-11-03",
+   "build": "v62",
+   "title": "AI가 화면을 끊지 않게",
+   "items": [
+    "자체 AI가 페이지와 따로(Web Worker) 돌아서, 글이 나오는 동안에도 화면이 덜 끊김"
+   ],
+   "tr": {
+    "en": {
+     "title": "AI no longer freezes the page",
+     "items": [
+      "The built-in AI now runs in a Web Worker, so the page stays smoother while the model writes"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-01",
    "build": "v61",
    "title": "목록 답변 없애기",
