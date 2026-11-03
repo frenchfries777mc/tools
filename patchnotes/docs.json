@@ -15,6 +15,72 @@
      "items": [
       "When storage is full, Docs now tells you whether the server could not be reached or there are no old versions to move"
      ]
+    },
+    "es": {
+     "title": "Motivos de fallo al guardar más claros",
+     "items": [
+      "Cuando el almacenamiento está lleno, Docs ahora indica si no se pudo conectar con el servidor o si no hay versiones antiguas que mover"
+     ]
+    },
+    "fr": {
+     "title": "Causes d’échec d’enregistrement plus claires",
+     "items": [
+      "Quand le stockage est plein, Docs indique maintenant si le serveur est injoignable ou s’il n’y a pas d’anciennes versions à déplacer"
+     ]
+    },
+    "de": {
+     "title": "Klarere Gründe für Speicherfehler",
+     "items": [
+      "Ist der Speicher voll, zeigt Docs jetzt an, ob der Server nicht erreichbar ist oder keine alten Versionen zum Verschieben vorhanden sind"
+     ]
+    },
+    "ja": {
+     "title": "保存失敗の理由をわかりやすく",
+     "items": [
+      "保存容量がいっぱいのとき、サーバーに接続できなかったのか、移す古い版がないのかを Docs が区別して知らせます"
+     ]
+    },
+    "zh": {
+     "title": "更清楚的保存失败原因",
+     "items": [
+      "存储空间已满时，Docs 会区分是无法连接服务器，还是没有可移动的旧版本"
+     ]
+    },
+    "pt": {
+     "title": "Motivos de falha ao salvar mais claros",
+     "items": [
+      "Quando o armazenamento está cheio, o Docs agora informa se não foi possível conectar ao servidor ou se não há versões antigas para mover"
+     ]
+    },
+    "ru": {
+     "title": "Более понятные причины ошибок сохранения",
+     "items": [
+      "Когда место заканчивается, Docs теперь сообщает, не удалось ли подключиться к серверу или нет старых версий для переноса"
+     ]
+    },
+    "tr": {
+     "title": "Kaydetme hatasının nedenleri daha net",
+     "items": [
+      "Depolama dolduğunda Docs artık sunucuya bağlanılamadığını mı yoksa taşınacak eski sürüm olmadığını mı söylediğini belirtir"
+     ]
+    },
+    "it": {
+     "title": "Motivi di errore di salvataggio più chiari",
+     "items": [
+      "Quando lo spazio è esaurito, Docs ora indica se non è stato possibile raggiungere il server o se non ci sono versioni vecchie da spostare"
+     ]
+    },
+    "pl": {
+     "title": "Jaśniejsze powody błędu zapisu",
+     "items": [
+      "Gdy brakuje miejsca, Docs informuje teraz, czy nie można połączyć się z serwerem, czy nie ma starych wersji do przeniesienia"
+     ]
+    },
+    "ar": {
+     "title": "أسباب أوضح لفشل الحفظ",
+     "items": [
+      "عندما تمتلئ مساحة التخزين، يخبرك Docs الآن ما إذا تعذّر الوصول إلى الخادم أو لا توجد نسخ قديمة لنقلها"
+     ]
     }
    }
   },
@@ -35,6 +101,94 @@
       "Text written by the AI keeps the original font and size",
       "Removed the earlier automatic deletion of old versions"
      ]
+    },
+    "es": {
+     "title": "Las versiones antiguas van al servidor, la IA mantiene el estilo",
+     "items": [
+      "Cuando queda poco espacio, las versiones guardadas antiguas se pasan al servidor Oracle en lugar de borrarse, y se pueden recuperar desde el historial de versiones (marcadas con ☁️)",
+      "El texto escrito por la IA mantiene la fuente y el tamaño originales",
+      "Se ha quitado el borrado automático anterior de las versiones antiguas"
+     ]
+    },
+    "fr": {
+     "title": "Les anciennes versions vont sur le serveur, l’IA garde le style",
+     "items": [
+      "Quand le stockage manque, les anciennes versions enregistrées sont déplacées vers le serveur Oracle au lieu d’être supprimées, et peuvent être restaurées depuis l’historique des versions (marquées ☁️)",
+      "Le texte écrit par l’IA garde la police et la taille d’origine",
+      "Suppression automatique précédente des anciennes versions retirée"
+     ]
+    },
+    "de": {
+     "title": "Alte Versionen wandern auf den Server, KI behält den Textstil",
+     "items": [
+      "Wenn der Speicher knapp wird, werden alte gespeicherte Versionen auf den Oracle-Server verschoben statt gelöscht und lassen sich im Versionsverlauf wiederherstellen (mit ☁️ markiert)",
+      "Von der KI geschriebener Text behält die ursprüngliche Schrift und Größe",
+      "Die frühere automatische Löschung alter Versionen wurde entfernt"
+     ]
+    },
+    "ja": {
+     "title": "古い版はサーバーへ、AIの文の見た目は維持",
+     "items": [
+      "保存容量が少なくなると、古い保存版は削除されずOracleサーバーに移され、バージョン履歴から（☁️付きで）復元できます",
+      "AIが書いた文章は元のフォントと文字サイズを維持します",
+      "以前の古い版の自動削除をなくしました"
+     ]
+    },
+    "zh": {
+     "title": "旧版本移到服务器，AI 保留文字样式",
+     "items": [
+      "存储空间不足时，旧的保存版本不再删除，而是移到 Oracle 服务器，可在版本历史中恢复（标有 ☁️）",
+      "AI 修改的文字保留原有字体和字号",
+      "取消了之前对旧版本的自动删除"
+     ]
+    },
+    "pt": {
+     "title": "Versões antigas vão para o servidor, IA mantém o estilo",
+     "items": [
+      "Quando o armazenamento fica baixo, as versões salvas antigas são movidas para o servidor Oracle em vez de apagadas, e podem ser restauradas pelo histórico de versões (marcadas com ☁️)",
+      "O texto escrito pela IA mantém a fonte e o tamanho originais",
+      "Removida a exclusão automática anterior de versões antigas"
+     ]
+    },
+    "ru": {
+     "title": "Старые версии уходят на сервер, ИИ сохраняет стиль текста",
+     "items": [
+      "Когда места мало, старые сохранённые версии переносятся на сервер Oracle вместо удаления и могут быть восстановлены из истории версий (отмечены ☁️)",
+      "Текст, написанный ИИ, сохраняет исходный шрифт и размер",
+      "Убрано прежнее автоматическое удаление старых версий"
+     ]
+    },
+    "tr": {
+     "title": "Eski sürümler sunucuya gider, YZ metin biçimini korur",
+     "items": [
+      "Depolama azaldığında eski kayıtlı sürümler silinmek yerine Oracle sunucusuna taşınır ve sürüm geçmişinden geri yüklenebilir (☁️ ile işaretlenir)",
+      "YZ'nin yazdığı metin özgün yazı tipini ve boyutunu korur",
+      "Eski sürümlerin önceki otomatik silinmesi kaldırıldı"
+     ]
+    },
+    "it": {
+     "title": "Le versioni vecchie vanno sul server, l’IA mantiene lo stile",
+     "items": [
+      "Quando lo spazio scarseggia, le versioni salvate più vecchie vengono spostate sul server Oracle invece di essere eliminate, e si possono ripristinare dalla cronologia (contrassegnate con ☁️)",
+      "Il testo scritto dall’IA mantiene il carattere e la dimensione originali",
+      "Eliminata la precedente cancellazione automatica delle versioni vecchie"
+     ]
+    },
+    "pl": {
+     "title": "Stare wersje trafiają na serwer, AI zachowuje styl tekstu",
+     "items": [
+      "Gdy brakuje miejsca, stare zapisane wersje są przenoszone na serwer Oracle zamiast usuwane i można je przywrócić z historii wersji (oznaczone ☁️)",
+      "Tekst napisany przez AI zachowuje oryginalną czcionkę i rozmiar",
+      "Usunięto wcześniejsze automatyczne kasowanie starych wersji"
+     ]
+    },
+    "ar": {
+     "title": "النسخ القديمة تُنقل إلى الخادم، والذكاء الاصطناعي يحافظ على شكل النص",
+     "items": [
+      "عند قلة مساحة التخزين تُنقل النسخ المحفوظة القديمة إلى خادم Oracle بدلًا من حذفها، ويمكن استعادتها من سجل الإصدارات (وتظهر بعلامة ☁️)",
+      "يحتفظ النص الذي يكتبه الذكاء الاصطناعي بالخط وحجم الخط الأصليين",
+      "أُزيل الحذف التلقائي السابق للنسخ القديمة"
+     ]
     }
    }
   },
@@ -54,6 +208,94 @@
       "After clearing all text, you keep typing in the last font and size",
       "When storage runs out, the oldest saved versions are removed automatically so your document still saves",
       "Added a separate 'Print' item to the export menu"
+     ]
+    },
+    "es": {
+     "title": "Mantener fuente, espacio y imprimir",
+     "items": [
+      "Tras borrar todo el texto, sigues escribiendo con la última fuente y tamaño",
+      "Cuando se agota el almacenamiento, se borran automáticamente las versiones guardadas más antiguas para que el documento siga guardándose",
+      "Se ha añadido «Imprimir» como elemento aparte en el menú de exportar"
+     ]
+    },
+    "fr": {
+     "title": "Garder la police, espace et impression",
+     "items": [
+      "Après avoir tout effacé, vous continuez à écrire avec la dernière police et taille",
+      "Quand le stockage est plein, les plus anciennes versions enregistrées sont supprimées automatiquement pour que votre document puisse encore être enregistré",
+      "Ajout d’un élément « Imprimer » distinct dans le menu d’exportation"
+     ]
+    },
+    "de": {
+     "title": "Schrift, Speicher und Drucken",
+     "items": [
+      "Nach dem Löschen des ganzen Textes schreibst du weiter mit der zuletzt verwendeten Schrift und Größe",
+      "Wenn der Speicher voll ist, werden die ältesten gespeicherten Versionen automatisch entfernt, damit das Dokument weiter gespeichert werden kann",
+      "Im Exportmenü gibt es jetzt einen eigenen Eintrag „Drucken“"
+     ]
+    },
+    "ja": {
+     "title": "フォントの維持・保存容量・印刷",
+     "items": [
+      "文字をすべて消した後も、最後に使ったフォントと文字サイズで入力を続けられます",
+      "保存容量が足りなくなると、古い保存履歴から自動で削除されるため、文書は保存され続けます",
+      "書き出しメニューに「印刷」を独立して追加しました"
+     ]
+    },
+    "zh": {
+     "title": "保持字体、存储空间、打印",
+     "items": [
+      "清空所有文字后，仍使用上次的字体和字号继续输入",
+      "存储空间不足时，会自动删除最旧的保存记录，文档仍能正常保存",
+      "导出菜单中单独新增了“打印”项"
+     ]
+    },
+    "pt": {
+     "title": "Manter fonte, espaço e imprimir",
+     "items": [
+      "Depois de apagar todo o texto, você continua digitando com a última fonte e tamanho",
+      "Quando o armazenamento acaba, as versões salvas mais antigas são removidas automaticamente para que o documento continue sendo salvo",
+      "Adicionado um item «Imprimir» separado no menu de exportação"
+     ]
+    },
+    "ru": {
+     "title": "Шрифт, место и печать",
+     "items": [
+      "Даже после удаления всего текста вы продолжаете печатать тем же шрифтом и размером, что и последний раз",
+      "Когда место заканчивается, самые старые сохранённые версии удаляются автоматически, и документ всё равно сохраняется",
+      "В меню экспорта добавлен отдельный пункт «Печать»"
+     ]
+    },
+    "tr": {
+     "title": "Yazı tipi, depolama ve yazdırma",
+     "items": [
+      "Tüm metni sildikten sonra da son kullanılan yazı tipi ve boyutuyla yazmaya devam edersiniz",
+      "Depolama alanı dolduğunda en eski kayıtlı sürümler otomatik silinir ve belgeniz yine kaydedilir",
+      "Dışa aktarma menüsüne ayrı bir “Yazdır” öğesi eklendi"
+     ]
+    },
+    "it": {
+     "title": "Mantieni carattere, spazio e stampa",
+     "items": [
+      "Dopo aver cancellato tutto il testo, continui a scrivere con l’ultimo carattere e dimensione",
+      "Quando lo spazio finisce, le versioni salvate più vecchie vengono rimosse automaticamente, così il documento continua a salvarsi",
+      "Aggiunta una voce «Stampa» separata nel menu di esportazione"
+     ]
+    },
+    "pl": {
+     "title": "Czcionka, miejsce i drukowanie",
+     "items": [
+      "Po wyczyszczeniu całego tekstu nadal piszesz ostatnią czcionką i rozmiarem",
+      "Gdy zabraknie miejsca, najstarsze zapisane wersje są usuwane automatycznie, dzięki czemu dokument nadal się zapisuje",
+      "W menu eksportu dodano osobną pozycję „Drukuj”"
+     ]
+    },
+    "ar": {
+     "title": "الاحتفاظ بالخط والمساحة والطباعة",
+     "items": [
+      "بعد مسح كل النص تستمر في الكتابة بآخر خط وحجم استخدمته",
+      "عند نفاد مساحة التخزين تُحذف أقدم النسخ المحفوظة تلقائيًا، فيبقى المستند محفوظًا",
+      "أُضيف بند «طباعة» منفصل في قائمة التصدير"
      ]
     }
    }

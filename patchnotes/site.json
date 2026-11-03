@@ -28,6 +28,94 @@
       "Old documents still in this browser are moved to the server the first time you open a tool, then removed from the browser",
       "When the server cannot be reached nothing is saved and a red notice shows at the top (so the documents on the server are never overwritten by an empty list)"
      ]
+    },
+    "es": {
+     "title": "Los documentos se guardan solo en el servidor",
+     "items": [
+      "Los documentos de Fry Docs, Sheet, Slides, Block HTML y Python se guardan solo en el servidor, no en este navegador (4 MB por documento, 16 MB por persona)",
+      "Los documentos antiguos que aún estén en este navegador se pasan al servidor la primera vez que abres una herramienta y luego se borran del navegador",
+      "Cuando no se puede conectar con el servidor no se guarda nada y aparece un aviso rojo arriba (así los documentos del servidor nunca se sobrescriben con una lista vacía)"
+     ]
+    },
+    "fr": {
+     "title": "Les documents ne sont conservés que sur le serveur",
+     "items": [
+      "Les documents de Fry Docs, Sheet, Slides, Block HTML et Python sont enregistrés uniquement sur le serveur, pas dans ce navigateur (4 Mo par document, 16 Mo par personne)",
+      "Les anciens documents encore présents dans ce navigateur sont transférés sur le serveur la première fois que vous ouvrez un outil, puis supprimés du navigateur",
+      "Si le serveur est injoignable, rien n’est enregistré et un bandeau rouge s’affiche en haut (ainsi les documents du serveur ne sont jamais écrasés par une liste vide)"
+     ]
+    },
+    "de": {
+     "title": "Dokumente werden nur auf dem Server gespeichert",
+     "items": [
+      "Dokumente von Fry Docs, Sheet, Slides, Block HTML und Python werden nur auf dem Server gespeichert, nicht in diesem Browser (4 MB pro Dokument, 16 MB pro Person)",
+      "Alte Dokumente, die noch in diesem Browser liegen, werden beim ersten Öffnen eines Tools auf den Server verschoben und danach aus dem Browser entfernt",
+      "Ist der Server nicht erreichbar, wird nichts gespeichert und oben erscheint ein roter Hinweis (so werden die Dokumente auf dem Server nie durch eine leere Liste überschrieben)"
+     ]
+    },
+    "ja": {
+     "title": "文書はサーバーにだけ保存",
+     "items": [
+      "Fry Docs・Sheet・Slides・Block HTML・Python の文書は、このブラウザではなくサーバーにだけ保存されます（1文書4MB、1人16MBまで）",
+      "このブラウザに残っていた古い文書は、ツールを初めて開いたときにサーバーへ移され、ブラウザからは消えます",
+      "サーバーに接続できないときは何も保存されず、画面上部に赤い案内が出ます（空の一覧でサーバー上の文書が上書きされないようにするため）"
+     ]
+    },
+    "zh": {
+     "title": "文档只保存在服务器上",
+     "items": [
+      "Fry Docs、Sheet、Slides、Block HTML 和 Python 的文档只保存在服务器上，不保存在本浏览器中（每个文档 4MB，每人 16MB）",
+      "本浏览器中残留的旧文档会在你第一次打开工具时移到服务器，然后从浏览器中删除",
+      "无法连接服务器时不会保存任何内容，并在顶部显示红色提示（以免服务器上的文档被空列表覆盖）"
+     ]
+    },
+    "pt": {
+     "title": "Os documentos ficam só no servidor",
+     "items": [
+      "Os documentos do Fry Docs, Sheet, Slides, Block HTML e Python são salvos somente no servidor, não neste navegador (4 MB por documento, 16 MB por pessoa)",
+      "Os documentos antigos que ainda estão neste navegador são movidos para o servidor na primeira vez que você abre uma ferramenta e depois removidos do navegador",
+      "Quando não é possível conectar ao servidor, nada é salvo e um aviso vermelho aparece no topo (assim os documentos do servidor nunca são substituídos por uma lista vazia)"
+     ]
+    },
+    "ru": {
+     "title": "Документы хранятся только на сервере",
+     "items": [
+      "Документы Fry Docs, Sheet, Slides, Block HTML и Python сохраняются только на сервере, а не в этом браузере (4 МБ на документ, 16 МБ на человека)",
+      "Старые документы, которые ещё есть в этом браузере, переносятся на сервер при первом открытии инструмента и затем удаляются из браузера",
+      "Если сервер недоступен, ничего не сохраняется и вверху появляется красное уведомление (так документы на сервере никогда не перезаписываются пустым списком)"
+     ]
+    },
+    "tr": {
+     "title": "Belgeler yalnızca sunucuda tutulur",
+     "items": [
+      "Fry Docs, Sheet, Slides, Block HTML ve Python belgeleri bu tarayıcıda değil yalnızca sunucuda kaydedilir (belge başına 4 MB, kişi başına 16 MB)",
+      "Bu tarayıcıda hâlâ duran eski belgeler, bir aracı ilk açtığınızda sunucuya taşınır ve sonra tarayıcıdan silinir",
+      "Sunucuya ulaşılamazsa hiçbir şey kaydedilmez ve üstte kırmızı bir uyarı görünür (sunucudaki belgelerin boş bir listeyle üzerine yazılmaması için)"
+     ]
+    },
+    "it": {
+     "title": "I documenti sono conservati solo sul server",
+     "items": [
+      "I documenti di Fry Docs, Sheet, Slides, Block HTML e Python sono salvati solo sul server, non in questo browser (4 MB per documento, 16 MB per persona)",
+      "I vecchi documenti ancora in questo browser vengono spostati sul server la prima volta che apri uno strumento, poi rimossi dal browser",
+      "Quando il server non è raggiungibile non si salva nulla e in alto appare un avviso rosso (così i documenti sul server non vengono mai sovrascritti da un elenco vuoto)"
+     ]
+    },
+    "pl": {
+     "title": "Dokumenty są przechowywane tylko na serwerze",
+     "items": [
+      "Dokumenty z Fry Docs, Sheet, Slides, Block HTML i Python są zapisywane tylko na serwerze, a nie w tej przeglądarce (4 MB na dokument, 16 MB na osobę)",
+      "Stare dokumenty nadal obecne w tej przeglądarce są przenoszone na serwer przy pierwszym otwarciu narzędzia, a potem usuwane z przeglądarki",
+      "Gdy nie można połączyć się z serwerem, nic nie jest zapisywane i na górze pojawia się czerwone ostrzeżenie (dzięki temu dokumenty na serwerze nie zostaną nadpisane pustą listą)"
+     ]
+    },
+    "ar": {
+     "title": "المستندات تُحفظ على الخادم فقط",
+     "items": [
+      "تُحفظ مستندات Fry Docs وSheet وSlides وBlock HTML وPython على الخادم فقط، لا في هذا المتصفح (4 ميغابايت لكل مستند، و16 ميغابايت لكل شخص)",
+      "المستندات القديمة التي ما زالت في هذا المتصفح تُنقل إلى الخادم عند فتح أداة لأول مرة، ثم تُحذف من المتصفح",
+      "عند تعذّر الوصول إلى الخادم لا يُحفظ شيء ويظهر تنبيه أحمر في الأعلى (حتى لا تُستبدل المستندات على الخادم بقائمة فارغة أبدًا)"
+     ]
     }
    }
   },
@@ -46,6 +134,83 @@
       "Removed the browser gauge from the usage window, only the server gauge is left",
       "The gauge shows its percentage at the right end"
      ]
+    },
+    "es": {
+     "title": "Ventana de uso: solo el medidor del servidor",
+     "items": [
+      "Se ha quitado el medidor del navegador de la ventana de uso y solo queda el del servidor",
+      "El medidor muestra su porcentaje al final de la derecha"
+     ]
+    },
+    "fr": {
+     "title": "Fenêtre d’utilisation : seule la jauge serveur",
+     "items": [
+      "La jauge du navigateur a été retirée de la fenêtre d’utilisation, seule la jauge serveur reste",
+      "La jauge affiche son pourcentage à droite"
+     ]
+    },
+    "de": {
+     "title": "Nutzungsfenster: nur Serveranzeige",
+     "items": [
+      "Die Browseranzeige wurde aus dem Nutzungsfenster entfernt, nur die Serveranzeige bleibt",
+      "Die Anzeige zeigt ihren Prozentwert ganz rechts an"
+     ]
+    },
+    "ja": {
+     "title": "使用量ウィンドウ: サーバーのゲージだけ",
+     "items": [
+      "使用量ウィンドウから「このブラウザ」のゲージを外し、サーバーのゲージだけを残しました",
+      "ゲージの右端に何パーセント埋まったかを表示します"
+     ]
+    },
+    "zh": {
+     "title": "用量窗口：只保留服务器仪表",
+     "items": [
+      "用量窗口中去掉了“本浏览器”仪表，只保留服务器仪表",
+      "仪表右端显示已用百分比"
+     ]
+    },
+    "pt": {
+     "title": "Janela de uso: só o medidor do servidor",
+     "items": [
+      "Removido o medidor do navegador da janela de uso; resta só o medidor do servidor",
+      "O medidor mostra a porcentagem no extremo direito"
+     ]
+    },
+    "ru": {
+     "title": "Окно использования: только серверная шкала",
+     "items": [
+      "Шкала браузера убрана из окна использования, осталась только серверная шкала",
+      "Шкала показывает процент заполнения в правом конце"
+     ]
+    },
+    "tr": {
+     "title": "Kullanım penceresi: yalnızca sunucu göstergesi",
+     "items": [
+      "Kullanım penceresindeki tarayıcı göstergesi kaldırıldı, yalnızca sunucu göstergesi kaldı",
+      "Gösterge, sağ ucunda yüzdesini gösterir"
+     ]
+    },
+    "it": {
+     "title": "Finestra di utilizzo: solo indicatore del server",
+     "items": [
+      "Rimosso dalla finestra di utilizzo l’indicatore del browser: resta solo quello del server",
+      "L’indicatore mostra la percentuale all’estremità destra"
+     ]
+    },
+    "pl": {
+     "title": "Okno zużycia: tylko wskaźnik serwera",
+     "items": [
+      "Usunięto ze okna zużycia wskaźnik przeglądarki, zostawiono tylko wskaźnik serwera",
+      "Wskaźnik pokazuje procent na prawym końcu"
+     ]
+    },
+    "ar": {
+     "title": "نافذة الاستخدام: مؤشر الخادم فقط",
+     "items": [
+      "أُزيل مؤشر المتصفح من نافذة الاستخدام، ولم يبقَ إلا مؤشر الخادم",
+      "يعرض المؤشر النسبة المئوية في طرفه الأيمن"
+     ]
     }
    }
   },
@@ -61,6 +226,72 @@
      "title": "Usage gauge always gold",
      "items": [
       "The usage gauge is always gold, however full it is"
+     ]
+    },
+    "es": {
+     "title": "El medidor de uso siempre es dorado",
+     "items": [
+      "El medidor de uso es siempre dorado, sea cual sea su nivel de llenado"
+     ]
+    },
+    "fr": {
+     "title": "La jauge d’utilisation est toujours dorée",
+     "items": [
+      "La jauge d’utilisation est toujours dorée, quel que soit son niveau de remplissage"
+     ]
+    },
+    "de": {
+     "title": "Nutzungsanzeige immer golden",
+     "items": [
+      "Die Nutzungsanzeige ist immer golden, egal wie voll sie ist"
+     ]
+    },
+    "ja": {
+     "title": "使用量ゲージはいつも金色",
+     "items": [
+      "使用量ゲージは、どれだけ埋まっていても常に金色です"
+     ]
+    },
+    "zh": {
+     "title": "用量仪表始终为金色",
+     "items": [
+      "无论用量多少，用量仪表始终为金色"
+     ]
+    },
+    "pt": {
+     "title": "O medidor de uso é sempre dourado",
+     "items": [
+      "O medidor de uso é sempre dourado, não importa quão cheio esteja"
+     ]
+    },
+    "ru": {
+     "title": "Шкала использования всегда золотая",
+     "items": [
+      "Шкала использования всегда золотая, как бы ни была заполнена"
+     ]
+    },
+    "tr": {
+     "title": "Kullanım göstergesi her zaman altın rengi",
+     "items": [
+      "Kullanım göstergesi ne kadar dolu olursa olsun her zaman altın renkli"
+     ]
+    },
+    "it": {
+     "title": "L’indicatore di utilizzo è sempre dorato",
+     "items": [
+      "L’indicatore di utilizzo è sempre dorato, qualunque sia il suo livello"
+     ]
+    },
+    "pl": {
+     "title": "Wskaźnik zużycia zawsze złoty",
+     "items": [
+      "Wskaźnik zużycia jest zawsze złoty, bez względu na to, jak bardzo jest zapełniony"
+     ]
+    },
+    "ar": {
+     "title": "مؤشر الاستخدام ذهبي دائمًا",
+     "items": [
+      "مؤشر الاستخدام ذهبي دائمًا مهما كان مستوى امتلائه"
      ]
     }
    }
@@ -80,6 +311,83 @@
       "The Tools home page and patch notes page show the 🍟 emoji in an orange rounded square instead of the small logo image in the header (the big image is unchanged)",
       "The usage window gauge is now gold"
      ]
+    },
+    "es": {
+     "title": "El encabezado usa el emoji 🍟",
+     "items": [
+      "La página de inicio de Tools y la de notas de versión muestran el emoji 🍟 en un cuadrado naranja redondeado en lugar de la imagen pequeña del logo del encabezado (la imagen grande no cambia)",
+      "El medidor de la ventana de uso ahora es dorado"
+     ]
+    },
+    "fr": {
+     "title": "L’en-tête utilise l’emoji 🍟",
+     "items": [
+      "La page d’accueil de Tools et la page des notes de version affichent l’emoji 🍟 dans un carré orange arrondi au lieu de la petite image du logo en haut (la grande image ne change pas)",
+      "La jauge de la fenêtre d’utilisation est maintenant dorée"
+     ]
+    },
+    "de": {
+     "title": "Kopfzeile nutzt das 🍟-Emoji",
+     "items": [
+      "Die Startseite von Tools und die Seite mit den Versionshinweisen zeigen das 🍟-Emoji in einem abgerundeten orangefarbenen Quadrat statt des kleinen Logobilds in der Kopfzeile (das große Bild bleibt unverändert)",
+      "Die Anzeige im Nutzungsfenster ist jetzt golden"
+     ]
+    },
+    "ja": {
+     "title": "ヘッダーは🍟絵文字",
+     "items": [
+      "Toolsのホーム画面とパッチノート画面では、ヘッダーの小さなロゴ画像の代わりに、オレンジ色の角丸四角の中に🍟絵文字を表示します（大きな画像は変わりません）",
+      "使用量ウィンドウのゲージが金色になりました"
+     ]
+    },
+    "zh": {
+     "title": "顶部使用 🍟 表情符号",
+     "items": [
+      "Tools 首页和补丁说明页面顶部不再显示小 logo 图片，而是在橙色圆角方块中显示 🍟 表情符号（大图不变）",
+      "用量窗口的仪表现在为金色"
+     ]
+    },
+    "pt": {
+     "title": "O cabeçalho usa o emoji 🍟",
+     "items": [
+      "A página inicial do Tools e a página de notas de versão mostram o emoji 🍟 em um quadrado laranja arredondado, no lugar da pequena imagem do logo no cabeçalho (a imagem grande não muda)",
+      "O medidor da janela de uso agora é dourado"
+     ]
+    },
+    "ru": {
+     "title": "В шапке эмодзи 🍟",
+     "items": [
+      "На главной странице Tools и на странице заметок о выпуске вверху вместо маленького логотипа показывается эмодзи 🍟 в оранжевом скруглённом квадрате (большое изображение не изменилось)",
+      "Шкала в окне использования теперь золотая"
+     ]
+    },
+    "tr": {
+     "title": "Üst bilgide 🍟 emojisi",
+     "items": [
+      "Tools ana sayfası ve sürüm notları sayfası, üst bilgideki küçük logo resmi yerine turuncu yuvarlak köşeli bir karede 🍟 emojisini gösterir (büyük resim değişmedi)",
+      "Kullanım penceresindeki gösterge artık altın renkli"
+     ]
+    },
+    "it": {
+     "title": "L’intestazione usa l’emoji 🍟",
+     "items": [
+      "La home di Tools e la pagina delle note di rilascio mostrano l’emoji 🍟 in un quadrato arancione arrotondato invece della piccola immagine del logo in alto (l’immagine grande non cambia)",
+      "L’indicatore della finestra di utilizzo ora è dorato"
+     ]
+    },
+    "pl": {
+     "title": "Nagłówek używa emoji 🍟",
+     "items": [
+      "Strona główna Tools i strona informacji o wersjach pokazują emoji 🍟 w pomarańczowym zaokrąglonym kwadracie zamiast małego obrazka logo w nagłówku (duży obrazek bez zmian)",
+      "Wskaźnik w oknie zużycia jest teraz złoty"
+     ]
+    },
+    "ar": {
+     "title": "الترويسة تستخدم إيموجي 🍟",
+     "items": [
+      "تعرض الصفحة الرئيسية لـ Tools وصفحة ملاحظات الإصدار إيموجي 🍟 داخل مربع برتقالي مستدير بدل صورة الشعار الصغيرة في الترويسة (الصورة الكبيرة لم تتغير)",
+      "صار مؤشر نافذة الاستخدام ذهبيًا"
+     ]
     }
    }
   },
@@ -95,6 +403,72 @@
      "title": "Usage window colours",
      "items": [
       "The usage window now uses the same background and text colours as the other windows"
+     ]
+    },
+    "es": {
+     "title": "Colores de la ventana de uso",
+     "items": [
+      "La ventana de uso usa ahora el mismo fondo y color de texto que las demás ventanas"
+     ]
+    },
+    "fr": {
+     "title": "Couleurs de la fenêtre d’utilisation",
+     "items": [
+      "La fenêtre d’utilisation utilise désormais le même fond et les mêmes couleurs de texte que les autres fenêtres"
+     ]
+    },
+    "de": {
+     "title": "Farben des Nutzungsfensters",
+     "items": [
+      "Das Nutzungsfenster verwendet jetzt denselben Hintergrund und dieselben Textfarben wie die anderen Fenster"
+     ]
+    },
+    "ja": {
+     "title": "使用量ウィンドウの色",
+     "items": [
+      "使用量ウィンドウの背景と文字色を、ほかのウィンドウと同じにしました"
+     ]
+    },
+    "zh": {
+     "title": "用量窗口配色",
+     "items": [
+      "用量窗口现在使用与其他窗口相同的背景色和文字颜色"
+     ]
+    },
+    "pt": {
+     "title": "Cores da janela de uso",
+     "items": [
+      "A janela de uso agora usa o mesmo fundo e as mesmas cores de texto das outras janelas"
+     ]
+    },
+    "ru": {
+     "title": "Цвета окна использования",
+     "items": [
+      "Окно использования теперь использует такой же фон и цвета текста, как и другие окна"
+     ]
+    },
+    "tr": {
+     "title": "Kullanım penceresi renkleri",
+     "items": [
+      "Kullanım penceresi artık diğer pencerelerle aynı arka plan ve yazı renklerini kullanıyor"
+     ]
+    },
+    "it": {
+     "title": "Colori della finestra di utilizzo",
+     "items": [
+      "La finestra di utilizzo ora usa lo stesso sfondo e gli stessi colori del testo delle altre finestre"
+     ]
+    },
+    "pl": {
+     "title": "Kolory okna zużycia",
+     "items": [
+      "Okno zużycia używa teraz tego samego tła i kolorów tekstu co pozostałe okna"
+     ]
+    },
+    "ar": {
+     "title": "ألوان نافذة الاستخدام",
+     "items": [
+      "تستخدم نافذة الاستخدام الآن الخلفية وألوان النص نفسها المستخدمة في النوافذ الأخرى"
      ]
     }
    }
@@ -118,6 +492,105 @@
       "Lists big files not opened for a week; clicking one opens it in a new window in its program",
       "Server store limit is now 16MB"
      ]
+    },
+    "es": {
+     "title": "Uso actual",
+     "items": [
+      "Se ha añadido «Ver uso actual» al menú de archivo de Fry Docs, Sheet, Slides, Block HTML y Python",
+      "Muestra medidores del almacenamiento de este navegador y del almacenamiento del servidor",
+      "Muestra una lista de archivos grandes no abiertos en una semana; al pulsar uno, se abre en una ventana nueva en su programa",
+      "El límite del almacenamiento del servidor es ahora de 16 MB"
+     ]
+    },
+    "fr": {
+     "title": "Utilisation actuelle",
+     "items": [
+      "Ajout de « Voir l’utilisation actuelle » dans le menu Fichier de Fry Docs, Sheet, Slides, Block HTML et Python",
+      "Affiche des jauges pour le stockage de ce navigateur et pour le stockage serveur",
+      "Liste les gros fichiers non ouverts depuis une semaine ; un clic les ouvre dans une nouvelle fenêtre de leur programme",
+      "La limite du stockage serveur est désormais de 16 Mo"
+     ]
+    },
+    "de": {
+     "title": "Aktuelle Nutzung",
+     "items": [
+      "Im Dateimenü von Fry Docs, Sheet, Slides, Block HTML und Python gibt es jetzt „Aktuelle Nutzung anzeigen“",
+      "Zeigt Anzeigen für den Speicher dieses Browsers und den Serverspeicher",
+      "Listet große Dateien auf, die seit einer Woche nicht geöffnet wurden; ein Klick öffnet sie in einem neuen Fenster ihres Programms",
+      "Das Serverspeicherlimit beträgt jetzt 16 MB"
+     ]
+    },
+    "ja": {
+     "title": "現在の使用量",
+     "items": [
+      "Fry Docs・Sheet・Slides・Block HTML・Python のファイルメニューに「現在の使用量を見る」を追加しました",
+      "このブラウザの保存容量とサーバー保存領域をゲージで表示します",
+      "1週間以上開いていない大きなファイルを一覧表示します。クリックすると、そのプログラムの新しいウィンドウで開きます",
+      "サーバー保存の上限を16MBに合わせました"
+     ]
+    },
+    "zh": {
+     "title": "查看当前用量",
+     "items": [
+      "在 Fry Docs、Sheet、Slides、Block HTML 和 Python 的文件菜单下新增“查看当前用量”",
+      "以仪表显示本浏览器的存储和服务器存储",
+      "列出一周以上未打开的大文件；点击其中一个，会在对应程序的新窗口中打开",
+      "服务器存储上限现已调整为 16MB"
+     ]
+    },
+    "pt": {
+     "title": "Uso atual",
+     "items": [
+      "Adicionado «Ver uso atual» ao menu de arquivo do Fry Docs, Sheet, Slides, Block HTML e Python",
+      "Mostra medidores do armazenamento deste navegador e do armazenamento do servidor",
+      "Lista arquivos grandes não abertos há uma semana; ao clicar em um, ele abre em uma nova janela do programa",
+      "O limite do armazenamento do servidor agora é de 16 MB"
+     ]
+    },
+    "ru": {
+     "title": "Текущее использование",
+     "items": [
+      "В меню «Файл» Fry Docs, Sheet, Slides, Block HTML и Python добавлен пункт «Посмотреть текущее использование»",
+      "Показывает шкалы хранилища этого браузера и серверного хранилища",
+      "Выводит список больших файлов, которые не открывали неделю; щелчок открывает файл в новом окне его программы",
+      "Лимит серверного хранилища теперь 16 МБ"
+     ]
+    },
+    "tr": {
+     "title": "Geçerli kullanım",
+     "items": [
+      "Fry Docs, Sheet, Slides, Block HTML ve Python'un Dosya menüsüne “Geçerli kullanımı gör” eklendi",
+      "Bu tarayıcının depolamasını ve sunucu deposunu göstergelerle gösterir",
+      "Bir haftadır açılmayan büyük dosyaları listeler; birine tıklamak onu programında yeni bir pencerede açar",
+      "Sunucu deposu sınırı artık 16 MB"
+     ]
+    },
+    "it": {
+     "title": "Utilizzo attuale",
+     "items": [
+      "Aggiunta «Vedi utilizzo attuale» al menu File di Fry Docs, Sheet, Slides, Block HTML e Python",
+      "Mostra indicatori dello spazio di questo browser e dello spazio sul server",
+      "Elenca i file grandi non aperti da una settimana; cliccando su uno si apre in una nuova finestra del suo programma",
+      "Il limite dello spazio sul server è ora di 16 MB"
+     ]
+    },
+    "pl": {
+     "title": "Bieżące zużycie",
+     "items": [
+      "W menu Plik Fry Docs, Sheet, Slides, Block HTML i Python dodano „Zobacz bieżące zużycie”",
+      "Pokazuje wskaźniki miejsca w tej przeglądarce i na serwerze",
+      "Wypisuje duże pliki nieotwierane przez tydzień; kliknięcie otwiera plik w nowym oknie jego programu",
+      "Limit miejsca na serwerze to teraz 16 MB"
+     ]
+    },
+    "ar": {
+     "title": "الاستخدام الحالي",
+     "items": [
+      "أُضيف «عرض الاستخدام الحالي» إلى قائمة الملف في Fry Docs وSheet وSlides وBlock HTML وPython",
+      "يعرض مؤشرات لمساحة هذا المتصفح ومساحة الخادم",
+      "يسرد الملفات الكبيرة التي لم تُفتح منذ أسبوع؛ النقر على أحدها يفتحه في نافذة جديدة ضمن برنامجه",
+      "حد تخزين الخادم صار 16 ميغابايت"
+     ]
     }
    }
   },
@@ -133,6 +606,72 @@
      "title": "Fixed saving of Wrong reports",
      "items": [
       "The 'Wrong' report now saves even when storage is full (the oldest reports make room)"
+     ]
+    },
+    "es": {
+     "title": "Corregido el guardado de los informes de «Incorrecto»",
+     "items": [
+      "El informe «Incorrecto» ahora se guarda aunque el almacenamiento esté lleno (los informes más antiguos dejan sitio)"
+     ]
+    },
+    "fr": {
+     "title": "Correction de l’enregistrement des signalements « Faux »",
+     "items": [
+      "Le signalement « Faux » s’enregistre maintenant même quand le stockage est plein (les plus anciens font de la place)"
+     ]
+    },
+    "de": {
+     "title": "Speichern der „Falsch“-Meldungen repariert",
+     "items": [
+      "Die „Falsch“-Meldung wird jetzt auch bei vollem Speicher gespeichert (die ältesten Meldungen machen Platz)"
+     ]
+    },
+    "ja": {
+     "title": "「違います」の保存を修正",
+     "items": [
+      "保存容量がいっぱいでも「違います」の報告が保存されるようになりました（古い報告から場所を空けます）"
+     ]
+    },
+    "zh": {
+     "title": "修复“错误”报告的保存",
+     "items": [
+      "即使存储空间已满，“错误”报告也能保存了（最旧的报告会让出位置）"
+     ]
+    },
+    "pt": {
+     "title": "Corrigido o salvamento dos relatos de «Errado»",
+     "items": [
+      "O relato «Errado» agora é salvo mesmo com o armazenamento cheio (os relatos mais antigos abrem espaço)"
+     ]
+    },
+    "ru": {
+     "title": "Исправлено сохранение отчётов «Неверно»",
+     "items": [
+      "Отчёт «Неверно» теперь сохраняется даже при заполненном хранилище (самые старые отчёты освобождают место)"
+     ]
+    },
+    "tr": {
+     "title": "“Yanlış” bildirimleri kaydetme düzeltildi",
+     "items": [
+      "Depolama dolu olsa bile “Yanlış” bildirimi artık kaydedilir (en eski bildirimler yer açar)"
+     ]
+    },
+    "it": {
+     "title": "Corretto il salvataggio delle segnalazioni «Sbagliato»",
+     "items": [
+      "La segnalazione «Sbagliato» ora si salva anche con lo spazio esaurito (le segnalazioni più vecchie fanno posto)"
+     ]
+    },
+    "pl": {
+     "title": "Naprawiono zapisywanie zgłoszeń „Błędne”",
+     "items": [
+      "Zgłoszenie „Błędne” zapisuje się teraz nawet przy pełnej pamięci (najstarsze zgłoszenia zwalniają miejsce)"
+     ]
+    },
+    "ar": {
+     "title": "إصلاح حفظ تقارير «خطأ»",
+     "items": [
+      "صار تقرير «خطأ» يُحفظ حتى عند امتلاء التخزين (أقدم التقارير تفسح المجال)"
      ]
     }
    }
@@ -150,6 +689,72 @@
      "items": [
       "Emoji logos are back in Fry Lab only (other tools keep the original emoji)"
      ]
+    },
+    "es": {
+     "title": "Fry Lab conserva los logos",
+     "items": [
+      "Los logos de emoji vuelven solo en Fry Lab (las demás herramientas mantienen el emoji original)"
+     ]
+    },
+    "fr": {
+     "title": "Fry Lab garde les logos",
+     "items": [
+      "Les logos emoji reviennent uniquement dans Fry Lab (les autres outils gardent l’emoji d’origine)"
+     ]
+    },
+    "de": {
+     "title": "Fry Lab behält die Logos",
+     "items": [
+      "Emoji-Logos sind nur in Fry Lab zurück (andere Tools behalten das ursprüngliche Emoji)"
+     ]
+    },
+    "ja": {
+     "title": "Fry Labはロゴを維持",
+     "items": [
+      "絵文字ロゴはFry Labだけで再び使われます（ほかのツールは元の絵文字のまま）"
+     ]
+    },
+    "zh": {
+     "title": "Fry Lab 保留 logo",
+     "items": [
+      "仅 Fry Lab 重新使用表情符号 logo（其他工具保持原来的表情符号）"
+     ]
+    },
+    "pt": {
+     "title": "Fry Lab mantém os logos",
+     "items": [
+      "Os logos de emoji voltam só no Fry Lab (as outras ferramentas mantêm o emoji original)"
+     ]
+    },
+    "ru": {
+     "title": "Fry Lab оставляет логотипы",
+     "items": [
+      "Логотипы-эмодзи вернулись только в Fry Lab (в других инструментах остаются исходные эмодзи)"
+     ]
+    },
+    "tr": {
+     "title": "Fry Lab logoları koruyor",
+     "items": [
+      "Emoji logolar yalnızca Fry Lab'de geri geldi (diğer araçlar özgün emojilerini korur)"
+     ]
+    },
+    "it": {
+     "title": "Fry Lab mantiene i logo",
+     "items": [
+      "I logo emoji tornano solo in Fry Lab (gli altri strumenti mantengono l’emoji originale)"
+     ]
+    },
+    "pl": {
+     "title": "Fry Lab zachowuje logo",
+     "items": [
+      "Logo-emoji wróciły tylko w Fry Lab (pozostałe narzędzia zachowują oryginalne emoji)"
+     ]
+    },
+    "ar": {
+     "title": "Fry Lab يحتفظ بالشعارات",
+     "items": [
+      "عادت شعارات الإيموجي إلى Fry Lab وحده (الأدوات الأخرى تحتفظ بالإيموجي الأصلية)"
+     ]
     }
    }
   },
@@ -165,6 +770,72 @@
      "title": "Back to the original emoji",
      "items": [
       "Removed the emoji-to-logo swap everywhere so the original emoji show again"
+     ]
+    },
+    "es": {
+     "title": "Vuelta a los emojis originales",
+     "items": [
+      "Se ha quitado el cambio de emoji por logo en todas partes para que vuelvan a verse los emojis originales"
+     ]
+    },
+    "fr": {
+     "title": "Retour aux emojis d’origine",
+     "items": [
+      "Le remplacement des emojis par des logos a été retiré partout pour que les emojis d’origine s’affichent à nouveau"
+     ]
+    },
+    "de": {
+     "title": "Zurück zu den ursprünglichen Emojis",
+     "items": [
+      "Der Austausch von Emojis gegen Logos wurde überall entfernt, sodass wieder die ursprünglichen Emojis angezeigt werden"
+     ]
+    },
+    "ja": {
+     "title": "元の絵文字に戻しました",
+     "items": [
+      "絵文字をロゴに置き換える機能をすべて外し、元の絵文字がそのまま表示されるようにしました"
+     ]
+    },
+    "zh": {
+     "title": "改回原来的表情符号",
+     "items": [
+      "去掉了所有把表情符号换成 logo 的功能，原来的表情符号重新显示"
+     ]
+    },
+    "pt": {
+     "title": "De volta aos emojis originais",
+     "items": [
+      "Removida a troca de emoji por logo em todos os lugares para que os emojis originais voltem a aparecer"
+     ]
+    },
+    "ru": {
+     "title": "Снова исходные эмодзи",
+     "items": [
+      "Убрана замена эмодзи на логотипы везде, чтобы снова показывались исходные эмодзи"
+     ]
+    },
+    "tr": {
+     "title": "Özgün emojilere dönüldü",
+     "items": [
+      "Her yerde emojinin logoyla değiştirilmesi kaldırıldı, böylece özgün emojiler yeniden görünür"
+     ]
+    },
+    "it": {
+     "title": "Di nuovo le emoji originali",
+     "items": [
+      "Rimosso ovunque lo scambio da emoji a logo, così tornano a vedersi le emoji originali"
+     ]
+    },
+    "pl": {
+     "title": "Z powrotem oryginalne emoji",
+     "items": [
+      "Usunięto zamianę emoji na logo wszędzie, dzięki czemu znów widać oryginalne emoji"
+     ]
+    },
+    "ar": {
+     "title": "العودة إلى الإيموجي الأصلية",
+     "items": [
+      "أُزيلت ميزة استبدال الإيموجي بالشعارات في كل مكان، فتظهر الإيموجي الأصلية من جديد"
      ]
     }
    }
@@ -182,6 +853,72 @@
      "items": [
       "The fries at the top of each tool is an emoji again instead of the logo, with the orange square back"
      ]
+    },
+    "es": {
+     "title": "La patata frita superior vuelve a ser un emoji",
+     "items": [
+      "La patata frita de la parte superior de cada herramienta vuelve a ser un emoji en lugar del logo, con el cuadrado naranja de nuevo"
+     ]
+    },
+    "fr": {
+     "title": "Les frites du haut redeviennent un emoji",
+     "items": [
+      "Les frites en haut de chaque outil redeviennent un emoji au lieu du logo, avec le carré orange rétabli"
+     ]
+    },
+    "de": {
+     "title": "Pommes oben wieder als Emoji",
+     "items": [
+      "Die Pommes oben in jedem Tool sind wieder ein Emoji statt des Logos, und das orangefarbene Quadrat ist zurück"
+     ]
+    },
+    "ja": {
+     "title": "上部のポテトは再び絵文字に",
+     "items": [
+      "各ツール上部のポテトはロゴではなく再び絵文字になり、オレンジ色の四角も戻しました"
+     ]
+    },
+    "zh": {
+     "title": "顶部薯条改回表情符号",
+     "items": [
+      "每个工具顶部的薯条重新变回表情符号而不是 logo，橙色方块也放回去了"
+     ]
+    },
+    "pt": {
+     "title": "A batata frita do topo voltou a ser emoji",
+     "items": [
+      "A batata frita no topo de cada ferramenta voltou a ser um emoji em vez do logo, com o quadrado laranja de volta"
+     ]
+    },
+    "ru": {
+     "title": "Картошка сверху снова эмодзи",
+     "items": [
+      "Картошка вверху каждого инструмента снова эмодзи вместо логотипа, оранжевый квадрат вернулся"
+     ]
+    },
+    "tr": {
+     "title": "Üstteki patates artık emoji",
+     "items": [
+      "Her aracın üstündeki patates kızartması logo yerine yeniden emoji oldu ve turuncu kare geri eklendi"
+     ]
+    },
+    "it": {
+     "title": "Patatine in alto di nuovo emoji",
+     "items": [
+      "Le patatine in alto in ogni strumento tornano emoji invece del logo, con il quadrato arancione di nuovo presente"
+     ]
+    },
+    "pl": {
+     "title": "Frytki na górze znów emoji",
+     "items": [
+      "Frytki na górze każdego narzędzia znów są emoji zamiast logo, a pomarańczowy kwadrat wrócił"
+     ]
+    },
+    "ar": {
+     "title": "البطاطس في الأعلى عادت إيموجي",
+     "items": [
+      "البطاطس في أعلى كل أداة صارت إيموجي مرة أخرى بدل الشعار، وعاد المربع البرتقالي"
+     ]
     }
    }
   },
@@ -197,6 +934,72 @@
      "title": "Top logo cleanup",
      "items": [
       "Removed the orange square behind the fries logo at the top of each tool and made the logo bigger"
+     ]
+    },
+    "es": {
+     "title": "Limpieza del logo superior",
+     "items": [
+      "Se ha quitado el cuadrado naranja detrás del logo de patata frita de la parte superior de cada herramienta y el logo se ve más grande"
+     ]
+    },
+    "fr": {
+     "title": "Nettoyage du logo en haut",
+     "items": [
+      "Le carré orange derrière le logo frites en haut de chaque outil a été supprimé et le logo est plus grand"
+     ]
+    },
+    "de": {
+     "title": "Oberes Logo aufgeräumt",
+     "items": [
+      "Das orangefarbene Quadrat hinter dem Pommes-Logo oben in jedem Tool wurde entfernt und das Logo vergrößert"
+     ]
+    },
+    "ja": {
+     "title": "上部ロゴを整理",
+     "items": [
+      "各ツール上部のポテト型ロゴの後ろにあったオレンジ色の四角を消し、ロゴを大きくしました"
+     ]
+    },
+    "zh": {
+     "title": "整理顶部 logo",
+     "items": [
+      "去掉了每个工具顶部薯条 logo 后面的橙色方块，并把 logo 放大了"
+     ]
+    },
+    "pt": {
+     "title": "Limpeza do logo do topo",
+     "items": [
+      "Removido o quadrado laranja atrás do logo de batata frita no topo de cada ferramenta e o logo ficou maior"
+     ]
+    },
+    "ru": {
+     "title": "Порядок в логотипе сверху",
+     "items": [
+      "Убран оранжевый квадрат за логотипом-картофелем вверху каждого инструмента, а логотип стал крупнее"
+     ]
+    },
+    "tr": {
+     "title": "Üst logo düzenlendi",
+     "items": [
+      "Her aracın üstündeki patates kızartması logosunun arkasındaki turuncu kare kaldırıldı ve logo büyütüldü"
+     ]
+    },
+    "it": {
+     "title": "Logo in alto ripulito",
+     "items": [
+      "Rimosso il quadrato arancione dietro il logo delle patatine in alto in ogni strumento e il logo è più grande"
+     ]
+    },
+    "pl": {
+     "title": "Uporządkowany logo u góry",
+     "items": [
+      "Usunięto pomarańczowy kwadrat za logo frytek u góry każdego narzędzia i powiększono logo"
+     ]
+    },
+    "ar": {
+     "title": "تنظيف الشعار العلوي",
+     "items": [
+      "أُزيل المربع البرتقالي خلف شعار البطاطس في أعلى كل أداة، وكُبّر الشعار"
      ]
     }
    }
