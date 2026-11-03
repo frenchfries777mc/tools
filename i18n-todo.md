@@ -31,3 +31,4 @@ patchnotes/site.json | 문서를 서버에만 보관 항목 (en만), serverstore
 patchnotes/ai.json | 목록 답변 없애기 항목 (en만) | ai v62 | 2026-11-03
 patchnotes/ai.json | AI가 화면을 끊지 않게 항목 (en만) | ai | 2026-11-03
 patchnotes/ai.json | premus 2.0 항목 (en만) | ai v63 | 2026-11-03
+patchnotes/ai.json | AI 체험에 AI 설정 항목 (en만), ai-chat 'AI 설정' 버튼 | ai v64 | 2026-11-03
