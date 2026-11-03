@@ -3,6 +3,22 @@
  "name": "자체 AI (FF777)",
  "notes": [
   {
+   "date": "2026-11-04",
+   "build": "v65",
+   "title": "AI 체험에서 AI 설정 버튼 뺌",
+   "items": [
+    "AI 체험 화면 위쪽의 AI 설정 버튼을 없앰"
+   ],
+   "tr": {
+    "en": {
+     "title": "AI settings button removed from AI Experience",
+     "items": [
+      "Removed the AI settings button at the top of the AI Experience screen"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-03",
    "build": "v64",
    "title": "AI 체험에 AI 설정",
