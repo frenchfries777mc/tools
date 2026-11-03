@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-11-03",
+   "build": "v59",
+   "title": "사용량 창: 서버 게이지만",
+   "items": [
+    "현재 사용량 창에서 '이 브라우저' 게이지를 없애고 서버 게이지만 남김",
+    "게이지 오른쪽 끝에 몇 퍼센트 찼는지 표시"
+   ],
+   "tr": {
+    "en": {
+     "title": "Usage window: server gauge only",
+     "items": [
+      "Removed the browser gauge from the usage window, only the server gauge is left",
+      "The gauge shows its percentage at the right end"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-03",
    "build": "v58",
    "title": "사용량 게이지 항상 황금색",
    "items": [
