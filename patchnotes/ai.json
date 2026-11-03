@@ -4,6 +4,22 @@
  "notes": [
   {
    "date": "2026-11-03",
+   "build": "v63",
+   "title": "premus 2.0",
+   "items": [
+    "premus가 2.0으로 올라갔어요: 아재개그와 넌센스를 모델이 더 잘 답해요"
+   ],
+   "tr": {
+    "en": {
+     "title": "premus 2.0",
+     "items": [
+      "premus is now 2.0: it answers dad jokes and riddles better"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-03",
    "build": "v62",
    "title": "AI가 화면을 끊지 않게",
    "items": [
