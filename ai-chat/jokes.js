@@ -170,11 +170,7 @@ function self_(model){
 }
 function reply(text, st, model){
   var t=String(text||'').trim(); if(!t||t.length>80) return null; st=st||{};
-  var r=riddle(t);
-  if(r>=0){ st.last=r; return {text:tf('정답은 {0}!',J[r][1]), kind:'answer'}; }
-  if(st.last!=null&&ANS.test(t)) return {text:say(st.last), kind:'answer'};
-  if(st.last!=null&&MORE.test(t)) return {text:say(fresh(st)), kind:'joke'};
-  if(ASKJ.test(t)&&ASKV.test(t)&&!ASKQ.test(t)) return {text:(/외워|알아/.test(t)?tf('네, 외워요! 하나 들려 드릴게요.')+'\n':'')+say(fresh(st)), kind:'joke'};
+  /* dad jokes and riddles are answered by the model itself (owner 2026-11-03), not from the list */
   if(t.length<=24&&(WHO.test(t)||WHO2.test(t))){ var s=self_(model); if(s){ st.last=null; return {text:s, kind:'self'}; } }
   st.last=null; return null;
 }
