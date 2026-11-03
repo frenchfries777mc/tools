@@ -26,11 +26,11 @@ var PROGS=[
 var MINE=/^(ffdocs|ffsheet|ffslides|ffblocks|ffpy|ffver|fflab|ffai|ffchat|ffstore)/;
 function ls(){ try{ return root.localStorage; }catch(e){ return null; } }
 function J(st,k){ try{ return JSON.parse(st.getItem(k)||'null'); }catch(e){ return null; } }
-function L(st,k){ try{ var v=st.getItem(k); return v==null?0:v.length; }catch(e){ return 0; } }
+function L(st,k){ if(root.FFSrv&&root.FFSrv.up&&root.FFSrv.route.test(k)) return root.FFSrv.size(k); try{ var v=st.getItem(k); return v==null?0:v.length; }catch(e){ return 0; } }
 /* st: a Storage. now: ms. Returns {browser:{used,mine,max}, server:{used,max}, files:[{prog,pname,ico,path,id,name,t,size}]} (files = every file; callers filter) */
 function collect(st,now){
   st=st||ls(); now=now||Date.now(); var out={browser:{used:0,mine:0,max:BROWSER_MAX},server:{used:0,max:SERVER_MAX},files:[]}; if(!st) return out;
-  try{ for(var i=0;i<st.length;i++){ var k=st.key(i), n=k.length+L(st,k); out.browser.used+=n; if(MINE.test(k)) out.browser.mine+=n;
+  if(root.FFSrv&&root.FFSrv.up) out.server.used=root.FFSrv.total(); else try{ for(var i=0;i<st.length;i++){ var k=st.key(i), n=k.length+L(st,k); out.browser.used+=n; if(MINE.test(k)) out.browser.mine+=n;
     if(k.indexOf('ffver.v1.')===0){ var a=J(st,k); if(Array.isArray(a)) a.forEach(function(x){ if(x&&x.remote&&x.len) out.server.used+=x.len; }); } } }catch(e){}
   PROGS.forEach(function(p){ var l=p.list(J(st,p.idx)); if(!Array.isArray(l)) return;
     l.forEach(function(f){ if(!f||!f.id) return; var size=0; if(p.inline){ try{ size+=JSON.stringify(f).length; }catch(e){} }

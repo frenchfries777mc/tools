@@ -41,6 +41,7 @@ function net(m,u,body){ return fetch(u,{method:m,headers:body?{'content-type':'a
 /* storage is full: move the oldest saved versions (automatic ones first; never the newest version of the document named by keepKey) to the server.
    A version is removed from this browser only after the server has it. Resolves to how many were moved. */
 function offload(keepKey,n,st){
+  if(root.FFSrv&&root.FFSrv.up){ api.why='none'; return Promise.resolve(0); }   // documents already live on the server
   st=st||ls(); if(!st||!root.fetch||!owner(st)) return Promise.resolve(0); var all=[];
   try{ for(var i=0;i<st.length;i++){ var k=st.key(i); if(k&&k.indexOf(PRE)===0){ var key=k.slice(PRE.length); read(key,st).forEach(function(x,j){ if(x.remote||!x.d) return; all.push({key:key,x:x,newest:j===0,own:keepKey&&key==='docs.'+keepKey}); }); } } }catch(e){ return Promise.resolve(0); }
   all=all.filter(function(g){ return !(g.own&&g.newest); }).sort(function(a,b){ return ((b.x.auto?1:0)-(a.x.auto?1:0))||(a.x.t-b.x.t); }).slice(0,n||8);
