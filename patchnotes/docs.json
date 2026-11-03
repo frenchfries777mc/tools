@@ -3,6 +3,24 @@
  "name": "Fry Docs",
  "notes": [
   {
+   "date": "2026-11-03",
+   "build": "v19",
+   "title": "쪽이 차면 다음 쪽 생김",
+   "items": [
+    "글이 한 쪽을 가득 채우면 아래에 다음 쪽이 생기고, 쪽이 끝나는 곳에 선이 보임",
+    "아래 표시줄에 전체 쪽 수가 나옴"
+   ],
+   "tr": {
+    "en": {
+     "title": "A new page appears when one is full",
+     "items": [
+      "When the text fills a page, the next page appears below it, and a line shows where each page ends",
+      "The bottom bar shows how many pages there are"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-02",
    "build": "v18",
    "title": "저장 실패 이유 구분",
