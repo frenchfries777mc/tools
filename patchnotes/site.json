@@ -3,6 +3,22 @@
  "name": "Tools 사이트",
  "notes": [
   {
+   "date": "2026-11-03",
+   "build": "v58",
+   "title": "사용량 게이지 항상 황금색",
+   "items": [
+    "사용량 게이지는 얼마나 찼든 항상 황금색"
+   ],
+   "tr": {
+    "en": {
+     "title": "Usage gauge always gold",
+     "items": [
+      "The usage gauge is always gold, however full it is"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-02",
    "build": "v57",
    "title": "상단 로고를 🍟 이모티콘으로",
