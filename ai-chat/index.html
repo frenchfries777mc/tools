@@ -235,7 +235,6 @@ form.in textarea:focus{outline:none;}
 <script src="../ai-prompts.js"></script>
 <script src="../ai.js?v=ai36.l18"></script>
 <script src="../ai-wrong.js?v=4.l13"></script>
-<script src="jokes.js?v=2.l14"></script>
 <script src="vote.js?v=2"></script>
 <script src="memo.js?v=1"></script>
 <script src="arena.js?v=2"></script>
@@ -432,16 +431,6 @@ function send(q){
   $('q').value=''; $('chips').hidden=true; add('u',q); convPush('u',q);
   hideSug(); var sg=window.FFMemo&&FFMemo.suggest(q); if(sg) showSug(sg);
   var out=add('a',''), got='', g=gen, mid=cur.id;
-  if(jst.g!==gen) jst={g:gen};
-  var sc=window.FFJoke&&FFJoke.reply(q,jst,{id:cur.id,name:cur.name});
-  if(sc){   // 아재개그와 자기소개는 모델이 지어내지 않고 목록에서 짝 그대로 꺼내 말해요. 보이는 모습은 모델 답과 같게: 5~10초 생각 중 점, 그다음 한 단어씩
-    dots(out); setBusy(true);
-    listOut(out,sc.text,function(text){
-      if(text==null){ out.textContent=T('멈췄어요'); out.classList.add('bad'); setBusy(false); return; }
-      if(g===gen){ hist.push({role:'user',content:q},{role:'assistant',content:text}); convPush('a',text); }
-      FFWrong.attach(out,{tool:'ai-chat',question:q,answer:text,model:'list:'+cur.id,history:before}); setBusy(false);
-    }); return;
-  }
   dots(out); setBusy(true);
   trim();
   var N=FFVote.TIMES[lv];
