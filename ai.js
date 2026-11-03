@@ -219,6 +219,7 @@ function progress(p,text){
   prog.classList.add('on'); prog.querySelector('b').textContent=text; prog.querySelector('i').style.width=Math.round(p*100)+'%';
   if(ov&&ov.classList.contains('open')) msg(text,'');
 }
+function stopWorker(en){ try{ if(en&&en.__wk) en.__wk.terminate(); }catch(e){} }
 function engine(model){
   var id=mlcId(model);
   if(eng&&engId===id) return Promise.resolve(eng);
@@ -230,7 +231,12 @@ function engine(model){
     return webllm();
   }).then(function(W){
     var old=eng; eng=null; var p=old?old.unload():Promise.resolve();
-    return p.then(function(){ progress(0,F('{0} 준비 중…',modelLabel(model))); return W.CreateMLCEngine(id,{appConfig:appCfg(W,model), initProgressCallback:function(r){ progress(r.progress||0,F('{0} 준비 중… {1}%',modelLabel(model),Math.round((r.progress||0)*100))); }},{context_window_size:ctxFor(model)}); });
+    return p.then(function(){ stopWorker(old); progress(0,F('{0} 준비 중…',modelLabel(model)));
+      var cfg={appConfig:appCfg(W,model), initProgressCallback:function(r){ progress(r.progress||0,F('{0} 준비 중… {1}%',modelLabel(model),Math.round((r.progress||0)*100))); }}, opts={context_window_size:ctxFor(model)}, wk=null;
+      // the model runs in a Web Worker (the page does not freeze while it writes); the page itself is the fallback
+      try{ if(W.CreateWebWorkerMLCEngine&&window.Worker) wk=new Worker(BASE+'ai-worker.js?v=1'); }catch(e){ wk=null; }
+      if(!wk) return W.CreateMLCEngine(id,cfg,opts);
+      return W.CreateWebWorkerMLCEngine(wk,id,cfg,opts).then(function(en){ en.__wk=wk; return en; },function(err){ try{ wk.terminate(); }catch(e){} throw err; }); });
   }).then(function(e){ progress(null); eng=e; engP=null; return e; },function(err){ progress(null); engP=null; engId='';
     if(err&&err.kind) throw err; console.error(err);
     throw AIError(/memory|OOM|allocate|device lost/i.test(String(err&&err.message))?T('이 기기에서는 메모리가 부족해요. 더 가벼운 모델을 골라 보세요'):T('자체 AI를 불러오지 못했어요'),'net'); });
@@ -396,7 +402,7 @@ function build(){
   q('.ffai-x').onclick=cancel; // closes only with the X button, so a text drag that ends outside the window does not close it
   q('.del').onclick=function(){
     if(cur.provider==='local'){ keep(); var m=cur.models.local; delete cur.local[m]; store(cur); msg(T('지우는 중…'),'');
-      checkGPU().then(webllm).then(function(W){ if(engId===mlcId(m)&&eng){ eng.unload(); eng=null; engId=''; } return W.deleteModelAllInfoInCache(mlcId(m),appCfg(W,m)); })
+      checkGPU().then(webllm).then(function(W){ if(engId===mlcId(m)&&eng){ eng.unload(); stopWorker(eng); eng=null; engId=''; } return W.deleteModelAllInfoInCache(mlcId(m),appCfg(W,m)); })
         .then(function(){ msg(T('이 기기에서 모델을 지웠어요'),'ok'); },function(){ msg(T('이 기기에서 모델을 지웠어요'),'ok'); }); return; }
     delete cur.keys[cur.provider]; q('.k').value=''; store(cur); msg('',''); };
   q('.test').onclick=function(){ keep(); var c={provider:cur.provider,key:cur.keys[cur.provider]||'',model:cur.models[cur.provider],local:cur.provider==='local'};
