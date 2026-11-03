@@ -63,3 +63,4 @@ usage.js | 현재 사용량 창 문구 (현재 사용량, 이 브라우저, 서�
 patchnotes/site.json | 현재 사용량 보기 항목 (en만) | site v55 | 2026-11-02
 patchnotes/site.json | 사용량 창 색 맞춤 항목 (en만) | site v56 | 2026-11-02
 patchnotes/site.json | 상단 로고를 🍟 이모티콘으로·게이지 황금색 항목 (en만) | site v57 | 2026-11-02
+patchnotes/site.json | 사용량 게이지 항상 황금색 항목 (en만) | site v58 | 2026-11-03
