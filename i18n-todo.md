@@ -7,3 +7,4 @@ patchnotes/docs.json | 글자 크기를 포인트(pt)로 항목 (en만) | docs v
 patchnotes/sheet.json | 글자 크기를 포인트(pt)로 항목 (en만), 글자 크기 메뉴 '11 (기본)' (commands.js) | sheet v46 | 2026-11-04
 
 patchnotes/slides.json | 글자 크기를 포인트(pt)로 고르기 항목 (en만), 글자 크기 메뉴 문구 2개 (strings.js en만) | slides v37 | 2026-11-04
+patchnotes/python.json | Fry Code로 이름 바꾸기와 언어 고르기 항목 (en만), 카드 문구 3개(index.html en만), python/strings.js 탭 이름 en만, python/langs.js 안의 한글 메시지(검사·미리보기 글자)는 아직 번역 안 됨 | python v3 | 2026-11-04
