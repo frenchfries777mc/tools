@@ -19,6 +19,94 @@
       "The default font size is 11pt, like Excel",
       "Sizes carry over unchanged when you export or import .xlsx"
      ]
+    },
+    "es": {
+     "title": "Tamaños de letra en puntos",
+     "items": [
+      "Los números del tamaño de letra ahora son puntos (pt) como en Excel, así que el mismo número se ve del mismo tamaño",
+      "El tamaño de letra predeterminado es 11 pt, como en Excel",
+      "Los tamaños se conservan sin cambios al exportar o importar .xlsx"
+     ]
+    },
+    "fr": {
+     "title": "Tailles de police en points",
+     "items": [
+      "Les tailles de police sont désormais en points (pt) comme dans Excel : un même nombre donne la même taille",
+      "La taille de police par défaut est de 11 pt, comme dans Excel",
+      "Les tailles sont conservées telles quelles à l’export et à l’import au format .xlsx"
+     ]
+    },
+    "de": {
+     "title": "Schriftgrößen in Punkt",
+     "items": [
+      "Die Schriftgrößen sind jetzt Punkt (pt) wie in Excel, sodass dieselbe Zahl dieselbe Größe hat",
+      "Die Standardschriftgröße ist 11 pt, wie in Excel",
+      "Beim Exportieren und Importieren von .xlsx bleiben die Größen unverändert"
+     ]
+    },
+    "ja": {
+     "title": "文字サイズをポイント(pt)で",
+     "items": [
+      "文字サイズの数字をExcelと同じポイント(pt)単位にしました。同じ数字ならExcelと同じ大きさで表示されます",
+      "基本の文字サイズはExcelと同じ11ptです",
+      ".xlsxに書き出す・読み込むときも同じポイントサイズで引き継がれます"
+     ]
+    },
+    "zh": {
+     "title": "字号改用磅（pt）",
+     "items": [
+      "字号数字改为与 Excel 相同的磅（pt）单位，相同数字显示的大小也相同",
+      "默认字号为 11pt，与 Excel 相同",
+      "导出和导入 .xlsx 时，字号保持相同的磅值"
+     ]
+    },
+    "pt": {
+     "title": "Tamanhos de fonte em pontos",
+     "items": [
+      "Os números de tamanho de fonte agora são pontos (pt), como no Excel, então o mesmo número aparece com o mesmo tamanho",
+      "O tamanho de fonte padrão é 11 pt, como no Excel",
+      "Os tamanhos são mantidos sem alteração ao exportar ou importar .xlsx"
+     ]
+    },
+    "ru": {
+     "title": "Размеры шрифта в пунктах",
+     "items": [
+      "Размеры шрифта теперь задаются в пунктах (пт), как в Excel, поэтому одинаковое число даёт одинаковый размер",
+      "Размер шрифта по умолчанию — 11 пт, как в Excel",
+      "При экспорте и импорте .xlsx размеры сохраняются без изменений"
+     ]
+    },
+    "tr": {
+     "title": "Yazı boyutları artık punto",
+     "items": [
+      "Yazı boyutu sayıları artık Excel'deki gibi punto (pt) birimindedir; aynı sayı aynı boyutta görünür",
+      "Varsayılan yazı boyutu, Excel'deki gibi 11 pt'tir",
+      ".xlsx dışa aktarırken ve içe aktarırken boyutlar değişmeden taşınır"
+     ]
+    },
+    "it": {
+     "title": "Dimensioni del carattere in punti",
+     "items": [
+      "I numeri della dimensione del carattere ora sono in punti (pt) come in Excel, quindi lo stesso numero appare della stessa dimensione",
+      "La dimensione predefinita del carattere è 11 pt, come in Excel",
+      "Esportando e importando .xlsx le dimensioni restano invariate"
+     ]
+    },
+    "pl": {
+     "title": "Rozmiary czcionki w punktach",
+     "items": [
+      "Rozmiary czcionki są teraz w punktach (pt) jak w Excelu, więc ta sama liczba oznacza ten sam rozmiar",
+      "Domyślny rozmiar czcionki to 11 pt, jak w Excelu",
+      "Przy eksporcie i imporcie .xlsx rozmiary przechodzą bez zmian"
+     ]
+    },
+    "ar": {
+     "title": "أحجام الخط بالنقاط",
+     "items": [
+      "أصبحت أرقام حجم الخط بالنقاط (pt) كما في Excel، فيظهر الرقم نفسه بالحجم نفسه",
+      "حجم الخط الافتراضي 11 pt، كما في Excel",
+      "تُنقل الأحجام دون تغيير عند التصدير والاستيراد بصيغة .xlsx"
+     ]
     }
    }
   },
