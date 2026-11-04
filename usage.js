@@ -21,7 +21,7 @@ var PROGS=[
  {id:'sheet', name:'Fry Sheet', ico:'📊', path:'../sheet/',  idx:'ffsheet.docs',    list:function(o){ return o; },           keys:function(i){ return ['ffsheet.doc.'+i,'ffver.v1.sheet.'+i]; }},
  {id:'slides',name:'Fry Slides',ico:'🎞️', path:'../slides/', idx:'ffslides.v1',     list:function(o){ return o&&o.decks; },  keys:function(i){ return ['ffver.v1.slides.'+i]; }, inline:true},
  {id:'blocks',name:'Block HTML',ico:'🧱', path:'../blocks/', idx:'ffblocks.projects',list:function(o){ return o&&o.list; },   keys:function(i){ return ['ffblocks.p.'+i,'ffblocks.store.'+i,'ffblocks.ai.'+i,'ffver.v1.blocks.'+i]; }},
- {id:'python',name:'Fry Code',ico:'🐍', path:'../python/', idx:'ffpy.v1',         list:function(o){ return o&&o.files; }, keys:function(i){ return ['ffpy.file.'+i,'ffver.v1.python.'+i]; }}
+ {id:'python',name:'Fry Code',ico:'💻', path:'../python/', idx:'ffpy.v1',         list:function(o){ return o&&o.files; }, keys:function(i){ return ['ffpy.file.'+i,'ffver.v1.python.'+i]; }}
 ];
 var MINE=/^(ffdocs|ffsheet|ffslides|ffblocks|ffpy|ffver|fflab|ffai|ffchat|ffstore)/;
 function ls(){ try{ return root.localStorage; }catch(e){ return null; } }
