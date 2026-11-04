@@ -1114,6 +1114,8 @@ FFT.add({
 "기울임":["Italic","Cursiva","Italique","Kursiv","斜体","斜体","Itálico","Курсив","İtalik",null,null,"Corsivo","Kursywa","مائل"],
 "밑줄":["Underline","Subrayado","Souligné","Unterstrichen","下線","下划线","Sublinhado","Подчёркивание","Altı çizili",null,null,"Sottolineato","Podkreślenie","تسطير"],
 "취소선":["Strikethrough","Tachado","Barré","Durchgestrichen","取り消し線","删除线","Riscado","Зачёркивание","Üstü çizili",null,null,"Barrato","Przekreślenie","شطب"],
+"글자 크기 (pt, 넘치면 알아서 줄어요)":["Font size (pt, shrinks if too big)",null,null,null,null,null,null,null,null,null,null,null,null,null],
+"자동 (기본)":["Auto (default)",null,null,null,null,null,null,null,null,null,null,null,null,null],
 "글자 색":["Font color","Color de texto","Couleur de police","Schriftfarbe","文字の色","文字颜色","Cor da fonte","Цвет текста","Yazı rengi",null,null,"Colore del testo","Kolor czcionki","لون الخط"],
 "테마 기본 색":["Theme default color","Color predeterminado del tema","Couleur par défaut du thème","Standardfarbe des Designs","テーマの既定の色","主题默认颜色","Cor padrão do tema","Цвет темы по умолчанию","Tema varsayılan rengi",null,null,"Colore predefinito del tema","Domyślny kolor motywu","لون السمة الافتراضي"],
 "글자 모양 모두 지우기":["Clear all font styles","Borrar todos los estilos de texto","Effacer tous les styles de texte","Alle Textformate entfernen","文字の書式をすべて解除","清除所有文字样式","Limpar todos os estilos de texto","Убрать всё форматирование текста","Tüm yazı biçimlerini temizle",null,null,"Cancella tutti gli stili del testo","Wyczyść wszystkie style tekstu","مسح كل أنماط الخط"],
