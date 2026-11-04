@@ -16,7 +16,8 @@ var KEEP={P:1,H1:1,H2:1,H3:1,BLOCKQUOTE:1,UL:1,OL:1,LI:1,B:1,I:1,U:1,S:1,BR:1,HR
 /* fonts a piece of text may use (first name = what is stored); px sizes for the size box */
 var FACES=[['Noto Sans KR','본고딕'],['Noto Serif KR','본명조'],['Nanum Gothic','나눔고딕'],['Nanum Myeongjo','나눔명조'],['Gowun Dodum','고운돋움'],['Nanum Pen Script','나눔손글씨 펜'],['Jua','주아'],['Black Han Sans','검은고딕'],['Malgun Gothic','맑은 고딕'],['Batang','바탕'],['Arial','Arial'],['Times New Roman','Times New Roman'],['Courier New','Courier New'],['Georgia','Georgia']];
 var FACE_OK={}; FACES.forEach(function(f){ FACE_OK[f[0].toLowerCase()]=f[0]; });
-var SIZES=[8,9,10,11,12,13,14,15,16,18,20,22,24,28,32,36,40,48,60,72];
+var SIZES=[8,9,10,10.5,11,12,14,16,18,20,22,24,26,28,36,48,72];   // points, like Word; the text itself is stored in px (1pt = 4/3 px)
+function toPt(px){ return Math.round(px*0.75*2)/2; }
 function faceOf(v){ var f=String(v||'').split(',')[0].replace(/["']/g,'').trim().toLowerCase(); return FACE_OK[f]||''; }
 function pxOf(v){ var m=/^([\d.]+)(px|pt)$/.exec(String(v||'').trim()); if(!m) return 0; var n=+m[1]*(m[2]==='pt'?4/3:1); return n>=6&&n<=120?Math.round(n):0; }
 function ptOf(v){ var m=/^(-?[\d.]+)(px|pt)$/.exec(String(v||'').trim()); return m?Math.round(+m[1]*(m[2]==='px'?.75:1)*10)/10:0; }
@@ -162,7 +163,7 @@ function sync(){
   var bl=curBlock(), t=bl?bl.tagName.toLowerCase():'p'; if(t==='li') t='p'; if(bl&&bl.closest&&bl.closest('blockquote')) t='blockquote'; $('blockSel').value=t;
   $('tblCtx').hidden=!(inPage()&&closest('TD')||inPage()&&closest('TH'));
   var s=getSelection(), el=inPage()&&s.anchorNode?(s.anchorNode.nodeType===1?s.anchorNode:s.anchorNode.parentNode):null;
-  if(el&&page.contains(el)){ var cs=getComputedStyle(el), px=Math.round(parseFloat(cs.fontSize)); $('sizeSel').value=SIZES.indexOf(px)>=0?String(px):''; if(SIZES.indexOf(px)<0) $('sizeSel').options[0].textContent=px?String(px):T('크기'); else $('sizeSel').options[0].textContent=T('크기');
+  if(el&&page.contains(el)){ var cs=getComputedStyle(el), px=toPt(parseFloat(cs.fontSize)); $('sizeSel').value=SIZES.indexOf(px)>=0?String(px):''; if(SIZES.indexOf(px)<0) $('sizeSel').options[0].textContent=px?String(px):T('크기'); else $('sizeSel').options[0].textContent=T('크기');
     var f=faceOf(cs.fontFamily); var own=el.closest('span[style*="font-family"]'); $('faceSel').value=own&&page.contains(own)?faceOf(own.style.fontFamily):'';
     var b2=curBlock(); $('lhSel').value=b2&&b2.style.lineHeight?b2.style.lineHeight:''; }
   ['superscript','subscript'].forEach(function(c){ var b=document.querySelector('[data-cmd="'+c+'"]'), on=false; try{ on=inPage()&&document.queryCommandState(c); }catch(e){} if(b) b.classList.toggle('on',on); }); }
@@ -203,9 +204,9 @@ page.addEventListener('input',function(e){ if(!keepSt||!/^delete/.test(e.inputTy
   var cs=getComputedStyle(el), px=Math.round(parseFloat(cs.fontSize))||0; if(px===keepSt.px&&cs.fontFamily===keepSt.face) return;
   var sp=document.createElement('span'); if(px!==keepSt.px) sp.style.fontSize=keepSt.px+'px'; if(cs.fontFamily!==keepSt.face) sp.style.fontFamily=keepSt.face; sp.textContent='\u200b';
   var r=s.getRangeAt(0); r.insertNode(sp); var rr=document.createRange(); rr.setStart(sp.firstChild,1); rr.collapse(true); s.removeAllRanges(); s.addRange(rr); });
-function curPx(){ var el=anchorEl(); return el?Math.round(parseFloat(getComputedStyle(el).fontSize))||15:15; }
-function stepSize(d){ var px=curPx(), i; if(d>0){ for(i=0;i<SIZES.length&&SIZES[i]<=px;i++); applySize(SIZES[Math.min(i,SIZES.length-1)]); } else { for(i=SIZES.length-1;i>=0&&SIZES[i]>=px;i--); applySize(SIZES[Math.max(i,0)]); } }
-$('sizeSel').onchange=function(){ var v=+this.value; if(v) applySize(v); page.focus(); };
+function curPx(){ var el=anchorEl(); return el?toPt(parseFloat(getComputedStyle(el).fontSize))||11:11; }
+function stepSize(d){ var px=curPx(), i; if(d>0){ for(i=0;i<SIZES.length&&SIZES[i]<=px;i++); applySize(SIZES[Math.min(i,SIZES.length-1)]*4/3); } else { for(i=SIZES.length-1;i>=0&&SIZES[i]>=px;i--); applySize(SIZES[Math.max(i,0)]*4/3); } }
+$('sizeSel').onchange=function(){ var v=+this.value; if(v) applySize(v*4/3); page.focus(); };
 ['growBtn','shrinkBtn'].forEach(function(id){ $(id).addEventListener('mousedown',function(e){ e.preventDefault(); }); $(id).onclick=function(){ stepSize(id==='growBtn'?1:-1); }; });
 $('faceSel').onchange=function(){ var v=this.value; backSel(); if(v==='-'){ mark(true); spansInSel('fontFamily').forEach(function(x){ x.style.fontFamily=''; if(!x.getAttribute('style')) unwrap(x); }); after(); }
   else if(v) exec('fontName',v); page.focus(); };
