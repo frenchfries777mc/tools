@@ -183,29 +183,26 @@ function bsCheck(src){ var errs=[], stack=[], lines=src.split('\n'), VERB=BS_VER
     if(opens) stack.push({line:ln,ind:ind,kids:0}); });
   stack.forEach(function(cl){ if(!cl.kids) errs.push({line:cl.line,msg:'":" 로 끝난 줄 아래에는 안쪽으로 들여쓴 명령이 와야 해요'}); });
   return {errs:errs}; }
-function bsDescribe(t){ var m;
-  if((m=/^give\s+(\d+)\s+(.+)$/i.exec(t))) return '🎁 '+m[2]+' '+m[1]+'개 주기'; if((m=/^give\s+(.+)$/i.exec(t))) return '🎁 '+m[1]+' 1개 주기';
-  if((m=/^set\s+(\S+)\s+(damage|speed|name)\s+(.+)$/i.exec(t))) return '⚙️ '+m[1]+' 의 '+({damage:'데미지',speed:'공격 간격(초)',name:'이름'}[m[2].toLowerCase()])+' → '+m[3];
-  if((m=/^remove\s+(\S+)\s+in\s+(\d+)\s+blocks\s+of\s+(\S+)/i.exec(t))) return '🧹 '+m[3]+' 주변 '+m[2]+'칸 안의 '+m[1]+' 없애기';
-  if((m=/^replace\s+(\S+)\s+with\s+(\S+)(?:\s+in\s+(\d+)\s+blocks\s+of\s+(\S+))?/i.exec(t))) return '🔁 '+m[1]+' 을(를) '+m[2]+' 으로 바꾸기'+(m[3]?' ('+m[4]+' 주변 '+m[3]+'칸)':'');
-  if((m=/^spawn\s+(\S+)\s+(\d+)\s+times/i.exec(t))) return '🐺 '+m[1]+' '+m[2]+'번 소환'; if((m=/^spawn\s+(\S+)/i.exec(t))) return '🐺 '+m[1]+' 소환';
-  if((m=/^place\s+(\S+)(?:\s+near\s+(\S+))?/i.exec(t))) return '🏗️ '+(m[2]?m[2]+' 근처에 ':'')+m[1]+' 설치';
-  if((m=/^teleport\s+(\S+)\s+to\s+(\S+)/i.exec(t))) return '✨ '+m[1]+' 을(를) '+m[2]+' 으로 순간이동';
-  if((m=/^title\s+"([^"]*)"(?:\s+for\s+(\d+)\s+seconds?)?/i.exec(t))) return '🔤 화면 가운데에 "'+m[1]+'" 띄우기'+(m[2]?' ('+m[2]+'초)':'');
-  if((m=/^(?:chat|say)\s+"([^"]*)"/i.exec(t))) return '💬 채팅: "'+m[1]+'"';
-  if((m=/^button\s+"([^"]*)"(?:\s+at\s+([a-z ]+))?:/i.exec(t))) return '🔘 "'+m[1]+'" 버튼'+(m[2]?' ('+m[2].trim()+')':'')+' — 누르면:';
-  if((m=/^ui\s+"([^"]*)":/i.exec(t))) return '🪟 "'+m[1]+'" 작은 창 — 안에 보여 줄 것:';
-  if((m=/^remap\s+"([^"]+)"\s+to\s+"([^"]+)"/i.exec(t))) return '⌨️ 키 '+m[1]+' → '+m[2]+' 로 바꾸기';
-  if((m=/^key\s+"([^"]+)"\s*=\s*"([^"]+)"/i.exec(t))) return '⌨️ 키 '+m[1]+' = '+m[2];
-  if((m=/^chance\s+(\d+)%:/i.exec(t))) return '🎲 '+m[1]+'% 확률로:'; if((m=/^if\s+(.+):$/i.exec(t))) return '❓ 만약 '+m[1]+' 이면:'; if(/^else:/i.test(t)) return '↩️ 아니면:';
-  if((m=/^on\s+(.+):$/i.exec(t))) { var e=m[1].trim(), k=/^key\s+"([^"]+)"\s+press/i.exec(e); return '⏰ '+(k?'키 '+k[1]+' 을(를) 누르면':({'world generate':'월드를 처음 만들 때','join':'월드에 들어갈 때','mine':'돌을 캘 때','chop':'나무를 벨 때','kill':'몬스터를 잡을 때','craft':'아이템을 만들 때','fish':'낚시할 때','place':'무언가 설치할 때','die':'죽을 때'}[e]||e))+':'; }
-  return t; }
+/* each word of a line is its own small card: the word and what it means */
+var BS_MEAN={on:'때',world:'월드',generate:'만들어질 때',join:'들어올 때',key:'키',press:'누를 때',mine:'돌 캘 때',chop:'나무 벨 때',kill:'몬스터 잡을 때',craft:'만들 때',fish:'낚시할 때',place:'설치',die:'죽을 때',
+  give:'주기',set:'정하기',remove:'없애기',replace:'바꾸기',teleport:'순간이동',title:'화면 가운데 글자',chat:'채팅',say:'말하기',button:'버튼',ui:'작은 창',remap:'키 바꾸기',chance:'확률',if:'만약',else:'아니면',rename:'이름 바꾸기',
+  in:'안에서',of:'의',to:'로',at:'위치',near:'근처',with:'으로',for:'동안',and:'그리고',has:'가지고 있으면',seconds:'초',second:'초',times:'번',blocks:'칸',block:'칸',damage:'데미지',speed:'공격 간격(초)',name:'이름',
+  top:'위',bottom:'아래',left:'왼쪽',right:'오른쪽',center:'가운데',player:'플레이어',iron:'철',log:'통나무',stone:'돌',wood:'나무',sword:'검',bench:'작업대',wolf:'늑대',tree:'나무',rock:'바위',grass:'풀',sand:'모래'};
+function bsChip(w,first){ var c=document.createElement('span'); c.className='chip'; var b=document.createElement('b'), m=document.createElement('small'), lw=w.toLowerCase(), mean;
+  if(/^"/.test(w)){ b.textContent=w; mean='글자'; c.classList.add('s'); }
+  else if(/^\d+%$/.test(w)){ b.textContent=w; mean='퍼센트'; c.classList.add('n'); }
+  else if(/^\d+$/.test(w)){ b.textContent=w; mean='숫자'; c.classList.add('n'); }
+  else if(w===':'){ b.textContent=':'; mean='안쪽 명령'; }
+  else if(w==='='){ b.textContent='='; mean='같다'; }
+  else { b.textContent=w; if(lw==='spawn') mean=first?'소환':'시작 위치'; else mean=BS_MEAN[lw]; if(BS_VERBS.split(' ').indexOf(lw)>=0||lw==='press') c.classList.add('k'); if(mean==null){ mean='(이름)'; c.classList.add('u'); } }
+  m.textContent=mean; c.appendChild(b); c.appendChild(m); return c; }
+function bsChips(t){ var row=document.createElement('span'); row.className='chips'; var re=/"(?:\\.|[^"\\])*"?|\d+%?|[A-Za-z_][\w]*|[:=]|[^\s]/g, m, i=0; while((m=re.exec(t))){ row.appendChild(bsChip(m[0],i===0)); i++; } return row; }
 function bsRun(ctx){ var src=ctx.code, r=bsCheck(src); ctx.pv.innerHTML='';
   var lines=src.split('\n'), stack=[{ind:-1,el:ctx.pv}], any=false;
   lines.forEach(function(raw,i){ var line=raw.replace(/\t/g,'    '); if(!line.trim()||/^\s*#/.test(line)) return; var ind=/^ */.exec(line)[0].length, t=line.trim(); any=true;
     while(stack.length>1&&ind<=stack[stack.length-1].ind) stack.pop(); var par=stack[stack.length-1].el, row;
-    if(/:\s*$/.test(t)){ var d=document.createElement('details'); d.open=true; var s=mk('summary','',bsDescribe(t)); d.appendChild(s); var b=mk('div','tb'); d.appendChild(b); par.appendChild(d); stack.push({ind:ind,el:b}); }
-    else { row=mk('div','tl',bsDescribe(t)); par.appendChild(row); } });
+    if(/:\s*$/.test(t)){ var d=document.createElement('details'); d.open=true; var s=mk('summary',''); s.appendChild(bsChips(t)); d.appendChild(s); var b=mk('div','tb'); d.appendChild(b); par.appendChild(d); stack.push({ind:ind,el:b}); }
+    else { row=mk('div','tl'); row.appendChild(bsChips(t)); par.appendChild(row); } });
   if(!any) ctx.pv.appendChild(mk('p','tl','규칙이 아직 없어요. on join: 처럼 써 보세요'));
   if(r.errs.length){ r.errs.sort(function(a,b){ return a.line-b.line; }); r.errs.slice(0,12).forEach(function(e){ ctx.write('✖ '+e.line+'줄: '+e.msg+'\n','err'); }); ctx.errLine(r.errs[0].line); ctx.show('out'); ctx.done(false); return; }
   if(any) ctx.write('✔ 문법이 맞아요. 이 파일을 Beaconfall 모드 올리기 창에 올리면 게임에서 써요\n','ok'); ctx.show('pv'); ctx.done(true); }
