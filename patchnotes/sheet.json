@@ -3,6 +3,26 @@
  "name": "Fry Sheet",
  "notes": [
   {
+   "date": "2026-11-04",
+   "build": "v46",
+   "title": "글자 크기를 포인트(pt)로",
+   "items": [
+    "글자 크기 숫자를 Excel과 같은 포인트(pt) 단위로 바꿈: 같은 숫자면 Excel과 같은 크기로 보임",
+    "기본 글자 크기는 11pt (Excel 기본과 같음)",
+    "xlsx로 내보내고 가져올 때도 같은 포인트 크기로 오감"
+   ],
+   "tr": {
+    "en": {
+     "title": "Font sizes in points",
+     "items": [
+      "Font size numbers are now points (pt) like Excel, so the same number looks the same size",
+      "The default font size is 11pt, like Excel",
+      "Sizes carry over unchanged when you export or import .xlsx"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-10-31",
    "build": "v45",
    "title": "선택하여 붙여넣기",
@@ -60,7 +80,12 @@
     },
     "zh": {
      "title": "选择性粘贴",
-     "items": ["“开始”选项卡新增“选择性粘贴”按钮：可选择粘贴全部、仅公式和值、仅计算后的值或仅格式", "在已有数值上进行加、减、乘、除后粘贴", "可选择跳过空白单元格、行列转置（公式以数值形式粘贴）", "粘贴后可以撤销"]
+     "items": [
+      "“开始”选项卡新增“选择性粘贴”按钮：可选择粘贴全部、仅公式和值、仅计算后的值或仅格式",
+      "在已有数值上进行加、减、乘、除后粘贴",
+      "可选择跳过空白单元格、行列转置（公式以数值形式粘贴）",
+      "粘贴后可以撤销"
+     ]
     },
     "pt": {
      "title": "Colar especial",
@@ -712,11 +737,17 @@
     },
     "ja": {
      "title": "リボンタブを整理",
-     "items": ["ホームタブに集まっていた機能を、書式・行・列・保護・印刷の各タブに分けました", "データタブにあった非表示・ウィンドウ枠の固定・ロックを、行・列タブと保護・印刷タブへ移しました"]
+     "items": [
+      "ホームタブに集まっていた機能を、書式・行・列・保護・印刷の各タブに分けました",
+      "データタブにあった非表示・ウィンドウ枠の固定・ロックを、行・列タブと保護・印刷タブへ移しました"
+     ]
     },
     "zh": {
      "title": "整理功能区标签",
-     "items": ["把开始标签中堆在一起的功能分到“格式”“行·列”“保护·打印”标签中", "数据标签中的隐藏、冻结窗格和锁定分别移到“行·列”和“保护·打印”标签"]
+     "items": [
+      "把开始标签中堆在一起的功能分到“格式”“行·列”“保护·打印”标签中",
+      "数据标签中的隐藏、冻结窗格和锁定分别移到“行·列”和“保护·打印”标签"
+     ]
     },
     "pt": {
      "title": "Abas da faixa reorganizadas",
@@ -1022,11 +1053,17 @@
     },
     "ja": {
      "title": "削除の確認画面をなくす",
-     "items": ["シートと文書を消すとき確認画面を出さずにすぐ消す", "消した後、画面下に元に戻す案内が7秒間出て、すぐ復元できる"]
+     "items": [
+      "シートと文書を消すとき確認画面を出さずにすぐ消す",
+      "消した後、画面下に元に戻す案内が7秒間出て、すぐ復元できる"
+     ]
     },
     "zh": {
      "title": "取消删除确认窗口",
-     "items": ["删除表格和文档时不再弹出确认窗口，直接删除", "删除后屏幕下方会显示 7 秒的撤销提示，可立即恢复"]
+     "items": [
+      "删除表格和文档时不再弹出确认窗口，直接删除",
+      "删除后屏幕下方会显示 7 秒的撤销提示，可立即恢复"
+     ]
     },
     "pt": {
      "title": "Sem janela de confirmação ao apagar",
@@ -1079,7 +1116,10 @@
     },
     "gk": {
      "title": "지우는 확인 창 없애다",
-     "items": ["시트 그리고 문서 지울 때 확인 창 없이 곧 지움", "지운 뒤 화면 아래 되돌리기 안내 7 초 나오다 곧 되살리다"]
+     "items": [
+      "시트 그리고 문서 지울 때 확인 창 없이 곧 지움",
+      "지운 뒤 화면 아래 되돌리기 안내 7 초 나오다 곧 되살리다"
+     ]
     }
    }
   },
@@ -1094,59 +1134,101 @@
    "tr": {
     "en": {
      "title": "17 languages",
-     "items": ["Added Italian, Polish and Arabic text", "Arabic is laid out right to left"]
+     "items": [
+      "Added Italian, Polish and Arabic text",
+      "Arabic is laid out right to left"
+     ]
     },
     "es": {
      "title": "17 idiomas",
-     "items": ["Añadidos textos en italiano, polaco y árabe", "El árabe se dispone de derecha a izquierda"]
+     "items": [
+      "Añadidos textos en italiano, polaco y árabe",
+      "El árabe se dispone de derecha a izquierda"
+     ]
     },
     "fr": {
      "title": "17 langues",
-     "items": ["Ajout de l'italien, du polonais et de l'arabe", "L'arabe est disposé de droite à gauche"]
+     "items": [
+      "Ajout de l'italien, du polonais et de l'arabe",
+      "L'arabe est disposé de droite à gauche"
+     ]
     },
     "de": {
      "title": "17 Sprachen",
-     "items": ["Texte auf Italienisch, Polnisch und Arabisch hinzugefügt", "Arabisch wird von rechts nach links gesetzt"]
+     "items": [
+      "Texte auf Italienisch, Polnisch und Arabisch hinzugefügt",
+      "Arabisch wird von rechts nach links gesetzt"
+     ]
     },
     "ja": {
      "title": "17言語",
-     "items": ["イタリア語、ポーランド語、アラビア語の文言を追加", "アラビア語は右から左に配置"]
+     "items": [
+      "イタリア語、ポーランド語、アラビア語の文言を追加",
+      "アラビア語は右から左に配置"
+     ]
     },
     "zh": {
      "title": "17 种语言",
-     "items": ["新增意大利语、波兰语和阿拉伯语文字", "阿拉伯语从右向左排版"]
+     "items": [
+      "新增意大利语、波兰语和阿拉伯语文字",
+      "阿拉伯语从右向左排版"
+     ]
     },
     "pt": {
      "title": "17 idiomas",
-     "items": ["Adicionados textos em italiano, polonês e árabe", "O árabe é disposto da direita para a esquerda"]
+     "items": [
+      "Adicionados textos em italiano, polonês e árabe",
+      "O árabe é disposto da direita para a esquerda"
+     ]
     },
     "ru": {
      "title": "17 языков",
-     "items": ["Добавлены тексты на итальянском, польском и арабском", "Арабский выводится справа налево"]
+     "items": [
+      "Добавлены тексты на итальянском, польском и арабском",
+      "Арабский выводится справа налево"
+     ]
     },
     "tr": {
      "title": "17 dil",
-     "items": ["İtalyanca, Lehçe ve Arapça metinler eklendi", "Arapça sağdan sola dizilir"]
+     "items": [
+      "İtalyanca, Lehçe ve Arapça metinler eklendi",
+      "Arapça sağdan sola dizilir"
+     ]
     },
     "it": {
      "title": "17 lingue",
-     "items": ["Aggiunti testi in italiano, polacco e arabo", "L'arabo è disposto da destra a sinistra"]
+     "items": [
+      "Aggiunti testi in italiano, polacco e arabo",
+      "L'arabo è disposto da destra a sinistra"
+     ]
     },
     "pl": {
      "title": "17 języków",
-     "items": ["Dodano teksty po włosku, polsku i arabsku", "Arabski układany jest od prawej do lewej"]
+     "items": [
+      "Dodano teksty po włosku, polsku i arabsku",
+      "Arabski układany jest od prawej do lewej"
+     ]
     },
     "ar": {
      "title": "17 لغة",
-     "items": ["أُضيفت نصوص بالإيطالية والبولندية والعربية", "تُرتَّب العربية من اليمين إلى اليسار"]
+     "items": [
+      "أُضيفت نصوص بالإيطالية والبولندية والعربية",
+      "تُرتَّب العربية من اليمين إلى اليسار"
+     ]
     },
     "nw": {
      "title": "17 speaks",
-     "items": ["Added Italian, Polish, Arabic words", "Arabic laid right to left"]
+     "items": [
+      "Added Italian, Polish, Arabic words",
+      "Arabic laid right to left"
+     ]
     },
     "gk": {
      "title": "17 언어들",
-     "items": ["더했다 이탈리아어 광택제 아라비아어 글", "아라비아어 오른쪽에서 왼쪽 배치"]
+     "items": [
+      "더했다 이탈리아어 광택제 아라비아어 글",
+      "아라비아어 오른쪽에서 왼쪽 배치"
+     ]
     }
    }
   },
@@ -1208,7 +1290,12 @@
     },
     "zh": {
      "title": "版本记录",
-     "items": ["点击顶部“版本”按钮打开旧版本列表并恢复", "可以起名保存当前状态（最多 15 个）", "过了 30 分钟且内容有变化时自动保存版本（自动版本保留最近 4 个）", "恢复前的状态也会自动保存，可以再回来"]
+     "items": [
+      "点击顶部“版本”按钮打开旧版本列表并恢复",
+      "可以起名保存当前状态（最多 15 个）",
+      "过了 30 分钟且内容有变化时自动保存版本（自动版本保留最近 4 个）",
+      "恢复前的状态也会自动保存，可以再回来"
+     ]
     },
     "pt": {
      "title": "Histórico de versões",
@@ -1336,7 +1423,11 @@
     },
     "zh": {
      "title": "单元格日记",
-     "items": ["修改单元格的值时会记住旧值和修改时间（每个单元格最多 20 次，不含公式）", "公式讲解窗口显示值变化记录（如“3 天前 85”）", "“用故事总结”按钮：AI 简要说明什么时候从哪个值变成了哪个值"]
+     "items": [
+      "修改单元格的值时会记住旧值和修改时间（每个单元格最多 20 次，不含公式）",
+      "公式讲解窗口显示值变化记录（如“3 天前 85”）",
+      "“用故事总结”按钮：AI 简要说明什么时候从哪个值变成了哪个值"
+     ]
     },
     "pt": {
      "title": "Diário da célula",
@@ -1438,11 +1529,15 @@
     },
     "ja": {
      "title": "AI数式に理由メモ",
-     "items": ["AI画面で数式を入れるとき、AIがなぜそう書いたかの一行説明をそのセルのメモとして一緒に入れる（すでにメモのあるセルはそのまま、セルにマウスを乗せると表示）"]
+     "items": [
+      "AI画面で数式を入れるとき、AIがなぜそう書いたかの一行説明をそのセルのメモとして一緒に入れる（すでにメモのあるセルはそのまま、セルにマウスを乗せると表示）"
+     ]
     },
     "zh": {
      "title": "AI 公式附理由备注",
-     "items": ["在 AI 窗口插入公式时，会把 AI 为什么这样写的一行说明作为该单元格的备注一并放入（已有备注的单元格保持不变，鼠标移到单元格上即可查看）"]
+     "items": [
+      "在 AI 窗口插入公式时，会把 AI 为什么这样写的一行说明作为该单元格的备注一并放入（已有备注的单元格保持不变，鼠标移到单元格上即可查看）"
+     ]
     },
     "pt": {
      "title": "Notas com o motivo nas fórmulas de IA",
@@ -1488,7 +1583,9 @@
     },
     "gk": {
      "title": "AI 수식에 이유 메모",
-     "items": ["AI 창 수식 넣을 때 AI 왜 이렇게 썼는지 한 줄 설명 칸 메모로 같이 (이미 메모 있는 칸 그대로 마우스 올리면 보임)"]
+     "items": [
+      "AI 창 수식 넣을 때 AI 왜 이렇게 썼는지 한 줄 설명 칸 메모로 같이 (이미 메모 있는 칸 그대로 마우스 올리면 보임)"
+     ]
     }
    }
   },
@@ -2008,11 +2105,17 @@
     },
     "ja": {
      "title": "チャートを Fry Slides へ",
-     "items": ["チャート画面に「スライドへ」ボタンを追加（選んだ発表資料または新しい発表資料にグラフスライドとして直接入れる）", "シートと連携して入れると、シートの値を直したときスライドのグラフも一緒に変わる"]
+     "items": [
+      "チャート画面に「スライドへ」ボタンを追加（選んだ発表資料または新しい発表資料にグラフスライドとして直接入れる）",
+      "シートと連携して入れると、シートの値を直したときスライドのグラフも一緒に変わる"
+     ]
     },
     "zh": {
      "title": "图表发送到 Fry Slides",
-     "items": ["图表窗口新增“发送到幻灯片”按钮（把图表作为图表幻灯片直接放入所选或新的演示文稿）", "与表格链接后放入时，修改表格的值，幻灯片中的图表也会跟着变化"]
+     "items": [
+      "图表窗口新增“发送到幻灯片”按钮（把图表作为图表幻灯片直接放入所选或新的演示文稿）",
+      "与表格链接后放入时，修改表格的值，幻灯片中的图表也会跟着变化"
+     ]
     },
     "pt": {
      "title": "Gráficos para o Fry Slides",
@@ -2065,7 +2168,10 @@
     },
     "gk": {
      "title": "차트를 프라이 슬라이드로",
-     "items": ["차트 창 슬라이드로 단추 (고른 발표 자료나 새 발표 자료 그래프 슬라이드로 바로 넣기)", "시트와 연결해서 넣으면 시트 값 고칠 때 슬라이드 그래프도 따라 바뀜"]
+     "items": [
+      "차트 창 슬라이드로 단추 (고른 발표 자료나 새 발표 자료 그래프 슬라이드로 바로 넣기)",
+      "시트와 연결해서 넣으면 시트 값 고칠 때 슬라이드 그래프도 따라 바뀜"
+     ]
     }
    }
   },
@@ -2247,11 +2353,17 @@
     },
     "ja": {
      "title": "名詞をすべて探す",
-     "items": ["=AI(\"名詞\", セル) が文の名詞を漏らさずすべて拾う（今日・昨日のような時間を表す言葉も名詞）", "=AI(\"代名詞\", セル) も同じ方法で、私・あなた・私たちのような代名詞をすべて拾う"]
+     "items": [
+      "=AI(\"名詞\", セル) が文の名詞を漏らさずすべて拾う（今日・昨日のような時間を表す言葉も名詞）",
+      "=AI(\"代名詞\", セル) も同じ方法で、私・あなた・私たちのような代名詞をすべて拾う"
+     ]
     },
     "zh": {
      "title": "找出所有名词",
-     "items": ["=AI(\"名词\", 单元格) 不遗漏地挑出句子中的所有名词（今天、昨天这样的时间词也算名词）", "=AI(\"代词\", 单元格) 同样挑出我、你、我们等所有代词"]
+     "items": [
+      "=AI(\"名词\", 单元格) 不遗漏地挑出句子中的所有名词（今天、昨天这样的时间词也算名词）",
+      "=AI(\"代词\", 单元格) 同样挑出我、你、我们等所有代词"
+     ]
     },
     "pt": {
      "title": "Encontrar todos os substantivos",
@@ -2304,7 +2416,10 @@
     },
     "gk": {
      "title": "명사 모두 찾기",
-     "items": ["=AI(\"명사\", 칸) 문장의 명사 빠뜨리지 않고 모두 (오늘 어제 같은 시간 말도 명사)", "=AI(\"대명사\", 칸) 같은 방식 나 너 우리 같은 대명사 모두"]
+     "items": [
+      "=AI(\"명사\", 칸) 문장의 명사 빠뜨리지 않고 모두 (오늘 어제 같은 시간 말도 명사)",
+      "=AI(\"대명사\", 칸) 같은 방식 나 너 우리 같은 대명사 모두"
+     ]
     }
    }
   },
@@ -2342,11 +2457,15 @@
     },
     "ja": {
      "title": "質問・要約の繰り返しを防ぐ",
-     "items": ["質問・要約タブと =AI() 関数が自前AIの文の答え設定を使用（同じ言葉の繰り返し、漢字の混入、長すぎる答えを防ぐ）"]
+     "items": [
+      "質問・要約タブと =AI() 関数が自前AIの文の答え設定を使用（同じ言葉の繰り返し、漢字の混入、長すぎる答えを防ぐ）"
+     ]
     },
     "zh": {
      "title": "防止提问·总结重复",
-     "items": ["提问·总结标签页和 =AI() 函数使用自带 AI 的文字回答设置（防止重复同一句话、夹杂汉字和回答过长）"]
+     "items": [
+      "提问·总结标签页和 =AI() 函数使用自带 AI 的文字回答设置（防止重复同一句话、夹杂汉字和回答过长）"
+     ]
     },
     "pt": {
      "title": "Evitar repetições em perguntas e resumos",
@@ -2392,7 +2511,9 @@
     },
     "gk": {
      "title": "질문 요약 반복 막기",
-     "items": ["질문 요약 탭 =AI() 함수 자체 AI 글 답변 설정 사용 (같은 말 반복 한자 섞임 너무 긴 답 막기)"]
+     "items": [
+      "질문 요약 탭 =AI() 함수 자체 AI 글 답변 설정 사용 (같은 말 반복 한자 섞임 너무 긴 답 막기)"
+     ]
     }
    }
   },
@@ -2430,11 +2551,15 @@
     },
     "ja": {
      "title": "AI関数の文の成分",
-     "items": ["=AI(\"目的語\", B1) のように主語・目的語・補語・述語・連用修飾語・連体修飾語を書くと、AIにその成分の見分け方と例も一緒に送って混乱を減らす"]
+     "items": [
+      "=AI(\"目的語\", B1) のように主語・目的語・補語・述語・連用修飾語・連体修飾語を書くと、AIにその成分の見分け方と例も一緒に送って混乱を減らす"
+     ]
     },
     "zh": {
      "title": "AI 函数的句子成分",
-     "items": ["像 =AI(\"宾语\", B1) 这样写主语、宾语、补语、谓语、状语、定语时，会把识别该成分的方法和例子一起发给 AI，减少混淆"]
+     "items": [
+      "像 =AI(\"宾语\", B1) 这样写主语、宾语、补语、谓语、状语、定语时，会把识别该成分的方法和例子一起发给 AI，减少混淆"
+     ]
     },
     "pt": {
      "title": "Partes da frase na função de IA",
@@ -2480,7 +2605,9 @@
     },
     "gk": {
      "title": "AI 함수 문장 성분",
-     "items": ["=AI(\"목적어\", B1) 처럼 주어 목적어 보어 서술어 부사어 관형어 쓰면 AI에게 그 성분 알아보는 방법 예시 함께 보내 덜 헷갈리게"]
+     "items": [
+      "=AI(\"목적어\", B1) 처럼 주어 목적어 보어 서술어 부사어 관형어 쓰면 AI에게 그 성분 알아보는 방법 예시 함께 보내 덜 헷갈리게"
+     ]
     }
    }
   },
@@ -2530,7 +2657,10 @@
     },
     "zh": {
      "title": "简写 AI 函数",
-     "items": ["像 =AI(\"主语\", B1) 这样，任务只写“主语”“动词”“日期”“名字”“数字”之类的一个词，也能只挑出并填入那一部分", "“只要主语”“找日期”“subject”等写法也按同样的意思处理"]
+     "items": [
+      "像 =AI(\"主语\", B1) 这样，任务只写“主语”“动词”“日期”“名字”“数字”之类的一个词，也能只挑出并填入那一部分",
+      "“只要主语”“找日期”“subject”等写法也按同样的意思处理"
+     ]
     },
     "pt": {
      "title": "Tarefas curtas na função de IA",
@@ -2583,7 +2713,10 @@
     },
     "gk": {
      "title": "AI 함수 짧게 쓰기",
-     "items": ["=AI(\"주어\", B1) 처럼 할 일에 주어 동사 날짜 이름 숫자 같은 단어 하나만 써도 그 부분만 골라 채우기", "주어만 날짜 찾기 subject 처럼 써도 같은 뜻으로 처리"]
+     "items": [
+      "=AI(\"주어\", B1) 처럼 할 일에 주어 동사 날짜 이름 숫자 같은 단어 하나만 써도 그 부분만 골라 채우기",
+      "주어만 날짜 찾기 subject 처럼 써도 같은 뜻으로 처리"
+     ]
     }
    }
   },
@@ -2949,11 +3082,17 @@
     },
     "ja": {
      "title": "Fry Lab の記録を開く",
-     "items": ["Fry Lab から送った実験記録の文書をすぐ開く", "チャートのある文書はチャート画面を広げた状態で開く"]
+     "items": [
+      "Fry Lab から送った実験記録の文書をすぐ開く",
+      "チャートのある文書はチャート画面を広げた状態で開く"
+     ]
     },
     "zh": {
      "title": "打开 Fry Lab 记录",
-     "items": ["可直接打开从 Fry Lab 发送的实验记录文档", "带图表的文档打开时图表窗口处于展开状态"]
+     "items": [
+      "可直接打开从 Fry Lab 发送的实验记录文档",
+      "带图表的文档打开时图表窗口处于展开状态"
+     ]
     },
     "pt": {
      "title": "Abrir registros do Fry Lab",
@@ -2992,15 +3131,24 @@
     },
     "ar": {
      "title": "فتح سجلات Fry Lab",
-     "items": ["تُفتح فورًا مستندات سجلات التجارب المرسلة من Fry Lab", "تُفتح المستندات التي فيها رسم بياني ونافذة الرسم مفتوحة"]
+     "items": [
+      "تُفتح فورًا مستندات سجلات التجارب المرسلة من Fry Lab",
+      "تُفتح المستندات التي فيها رسم بياني ونافذة الرسم مفتوحة"
+     ]
     },
     "nw": {
      "title": "Open Fry Lab records",
-     "items": ["Open tryout record docs sent from Fry Lab at once", "Docs with chart open with chart window spread"]
+     "items": [
+      "Open tryout record docs sent from Fry Lab at once",
+      "Docs with chart open with chart window spread"
+     ]
     },
     "gk": {
      "title": "프라이 랩 기록 열기",
-     "items": ["프라이 랩에서 보낸 실험 기록 문서 바로 열기", "차트 있는 문서 차트 창 펼친 채로 열기"]
+     "items": [
+      "프라이 랩에서 보낸 실험 기록 문서 바로 열기",
+      "차트 있는 문서 차트 창 펼친 채로 열기"
+     ]
     }
    }
   },
@@ -3769,11 +3917,19 @@
     },
     "ja": {
      "title": "AI数式・グラフ・表を前に",
-     "items": ["AI画面のタブ順を数式作成、グラフ作成、表作成、質問・要約の順に変更", "AI画面を開くと数式作成から表示", "AI画面に得意なことと間違えやすいことの案内を追加"]
+     "items": [
+      "AI画面のタブ順を数式作成、グラフ作成、表作成、質問・要約の順に変更",
+      "AI画面を開くと数式作成から表示",
+      "AI画面に得意なことと間違えやすいことの案内を追加"
+     ]
     },
     "zh": {
      "title": "AI 公式·图表·表格前置",
-     "items": ["AI 窗口标签页顺序改为生成公式、生成图表、生成表格、提问·总结", "打开 AI 窗口时先显示生成公式", "AI 窗口新增擅长和容易出错之处的说明"]
+     "items": [
+      "AI 窗口标签页顺序改为生成公式、生成图表、生成表格、提问·总结",
+      "打开 AI 窗口时先显示生成公式",
+      "AI 窗口新增擅长和容易出错之处的说明"
+     ]
     },
     "pt": {
      "title": "Fórmulas, gráficos e tabelas de IA em primeiro",
@@ -3833,7 +3989,11 @@
     },
     "gk": {
      "title": "AI 수식 그래프 표 앞으로",
-     "items": ["AI 창 탭 순서 수식 만들기 그래프 만들기 표 만들기 질문 요약", "AI 창 열면 수식 만들기부터 표시", "AI 창 잘 맞는 일 틀릴 수 있는 일 안내"]
+     "items": [
+      "AI 창 탭 순서 수식 만들기 그래프 만들기 표 만들기 질문 요약",
+      "AI 창 열면 수식 만들기부터 표시",
+      "AI 창 잘 맞는 일 틀릴 수 있는 일 안내"
+     ]
     }
    }
   },
@@ -3876,11 +4036,17 @@
     },
     "ja": {
      "title": "AI数式の翻訳依頼を修正",
-     "items": ["翻訳の依頼にAI()関数の数式をすぐ作る", "数式にならない依頼は無理に数式を作らず理由を知らせる"]
+     "items": [
+      "翻訳の依頼にAI()関数の数式をすぐ作る",
+      "数式にならない依頼は無理に数式を作らず理由を知らせる"
+     ]
     },
     "zh": {
      "title": "修复 AI 公式翻译请求",
-     "items": ["翻译请求会立即生成 AI() 函数公式", "无法写成公式的请求会说明原因，而不是勉强生成公式"]
+     "items": [
+      "翻译请求会立即生成 AI() 函数公式",
+      "无法写成公式的请求会说明原因，而不是勉强生成公式"
+     ]
     },
     "pt": {
      "title": "Corrigidos os pedidos de tradução com fórmula de IA",
@@ -3919,7 +4085,10 @@
     },
     "ar": {
      "title": "إصلاح طلبات الترجمة بصيغ الذكاء الاصطناعي",
-     "items": ["يُنشأ لطلب الترجمة فورًا صيغة بدالة AI()", "الطلبات التي لا تصلح أن تكون صيغة يُذكر لها السبب بدل صيغة مفروضة"]
+     "items": [
+      "يُنشأ لطلب الترجمة فورًا صيغة بدالة AI()",
+      "الطلبات التي لا تصلح أن تكون صيغة يُذكر لها السبب بدل صيغة مفروضة"
+     ]
     },
     "nw": {
      "title": "AI formula translate ask fixed",
@@ -3930,7 +4099,10 @@
     },
     "gk": {
      "title": "AI 수식 번역 요청 수정",
-     "items": ["번역 수식 요청 AI() 함수 수식 바로 만들기", "수식 안 되는 요청 억지 수식 대신 이유 알림"]
+     "items": [
+      "번역 수식 요청 AI() 함수 수식 바로 만들기",
+      "수식 안 되는 요청 억지 수식 대신 이유 알림"
+     ]
     }
    }
   },
@@ -3992,7 +4164,12 @@
     },
     "zh": {
      "title": "迷你条、迷你图、图标",
-     "items": ["新增单元格内迷你条的条件格式", "新增迷你图（把每行的值以折线或柱形画在另一列的单元格中）", "新增图标集（箭头、红绿灯、分界标准和颜色反转）", "可从功能区图标按钮和条件格式窗口打开，插入或删除行列时会跟着变化"]
+     "items": [
+      "新增单元格内迷你条的条件格式",
+      "新增迷你图（把每行的值以折线或柱形画在另一列的单元格中）",
+      "新增图标集（箭头、红绿灯、分界标准和颜色反转）",
+      "可从功能区图标按钮和条件格式窗口打开，插入或删除行列时会跟着变化"
+     ]
     },
     "pt": {
      "title": "Minibarras, sparklines e ícones",
@@ -4126,7 +4303,12 @@
     },
     "zh": {
      "title": "数据整理",
-     "items": ["新增删除重复项（所选列相同即为重复，不区分大小写）", "新增文本分列（按逗号、分号、制表符、空格或自定义分隔符，可预览）", "新增清理空格（删除首尾和重复的空格）", "都可以在数据菜单中撤销"]
+     "items": [
+      "新增删除重复项（所选列相同即为重复，不区分大小写）",
+      "新增文本分列（按逗号、分号、制表符、空格或自定义分隔符，可预览）",
+      "新增清理空格（删除首尾和重复的空格）",
+      "都可以在数据菜单中撤销"
+     ]
     },
     "pt": {
      "title": "Limpeza de dados",
@@ -4539,11 +4721,19 @@
     },
     "ja": {
      "title": "ピボットテーブル",
-     "items": ["ピボットテーブルを追加（1つの列でグループ化して合計・個数・平均を計算、新しいシートに作成）", "データツールメニューを追加（リボンのデータボタン）", "グループ化の順序を選択（最初に出た順、名前順、値が大きい順）"]
+     "items": [
+      "ピボットテーブルを追加（1つの列でグループ化して合計・個数・平均を計算、新しいシートに作成）",
+      "データツールメニューを追加（リボンのデータボタン）",
+      "グループ化の順序を選択（最初に出た順、名前順、値が大きい順）"
+     ]
     },
     "zh": {
      "title": "数据透视表",
-     "items": ["新增数据透视表（按一列分组并计算合计、个数或平均值，在新表中生成）", "新增数据工具菜单（功能区数据按钮）", "可选择分组顺序（首次出现顺序、按名称、按值从大到小）"]
+     "items": [
+      "新增数据透视表（按一列分组并计算合计、个数或平均值，在新表中生成）",
+      "新增数据工具菜单（功能区数据按钮）",
+      "可选择分组顺序（首次出现顺序、按名称、按值从大到小）"
+     ]
     },
     "pt": {
      "title": "Tabelas dinâmicas",
@@ -4603,7 +4793,11 @@
     },
     "gk": {
      "title": "피벗 테이블",
-     "items": ["피벗 테이블 (한 열로 묶어 합계 개수 평균 계산 새 시트에 만들기)", "데이터 도구 메뉴 (리본 데이터 단추)", "묶는 순서 선택 (처음 나온 순서 이름순 값이 큰 순서)"]
+     "items": [
+      "피벗 테이블 (한 열로 묶어 합계 개수 평균 계산 새 시트에 만들기)",
+      "데이터 도구 메뉴 (리본 데이터 단추)",
+      "묶는 순서 선택 (처음 나온 순서 이름순 값이 큰 순서)"
+     ]
     }
    }
   },
@@ -5120,59 +5314,87 @@
    "tr": {
     "en": {
      "title": "Translation example sentences replaced",
-     "items": ["Translation examples replaced with easy sentences the model translates well"]
+     "items": [
+      "Translation examples replaced with easy sentences the model translates well"
+     ]
     },
     "es": {
      "title": "Frases de ejemplo de traducción sustituidas",
-     "items": ["Los ejemplos de traducción se cambiaron por frases fáciles que el modelo traduce bien"]
+     "items": [
+      "Los ejemplos de traducción se cambiaron por frases fáciles que el modelo traduce bien"
+     ]
     },
     "fr": {
      "title": "Phrases d'exemple de traduction remplacées",
-     "items": ["Les exemples de traduction sont remplacés par des phrases simples que le modèle traduit bien"]
+     "items": [
+      "Les exemples de traduction sont remplacés par des phrases simples que le modèle traduit bien"
+     ]
     },
     "de": {
      "title": "Übersetzungsbeispiele ausgetauscht",
-     "items": ["Die Übersetzungsbeispiele wurden durch einfache Sätze ersetzt, die das Modell gut übersetzt"]
+     "items": [
+      "Die Übersetzungsbeispiele wurden durch einfache Sätze ersetzt, die das Modell gut übersetzt"
+     ]
     },
     "ja": {
      "title": "翻訳の例文を入れ替え",
-     "items": ["翻訳の例を、モデルがうまく翻訳できる易しい文に入れ替え"]
+     "items": [
+      "翻訳の例を、モデルがうまく翻訳できる易しい文に入れ替え"
+     ]
     },
     "zh": {
      "title": "更换翻译示例句",
-     "items": ["翻译示例换成模型翻译得好的简单句子"]
+     "items": [
+      "翻译示例换成模型翻译得好的简单句子"
+     ]
     },
     "pt": {
      "title": "Frases de exemplo de tradução trocadas",
-     "items": ["Os exemplos de tradução foram trocados por frases fáceis que o modelo traduz bem"]
+     "items": [
+      "Os exemplos de tradução foram trocados por frases fáceis que o modelo traduz bem"
+     ]
     },
     "ru": {
      "title": "Заменены примеры предложений для перевода",
-     "items": ["Примеры перевода заменены простыми предложениями, которые модель хорошо переводит"]
+     "items": [
+      "Примеры перевода заменены простыми предложениями, которые модель хорошо переводит"
+     ]
     },
     "tr": {
      "title": "Çeviri örnek cümleleri değiştirildi",
-     "items": ["Çeviri örnekleri modelin iyi çevirdiği basit cümlelerle değiştirildi"]
+     "items": [
+      "Çeviri örnekleri modelin iyi çevirdiği basit cümlelerle değiştirildi"
+     ]
     },
     "it": {
      "title": "Frasi d'esempio di traduzione sostituite",
-     "items": ["Gli esempi di traduzione sono sostituiti da frasi semplici che il modello traduce bene"]
+     "items": [
+      "Gli esempi di traduzione sono sostituiti da frasi semplici che il modello traduce bene"
+     ]
     },
     "pl": {
      "title": "Wymieniono przykładowe zdania do tłumaczenia",
-     "items": ["Przykłady tłumaczenia zastąpiono prostymi zdaniami, które model dobrze tłumaczy"]
+     "items": [
+      "Przykłady tłumaczenia zastąpiono prostymi zdaniami, które model dobrze tłumaczy"
+     ]
     },
     "ar": {
      "title": "استبدال جمل أمثلة الترجمة",
-     "items": ["استُبدلت أمثلة الترجمة بجمل سهلة يترجمها النموذج جيدًا"]
+     "items": [
+      "استُبدلت أمثلة الترجمة بجمل سهلة يترجمها النموذج جيدًا"
+     ]
     },
     "nw": {
      "title": "Translate example lines swapped",
-     "items": ["Translate examples swapped for easy lines the model translates good"]
+     "items": [
+      "Translate examples swapped for easy lines the model translates good"
+     ]
     },
     "gk": {
      "title": "번역 예시 문장 교체",
-     "items": ["번역 예시 모델이 잘 번역하는 쉬운 문장으로 교체"]
+     "items": [
+      "번역 예시 모델이 잘 번역하는 쉬운 문장으로 교체"
+     ]
     }
    }
   },
@@ -5215,11 +5437,17 @@
     },
     "ja": {
      "title": "AI画面を止める",
-     "items": ["AIが答えている間、送信ボタンが停止ボタンに変わる", "同じ言葉を繰り返し続けると自動で停止"]
+     "items": [
+      "AIが答えている間、送信ボタンが停止ボタンに変わる",
+      "同じ言葉を繰り返し続けると自動で停止"
+     ]
     },
     "zh": {
      "title": "停止 AI 窗口",
-     "items": ["AI 回答期间，发送按钮会变成停止按钮", "持续重复同样的话会自动停止"]
+     "items": [
+      "AI 回答期间，发送按钮会变成停止按钮",
+      "持续重复同样的话会自动停止"
+     ]
     },
     "pt": {
      "title": "Parar a janela de IA",
@@ -5237,7 +5465,10 @@
     },
     "tr": {
      "title": "AI penceresini durdurma",
-     "items": ["AI cevap verirken gönder düğmesi durdur düğmesine dönüşür", "Aynı sözleri sürekli tekrarlarsa otomatik durur"]
+     "items": [
+      "AI cevap verirken gönder düğmesi durdur düğmesine dönüşür",
+      "Aynı sözleri sürekli tekrarlarsa otomatik durur"
+     ]
     },
     "it": {
      "title": "Fermare la finestra IA",
@@ -5255,15 +5486,24 @@
     },
     "ar": {
      "title": "إيقاف نافذة الذكاء الاصطناعي",
-     "items": ["أثناء إجابة الذكاء الاصطناعي يتحول زر الإرسال إلى زر إيقاف", "إذا استمر في تكرار الكلام نفسه يتوقف تلقائيًا"]
+     "items": [
+      "أثناء إجابة الذكاء الاصطناعي يتحول زر الإرسال إلى زر إيقاف",
+      "إذا استمر في تكرار الكلام نفسه يتوقف تلقائيًا"
+     ]
     },
     "nw": {
      "title": "Stopping AI window",
-     "items": ["While AI answers, send button becomes stop button", "Same words over and over stops it auto"]
+     "items": [
+      "While AI answers, send button becomes stop button",
+      "Same words over and over stops it auto"
+     ]
     },
     "gk": {
      "title": "AI 창 멈추기",
-     "items": ["AI 답하는 동안 보내기 단추 멈추기 단추로 변경", "같은 말 계속 반복하면 자동 멈춤"]
+     "items": [
+      "AI 답하는 동안 보내기 단추 멈추기 단추로 변경",
+      "같은 말 계속 반복하면 자동 멈춤"
+     ]
     }
    }
   },
@@ -5277,7 +5517,9 @@
    "tr": {
     "en": {
      "title": "Built-in AI name and taught facts used",
-     "items": ["In the ask and summary tab, the built-in AI uses its name and the facts developers taught it"]
+     "items": [
+      "In the ask and summary tab, the built-in AI uses its name and the facts developers taught it"
+     ]
     },
     "es": {
      "title": "Se usan el nombre de la IA integrada y los datos enseñados",
@@ -5299,43 +5541,63 @@
     },
     "ja": {
      "title": "自前AIの名前と教えた事実を反映",
-     "items": ["質問・要約タブで自前AIが自分の名前と開発者が教えた事実を活用"]
+     "items": [
+      "質問・要約タブで自前AIが自分の名前と開発者が教えた事実を活用"
+     ]
     },
     "zh": {
      "title": "采用自带 AI 的名字和教过的事实",
-     "items": ["在提问·总结标签页中，自带 AI 会使用自己的名字和开发者教给它的事实"]
+     "items": [
+      "在提问·总结标签页中，自带 AI 会使用自己的名字和开发者教给它的事实"
+     ]
     },
     "pt": {
      "title": "Nome da IA integrada e fatos ensinados usados",
-     "items": ["Na aba de perguntas e resumos, a IA integrada usa seu nome e os fatos que os desenvolvedores lhe ensinaram"]
+     "items": [
+      "Na aba de perguntas e resumos, a IA integrada usa seu nome e os fatos que os desenvolvedores lhe ensinaram"
+     ]
     },
     "ru": {
      "title": "Учитываются имя встроенного ИИ и выученные факты",
-     "items": ["На вкладке вопросов и пересказов встроенный ИИ использует своё имя и факты, которым его научили разработчики"]
+     "items": [
+      "На вкладке вопросов и пересказов встроенный ИИ использует своё имя и факты, которым его научили разработчики"
+     ]
     },
     "tr": {
      "title": "Yerleşik AI'nın adı ve öğretilen bilgiler kullanılıyor",
-     "items": ["Soru-özet sekmesinde yerleşik AI kendi adını ve geliştiricilerin öğrettiği bilgileri kullanır"]
+     "items": [
+      "Soru-özet sekmesinde yerleşik AI kendi adını ve geliştiricilerin öğrettiği bilgileri kullanır"
+     ]
     },
     "it": {
      "title": "Usati il nome dell'IA integrata e i fatti insegnati",
-     "items": ["Nella scheda domande e riassunti l'IA integrata usa il proprio nome e i fatti insegnati dagli sviluppatori"]
+     "items": [
+      "Nella scheda domande e riassunti l'IA integrata usa il proprio nome e i fatti insegnati dagli sviluppatori"
+     ]
     },
     "pl": {
      "title": "Wykorzystanie nazwy wbudowanego AI i wyuczonych faktów",
-     "items": ["W karcie pytań i streszczeń wbudowane AI używa swojej nazwy i faktów, których nauczyli je deweloperzy"]
+     "items": [
+      "W karcie pytań i streszczeń wbudowane AI używa swojej nazwy i faktów, których nauczyli je deweloperzy"
+     ]
     },
     "ar": {
      "title": "اعتماد اسم الذكاء الاصطناعي المدمج والحقائق التي تعلّمها",
-     "items": ["في تبويب السؤال والتلخيص يستخدم الذكاء الاصطناعي المدمج اسمه والحقائق التي علّمه إياها المطورون"]
+     "items": [
+      "في تبويب السؤال والتلخيص يستخدم الذكاء الاصطناعي المدمج اسمه والحقائق التي علّمه إياها المطورون"
+     ]
     },
     "nw": {
      "title": "Built-in AI name plus taught facts used",
-     "items": ["In ask plus sum tab, built-in AI uses own name plus facts makers taught"]
+     "items": [
+      "In ask plus sum tab, built-in AI uses own name plus facts makers taught"
+     ]
     },
     "gk": {
      "title": "자체 AI 이름 가르친 사실 반영",
-     "items": ["질문 요약 탭 자체 AI 이름 개발자가 가르친 사실 활용"]
+     "items": [
+      "질문 요약 탭 자체 AI 이름 개발자가 가르친 사실 활용"
+     ]
     }
    }
   },
@@ -5378,11 +5640,17 @@
     },
     "ja": {
      "title": "グラフ作成タブ",
-     "items": ["AI画面にグラフ作成タブを追加", "表からチャートの種類と範囲をAIが選んでチャートを入れる"]
+     "items": [
+      "AI画面にグラフ作成タブを追加",
+      "表からチャートの種類と範囲をAIが選んでチャートを入れる"
+     ]
     },
     "zh": {
      "title": "生成图表标签页",
-     "items": ["AI 窗口新增生成图表标签页", "AI 根据表格选择图表类型和范围并插入图表"]
+     "items": [
+      "AI 窗口新增生成图表标签页",
+      "AI 根据表格选择图表类型和范围并插入图表"
+     ]
     },
     "pt": {
      "title": "Aba Criar gráficos",
@@ -5400,7 +5668,10 @@
     },
     "tr": {
      "title": "Grafik yapma sekmesi",
-     "items": ["AI penceresine Grafik yap sekmesi eklendi", "AI tablodan grafik türünü ve aralığı seçip grafiği ekler"]
+     "items": [
+      "AI penceresine Grafik yap sekmesi eklendi",
+      "AI tablodan grafik türünü ve aralığı seçip grafiği ekler"
+     ]
     },
     "it": {
      "title": "Scheda Crea grafici",
@@ -5411,7 +5682,10 @@
     },
     "pl": {
      "title": "Karta Twórz wykresy",
-     "items": ["Do okna AI dodano kartę Twórz wykresy", "AI wybiera z tabeli typ wykresu i zakres i wstawia wykres"]
+     "items": [
+      "Do okna AI dodano kartę Twórz wykresy",
+      "AI wybiera z tabeli typ wykresu i zakres i wstawia wykres"
+     ]
     },
     "ar": {
      "title": "تبويب إنشاء الرسوم",
@@ -5422,11 +5696,17 @@
     },
     "nw": {
      "title": "Make charts tab",
-     "items": ["Added Make charts tab to AI window", "AI picks chart type plus range from table, puts chart in"]
+     "items": [
+      "Added Make charts tab to AI window",
+      "AI picks chart type plus range from table, puts chart in"
+     ]
     },
     "gk": {
      "title": "그래프 만들기 탭",
-     "items": ["AI 창 그래프 만들기 탭 추가", "표에서 차트 종류 범위 AI 골라 차트 넣기"]
+     "items": [
+      "AI 창 그래프 만들기 탭 추가",
+      "표에서 차트 종류 범위 AI 골라 차트 넣기"
+     ]
     }
    }
   },
@@ -5479,11 +5759,21 @@
     },
     "ja": {
      "title": "AIの例とリアルタイム回答",
-     "items": ["AI画面に例のボタンを追加", "答えが書かれる順にすぐ表示", "送信中の停止に対応", "=AI の翻訳の紹介と、一度に入れて試せる例を追加"]
+     "items": [
+      "AI画面に例のボタンを追加",
+      "答えが書かれる順にすぐ表示",
+      "送信中の停止に対応",
+      "=AI の翻訳の紹介と、一度に入れて試せる例を追加"
+     ]
     },
     "zh": {
      "title": "AI 示例和实时回答",
-     "items": ["AI 窗口新增示例按钮", "回答边写边显示", "发送中可停止", "新增 =AI 翻译介绍和可一次性放入尝试的示例"]
+     "items": [
+      "AI 窗口新增示例按钮",
+      "回答边写边显示",
+      "发送中可停止",
+      "新增 =AI 翻译介绍和可一次性放入尝试的示例"
+     ]
     },
     "pt": {
      "title": "Exemplos de IA e respostas ao vivo",
@@ -5550,7 +5840,12 @@
     },
     "gk": {
      "title": "AI 예시 실시간 답변",
-     "items": ["AI 창 예시 단추", "답이 쓰이는 대로 바로 표시", "보내는 중 멈추기 지원", "=AI 번역 소개 한 번에 넣어 보는 예시"]
+     "items": [
+      "AI 창 예시 단추",
+      "답이 쓰이는 대로 바로 표시",
+      "보내는 중 멈추기 지원",
+      "=AI 번역 소개 한 번에 넣어 보는 예시"
+     ]
     }
    }
   },
@@ -5598,11 +5893,19 @@
     },
     "ja": {
      "title": "AI連携",
-     "items": ["=AI() セル関数を追加", "AI画面を追加（質問・要約、数式作成、表作成）", "開始時のサンプル表を削除"]
+     "items": [
+      "=AI() セル関数を追加",
+      "AI画面を追加（質問・要約、数式作成、表作成）",
+      "開始時のサンプル表を削除"
+     ]
     },
     "zh": {
      "title": "连接 AI",
-     "items": ["新增 =AI() 单元格函数", "新增 AI 窗口（提问·总结、生成公式、生成表格）", "移除起始示例表格"]
+     "items": [
+      "新增 =AI() 单元格函数",
+      "新增 AI 窗口（提问·总结、生成公式、生成表格）",
+      "移除起始示例表格"
+     ]
     },
     "pt": {
      "title": "Conexão com IA",
@@ -5662,7 +5965,11 @@
     },
     "gk": {
      "title": "AI 연결",
-     "items": ["=AI() 셀 함수 추가", "AI 창 추가 (질문 요약 수식 만들기 표 만들기)", "시작 샘플 표 제거"]
+     "items": [
+      "=AI() 셀 함수 추가",
+      "AI 창 추가 (질문 요약 수식 만들기 표 만들기)",
+      "시작 샘플 표 제거"
+     ]
     }
    }
   },
@@ -5715,11 +6022,21 @@
     },
     "ja": {
      "title": "表の視覚化",
-     "items": ["視覚化ボタンを追加（グラフ、整えた表、図、マインドマップ）", "視覚化をPNGで保存", "チャートに散布図の種類を追加", "チャートのラベルを先頭の文字の列から取得"]
+     "items": [
+      "視覚化ボタンを追加（グラフ、整えた表、図、マインドマップ）",
+      "視覚化をPNGで保存",
+      "チャートに散布図の種類を追加",
+      "チャートのラベルを先頭の文字の列から取得"
+     ]
     },
     "zh": {
      "title": "表格可视化",
-     "items": ["新增可视化按钮（图表、整理后的表格、图示、思维导图）", "可视化结果可保存为 PNG", "图表新增散点图类型", "图表标签可取自最前面的文字列"]
+     "items": [
+      "新增可视化按钮（图表、整理后的表格、图示、思维导图）",
+      "可视化结果可保存为 PNG",
+      "图表新增散点图类型",
+      "图表标签可取自最前面的文字列"
+     ]
     },
     "pt": {
      "title": "Visualização de tabelas",
@@ -5786,7 +6103,12 @@
     },
     "gk": {
      "title": "표 시각화",
-     "items": ["시각화 단추 (그래프 정돈된 표 다이어그램 마인드맵)", "시각화 PNG 저장", "차트 산점도 종류", "차트 이름표 앞쪽 글자 열에서 가져오기"]
+     "items": [
+      "시각화 단추 (그래프 정돈된 표 다이어그램 마인드맵)",
+      "시각화 PNG 저장",
+      "차트 산점도 종류",
+      "차트 이름표 앞쪽 글자 열에서 가져오기"
+     ]
     }
    }
   },
@@ -5839,11 +6161,21 @@
     },
     "ja": {
      "title": "スプレッドシート公開",
-     "items": ["SUM、IF、VLOOKUP など関数60余り", "表を直すとすぐ変わるチャート、色段階、データバー、チェックボックス", "Excel ファイルの読み込みと保存", "iPad で指による範囲選択と塗りつぶし"]
+     "items": [
+      "SUM、IF、VLOOKUP など関数60余り",
+      "表を直すとすぐ変わるチャート、色段階、データバー、チェックボックス",
+      "Excel ファイルの読み込みと保存",
+      "iPad で指による範囲選択と塗りつぶし"
+     ]
     },
     "zh": {
      "title": "电子表格上线",
-     "items": ["SUM、IF、VLOOKUP 等 60 多个函数", "修改表格立即变化的图表、色阶、数据条和复选框", "打开和保存 Excel 文件", "在 iPad 上用手指选择范围和填充"]
+     "items": [
+      "SUM、IF、VLOOKUP 等 60 多个函数",
+      "修改表格立即变化的图表、色阶、数据条和复选框",
+      "打开和保存 Excel 文件",
+      "在 iPad 上用手指选择范围和填充"
+     ]
     },
     "pt": {
      "title": "Planilha lançada",
@@ -5910,7 +6242,12 @@
     },
     "gk": {
      "title": "스프레드시트 공개",
-     "items": ["SUM IF VLOOKUP 등 함수 60여 개", "표 고치면 바로 바뀌는 차트 색 단계 데이터 막대 체크박스", "엑셀 파일 열기 저장", "아이패드 손가락 범위 선택 채우기"]
+     "items": [
+      "SUM IF VLOOKUP 등 함수 60여 개",
+      "표 고치면 바로 바뀌는 차트 색 단계 데이터 막대 체크박스",
+      "엑셀 파일 열기 저장",
+      "아이패드 손가락 범위 선택 채우기"
+     ]
     }
    }
   }
