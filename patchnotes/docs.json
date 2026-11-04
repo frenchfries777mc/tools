@@ -3,6 +3,24 @@
  "name": "Fry Docs",
  "notes": [
   {
+   "date": "2026-11-04",
+   "build": "v20",
+   "title": "글자 크기를 포인트(pt)로",
+   "items": [
+    "글자 크기 숫자를 Word와 같은 포인트(pt) 단위로 바꿈: 같은 숫자면 Word와 같은 크기로 보임",
+    "기본 글자 크기는 11pt (Word 기본과 같음)"
+   ],
+   "tr": {
+    "en": {
+     "title": "Font sizes in points",
+     "items": [
+      "Font size numbers are now points (pt) like Word, so the same number looks the same size",
+      "The default font size is 11pt, like Word"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-03",
    "build": "v19",
    "title": "쪽이 차면 다음 쪽 생김",
