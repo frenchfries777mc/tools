@@ -203,6 +203,7 @@ FFT.add({
   .game.sl{--gc:255,106,138;}
   .game.fl{--gc:122,140,255;}
   .game.dc{--gc:77,171,247;}
+  .game.dr{--gc:46,196,182;}
   .game.py{--gc:255,212,59;}
   .game{--rx:0deg; --ry:0deg; --mx:50%; --my:30%;}
   .game.rv{opacity:0; transform:translateY(34px);}
@@ -256,6 +257,14 @@ FFT.add({
   .dc .tags span{background:rgba(77,171,247,.08); color:#cfe6fb; border:1px solid rgba(77,171,247,.28);}
   .dc .desc{color:#a3b2c4;} .dc .desc li::marker{color:#4dabf7;}
   .dc .play{background:#4dabf7; color:#03121f;}
+  .dr{--card:#0a1413; background:#0a1413; border-color:#17332f;}
+  .dr:hover{border-color:#2ec4b6; box-shadow:0 18px 50px rgba(46,196,182,.14);}
+  .dr .badge{background:rgba(46,196,182,.92); color:#021412;}
+  .dr h2 b{color:#2ec4b6;}
+  .dr .motto{color:#2ec4b6;} .dr .motto i{background:#2ec4b6;}
+  .dr .tags span{background:rgba(46,196,182,.08); color:#c9f3ee; border:1px solid rgba(46,196,182,.28);}
+  .dr .desc{color:#a3bfbb;} .dr .desc li::marker{color:#2ec4b6;}
+  .dr .play{background:#2ec4b6; color:#021412;}
   .fs{--card:#0c1310; background:#0c1310; border-color:#1d3a2b;}
   .fs:hover{border-color:#3fe08f; box-shadow:0 18px 50px rgba(63,224,143,.14);}
   .fs .badge{background:rgba(63,224,143,.92); color:#04170c;}
@@ -443,6 +452,24 @@ FFT.add({
           </ul>
         </div>
         <div class="acts"><a class="play" href="lab/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
+      </div>
+    </article>
+    <article class="game dr">
+      <a class="shot" href="draw/" aria-label="Fry Draw 열기"><span class="badge">그림</span><img src="draw.webp" alt="Fry Draw 화면" loading="lazy"></a>
+      <div class="body">
+        <h2><img class="ch" src="icons/cards/fry-draw.svg" alt="" width="44" height="44">FRY <b>DRAW</b></h2>
+        <div class="motto"><i></i>DRAWING<i></i></div>
+        <div class="tags"><span>도형 · 곡선 · 무늬</span><span>PNG · SVG 파일</span><span>AI 그림(시험)</span><span>로그인 없이</span></div>
+        <div class="desc">
+          도형과 곡선, 기하학 무늬를 그리는 벡터 그림 도구예요. 캔버스 크기를 정하고 PNG나 SVG로 받아요.
+          <ul>
+            <li>자유 선, 직선, 부드러운 곡선, 네모·원·다각형·별, 글자. 돌리고 뒤집고 크기를 바꿔요</li>
+            <li>대칭 그리기: 한 번 그으면 2~24겹으로 돌려 겹쳐서 눈송이·꽃 무늬가 돼요</li>
+            <li>무늬 15가지: 스피로그래프, 장미 곡선, 해바라기 점, 코흐 눈송이, 하트 등 숫자를 돌려 모양을 바꿔요</li>
+            <li>AI(시험 기능)에게 "파란 별 12개를 원 모양으로"처럼 시켜 보세요. 도형 위주고 틀릴 수 있어요</li>
+          </ul>
+        </div>
+        <div class="acts"><a class="play" href="draw/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
       </div>
     </article>
   </section>
