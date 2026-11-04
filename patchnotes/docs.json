@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-11-04",
+   "build": "v21",
+   "title": "쪽 경계 확실하게 보이기",
+   "items": [
+    "쪽이 끝나는 자리에 굵은 띠가 보이고, 옆에 '1쪽 끝 · 2쪽 시작' 표시가 나옴",
+    "글을 쓰거나 창 크기를 바꾸면 표시가 따라서 움직임"
+   ],
+   "tr": {
+    "en": {
+     "title": "Clearer page breaks",
+     "items": [
+      "A thick band shows where a page ends, with an 'End of page 1 · page 2 starts' label beside it",
+      "The labels follow as you type or resize the window"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-04",
    "build": "v20",
    "title": "글자 크기를 포인트(pt)로",
    "items": [
