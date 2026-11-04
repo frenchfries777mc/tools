@@ -461,7 +461,10 @@ document.addEventListener('keydown',function(e){ var k=e.key.toLowerCase(), m=e.
 /* a page is as tall as the paper; when the text fills it, the editor grows by one more page and a line marks where each page ends */
 function pages(){ var ph=parseFloat(page.style.getPropertyValue('--ph'))||1123, pgN=1;
   if(window.matchMedia&&matchMedia('(max-width:840px)').matches||+(pg().cols)>1){ page.style.minHeight=''; return 1; }
-  page.style.minHeight=ph+'px'; pgN=Math.max(1,Math.ceil((page.scrollHeight-1)/ph)); page.style.minHeight=pgN*ph+'px'; return pgN; }
+  page.style.minHeight=ph+'px'; pgN=Math.max(1,Math.ceil((page.scrollHeight-1)/ph)); page.style.minHeight=pgN*ph+'px'; marks(pgN,ph); return pgN; }
+function marks(n,ph){ var d=document.getElementById('desk'), m=document.getElementById('pgMarks'); if(!d) return; if(!m){ m=document.createElement('div'); m.id='pgMarks'; m.setAttribute('aria-hidden','true'); d.appendChild(m); }
+  m.innerHTML=''; for(var k=1;k<n;k++){ var i=document.createElement('i'); i.textContent=F('{0}쪽 끝 · {1}쪽 시작',k,k+1); i.style.left=(page.offsetLeft+page.offsetWidth+10)+'px'; i.style.top=(page.offsetTop+k*ph-6)+'px'; m.appendChild(i); } }
+addEventListener('resize',function(){ if(page) pages(); });
 function count(){ var t=page.innerText||'', ch=t.replace(/\s/g,'').length, w=(t.match(/\S+/g)||[]).length, n=pages();
   $('cnt').textContent=F('글자 {0} · 단어 {1}',ch.toLocaleString(),w.toLocaleString())+(n>1?' · '+F('{0}쪽',n):''); }
 
