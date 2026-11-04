@@ -17,6 +17,83 @@
       "Font size numbers are now points (pt) like Word, so the same number looks the same size",
       "The default font size is 11pt, like Word"
      ]
+    },
+    "es": {
+     "title": "Tamaños de letra en puntos",
+     "items": [
+      "Los números del tamaño de letra ahora son puntos (pt) como en Word, así que el mismo número se ve del mismo tamaño",
+      "El tamaño de letra predeterminado es 11 pt, como en Word"
+     ]
+    },
+    "fr": {
+     "title": "Tailles de police en points",
+     "items": [
+      "Les tailles de police sont désormais en points (pt) comme dans Word : un même nombre donne la même taille",
+      "La taille de police par défaut est de 11 pt, comme dans Word"
+     ]
+    },
+    "de": {
+     "title": "Schriftgrößen in Punkt",
+     "items": [
+      "Die Schriftgrößen sind jetzt Punkt (pt) wie in Word, sodass dieselbe Zahl dieselbe Größe hat",
+      "Die Standardschriftgröße ist 11 pt, wie in Word"
+     ]
+    },
+    "ja": {
+     "title": "文字サイズをポイント(pt)で",
+     "items": [
+      "文字サイズの数字をWordと同じポイント(pt)単位にしました。同じ数字ならWordと同じ大きさで表示されます",
+      "基本の文字サイズはWordと同じ11ptです"
+     ]
+    },
+    "zh": {
+     "title": "字号改用磅（pt）",
+     "items": [
+      "字号数字改为与 Word 相同的磅（pt）单位，相同数字显示的大小也相同",
+      "默认字号为 11pt，与 Word 相同"
+     ]
+    },
+    "pt": {
+     "title": "Tamanhos de fonte em pontos",
+     "items": [
+      "Os números de tamanho de fonte agora são pontos (pt), como no Word, então o mesmo número aparece com o mesmo tamanho",
+      "O tamanho de fonte padrão é 11 pt, como no Word"
+     ]
+    },
+    "ru": {
+     "title": "Размеры шрифта в пунктах",
+     "items": [
+      "Размеры шрифта теперь задаются в пунктах (пт), как в Word, поэтому одинаковое число даёт одинаковый размер",
+      "Размер шрифта по умолчанию — 11 пт, как в Word"
+     ]
+    },
+    "tr": {
+     "title": "Yazı boyutları artık punto",
+     "items": [
+      "Yazı boyutu sayıları artık Word'deki gibi punto (pt) birimindedir; aynı sayı aynı boyutta görünür",
+      "Varsayılan yazı boyutu, Word'deki gibi 11 pt'tir"
+     ]
+    },
+    "it": {
+     "title": "Dimensioni del carattere in punti",
+     "items": [
+      "I numeri della dimensione del carattere ora sono in punti (pt) come in Word, quindi lo stesso numero appare della stessa dimensione",
+      "La dimensione predefinita del carattere è 11 pt, come in Word"
+     ]
+    },
+    "pl": {
+     "title": "Rozmiary czcionki w punktach",
+     "items": [
+      "Rozmiary czcionki są teraz w punktach (pt) jak w Wordzie, więc ta sama liczba oznacza ten sam rozmiar",
+      "Domyślny rozmiar czcionki to 11 pt, jak w Wordzie"
+     ]
+    },
+    "ar": {
+     "title": "أحجام الخط بالنقاط",
+     "items": [
+      "أصبحت أرقام حجم الخط بالنقاط (pt) كما في Word، فيظهر الرقم نفسه بالحجم نفسه",
+      "حجم الخط الافتراضي 11 pt، كما في Word"
+     ]
     }
    }
   },
@@ -34,6 +111,83 @@
      "items": [
       "When the text fills a page, the next page appears below it, and a line shows where each page ends",
       "The bottom bar shows how many pages there are"
+     ]
+    },
+    "es": {
+     "title": "Aparece una página nueva cuando se llena una",
+     "items": [
+      "Cuando el texto llena una página, la siguiente aparece debajo y una línea marca dónde termina cada página",
+      "La barra inferior muestra cuántas páginas hay"
+     ]
+    },
+    "fr": {
+     "title": "Une nouvelle page apparaît quand une page est pleine",
+     "items": [
+      "Quand le texte remplit une page, la suivante apparaît en dessous, et une ligne indique où chaque page se termine",
+      "La barre du bas affiche le nombre total de pages"
+     ]
+    },
+    "de": {
+     "title": "Wenn eine Seite voll ist, erscheint eine neue",
+     "items": [
+      "Wenn der Text eine Seite füllt, erscheint darunter die nächste Seite, und eine Linie zeigt, wo jede Seite endet",
+      "Die untere Leiste zeigt die Gesamtzahl der Seiten an"
+     ]
+    },
+    "ja": {
+     "title": "ページがいっぱいになると次のページができる",
+     "items": [
+      "文章がページいっぱいになると、下に次のページができ、各ページの終わりに線が表示されます",
+      "下のバーに全体のページ数が表示されます"
+     ]
+    },
+    "zh": {
+     "title": "页面写满时会出现新页面",
+     "items": [
+      "文字写满一页时，下方会出现下一页，并用一条线标出每页的结尾",
+      "底部栏会显示总页数"
+     ]
+    },
+    "pt": {
+     "title": "Uma nova página aparece quando uma está cheia",
+     "items": [
+      "Quando o texto preenche uma página, a próxima aparece abaixo dela, e uma linha mostra onde cada página termina",
+      "A barra inferior mostra quantas páginas existem"
+     ]
+    },
+    "ru": {
+     "title": "Когда страница заполнена, появляется следующая",
+     "items": [
+      "Когда текст заполняет страницу, под ней появляется следующая, а линия показывает, где заканчивается каждая страница",
+      "В нижней панели показано общее количество страниц"
+     ]
+    },
+    "tr": {
+     "title": "Bir sayfa dolunca yeni sayfa çıkıyor",
+     "items": [
+      "Metin bir sayfayı doldurduğunda altında bir sonraki sayfa belirir ve her sayfanın bittiği yer bir çizgiyle gösterilir",
+      "Alt çubukta toplam sayfa sayısı gösterilir"
+     ]
+    },
+    "it": {
+     "title": "Quando una pagina è piena ne appare una nuova",
+     "items": [
+      "Quando il testo riempie una pagina, sotto ne appare un'altra e una linea mostra dove finisce ogni pagina",
+      "La barra in basso mostra quante pagine ci sono"
+     ]
+    },
+    "pl": {
+     "title": "Gdy strona się zapełni, pojawia się następna",
+     "items": [
+      "Gdy tekst zapełni stronę, pod nią pojawia się kolejna, a linia pokazuje, gdzie kończy się każda strona",
+      "Dolny pasek pokazuje, ile jest stron"
+     ]
+    },
+    "ar": {
+     "title": "تظهر صفحة جديدة عندما تمتلئ الصفحة",
+     "items": [
+      "عندما يملأ النص صفحة، تظهر الصفحة التالية أسفلها، ويُظهر خط مكان انتهاء كل صفحة",
+      "يعرض الشريط السفلي عدد الصفحات الإجمالي"
      ]
     }
    }
