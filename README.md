@@ -1,6 +1,6 @@
 # Frenchfries777 Tools
 
-Browser tools, served at https://frenchfries777mc.github.io/tools/ (GitHub Pages from `main`).
+Browser tools, served at https://frenchfries777.com/tools/ (GitHub Pages from `main`).
 
 - `index.html`: tool list (same look as the Games and Educations sites, with the Games | Educations | Tools switch).
 - `sheet/`: **Fry Sheet**, a spreadsheet. `engine.js` is the formula engine (testable in Node), `app.js` the UI, `strings.js` translations and the function list. `xlsx.full.min.js` is SheetJS 0.18.5 (Apache 2.0), loaded only when opening Excel files. `xlsxio.js` writes .xlsx itself (styles, merges, borders, conditional formats, drop-downs, notes, charts, which SheetJS community edition cannot write) and reads those parts back on open.

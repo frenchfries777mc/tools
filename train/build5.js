@@ -51,7 +51,7 @@ const LOOP_TEST=[ // owner's own questions from 2026-10-18; reference answers ar
   ['ask','에엑따','잘 모르는 말이에요. 어떤 뜻인지 조금 더 알려 주세요.'],
   ['ask','알파벳','알파벳은 영어 등에서 쓰는 글자로, A부터 Z까지 26자예요.'],
   ['ask','너의 이름의 뜻은?','제 이름 {NAME}의 {SHORT}는 라틴어 {LATIN}에서 따왔어요.'],
-  ['ask','https://frenchfries777mc.github.io/games/는 어떤 사이트야?','Frenchfries777님이 만든 게임 허브 사이트예요. Stickseum, Beaconfall, Crown Envoy를 할 수 있고 커뮤니티, 위키, 업적이 있어요.'],
+  ['ask','https://frenchfries777.com/games/는 어떤 사이트야?','Frenchfries777님이 만든 게임 허브 사이트예요. Stickseum, Beaconfall, Crown Envoy를 할 수 있고 커뮤니티, 위키, 업적이 있어요.'],
   ['ask','351의 제곱을 x라 할 때, x=2y/5+38*x에서 y의 값을 구하는 풀이과정과 답을 써라','x = 351² = 123,201이에요. 2y/5 = x - 38x = -37x이므로 y = -37x × 5/2 = -92.5x = -11,396,092.5예요. 시트에서 =-92.5*351^2로 확인할 수 있어요.'],
   ['ask','아재개그 해줘','소가 그림을 그리면?\n정답은 피카소!'],
   ['cell','목적어인 단어만 나타내기','오늘 나는 점심을 먹었다','점심을'],
