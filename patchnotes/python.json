@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v6",
+   "title": "BeaconScript 단어별 미리보기",
+   "items": [
+    "BeaconScript 규칙 보기에서 on, world, generate처럼 단어마다 따로 카드로 나뉘고 아래에 뜻이 나옴",
+    "글자, 숫자, 퍼센트는 색이 다르게 보이고 모르는 이름은 (이름)으로 보임"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript preview word by word",
+     "items": [
+      "In the BeaconScript rules view every word (on, world, generate...) is its own card with its meaning underneath",
+      "Texts, numbers and percents have their own colours, and an unknown name shows as (name)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v5",
    "title": "언어 고르는 창에 로고",
    "items": [
