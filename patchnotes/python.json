@@ -3,6 +3,24 @@
  "name": "Fry Code",
  "notes": [
   {
+   "date": "2026-11-05",
+   "build": "v5",
+   "title": "언어 고르는 창에 로고",
+   "items": [
+    "언어 고르는 단추와 목록에 파이썬·자바스크립트·자바·HTML·JSON·BeaconScript 로고가 보임",
+    "목록에 파일 확장자가 같이 나오고, 내 파일 목록에도 언어 로고가 붙음"
+   ],
+   "tr": {
+    "en": {
+     "title": "Logos in the language picker",
+     "items": [
+      "The language button and list show a logo for Python, JavaScript, Java, HTML, JSON and BeaconScript",
+      "The list also shows each file extension, and the My files list shows the language logo"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-04",
    "build": "v4",
    "title": "Fry Code 새 로고",

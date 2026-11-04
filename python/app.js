@@ -177,7 +177,7 @@ Array.prototype.forEach.call(document.querySelectorAll('.ov'),function(ov){ ov.a
   Array.prototype.forEach.call(ov.querySelectorAll('[data-close]'),function(b){ b.onclick=function(){ ov.classList.remove('open'); }; }); });
 function drawMgr(){ var ul=$('fileList'); ul.innerHTML='';
   idx.files.slice().sort(function(a,b){ return (b.t||0)-(a.t||0); }).forEach(function(f){ var li=document.createElement('li'); if(f===file) li.className='on';
-    var nm=document.createElement('div'); nm.className='dn'; nm.setAttribute('data-notr',''); var b=document.createElement('b'); b.textContent=f.name; var sm=document.createElement('small'); sm.textContent=((FC.langs[f.lang||'python']||{}).name||'Python')+' · '+ago(f.t||Date.now()); nm.appendChild(b); nm.appendChild(sm);
+    var nm=document.createElement('div'); nm.className='dn'; nm.setAttribute('data-notr',''); var b=document.createElement('b'); b.textContent=f.name; var sm=document.createElement('small'); sm.innerHTML=lgi(f.lang||'python')+esc(((FC.langs[f.lang||'python']||{}).name||'Python')+' · '+ago(f.t||Date.now())); nm.appendChild(b); nm.appendChild(sm);
     nm.onclick=function(){ openFile(f); closeDlg('mgrDlg'); };
     var rn=document.createElement('button'); rn.className='ib'; rn.title=T('이름 바꾸기'); rn.setAttribute('aria-label',T('이름 바꾸기')); rn.textContent='✏️';
     rn.onclick=function(){ var inp=document.createElement('input'); inp.value=f.name; inp.setAttribute('data-notr',''); li.replaceChild(inp,nm); inp.focus(); inp.select();
@@ -198,7 +198,7 @@ $('verBtn').onclick=function(){ if(!window.FFVer||!file) return; saveNow(); FFVe
 function closeMenus(){ Array.prototype.forEach.call(document.querySelectorAll('.menu.open'),function(m){ m.classList.remove('open'); }); }
 function popMenu(menu,btn){ var open=menu.classList.contains('open'); closeMenus(); if(open) return; menu.classList.add('open');
   var r=btn.getBoundingClientRect(), w=menu.offsetWidth; menu.style.top=(r.bottom+6)+'px'; menu.style.left=Math.max(8,Math.min(innerWidth-w-8,r.right-w))+'px'; }
-document.addEventListener('mousedown',function(e){ if(!e.target.closest('.menu')&&!e.target.closest('#exBtn')&&!e.target.closest('#fileBtn')) closeMenus(); });
+document.addEventListener('mousedown',function(e){ if(!e.target.closest('.menu')&&!e.target.closest('#exBtn')&&!e.target.closest('#langBtn')&&!e.target.closest('#fileBtn')) closeMenus(); });
 function buildEx(){ var m=$('exMenu'); m.innerHTML=''; var h=document.createElement('div'); h.className='mh'; h.textContent=T('예제를 지금 파일에 불러와요 (원래 코드는 되돌리기로 살려요)'); m.appendChild(h);
   (curLang==='python'?(window.FPY_EX||[]):(LG().ex||[])).forEach(function(ex){ var b=document.createElement('button'); b.textContent=T(ex[0]);
     b.onclick=function(){ closeMenus(); var prev={c:code.value, i:$('stdin').value};
@@ -376,13 +376,18 @@ function runOther(live){ var L=LG(); if(!L.run) return; if(!live) saveNow(); err
   try{ L.run(ctx); }catch(e){ write(String((e&&e.message)||e)+'\n','err'); ctx.done(false); } }
 function liveSoon(){ clearTimeout(liveT); liveT=setTimeout(function(){ if(LG().live&&!running) runOther(true); },500); }
 function setLang(l,silent){ if(!FC.langs[l]) l='python'; var changed=l!==curLang; if(changed&&stopFn){ try{ stopFn(); }catch(e){} stopFn=null; } otherGen++; running=false; ui();
-  curLang=l; var L=LG(); IN=L.indent||'    '; $('langPick').value=l; var py=(l==='python');
+  curLang=l; var L=LG(); IN=L.indent||'    '; $('langPick').value=l; langBtn(); var py=(l==='python');
   $('dictBtn').hidden=!py; $('stdinBox').hidden=!py; $('exBtn').hidden=false; code.setAttribute('aria-label',T(L.name+' 코드'));
   var tb=$('rtabs'); tb.innerHTML=''; (L.tabs||[]).forEach(function(t){ var b=document.createElement('button'); b.type='button'; b.className='rt'; b.dataset.t=t[0]; b.textContent=T(t[1]); b.onclick=function(){ showTab(t[0]); }; tb.appendChild(b); });
   tb.hidden=py; $('pv').hidden=true; out.hidden=false; $('resTitle').hidden=!py; if(!py) showTab(L.tabs[0][0]);
   $('runBtn').title=py||l==='javascript'?T('실행 (Ctrl+Enter)'):T('검사하고 미리보기 (Ctrl+Enter)'); acHide();
   if(changed){ out.innerHTML=''; $('pv').innerHTML=''; lastPre=null; outChars=0; tur=null; errLine=0; if(py&&!worker) setTimeout(function(){ if(!worker&&curLang==='python') mkWorker(); },300); }
   buildEx(); if(!silent){ paint(); saveNow(); } if(L.live) liveSoon(); }
+function lgi(k){ return '<span class="lgi" aria-hidden="true">'+((FC.logos||{})[k]||'')+'</span>'; }
+function langBtn(){ var b=$('langBtn'); if(!b) return; b.innerHTML=lgi(curLang)+'<span>'+esc((FC.langs[curLang]||{}).name||'')+'</span><span class="cv">▾</span>'; }
+function langMenu(){ var m=$('langMenu'); m.innerHTML=''; FC.order.forEach(function(k){ var b=document.createElement('button'); b.type='button'; b.className=k===curLang?'on':''; b.innerHTML=lgi(k)+'<span>'+esc(FC.langs[k].name)+(FC.langs[k].ext?' <small style="color:var(--dim)">.'+FC.langs[k].ext+'</small>':'')+'</span>';
+    b.onclick=function(){ closeMenus(); if(k!==curLang){ var sel=$('langPick'); sel.value=k; sel.onchange(); } }; m.appendChild(b); }); }
+$('langBtn').onclick=function(){ langMenu(); popMenu($('langMenu'),this); };
 (function(){ var sel=$('langPick'); FC.order.forEach(function(k){ var o=document.createElement('option'); o.value=k; o.textContent=(FC.langs[k].icon||'')+' '+FC.langs[k].name; sel.appendChild(o); });
   sel.onchange=function(){ setLang(sel.value,false); toast(F('{0} 로 바꿨어요',FC.langs[sel.value].name)); }; })();
 
