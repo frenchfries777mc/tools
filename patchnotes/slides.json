@@ -3,6 +3,26 @@
  "name": "Fry Slides",
  "notes": [
   {
+   "date": "2026-11-04",
+   "build": "v37",
+   "title": "글자 크기를 포인트(pt)로 고르기",
+   "items": [
+    "글자 모양 메뉴에 글자 크기 추가: 12~72pt 중에 고를 수 있고 '자동'이면 예전처럼 알아서 맞춰짐",
+    "글 상자와 도형 글자에 적용되고 상자보다 크면 넘치지 않게 알아서 줄어듦",
+    "pptx로 내보내도 같은 크기로 나감"
+   ],
+   "tr": {
+    "en": {
+     "title": "Pick the font size in points",
+     "items": [
+      "The text format menu now has a font size (12-72pt); Auto keeps the old fit-to-box behaviour",
+      "Works on text boxes and shape text, and shrinks if it would overflow the box",
+      "Exports to .pptx at the same size"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-10-31",
    "build": "v36",
    "title": "실시간 함께 편집 (바로 보여요)",
