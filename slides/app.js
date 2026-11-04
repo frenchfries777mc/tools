@@ -120,7 +120,7 @@ function fixConn(c){ if(!Array.isArray(c)||c.length!==2) return null; var o=c.ma
   return o[0]!==o[1]&&o.every(function(v){ return /^(e:[\w-]{1,40}|[a-z]\w{0,19})$/i.test(v); })?o:null; }
 /* text style of a whole box: tf = {b: 1 bold | -1 not bold | 0 as the theme has it, i: italic, u: underline, s: strikethrough, c: colour ('' = the theme's)}; a slide keeps one per layout box (s.tf), a shape one of its own */
 var TFK=['title','subtitle','bullets','leftTitle','left','rightTitle','right','stat','caption','quote','by'];
-function fixTf(t){ if(!t||typeof t!=='object') return null; var o={b:t.b>0?1:t.b<0?-1:0, i:t.i?1:0, u:t.u?1:0, s:t.s?1:0, c:fixCol(t.c,'')}; return o.b||o.i||o.u||o.s||o.c?o:null; }
+function fixTf(t){ if(!t||typeof t!=='object') return null; var o={b:t.b>0?1:t.b<0?-1:0, i:t.i?1:0, u:t.u?1:0, s:t.s?1:0, c:fixCol(t.c,''), z:+t.z>0?Math.min(400,Math.round(+t.z*100)/100):0}; return o.b||o.i||o.u||o.s||o.c||o.z?o:null; }
 function tfCss(o,th){ var c=colOf(o.c,th), d=(o.u?'underline ':'')+(o.s?'line-through':''); return (o.b?'font-weight:'+(o.b>0?800:400)+';':'')+(o.i?'font-style:italic;':'')+(d?'text-decoration:'+d.trim()+';':'')+(c?'color:'+c+';':''); }
 function fixEl(e){ var o=fixEl0(e), tf=o&&!isLine(o)&&o.k!=='media'&&o.k!=='pic'?fixTf(e.tf):null, al=o&&e.alt!=null?String(e.alt).slice(0,300):''; if(tf) o.tf=tf; if(al) o.alt=al;
   if(o&&o.k!=='media'){ if(!isLine(o)){ var gl=num(e.gl,0,0,2), fl=num(e.fl,0,0,3); if(gl) o.gl=gl; if(fl) o.fl=fl; } if(o.k!=='pic'){ var ds=num(e.ds,0,0,2); if(ds) o.ds=ds; } } return o; }
@@ -227,6 +227,7 @@ function slideEl(s,th,edit,opt){
     if(b.list) fillList(inn,s[b.f]); else { inn.textContent=(opt.over&&opt.over[b.f]!=null?opt.over[b.f]:s[b.f])||''; if(em) inn.classList.add('ph'); }
     if(edit){ inn.contentEditable=b.list?'true':CE; inn.spellcheck=false; inn.setAttribute('data-ph',T(ph(b.f,s.layout))); inn.setAttribute('autocapitalize','sentences'); }
     if(s.tf[b.f]) inn.style.cssText+=tfCss(s.tf[b.f],th);
+    if(s.tf[b.f]&&s.tf[b.f].z) box.dataset.fm=s.tf[b.f].z;
     box.appendChild(inn); el.appendChild(box);
   });
   shp(false);
@@ -379,7 +380,7 @@ function shapeEl(e,th,edit,opt){
   d.innerHTML='<svg width="'+bw+'" height="'+bh+'" viewBox="0 0 '+bw+' '+bh+'" xmlns="http://www.w3.org/2000/svg">'+g+'</svg>';
   if(e.fl) d.firstChild.style.transform='scale('+(e.fl&1?-1:1)+','+(e.fl&2?-1:1)+')';
   if(!isLine(e)&&(e.text||edit)){ var tb=shTextBox(e), x=document.createElement('div'), inn=document.createElement('div'); x.className='stx';
-    x.style.cssText='left:'+tb.x+'px;top:'+tb.y+'px;width:'+tb.w+'px;height:'+tb.h+'px;color:'+shTextCol(e,th)+';text-align:'+({l:'left',c:'center',r:'right'}[e.al]||'center')+';'; if(e.fs) x.dataset.fm=e.fs; if(e.tf) x.style.cssText+=tfCss(e.tf,th);
+    x.style.cssText='left:'+tb.x+'px;top:'+tb.y+'px;width:'+tb.w+'px;height:'+tb.h+'px;color:'+shTextCol(e,th)+';text-align:'+({l:'left',c:'center',r:'right'}[e.al]||'center')+';'; var zf=(e.tf&&e.tf.z)||e.fs; if(zf) x.dataset.fm=zf; if(e.tf) x.style.cssText+=tfCss(e.tf,th);
     inn.className='in'; inn.textContent=e.text; if(edit){ inn.setAttribute('data-ph',T('글 쓰기')); inn.spellcheck=false; if(!e.text) inn.classList.add('ph'); } x.appendChild(inn); d.appendChild(x); }
   return d; }
 /* the master: logo, footer text and slide number (the title and closing slides only when the master says so); shared by screen, print and .pptx.
@@ -397,7 +398,7 @@ function boxDef(s,f){ var L=LAY[s.layout]||LAY.bullets; for(var i=0;i<L.length;i
 var fitCache=new Map();
 function fitBox(box,b,th,lay,fresh){
   var inn=box.firstChild, txt=inn.classList.contains('ph')?'\u0000'+inn.getAttribute('data-ph'):inn.innerText+'\u0001'+inn.textContent.length, key=th.id+(th.f||'')+'|'+lay+'|'+b.f+'|'+b.w+'x'+b.h+'|'+txt;
-  fitIn(inn,box,b.fs,b.min,key,fresh); }
+  var z=+box.dataset.fm||0; fitIn(inn,box,z||b.fs,z?Math.min(b.min,z):b.min,key+(z?'|z'+z:''),fresh); }
 function fitIn(inn,box,hi,lo,key,fresh){
   var set=function(v){ inn.style.fontSize=v+'px'; };
   var over=function(){ return inn.scrollHeight>box.clientHeight+1||inn.scrollWidth>box.clientWidth+1; };
@@ -407,7 +408,7 @@ function fitIn(inn,box,hi,lo,key,fresh){
   if(fitCache.size>3000) fitCache.clear(); fitCache.set(key,v);
 }
 function fitShapes(el,th,fresh){ el.querySelectorAll('.stx').forEach(function(x){ var inn=x.firstChild, t=inn.classList.contains('ph')?'':inn.innerText, hi=+x.dataset.fm||SH_FS; if(!t.trim()){ inn.style.fontSize=hi+'px'; return; }
-  fitIn(inn,x,hi,12,'shp'+hi+'|'+th.id+(th.f||'')+'|'+x.style.width+'x'+x.style.height+'|'+t,fresh); }); }
+  fitIn(inn,x,hi,Math.min(12,hi),'shp'+hi+'|'+th.id+(th.f||'')+'|'+x.style.width+'x'+x.style.height+'|'+t,fresh); }); }
 function fitAll(el,s,th,fresh){ el.querySelectorAll('.fld').forEach(function(box){ var b=boxDef(s,box.dataset.f); if(b) fitBox(box,b,th,s.layout,fresh); }); fitShapes(el,th,fresh); }
 /* font size (slide px) of every field, measured off screen */
 function measure(s,th){ var m=$('measure'); m.innerHTML=''; var el=slideEl(s,th,false); m.appendChild(el); fitAll(el,s,th);
@@ -536,12 +537,12 @@ function selShape(){ var s=deck&&deck.slides[cur]; return s&&selK&&selK.slice(0,
 /* text style (bold, italic, underline, strikethrough, colour) of the picked text boxes and shapes */
 function tfTxt(e){ return e&&!isLine(e)&&e.k!=='media'&&e.k!=='pic'; }
 function tfList(s){ if(!s||!selK) return []; if(TFK.indexOf(selK)>=0) return [{s:s,k:selK}]; return selEls(s).filter(tfTxt).map(function(e){ return {e:e}; }); }
-function tfGet(t,mk){ var o=t.e?t.e.tf:t.s.tf[t.k]; if(!o&&mk){ o={b:0,i:0,u:0,s:0,c:''}; if(t.e) t.e.tf=o; else t.s.tf[t.k]=o; } return o; }
-function tfClean(t){ var o=tfGet(t); if(o&&!o.b&&!o.i&&!o.u&&!o.s&&!o.c){ if(t.e) delete t.e.tf; else delete t.s.tf[t.k]; } }
+function tfGet(t,mk){ var o=t.e?t.e.tf:t.s.tf[t.k]; if(!o&&mk){ o={b:0,i:0,u:0,s:0,c:'',z:0}; if(t.e) t.e.tf=o; else t.s.tf[t.k]=o; } return o; }
+function tfClean(t){ var o=tfGet(t); if(o&&!o.b&&!o.i&&!o.u&&!o.s&&!o.c&&!o.z){ if(t.e) delete t.e.tf; else delete t.s.tf[t.k]; } }
 function tfSet(fn){ var s=deck.slides[cur], a=tfList(s); if(!a.length||gen||busyOn) return; blurEdit(); pushUndo(); a.forEach(function(t){ var o=tfGet(t,1); fn(o,t); tfClean(t); }); fitCache.clear(); changed(true); }
 function tfNode(t){ return host.querySelector('[data-bk="'+(t.e?'e:'+t.e.id:t.k)+'"] .in'); }
 function tfToggle(k){ tfSet(function(o,t){ if(k==='b'){ var n=tfNode(t), bold=n?+getComputedStyle(n).fontWeight>=600:false; o.b=bold?-1:1; } else o[k]=o[k]?0:1; }); }
-function tfState(){ var s=deck&&deck.slides[cur], a=tfList(s), o=a.length&&tfGet(a[0]), n=a.length&&tfNode(a[0]); return a.length?{b:n?+getComputedStyle(n).fontWeight>=600:false, i:!!(o&&o.i), u:!!(o&&o.u), s:!!(o&&o.s), c:o?o.c:''}:null; }
+function tfState(){ var s=deck&&deck.slides[cur], a=tfList(s), o=a.length&&tfGet(a[0]), n=a.length&&tfNode(a[0]); return a.length?{b:n?+getComputedStyle(n).fontWeight>=600:false, i:!!(o&&o.i), u:!!(o&&o.u), s:!!(o&&o.s), c:o?o.c:'', z:o&&o.z||0}:null; }
 /* what is picked: 'e:id' one shape, 'g:gid' a whole group, 'm' several shapes picked together (selM = their ids), or a layout box / 'img' */
 var selM=[], multiOn=false;
 function selEls(s,k){ k=k||selK; if(!s||!k) return []; if(k==='m') return s.els.filter(function(e){ return selM.indexOf(e.id)>=0; }); if(k.slice(0,2)==='g:') return s.els.filter(function(e){ return e.g===k.slice(2); }); var e=k.slice(0,2)==='e:'&&shapeOf(s,k.slice(2)); return e?[e]:[]; }
@@ -873,7 +874,7 @@ function drawElMenu(kind){ var m=$('elMenu'), s=deck.slides[cur], e=selShape(), 
     hd('그림 안에서 보이는 곳 옮기기 (상자보다 큰 그림일 때)'); var pr=document.createElement('div'); pr.className='gdir'; m.appendChild(pr);
     [['x:-15','←'],['x:15','→'],['y:-15','↑'],['y:15','↓']].forEach(function(q){ var b=document.createElement('button'); b.className='tbtn'; b.dataset.o='pf:p'+q[0]; b.textContent=q[1]; pr.appendChild(b); });
     m.appendChild(document.createElement('hr')); add('pf:reset','그림 효과 모두 없애기'); return; }
-  if(kind==='tf'){ var ts=tfState(); if(!ts) return; hd('글자 모양'); add('tf:b','굵게',ts.b); add('tf:i','기울임',ts.i); add('tf:u','밑줄',ts.u); add('tf:s','취소선',ts.s); m.appendChild(document.createElement('hr')); hd('글자 색');
+  if(kind==='tf'){ var ts=tfState(); if(!ts) return; hd('글자 모양'); add('tf:b','굵게',ts.b); add('tf:i','기울임',ts.i); add('tf:u','밑줄',ts.u); add('tf:s','취소선',ts.s); m.appendChild(document.createElement('hr')); hd('글자 크기 (pt, 넘치면 알아서 줄어요)'); add('tz:0','자동 (기본)',!ts.z); [12,14,16,18,20,24,28,32,36,40,48,60,72].forEach(function(q){ add('tz:'+q,q+' pt',Math.abs(ts.z*0.75-q)<0.3); }); m.appendChild(document.createElement('hr')); hd('글자 색');
     var tr=document.createElement('div'); tr.className='swr'; m.appendChild(tr);
     var tsw=function(v,bg,label){ var b=document.createElement('button'); b.className='sw'+(ts.c===v?' on':'')+(v===''?' none':''); b.dataset.o='tc:'+v; b.style.background=bg; b.title=T(label||v); b.setAttribute('aria-label',T(label||v)); tr.appendChild(b); };
     tsw('','transparent','테마 기본 색'); tsw('ac',t.ac,'테마 강조색'); tsw('fg',t.fg,'테마 글자색'); SWC.forEach(function(c){ tsw(c,c); });
@@ -952,7 +953,8 @@ $('elMenu').addEventListener('click',function(ev){ var b=ev.target.closest('[dat
   if(k==='ey:'){ return eyeStart($('elMenu')._kind); }
   if(k==='mc:clear'){ try{ localStorage.removeItem(MYK); }catch(err){} drawElMenu($('elMenu')._kind); return; }
   if(k.indexOf('mc:')===0){ closeMenus(); return myApply($('elMenu')._kind,k.slice(3)); }
-  if(k.indexOf('tf:')===0){ if(k==='tf:reset'){ closeMenus(); return tfSet(function(o){ o.b=o.i=o.u=o.s=0; o.c=''; }); } tfToggle(k.slice(3)); drawElMenu('tf'); return; }
+  if(k.indexOf('tf:')===0){ if(k==='tf:reset'){ closeMenus(); return tfSet(function(o){ o.b=o.i=o.u=o.s=0; o.c=''; o.z=0; }); } tfToggle(k.slice(3)); drawElMenu('tf'); return; }
+  if(k.indexOf('tz:')===0){ closeMenus(); var zv=+k.slice(3); return tfSet(function(o){ o.z=zv?Math.round(zv*4/3*100)/100:0; }); }
   if(k.indexOf('tc:')===0){ closeMenus(); var tv=k.slice(3); return tfSet(function(o){ o.c=tv; }); }
   if(k.indexOf('ps:')===0){ closeMenus(); return setPicShape(k.slice(3)); }
   if(k.indexOf('pf:')===0&&e&&e.k==='pic'){ var pq=k.split(':'); pushUndo();
