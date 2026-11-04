@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-11-04",
+   "build": "v4",
+   "title": "Fry Code 새 로고",
+   "items": [
+    "파이썬 로고 대신 파란 테두리에 노란 터미널 모양의 Fry Code 새 로고로 바뀜",
+    "도구 카드의 아이콘과 그림, 브라우저 탭 아이콘도 새 로고와 새 화면으로 바뀜"
+   ],
+   "tr": {
+    "en": {
+     "title": "New Fry Code logo",
+     "items": [
+      "The Python logo is replaced by the new Fry Code logo: a yellow terminal window with a blue border",
+      "The tool card icon and picture and the browser tab icon use the new logo and a new screenshot"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-04",
    "build": "v3",
    "title": "Fry Code로 이름 바꾸기와 언어 고르기",
    "items": [
