@@ -1487,8 +1487,8 @@ HELP.ai=src(function(){
   function __aiFont(s, font) {
     if (!document.getElementById('__aifont')) {
       var st = document.createElement('style'); st.id = '__aifont';
-      st.textContent = "@font-face{font-family:'FF Aurebesh';src:url('https://frenchfries777mc.github.io/games/fonts/ff-aurebesh.woff2?v=2') format('woff2')}" +
-        "@font-face{font-family:'FF Galactic';src:url('https://frenchfries777mc.github.io/games/fonts/ff-galactic.woff2?v=1') format('woff2')}";
+      st.textContent = "@font-face{font-family:'FF Aurebesh';src:url('https://frenchfries777.com/games/fonts/ff-aurebesh.woff2?v=2') format('woff2')}" +
+        "@font-face{font-family:'FF Galactic';src:url('https://frenchfries777.com/games/fonts/ff-galactic.woff2?v=1') format('woff2')}";
       document.head.appendChild(st);
     }
     __aiTexts[s] = font === 'au' ? 'FF Aurebesh' : 'FF Galactic';

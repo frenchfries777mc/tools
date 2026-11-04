@@ -11,7 +11,7 @@
    A test can set FFRoom.peerOpts (host, port, path, secure) and FFRoom.peerSrc before the first call. */
 (function(root){
 'use strict';
-var FFRoom={ peerSrc:'https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js', peerOpts:{debug:0}, authSrc:'https://frenchfries777mc.github.io/games/ff-auth.js', max:8, frame:3500, maxFrames:6000 };
+var FFRoom={ peerSrc:'https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js', peerOpts:{debug:0}, authSrc:'https://frenchfries777.com/games/ff-auth.js', max:8, frame:3500, maxFrames:6000 };
 var PREFIX='ffroom-', CODE_CH='ABCDEFGHJKLMNPQRSTUVWXYZ23456789', COLORS=['#e03131','#1c7ed6','#2f9e44','#f08c00','#7048e8','#d6336c','#1098ad','#868e96','#5c940d'], peerP=null;
 function makeCode(){ var s='', a=new Uint8Array(6); try{ crypto.getRandomValues(a); }catch(e){ for(var j=0;j<6;j++) a[j]=Math.random()*256|0; } for(var i=0;i<6;i++) s+=CODE_CH[a[i]%CODE_CH.length]; return s; }
 function cleanCode(c){ return String(c||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6); }

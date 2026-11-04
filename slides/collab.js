@@ -8,7 +8,7 @@
 'use strict';
 var X=window.FSLX; if(!X||X.mode) return;
 var T=FFT.T, $=function(id){ return document.getElementById(id); };
-var AUTH_URL='https://frenchfries777mc.github.io/games/ff-auth.js', POLL=3000, SOON=1200, BK='ffslides.co.';
+var AUTH_URL='https://frenchfries777.com/games/ff-auth.js', POLL=3000, SOON=1200, BK='ffslides.co.';
 var authP=null, sb=null, busy=false, sqlOk=null, st={k:'', t:0}, soonT=null, again=false;
 
 /* ---------- account / client ---------- */
