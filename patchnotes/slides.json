@@ -19,6 +19,94 @@
       "Works on text boxes and shape text, and shrinks if it would overflow the box",
       "Exports to .pptx at the same size"
      ]
+    },
+    "es": {
+     "title": "Elige el tamaño de letra en puntos",
+     "items": [
+      "El menú de formato de texto ahora tiene tamaño de letra (12-72 pt); Automático mantiene el comportamiento anterior de ajustar al cuadro",
+      "Funciona en cuadros de texto y en el texto de las formas, y se reduce si se saldría del cuadro",
+      "Al exportar a .pptx sale con el mismo tamaño"
+     ]
+    },
+    "fr": {
+     "title": "Choisir la taille de police en points",
+     "items": [
+      "Le menu de format du texte propose désormais une taille de police (12 à 72 pt) ; Auto garde l’ancien ajustement à la zone",
+      "Fonctionne dans les zones de texte et le texte des formes, et rétrécit s’il déborde de la zone",
+      "L’export en .pptx garde la même taille"
+     ]
+    },
+    "de": {
+     "title": "Schriftgröße in Punkt wählen",
+     "items": [
+      "Das Textformat-Menü hat jetzt eine Schriftgröße (12–72 pt); „Automatisch“ behält das bisherige Einpassen in den Rahmen bei",
+      "Funktioniert in Textfeldern und Formtexten und wird kleiner, wenn der Text sonst überläuft",
+      "Der Export als .pptx behält dieselbe Größe"
+     ]
+    },
+    "ja": {
+     "title": "文字サイズをポイントで選ぶ",
+     "items": [
+      "文字の書式メニューに文字サイズを追加しました（12〜72pt）。「自動」なら従来どおり枠に合わせて調整されます",
+      "テキストボックスと図形の文字で使え、枠からはみ出す場合は自動で小さくなります",
+      ".pptxに書き出しても同じサイズで出力されます"
+     ]
+    },
+    "zh": {
+     "title": "以磅为单位选择字号",
+     "items": [
+      "文字格式菜单新增字号（12～72pt）；选择“自动”时保持原来的按框大小自动调整",
+      "适用于文本框和形状中的文字，若超出文本框会自动缩小",
+      "导出为 .pptx 时保持相同字号"
+     ]
+    },
+    "pt": {
+     "title": "Escolha o tamanho da fonte em pontos",
+     "items": [
+      "O menu de formato de texto agora tem tamanho de fonte (12 a 72 pt); Automático mantém o ajuste antigo à caixa",
+      "Funciona em caixas de texto e no texto de formas, e diminui se ultrapassar a caixa",
+      "Ao exportar para .pptx, sai no mesmo tamanho"
+     ]
+    },
+    "ru": {
+     "title": "Размер шрифта в пунктах",
+     "items": [
+      "В меню формата текста появился размер шрифта (12–72 пт); «Авто» сохраняет прежнее подгонание под рамку",
+      "Работает в текстовых полях и тексте фигур и уменьшается, если иначе выйдет за рамку",
+      "При экспорте в .pptx размер сохраняется"
+     ]
+    },
+    "tr": {
+     "title": "Yazı boyutunu punto olarak seç",
+     "items": [
+      "Yazı biçimi menüsüne yazı boyutu eklendi (12-72 pt); Otomatik seçilirse eskisi gibi kutuya göre ayarlanır",
+      "Metin kutularında ve şekil metinlerinde çalışır; kutudan taşacaksa küçülür",
+      ".pptx olarak dışa aktarıldığında aynı boyutta çıkar"
+     ]
+    },
+    "it": {
+     "title": "Scegli la dimensione del carattere in punti",
+     "items": [
+      "Il menu del formato testo ora ha la dimensione del carattere (12-72 pt); Automatico mantiene il vecchio adattamento alla casella",
+      "Funziona nelle caselle di testo e nel testo delle forme e si riduce se uscirebbe dalla casella",
+      "Esportando in .pptx resta alla stessa dimensione"
+     ]
+    },
+    "pl": {
+     "title": "Wybierz rozmiar czcionki w punktach",
+     "items": [
+      "Menu formatu tekstu ma teraz rozmiar czcionki (12–72 pt); Auto zachowuje dotychczasowe dopasowanie do pola",
+      "Działa w polach tekstowych i w tekście kształtów, a jeśli tekst wyszedłby poza pole, zmniejsza się",
+      "Eksport do .pptx zachowuje ten sam rozmiar"
+     ]
+    },
+    "ar": {
+     "title": "اختر حجم الخط بالنقاط",
+     "items": [
+      "أصبحت قائمة تنسيق النص تتضمن حجم الخط (12 إلى 72 pt)؛ و«تلقائي» يُبقي الضبط القديم لملاءمة الإطار",
+      "يعمل في مربعات النص ونص الأشكال، ويصغر إذا تجاوز المربع",
+      "يُصدَّر بالحجم نفسه عند الحفظ بصيغة .pptx"
+     ]
     }
    }
   },

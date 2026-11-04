@@ -15,6 +15,72 @@
      "items": [
       "Removed the AI settings button at the top of the AI Experience screen"
      ]
+    },
+    "es": {
+     "title": "Se quitó el botón de ajustes de IA de la Experiencia IA",
+     "items": [
+      "Se quitó el botón de ajustes de IA de la parte superior de la pantalla de la Experiencia IA"
+     ]
+    },
+    "fr": {
+     "title": "Bouton des réglages IA retiré de l’Essai IA",
+     "items": [
+      "Suppression du bouton de réglages IA en haut de l’écran de l’Essai IA"
+     ]
+    },
+    "de": {
+     "title": "KI-Einstellungen-Schaltfläche aus dem KI-Erlebnis entfernt",
+     "items": [
+      "Die Schaltfläche „KI-Einstellungen“ oben im Bildschirm „KI-Erlebnis“ wurde entfernt"
+     ]
+    },
+    "ja": {
+     "title": "AI体験からAI設定ボタンを削除",
+     "items": [
+      "AI体験画面の上部にあったAI設定ボタンを削除しました"
+     ]
+    },
+    "zh": {
+     "title": "AI 体验中移除了 AI 设置按钮",
+     "items": [
+      "移除了 AI 体验页面顶部的 AI 设置按钮"
+     ]
+    },
+    "pt": {
+     "title": "Botão de ajustes de IA removido da Experiência IA",
+     "items": [
+      "Removido o botão de ajustes de IA no topo da tela da Experiência IA"
+     ]
+    },
+    "ru": {
+     "title": "Кнопка настроек ИИ убрана из «Опыта ИИ»",
+     "items": [
+      "Убрана кнопка настроек ИИ в верхней части экрана «Опыт ИИ»"
+     ]
+    },
+    "tr": {
+     "title": "Yapay zeka deneyiminden yapay zeka ayarları düğmesi kaldırıldı",
+     "items": [
+      "Yapay zeka deneyimi ekranının üstündeki yapay zeka ayarları düğmesi kaldırıldı"
+     ]
+    },
+    "it": {
+     "title": "Pulsante impostazioni IA rimosso da Esperienza IA",
+     "items": [
+      "Rimosso il pulsante delle impostazioni IA in alto nella schermata Esperienza IA"
+     ]
+    },
+    "pl": {
+     "title": "Usunięto przycisk ustawień AI z Doświadczenia AI",
+     "items": [
+      "Usunięto przycisk ustawień AI na górze ekranu Doświadczenia AI"
+     ]
+    },
+    "ar": {
+     "title": "إزالة زر إعدادات الذكاء الاصطناعي من تجربة الذكاء الاصطناعي",
+     "items": [
+      "أُزيل زر إعدادات الذكاء الاصطناعي من أعلى شاشة تجربة الذكاء الاصطناعي"
+     ]
     }
    }
   },
