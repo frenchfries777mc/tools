@@ -85,6 +85,9 @@ button,input,select,textarea{font:inherit; color:inherit;}
 @keyframes sp{to{transform:rotate(360deg);}}
 /* language picker with logos */
 .lgi{display:inline-flex; width:20px; height:20px; flex:0 0 auto;} .lgi svg{width:20px; height:20px;} .langBtn .cv{font-size:10px; opacity:.6;} #langMenu button.on{background:var(--panel2); box-shadow:inset 0 0 0 1px var(--fry);} .files .lgi{width:16px; height:16px; vertical-align:-3px; margin-right:4px;} .files .lgi svg{width:16px; height:16px;}
+/* BeaconScript: one card per word */
+.chips{display:inline-flex; flex-wrap:wrap; gap:6px; vertical-align:middle; margin:3px 0;} .chip{display:inline-flex; flex-direction:column; align-items:center; border:1px solid var(--line); border-radius:8px; padding:3px 9px; background:var(--panel); min-width:34px;}
+.chip b{font:600 13.5px 'JetBrains Mono',ui-monospace,monospace; color:var(--text);} .chip small{font-size:11.5px; color:var(--dim); font-family:'Noto Sans KR',sans-serif;} .chip.k b{color:var(--k);} .chip.s b{color:var(--s);} .chip.n b{color:var(--n);} .chip.u small{opacity:.6;}
 /* languages: right-pane tabs, preview, structure tree */
 .rtabs{display:inline-flex; gap:4px;} .rtabs .rt{border:1px solid var(--line); background:transparent; color:var(--dim); border-radius:99px; padding:3px 12px; cursor:pointer; font-size:12.5px;}
 .rtabs .rt.on{border-color:var(--fry); color:var(--text); background:var(--panel2);}
@@ -198,7 +201,7 @@ button,input,select,textarea{font:inherit; color:inherit;}
 <script src="strings.js?v=p4"></script>
 <script src="examples.js?v=p3"></script>
 <script src="dict.js?v=p3"></script>
-<script src="langs.js?v=p2"></script>
+<script src="langs.js?v=p3"></script>
 <script src="app.js?v=p5"></script>
 <script src="../pwa.js" defer></script>
 <script src="../ping.js" defer></script>
