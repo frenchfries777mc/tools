@@ -7,7 +7,7 @@
 const fs=require('fs'), path=require('path'), cp=require('child_process');
 const DIR=__dirname, ROOT=path.join(DIR,'..'), RAW=path.join(DIR,'raw'), OUT=path.join(DIR,'data');
 const P=require(path.join(ROOT,'ai-prompts.js'));
-const N=6000, VER=process.env.VER||'2.0b';
+const N=+process.env.N||6000, VER=process.env.VER||'2.0b';
 const STAGE=['b','j'].includes(process.env.STAGE)?process.env.STAGE:'a';
 const VARIANT=['basic','premus'].includes(process.env.VARIANT)?process.env.VARIANT:'smart';   // basic = tarius (Qwen3 1.7B): same data, own name; node train/build6.js basic -> data/v15-basic.jsonl
 const BASIC=VARIANT==='basic', PREMUS=VARIANT==='premus';
