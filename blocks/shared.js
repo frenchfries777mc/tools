@@ -5,7 +5,7 @@
 (function(){
 'use strict';
 var T=FFT.T, F=FFT.F, $=function(id){ return document.getElementById(id); };
-var AUTH_URL='https://frenchfries777mc.github.io/games/ff-auth.js', TABLE='ff_shared_drawings', PAGE=24, MAXPX=256, MAXLEN=200000;
+var AUTH_URL='https://frenchfries777.com/games/ff-auth.js', TABLE='ff_shared_drawings', PAGE=24, MAXPX=256, MAXLEN=200000;
 var COLS='id,user_id,author,name,image,w,h,created_at';
 
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
