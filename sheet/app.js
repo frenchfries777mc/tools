@@ -293,7 +293,7 @@ function updateBar(){
   var cell=sh.cells[K(act.r,act.c)]||{};
   $('bBold').classList.toggle('on',!!cell.b); $('bItal').classList.toggle('on',!!cell.i);
   if($('bUnder')) $('bUnder').classList.toggle('on',!!cell.u); if($('bStrike')) $('bStrike').classList.toggle('on',!!cell.s);
-  if($('fszSel')) $('fszSel').value=cell.fz?String(cell.fz):''; if($('ffSel')) $('ffSel').value=cell.ff||'';
+  if($('fszSel')) $('fszSel').value=cell.fz?String(Math.round(cell.fz*0.75*2)/2):'11'; if($('ffSel')) $('ffSel').value=cell.ff||'';
   var nso=$('nfSel'); nso.querySelectorAll('.tmp').forEach(function(x){ x.remove(); }); nso.value=cell.nf||''; if(nso.value!==(cell.nf||'')){ var op=document.createElement('option'); op.value=cell.nf; op.textContent=nfLabel(cell.nf); op.setAttribute('data-notr',''); op.className='tmp'; nso.appendChild(op); nso.value=cell.nf; }
   $('bNote').classList.toggle('on',!!cell.nt); $('bMerge').classList.toggle('on',!!mergeAt(act.r,act.c)); $('bFilter').classList.toggle('on',!!sh.flt);
 }
@@ -1192,7 +1192,7 @@ function needXLSX(){ if(window.XLSX) return Promise.resolve(window.XLSX); if(xls
   xlsxP=new Promise(function(res,rej){ var s=document.createElement('script'); s.src='xlsx.full.min.js'; s.onload=function(){ res(window.XLSX); }; s.onerror=function(){ xlsxP=null; rej(); }; document.head.appendChild(s); }); return xlsxP; }
 var fsxP=null;
 function needFSX(){ if(window.FSX) return Promise.resolve(window.FSX); if(fsxP) return fsxP;
-  fsxP=new Promise(function(res,rej){ var s=document.createElement('script'); s.src='xlsxio.js?v=39'; s.onload=function(){ res(window.FSX); }; s.onerror=function(){ fsxP=null; rej(); }; document.head.appendChild(s); }); return fsxP; }
+  fsxP=new Promise(function(res,rej){ var s=document.createElement('script'); s.src='xlsxio.js?v=40'; s.onload=function(){ res(window.FSX); }; s.onerror=function(){ fsxP=null; rej(); }; document.head.appendChild(s); }); return fsxP; }
 function exportXLSX(){
   commitEdit(); toast(T('엑셀 파일을 만드는 중…'));
   needFSX().then(function(X){
@@ -1908,7 +1908,7 @@ $('nmRef').addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preven
 function ffam(k){ return {serif:'"Noto Serif KR","Batang",Georgia,serif',mono:'"JetBrains Mono",Consolas,monospace',hand:'"Nanum Pen Script","Gaegu",cursive'}[k]||''; }
 function safeUrl(u){ u=String(u||'').trim(); if(/^(https?:|mailto:)/i.test(u)) return u; if(/^www\./i.test(u)||/^[^\s:/]+\.[a-z]{2,}(\/|$)/i.test(u)) return 'https://'+u; return ''; }
 function cellLink(cell){ if(!cell) return ''; if(cell.ln) return safeUrl(cell.ln); var m=typeof cell.v==='string'&&/^=\s*HYPERLINK\(\s*"([^"]+)"/i.exec(cell.v); return m?safeUrl(m[1]):''; }
-$('fszSel').addEventListener('change',function(){ var v=+this.value; commitEdit(); fmtSel(function(x){ if(v&&v!==13) x.fz=v; else delete x.fz; }); });
+$('fszSel').addEventListener('change',function(){ var v=+this.value; commitEdit(); fmtSel(function(x){ if(v&&v!==11) x.fz=Math.round(v*4/3*100)/100; else delete x.fz; }); });   // sizes are points; a cell keeps its size in px (1pt = 4/3 px), the default is 11pt
 $('ffSel').addEventListener('change',function(){ var v=this.value; commitEdit(); fmtSel(function(x){ if(v&&v!=='sans') x.ff=v; else delete x.ff; }); });
 function editLink(){ var k=K(act.r,act.c), cell=sh.cells[k]||{};
   ask(T('링크'),T('이 칸에 붙일 주소를 쓰세요 (예: https://naver.com). 비우면 링크가 지워져요. Ctrl을 누른 채 칸을 누르면 열려요'),cell.ln||'').then(function(v){

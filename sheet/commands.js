@@ -87,7 +87,7 @@ var C=[
   {id:'italic',tab:'home',g:3,ic:I.italic,lb:'기울임',kw:'italic 이탤릭 기울게',key:'Ctrl+I',sel:1,el:'bItal'},
   {id:'under',tab:'home',g:3,ic:'<u style="font-size:15px">U</u>',lb:'밑줄',kw:'underline 밑줄 줄',key:'Ctrl+U',sel:1,el:'bUnder'},
   {id:'strike',tab:'format',g:1,ic:'<s style="font-size:15px">S</s>',lb:'취소선',kw:'strikethrough 취소선 가운데 줄',key:'Ctrl+5',sel:1,el:'bStrike'},
-  {id:'fsz',tab:'home',g:3,ic:'',lb:'글자 크기',kw:'font size 글자 크기 글씨 크기 폰트 크게 작게',sel:1,select:'fszSel',opts:[['','크기'],['9','9'],['10','10'],['11','11'],['12','12'],['13','13 (기본)'],['14','14'],['16','16'],['18','18'],['20','20'],['24','24'],['28','28']]},
+  {id:'fsz',tab:'home',g:3,ic:'',lb:'글자 크기',kw:'font size 글자 크기 글씨 크기 폰트 크게 작게',sel:1,select:'fszSel',opts:[['','크기'],['8','8'],['9','9'],['10','10'],['10.5','10.5'],['11','11 (기본)'],['12','12'],['14','14'],['16','16'],['18','18'],['20','20'],['24','24'],['28','28'],['36','36'],['48','48']]},
   {id:'ffam',tab:'format',g:1,ic:'',lb:'글꼴',kw:'font family 글꼴 서체 폰트',sel:1,select:'ffSel',opts:[['','글꼴'],['sans','기본 고딕'],['serif','명조'],['mono','고정폭'],['hand','손글씨']]},
   {id:'painter',tab:'format',g:1,ic:SV('<rect x="4" y="3" width="14" height="6" rx="1.5"/><path d="M18 6h2v5h-8v3"/><path d="M11 14h2v7h-2z"/>'),lb:'서식 복사',tt:'서식 복사 (지금 칸의 모양을 다음에 고르는 칸에 입혀요)',kw:'format painter copy format 서식 복사 붓 모양 복사',el:'bPaint'},
   {id:'fc',tab:'home',g:3,ic:I.fc,lb:'글자색',kw:'font color text color 글씨 색 글자 색 폰트',sel:1,color:['fcPick','fcChip','#ff5d5d']},
