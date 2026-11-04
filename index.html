@@ -205,6 +205,7 @@ FFT.add({
   .game.dc{--gc:77,171,247;}
   .game.dr{--gc:46,196,182;}
   .game.sc{--gc:255,201,60;}
+  .game.vd{--gc:255,106,138;}
   .game.py{--gc:255,212,59;}
   .game{--rx:0deg; --ry:0deg; --mx:50%; --my:30%;}
   .game.rv{opacity:0; transform:translateY(34px);}
@@ -274,6 +275,14 @@ FFT.add({
   .sc .tags span{background:rgba(255,201,60,.08); color:#f7e7b3; border:1px solid rgba(255,201,60,.28);}
   .sc .desc{color:#c1b79b;} .sc .desc li::marker{color:#ffc93c;}
   .sc .play{background:#ffc93c; color:#1c1405;}
+  .vd{--card:#150b0f; background:#150b0f; border-color:#40161f;}
+  .vd:hover{border-color:#ff6a8a; box-shadow:0 18px 50px rgba(255,106,138,.14);}
+  .vd .badge{background:rgba(255,106,138,.95); color:#1c0509;}
+  .vd h2 b{color:#ff6a8a;}
+  .vd .motto{color:#ff6a8a;} .vd .motto i{background:#ff6a8a;}
+  .vd .tags span{background:rgba(255,106,138,.08); color:#fbd0d9; border:1px solid rgba(255,106,138,.28);}
+  .vd .desc{color:#c3a9af;} .vd .desc li::marker{color:#ff6a8a;}
+  .vd .play{background:#ff6a8a; color:#1c0509;}
   .fs{--card:#0c1310; background:#0c1310; border-color:#1d3a2b;}
   .fs:hover{border-color:#3fe08f; box-shadow:0 18px 50px rgba(63,224,143,.14);}
   .fs .badge{background:rgba(63,224,143,.92); color:#04170c;}
@@ -497,6 +506,24 @@ FFT.add({
           </ul>
         </div>
         <div class="acts"><a class="play" href="score/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
+      </div>
+    </article>
+    <article class="game vd">
+      <a class="shot" href="video/" aria-label="Fry Video 열기"><span class="badge">영상 편집</span><img src="video.webp" alt="Fry Video 화면" loading="lazy"></a>
+      <div class="body">
+        <h2><img class="ch" src="icons/cards/fry-video.svg" alt="" width="44" height="44">FRY <b>VIDEO</b></h2>
+        <div class="motto"><i></i>VIDEO EDITOR<i></i></div>
+        <div class="tags"><span>자르기 · 이어붙이기</span><span>글자 · 소리</span><span>mp4 / webm</span><span>로그인 없이</span></div>
+        <div class="desc">
+          영상 클립을 자르고 이어 붙이고, 글자와 소리를 넣어 파일로 받는 영상 편집 도구예요. 파일은 이 기기 안에서만 쓰여요.
+          <ul>
+            <li>영상·그림·소리를 끌어다 놓고, 타임라인에서 옮기고 양 끝을 끌어 줄이고 ✂로 나눠요</li>
+            <li>글자(자막)를 넣고 크기·색·위치·상자, 서서히·올라옴·한 글자씩 같은 나타남 효과</li>
+            <li>소리 크기, 서서히 커지고 작아지기, 빠르기(0.25~4배), 밝기·흑백·옛날 사진 같은 색 효과</li>
+            <li>16:9·9:16·1:1 화면 비율, 영상 위에 영상 겹치기, 완성하면 mp4나 webm으로 받기(재생 시간만큼 걸려요)</li>
+          </ul>
+        </div>
+        <div class="acts"><a class="play" href="video/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
       </div>
     </article>
   </section>
