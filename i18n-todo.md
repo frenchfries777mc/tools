@@ -8,3 +8,4 @@ patchnotes/docs.json | 쪽 경계 확실하게 보이기 항목 (en만), docs/st
 patchnotes/python.json | Fry Code 새 로고 항목 (en만) | python v4 | 2026-11-04
 patchnotes/python.json | 언어 고르는 창에 로고 항목 (en만) | python v5 | 2026-11-05
 draw/ + index.html 카드 + patchnotes/draw.json + draw/ 안 한국어 전부 | Fry Draw 첫 공개 (en 번역 없음) | draw v1 | 2026-11-05
+patchnotes/python.json | BeaconScript 단어별 미리보기 항목 (en만), python/langs.js 단어 뜻(한글)은 아직 번역 안 됨 | python v6 | 2026-11-05
