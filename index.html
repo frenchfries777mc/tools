@@ -204,6 +204,7 @@ FFT.add({
   .game.fl{--gc:122,140,255;}
   .game.dc{--gc:77,171,247;}
   .game.dr{--gc:46,196,182;}
+  .game.sc{--gc:255,201,60;}
   .game.py{--gc:255,212,59;}
   .game{--rx:0deg; --ry:0deg; --mx:50%; --my:30%;}
   .game.rv{opacity:0; transform:translateY(34px);}
@@ -265,6 +266,14 @@ FFT.add({
   .dr .tags span{background:rgba(46,196,182,.08); color:#c9f3ee; border:1px solid rgba(46,196,182,.28);}
   .dr .desc{color:#a3bfbb;} .dr .desc li::marker{color:#2ec4b6;}
   .dr .play{background:#2ec4b6; color:#021412;}
+  .sc{--card:#14110a; background:#14110a; border-color:#3a3015;}
+  .sc:hover{border-color:#ffc93c; box-shadow:0 18px 50px rgba(255,201,60,.14);}
+  .sc .badge{background:rgba(255,201,60,.95); color:#1c1405;}
+  .sc h2 b{color:#ffc93c;}
+  .sc .motto{color:#ffc93c;} .sc .motto i{background:#ffc93c;}
+  .sc .tags span{background:rgba(255,201,60,.08); color:#f7e7b3; border:1px solid rgba(255,201,60,.28);}
+  .sc .desc{color:#c1b79b;} .sc .desc li::marker{color:#ffc93c;}
+  .sc .play{background:#ffc93c; color:#1c1405;}
   .fs{--card:#0c1310; background:#0c1310; border-color:#1d3a2b;}
   .fs:hover{border-color:#3fe08f; box-shadow:0 18px 50px rgba(63,224,143,.14);}
   .fs .badge{background:rgba(63,224,143,.92); color:#04170c;}
@@ -470,6 +479,24 @@ FFT.add({
           </ul>
         </div>
         <div class="acts"><a class="play" href="draw/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
+      </div>
+    </article>
+    <article class="game sc">
+      <a class="shot" href="score/" aria-label="Fry Score 열기"><span class="badge">악보</span><img src="score.webp" alt="Fry Score 화면" loading="lazy"></a>
+      <div class="body">
+        <h2><img class="ch" src="icons/cards/fry-score.svg" alt="" width="44" height="44">FRY <b>SCORE</b></h2>
+        <div class="motto"><i></i>SHEET MUSIC<i></i></div>
+        <div class="tags"><span>악보 그리기</span><span>바로 재생</span><span>MIDI · PNG</span><span>로그인 없이</span></div>
+        <div class="desc">
+          오선에 음표를 찍어 악보를 만들고 바로 들어 보는 도구예요. 여러 악기로 재생하고 MIDI, 그림, PDF로 받아요.
+          <ul>
+            <li>오선을 눌러 음표·쉼표·화음 넣기, 키보드로 A~G를 눌러 빠르게 쓰기, 점음표·붙임줄·올림·내림표</li>
+            <li>높은음·낮은음자리표 4파트까지, 박자와 조(♯♭ 6개까지), 마디가 알아서 나뉘고 8분·16분음표는 묶여요</li>
+            <li>피아노·플루트·현악기·오르간·기타·오르골·8비트·베이스로 재생하고, 재생 위치가 악보에 보여요</li>
+            <li>글자로 쓴 악보(C4/4 E4 G4/2), MIDI 파일 열기와 내보내기, AI(시험 기능)가 멜로디 초안 써 주기</li>
+          </ul>
+        </div>
+        <div class="acts"><a class="play" href="score/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
       </div>
     </article>
   </section>
