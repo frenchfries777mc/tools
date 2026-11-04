@@ -1,7 +1,37 @@
 {
  "program": "python",
- "name": "Fry Python",
+ "name": "Fry Code",
  "notes": [
+  {
+   "date": "2026-11-04",
+   "build": "v3",
+   "title": "Fry Code로 이름 바꾸기와 언어 고르기",
+   "items": [
+    "Fry Python이 Fry Code로 바뀜 (주소와 내 파일은 그대로)",
+    "위쪽에서 파이썬·자바스크립트·자바·HTML·JSON·BeaconScript(.bs) 중에 언어를 고르면 파일마다 기억",
+    "언어마다 색칠, 자동완성, 예제, 파일 열기·받기 확장자가 따로 있음",
+    "자바스크립트: 실행하면 결과 탭에 글자가, 화면을 쓰는 코드는 화면 탭에 나옴",
+    "HTML: 쓰는 대로 미리보기가 바뀌고 콘솔 탭이 있음",
+    "JSON: 틀린 줄을 알려 주고, 트리로 보기, 예쁘게 정리하기, 한 줄로 줄이기",
+    "자바: 괄호·따옴표 검사와 구조 보기 (브라우저에서 실행은 안 됨)",
+    "BeaconScript: 문법 검사와 규칙 보기, 틀린 명령은 비슷한 명령을 알려 줌"
+   ],
+   "tr": {
+    "en": {
+     "title": "Renamed to Fry Code, pick a language",
+     "items": [
+      "Fry Python is now Fry Code (the address and your files stay the same)",
+      "Pick Python, JavaScript, Java, HTML, JSON or BeaconScript (.bs) at the top; each file remembers its language",
+      "Each language has its own colours, auto-complete, examples and file extension",
+      "JavaScript: text goes to the Result tab, code that draws on the page shows in the Screen tab",
+      "HTML: the preview updates as you type, with a Console tab",
+      "JSON: shows the broken line, a tree view, pretty print and minify",
+      "Java: bracket and quote check plus a structure view (it cannot run in the browser)",
+      "BeaconScript: syntax check and a rules view; a wrong command suggests a similar one"
+     ]
+    }
+   }
+  },
   {
    "date": "2026-10-25",
    "build": "v2",

@@ -1,11 +1,12 @@
-/* Fry Python: write Python, run it in the browser (worker.js + Pyodide), draw turtle pictures and graphs, and ask the AI what an error means.
-   Files live in this browser (localStorage). */
+/* Fry Code (was Fry Python): write Python (run in the browser by worker.js + Pyodide, turtle pictures, graphs, AI error help) or JavaScript, Java, HTML, JSON and BeaconScript (langs.js).
+   Files live in this browser (localStorage); each file remembers its language (f.lang). */
 (function(){
 'use strict';
 var T=function(s){ return window.FFT&&FFT.T?FFT.T(s):s; }, F=function(s){ var a=arguments; s=T(s); return s.replace(/\{(\d)\}/g,function(m,i){ return a[+i+1]; }); };
 function $(id){ return document.getElementById(id); }
 var code=$('code'), hl=$('hl'), gut=$('gut'), out=$('out'), LS='ffpy.v1', FILE='ffpy.file.';
-var toastT=null;
+var toastT=null, curLang='python', IN='    ', FC=window.FCODE||{langs:{python:{id:'python',name:'Python',ext:'py',indent:'    ',tabs:[['out','결과']]}},order:['python']};
+function LG(){ return FC.langs[curLang]||FC.langs.python; }
 function trCode(src){ return String(src).split('\n').map(function(l){ if(!/[\uAC00-\uD7A3]/.test(l)) return l; var m=/^(\s*)([\s\S]*)$/.exec(l); return m[1]+T(m[2]); }).join('\n'); }
 function trErr(e){ return String(e).split('\n').map(function(l){ if(!/[\uAC00-\uD7A3]/.test(l)) return l; var q=l.replace(/<코드>/g,'\u0001'); var m=/^(\s*[A-Za-z]*Error: )(.*)$/.exec(q); var xy=m&&/^x와 y의 개수가 달라요 \(x (\d+)개, y (\d+)개\)$/.exec(m[2]); q=xy?m[1]+F('x와 y의 개수가 달라요 (x {0}개, y {1}개)',xy[1],xy[2]):m?m[1]+T(m[2]):q; return q.replace(/\u0001/g,T('<코드>')); }).join('\n'); }
 function toast(m){ var t=$('toast'); t.textContent=T(m); t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(function(){ t.classList.remove('on'); },2600); }
@@ -18,6 +19,7 @@ var TOK=/(#[^\n]*)|([rRbBfFuU]{0,2}(?:"""[\s\S]*?(?:"""|$)|'''[\s\S]*?(?:'''|$)|
 var errLine=0;
 function paint(){
   var src=code.value, h='', last=0, m, prevDef=false; TOK.lastIndex=0;
+  if(curLang!=='python'&&LG().hl){ h=LG().hl(src); last=src.length; TOK.lastIndex=src.length; }
   while((m=TOK.exec(src))){ h+=esc(src.slice(last,m.index)); last=TOK.lastIndex; var t=m[0];
     if(m[1]) h+='<span class="c">'+esc(t)+'</span>';
     else if(m[2]) h+='<span class="s">'+esc(t)+'</span>';
@@ -27,7 +29,7 @@ function paint(){
     else if(BI.test(t)) h+='<span class="b">'+t+'</span>';
     else h+=esc(t);
     prevDef=false; }
-  h+=esc(src.slice(last));
+  if(last<src.length) h+=esc(src.slice(last));
   if(errLine){ var ls=h.split('\n'); if(ls[errLine-1]!=null) ls[errLine-1]='<span class="eline">'+(ls[errLine-1]||' ')+'</span>'; h=ls.join('\n'); }
   hl.innerHTML=h+'\n ';
   var n=src.split('\n').length, g=''; for(var i=1;i<=n;i++) g+='<div'+(i===errLine?' class="bad"':'')+'>'+i+'</div>'; gut.innerHTML=g;
@@ -35,7 +37,7 @@ function paint(){
 function scrollSync(){ hl.scrollTop=code.scrollTop; hl.scrollLeft=code.scrollLeft; gut.scrollTop=code.scrollTop; }
 code.addEventListener('scroll',scrollSync);
 function caretPos(){ var v=code.value.slice(0,code.selectionStart).split('\n'); $('pos').textContent=F('{0}줄 {1}칸',v.length,v[v.length-1].length+1); }
-code.addEventListener('input',function(e){ if(errLine){ errLine=0; } paint(); saveSoon(); caretPos(); if(e.isComposing||/^delete/.test(e.inputType||'')||e.inputType==='insertLineBreak') acHide(); else acUpdate(); });
+code.addEventListener('input',function(e){ if(errLine){ errLine=0; } paint(); saveSoon(); caretPos(); if(e.isComposing||/^delete/.test(e.inputType||'')||e.inputType==='insertLineBreak') acHide(); else acUpdate(); if(LG().live) liveSoon(); });
 ['keyup','click','select'].forEach(function(e){ code.addEventListener(e,caretPos); });
 function ins(t){ code.focus(); if(!document.execCommand('insertText',false,t)){ var a=code.selectionStart,b=code.selectionEnd; code.setRangeText(t,a,b,'end'); code.dispatchEvent(new Event('input')); } }
 code.addEventListener('keydown',function(e){
@@ -48,15 +50,17 @@ code.addEventListener('keydown',function(e){
   if((e.ctrlKey||e.metaKey)&&e.code==='Space'){ e.preventDefault(); acUpdate(true); return; }
   if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){ e.preventDefault(); run(); return; }
   if(e.key==='Tab'&&!e.altKey&&!e.ctrlKey&&!e.metaKey){ e.preventDefault(); var v=code.value, a=code.selectionStart, b=code.selectionEnd;
-    if(a===b&&!e.shiftKey){ ins('    '); return; }
+    if(a===b&&!e.shiftKey){ ins(IN); return; }
     var ls=v.lastIndexOf('\n',a-1)+1, le=v.indexOf('\n',b-(b>a&&v[b-1]==='\n'?1:0)); if(le<0) le=v.length;
-    var block=v.slice(ls,le), nb=e.shiftKey?block.replace(/^( {1,4}|\t)/gm,''):block.replace(/^/gm,'    ');
+    var block=v.slice(ls,le), nb=e.shiftKey?block.replace(new RegExp('^( {1,'+IN.length+'}|\\t)','gm'),''):block.replace(/^/gm,IN);
     code.setSelectionRange(ls,le); ins(nb); code.setSelectionRange(ls,ls+nb.length); return; }
   if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){ var v2=code.value, p=code.selectionStart, line=v2.slice(v2.lastIndexOf('\n',p-1)+1,p), ind=/^\s*/.exec(line)[0];
-    if(/:\s*(#.*)?$/.test(line)) ind+='    '; else if(/^\s*(return|break|continue|pass|raise)\b/.test(line)) ind=ind.slice(0,Math.max(0,ind.length-4));
+    if(curLang==='python'){ if(/:\s*(#.*)?$/.test(line)) ind+=IN; else if(/^\s*(return|break|continue|pass|raise)\b/.test(line)) ind=ind.slice(0,Math.max(0,ind.length-4)); }
+    else { var op=LG().open; if(op&&op.test(line)){ ind+=IN; var nx0=v2[p], cl={'{':'}','[':']','(':')'}[line.trim().slice(-1)];
+      if(cl&&nx0===cl&&curLang!=='beaconscript'){ e.preventDefault(); ins('\n'+ind+'\n'+ind.slice(0,ind.length-IN.length)); var np0=p+1+ind.length; code.setSelectionRange(np0,np0); return; } } }
     e.preventDefault(); ins('\n'+ind); return; }
   if(e.key==='Backspace'&&code.selectionStart===code.selectionEnd){ var v3=code.value, q=code.selectionStart, lb=v3.slice(v3.lastIndexOf('\n',q-1)+1,q);
-    if(lb.length&&/^ +$/.test(lb)&&lb.length%4===0){ e.preventDefault(); code.setSelectionRange(q-4,q); ins(''); } }
+    if(lb.length&&/^ +$/.test(lb)&&lb.length%IN.length===0){ e.preventDefault(); code.setSelectionRange(q-IN.length,q); ins(''); } }
   var pairs={'(':')','[':']','{':'}','"':'"',"'":"'"};
   if(pairs[e.key]&&!e.ctrlKey&&!e.metaKey&&code.selectionStart===code.selectionEnd){ var nx=code.value[code.selectionStart]||'';
     if((e.key==='"'||e.key==="'")&&nx===e.key){ e.preventDefault(); code.setSelectionRange(code.selectionStart+1,code.selectionStart+1); return; }
@@ -85,7 +89,15 @@ function modules(src){ var mods={}, star={}, m, re=/^[ \t]*import\s+(.+)$/gm;
   return {mods:mods, star:star}; }
 function turtleVars(src){ var set={}, m, re=/([A-Za-z_]\w*)\s*=\s*(?:turtle\.)?(?:Turtle|Pen|RawTurtle)\(/g; while((m=re.exec(src))) set[m[1]]=1; return set; }
 function rank(list,pre,keyf){ var lo=pre.toLowerCase(), a=[], b=[]; list.forEach(function(x){ var n=keyf(x), l=n.toLowerCase(); if(l.indexOf(lo)===0) a.push(x); else if(lo.length>1&&l.indexOf(lo)>0) b.push(x); }); return a.concat(b); }
+function acOther(force){ var pos=code.selectionStart; if(pos!==code.selectionEnd) return null; var src=code.value, ls=src.lastIndexOf('\n',pos-1)+1, line=src.slice(ls,pos), L=LG();
+  var wm=/([A-Za-z_$\u00c0-\uffff][\w$\u00c0-\uffff-]*)$/.exec(line), pre=wm?wm[1]:''; if((!pre&&!force)||/^\d/.test(pre)) return null;
+  if(curLang==='json'||(curLang!=='html'&&/(^|[^\\])"[^"]*$/.test(line))) return null;
+  var pool=(L.words||[]).map(function(w){ return {n:w[0],i:w[1],d:w[2]}; }), seen={}; pool.forEach(function(x){ seen[x.n]=1; });
+  if(curLang!=='html'){ var mm, re=/[A-Za-z_$][\w$]{2,}/g, cnt=0; while((mm=re.exec(src))&&cnt<400){ cnt++; if(!seen[mm[0]]&&mm.index!==pos-pre.length){ seen[mm[0]]=1; pool.push({n:mm[0],i:mm[0],d:'쓴 이름'}); } } }
+  var items=rank(pool,pre,function(x){ return x.n; }); if(!items.length) return null; if(!force&&items.length===1&&items[0].n===pre) return null;
+  return {items:items.slice(0,8), start:pos-pre.length, pre:pre}; }
 function acItems(force){
+  if(curLang!=='python') return acOther(force);
   var pos=code.selectionStart; if(pos!==code.selectionEnd) return null;
   var src=code.value, ls=src.lastIndexOf('\n',pos-1)+1, line=src.slice(ls,pos);
   if(inStrOrComment(line)) return null;
@@ -146,15 +158,15 @@ function loadIdx(){ try{ var o=JSON.parse(localStorage.getItem(LS)||'null'); if(
 var idx=loadIdx(), file=null, saveT=null;
 function readFile(id){ try{ return localStorage.getItem(FILE+id); }catch(e){ return null; } }
 function writeIdx(){ try{ localStorage.setItem(LS,JSON.stringify(idx)); }catch(e){} }
-function snap(){ return JSON.stringify({n:file.name, c:code.value, i:$('stdin').value}); }
-function saveNow(){ clearTimeout(saveT); saveT=null; if(!file) return; file.t=Date.now(); file.name=$('fileName').value.trim()||T('새 파일'); file.stdin=$('stdin').value; idx.last=file.id;
+function snap(){ return JSON.stringify({n:file.name, c:code.value, i:$('stdin').value, l:curLang}); }
+function saveNow(){ clearTimeout(saveT); saveT=null; if(!file) return; file.t=Date.now(); file.name=$('fileName').value.trim()||T('새 파일'); file.stdin=$('stdin').value; file.lang=curLang; idx.last=file.id;
   if(idx.files.indexOf(file)<0) idx.files.unshift(file);
   try{ localStorage.setItem(FILE+file.id,code.value); localStorage.setItem(LS,JSON.stringify(idx)); $('saved').textContent=T('저장됨'); }catch(e){ toast('저장 공간이 부족해서 저장하지 못했어요'); }
   if(window.FFVer) FFVer.tick('python.'+file.id,snap); }
 function saveSoon(){ $('saved').textContent=''; clearTimeout(saveT); saveT=setTimeout(saveNow,600); }
 function openFile(f){ if(file&&file!==f) saveNow(); file=f; if(idx.files.indexOf(f)<0) idx.files.unshift(f);
-  $('fileName').value=f.name||''; code.value=readFile(f.id)||''; $('stdin').value=f.stdin||''; $('stdinBox').open=!!f.stdin; errLine=0; paint(); caretPos(); code.scrollTop=0; saveNow(); }
-function newFile(name,src,stdin){ var f={id:uid(), name:name||T('새 파일'), t:Date.now(), stdin:stdin||''}; try{ localStorage.setItem(FILE+f.id,src||''); }catch(e){} idx.files.unshift(f); openFile(f); return f; }
+  $('fileName').value=f.name||''; code.value=readFile(f.id)||''; $('stdin').value=f.stdin||''; $('stdinBox').open=!!f.stdin; setLang(f.lang||'python',true); errLine=0; paint(); caretPos(); code.scrollTop=0; saveNow(); }
+function newFile(name,src,stdin,lang){ var f={id:uid(), name:name||T('새 파일'), t:Date.now(), stdin:stdin||'', lang:lang||'python'}; try{ localStorage.setItem(FILE+f.id,src||''); }catch(e){} idx.files.unshift(f); openFile(f); return f; }
 $('fileName').addEventListener('input',saveSoon);
 $('fileName').addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); code.focus(); } });
 $('stdin').addEventListener('input',saveSoon);
@@ -165,7 +177,7 @@ Array.prototype.forEach.call(document.querySelectorAll('.ov'),function(ov){ ov.a
   Array.prototype.forEach.call(ov.querySelectorAll('[data-close]'),function(b){ b.onclick=function(){ ov.classList.remove('open'); }; }); });
 function drawMgr(){ var ul=$('fileList'); ul.innerHTML='';
   idx.files.slice().sort(function(a,b){ return (b.t||0)-(a.t||0); }).forEach(function(f){ var li=document.createElement('li'); if(f===file) li.className='on';
-    var nm=document.createElement('div'); nm.className='dn'; nm.setAttribute('data-notr',''); var b=document.createElement('b'); b.textContent=f.name; var sm=document.createElement('small'); sm.textContent=ago(f.t||Date.now()); nm.appendChild(b); nm.appendChild(sm);
+    var nm=document.createElement('div'); nm.className='dn'; nm.setAttribute('data-notr',''); var b=document.createElement('b'); b.textContent=f.name; var sm=document.createElement('small'); sm.textContent=((FC.langs[f.lang||'python']||{}).name||'Python')+' · '+ago(f.t||Date.now()); nm.appendChild(b); nm.appendChild(sm);
     nm.onclick=function(){ openFile(f); closeDlg('mgrDlg'); };
     var rn=document.createElement('button'); rn.className='ib'; rn.title=T('이름 바꾸기'); rn.setAttribute('aria-label',T('이름 바꾸기')); rn.textContent='✏️';
     rn.onclick=function(){ var inp=document.createElement('input'); inp.value=f.name; inp.setAttribute('data-notr',''); li.replaceChild(inp,nm); inp.focus(); inp.select();
@@ -177,9 +189,9 @@ function drawMgr(){ var ul=$('fileList'); ul.innerHTML='';
       if(window.FFUndo) FFUndo.show(F('"{0}" 파일을 지웠어요',f.name),function(){ try{ localStorage.setItem(FILE+f.id,src||''); }catch(e){} idx.files.splice(Math.min(pos,idx.files.length),0,f); writeIdx(); openFile(f); drawMgr(); }); };
     li.appendChild(nm); li.appendChild(rn); li.appendChild(del); ul.appendChild(li); }); }
 $('mineBtn').onclick=function(){ saveNow(); drawMgr(); $('mgrDlg').classList.add('open'); };
-$('newBtn').onclick=function(){ newFile(); closeDlg('mgrDlg'); code.focus(); };
+$('newBtn').onclick=function(){ var L=LG(); newFile(T('새 파일'),curLang==='python'?'':(L.starter||''),'',curLang); closeDlg('mgrDlg'); code.focus(); };
 $('verBtn').onclick=function(){ if(!window.FFVer||!file) return; saveNow(); FFVer.open({key:'python.'+file.id,title:'버전 기록',get:snap,toast:toast,
-  put:function(s){ var o=JSON.parse(s); code.value=o.c||''; $('fileName').value=o.n||''; $('stdin').value=o.i||''; errLine=0; paint(); saveNow(); },
+  put:function(s){ var o=JSON.parse(s); if(o.l&&o.l!==curLang) setLang(o.l,true); code.value=o.c||''; $('fileName').value=o.n||''; $('stdin').value=o.i||''; errLine=0; paint(); saveNow(); },
   describe:function(s){ var o=JSON.parse(s); return F('{0}줄',(o.c||'').split('\n').length); }}); };
 
 /* ---------- menus ---------- */
@@ -187,20 +199,20 @@ function closeMenus(){ Array.prototype.forEach.call(document.querySelectorAll('.
 function popMenu(menu,btn){ var open=menu.classList.contains('open'); closeMenus(); if(open) return; menu.classList.add('open');
   var r=btn.getBoundingClientRect(), w=menu.offsetWidth; menu.style.top=(r.bottom+6)+'px'; menu.style.left=Math.max(8,Math.min(innerWidth-w-8,r.right-w))+'px'; }
 document.addEventListener('mousedown',function(e){ if(!e.target.closest('.menu')&&!e.target.closest('#exBtn')&&!e.target.closest('#fileBtn')) closeMenus(); });
-(function(){ var m=$('exMenu'); var h=document.createElement('div'); h.className='mh'; h.textContent=T('예제를 지금 파일에 불러와요 (원래 코드는 되돌리기로 살려요)'); m.appendChild(h);
-  (window.FPY_EX||[]).forEach(function(ex){ var b=document.createElement('button'); b.textContent=T(ex[0]);
+function buildEx(){ var m=$('exMenu'); m.innerHTML=''; var h=document.createElement('div'); h.className='mh'; h.textContent=T('예제를 지금 파일에 불러와요 (원래 코드는 되돌리기로 살려요)'); m.appendChild(h);
+  (curLang==='python'?(window.FPY_EX||[]):(LG().ex||[])).forEach(function(ex){ var b=document.createElement('button'); b.textContent=T(ex[0]);
     b.onclick=function(){ closeMenus(); var prev={c:code.value, i:$('stdin').value};
-      code.value=trCode(ex[1]); $('stdin').value=ex[2]||''; $('stdinBox').open=!!ex[2]; errLine=0; paint(); caretPos(); code.scrollTop=0; saveNow();
+      code.value=curLang==='python'?trCode(ex[1]):ex[1]; $('stdin').value=ex[2]||''; $('stdinBox').open=!!ex[2]; errLine=0; paint(); caretPos(); code.scrollTop=0; saveNow(); if(LG().live) liveSoon();
       if(window.FFUndo) FFUndo.show(T('예제를 이 파일에 불러왔어요. ▶ 실행을 눌러 보세요'),function(){ code.value=prev.c; $('stdin').value=prev.i; errLine=0; paint(); saveNow(); }); else toast('예제를 이 파일에 불러왔어요'); };
-    m.appendChild(b); }); })();
+    m.appendChild(b); }); }
 $('exBtn').onclick=function(){ popMenu($('exMenu'),this); };
 $('fileBtn').onclick=function(){ popMenu($('fileMenu'),this); };
 Array.prototype.forEach.call(document.querySelectorAll('[data-f]'),function(b){ b.onclick=function(){ closeMenus(); var k=b.dataset.f;
   if(k==='usage'){ if(window.FFUsage) FFUsage.open(); }
   else if(k==='open'){ $('openFile').value=''; $('openFile').click(); }
-  else if(k==='save'){ saveNow(); var a=document.createElement('a'), u=URL.createObjectURL(new Blob([code.value],{type:'text/x-python'})); a.href=u; a.download=(file.name.replace(/[\\/:*?"<>|]+/g,' ').trim()||'main').replace(/\.py$/,'')+'.py'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){ URL.revokeObjectURL(u); },4000); }
+  else if(k==='save'){ saveNow(); var a=document.createElement('a'), u=URL.createObjectURL(new Blob([code.value],{type:LG().mime||'text/plain'})); a.href=u; a.download=(file.name.replace(/[\\/:*?"<>|]+/g,' ').trim()||'main').replace(new RegExp('\\.'+LG().ext+'$'),'')+'.'+LG().ext; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){ URL.revokeObjectURL(u); },4000); }
   else if(k==='ai'&&window.FFAI) FFAI.settings(); }; });
-$('openFile').onchange=function(){ var f=this.files[0]; if(!f) return; f.text().then(function(t){ newFile(f.name.replace(/\.(py|txt)$/,''),t); toast('파일을 열었어요'); }); };
+$('openFile').onchange=function(){ var f=this.files[0]; if(!f) return; f.text().then(function(t){ var em=/\.([A-Za-z0-9]+)$/.exec(f.name), ex=em?em[1].toLowerCase():'', lg='python'; FC.order.forEach(function(k){ if(FC.langs[k].ext===ex||(k==='javascript'&&(ex==='mjs'))||(k==='html'&&ex==='htm')) lg=k; }); newFile(f.name.replace(/\.[A-Za-z0-9]+$/,''),t,'',lg); toast('파일을 열었어요'); }); };
 
 /* ---------- output ---------- */
 var atBottom=true;
@@ -211,7 +223,7 @@ function write(t,cls){ if(outChars>200000){ if(outChars<1e9){ outChars=1e9; sys(
   if(!lastPre||lastPre.dataset.c!==(cls||'')){ lastPre=document.createElement('pre'); lastPre.dataset.c=cls||''; if(cls) lastPre.className=cls; out.appendChild(lastPre); }
   lastPre.appendChild(document.createTextNode(t)); stick(); }
 function sys(t,cls){ var d=document.createElement('div'); d.className='sys'+(cls?' '+cls:''); d.textContent=t; out.appendChild(d); lastPre=null; stick(); return d; }
-$('clearBtn').onclick=function(){ out.innerHTML=''; lastPre=null; outChars=0; tur=null; };
+$('clearBtn').onclick=function(){ out.innerHTML=''; lastPre=null; outChars=0; tur=null; if(curLang!=='python') $('pv').innerHTML=''; };
 
 /* ---------- turtle canvas ---------- */
 var tur=null, TW=600, TH=500;
@@ -325,13 +337,13 @@ function checkDone(){ var d=pendingDone; if(!d||(tur&&tur.q.length)) return; pen
   if(errLine){ var lh=parseFloat(getComputedStyle(code).lineHeight)||21; if(errLine*lh<code.scrollTop||errLine*lh>code.scrollTop+code.clientHeight) code.scrollTop=Math.max(0,(errLine-4)*lh); }
   lastErr={code:code.value, error:d.error, last:d.last, line:d.line}; whyBox(lastErr); }
 var t0=0;
-function run(){ if(running) return; saveNow(); errLine=0; paint();
+function run(){ if(running) return; if(curLang!=='python') return runOther(false); saveNow(); errLine=0; paint();
   out.innerHTML=''; lastPre=null; outChars=0; tur=null; atBottom=true; pendingDone=null;
   if(!worker) mkWorker();
   running=true; ui(); runId++; t0=Date.now(); state(ready?'실행 중…':'파이썬을 불러오는 중…',true);
   var stdin=$('stdin').value.replace(/\r/g,''), lines=stdin?stdin.split('\n'):[];
   worker.postMessage({run:{code:code.value, stdin:lines, id:runId}}); }
-function stop(){ if(!running) return; if(worker){ worker.terminate(); worker=null; } running=false; pendingDone=null; if(tur){ cancelAnimationFrame(tur.raf); tur.q=[]; } ui(); state(''); sys(T('■ 멈췄어요'),'err'); setTimeout(mkWorker,50); }
+function stop(){ if(!running) return; if(curLang!=='python'){ stopOther(); return; } if(worker){ worker.terminate(); worker=null; } running=false; pendingDone=null; if(tur){ cancelAnimationFrame(tur.raf); tur.q=[]; } ui(); state(''); sys(T('■ 멈췄어요'),'err'); setTimeout(mkWorker,50); }
 function ui(){ $('runBtn').hidden=running; $('stopBtn').hidden=!running; }
 $('runBtn').onclick=run; $('stopBtn').onclick=stop;
 document.addEventListener('keydown',function(e){ if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){ e.preventDefault(); run(); } else if(e.key==='Escape'){ closeMenus(); if(running) stop(); }
@@ -350,13 +362,36 @@ function whyBox(er){ var box=document.createElement('div'); box.className='why';
       .then(function(t){ ans.textContent=String(t||ans.textContent).trim(); b.hidden=true; stick(); },
         function(e){ ans.textContent=(e&&e.message)||T('AI가 답하지 못했어요'); b.disabled=false; }); }; }
 
+/* ---------- other languages (langs.js) ---------- */
+var stopFn=null, liveT=0, otherGen=0;
+function stopOther(){ if(stopFn){ try{ stopFn(); }catch(e){} stopFn=null; } otherGen++; running=false; ui(); state(''); sys(T('■ 멈췄어요'),'err'); }
+function showTab(id){ out.hidden=(id!=='out'); $('pv').hidden=(id!=='pv'); Array.prototype.forEach.call($('rtabs').children,function(b){ b.classList.toggle('on',b.dataset.t===id); }); }
+function runOther(live){ var L=LG(); if(!L.run) return; if(!live) saveNow(); errLine=0; paint(); out.innerHTML=''; $('pv').innerHTML=''; lastPre=null; outChars=0;
+  if(stopFn){ try{ stopFn(); }catch(e){} stopFn=null; } var gen=++otherGen; running=!live; ui(); var t1=Date.now();
+  var ctx={code:code.value, out:out, pv:$('pv'), write:write, sys:sys, show:function(id){ if(!live||gen===otherGen) showTab(id); }, T:T,
+    errLine:function(n){ errLine=n; paint(); },
+    setCode:function(t){ code.focus(); code.select(); ins(t); },
+    onStop:function(fn){ var old=stopFn; stopFn=function(){ if(old) old(); fn(); }; },
+    done:function(ok){ if(gen!==otherGen) return; running=false; ui(); if(!live&&ok&&curLang==='javascript') sys(F('✔ 끝났어요 ({0}초)',((Date.now()-t1)/1000).toFixed(1)),'ok'); }};
+  try{ L.run(ctx); }catch(e){ write(String((e&&e.message)||e)+'\n','err'); ctx.done(false); } }
+function liveSoon(){ clearTimeout(liveT); liveT=setTimeout(function(){ if(LG().live&&!running) runOther(true); },500); }
+function setLang(l,silent){ if(!FC.langs[l]) l='python'; var changed=l!==curLang; if(changed&&stopFn){ try{ stopFn(); }catch(e){} stopFn=null; } otherGen++; running=false; ui();
+  curLang=l; var L=LG(); IN=L.indent||'    '; $('langPick').value=l; var py=(l==='python');
+  $('dictBtn').hidden=!py; $('stdinBox').hidden=!py; $('exBtn').hidden=false; code.setAttribute('aria-label',T(L.name+' 코드'));
+  var tb=$('rtabs'); tb.innerHTML=''; (L.tabs||[]).forEach(function(t){ var b=document.createElement('button'); b.type='button'; b.className='rt'; b.dataset.t=t[0]; b.textContent=T(t[1]); b.onclick=function(){ showTab(t[0]); }; tb.appendChild(b); });
+  tb.hidden=py; $('pv').hidden=true; out.hidden=false; $('resTitle').hidden=!py; if(!py) showTab(L.tabs[0][0]);
+  $('runBtn').title=py||l==='javascript'?T('실행 (Ctrl+Enter)'):T('검사하고 미리보기 (Ctrl+Enter)'); acHide();
+  if(changed){ out.innerHTML=''; $('pv').innerHTML=''; lastPre=null; outChars=0; tur=null; errLine=0; if(py&&!worker) setTimeout(function(){ if(!worker&&curLang==='python') mkWorker(); },300); }
+  buildEx(); if(!silent){ paint(); saveNow(); } if(L.live) liveSoon(); }
+(function(){ var sel=$('langPick'); FC.order.forEach(function(k){ var o=document.createElement('option'); o.value=k; o.textContent=(FC.langs[k].icon||'')+' '+FC.langs[k].name; sel.appendChild(o); });
+  sel.onchange=function(){ setLang(sel.value,false); toast(F('{0} 로 바꿨어요',FC.langs[sel.value].name)); }; })();
+
 /* ---------- start ---------- */
 (function(){ var op=/^#open=([a-z0-9]{4,40})$/.exec(location.hash||'');   // ../python/#open=<id>: the usage window opens a file in a new window
   if(op){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} if(idx.files.some(function(x){ return x.id===op[1]; })) idx.last=op[1]; }
   var f=idx.files.filter(function(x){ return x.id===idx.last; })[0]||idx.files[0];
   if(f) openFile(f); else { var ex=(window.FPY_EX||[])[0]; newFile(T('첫 파일'),ex?trCode(ex[1]):T('print("안녕하세요!")')+'\n'); } })();
-sys(T('▶ 실행(Ctrl+Enter)을 누르면 여기에 결과가 나와요. 처음 실행할 때는 파이썬(약 10MB)을 받느라 조금 걸려요.'));
-setTimeout(function(){ if(!worker) mkWorker(); },600);
+if(curLang==='python'){ sys(T('▶ 실행(Ctrl+Enter)을 누르면 여기에 결과가 나와요. 처음 실행할 때는 파이썬(약 10MB)을 받느라 조금 걸려요.')); setTimeout(function(){ if(!worker&&curLang==='python') mkWorker(); },600); }
 window.addEventListener('pagehide',saveNow);
 document.addEventListener('visibilitychange',function(){ if(document.hidden) saveNow(); });
 })();
