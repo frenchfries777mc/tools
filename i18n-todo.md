@@ -4,3 +4,4 @@
 patchnotes/docs.json | 쪽이 차면 다음 쪽 생김 항목 (en만) | docs v19 | 2026-11-03
 patchnotes/ai.json | AI 체험에서 AI 설정 버튼 뺌 항목 (en만) | ai v65 | 2026-11-04
 patchnotes/docs.json | 글자 크기를 포인트(pt)로 항목 (en만) | docs v20 | 2026-11-04
+patchnotes/sheet.json | 글자 크기를 포인트(pt)로 항목 (en만), 글자 크기 메뉴 '11 (기본)' (commands.js) | sheet v46 | 2026-11-04

@@ -80,7 +80,7 @@ Styles.prototype.xf=function(sp){
   var key=JSON.stringify([sp.b?1:0,sp.i?1:0,sp.fc||'',sp.bg||'',sp.al||'',sp.nf||'',sp.bx||'',sp.u?1:0,sp.s?1:0,sp.fz||0,sp.ff||'']); if(key in this.map) return this.map[key];
   var fontId=0, fillId=0, borderId=0, fc=sp.fc&&toRGB(sp.fc), bg=sp.bg&&toRGB(sp.bg);
   var FN={serif:'Batang',mono:'Consolas',hand:'Nanum Pen Script'};
-  if(sp.b||sp.i||fc||sp.u||sp.s||sp.fz||sp.ff) fontId=this.idx(this.fonts,'<font>'+(sp.b?'<b/>':'')+(sp.i?'<i/>':'')+(sp.s?'<strike/>':'')+(sp.u?'<u/>':'')+'<sz val="'+(sp.fz?Math.round(sp.fz*11/13*2)/2:11)+'"/>'+(fc?'<color rgb="FF'+fc+'"/>':'')+'<name val="'+(FN[sp.ff]||'Calibri')+'"/><family val="2"/></font>');
+  if(sp.b||sp.i||fc||sp.u||sp.s||sp.fz||sp.ff) fontId=this.idx(this.fonts,'<font>'+(sp.b?'<b/>':'')+(sp.i?'<i/>':'')+(sp.s?'<strike/>':'')+(sp.u?'<u/>':'')+'<sz val="'+(sp.fz?Math.round(sp.fz*0.75*2)/2:11)+'"/>'+(fc?'<color rgb="FF'+fc+'"/>':'')+'<name val="'+(FN[sp.ff]||'Calibri')+'"/><family val="2"/></font>');
   if(bg) fillId=this.idx(this.fills,'<fill><patternFill patternType="solid"><fgColor rgb="FF'+bg+'"/><bgColor indexed="64"/></patternFill></fill>');
   if(sp.bx){ var bs=''; [['l','left'],['r','right'],['t','top'],['b','bottom']].forEach(function(p){ var o=sp.bx[p[0]], col=o&&toRGB(o.c);
       bs+=o?'<'+p[1]+' style="'+(BSTYLE[o.w>=3?3:o.w>=2?2:1])+'"><color rgb="FF'+(col||'000000')+'"/></'+p[1]+'>':'<'+p[1]+'/>'; });
@@ -308,7 +308,7 @@ function parseStyles(txt,theme){
   var fmts={}; kids(q1(d,'numFmts'),'numFmt').forEach(function(e){ fmts[e.getAttribute('numFmtId')]=e.getAttribute('formatCode'); });
   var fonts=kids(q1(d,'fonts'),'font').map(function(f){ var b=q1(f,'b'), i=q1(f,'i'), u=q1(f,'u'), st=q1(f,'strike'), sz=q1(f,'sz'), szv=sz&&parseFloat(sz.getAttribute('val'));
     return {b:!!b&&!/^(0|false)$/.test(b.getAttribute('val')||''),i:!!i&&!/^(0|false)$/.test(i.getAttribute('val')||''),fc:colorOf(q1(f,'color'),theme),
-      u:!!u&&!/^(none)$/.test(u.getAttribute('val')||''),s:!!st&&!/^(0|false)$/.test(st.getAttribute('val')||''),fz:szv&&Math.abs(szv-11)>.4?Math.max(8,Math.min(28,Math.round(szv*13/11))):0}; });
+      u:!!u&&!/^(none)$/.test(u.getAttribute('val')||''),s:!!st&&!/^(0|false)$/.test(st.getAttribute('val')||''),fz:szv&&Math.abs(szv-11)>.4?Math.max(8,Math.min(72,Math.round(szv*4/3*100)/100)):0}; });
   var fills=kids(q1(d,'fills'),'fill').map(function(f){ var p=q1(f,'patternFill'); if(!p||p.getAttribute('patternType')!=='solid') return null; var fg=q1(p,'fgColor'); return colorOf(fg,theme); });
   var BST={thin:1,hair:1,dotted:1,dashed:1,dashDot:1,dashDotDot:1,mediumDashed:2,mediumDashDot:2,mediumDashDotDot:2,slantDashDot:2,medium:2,thick:3,double:3};
   var borders=kids(q1(d,'borders'),'border').map(function(b){ var o={}, any=false; [['left','l'],['right','r'],['top','t'],['bottom','b']].forEach(function(p){ var e=q1(b,p[0]); if(!e) return; var s=e.getAttribute('style'); if(!s||!BST[s]) return; o[p[1]]={c:colorOf(q1(e,'color'),theme)||'#000000',w:BST[s]}; any=true; }); return any?o:null; });

@@ -1095,6 +1095,7 @@ FFT.add({
 "글자 크기":["Font size", "Tamaño de letra", "Taille de police", "Schriftgröße", "文字サイズ", "字号", "Tamanho da fonte", "Размер шрифта", "Yazı boyutu", "Font size", "글자 크기", "Dimensione del testo", "Rozmiar czcionki", "حجم الخط"],
 "크기":["Size", "Tamaño", "Taille", "Größe", "サイズ", "大小", "Tamanho", "Размер", "Boyut", "Size", "크기", "Dimensione", "Rozmiar", "الحجم"],
 "13 (기본)":["13 (default)", "13 (predeterminado)", "13 (par défaut)", "13 (Standard)", "13（標準）", "13（默认）", "13 (padrão)", "13 (по умолчанию)", "13 (varsayılan)", "13 (default)", "13 (기본)", "13 (predefinito)", "13 (domyślnie)", "13 (افتراضي)"],
+"11 (기본)":["11 (default)", "11 (predeterminado)", "11 (par défaut)", "11 (Standard)", "11（標準）", "11（默认）", "11 (padrão)", "11 (по умолчанию)", "11 (varsayılan)", "11 (default)", "11 (기본)", "11 (predefinito)", "11 (domyślnie)", "11 (افتراضي)"],
 "글꼴":["Font", "Fuente", "Police", "Schriftart", "フォント", "字体", "Fonte", "Шрифт", "Yazı tipi", "Font", "글꼴", "Carattere", "Czcionka", "الخط"],
 "기본 고딕":["Default Gothic", "Gótica predeterminada", "Gothique par défaut", "Standard-Gothic", "標準ゴシック", "默认黑体", "Gótica padrão", "Гротеск по умолчанию", "Varsayılan Gotik", "Default Gothic", "기본 고딕", "Gotico predefinito", "Domyślna groteskowa", "غوثي افتراضي"],
 "명조":["Serif", "Serif", "Serif", "Serif", "明朝", "宋体", "Serifada", "С засечками", "Serif", "Serif", "명조", "Serif", "Szeryfowa", "سيريف"],
