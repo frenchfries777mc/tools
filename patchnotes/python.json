@@ -4,6 +4,22 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v14",
+   "title": "BeaconScript 명령 전부 점검",
+   "items": [
+    "b189~b191 명령·이벤트·% 값을 한 번에 다시 확인해서 빠졌던 damage player N을 고쳤어요 (heal·damage는 1~100까지 검사)"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript full command check",
+     "items": [
+      "Re-checked every b189-b191 command, event and % value; fixed the missing damage player N (heal/damage are checked for 1-100)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v13",
    "title": "BeaconScript {변수} 표기와 새 % 값",
    "items": [
