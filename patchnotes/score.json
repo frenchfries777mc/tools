@@ -4,6 +4,48 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v10",
+   "title": "셋잇단음표와 꾸밈음",
+   "items": [
+    "셋잇단음표: 고른 음표 세 개씩 묶어 켜고 끄기, 숫자 3 괄호 표시, 재생·MIDI·MusicXML에 정확한 길이로 반영, 글자 악보는 길이 뒤에 t (예: E5/8t F5 G5)",
+    "꾸밈음: 음표마다 최대 4개까지 작은 음표로 앞에 붙이기(예: D5 E5), 재생할 때는 본음 앞부분을 빌려 빠르게 연주, MusicXML에도 저장·읽기",
+    "마디 안 박자 계산에 오차가 생기지 않도록 정리"
+   ],
+   "tr": {
+    "en": {
+     "title": "Triplets and grace notes",
+     "items": [
+      "Triplets: toggle on any selection (groups of three), drawn with a 3 bracket and played, exported to MIDI/MusicXML with exact timing; in text notation add t after the length (E5/8t F5 G5)",
+      "Grace notes: up to 4 small notes before any note (e.g. D5 E5); on playback they borrow time from the main note; saved to and read from MusicXML",
+      "Measure timing math made tolerant of floating-point error"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
+   "build": "v9",
+   "title": "D.S.·코다·악보 틀·좌우 위치·음 찾아 바꾸기",
+   "items": [
+    "Segno, Coda, To Coda, D.S., D.C., Fine 표시를 마디에 붙이면 악보에 쓰이고 재생·WAV에 그대로 반영(도돌이표와 같이 써도 됨)",
+    "새 악보 틀: 한 줄, 피아노(두 줄), 현악 4중주(알토 음자리표 포함), 기타, 밴드",
+    "파트마다 좌우 위치(스테레오 패닝)",
+    "음 찾아 바꾸기: F → F#4, 모든 파트 한꺼번에, R로 쉼표로 바꾸기 (되돌리기 가능)"
+   ],
+   "tr": {
+    "en": {
+     "title": "D.S./Coda jumps, templates, per-part pan, find and replace",
+     "items": [
+      "Segno, Coda, To Coda, D.S., D.C. and Fine marks on any measure, written on the score and followed by playback and WAV export (works together with repeats)",
+      "New-score templates: lead line, piano grand staff, string quartet (with alto clef), guitar and band",
+      "Per-part stereo pan",
+      "Find and replace notes: F to F#4, across all parts, or to a rest with R (undoable)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v8",
    "title": "휴대폰에서 쓰기 편하게, 조 옮기기, 내 보관함",
    "items": [

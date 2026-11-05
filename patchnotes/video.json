@@ -4,6 +4,56 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v13",
+   "title": "키프레임·소리 곡선·잡음 끊기·무음 자르기·여러 개 고르기",
+   "items": [
+    "키프레임: 클립의 크기·위치·돌리기를 여러 지점에서 정하고 지점마다 변하는 방식(부드럽게·일정하게·천천히 시작·천천히 끝·딱 바꾸기)을 골라요. 클립 위의 ◆로 보여요",
+    "소리 곡선: 재생 막대 위치에 지점을 찍어 소리 크기를 여러 번 키우고 줄여요",
+    "잡음 끊기(노이즈 게이트): 조용한 소리(숨소리·잡음)를 자동으로 꺼요. 재생과 내보내기에 적용돼요",
+    "무음 구간 잘라 내고 붙이기: 소리 모양을 보고 조용한 구간을 잘라 내고 뒤를 당겨 붙여요 (무음 기준·길이 조절)",
+    "여러 개 고르기: 컴퓨터는 Shift/Ctrl+클릭, 터치는 '여러 개 고르기' 버튼. 함께 옮기고, 복제하고, 지울 수 있어요",
+    "다른 줄로 복사: 영상·그림 클립을 영상(V1)↔겹침(V2) 줄로 복사해요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Keyframes, volume curve, noise gate, silence removal, multi-select",
+     "items": [
+      "Keyframes: set a clip's size, position and rotation at several points, with a choice of easing per segment (smooth, linear, ease-in, ease-out, hold); shown as diamonds on the clip",
+      "Volume curve: add points at the playhead to raise and lower the volume several times",
+      "Noise gate: automatically mutes quiet sound (breathing, hiss) during playback and export",
+      "Remove silence: reads the waveform, cuts the quiet parts and closes the gaps (adjustable threshold and length)",
+      "Multi-select: Shift/Ctrl+click on a computer, or the Select multiple button on touch; move, duplicate and delete together",
+      "Copy to other track: copy a video or picture clip between the main (V1) and overlay (V2) tracks"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
+   "build": "v12",
+   "title": "넣기 탭: 템플릿·스티커·작은 화면, 프로젝트 파일, 챕터",
+   "items": [
+    "새 '넣기' 탭: 제목 카드, 이름 띠, 자막, 인트로, 아웃트로 템플릿 (글자·도형 클립으로 만들어져서 하나하나 고칠 수 있어요)",
+    "스티커: 이모지 24개를 눌러 재생 막대 위치에 톡 튀어나오게 넣어요",
+    "작은 화면(화면 속 화면): 고른 영상·그림을 네 모서리나 가운데에 작게 겹쳐 놓고, '꽉 채움'으로 되돌려요",
+    "프로젝트 파일(.fryvideo)로 저장·열기: 영상·그림·소리까지 한 파일에 담아서 다른 기기에서 이어 편집해요",
+    "표시에 챕터 이름을 붙이고, 유튜브 설명란에 붙여 넣을 챕터 목록을 복사해요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Insert tab: templates, stickers, picture-in-picture, project files, chapters",
+     "items": [
+      "New Insert tab: title card, lower third, caption, intro and outro templates (built from text and shape clips you can edit one by one)",
+      "Stickers: tap one of 24 emoji to pop it in at the playhead",
+      "Picture-in-picture: put the selected video or picture small in a corner or the centre, or restore it to full screen",
+      "Save and open project files (.fryvideo) that include the media, so you can continue on another device",
+      "Name your markers as chapters and copy a chapter list ready for a YouTube description"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v11",
    "title": "거꾸로 재생·빠르기 변화·새 전환·틈 없애기",
    "items": [

@@ -53,6 +53,12 @@ patchnotes/video.json | Fry Video v10 GIF 만들기·글자 스타일과 움직�
 patchnotes/video.json | Fry Video v11 거꾸로 재생·빠르기 변화·새 전환·틈 없애기 (en 번역 없음) | video v11 | 2026-11-06
 patchnotes/score.json | Fry Score v7 항목 (en만) | score v7 | 2026-11-06
 score/app.js | Fry Score v7 한국어 메시지·버튼 | score v7 | 2026-11-06
+patchnotes/video.json | Fry Video v12 넣기 탭: 템플릿·스티커·작은 화면, 프로젝트 파일, 챕터 (en 번역 없음) | video v12 | 2026-11-06
 patchnotes/score.json | Fry Score v8 항목 (en만) | score v8 | 2026-11-06
 score/app.js | Fry Score v8 한국어 메시지·버튼 | score v8 | 2026-11-06
 patchnotes/draw.json | Fry Draw v6 항목 (en만), draw/app.js 글자 편집·선 따라 쓰기 한국어 문구 | draw v6 | 2026-11-06
+patchnotes/video.json | Fry Video v13 키프레임·소리 곡선·잡음 끊기·무음 자르기·여러 개 고르기 (en 번역 없음) | video v13 | 2026-11-06
+patchnotes/score.json | Fry Score v9 항목 (en만) | score v9 | 2026-11-06
+score/app.js | Fry Score v9 한국어 메시지·버튼 | score v9 | 2026-11-06
+patchnotes/score.json | Fry Score v10 항목 (en만) | score v10 | 2026-11-06
+score/app.js | Fry Score v10 한국어 메시지·버튼 | score v10 | 2026-11-06
