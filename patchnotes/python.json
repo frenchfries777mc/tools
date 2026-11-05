@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v29",
+   "title": "BeaconScript use_mod_uuid",
+   "items": [
+    "mod 이름 줄 아래 use_mod_uuid: uuid 줄(최대 5줄)을 점검하고, 모양이 틀리면 알려 줘요",
+    "use_mod_uuid가 있는 파일에서는 글 안의 %hp% 같은 자리표시를 모르는 자리표시로 보지 않아요"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript use_mod_uuid",
+     "items": [
+      "use_mod_uuid: uuid lines (up to 5) below the mod name line are checked; a malformed uuid is reported",
+      "In files with use_mod_uuid, placeholders such as %hp% in text are no longer reported as unknown"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v28",
    "title": "BeaconScript eat와 api potato",
    "items": [
