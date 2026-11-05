@@ -26,4 +26,4 @@ patchnotes/python.json | BeaconScript b196 항목 (en만) | python v12 | 2026-11
 patchnotes/python.json | BeaconScript 맨 위 줄·새 조건문 항목 (en만) | python v13 | 2026-11-05
 patchnotes/python.json | BeaconScript 새 이벤트 항목 (en만) | python v14 | 2026-11-05
 patchnotes/python.json | %interacted% 항목 (en만) | python v15 | 2026-11-05
-patchnotes/python.json | %변수% 읽기 항목 (en만) | python v16 | 2026-11-05
+patchnotes/python.json | %변수% 읽기 취소 항목 (en만) | python v17 | 2026-11-05
