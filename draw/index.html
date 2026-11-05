@@ -71,6 +71,8 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
   .main{flex-direction:column;flex-wrap:nowrap;} .tools{flex:0 0 auto;} .desk{flex:1 1 auto;height:auto;} .panel{flex:0 0 40%;}
   .brand,.tbtn .lb{display:none;}
 }
+.lyr{display:flex;gap:2px;align-items:center;margin:2px 0;border:1px solid transparent;border-radius:7px;} .lyr.on{background:rgba(255,201,60,.12);border-color:rgba(255,201,60,.5);}
+.lyr button{border:0;background:transparent;cursor:pointer;padding:5px 6px;border-radius:6px;font-size:13px;} .lyr button:hover{background:var(--panel2);} .lyr .nm{flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .footer-copy{display:none;}
 </style>
 </head>
@@ -83,20 +85,22 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
   <button class="tbtn" id="bRedo" title="다시 (Ctrl+Y)">↷<span class="lb"> 다시</span></button>
   <span class="sp"></span>
   <button class="tbtn" id="bZm">−</button><span class="zoom" id="zl">100%</span><button class="tbtn" id="bZp">+</button><button class="tbtn" id="bFit">맞춤</button>
-  <button class="tbtn" id="bOpen">열기</button>
+  <button class="tbtn" id="bImg">그림 넣기</button><button class="tbtn" id="bOpen">열기</button>
   <button class="tbtn pri" id="bSave">받기 ▾</button>
 </div>
 <div class="main">
   <div class="tools" id="tools"></div>
   <div class="desk" id="desk"><div class="stagew"><svg id="stage" xmlns="http://www.w3.org/2000/svg"></svg></div></div>
   <div class="panel">
-    <div class="ptabs" id="ptabs"><button data-p="prop" class="on">속성</button><button data-p="pat">무늬</button><button data-p="ai">AI</button><button data-p="cv">캔버스</button></div>
+    <div class="ptabs" id="ptabs"><button data-p="prop" class="on">속성</button><button data-p="pat">무늬</button><button data-p="ly">레이어</button><button data-p="ai">AI</button><button data-p="cv">캔버스</button></div>
     <div class="pbody" id="pbody"></div>
   </div>
 </div>
+<input type="file" id="imgIn" accept="image/*" hidden>
 <input type="file" id="fileIn" accept=".svg,.json,.fdraw,image/svg+xml,application/json" hidden>
 <script src="../ai.js?v=ai36.l21"></script>
-<script src="app.js?v=dr1"></script>
+<script src="lib/polybool.js"></script>
+<script src="app.js?v=dr2"></script>
 <script src="../pwa.js" defer></script>
 <script src="../ping.js" defer></script>
 </body>
