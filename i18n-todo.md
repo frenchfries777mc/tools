@@ -59,3 +59,5 @@ score/app.js | Fry Score v8 한국어 메시지·버튼 | score v8 | 2026-11-06
 patchnotes/video.json | Fry Video v13 키프레임·소리 곡선·잡음 끊기·무음 자르기·여러 개 고르기 (en 번역 없음) | video v13 | 2026-11-06
 patchnotes/score.json | Fry Score v9 항목 (en만) | score v9 | 2026-11-06
 score/app.js | Fry Score v9 한국어 메시지·버튼 | score v9 | 2026-11-06
+patchnotes/score.json | Fry Score v10 항목 (en만) | score v10 | 2026-11-06
+score/app.js | Fry Score v10 한국어 메시지·버튼 | score v10 | 2026-11-06
