@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v32",
+   "title": "BeaconScript 신호·계산·publish_aliases",
+   "items": [
+    "signal send / on signal / if signal receive … 줄을 검사하고 자동완성해 줘요",
+    "multiply·divide, add·subtract variable, set variable … to variable·player name·player uuid·distance 를 알아봐요 (변수는 {x} 또는 x)",
+    "publish_aliases: 아래 aliases_name 과 use_command 를 검사하고, loop 는 10000번까지, on damage of A by B, on craft 아이템도 알아봐요",
+    "옛 publish_short·expose·provide 는 없앴어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript signals, math, publish_aliases",
+     "items": [
+      "Checks and autocompletes signal send, on signal and if signal receive lines",
+      "Understands multiply/divide, add/subtract variable, and set variable ... to variable, player name, player uuid or distance (variables as {x} or x)",
+      "publish_aliases with aliases_name and use_command is checked; loop goes up to 10000, and on damage of A by B and on craft <item> are understood",
+      "Removed the old publish_short, expose and provide"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v31",
    "title": "BeaconScript publish_short·expose·provide",
    "items": [
