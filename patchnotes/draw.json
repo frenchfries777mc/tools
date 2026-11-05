@@ -4,6 +4,32 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v2",
+   "title": "Fry Draw 2: 점 고치기, 묶기, 합치기, 레이어",
+   "items": [
+    "점 고치기 도구(N): 곡선·다각형·네모·원의 점을 끌어 옮기고, 선을 두 번 눌러 점 늘리기, 점을 두 번 눌러 지우기, 꺾인 선/부드러운 선 바꾸기",
+    "묶기·풀기(Ctrl+G), 정렬(왼쪽·가운데·오른쪽·위·아래)과 가로·세로 간격 같게",
+    "도형 합치기: 하나로 합치기, 겹친 곳만, 빼기, 겹친 곳 빼기",
+    "그라데이션(직선·둥글게)과 방향, 흐리게, 그림자",
+    "레이어 목록: 보이기/숨기기, 잠그기, 앞뒤 순서 바꾸기",
+    "내 그림(PNG·JPG) 넣기, 글꼴 고르기와 굵게"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 2: node editing, groups, boolean shapes, layers",
+     "items": [
+      "Node tool (N): drag points of curves, polygons, rectangles and ellipses, double-click a line to add a point or a point to delete it, switch sharp/smooth",
+      "Group/ungroup (Ctrl+G), align (left, centre, right, top, bottom) and distribute evenly",
+      "Shape operations: union, intersect, subtract, exclude",
+      "Gradients (linear, radial) with direction, blur and drop shadow",
+      "Layer list: show/hide, lock, reorder",
+      "Insert your own pictures (PNG/JPG), choose a font and bold"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v1",
    "title": "Fry Draw 첫 공개",
    "items": [

@@ -15,36 +15,51 @@ function toast(t){ var d=document.createElement('div'); d.className='toast'; d.t
 function el(tag,attrs){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); return e; }
 
 /* ---------- model -> svg ---------- */
-function objStr(o){
-  var a='';
+var IMGS={}, warned=0;
+function oS(o){ return objStr(o); }
+function gradDef(o){ var g=o.grad, id='g'+o.id, stp='<stop offset="0" stop-color="'+esc(g.c1)+'"/><stop offset="1" stop-color="'+esc(g.c2)+'"/>';
+  if(g.t==='rad') return '<radialGradient id="'+id+'" cx="50%" cy="50%" r="70%">'+stp+'</radialGradient>';
+  var an=(g.ang||0)*Math.PI/180, c=Math.cos(an), sn=Math.sin(an);
+  return '<linearGradient id="'+id+'" x1="'+f(.5-c/2)+'" y1="'+f(.5-sn/2)+'" x2="'+f(.5+c/2)+'" y2="'+f(.5+sn/2)+'">'+stp+'</linearGradient>'; }
+function filtDef(o){ var b=+o.blur||0, inner=''; if(b>0) inner+='<feGaussianBlur stdDeviation="'+f(b)+'" result="bl"/>';
+  if(o.shadow) inner+='<feDropShadow '+(b>0?'in="bl" ':'')+'dx="6" dy="6" stdDeviation="5" flood-color="#000" flood-opacity=".5"/>';
+  return '<filter id="f'+o.id+'" x="-50%" y="-50%" width="200%" height="200%">'+inner+'</filter>'; }
+function objStr(o,nested){
+  if(o.hid) return '';
+  var a='', defs='';
   for(var k in o.a) a+=' '+k+'="'+esc(o.a[k])+'"';
-  if(o.fill!=null) a+=' fill="'+esc(o.fill)+'"';
+  var fv=o.fill; if(o.grad){ defs+=gradDef(o); fv='url(#g'+o.id+')'; }
+  if(fv!=null) a+=' fill="'+esc(fv)+'"';
   if(o.stroke!=null) a+=' stroke="'+esc(o.stroke)+'"';
   if(o.sw!=null) a+=' stroke-width="'+f(o.sw)+'"';
   if(o.op!=null&&o.op<1) a+=' opacity="'+f(o.op)+'"';
   if(o.dash) a+=' stroke-dasharray="'+f(o.dash)+' '+f(o.dash*.8)+'"';
-  if(o.tag!=='text'&&o.tag!=='g') a+=' stroke-linecap="round" stroke-linejoin="round"';
+  if(o.tag!=='text'&&o.tag!=='g'&&o.tag!=='grp') a+=' stroke-linecap="round" stroke-linejoin="round"';
+  if(o.blur>0||o.shadow){ defs+=filtDef(o); a+=' filter="url(#f'+o.id+')"'; }
+  if(o.lock&&!nested) a+=' pointer-events="none"';
+  if(o.tag==='image') a+=' href="'+esc(IMGS[o.imgId]||'')+'"';
   var tf='';
   if(o.tx||o.ty) tf+='translate('+f(o.tx)+' '+f(o.ty)+') ';
   if(o.rot||(o.sx!=null&&(o.sx!==1||o.sy!==1))){ tf+='translate('+f(o.cx||0)+' '+f(o.cy||0)+') rotate('+f(o.rot||0)+') scale('+f(o.sx==null?1:o.sx)+' '+f(o.sy==null?1:o.sy)+') translate('+f(-(o.cx||0))+' '+f(-(o.cy||0))+')'; }
   if(tf) a+=' transform="'+tf.trim()+'"';
-  var inner=o.tag==='text'?esc(o.txt||''):(o.tag==='g'?(o.inner||''):'');
-  if(o.tag==='text'||o.tag==='g') return '<'+o.tag+a+' data-id="'+o.id+'">'+inner+'</'+o.tag+'>';
-  return '<'+o.tag+a+' data-id="'+o.id+'"/>';
+  var tag=o.tag==='grp'?'g':o.tag, idA=nested?'':' data-id="'+o.id+'"';
+  if(tag==='text') return defs+'<text'+a+idA+'>'+esc(o.txt||'')+'</text>';
+  if(tag==='g') return defs+'<g'+a+idA+'>'+(o.tag==='grp'?(o.kids||[]).map(function(q){ return objStr(q,true); }).join(''):(o.inner||''))+'</g>';
+  return defs+'<'+tag+a+idA+'/>';
 }
 function bgStr(){ return doc.bgOn?'<rect width="'+doc.w+'" height="'+doc.h+'" fill="'+esc(doc.bg)+'" data-bg="1"/>':''; }
 function docSvg(forExport){
-  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+doc.w+' '+doc.h+'" width="'+doc.w+'" height="'+doc.h+'">'+bgStr()+doc.objs.map(objStr).join('')+'</svg>';
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+doc.w+' '+doc.h+'" width="'+doc.w+'" height="'+doc.h+'">'+bgStr()+doc.objs.map(oS).join('')+'</svg>';
 }
 function byId(id){ for(var i=0;i<doc.objs.length;i++) if(doc.objs[i].id===id) return doc.objs[i]; }
 function render(){
   stage.setAttribute('viewBox','0 0 '+doc.w+' '+doc.h);
   stage.style.width=f(doc.w*zoom)+'px'; stage.style.height=f(doc.h*zoom)+'px';
   var bgp=doc.bgOn?'':'<defs><pattern id="chk" width="20" height="20" patternUnits="userSpaceOnUse"><rect width="20" height="20" fill="#ffffff"/><rect width="10" height="10" fill="#d9d9d9"/><rect x="10" y="10" width="10" height="10" fill="#d9d9d9"/></pattern></defs><rect width="'+doc.w+'" height="'+doc.h+'" fill="url(#chk)"/>';
-  stage.innerHTML=bgp+bgStr()+'<g id="gobj">'+doc.objs.map(objStr).join('')+'</g><g id="ggrid" pointer-events="none"></g><g id="ov"></g>';
+  stage.innerHTML=bgp+bgStr()+'<g id="gobj">'+doc.objs.map(oS).join('')+'</g><g id="ggrid" pointer-events="none"></g><g id="ov"></g>';
   var need=false;
   doc.objs.forEach(function(o){ if(o.cx==null){ var e=stage.querySelector('[data-id="'+o.id+'"]'); if(e){ try{ var b=e.getBBox(); o.cx=b.x+b.width/2; o.cy=b.y+b.height/2; need=true; }catch(x){ o.cx=0; o.cy=0; } } } });
-  if(need) stage.querySelector('#gobj').innerHTML=doc.objs.map(objStr).join('');
+  if(need) stage.querySelector('#gobj').innerHTML=doc.objs.map(oS).join('');
   drawGrid(); drawOv();
   $('zl').textContent=Math.round(zoom*100)+'%';
   $('bUndo').disabled=hi<=0; $('bRedo').disabled=hi>=hist.length-1;
@@ -57,17 +72,19 @@ function drawGrid(){
 }
 
 /* ---------- history / save ---------- */
-function snap(){ return JSON.stringify({w:doc.w,h:doc.h,bg:doc.bg,bgOn:doc.bgOn,name:doc.name,objs:doc.objs,uid:uid}); }
-function load(s){ var o=JSON.parse(s); doc.w=o.w; doc.h=o.h; doc.bg=o.bg; doc.bgOn=o.bgOn!==false; doc.name=o.name||'이름 없는 그림'; doc.objs=o.objs||[]; uid=Math.max(uid,o.uid||1); doc.objs.forEach(function(x){ if(x.id>=uid) uid=x.id+1; }); }
+function snap(full){ var o={w:doc.w,h:doc.h,bg:doc.bg,bgOn:doc.bgOn,name:doc.name,objs:doc.objs,uid:uid};
+  if(full){ var im={}; (function use(os){ os.forEach(function(x){ if(x.imgId!=null&&IMGS[x.imgId]) im[x.imgId]=IMGS[x.imgId]; if(x.kids) use(x.kids); }); })(doc.objs); o.imgs=im; }
+  return JSON.stringify(o); }
+function load(s){ var o=JSON.parse(s); if(o.imgs) for(var ik in o.imgs) IMGS[ik]=o.imgs[ik]; doc.w=o.w; doc.h=o.h; doc.bg=o.bg; doc.bgOn=o.bgOn!==false; doc.name=o.name||'이름 없는 그림'; doc.objs=o.objs||[]; uid=Math.max(uid,o.uid||1); doc.objs.forEach(function(x){ if(x.id>=uid) uid=x.id+1; }); }
 var saveT;
 function commit(){
   hist=hist.slice(0,hi+1); hist.push(snap()); if(hist.length>80) hist.shift(); hi=hist.length-1;
-  clearTimeout(saveT); saveT=setTimeout(function(){ try{ localStorage.setItem(KEY,snap()); }catch(e){} },400);
+  clearTimeout(saveT); saveT=setTimeout(persist,400);
   render(); panel();
 }
 function undo(){ if(hi>0){ hi--; load(hist[hi]); sel=sel.filter(function(i){ return byId(i); }); persist(); render(); panel(); $('dname').value=doc.name; } }
 function redo(){ if(hi<hist.length-1){ hi++; load(hist[hi]); persist(); render(); panel(); $('dname').value=doc.name; } }
-function persist(){ try{ localStorage.setItem(KEY,snap()); }catch(e){} }
+function persist(){ try{ localStorage.setItem(KEY,snap(true)); }catch(e){ if(!warned){ warned=1; toast('저장 공간이 부족해요. 그림을 .fdraw 파일로 받아 두세요'); } } }
 
 /* ---------- geometry helpers ---------- */
 function P(e){ var r=stage.getBoundingClientRect(); var p={x:(e.clientX-r.left)*doc.w/r.width,y:(e.clientY-r.top)*doc.h/r.height}; if(st.snap){ var s=st.gridSize; p.x=Math.round(p.x/s)*s; p.y=Math.round(p.y/s)*s; } return p; }
@@ -123,6 +140,10 @@ stage.addEventListener('pointerdown',function(e){
   stage.setPointerCapture&&stage.setPointerCapture(e.pointerId);
   var p=P(e), id=targetId(e), h=e.target.getAttribute&&e.target.getAttribute('data-h');
   if(tool==='hand'){ drag={k:'pan',x:e.clientX,y:e.clientY,sl:desk.scrollLeft,st:desk.scrollTop}; return; }
+  if(tool==='node'){ var nn=e.target.getAttribute&&e.target.getAttribute('data-n'), o3=byId(sel[0]);
+    if(nn!=null&&o3&&o3.pts){ drag={k:'node',o:o3,i:+nn,moved:false}; return; }
+    if(id==null&&o3&&o3.pts&&nearNode(o3,nodePt(o3,e))) return;
+    sel=(id!=null&&!(byId(id)||{}).lock)?[id]:[]; drawOv(); panel(); return; }
   if(tool==='sel'){
     if(h&&sel.length===1){ var o=byId(sel[0]); drag={k:h,o:o,start:p,sx:o.sx,sy:o.sy,rot:o.rot,c:{x:o.tx+(o.cx||0),y:o.ty+(o.cy||0)}}; drag.d0=Math.hypot(p.x-drag.c.x,p.y-drag.c.y)||1; drag.a0=Math.atan2(p.y-drag.c.y,p.x-drag.c.x); return; }
     if(id!=null){ if(e.shiftKey){ var ix=sel.indexOf(id); if(ix>=0) sel.splice(ix,1); else sel.push(id); } else if(sel.indexOf(id)<0) sel=[id]; drag={k:'move',start:p,orig:sel.map(function(i){ var o=byId(i); return [o,o.tx,o.ty]; }),moved:false}; }
@@ -147,6 +168,7 @@ stage.addEventListener('pointermove',function(e){
   if(drag.k==='erase'){ var t=document.elementFromPoint(e.clientX,e.clientY), id=t&&t.closest?targetIdFrom(t):null; if(id!=null){ doc.objs=doc.objs.filter(function(o){ return o.id!==id; }); render(); } return; }
   if(drag.k==='move'){ var dx=p.x-drag.start.x, dy=p.y-drag.start.y; if(!drag.moved&&Math.hypot(dx,dy)<2/zoom) return; drag.moved=true;
     drag.orig.forEach(function(r){ r[0].tx=r[1]+dx; r[0].ty=r[2]+dy; }); softRender(); return; }
+  if(drag.k==='node'){ var l=nodePt(drag.o,e); drag.o.pts[drag.i]={x:l[0],y:l[1]}; setD(drag.o); drag.moved=true; softRender(); return; }
   if(drag.k==='rot'){ var ang=Math.atan2(p.y-drag.c.y,p.x-drag.c.x)-drag.a0; var r=drag.rot+ang*180/Math.PI; if(e.shiftKey) r=Math.round(r/15)*15; drag.o.rot=r; softRender(); return; }
   if(drag.k==='scl'){ var k=(Math.hypot(p.x-drag.c.x,p.y-drag.c.y)||1)/drag.d0; drag.o.sx=drag.sx*k; drag.o.sy=drag.sy*k; softRender(); return; }
   if(drag.k==='box'){ drag.cur=p; drawOv(); return; }
@@ -154,24 +176,28 @@ stage.addEventListener('pointermove',function(e){
   if(drag.k==='shape'){ var s=shapeFor(tool,drag.start,p,e.shiftKey); if(!s) return; tmp.innerHTML=''; var pe=el(s.tag,s.a); pe.setAttribute('fill',st.fillOn?st.fill:'none'); pe.setAttribute('stroke',st.stroke); pe.setAttribute('stroke-width',st.sw); pe.setAttribute('opacity',st.op); tmp.appendChild(pe); }
 });
 function targetIdFrom(t){ var n=t; while(n&&n!==stage){ if(n.getAttribute&&n.getAttribute('data-id')) return +n.getAttribute('data-id'); n=n.parentNode; } return null; }
-function softRender(){ var g=stage.querySelector('#gobj'); if(g) g.innerHTML=doc.objs.map(objStr).join(''); drawOv(); }
+function softRender(){ var g=stage.querySelector('#gobj'); if(g) g.innerHTML=doc.objs.map(oS).join(''); drawOv(); }
 stage.addEventListener('pointerup',function(e){
   if(!drag) return; var d=drag; drag=null; var p=P(e);
   if(d.k==='move'){ if(d.moved) commit(); else panel(); return; }
+  if(d.k==='node'){ if(d.moved) commit(); return; }
   if(d.k==='rot'||d.k==='scl'){ commit(); return; }
   if(d.k==='pan'||d.k==='erase') return;
   if(d.k==='box'){ if(d.cur){ var x0=Math.min(d.start.x,d.cur.x),x1=Math.max(d.start.x,d.cur.x),y0=Math.min(d.start.y,d.cur.y),y1=Math.max(d.start.y,d.cur.y); sel=[];
-      doc.objs.forEach(function(o){ var b=bbox(o); if(b&&b.x>=x0&&b.x+b.w<=x1&&b.y>=y0&&b.y+b.h<=y1) sel.push(o.id); }); }
+      doc.objs.forEach(function(o){ if(o.hid||o.lock) return; var b=bbox(o); if(b&&b.x>=x0&&b.x+b.w<=x1&&b.y>=y0&&b.y+b.h<=y1) sel.push(o.id); }); }
     drawOv(); panel(); return; }
   if(d.k==='pen'){ if(tmp) tmp.remove(); tmp=null; if(d.pts.length<2) return; var pts=simplify(d.pts);
-    doc.objs.push(newObj('path',{d:symPath(pts,false)},{fill:'none'})); sel=[doc.objs[doc.objs.length-1].id]; commit(); return; }
+    var pex={fill:'none'}; if(st.sym<=1&&!st.mirror){ pex.pts=pts.map(function(q){ return {x:q.x,y:q.y}; }); pex.cl=false; pex.sh=false; } doc.objs.push(newObj('path',{d:symPath(pts,false)},pex)); sel=[doc.objs[doc.objs.length-1].id]; commit(); return; }
   if(d.k==='shape'){ if(tmp) tmp.remove(); tmp=null; if(Math.hypot(p.x-d.start.x,p.y-d.start.y)<3) return; var s=shapeFor(tool,d.start,p,e.shiftKey); if(!s) return;
     var o=newObj(s.tag,s.a); if(tool==='line'&&o.fill==='none') {} doc.objs.push(o); sel=[o.id]; commit(); }
 });
 function simplify(pts){ var out=[pts[0]]; for(var i=1;i<pts.length-1;i++){ var l=out[out.length-1]; if(Math.hypot(pts[i].x-l.x,pts[i].y-l.y)>3/zoom) out.push(pts[i]); } out.push(pts[pts.length-1]); return out; }
-stage.addEventListener('dblclick',function(){ if(tool==='curve') finishCurve(); });
+stage.addEventListener('dblclick',function(e){ if(tool==='curve'){ finishCurve(); return; }
+  if(tool==='node'){ var o=byId(sel[0]); if(!o||!o.pts) return; var tg=document.elementFromPoint(e.clientX,e.clientY), nn=tg&&tg.getAttribute&&tg.getAttribute('data-n');
+    if(nn!=null){ if(o.pts.length>(o.cl?3:2)){ o.pts.splice(+nn,1); setD(o); commit(); } return; }
+    if(addNode(o,nodePt(o,e))) commit(); } });
 function finishCurve(){ if(curvePts.length<2){ curvePts=[]; drawOv(); return; }
-  doc.objs.push(newObj('path',{d:symPath(curvePts,st.closed)},{fill:st.fillOn?st.fill:'none'})); sel=[doc.objs[doc.objs.length-1].id]; curvePts=[]; commit(); }
+  var cex={fill:st.fillOn?st.fill:'none'}; if(st.sym<=1&&!st.mirror){ cex.pts=curvePts.map(function(q){ return {x:q.x,y:q.y}; }); cex.cl=st.closed; cex.sh=false; } doc.objs.push(newObj('path',{d:symPath(curvePts,st.closed)},cex)); sel=[doc.objs[doc.objs.length-1].id]; curvePts=[]; commit(); }
 function bbox(o){
   var e=stage.querySelector('[data-id="'+o.id+'"]'); if(!e) return null; var r=e.getBoundingClientRect(), s=stage.getBoundingClientRect(), k=doc.w/s.width;
   return {x:(r.left-s.left)*k,y:(r.top-s.top)*k,w:r.width*k,h:r.height*k};
@@ -183,6 +209,10 @@ function drawOv(cur){
     curvePts.forEach(function(q){ g.appendChild(el('circle',{cx:q.x,cy:q.y,r:4*u,fill:'#ffc93c',stroke:'#000','stroke-width':u})); });
   }
   if(drag&&drag.k==='box'&&drag.cur){ g.appendChild(el('rect',{x:Math.min(drag.start.x,drag.cur.x),y:Math.min(drag.start.y,drag.cur.y),width:Math.abs(drag.cur.x-drag.start.x),height:Math.abs(drag.cur.y-drag.start.y),fill:'rgba(255,201,60,.12)',stroke:'#ffc93c','stroke-width':u,'stroke-dasharray':(4*u)+' '+(3*u)})); }
+  if(tool==='node'){ var no=byId(sel[0]); if(no&&no.pts){ var mm=mat(no), q=no.pts.map(function(p){ return mapPt(mm,p.x,p.y); });
+      g.appendChild(el('path',{d:'M'+q.map(function(z){ return f(z[0])+' '+f(z[1]); }).join('L')+(no.cl?'Z':''),fill:'none',stroke:'#ff8a3d','stroke-width':u,'stroke-dasharray':(4*u)+' '+(3*u),'pointer-events':'none'}));
+      q.forEach(function(z,i){ g.appendChild(el('circle',{cx:z[0],cy:z[1],r:6*u,fill:'#ffffff',stroke:'#ff8a3d','stroke-width':2*u,'data-n':i,style:'cursor:move'})); }); }
+    return; }
   if(tool!=='sel') return;
   sel.forEach(function(i){ var o=byId(i); if(!o) return; var b=bbox(o); if(!b) return;
     g.appendChild(el('rect',{x:b.x,y:b.y,width:b.w,height:b.h,fill:'none',stroke:'#ffc93c','stroke-width':1.5*u,'stroke-dasharray':(5*u)+' '+(3*u),'pointer-events':'none'}));
@@ -193,6 +223,73 @@ function drawOv(cur){
     }
   });
 }
+
+
+/* ---------- matrix, nodes, boolean, align, group ---------- */
+function mmul(A,B){ return [A[0]*B[0]+A[2]*B[1],A[1]*B[0]+A[3]*B[1],A[0]*B[2]+A[2]*B[3],A[1]*B[2]+A[3]*B[3],A[0]*B[4]+A[2]*B[5]+A[4],A[1]*B[4]+A[3]*B[5]+A[5]]; }
+function mat(o){ var cx=o.cx||0, cy=o.cy||0, rr=(o.rot||0)*Math.PI/180, m=[1,0,0,1,o.tx||0,o.ty||0];
+  m=mmul(m,[1,0,0,1,cx,cy]); m=mmul(m,[Math.cos(rr),Math.sin(rr),-Math.sin(rr),Math.cos(rr),0,0]); m=mmul(m,[o.sx==null?1:o.sx,0,0,o.sy==null?1:o.sy,0,0]); return mmul(m,[1,0,0,1,-cx,-cy]); }
+function mapPt(m,x,y){ return [m[0]*x+m[2]*y+m[4],m[1]*x+m[3]*y+m[5]]; }
+function minv(m){ var d=m[0]*m[3]-m[1]*m[2]||1e-9; return [m[3]/d,-m[1]/d,-m[2]/d,m[0]/d,(m[2]*m[5]-m[3]*m[4])/d,(m[1]*m[4]-m[0]*m[5])/d]; }
+function polyD(pts,cl){ return 'M'+pts.map(function(p){ return f(p.x)+' '+f(p.y); }).join('L')+(cl?'Z':''); }
+function setD(o){ o.a.d=o.sh?polyD(o.pts,o.cl):smooth(o.pts,o.cl); }
+function nums(str){ return (String(str).match(/-?\d*\.?\d+(?:e-?\d+)?/gi)||[]).map(Number); }
+function toPath(o){
+  var t=o.tag, a=o.a, pts=[], cl=false, sh=true, n;
+  if(t==='path'){ if(o.pts) return true; var d=String(a.d||''); if(/[^MLZ0-9eE.\-\s,]/.test(d)||(d.match(/M/g)||[]).length!==1) return false;
+    n=nums(d.replace(/[MLZ]/g,' ')); for(var i=0;i+1<n.length;i+=2) pts.push({x:n[i],y:n[i+1]}); cl=/Z/.test(d); }
+  else if(t==='line'){ pts=[{x:+a.x1,y:+a.y1},{x:+a.x2,y:+a.y2}]; }
+  else if(t==='rect'){ var x=+a.x,y=+a.y,w=+a.width,h=+a.height; pts=[{x:x,y:y},{x:x+w,y:y},{x:x+w,y:y+h},{x:x,y:y+h}]; cl=true; }
+  else if(t==='polygon'||t==='polyline'){ n=nums(a.points); for(var j=0;j+1<n.length;j+=2) pts.push({x:n[j],y:n[j+1]}); cl=t==='polygon'; }
+  else if(t==='ellipse'||t==='circle'){ var ex=+a.cx,ey=+a.cy,rx=+(a.rx||a.r),ry=+(a.ry||a.r); for(var q=0;q<24;q++){ var an=2*Math.PI*q/24; pts.push({x:ex+rx*Math.cos(an),y:ey+ry*Math.sin(an)}); } cl=true; sh=false; }
+  else return false;
+  if(pts.length<2||pts.some(function(p){ return !isFinite(p.x)||!isFinite(p.y); })) return false;
+  o.tag='path'; o.a={}; o.pts=pts; o.cl=cl; o.sh=sh; setD(o); return true; }
+function nodePt(o,e){ var p=P(e), m=minv(mat(o)); return mapPt(m,p.x,p.y); }
+function nearNode(o,l){ var n=o.pts.length, best=-1, bd=1e9, bp=null, segs=o.cl?n:n-1;
+  for(var i=0;i<segs;i++){ var A=o.pts[i], B=o.pts[(i+1)%n], dx=B.x-A.x, dy=B.y-A.y, L2=dx*dx+dy*dy||1, t=Math.max(0,Math.min(1,((l[0]-A.x)*dx+(l[1]-A.y)*dy)/L2)), px=A.x+t*dx, py=A.y+t*dy, d=Math.hypot(l[0]-px,l[1]-py); if(d<bd){ bd=d; best=i; bp={x:px,y:py}; } }
+  return (best<0||bd>16/zoom)?null:{i:best,p:bp}; }
+function addNode(o,l){ var r=nearNode(o,l); if(!r) return false; o.pts.splice(r.i+1,0,r.p); setD(o); return true; }
+function placeNew(list,no){ var out=[], last=-1; doc.objs.forEach(function(o,i){ if(list.indexOf(o)>=0) last=i; });
+  doc.objs.forEach(function(o,i){ if(list.indexOf(o)>=0){ if(i===last) out.push(no); } else out.push(o); }); doc.objs=out; }
+function groupSel(){ var kids=doc.objs.filter(function(o){ return sel.indexOf(o.id)>=0; }); if(kids.length<2){ toast('2개 이상 골라서 묶어요'); return; }
+  var g={id:uid++,tag:'grp',a:{},kids:kids,tx:0,ty:0,rot:0,sx:1,sy:1,fill:null,stroke:null,sw:null,op:null,dash:0};
+  kids.forEach(function(k){ k.hid=false; k.lock=false; }); placeNew(kids,g); sel=[g.id]; commit(); }
+function ungroupSel(){ var out=[], ns=[], did=false;
+  doc.objs.forEach(function(o){ if(sel.indexOf(o.id)>=0&&o.tag==='grp'){ did=true; var plain=!o.rot&&(o.sx==null||o.sx===1)&&(o.sy==null||o.sy===1);
+      (o.kids||[]).forEach(function(k){ if(plain){ k.tx=(k.tx||0)+o.tx; k.ty=(k.ty||0)+o.ty; out.push(k); ns.push(k.id); } else { var w=JSON.parse(JSON.stringify(o)); w.id=uid++; w.kids=[k]; out.push(w); ns.push(w.id); } }); }
+    else out.push(o); });
+  if(!did){ toast('묶음을 골라 주세요'); return; } doc.objs=out; sel=ns; commit(); }
+function align(how){ var s=selObjs().filter(function(o){ return !o.hid; }); if(!s.length) return; var bs=s.map(bbox); if(bs.some(function(b){ return !b; })) return;
+  var ref; if(s.length===1) ref={x:0,y:0,w:doc.w,h:doc.h}; else { var x0=Math.min.apply(0,bs.map(function(b){ return b.x; })), y0=Math.min.apply(0,bs.map(function(b){ return b.y; })), x1=Math.max.apply(0,bs.map(function(b){ return b.x+b.w; })), y1=Math.max.apply(0,bs.map(function(b){ return b.y+b.h; })); ref={x:x0,y:y0,w:x1-x0,h:y1-y0}; }
+  if(how==='dh'||how==='dv'){ if(s.length<3){ toast('3개 이상 골라야 간격을 맞춰요'); return; } var h=how==='dh', idx=s.map(function(o,i){ return i; }).sort(function(i,j){ return h?bs[i].x-bs[j].x:bs[i].y-bs[j].y; });
+    var tot=idx.reduce(function(a,i){ return a+(h?bs[i].w:bs[i].h); },0), gap=((h?ref.w:ref.h)-tot)/(s.length-1), pos=h?ref.x:ref.y;
+    idx.forEach(function(i){ var d=pos-(h?bs[i].x:bs[i].y); if(h) s[i].tx+=d; else s[i].ty+=d; pos+=(h?bs[i].w:bs[i].h)+gap; }); commit(); return; }
+  s.forEach(function(o,i){ var b=bs[i], dx=0, dy=0;
+    if(how==='l') dx=ref.x-b.x; else if(how==='c') dx=ref.x+ref.w/2-(b.x+b.w/2); else if(how==='r') dx=ref.x+ref.w-(b.x+b.w);
+    else if(how==='t') dy=ref.y-b.y; else if(how==='m') dy=ref.y+ref.h/2-(b.y+b.h/2); else if(how==='b') dy=ref.y+ref.h-(b.y+b.h);
+    o.tx+=dx; o.ty+=dy; }); commit(); }
+function flat(o){ var tg=o.tag; if(['rect','ellipse','circle','polygon','path'].indexOf(tg)<0) return null;
+  var m=mat(o), polys=[], pieces=tg==='path'?String(o.a.d||'').split(/(?=[Mm])/).filter(function(x){ return x.trim(); }):[null];
+  pieces.forEach(function(pc){ var e=document.createElementNS(NS,tg); for(var k in o.a) if(k!=='transform') e.setAttribute(k,o.a[k]); if(pc!=null) e.setAttribute('d',pc); stage.appendChild(e);
+    try{ var L=e.getTotalLength(), n=Math.max(24,Math.min(700,Math.round(L/3))), pts=[]; for(var i=0;i<n;i++){ var q=e.getPointAtLength(L*i/n); pts.push(mapPt(m,q.x,q.y)); } if(pts.length>=3) polys.push(pts); }catch(x){}
+    e.remove(); });
+  return polys; }
+function boolOp(kind){ if(!window.PolyBool){ toast('합치기 도구를 불러오지 못했어요'); return; }
+  var s=doc.objs.filter(function(o){ return sel.indexOf(o.id)>=0; }); if(s.length<2){ toast('2개 이상 골라요'); return; }
+  var polys=[]; for(var i=0;i<s.length;i++){ var r0=flat(s[i]); if(!r0||!r0.length){ toast('네모·원·다각형·닫힌 곡선만 합칠 수 있어요'); return; } polys.push({regions:r0,inverted:false}); }
+  var acc=polys[0];
+  for(var j=1;j<polys.length;j++){ var C=PolyBool.combine(PolyBool.segments(acc),PolyBool.segments(polys[j]));
+    var sg=kind==='u'?PolyBool.selectUnion(C):kind==='i'?PolyBool.selectIntersect(C):kind==='s'?PolyBool.selectDifference(C):PolyBool.selectXor(C); acc=PolyBool.polygon(sg); }
+  if(!acc.regions.length){ toast('겹치는 곳이 없어서 아무것도 남지 않아요'); return; }
+  var d=acc.regions.map(function(rg){ return 'M'+rg.map(function(p){ return f(p[0])+' '+f(p[1]); }).join('L')+'Z'; }).join('');
+  var b0=s[0], no=newObj('path',{d:d,'fill-rule':'evenodd'}); no.fill=(b0.fill&&b0.fill!=='none')?b0.fill:st.fill; if(b0.grad) no.grad=b0.grad; no.stroke=b0.stroke; no.sw=b0.sw; no.op=b0.op; no.dash=b0.dash;
+  placeNew(s,no); sel=[no.id]; commit(); }
+function addImage(file){ var rd=new FileReader(); rd.onload=function(){ var im=new Image(); im.onload=function(){ var iw=im.width||300, ih=im.height||300, k=Math.min(1,1400/Math.max(iw,ih)), c=document.createElement('canvas'); c.width=Math.max(1,Math.round(iw*k)); c.height=Math.max(1,Math.round(ih*k)); c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+      var url=/jpe?g/i.test(file.type)?c.toDataURL('image/jpeg',.88):c.toDataURL('image/png'), fk=Math.min(1,doc.w*.8/c.width,doc.h*.8/c.height), w=c.width*fk, h=c.height*fk, iid=uid++; IMGS[iid]=url;
+      var o=newObj('image',{x:f((doc.w-w)/2),y:f((doc.h-h)/2),width:f(w),height:f(h),preserveAspectRatio:'none'},{fill:null,stroke:null,sw:null,dash:0,imgId:iid}); doc.objs.push(o); sel=[o.id]; commit(); setTool('sel'); };
+    im.onerror=function(){ toast('이 그림 파일을 열지 못했어요'); }; im.src=rd.result; }; rd.readAsDataURL(file); }
+function layerName(o){ var m={rect:'네모',ellipse:'원',path:'선·곡선',polygon:'다각형',polyline:'꺾은선',line:'직선',image:'그림',grp:'묶음',g:'가져온 그룹',circle:'원'}; return o.tag==='text'?'글자: '+(o.txt||'').slice(0,12):(m[o.tag]||o.tag); }
 
 /* ---------- editing ops ---------- */
 function selObjs(){ return sel.map(byId).filter(Boolean); }
@@ -309,7 +406,7 @@ function openFile(file){
 }
 
 /* ---------- ui ---------- */
-var TOOLS=[['sel','↖','고르기 (V)'],['hand','✋','화면 옮기기 (H)'],['pen','✏️','자유 선 (P)'],['line','╱','직선 (L)'],['curve','〰️','곡선: 눌러 점 찍기, 두 번 누르면 끝'],['rect','▭','네모 (R)'],['ellipse','◯','원 (O)'],['poly','⬡','다각형 (G)'],['star','☆','별 (S)'],['text','T','글자 (T)'],['bucket','🪣','색 채우기'],['erase','🧽','지우개 (E)']];
+var TOOLS=[['sel','↖','고르기 (V)'],['hand','✋','화면 옮기기 (H)'],['pen','✏️','자유 선 (P)'],['line','╱','직선 (L)'],['curve','〰️','곡선: 눌러 점 찍기, 두 번 누르면 끝'],['rect','▭','네모 (R)'],['ellipse','◯','원 (O)'],['poly','⬡','다각형 (G)'],['star','☆','별 (S)'],['node','◇','점 고치기 (N): 흰 점을 끌어 옮겨요'],['text','T','글자 (T)'],['bucket','🪣','색 채우기'],['erase','🧽','지우개 (E)']];
 function renderTools(){ $('tools').innerHTML=TOOLS.map(function(t){ return '<button class="tl'+(t[0]===tool?' on':'')+'" data-t="'+t[0]+'" title="'+t[2]+'">'+t[1]+'</button>'; }).join(''); }
 var ptab='prop';
 function rowRange(lbl,id,min,max,val,unit,step){ return '<div class="row"><label>'+lbl+'</label><input type="range" data-s="'+id+'" min="'+min+'" max="'+max+'" step="'+(step||1)+'" value="'+val+'"><span class="v">'+f(val)+(unit||'')+'</span></div>'; }
@@ -318,9 +415,13 @@ function panel(){
   document.querySelectorAll('#ptabs button').forEach(function(x){ x.classList.toggle('on',x.dataset.p===ptab); });
   if(ptab==='prop'){
     var so=selObjs(), o=so[0];
+    if(tool==='node') h+='<div class="sec"><h4>점 고치기</h4>'+(o&&o.pts?'<label class="chk"><input type="checkbox" data-o="sh"'+(o.sh?' checked':'')+'> 꺾인(뾰족한) 선으로</label><div class="note">흰 점을 끌어 옮기고, 선 위를 두 번 누르면 점이 늘고, 점을 두 번 누르면 없어져요.</div>':(o?'<div class="btns"><button class="tbtn pri" data-a="topath">점 고칠 수 있게 바꾸기</button></div><div class="note">네모·원·직선·다각형과 단순한 선은 바꿀 수 있어요.</div>':'<div class="note">고칠 도형을 눌러서 골라요.</div>'))+'</div>';
     h+='<div class="sec"><h4>'+(o?'고른 도형 ('+so.length+'개)':'새로 그릴 도형')+'</h4>';
     var fill=o?(o.fill==null||o.fill==='none'?'none':o.fill):st.fill, strokeC=o?(o.stroke==null||o.stroke==='none'?'none':o.stroke):st.stroke;
-    h+='<div class="row"><label>안쪽 색</label><input type="color" data-c="fill" value="'+hex(fill==='none'?st.fill:fill)+'"><label class="chk" style="margin:0;flex:1"><input type="checkbox" data-k="fillOn"'+((o?fill!=='none':st.fillOn)?' checked':'')+'> 채우기</label></div>';
+    var gr=o&&o.grad;
+    if(!gr) h+='<div class="row"><label>안쪽 색</label><input type="color" data-c="fill" value="'+hex(fill==='none'?st.fill:fill)+'"><label class="chk" style="margin:0;flex:1"><input type="checkbox" data-k="fillOn"'+((o?fill!=='none':st.fillOn)?' checked':'')+'> 채우기</label></div>';
+    if(o&&o.tag!=='image'){ h+='<div class="row"><label>채우는 법</label><select data-gt="1"><option value=""'+(gr?'':' selected')+'>한 가지 색</option><option value="lin"'+(gr&&gr.t==='lin'?' selected':'')+'>그라데이션 (직선)</option><option value="rad"'+(gr&&gr.t==='rad'?' selected':'')+'>그라데이션 (둥글게)</option></select></div>';
+      if(gr){ h+='<div class="row"><label>색 1 · 2</label><input type="color" data-gc="c1" value="'+hex(gr.c1)+'"><input type="color" data-gc="c2" value="'+hex(gr.c2)+'">'+'</div>'; if(gr.t==='lin') h+=rowRange('방향','gang',-180,180,gr.ang||0,'°'); } }
     h+='<div class="row"><label>선 색</label><input type="color" data-c="stroke" value="'+hex(strokeC==='none'?st.stroke:strokeC)+'"></div>';
     h+=rowRange('선 굵기','sw',0,60,o&&o.sw!=null?o.sw:st.sw,'px');
     h+=rowRange('투명도','op',0.05,1,o&&o.op!=null?o.op:st.op,'',0.05);
@@ -329,7 +430,10 @@ function panel(){
     if(o){
       h+='<div class="sec"><h4>모양 바꾸기</h4>'+rowRange('돌리기','rot',-180,180,o.rot||0,'°')+rowRange('크기 배율','scl',0.1,4,Math.abs(o.sx==null?1:o.sx),'x',0.05);
       h+='<div class="btns"><button class="tbtn" data-a="hflip">좌우 뒤집기</button><button class="tbtn" data-a="vflip">위아래 뒤집기</button><button class="tbtn" data-a="dup">복제</button><button class="tbtn" data-a="front">맨 앞</button><button class="tbtn" data-a="up">앞으로</button><button class="tbtn" data-a="down">뒤로</button><button class="tbtn" data-a="back">맨 뒤</button><button class="tbtn" data-a="del">지우기</button></div>';
-      if(o.tag==='text') h+='<div class="row"><label>글자</label><input type="text" data-txt="1" value="'+esc(o.txt||'')+'"></div>'+rowRange('글자 크기','fs',8,300,+o.a['font-size']||48,'px');
+      h+='<div class="sec" style="margin-top:10px"><h4>효과</h4>'+rowRange('흐리게','blur',0,40,o.blur||0,'px')+'<label class="chk"><input type="checkbox" data-o="shadow"'+(o.shadow?' checked':'')+'> 그림자</label></div>';
+      h+='<div class="sec"><h4>정렬</h4><div class="btns">'+[['l','⇤ 왼쪽'],['c','↔ 가운데'],['r','⇥ 오른쪽'],['t','⇧ 위'],['m','↕ 가운데'],['b','⇩ 아래'],['dh','가로 간격 같게'],['dv','세로 간격 같게']].map(function(x){ return '<button class="tbtn" data-al="'+x[0]+'">'+x[1]+'</button>'; }).join('')+'</div><div class="note">'+(so.length===1?'하나만 골랐으면 캔버스에 맞춰요.':'고른 것들끼리 맞춰요.')+'</div></div>';
+      h+='<div class="sec"><h4>묶기 · 합치기</h4><div class="btns"><button class="tbtn" data-a="group">묶기 (Ctrl+G)</button><button class="tbtn" data-a="ungroup">풀기 (Ctrl+Shift+G)</button></div><div class="btns"><button class="tbtn" data-a="bu">하나로 합치기</button><button class="tbtn" data-a="bi">겹친 곳만</button><button class="tbtn" data-a="bs">빼기 (아래 − 위)</button><button class="tbtn" data-a="bx">겹친 곳 빼기</button></div><div class="note">합치기는 네모·원·다각형·닫힌 곡선을 두 개 이상 골랐을 때 돼요.</div></div>';
+      if(o.tag==='text') h+='<div class="row"><label>글자</label><input type="text" data-txt="1" value="'+esc(o.txt||'')+'"></div>'+rowRange('글자 크기','fs',8,300,+o.a['font-size']||48,'px')+'<div class="row"><label>글꼴</label><select data-tf="family">'+[['\'Noto Sans KR\',sans-serif','고딕'],['serif','명조'],['monospace','고정폭'],['cursive','필기체'],['Impact,sans-serif','굵은 제목']].map(function(x){ return '<option value="'+esc(x[0])+'"'+((o.a['font-family']||'')===x[0]?' selected':'')+'>'+x[1]+'</option>'; }).join('')+'</select></div><label class="chk"><input type="checkbox" data-tf="bold"'+((o.a['font-weight']||'')==='700'?' checked':'')+'> 굵게</label>';
       h+='</div>';
     } else {
       if(tool==='poly') h+='<div class="sec"><h4>다각형</h4>'+rowRange('변 개수','sides',3,24,st.sides)+'</div>';
@@ -340,6 +444,8 @@ function panel(){
       h+='<div class="note">도구를 고르고 캔버스에서 끌어 그려요. 고르기(↖)로 도형을 눌러 고치고, Shift를 누르면 비율·각도가 맞춰져요.</div>';
     }
   } else if(ptab==='pat') h=patUI();
+  else if(ptab==='ly'){
+    h='<div class="sec"><h4>레이어 (위쪽이 앞에 있어요)</h4>'+(doc.objs.length?doc.objs.slice().reverse().map(function(o){ return '<div class="lyr'+(sel.indexOf(o.id)>=0?' on':'')+'"><button data-ly="eye" data-i="'+o.id+'" title="보이기/숨기기">'+(o.hid?'🚫':'👁')+'</button><button data-ly="lock" data-i="'+o.id+'" title="잠그기">'+(o.lock?'🔒':'🔓')+'</button><button class="nm" data-ly="pick" data-i="'+o.id+'">'+esc(layerName(o))+'</button><button data-ly="up" data-i="'+o.id+'" title="앞으로">▲</button><button data-ly="down" data-i="'+o.id+'" title="뒤로">▼</button></div>'; }).join(''):'<div class="note">아직 도형이 없어요</div>')+'</div>'; }
   else if(ptab==='ai'){
     h='<div class="sec"><h4>AI에게 그림 시키기 (시험 기능)</h4><textarea id="aiQ" placeholder="예: 파란 별 12개를 원 모양으로 배치해줘 / 노란 해와 초록 언덕 / 무지개색 동심원"></textarea><div class="btns"><button class="tbtn pri" id="aiGo">그리기</button><button class="tbtn" id="aiSet">AI 설정</button></div><div class="note" id="aiOut">AI는 도형·무늬·간단한 그림만 그려요. 사진 같은 그림은 못 그리고 결과가 엉뚱할 수 있어요. 마음에 안 들면 되돌리기를 눌러요.</div></div>';
   } else {
@@ -360,19 +466,24 @@ pb.addEventListener('input',function(e){
   var t=e.target;
   if(t.dataset.pv){ patVals[t.dataset.pv]=+t.value; t.nextElementSibling.textContent=t.value; return; }
   if(t.dataset.po){ patOpt[t.dataset.po]=+t.value; t.nextElementSibling.textContent=t.value+(t.dataset.po==='scale'?'%':'°'); return; }
+  if(t.dataset.gc){ selObjs().forEach(function(o){ if(o.grad) o.grad[t.dataset.gc]=t.value; }); softRender(); return; }
   if(t.dataset.c){ var k=t.dataset.c; if(selObjs().length){ setProp(k,t.value); } st[k]=t.value; return; }
   if(t.dataset.txt){ setProp('txt',t.value); return; }
   if(t.dataset.st){ st[t.dataset.st]=t.value; return; }
   if(t.dataset.s){ var id=t.dataset.s, v=+t.value, u=t.nextElementSibling; var unit=u.textContent.replace(/[-0-9.]/g,''); u.textContent=f(v)+unit;
     var so=selObjs();
-    if(id==='rot'||id==='scl'||id==='fs'){ so.forEach(function(o){ if(id==='rot') o.rot=v; else if(id==='scl'){ o.sx=(o.sx<0?-1:1)*v; o.sy=(o.sy<0?-1:1)*v; } else o.a['font-size']=v; }); softRender(); clearTimeout(saveT); saveT=setTimeout(commitQuiet,300); return; }
-    if(so.length&&(id==='sw'||id==='op'||id==='dash')){ setProp(id,v); }
+    if(id==='rot'||id==='scl'||id==='fs'||id==='gang'){ so.forEach(function(o){ if(id==='rot') o.rot=v; else if(id==='scl'){ o.sx=(o.sx<0?-1:1)*v; o.sy=(o.sy<0?-1:1)*v; } else if(id==='gang'){ if(o.grad) o.grad.ang=v; } else o.a['font-size']=v; }); softRender(); clearTimeout(saveT); saveT=setTimeout(commitQuiet,300); return; }
+    if(so.length&&(id==='sw'||id==='op'||id==='dash'||id==='blur')){ setProp(id,v); }
     if(id==='sw'||id==='op'||id==='dash'||id==='sides'||id==='star'||id==='inner'||id==='round'||id==='sym'||id==='font'||id==='gridSize') st[id]=v;
     if(id==='gridSize') drawGrid();
   }
 });
 pb.addEventListener('change',function(e){
   var t=e.target;
+  if(t.dataset.gc){ commit(); return; }
+  if(t.dataset.gt!=null){ var gv=t.value; selObjs().forEach(function(o){ if(!gv){ delete o.grad; } else { var c1=hex(o.fill&&o.fill!=='none'?o.fill:st.fill); o.grad={t:gv,c1:o.grad?o.grad.c1:c1,c2:o.grad?o.grad.c2:'#ff5a8a',ang:o.grad?o.grad.ang:0}; if(o.fill==='none'||o.fill==null) o.fill=c1; } }); commit(); return; }
+  if(t.dataset.o){ selObjs().forEach(function(o){ o[t.dataset.o]=t.checked; if(t.dataset.o==='sh'&&o.pts) setD(o); }); commit(); return; }
+  if(t.dataset.tf){ selObjs().forEach(function(o){ if(o.tag!=='text') return; if(t.dataset.tf==='family') o.a['font-family']=t.value; else o.a['font-weight']=t.checked?'700':'400'; }); commit(); return; }
   if(t.dataset.pc){ patOpt[t.dataset.pc]=t.checked; return; }
   if(t.dataset.k){ st[t.dataset.k]=t.checked; if(t.dataset.k==='fillOn'&&selObjs().length){ selObjs().forEach(function(o){ o.fill=t.checked?st.fill:'none'; }); commit(); } if(t.dataset.k==='grid') drawGrid(); return; }
   if(t.id==='bgc'){ doc.bg=t.value; commit(); return; }
@@ -383,6 +494,11 @@ pb.addEventListener('change',function(e){
 pb.addEventListener('click',function(e){
   var t=e.target.closest('button'); if(!t) return;
   if(t.dataset.pat){ PAT_SEL=t.dataset.pat; panel(); return; }
+  if(t.dataset.al){ align(t.dataset.al); return; }
+  if(t.dataset.ly){ var oid=+t.dataset.i, oo=byId(oid), ly=t.dataset.ly; if(!oo) return;
+    if(ly==='eye'){ oo.hid=!oo.hid; commit(); } else if(ly==='lock'){ oo.lock=!oo.lock; commit(); } else if(ly==='pick'){ sel=[oid]; drawOv(); panel(); }
+    else { var ix=doc.objs.indexOf(oo), jx=ly==='up'?ix+1:ix-1; if(jx>=0&&jx<doc.objs.length){ doc.objs[ix]=doc.objs[jx]; doc.objs[jx]=oo; commit(); } }
+    return; }
   if(t.id==='patGo'){ drawPattern(); return; }
   if(t.id==='aiGo'){ askAI(); return; }
   if(t.id==='aiSet'){ if(window.FFAI) FFAI.settings(); return; }
@@ -390,7 +506,7 @@ pb.addEventListener('click',function(e){
   if(t.id==='cvApply'){ var w=Math.max(16,Math.min(8000,+$('cw').value||doc.w)), h=Math.max(16,Math.min(8000,+$('ch').value||doc.h)); doc.w=w; doc.h=h; commit(); fit(); return; }
   if(t.id==='bClear'){ if(doc.objs.length&&!confirmOnce(t)) return; doc.objs=[]; sel=[]; commit(); return; }
   var a=t.dataset.a; if(!a) return;
-  if(a==='del') delSel(); else if(a==='dup') dupSel(); else if(a==='hflip') flip('h'); else if(a==='vflip') flip('v'); else order(a);
+  if(a==='del') delSel(); else if(a==='dup') dupSel(); else if(a==='hflip') flip('h'); else if(a==='vflip') flip('v'); else if(a==='group') groupSel(); else if(a==='ungroup') ungroupSel(); else if(a==='bu'||a==='bi'||a==='bs'||a==='bx') boolOp(a.charAt(1)); else if(a==='topath'){ var po=selObjs()[0]; if(po&&toPath(po)){ commit(); } else toast('이 도형은 점으로 바꾸지 못해요'); } else order(a);
 });
 var cf=0; function confirmOnce(b){ if(cf){ cf=0; return true; } cf=1; b.textContent='한 번 더 누르면 지워요'; setTimeout(function(){ cf=0; if(b.isConnected) b.textContent='모두 지우고 새로 시작'; },3000); return false; }
 
@@ -401,13 +517,15 @@ desk.addEventListener('wheel',function(e){ if(e.ctrlKey||e.metaKey){ e.preventDe
 $('bUndo').onclick=undo; $('bRedo').onclick=redo;
 $('dname').addEventListener('change',function(){ doc.name=this.value||'이름 없는 그림'; commit(); });
 $('bOpen').onclick=function(){ $('fileIn').click(); };
+$('bImg').onclick=function(){ $('imgIn').click(); };
+$('imgIn').addEventListener('change',function(){ var fl=this.files[0]; this.value=''; if(fl) addImage(fl); });
 $('fileIn').addEventListener('change',function(){ if(this.files[0]) openFile(this.files[0]); this.value=''; });
 $('bSave').onclick=function(e){
   var old=document.querySelector('.menu'); if(old){ old.remove(); return; }
   var m=document.createElement('div'); m.className='menu'; var r=this.getBoundingClientRect(); m.style.top=(r.bottom+4)+'px'; m.style.right='8px';
   m.innerHTML='<button data-x="png1">PNG (원래 크기)</button><button data-x="png2">PNG (2배 크게)</button><button data-x="svg">SVG (벡터)</button><button data-x="json">프로젝트 파일 (.fdraw)</button>';
   m.onclick=function(ev){ var x=ev.target.dataset.x; if(!x) return; m.remove();
-    if(x==='png1') exportPng(1); else if(x==='png2') exportPng(2); else if(x==='svg') download(fname('svg'),new Blob([docSvg(true)],{type:'image/svg+xml'})); else download(fname('fdraw'),new Blob([snap()],{type:'application/json'})); };
+    if(x==='png1') exportPng(1); else if(x==='png2') exportPng(2); else if(x==='svg') download(fname('svg'),new Blob([docSvg(true)],{type:'image/svg+xml'})); else download(fname('fdraw'),new Blob([snap(true)],{type:'application/json'})); };
   document.body.appendChild(m); setTimeout(function(){ document.addEventListener('click',function h(ev){ if(!m.contains(ev.target)){ m.remove(); } document.removeEventListener('click',h); }); },0);
 };
 document.addEventListener('keydown',function(e){
@@ -415,13 +533,14 @@ document.addEventListener('keydown',function(e){
   var ctrl=e.ctrlKey||e.metaKey, k=e.key.toLowerCase();
   if(ctrl&&k==='z'){ e.preventDefault(); if(e.shiftKey) redo(); else undo(); return; }
   if(ctrl&&k==='y'){ e.preventDefault(); redo(); return; }
+  if(ctrl&&k==='g'){ e.preventDefault(); if(e.shiftKey) ungroupSel(); else groupSel(); return; }
   if(ctrl&&k==='d'){ e.preventDefault(); dupSel(); return; }
   if(ctrl&&k==='a'){ e.preventDefault(); sel=doc.objs.map(function(o){ return o.id; }); drawOv(); panel(); return; }
   if(e.key==='Delete'||e.key==='Backspace'){ if(sel.length){ e.preventDefault(); delSel(); } return; }
   if(e.key==='Escape'){ curvePts=[]; sel=[]; drawOv(); panel(); return; }
   if(e.key==='Enter'&&tool==='curve'){ finishCurve(); return; }
   if(e.key.indexOf('Arrow')===0&&sel.length){ e.preventDefault(); var s=e.shiftKey?10:1, dx=e.key==='ArrowLeft'?-s:e.key==='ArrowRight'?s:0, dy=e.key==='ArrowUp'?-s:e.key==='ArrowDown'?s:0; selObjs().forEach(function(o){ o.tx+=dx; o.ty+=dy; }); softRender(); clearTimeout(saveT); saveT=setTimeout(commit,300); return; }
-  var map={v:'sel',h:'hand',p:'pen',l:'line',r:'rect',o:'ellipse',g:'poly',s:'star',t:'text',e:'erase'};
+  var map={n:'node',v:'sel',h:'hand',p:'pen',l:'line',r:'rect',o:'ellipse',g:'poly',s:'star',t:'text',e:'erase'};
   if(!ctrl&&map[k]) setTool(map[k]);
 });
 window.addEventListener('resize',function(){ drawOv(); });
@@ -432,6 +551,6 @@ window.addEventListener('resize',function(){ drawOv(); });
   if(s){ try{ load(s); }catch(e){} }
   $('dname').value=doc.name; hist=[snap()]; hi=0;
   renderTools(); render(); fit(); panel();
-  window.FDRAW={doc:doc,importSvg:importSvg,drawPattern:drawPattern,setTool:setTool,st:st,PATS:PATS,svg:docSvg};
+  window.FDRAW={groupSel:groupSel,ungroupSel:ungroupSel,boolOp:boolOp,align:align,toPath:toPath,select:function(a){ sel=a; drawOv(); panel(); },addNode:addNode,mat:mat,doc:doc,importSvg:importSvg,drawPattern:drawPattern,setTool:setTool,st:st,PATS:PATS,svg:docSvg};
 })();
 })();
