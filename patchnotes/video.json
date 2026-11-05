@@ -4,6 +4,32 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v9",
+   "title": "소리 섞기·핀치 확대·휴대폰 화면 정리",
+   "items": [
+    "줄 이름을 누르면 그 줄 전체의 소리 크기를 슬라이더로 조절할 수 있어요 (소리 섞기)",
+    "클립이 흐르는 동안 소리 크기가 바뀌게 하기 (처음 크기 → 끝 크기, 점점 줄이기·키우기)",
+    "우르릉 줄이기: 바람·에어컨 같은 낮은 잡음을 걸러 내요 (약하게·보통·세게)",
+    "타임라인을 두 손가락으로 벌리고 오므려 확대·축소",
+    "휴대폰 화면: 파일 목록이 가로 한 줄로, 미리보기와 설정 창이 알맞게 나뉘어요",
+    "색 프리셋 5개 추가 (따뜻한 필름, 청록 영화, 빈티지 흑백, 쨍한 색, 칙칙한 톤)"
+   ],
+   "tr": {
+    "en": {
+     "title": "Mixer, pinch zoom, phone layout",
+     "items": [
+      "Click a track name to set that whole track's volume with a slider (mixer)",
+      "Volume can change over the clip (start volume to end volume) for gradual fades",
+      "Rumble reduction: filters low-frequency noise such as wind or air-conditioning (light, medium, strong)",
+      "Pinch the timeline with two fingers to zoom",
+      "Phone layout: file list becomes a horizontal strip and the preview and settings panel share the space sensibly",
+      "Five more colour presets (Warm film, Teal cinema, Vintage B&W, Vivid, Muted)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v8",
    "title": "내보내기 선택지·자막 파일·소리 자동 맞춤",
    "items": [
