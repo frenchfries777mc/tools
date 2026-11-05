@@ -42,7 +42,7 @@ button,input,select,textarea{font:inherit;color:inherit;}
 .tl svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 .desk{flex:1 1 auto;min-width:0;overflow:auto;background:var(--desk);position:relative;display:grid;}
 .stagew{margin:auto;padding:30px;}
-#sheet{display:block;background:#fff;box-shadow:0 6px 30px rgba(0,0,0,.45);touch-action:manipulation;user-select:none;-webkit-user-select:none;cursor:crosshair;}
+#sheet{display:block;background:#fff;box-shadow:0 6px 30px rgba(0,0,0,.45);touch-action:pan-x pan-y;user-select:none;-webkit-user-select:none;cursor:crosshair;}
 @media print{ body{display:block;height:auto;overflow:visible;background:#fff;} .top,.tools,.panel{display:none!important;} .main,.desk{display:block;overflow:visible;background:#fff;} .stagew{padding:0;margin:0;} #sheet{box-shadow:none;width:100%!important;height:auto!important;} }
 .panel{flex:0 0 310px;background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0;}
 .ptabs{display:flex;border-bottom:1px solid var(--line);flex:0 0 auto;}
@@ -70,7 +70,7 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
   .main{flex-wrap:wrap;} .tools{flex:0 0 100%;flex-direction:row;border-right:0;border-bottom:1px solid var(--line);overflow-x:auto;overflow-y:hidden;order:0;}
   .desk{flex:1 1 100%;order:1;min-height:0;height:46%;} .panel{flex:1 1 100%;order:2;border-left:0;border-top:1px solid var(--line);min-height:0;height:38%;}
   .main{flex-direction:column;flex-wrap:nowrap;} .tools{flex:0 0 auto;} .desk{flex:1 1 auto;height:auto;} .panel{flex:0 0 40%;}
-  .brand,.tbtn .lb{display:none;}
+  .brand,.tbtn .lb{display:none;} .stagew{padding:12px;}
 }
 .footer-copy{display:none;}
 </style>
@@ -85,7 +85,7 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
   <span class="sp"></span>
   <button class="tbtn pri" id="bPlay">▶ 재생</button>
   <button class="tbtn" id="bStop">■</button>
-  <button class="tbtn" id="bZm">−</button><span class="zoom" id="zl">100%</span><button class="tbtn" id="bZp">+</button>
+  <button class="tbtn" id="bZm">−</button><span class="zoom" id="zl">100%</span><button class="tbtn" id="bZp">+</button><button class="tbtn" id="bZf" title="너비에 맞추기">↔</button>
   <button class="tbtn" id="bOpen">열기</button>
   <button class="tbtn pri" id="bSave">받기 ▾</button>
 </div>
@@ -99,7 +99,7 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
 </div>
 <input type="file" id="fileIn" accept=".fscore,.json,.mid,.midi,.musicxml,.xml,application/json" hidden>
 <script src="../ai.js?v=ai36.l21"></script>
-<script src="app.js?v=sc7"></script>
+<script src="app.js?v=sc8"></script>
 <script src="../pwa.js" defer></script>
 <script src="../ping.js" defer></script>
 </body>
