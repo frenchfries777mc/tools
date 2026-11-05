@@ -11,3 +11,4 @@ draw/ + index.html 카드 + patchnotes/draw.json + draw/ 안 한국어 전부 | 
 patchnotes/python.json | BeaconScript 단어별 미리보기 항목 (en만), python/langs.js 단어 뜻(한글)은 아직 번역 안 됨 | python v6 | 2026-11-05
 score/ + index.html 카드 + patchnotes/score.json + score/ 안 한국어 전부 | Fry Score 첫 공개 (en 번역 없음) | score v1 | 2026-11-05
 video/ + index.html 카드 + patchnotes/video.json + video/ 안 한국어 전부 | Fry Video 첫 공개 (en 번역 없음) | video v1 | 2026-11-05
+patchnotes/score.json | Fry Score v2 항목 (en 번역 없음), score/app.js 한국어 메시지 | score v2 | 2026-11-05
