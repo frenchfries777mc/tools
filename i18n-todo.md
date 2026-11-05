@@ -56,3 +56,4 @@ score/app.js | Fry Score v7 한국어 메시지·버튼 | score v7 | 2026-11-06
 patchnotes/video.json | Fry Video v12 넣기 탭: 템플릿·스티커·작은 화면, 프로젝트 파일, 챕터 (en 번역 없음) | video v12 | 2026-11-06
 patchnotes/score.json | Fry Score v8 항목 (en만) | score v8 | 2026-11-06
 score/app.js | Fry Score v8 한국어 메시지·버튼 | score v8 | 2026-11-06
+patchnotes/video.json | Fry Video v13 키프레임·소리 곡선·잡음 끊기·무음 자르기·여러 개 고르기 (en 번역 없음) | video v13 | 2026-11-06
