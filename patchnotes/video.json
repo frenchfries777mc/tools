@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v10",
+   "title": "GIF 만들기·글자 스타일과 움직임",
+   "items": [
+    "영상 만들기에서 '움직이는 그림(GIF)'을 고르면 실시간 녹화가 아니라 한 장씩 그려서 GIF로 받아요 (가로 320·480·640, 초당 8·12·15장, 60초까지)",
+    "글자 스타일 한 번에 입히기: 자막, 큰 제목, 네온, 메모지, 만화풍",
+    "글자 움직임 추가: 통통 튀기, 두근두근, 덜덜, 물결(글자마다 출렁)"
+   ],
+   "tr": {
+    "en": {
+     "title": "GIF export, text styles and motion",
+     "items": [
+      "Export as an animated GIF: frames are rendered one by one instead of real-time recording (width 320/480/640, 8/12/15 fps, up to 60 s)",
+      "One-click text styles: Subtitle, Big title, Neon, Sticky note, Comic",
+      "New text motions: bounce, pulse, shake and wave (letters ripple one by one)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v9",
    "title": "소리 섞기·핀치 확대·휴대폰 화면 정리",
    "items": [
