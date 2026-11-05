@@ -31,3 +31,4 @@ python/index.html·app.js | 찾기 창 글자(찾기, 없음, 툴팁) 번역 안
 patchnotes/python.json | Ctrl+F 찾기 항목 (en만) | python v22 | 2026-11-05
 patchnotes/python.json | BeaconScript publish_short·provide 항목 (en만) | python v31 | 2026-11-05
 patchnotes/python.json | BeaconScript 신호·publish_aliases 항목 (en만) | python v32 | 2026-11-05
+patchnotes/python.json | BeaconScript 글자 색 코드 항목 (en만) | python v33 | 2026-11-05
