@@ -3,6 +3,24 @@
  "name": "Fry Score",
  "notes": [
   {
+   "date": "2026-11-06",
+   "build": "v3",
+   "title": "높은음자리표·낮은음자리표 다시 그림",
+   "items": [
+    "높은음자리표가 G선(아래서 둘째 줄)을 감싸도록, 낮은음자리표는 점 두 개가 F선(위에서 둘째 줄)을 사이에 두도록 모양과 위치를 바로잡음",
+    "확대·축소·PNG·SVG에서도 선이 깨지지 않음"
+   ],
+   "tr": {
+    "en": {
+     "title": "Redrawn treble and bass clefs",
+     "items": [
+      "The treble clef now curls around the G line and the bass clef dots sit either side of the F line, with the correct shape",
+      "Clean at every zoom level and in PNG/SVG export"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-05",
    "build": "v2",
    "title": "MuseScore처럼: 셈여림·기호·슬러·가사·도돌이표",

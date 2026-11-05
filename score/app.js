@@ -137,8 +137,9 @@ function draw(){
   $('bUndo').disabled=hi<=0; $('bRedo').disabled=hi>=hist.length-1;
 }
 function clefSvg(clef,x,top){
-  if(clef==='bass') return '<g fill="#111" stroke="none" transform="translate('+x+' '+(top+10)+')"><path d="M-8 0 C-2 -6 10 -4 10 6 C10 16 2 24 -11 31 L-12 29 C-2 23 4 16 4 7 C4 1 -2 -1 -6 4 C-4 3 0 4 0 7 C0 10 -3 12 -6 10 C-9 8 -10 3 -8 0Z"/><circle cx="14" cy="3" r="2"/><circle cx="14" cy="13" r="2"/></g>';
-  return '<g transform="translate('+x+' '+(top+30)+') scale(1.12)" fill="none" stroke="#111" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M-1 14 C-6 14 -7 9 -4 8 C0 7 2 12 -1 14 M0 12 C-1 5 -2 -6 -1 -18 C0 -29 9 -29 9 -19 C9 -10 0 -4 -5 -5 C-14 -6 -14 5 -6 7 C4 8 5 -4 -3 -4 C-4 -4 -6 -3 -5 -1 M1 -18 L4 30 C4 36 -6 37 -5 31 C-5 29 -3 28 -2 29"/></g>';
+  // origin on the clef's own line: G line (treble) or F line (bass), 10px staff spacing
+  if(clef==='bass') return '<g transform="translate('+x+' '+(top+10)+')"><path fill="#111" d="M-6 -4.6C2 -8 14 -4.5 14 6C14 18 3 27 -12 33L-12.6 31.4C-1 25 6 16 6 6C6 -1 2 -3 -1.5 -1.2A4.3 4.3 0 1 1 -6 -4.6Z"/><circle cx="17" cy="-5" r="1.9" fill="#111"/><circle cx="17" cy="5" r="1.9" fill="#111"/></g>';
+  return '<g transform="translate('+x+' '+(top+30)+')" fill="none" stroke="#111" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 25.5C3.5 30 -3 31 -4.5 27C-5.5 24 -2 22 0 23.5C1.2 24.5 1 26 0 26.2M0 23.6C1.6 12 -0.6 -2 -1.4 -12C-2 -22 -1.6 -31 3 -38.5C7.5 -32 6.5 -24 0.5 -15C-4 -8.5 -9.5 -4 -8.5 2.5C-7.6 8.5 -2.6 11.6 2.6 11.2C8.6 10.7 11.4 5.8 10 1C8.6 -3.6 3.6 -5.6 0 -4.2C-3 -3 -3.6 1.6 -0.8 3C1.2 4 3.2 2.4 2.8 0.6"/></g>';
 }
 function restSvg(d,x,top,sel){
   var c=sel?'#e8453c':'#111', y=top;
