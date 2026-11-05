@@ -37,3 +37,5 @@ patchnotes/python.json | BeaconScript 변수 중괄호 항목 (en만) | python v
 patchnotes/video.json | Fry Video v6 타임라인: 표시·줄 잠금·당겨 지우기·멈춘 장면 (en 번역 없음) | video v6 | 2026-11-06
 patchnotes/score.json | Fry Score v3 항목 (en만) | score v3 | 2026-11-06
 score/app.js | Fry Score v3 한국어 메시지·버튼 | score v3 | 2026-11-06
+patchnotes/score.json | Fry Score v4 항목 (en만) | score v4 | 2026-11-06
+score/app.js | Fry Score v4 한국어 메시지·버튼 | score v4 | 2026-11-06
