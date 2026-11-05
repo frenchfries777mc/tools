@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v16",
+   "title": "BeaconScript b193 반영",
+   "items": [
+    "on damage 이벤트와 every N seconds: 반복 (1~3600초) 점검",
+    "on damage of monster: 처럼 of 대상, chat·say·play sound·give effect 뒤 to 대상, 새 효과 stun 지원",
+    "자동완성이 of → player·monster·mob, to → 대상을 한 단어씩 보여 줘요"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript b193 support",
+     "items": [
+      "on damage event and every N seconds: loops (1-3600) are checked",
+      "of targets like on damage of monster:, to targets after chat/say/play sound/give effect, and the new stun effect",
+      "Autocomplete shows of → player/monster/mob and to → target one word at a time"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v15",
    "title": "BeaconScript b192 반영",
    "items": [
