@@ -33,8 +33,8 @@ function paint(){
   if(errLine){ var ls=h.split('\n'); if(ls[errLine-1]!=null) ls[errLine-1]='<span class="eline">'+(ls[errLine-1]||' ')+'</span>'; h=ls.join('\n'); }
   hl.innerHTML=h+'\n ';
   var n=src.split('\n').length, g=''; for(var i=1;i<=n;i++) g+='<div'+(i===errLine?' class="bad"':'')+'>'+i+'</div>'; gut.innerHTML=g;
-  scrollSync(); }
-function scrollSync(){ hl.scrollTop=code.scrollTop; hl.scrollLeft=code.scrollLeft; gut.scrollTop=code.scrollTop; }
+  scrollSync(); if(window.fRefresh) window.fRefresh(); }
+function scrollSync(){ hl.scrollTop=code.scrollTop; hl.scrollLeft=code.scrollLeft; gut.scrollTop=code.scrollTop; var fh=$('fhl'); if(fh){ fh.scrollTop=code.scrollTop; fh.scrollLeft=code.scrollLeft; } }
 code.addEventListener('scroll',scrollSync);
 function caretPos(){ var v=code.value.slice(0,code.selectionStart).split('\n'); $('pos').textContent=F('{0}줄 {1}칸',v.length,v[v.length-1].length+1); }
 code.addEventListener('input',function(e){ if(errLine){ errLine=0; } paint(); saveSoon(); caretPos(); if(e.isComposing||/^delete/.test(e.inputType||'')||e.inputType==='insertLineBreak') acHide(); else acUpdate(); if(LG().live) liveSoon(); });
@@ -398,6 +398,29 @@ $('langBtn').onclick=function(){ langMenu(); popMenu($('langMenu'),this); };
   var f=idx.files.filter(function(x){ return x.id===idx.last; })[0]||idx.files[0];
   if(f) openFile(f); else { var ex=(window.FPY_EX||[])[0]; newFile(T('첫 파일'),ex?trCode(ex[1]):T('print("안녕하세요!")')+'\n'); } })();
 if(curLang==='python'){ sys(T('▶ 실행(Ctrl+Enter)을 누르면 여기에 결과가 나와요. 처음 실행할 때는 파이썬(약 10MB)을 받느라 조금 걸려요.')); setTimeout(function(){ if(!worker&&curLang==='python') mkWorker(); },600); }
+/* ---- find (Ctrl+F) ---- */
+(function(){ var fb=$('fbar'), fq=$('fq'), fcnt=$('fcnt'), fhl=$('fhl'), fcase=false, list=[], idx=-1, q='';
+  function esc2(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function scan(){ list=[]; q=fq.value; if(!q) return; var src=code.value, hay=fcase?src:src.toLowerCase(), nd=fcase?q:q.toLowerCase(), i=0; while((i=hay.indexOf(nd,i))>=0&&list.length<5000){ list.push(i); i+=nd.length; } }
+  function paintF(){ if(!list.length){ fhl.innerHTML=''; return; } var src=code.value, h='', last=0; list.forEach(function(p,k){ h+=esc2(src.slice(last,p))+'<mark'+(k===idx?' class="cur"':'')+'>'+esc2(src.substr(p,q.length))+'</mark>'; last=p+q.length; }); h+=esc2(src.slice(last)); fhl.innerHTML=h+'\n '; fhl.scrollTop=code.scrollTop; fhl.scrollLeft=code.scrollLeft; }
+  function count(){ fcnt.textContent=!q?'':(list.length?(idx+1)+'/'+list.length+(list.length>=5000?'+':''):T('없음')); fcnt.style.color=(q&&!list.length)?'#e5534b':''; }
+  function reveal(){ if(idx<0) return; var p=list[idx], before=code.value.slice(0,p), line=before.split('\n').length-1, lh=parseFloat(getComputedStyle(code).lineHeight)||21.6, top=12+line*lh;
+    if(top<code.scrollTop+lh||top>code.scrollTop+code.clientHeight-lh*3) code.scrollTop=Math.max(0,top-code.clientHeight/2);
+    var col=before.length-(before.lastIndexOf('\n')+1), cw=parseFloat(getComputedStyle(code).fontSize)*0.6, left=14+col*cw;
+    if(left<code.scrollLeft||left>code.scrollLeft+code.clientWidth-80) code.scrollLeft=Math.max(0,left-code.clientWidth/3);
+    try{ code.setSelectionRange(p,p+q.length); }catch(e){} scrollSync(); }
+  function go(dir){ scan(); if(!list.length){ idx=-1; paintF(); count(); return; } if(idx<0||dir===0){ var c=code.selectionStart, k=0; while(k<list.length&&list[k]<c) k++; idx=(dir<0)?((k-1+list.length)%list.length):(k%list.length); } else idx=(idx+dir+list.length)%list.length; paintF(); count(); reveal(); }
+  function refresh(){ if(fb.hidden) return; var cur=idx>=0?list[idx]:-1; scan(); idx=-1; if(cur>=0){ for(var k=0;k<list.length;k++){ if(list[k]>=cur){ idx=k; break; } } } paintF(); count(); }
+  window.fRefresh=refresh;
+  function open(){ var a=code.selectionStart, b=code.selectionEnd, sel=a!==b?code.value.slice(a,b):''; fb.hidden=false; if(sel&&sel.indexOf('\n')<0&&sel.length<=80) fq.value=sel; fq.focus(); fq.select(); idx=-1; if(fq.value) go(0); else { scan(); paintF(); count(); } }
+  function close(){ if(fb.hidden) return; fb.hidden=true; fhl.innerHTML=''; list=[]; idx=-1; code.focus(); }
+  fq.addEventListener('input',function(){ idx=-1; go(0); });
+  fq.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); go(e.shiftKey?-1:1); } else if(e.key==='Escape'){ e.preventDefault(); e.stopPropagation(); close(); } });
+  $('fnext').onclick=function(){ go(1); fq.focus(); }; $('fprev').onclick=function(){ go(-1); fq.focus(); }; $('fclose').onclick=close;
+  $('fcase').onclick=function(){ fcase=!fcase; this.classList.toggle('on',fcase); idx=-1; go(0); fq.focus(); };
+  $('findBtn').onclick=function(){ if(fb.hidden) open(); else close(); };
+  document.addEventListener('keydown',function(e){ if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&!e.altKey&&e.key.toLowerCase()==='f'){ e.preventDefault(); open(); } else if(e.key==='F3'&&!fb.hidden){ e.preventDefault(); go(e.shiftKey?-1:1); } },true);
+})();
 window.addEventListener('pagehide',saveNow);
 document.addEventListener('visibilitychange',function(){ if(document.hidden) saveNow(); });
 })();
