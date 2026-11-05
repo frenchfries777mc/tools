@@ -33,3 +33,4 @@ patchnotes/python.json | BeaconScript publish_short·provide 항목 (en만) | py
 patchnotes/python.json | BeaconScript 신호·publish_aliases 항목 (en만) | python v32 | 2026-11-05
 patchnotes/python.json | BeaconScript 글자 색 코드 항목 (en만) | python v33 | 2026-11-05
 patchnotes/python.json | BeaconScript else·else if 항목 (en만) | python v34 | 2026-11-05
+patchnotes/python.json | BeaconScript 변수 중괄호 항목 (en만) | python v35 | 2026-11-06
