@@ -45,3 +45,4 @@ patchnotes/video.json | Fry Video v8 내보내기 선택지·자막 파일·소�
 patchnotes/score.json | Fry Score v5 항목 (en만) | score v5 | 2026-11-06
 score/app.js | Fry Score v5 한국어 메시지·버튼 | score v5 | 2026-11-06
 patchnotes/video.json | Fry Video v9 소리 섞기·핀치 확대·휴대폰 화면 정리 (en 번역 없음) | video v9 | 2026-11-06
+patchnotes/video.json | Fry Video v10 GIF 만들기·글자 스타일과 움직임 (en 번역 없음) | video v10 | 2026-11-06
