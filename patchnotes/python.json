@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v17",
+   "title": "BeaconScript b194 · 아이템 미리보기",
+   "items": [
+    "on place 아이템: (id나 한글 이름) 지원, 없는 아이템은 unknown item 오류와 비슷한 이름 안내",
+    "give·on place·set 뒤 아이템은 미리보기에 아이콘과 이름 카드로 보여요 (Beaconfall 아이템 목록 495개)",
+    "on place 다음 자동완성에 아이템 id와 한글 이름이 나와요"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript b194 and item preview",
+     "items": [
+      "on place <item>: (id or Korean name) is supported; unknown items give an 'unknown item' error with a suggestion",
+      "Items after give, on place and set show as an icon and name card in the preview (495 Beaconfall items)",
+      "Autocomplete after on place lists item ids and Korean names"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v16",
    "title": "BeaconScript b193 반영",
    "items": [
