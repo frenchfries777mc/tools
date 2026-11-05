@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v20",
+   "title": "BeaconScript b196 반영",
+   "items": [
+    "every %{변수}% seconds: 처럼 변수 값을 초로 쓸 수 있어요",
+    "on mine or chop:, on damage or die of monster:, on key \"A\" or \"W\" press: 같은 or 이벤트를 점검해요",
+    "if has 3 iron or variable {n} >= 5 or %attacker% is player: 처럼 if 조건도 or로 이을 수 있어요 (따옴표 안의 or는 구분자가 아니에요)",
+    "or 다음에도 이벤트(on 줄)·조건(if 줄) 목록이 자동완성으로 나와요"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript b196 support",
+     "items": [
+      "every %{variable}% seconds: uses a variable as the interval",
+      "or events such as on mine or chop:, on damage or die of monster:, on key \"A\" or \"W\" press: are checked",
+      "if conditions can be joined with or (an or inside quotes is not a separator)",
+      "Autocomplete lists events (on lines) or conditions (if lines) after or"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v19",
    "title": "BeaconScript b195 반영",
    "items": [
