@@ -213,7 +213,7 @@ function javaRun(ctx){ var src=ctx.code, bal=balance(src,false); ctx.pv.innerHTM
   ctx.show('pv'); ctx.done(true); }
 
 /* ---------- BeaconScript ---------- */
-function bsCheck(src,nested){ var seenCode=false, errs=[], stack=[], lines=src.split('\n'), VERB=BS_VERBS.split(' ');
+function bsCheck(src,nested){ var defVars={}; src.replace(/\b(?:set|add|subtract|reset)\b[^\n]*?\bvariable\s+\{?([A-Za-z0-9_\uac00-\ud7a3]{1,22})\}?/gi,function(m0,nm){ defVars[nm.toLowerCase()]=1; return m0; }); var seenCode=false, errs=[], stack=[], lines=src.split('\n'), VERB=BS_VERBS.split(' ');
   lines.forEach(function(raw,i){ var ln=i+1, line=raw.replace(/\t/g,'    '); if(!line.trim()||/^\s*#/.test(line)) return;
     var ind=/^ */.exec(line)[0].length, t=line.trim(), m;
     var q=t.replace(/"(?:\\.|[^"\\])*"/g,''); if(/"/.test(q)){ errs.push({line:ln,msg:'따옴표(")가 닫히지 않았어요'}); }
@@ -275,7 +275,7 @@ function bsCheck(src,nested){ var seenCode=false, errs=[], stack=[], lines=src.s
     if(verb==='disable'||verb==='enable'){ var cm=/^(?:disable|enable)\s+collision\s+of\s+([A-Za-z_]+)\s*$/i.exec(t);
       if(!cm) errs.push({line:ln,msg:'이렇게 써요: disable collision of tree (또는 enable collision of water)'});
       else if(BS_COLL.indexOf(cm[1].toLowerCase())<0){ var g5=guess(cm[1].toLowerCase(),BS_COLL); errs.push({line:ln,msg:"모르는 대상 '"+cm[1]+"'"+(g5?" — 혹시 '"+g5+"'?":' (tree·rock·ore·water·block·아이템 이름)')}); } }
-    (t.replace(/%player's mod%/gi,'').replace(/%\{[^}\s]+\}%/g,'').match(/%[^%\s"]*%/g)||[]).forEach(function(ph){ if(BS_PH.indexOf(ph.toLowerCase())<0&&!/^%var_[a-z0-9_]{1,20}%$/i.test(ph)&&!/^%player_[a-z0-9_]+_count%$/i.test(ph)){ var g6=guess(ph.toLowerCase(),BS_PH); errs.push({line:ln,msg:"모르는 자리표시 '"+ph+"'"+(g6?" — 혹시 '"+g6+"'?":'')}); } });
+    (t.replace(/%player's mod%/gi,'').replace(/%\{[^}\s]+\}%/g,'').match(/%[^%\s"]*%/g)||[]).forEach(function(ph){ if(BS_PH.indexOf(ph.toLowerCase())<0&&!defVars[ph.slice(1,-1).toLowerCase()]&&!/^%var_[a-z0-9_]{1,20}%$/i.test(ph)&&!/^%player_[a-z0-9_]+_count%$/i.test(ph)){ var g6=guess(ph.toLowerCase(),BS_PH); errs.push({line:ln,msg:"모르는 자리표시 '"+ph+"'"+(g6?" — 혹시 '"+g6+"'?":'')}); } });
     if(verb==='teleport'&&!/\sto\s/.test(t)) errs.push({line:ln,msg:'이렇게 써요: teleport player to spawn'});
     if((verb==='title'||verb==='chat'||verb==='say'||verb==='broadcast')&&!/"/.test(t)) errs.push({line:ln,msg:verb+' 뒤에는 "글자"를 큰따옴표로 감싸서 써요'});
     if(opens) stack.push({line:ln,ind:ind,kids:0}); });
