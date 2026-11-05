@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v11",
+   "title": "거꾸로 재생·빠르기 변화·새 전환·틈 없애기",
+   "items": [
+    "거꾸로 재생: 영상 클립을 끝에서 처음 쪽으로 보여 줘요 (소리는 나지 않아요)",
+    "빠르기가 흐르며 바뀌기: 천천히에서 빠르게(또는 반대로) 부드럽게 변해요. 자르면 양쪽 클립이 이어지게 나뉘어요",
+    "전환 효과 3개 추가: 오른쪽에서 닦기, 동그랗게 열리며, 위에서 밀기",
+    "영상 설정 탭의 '줄 정리': 영상 줄·소리 줄의 틈을 한 번에 없애요 (잠긴 줄은 건드리지 않아요)"
+   ],
+   "tr": {
+    "en": {
+     "title": "Reverse, speed ramp, new transitions, close gaps",
+     "items": [
+      "Reverse playback for video clips (silent)",
+      "Speed ramp: speed changes smoothly across the clip (slow to fast or the reverse); splitting keeps both halves continuous",
+      "Three more transitions: wipe from right, iris open, push from top",
+      "Project tab 'Tidy tracks': close gaps on the video or audio track in one click (locked tracks are left alone)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v10",
    "title": "GIF 만들기·글자 스타일과 움직임",
    "items": [
