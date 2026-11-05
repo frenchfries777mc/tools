@@ -4,6 +4,30 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v8",
+   "title": "내보내기 선택지·자막 파일·소리 자동 맞춤",
+   "items": [
+    "영상 만들기에서 프레임(24/30/60), 화질(비트레이트), 파일 형식(mp4/webm)을 고를 수 있어요",
+    "소리만 내보내기 (m4a/webm), 진행 시간 표시, 만드는 도중 '중단' 버튼",
+    "자막 파일 가져오기(SRT·VTT)와 글자 클립을 SRT·VTT로 내보내기",
+    "소리 크기 자동으로 맞추기: 클립의 가장 큰 소리가 알맞게 들리도록 소리 크기를 정해 줘요",
+    "배경음악 낮추기: 다른 영상·소리가 나오는 동안 이 소리를 부드럽게 낮춰요 (낮추는 정도 조절)"
+   ],
+   "tr": {
+    "en": {
+     "title": "Export options, subtitle files, auto volume",
+     "items": [
+      "Export dialog: choose frame rate (24/30/60), quality (bitrate) and file format (mp4/webm)",
+      "Audio-only export (m4a/webm), elapsed time display and a Stop button while exporting",
+      "Import subtitles from SRT/VTT files and export text clips as SRT/VTT",
+      "Auto-set volume: picks a volume so the loudest part of the clip sounds right",
+      "Music ducking: lowers this sound smoothly while other video or audio plays (adjustable amount)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v7",
    "title": "화면: 자르기·모양·섞기·따뜻함·가장자리 어둡게",
    "items": [
