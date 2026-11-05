@@ -43,7 +43,9 @@ button,input,select,textarea{font:inherit;color:inherit;}
 .desk{flex:1 1 auto;min-width:0;overflow:auto;background:var(--desk);position:relative;display:grid;}
 .stagew{margin:auto;padding:30px;}
 #sheet{display:block;background:#fff;box-shadow:0 6px 30px rgba(0,0,0,.45);touch-action:pan-x pan-y;user-select:none;-webkit-user-select:none;cursor:crosshair;}
-@media print{ body{display:block;height:auto;overflow:visible;background:#fff;} .top,.tools,.panel{display:none!important;} .main,.desk{display:block;overflow:visible;background:#fff;} .stagew{padding:0;margin:0;} #sheet{box-shadow:none;width:100%!important;height:auto!important;} }
+#printArea{display:none;}
+@page{size:A4 portrait;margin:10mm;}
+@media print{ html,body{height:auto;overflow:visible;background:#fff;display:block;} .top,.tools,.panel,.main,.toast,.menu{display:none!important;} #printArea{display:block;} .ppage{page-break-after:always;break-after:page;position:relative;} .ppage:last-child{page-break-after:auto;break-after:auto;} .ppage svg{display:block;background:#fff;} .pno{text-align:center;font-size:11px;color:#444;} }
 .panel{flex:0 0 310px;background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0;}
 .ptabs{display:flex;border-bottom:1px solid var(--line);flex:0 0 auto;}
 .ptabs button{flex:1;height:36px;border:0;border-bottom:3px solid transparent;background:transparent;color:var(--dim);cursor:pointer;}
@@ -99,7 +101,7 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
 </div>
 <input type="file" id="fileIn" accept=".fscore,.json,.mid,.midi,.musicxml,.xml,application/json" hidden>
 <script src="../ai.js?v=ai36.l21"></script>
-<script src="app.js?v=sc10"></script>
+<script src="app.js?v=sc11"></script>
 <script src="../pwa.js" defer></script>
 <script src="../ping.js" defer></script>
 </body>
