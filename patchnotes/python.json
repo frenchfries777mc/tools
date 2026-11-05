@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v33",
+   "title": "BeaconScript 글자 색 코드",
+   "items": [
+    "글자 안의 \\a \\b \\e \\f \\0~\\8 \\d (색), \\u (밑줄), \\l (굵게), \\r (효과 지움)를 오류로 보지 않아요",
+    "규칙 보기에서 그 글자가 색과 효과 그대로 보여요"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript text color codes",
+     "items": [
+      "Color and style codes inside text (\\a \\b \\e \\f \\0-\\8 \\d, \\u underline, \\l bold, \\r clear) are accepted",
+      "The rule preview shows that text with its colors and effects"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v32",
    "title": "BeaconScript 신호·계산·publish_aliases",
    "items": [
