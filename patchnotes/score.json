@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v8",
+   "title": "휴대폰에서 쓰기 편하게, 조 옮기기, 내 보관함",
+   "items": [
+    "오른쪽 패널의 C D E F G A B·쉼표 버튼으로 키보드 없이 음 이어 쓰기",
+    "두 손가락으로 오므리고 벌려 확대·축소, Ctrl+휠 확대, ↔ 버튼으로 화면 너비에 맞추기 (좁은 화면에서는 처음부터 맞춰서 열림)",
+    "조를 바꿀 때 음도 같이 옮기기 옵션(예: C장조 → E♭장조로 모든 파트가 올라감)",
+    "내 보관함: 여러 악보를 이 브라우저에 저장해 두고 목록에서 열기·지우기"
+   ],
+   "tr": {
+    "en": {
+     "title": "Phone-friendly input, key change with transposition, saved-scores library",
+     "items": [
+      "Note-letter and rest buttons in the side panel for entering notes without a keyboard",
+      "Pinch to zoom, Ctrl+wheel zoom, a fit-to-width button (narrow screens open already fitted)",
+      "Option to transpose the notes along with a key change (e.g. C major to E-flat major moves every part)",
+      "Library: keep several scores in this browser and open or delete them from a list"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v7",
    "title": "MusicXML 열기·내보내기, WAV 소리 파일",
    "items": [
