@@ -142,9 +142,16 @@ function drawVisual(c,tt,W,H){
   var sc=fit*(scV/100)*an.s*zs, w=sw*sc, h=sh*sc;
   g.save(); if(clipK<1){ g.beginPath(); g.rect(0,0,W*clipK,H); g.clip(); }
   g.globalAlpha=(c.op/100)*fadeOf(c,tt)*(c.anim==='none'?1:an.a)*al; g.filter=filterStr(c.filt);
-  g.translate(W/2+(xV/100)*W+an.dx*W+dx,H/2+(yV/100)*H+an.dy*H+dy); if(rV) g.rotate(rV*Math.PI/180); if(c.flip) g.scale(-1,1);
+  g.translate(W/2+(xV/100)*W+an.dx*W+dx,H/2+(yV/100)*H+an.dy*H+dy); if(rV) g.rotate(rV*Math.PI/180); if(c.flip) g.scale(-1,1); if(c.flipV) g.scale(1,-1);
+  if(c.blend&&c.blend!=='none') g.globalCompositeOperation=c.blend;
   var src=s; if(c.ck&&c.ck.on) src=keyed(s,w,h,c.ck);
-  try{ g.drawImage(src,-w/2,-h/2,w,h); }catch(e){}
+  var cr=c.crop||null, cl=cr?cr.l/100:0, cR=cr?cr.r/100:0, ct=cr?cr.t/100:0, cb=cr?cr.b/100:0; if(cl+cR>.95){ cR=.95-cl; } if(ct+cb>.95){ cb=.95-ct; }
+  var dw=w*(1-cl-cR), dh=h*(1-ct-cb), dx0=-w/2+w*cl, dy0=-h/2+h*ct, vw=src.videoWidth||src.naturalWidth||src.width, vh=src.videoHeight||src.naturalHeight||src.height;
+  if(c.mask==='circle'){ g.beginPath(); g.ellipse(dx0+dw/2,dy0+dh/2,dw/2,dh/2,0,0,Math.PI*2); g.clip(); } else if(c.mask==='round'){ var rr=Math.min(dw,dh)*.18; g.beginPath(); g.moveTo(dx0+rr,dy0); g.arcTo(dx0+dw,dy0,dx0+dw,dy0+dh,rr); g.arcTo(dx0+dw,dy0+dh,dx0,dy0+dh,rr); g.arcTo(dx0,dy0+dh,dx0,dy0,rr); g.arcTo(dx0,dy0,dx0+dw,dy0,rr); g.closePath(); g.clip(); }
+  try{ g.drawImage(src,vw*cl,vh*ct,vw*(1-cl-cR),vh*(1-ct-cb),dx0,dy0,dw,dh); }catch(e){}
+  var fl=c.filt||{}; g.filter='none';
+  if(fl.temp){ g.globalCompositeOperation='soft-light'; g.globalAlpha*=Math.min(1,Math.abs(fl.temp)/100*.8); g.fillStyle=fl.temp>0?'#ff9a1e':'#2e8bff'; g.fillRect(dx0,dy0,dw,dh); g.globalAlpha=(c.op/100)*fadeOf(c,tt)*(c.anim==='none'?1:an.a)*al; g.globalCompositeOperation=(c.blend&&c.blend!=='none')?c.blend:'source-over'; }
+  if(fl.vig){ var rg=g.createRadialGradient(dx0+dw/2,dy0+dh/2,Math.min(dw,dh)*.2,dx0+dw/2,dy0+dh/2,Math.max(dw,dh)*.72); rg.addColorStop(0,'rgba(0,0,0,0)'); rg.addColorStop(1,'rgba(0,0,0,'+(fl.vig/100*.9)+')'); g.fillStyle=rg; g.globalCompositeOperation='source-over'; g.fillRect(dx0,dy0,dw,dh); }
   g.restore();
 }
 function drawShape(c,tt,W,H){
@@ -285,7 +292,7 @@ $('bFreeze').onclick=function(){
 
 /* ---------- panel ---------- */
 function rng(l,k,min,max,v,step,unit){ return '<div class="row"><label>'+l+'</label><input type="range" data-k="'+k+'" min="'+min+'" max="'+max+'" step="'+(step||1)+'" value="'+v+'"><input type="number" class="nv" data-k="'+k+'" min="'+min+'" max="'+max+'" step="'+(step||1)+'" value="'+f(v)+'"><span class="u">'+(unit||'')+'</span></div>'; }
-var PRESETS={'원본':{br:100,ct:100,sat:100,gray:0,sepia:0,blur:0,hue:0},'흑백':{br:100,ct:110,sat:100,gray:100,sepia:0,blur:0,hue:0},'옛날 사진':{br:100,ct:95,sat:80,gray:0,sepia:70,blur:0,hue:0},'선명하게':{br:104,ct:125,sat:130,gray:0,sepia:0,blur:0,hue:0},'따뜻하게':{br:104,ct:100,sat:115,gray:0,sepia:25,blur:0,hue:-10},'차갑게':{br:100,ct:105,sat:95,gray:0,sepia:0,blur:0,hue:18},'흐리게':{br:100,ct:100,sat:100,gray:0,sepia:0,blur:4,hue:0}};
+var PRESETS={'원본':{br:100,ct:100,sat:100,gray:0,sepia:0,blur:0,hue:0},'흑백':{br:100,ct:110,sat:100,gray:100,sepia:0,blur:0,hue:0},'옛날 사진':{br:100,ct:95,sat:80,gray:0,sepia:70,blur:0,hue:0},'선명하게':{br:104,ct:125,sat:130,gray:0,sepia:0,blur:0,hue:0},'따뜻하게':{br:104,ct:100,sat:115,gray:0,sepia:25,blur:0,hue:-10},'차갑게':{br:100,ct:105,sat:95,gray:0,sepia:0,blur:0,hue:18},'흐리게':{br:100,ct:100,sat:100,gray:0,sepia:0,blur:4,hue:0},'시네마':{br:98,ct:122,sat:88,gray:0,sepia:0,blur:0,hue:0,temp:-25,vig:45},'노을':{br:104,ct:108,sat:125,gray:0,sepia:12,blur:0,hue:0,temp:65,vig:25},'새벽':{br:106,ct:95,sat:85,gray:0,sepia:0,blur:0,hue:0,temp:-55,vig:15}};
 function panel(){
   var b=$('pbody'), h=''; document.querySelectorAll('#ptabs button').forEach(function(x){ x.classList.toggle('on',x.dataset.p===ptab); });
   if(ptab==='proj'){
@@ -320,7 +327,8 @@ function panel(){
             h+='<div class="sec"><h4>움직임 (천천히 확대·이동)</h4><label class="chk"><input type="checkbox" data-kfon="1"'+(KF.on?' checked':'')+'> 클립이 흐르는 동안 변하게 하기</label><div class="btns"><button class="tbtn" data-kfp="in">천천히 확대</button><button class="tbtn" data-kfp="out">천천히 축소</button><button class="tbtn" data-kfp="left">왼쪽으로</button><button class="tbtn" data-kfp="right">오른쪽으로</button></div>'+(KF.on?rng('끝 크기','kf.s',10,400,KF.s,1,'%')+rng('끝 가로','kf.x',-100,100,KF.x,1,'%')+rng('끝 세로','kf.y',-100,100,KF.y,1,'%')+rng('끝 돌리기','kf.r',-180,180,KF.r,1,'°'):'')+'<div class="note">위의 크기·옮기기·돌리기가 시작 값이고, 여기 값이 끝 값이에요.</div></div>';
             h+='<div class="sec"><h4>배경 지우기 (크로마키)</h4><label class="chk"><input type="checkbox" data-ckon="1"'+(CK.on?' checked':'')+'> 고른 색을 투명하게</label><div class="row"><label>지울 색</label><input type="color" data-ck="col" value="'+CK.col+'"></div>'+rng('범위','ck.tol',5,90,CK.tol,1)+'<div class="note">초록색 천 앞에서 찍은 영상을 위쪽(겹침) 줄에 올리면 뒤 영상이 비쳐 보여요.</div></div>';
           }
-          h+='<div class="sec"><h4>색 효과</h4><div class="btns">'+Object.keys(PRESETS).map(function(k){ return '<button class="tbtn" data-pre="'+k+'">'+k+'</button>'; }).join('')+'</div>'+rng('밝기','f.br',20,200,c.filt.br,1,'%')+rng('대비','f.ct',20,200,c.filt.ct,1,'%')+rng('색 진하기','f.sat',0,300,c.filt.sat,1,'%')+rng('흑백','f.gray',0,100,c.filt.gray,1,'%')+rng('옛날 느낌','f.sepia',0,100,c.filt.sepia,1,'%')+rng('색 돌리기','f.hue',-180,180,c.filt.hue,1,'°')+rng('흐리게','f.blur',0,20,c.filt.blur,1,'px')+'<div class="note">색 효과는 크롬·엣지·파이어폭스에서 보이고, 사파리에서는 안 보일 수 있어요.</div></div>';
+          h+='<div class="sec"><h4>자르기·모양·섞기</h4>'+rng('왼쪽 자르기','cr.l',0,90,(c.crop||{}).l||0,1,'%')+rng('오른쪽 자르기','cr.r',0,90,(c.crop||{}).r||0,1,'%')+rng('위 자르기','cr.t',0,90,(c.crop||{}).t||0,1,'%')+rng('아래 자르기','cr.b',0,90,(c.crop||{}).b||0,1,'%')+'<div class="row"><label>모양</label><select data-k="mask">'+[['none','네모 그대로'],['round','둥근 네모'],['circle','원 / 타원']].map(function(a){ return '<option value="'+a[0]+'"'+((c.mask||'none')===a[0]?' selected':'')+'>'+a[1]+'</option>'; }).join('')+'</select></div><label class="chk"><input type="checkbox" data-k="flipV"'+(c.flipV?' checked':'')+'> 위아래 뒤집기</label><div class="row"><label>섞는 방식</label><select data-k="blend">'+[['none','보통'],['multiply','어둡게 곱하기'],['screen','밝게 겹치기'],['overlay','대비 겹치기'],['lighten','밝은 쪽만'],['darken','어두운 쪽만'],['difference','차이'],['soft-light','부드러운 빛']].map(function(a){ return '<option value="'+a[0]+'"'+((c.blend||'none')===a[0]?' selected':'')+'>'+a[1]+'</option>'; }).join('')+'</select></div><div class="note">섞는 방식은 겹침 줄 클립을 아래 영상과 섞을 때 좋아요.</div></div>';
+          h+='<div class="sec"><h4>색 효과</h4><div class="btns">'+Object.keys(PRESETS).map(function(k){ return '<button class="tbtn" data-pre="'+k+'">'+k+'</button>'; }).join('')+'</div>'+rng('밝기','f.br',20,200,c.filt.br,1,'%')+rng('대비','f.ct',20,200,c.filt.ct,1,'%')+rng('색 진하기','f.sat',0,300,c.filt.sat,1,'%')+rng('흑백','f.gray',0,100,c.filt.gray,1,'%')+rng('옛날 느낌','f.sepia',0,100,c.filt.sepia,1,'%')+rng('색 돌리기','f.hue',-180,180,c.filt.hue,1,'°')+rng('흐리게','f.blur',0,20,c.filt.blur,1,'px')+rng('따뜻함(−차가움)','f.temp',-100,100,c.filt.temp||0,1)+rng('가장자리 어둡게','f.vig',0,100,c.filt.vig||0,1,'%')+'<div class="btns"><button class="tbtn" data-fx="copy">효과 복사</button><button class="tbtn" data-fx="paste">효과 붙이기</button></div>'+'<div class="note">색 효과는 크롬·엣지·파이어폭스에서 보이고, 사파리에서는 안 보일 수 있어요.</div></div>';
         }
       }
     }
@@ -329,7 +337,7 @@ function panel(){
 }
 $('ptabs').addEventListener('click',function(e){ var b=e.target.closest('button'); if(b){ ptab=b.dataset.p; panel(); } });
 var pb=$('pbody');
-function setProp(c,k,v){ if(k.indexOf('kf.')===0){ c.kf=c.kf||{on:true,s:c.scale,x:c.x,y:c.y,r:c.rot}; c.kf[k.slice(3)]=v; } else if(k.indexOf('ck.')===0){ c.ck=c.ck||{on:false,col:'#00b140',tol:35}; c.ck[k.slice(3)]=v; } else if(k.indexOf('sp.')===0) c.shp[k.slice(3)]=v; else if(k==='tr.d'){ setTr(c,(c.tr&&c.tr.t)||'none',v); } else if(k.indexOf('f.')===0) c.filt[k.slice(2)]=v; else if(k.indexOf('t.')===0) c.txt[k.slice(2)]=v; else if(k==='speed'){ var old=c.speed; c.dur=c.dur*old/v; c.speed=v; } else c[k]=v; }
+function setProp(c,k,v){ if(k.indexOf('cr.')===0){ c.crop=c.crop||{l:0,r:0,t:0,b:0}; c.crop[k.slice(3)]=v; } else if(k.indexOf('kf.')===0){ c.kf=c.kf||{on:true,s:c.scale,x:c.x,y:c.y,r:c.rot}; c.kf[k.slice(3)]=v; } else if(k.indexOf('ck.')===0){ c.ck=c.ck||{on:false,col:'#00b140',tol:35}; c.ck[k.slice(3)]=v; } else if(k.indexOf('sp.')===0) c.shp[k.slice(3)]=v; else if(k==='tr.d'){ setTr(c,(c.tr&&c.tr.t)||'none',v); } else if(k.indexOf('f.')===0) c.filt[k.slice(2)]=v; else if(k.indexOf('t.')===0) c.txt[k.slice(2)]=v; else if(k==='speed'){ var old=c.speed; c.dur=c.dur*old/v; c.speed=v; } else c[k]=v; }
 pb.addEventListener('input',function(e){ var tg=e.target, c=curClip(); if(!c) return;
   if(tg.dataset.k){ var isNv=tg.classList.contains('nv'), v=tg.type==='checkbox'?tg.checked:(tg.type==='range'||tg.type==='number'?+tg.value:tg.value);
     if(isNv){ if(tg.value===''||!isFinite(v)) return; v=Math.max(+tg.min,Math.min(+tg.max,v)); var rg=tg.previousElementSibling; if(rg&&rg.type==='range') rg.value=v; }
@@ -351,9 +359,10 @@ pb.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b
   if(b.dataset.emo){ var ct=curClip(); if(ct&&ct.txt){ ct.txt.s+=b.dataset.emo; commit(); } return; }
   if(b.dataset.kfp){ var ck=curClip(); if(ck){ var o=b.dataset.kfp; ck.kf={on:true,s:ck.scale,x:ck.x,y:ck.y,r:ck.rot}; if(o==='in') ck.kf.s=Math.round(ck.scale*1.25); else if(o==='out'){ ck.kf.s=Math.round(ck.scale*.8); } else if(o==='left') ck.kf.x=ck.x-12; else ck.kf.x=ck.x+12; if(o==='in'||o==='out') ck.kf.on=true; commit(); } return; }
   if(b.id==='subGo'){ var n=addSubs($('subTxt').value); toast(n+'개 자막을 넣었어요'); return; }
+  if(b.dataset.fx){ var cf=curClip(); if(!cf) return; if(b.dataset.fx==='copy'){ fxClip=JSON.parse(JSON.stringify({filt:cf.filt,crop:cf.crop,mask:cf.mask,blend:cf.blend,flipV:cf.flipV,ck:cf.ck,op:cf.op})); toast('효과를 복사했어요'); } else if(fxClip&&cf.type!=='audio'&&cf.type!=='text'){ var o=JSON.parse(JSON.stringify(fxClip)); Object.keys(o).forEach(function(k){ if(o[k]!==undefined) cf[k]=o[k]; }); commit(); toast('효과를 붙였어요'); } else toast('먼저 다른 클립에서 효과를 복사하세요'); return; }
   if(b.dataset.pre){ var c=curClip(); if(c){ c.filt=Object.assign({},PRESETS[b.dataset.pre]); commit(); } return; }
   if(b.id==='bClear'){ if(!confirmOnce(b)) return; proj.clips=[]; proj.media.forEach(function(m){ idbDel(m.id); }); proj.media=[]; media={}; elems={}; gains={}; sel=null; t=0; commit(); } });
-var cfo=0; function confirmOnce(b){ if(cfo){ cfo=0; return true; } cfo=1; b.textContent='한 번 더 누르면 지워요'; setTimeout(function(){ cfo=0; if(b.isConnected) b.textContent='모두 지우고 새로 시작'; },3000); return false; }
+var fxClip=null; var cfo=0; function confirmOnce(b){ if(cfo){ cfo=0; return true; } cfo=1; b.textContent='한 번 더 누르면 지워요'; setTimeout(function(){ cfo=0; if(b.isConnected) b.textContent='모두 지우고 새로 시작'; },3000); return false; }
 
 
 function setTr(c,type,d){
