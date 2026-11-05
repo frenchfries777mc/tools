@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v9",
+   "title": "D.S.·코다·악보 틀·좌우 위치·음 찾아 바꾸기",
+   "items": [
+    "Segno, Coda, To Coda, D.S., D.C., Fine 표시를 마디에 붙이면 악보에 쓰이고 재생·WAV에 그대로 반영(도돌이표와 같이 써도 됨)",
+    "새 악보 틀: 한 줄, 피아노(두 줄), 현악 4중주(알토 음자리표 포함), 기타, 밴드",
+    "파트마다 좌우 위치(스테레오 패닝)",
+    "음 찾아 바꾸기: F → F#4, 모든 파트 한꺼번에, R로 쉼표로 바꾸기 (되돌리기 가능)"
+   ],
+   "tr": {
+    "en": {
+     "title": "D.S./Coda jumps, templates, per-part pan, find and replace",
+     "items": [
+      "Segno, Coda, To Coda, D.S., D.C. and Fine marks on any measure, written on the score and followed by playback and WAV export (works together with repeats)",
+      "New-score templates: lead line, piano grand staff, string quartet (with alto clef), guitar and band",
+      "Per-part stereo pan",
+      "Find and replace notes: F to F#4, across all parts, or to a rest with R (undoable)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v8",
    "title": "휴대폰에서 쓰기 편하게, 조 옮기기, 내 보관함",
    "items": [
