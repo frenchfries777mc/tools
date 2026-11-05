@@ -17,6 +17,83 @@
       "A thick band shows where a page ends, with an 'End of page 1 · page 2 starts' label beside it",
       "The labels follow as you type or resize the window"
      ]
+    },
+    "es": {
+     "title": "Bordes de página claros",
+     "items": [
+      "Aparece una franja gruesa donde termina la página, con la marca '1 .ª página termina · 2 .ª página empieza' al lado",
+      "La marca se mueve con el texto cuando escribes o cambias el tamaño de la ventana"
+     ]
+    },
+    "fr": {
+     "title": "Limites de page bien visibles",
+     "items": [
+      "Une bande épaisse apparaît à la fin de chaque page, avec la mention « Fin de la page 1 · début de la page 2 » à côté",
+      "La marque suit le texte quand tu écris ou changes la taille de la fenêtre"
+     ]
+    },
+    "de": {
+     "title": "Seitengrenzen gut sichtbar",
+     "items": [
+      "An der Stelle, wo eine Seite endet, erscheint ein dicker Streifen mit der Anzeige „Ende von Seite 1 · Seite 2 beginnt“ daneben",
+      "Die Anzeige bewegt sich mit, wenn du schreibst oder das Fenster in der Größe änderst"
+     ]
+    },
+    "ja": {
+     "title": "ページの境目をはっきり表示",
+     "items": [
+      "ページが終わるところに太い帯が表示され、横に「1ページ終わり · 2ページ開始」と出ます",
+      "文字を書いたり、ウィンドウの大きさを変えたりすると、表示も一緒に動きます"
+     ]
+    },
+    "zh": {
+     "title": "更清楚地显示页面分界",
+     "items": [
+      "页面结束的位置会出现一条粗线，旁边显示“第 1 页结束 · 第 2 页开始”",
+      "书写或调整窗口大小时，标记会跟着移动"
+     ]
+    },
+    "pt": {
+     "title": "Divisão de página bem visível",
+     "items": [
+      "No ponto em que uma página termina aparece uma faixa grossa, com “Fim da página 1 · página 2 começa” ao lado",
+      "A marca acompanha o texto quando você escreve ou muda o tamanho da janela"
+     ]
+    },
+    "ru": {
+     "title": "Границы страниц хорошо видны",
+     "items": [
+      "В конце каждой страницы появляется толстая полоса, рядом — надпись «Конец страницы 1 · начинается страница 2»",
+      "Метка перемещается вместе с текстом при вводе и при изменении размера окна"
+     ]
+    },
+    "tr": {
+     "title": "Sayfa sınırları daha belirgin",
+     "items": [
+      "Bir sayfanın bittiği yerde kalın bir şerit ve yanında “1. sayfanın sonu · 2. sayfa başlıyor” yazısı görünür",
+      "Yazı yazdıkça veya pencere boyutu değiştikçe bu işaret birlikte hareket eder"
+     ]
+    },
+    "it": {
+     "title": "Limiti di pagina ben visibili",
+     "items": [
+      "Dove finisce una pagina compare una fascia spessa, con accanto “Fine pagina 1 · inizia pagina 2”",
+      "Il segno si sposta insieme al testo quando scrivi o cambi la dimensione della finestra"
+     ]
+    },
+    "pl": {
+     "title": "Wyraźniejsze granice stron",
+     "items": [
+      "Tam, gdzie kończy się strona, pojawia się gruby pasek, a obok napis „Koniec strony 1 · strona 2 zaczyna się”",
+      "Oznaczenie przesuwa się razem z tekstem, gdy piszesz lub zmieniasz rozmiar okna"
+     ]
+    },
+    "ar": {
+     "title": "حدود الصفحات واضحة",
+     "items": [
+      "يظهر شريط سميك عند نهاية كل صفحة، وبجانبه عبارة «نهاية الصفحة 1 · تبدأ الصفحة 2»",
+      "تتحرك العلامة مع النص عند الكتابة أو تغيير حجم النافذة"
+     ]
     }
    }
   },
