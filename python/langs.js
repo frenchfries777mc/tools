@@ -99,6 +99,7 @@ function bsSug(before,pre,ctx){
   if(v==='loop'){ if(n===2) return W(['times'],':'); return []; }
   if(v==='heal'||v==='damage'){ if(n===1) return W(['player']); return []; }
   if(v==='set'){ if(n===1) return W(['variable','time','weather']).concat(W(ITEMS)); if(tk[1]==='time'){ if(n===2) return W(['day','night','noon','midnight','sunrise','sunset'],''); return []; } if(tk[1]==='weather'){ if(n===2) return W(['clear','rain','storm'],''); return []; } if(tk[1]==='variable'&&n===4) return W(['random','variable','player','distance']); if(tk[1]==='variable'&&tk[4]==='player'){ if(n===5) return W(['name','uuid'],''); return []; } if(tk[1]==='variable'&&tk[4]==='variable') return []; if(tk[1]==='variable'&&tk[4]==='distance'){ if(n===5) return W(['player']); if(n===6) return W(['to']); if(n===7) return W(['nearest']).concat([{n:'스폰할 몬스터 이름',i:'',d:'예: slime, wolf'}].slice(1)); if(n===8&&tk[7]==='nearest') return W(['monster','mob'],''); return []; } if(tk[1]==='variable'&&tk[4]==='random'&&n===6) return W(['to']); if(tk[1]==='variable'){ if(n===3) return W(['to']); return []; } if(n===2) return W(['damage','speed','name']); return []; }
+  if(v==='else'){ if(n===1) return W(['if']); if(tk[1]==='if') return bsSug(before.replace(/^\s*else\s+/i,''),pre,ctx); return []; }
   if(v==='add'||v==='subtract'){ var pw=v==='add'?'to':'from'; if(n===1) return W(['variable']); if(tk[1]==='variable'){ if(n===3) return W([pw]); if(n===4) return W(['variable']); return []; } if(n===2) return W([pw]); if(n===3) return W(['variable']); return []; }
   if(v==='multiply'||v==='divide'){ if(n===1) return W(['variable']); if(n===3) return W(['by']); if(n===4) return W(['variable']); return []; }
   if(v==='signal'){ if(n===1) return W(['send']); var ti=tk.indexOf('to'); if(ti<0) return (n===3||n===4)?W(['to']):[]; if(n===ti+1) return W(['mod']); if(n===ti+2) return [{n:'back',i:'back',d:'신호를 보낸 모드로 답해요'},{n:'"모드이름"',i:'"$0"',d:'받을 모드 이름'}]; return []; }
@@ -225,7 +226,7 @@ function javaRun(ctx){ var src=ctx.code, bal=balance(src,false); ctx.pv.innerHTM
   ctx.show('pv'); ctx.done(true); }
 
 /* ---------- BeaconScript ---------- */
-function bsCheck(src,nested){ var V='(?:\\{[a-z0-9_가-힣]{1,22}\\}|[a-z0-9_]{1,20})', NUM='-?\\d{1,9}(?:\\.\\d{1,3})?', aliasSet={}, hasUse=/^\s*use_mod_uuid\s*:/im.test(src), useCount=0, hasUuid=/^\s*[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\s*$/im.test(src), hdrSeen={}, seenCode=false, errs=[], stack=[], lines=src.split('\n'), VERB=BS_VERBS.split(' ');
+function bsCheck(src,nested){ var lastK={}, V='(?:\\{[a-z0-9_가-힣]{1,22}\\}|[a-z0-9_]{1,20})', NUM='-?\\d{1,9}(?:\\.\\d{1,3})?', aliasSet={}, hasUse=/^\s*use_mod_uuid\s*:/im.test(src), useCount=0, hasUuid=/^\s*[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\s*$/im.test(src), hdrSeen={}, seenCode=false, errs=[], stack=[], lines=src.split('\n'), VERB=BS_VERBS.split(' ');
   lines.forEach(function(l0){ var m0=/^\s*aliases_name\s*:\s*"(%[a-z0-9_]{1,30}%)"\s*$/i.exec(l0); if(m0) aliasSet[m0[1].toLowerCase()]=1; });
   lines.forEach(function(raw,i){ var ln=i+1, line=raw.replace(/\t/g,'    '); if(!line.trim()||/^\s*#/.test(line)) return;
     var ind=/^ */.exec(line)[0].length, t=line.trim(), m;
@@ -243,6 +244,13 @@ function bsCheck(src,nested){ var V='(?:\\{[a-z0-9_가-힣]{1,22}\\}|[a-z0-9_]{1
     if(/^\{:/.test(t)){ if(!/^\{:[^:\s{}]{1,22}::(?:"(?:\\.|[^"\\])*"|-?\d+(?:\.\d+)?|%[A-Za-z0-9_' ]+%):\}$/.test(t)) errs.push({line:ln,msg:'이렇게 써요: {:이름::"글자":}  (값은 "글자"·숫자·%…%)'}); else if(hasUuid&&/^\{:([^:\s{}]+)::/.exec(t)[1].length>21) errs.push({line:ln,msg:'uuid가 있는 모드는 공유 변수 이름이 21자까지예요'}); return; }
     if(!verb){ errs.push({line:ln,msg:'명령으로 시작해야 해요: '+t.slice(0,20)}); return; }
     if(VERB.indexOf(verb)<0){ var g=guess(verb,VERB); errs.push({line:ln,msg:"모르는 명령 '"+verb+"'"+(g?" — 혹시 '"+g+"'?":'')}); return; }
+    Object.keys(lastK).forEach(function(k){ if(+k>ind) delete lastK[k]; });
+    if(verb==='else'){ var em2=/^else\s*(?:if\s+(.+?))?\s*:\s*$/i.exec(t);
+      if(!em2) errs.push({line:ln,msg:'이렇게 써요: else:  (또는 else if 조건:)'});
+      else { if(lastK[ind]!=='if') errs.push({line:ln,msg:'else 는 if·chance 블록 바로 아래, 같은 들여쓰기에 써요 (else 는 맨 끝에 한 번만)'});
+        if(em2[1]){ var se=bsCheck('if '+em2[1].trim()+':',true).errs; se.forEach(function(e){ if(!/아래에는/.test(e.msg)) errs.push({line:ln,msg:e.msg}); }); } }
+      lastK[ind]=(em2&&em2[1])?'if':'else'; }
+    else lastK[ind]=((verb==='if'||verb==='chance')&&/:\s*$/.test(t))?'if':'other';
     var first0=!seenCode&&!hdrSeen.name; if(verb==='mod'||verb==='resource'||verb==='pack') hdrSeen.name=1; else if(verb!=='api') seenCode=true;
     if(verb==='api'){ if(!/^api\s+potato\s*$/.test(t)) errs.push({line:ln,msg:'이렇게 써요: api potato'}); else if(seenCode) errs.push({line:ln,msg:'api 줄은 파일 맨 위(mod 이름 줄 아래)에 써요'}); else if(hdrSeen.api) errs.push({line:ln,msg:'api 줄은 한 번만 써요'}); hdrSeen.api=1; if(ind!==0) errs.push({line:ln,msg:'api 는 맨 앞 줄에 써요'}); return; }
     if(verb==='mod'||verb==='resource'||verb==='pack'){ if(!(verb==='mod'&&/^mod\s+"[^"]+"\s*$/.test(t))&&!(verb==='resource'&&/^resource\s+pack\s+"[^"]+"\s*$/.test(t))&&!(verb==='pack'&&/^pack\s+"[^"]+"\s*$/.test(t))) errs.push({line:ln,msg:'이렇게 써요: mod "이름"  (리소스팩은 resource pack "이름" 또는 pack "이름")'}); else if(!first0) errs.push({line:ln,msg:verb+' 줄은 파일 맨 위에 한 번만 써요'}); if(ind!==0) errs.push({line:ln,msg:verb+' 은 맨 앞 줄에 써요'}); return; }
