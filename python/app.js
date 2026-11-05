@@ -90,7 +90,7 @@ function modules(src){ var mods={}, star={}, m, re=/^[ \t]*import\s+(.+)$/gm;
 function turtleVars(src){ var set={}, m, re=/([A-Za-z_]\w*)\s*=\s*(?:turtle\.)?(?:Turtle|Pen|RawTurtle)\(/g; while((m=re.exec(src))) set[m[1]]=1; return set; }
 function rank(list,pre,keyf){ var lo=pre.toLowerCase(), a=[], b=[]; list.forEach(function(x){ var n=keyf(x), l=n.toLowerCase(); if(l.indexOf(lo)===0) a.push(x); else if(lo.length>1&&l.indexOf(lo)>0) b.push(x); }); return a.concat(b); }
 function acOther(force){ var pos=code.selectionStart; if(pos!==code.selectionEnd) return null; var src=code.value, ls=src.lastIndexOf('\n',pos-1)+1, line=src.slice(ls,pos), L=LG();
-  var wm=/([A-Za-z_$\u00c0-\uffff][\w$\u00c0-\uffff-]*)$/.exec(line), pre=wm?wm[1]:''; if(L.sug){ var before=line.slice(0,line.length-pre.length); if(!pre&&!force&&(!before.trim()||!/\s$/.test(before))) return null; if(/^\d/.test(pre)) return null; var its=rank(L.sug(before,pre).map(function(w){ return w; }),pre,function(x){ return x.n; }); if(!pre) its=L.sug(before,pre); if(!its.length||(its.length===1&&its[0].n===pre&&!force)) return null; return {items:its.slice(0,8), start:pos-pre.length, pre:pre}; }
+  var wm=/([A-Za-z_$\u00c0-\uffff][\w$\u00c0-\uffff-]*)$/.exec(line), pre=wm?wm[1]:''; if(L.sug){ var before=line.slice(0,line.length-pre.length); if(!pre&&!force&&(!before.trim()||!/\s$/.test(before))) return null; if(/^\d/.test(pre)) return null; var its=rank(L.sug(before,pre).map(function(w){ return w; }),pre,function(x){ return x.n; }); if(!pre) its=L.sug(before,pre); if(!its.length||(its.length===1&&its[0].n===pre&&!force)) return null; return {items:its.slice(0,30), start:pos-pre.length, pre:pre}; }
   if((!pre&&!force)||/^\d/.test(pre)) return null;
   if(curLang==='json'||(curLang!=='html'&&/(^|[^\\])"[^"]*$/.test(line))) return null;
   var pool=(L.words||[]).map(function(w){ return {n:w[0],i:w[1],d:w[2]}; }), seen={}; pool.forEach(function(x){ seen[x.n]=1; });
@@ -128,7 +128,7 @@ function acRender(){ acBox.innerHTML=''; ac.items.forEach(function(x,i){ var d=d
     d.onmousedown=function(e){ e.preventDefault(); ac.sel=i; acPick(); }; acBox.appendChild(d); });
   var h=document.createElement('div'); h.className='ach'; h.textContent=T('Tab 키로 넣기 · ↑↓ 고르기 · Esc 닫기'); acBox.appendChild(h);
   var p=caretXY(); acBox.hidden=false; var w=acBox.offsetWidth, hh=acBox.offsetHeight, x=Math.max(6,Math.min(innerWidth-w-6,p.x)), y=p.y+4;
-  if(y+hh>innerHeight-6){ y=p.y-(parseFloat(getComputedStyle(code).lineHeight)||21)-hh-4; if(y<6) y=6; } acBox.style.left=x+'px'; acBox.style.top=y+'px'; }
+  if(y+hh>innerHeight-6){ y=p.y-(parseFloat(getComputedStyle(code).lineHeight)||21)-hh-4; if(y<6) y=6; } acBox.style.left=x+'px'; acBox.style.top=y+'px'; var se=acBox.querySelector('.aci.on'); if(se&&se.scrollIntoView) se.scrollIntoView({block:'nearest'}); }
 function acUpdate(force){ var r=acItems(force); if(!r){ acHide(); return; } ac.items=r.items; ac.start=r.start; ac.sel=0; ac.open=true; acRender(); }
 function acPick(){ var x=ac.items[ac.sel]; if(!x){ acHide(); return; } var pos=code.selectionStart, line=code.value.slice(code.value.lastIndexOf('\n',pos-1)+1,pos), ind=/^\s*/.exec(line)[0];
   var txt=x.i.replace(/\n/g,'\n'+ind), at=txt.indexOf('$0'); txt=txt.replace('$0','');
