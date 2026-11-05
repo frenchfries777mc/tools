@@ -17,3 +17,4 @@ patchnotes/draw.json | Fry Draw v2 항목 (en 번역 없음), draw/app.js 한국
 patchnotes/video.json | Fry Video v3 슬라이더 숫자칸 (en 번역 없음) | video v3 | 2026-11-05
 patchnotes/video.json | Fry Video v4 슬라이더·글자 입력 고침 (en 번역 없음) | video v4 | 2026-11-05
 patchnotes/video.json | Fry Video v5 글자체·효과·방향 (en 번역 없음) | video v5 | 2026-11-05
+patchnotes/python.json | BeaconScript b192 항목 (en만) | python v7 | 2026-11-05
