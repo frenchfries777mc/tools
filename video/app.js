@@ -237,7 +237,7 @@ function del(ripple){ var c=curClip(); if(!c) return; proj.clips=proj.clips.filt
 $('bDel').onclick=function(){ del(false); };
 
 /* ---------- panel ---------- */
-function rng(l,k,min,max,v,step,unit){ return '<div class="row"><label>'+l+'</label><input type="range" data-k="'+k+'" min="'+min+'" max="'+max+'" step="'+(step||1)+'" value="'+v+'"><span class="v">'+f(v)+(unit||'')+'</span></div>'; }
+function rng(l,k,min,max,v,step,unit){ return '<div class="row"><label>'+l+'</label><input type="range" data-k="'+k+'" min="'+min+'" max="'+max+'" step="'+(step||1)+'" value="'+v+'"><input type="number" class="nv" data-k="'+k+'" min="'+min+'" max="'+max+'" step="'+(step||1)+'" value="'+f(v)+'"><span class="u">'+(unit||'')+'</span></div>'; }
 var PRESETS={'원본':{br:100,ct:100,sat:100,gray:0,sepia:0,blur:0,hue:0},'흑백':{br:100,ct:110,sat:100,gray:100,sepia:0,blur:0,hue:0},'옛날 사진':{br:100,ct:95,sat:80,gray:0,sepia:70,blur:0,hue:0},'선명하게':{br:104,ct:125,sat:130,gray:0,sepia:0,blur:0,hue:0},'따뜻하게':{br:104,ct:100,sat:115,gray:0,sepia:25,blur:0,hue:-10},'차갑게':{br:100,ct:105,sat:95,gray:0,sepia:0,blur:0,hue:18},'흐리게':{br:100,ct:100,sat:100,gray:0,sepia:0,blur:4,hue:0}};
 function panel(){
   var b=$('pbody'), h=''; document.querySelectorAll('#ptabs button').forEach(function(x){ x.classList.toggle('on',x.dataset.p===ptab); });
@@ -281,7 +281,11 @@ $('ptabs').addEventListener('click',function(e){ var b=e.target.closest('button'
 var pb=$('pbody');
 function setProp(c,k,v){ if(k.indexOf('kf.')===0){ c.kf=c.kf||{on:true,s:c.scale,x:c.x,y:c.y,r:c.rot}; c.kf[k.slice(3)]=v; } else if(k.indexOf('ck.')===0){ c.ck=c.ck||{on:false,col:'#00b140',tol:35}; c.ck[k.slice(3)]=v; } else if(k.indexOf('sp.')===0) c.shp[k.slice(3)]=v; else if(k==='tr.d'){ setTr(c,(c.tr&&c.tr.t)||'none',v); } else if(k.indexOf('f.')===0) c.filt[k.slice(2)]=v; else if(k.indexOf('t.')===0) c.txt[k.slice(2)]=v; else if(k==='speed'){ var old=c.speed; c.dur=c.dur*old/v; c.speed=v; } else c[k]=v; }
 pb.addEventListener('input',function(e){ var tg=e.target, c=curClip(); if(!c) return;
-  if(tg.dataset.k){ var v=tg.type==='checkbox'?tg.checked:(tg.type==='range'||tg.type==='number'?+tg.value:tg.value); setProp(c,tg.dataset.k,v); if(tg.type==='range'&&tg.nextElementSibling){ var u=tg.nextElementSibling.textContent.replace(/[-0-9.]/g,''); tg.nextElementSibling.textContent=f(v)+u; } if(tg.type==='range'){ clearTimeout(saveT); saveT=setTimeout(function(){ commit(); },350); drawTlLight(); } }
+  if(tg.dataset.k){ var isNv=tg.classList.contains('nv'), v=tg.type==='checkbox'?tg.checked:(tg.type==='range'||tg.type==='number'?+tg.value:tg.value);
+    if(isNv){ if(tg.value===''||!isFinite(v)) return; v=Math.max(+tg.min,Math.min(+tg.max,v)); var rg=tg.previousElementSibling; if(rg&&rg.type==='range') rg.value=v; }
+    setProp(c,tg.dataset.k,v);
+    if(tg.type==='range'){ var nvb=tg.nextElementSibling; if(nvb&&nvb.classList.contains('nv')) nvb.value=f(v); }
+    if(tg.type==='range'){ clearTimeout(saveT); saveT=setTimeout(function(){ commit(); },350); drawTlLight(); } }
   else if(tg.dataset.sp){ c.shp[tg.dataset.sp]=tg.type==='checkbox'?tg.checked:tg.value; drawTlLight(); }
   else if(tg.dataset.ck){ c.ck=c.ck||{on:false,col:'#00b140',tol:35}; c.ck[tg.dataset.ck]=tg.value; }
   else if(tg.dataset.t){ c.txt[tg.dataset.t]=tg.type==='checkbox'?tg.checked:tg.value; if(tg.dataset.t==='s'){ clearTimeout(saveT); saveT=setTimeout(commit,400); drawTlLight(); } } });

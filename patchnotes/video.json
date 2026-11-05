@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v3",
+   "title": "슬라이더 옆에 숫자 입력 칸",
+   "items": [
+    "밝기·크기·위치·소리 크기 같은 모든 슬라이더 옆에 숫자 칸이 생겨서 값을 직접 쳐서 정할 수 있어요",
+    "슬라이더를 더 크게 잡기 쉽게 키웠어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Number boxes next to sliders",
+     "items": [
+      "Every slider (brightness, size, position, volume...) has a number box so you can type the value",
+      "Sliders are taller and easier to grab"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v2",
    "title": "Fry Video 2: 더 많은 편집 기능",
    "items": [
