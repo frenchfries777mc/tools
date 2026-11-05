@@ -82,15 +82,16 @@ function getEl(c){
   var el=document.createElement(c.type==='video'?'video':'audio'); el.preload='auto'; el.playsInline=true; el.src=m.url; elems[c.id]=el; return el;
 }
 function ensureAudio(){ if(!actx){ var A=window.AudioContext||window.webkitAudioContext; actx=new A(); master=actx.createGain(); master.gain.value=1; streamDest=actx.createMediaStreamDestination(); master.connect(streamDest); if(monitor) master.connect(actx.destination); } if(actx.state==='suspended') actx.resume(); }
-var hpfs={};
-function wire(c,el){ if(gains[c.id]||!actx||!el) return; try{ var s=actx.createMediaElementSource(el), hp=actx.createBiquadFilter(), gn=actx.createGain(); hp.type='highpass'; hp.frequency.value=10; s.connect(hp); hp.connect(gn); gn.connect(master); gains[c.id]=gn; hpfs[c.id]=hp; }catch(e){} }
-function cleanElems(){ Object.keys(elems).forEach(function(id){ if(!clipById(id)){ try{ elems[id].pause(); }catch(e){} delete elems[id]; delete gains[id]; delete hpfs[id]; } }); }
+var hpfs={}, ans={}, gateSt={}, gbuf=null;
+function gateK(c){ var an=ans[c.id]; if(!an) return 1; if(!gbuf) gbuf=new Float32Array(1024); an.getFloatTimeDomainData(gbuf); var sum=0; for(var i=0;i<gbuf.length;i++) sum+=gbuf[i]*gbuf[i]; var rms=Math.sqrt(sum/gbuf.length), th=c.gate/100*.08, st=gateSt[c.id]||(gateSt[c.id]={open:true,hold:0}), now=performance.now(); if(rms>th){ st.open=true; st.hold=now+260; } else if(now>st.hold) st.open=false; return st.open?1:0; }
+function wire(c,el){ if(gains[c.id]||!actx||!el) return; try{ var s=actx.createMediaElementSource(el), hp=actx.createBiquadFilter(), gn=actx.createGain(); hp.type='highpass'; hp.frequency.value=10; var an=actx.createAnalyser(); an.fftSize=1024; s.connect(hp); hp.connect(an); an.connect(gn); gn.connect(master); gains[c.id]=gn; hpfs[c.id]=hp; ans[c.id]=an; }catch(e){} }
+function cleanElems(){ Object.keys(elems).forEach(function(id){ if(!clipById(id)){ try{ elems[id].pause(); }catch(e){} delete elems[id]; delete gains[id]; delete hpfs[id]; delete ans[id]; delete gateSt[id]; } }); }
 function setMonitor(on){ monitor=on; if(!master) return; try{ master.disconnect(actx.destination); }catch(e){} if(on) master.connect(actx.destination); }
 
 /* ---------- playback ---------- */
 function active(c,tt){ return tt>=c.start-0.0001&&tt<endOf(c)-0.0001; }
 function fadeOf(c,tt){ var a=1, r=tt-c.start, l=endOf(c)-tt; if(c.fadeIn>0&&r<c.fadeIn) a*=r/c.fadeIn; if(c.fadeOut>0&&l<c.fadeOut) a*=l/c.fadeOut; return Math.max(0,Math.min(1,a)); }
-function volAt(c,tt){ var v=c.vol; if(c.vol2!=null){ var u=Math.max(0,Math.min(1,(tt-c.start)/Math.max(.01,c.dur))); v=c.vol+(c.vol2-c.vol)*u; } var L=proj.lanes[c.track]; if(L&&L.vol!=null) v*=L.vol/100; return v; }
+function volAt(c,tt){ var v=c.vol; if(c.vkfs&&c.vkfs.length){ var u0=Math.max(0,Math.min(1,(tt-c.start)/Math.max(.01,c.dur))), P=c.vkfs.slice().sort(function(a,b){ return a.u-b.u; }); v=P[P.length-1].v; if(u0<=P[0].u) v=P[0].v; else for(var i=0;i<P.length-1;i++) if(u0<P[i+1].u){ v=P[i].v+(P[i+1].v-P[i].v)*(u0-P[i].u)/Math.max(.0001,P[i+1].u-P[i].u); break; } } else if(c.vol2!=null){ var u=Math.max(0,Math.min(1,(tt-c.start)/Math.max(.01,c.dur))); v=c.vol+(c.vol2-c.vol)*u; } var L=proj.lanes[c.track]; if(L&&L.vol!=null) v*=L.vol/100; return v; }
 function duckK(c,tt){ var d=(c.duckAmt==null?70:c.duckAmt)/100; var on=proj.clips.some(function(o){ return o!==c&&!o.duck&&(o.type==='video'||o.type==='audio')&&o.vol>0&&!laneOff(o.track)&&active(o,tt)&&(o.type==='audio'||media[o.mid]&&media[o.mid].hasAudio!==false); }); return on?1-d:1; }
 function avgSp(c){ return c.speed2!=null?(c.speed+c.speed2)/2:c.speed; }
 function spAt(c,r){ return c.speed2!=null?c.speed+(c.speed2-c.speed)*Math.max(0,Math.min(1,r/Math.max(.01,c.dur))):c.speed; }
@@ -101,7 +102,7 @@ function syncMedia(tt,run){
     if(c.type==='image'||c.type==='text') return; var el=getEl(c); if(!el) return;
     if(actx) wire(c,el);
     var on=active(c,tt), want=wantAt(c,tt), gn=gains[c.id], rv=!!c.rev;
-    var lv=laneOff(c.track)?0:1, dk=c.duck?duckK(c,tt):1; var vv=rv?0:volAt(c,tt)/100; if(hpfs[c.id]) hpfs[c.id].frequency.value=c.hp||10; if(gn&&c.duck&&actx) gn.gain.setTargetAtTime(vv*fadeOf(c,tt)*lv*dk,actx.currentTime,.12); else if(gn) gn.gain.value=vv*fadeOf(c,tt)*lv; else el.volume=Math.max(0,Math.min(1,vv*fadeOf(c,tt)*lv));
+    var lv=laneOff(c.track)?0:1, dk=c.duck?duckK(c,tt):1; var vv=rv?0:volAt(c,tt)/100; if(hpfs[c.id]) hpfs[c.id].frequency.value=c.hp||10; if(gn&&(c.duck||c.gate>0)&&actx) gn.gain.setTargetAtTime(vv*fadeOf(c,tt)*lv*dk*(c.gate>0?gateK(c):1),actx.currentTime,c.gate>0?.03:.12); else if(gn) gn.gain.value=vv*fadeOf(c,tt)*lv; else el.volume=Math.max(0,Math.min(1,vv*fadeOf(c,tt)*lv));
     if(on){ el.playbackRate=Math.max(.0625,Math.min(16,spAt(c,tt-c.start))); if(run&&!rv){ if(el.paused){ if(Math.abs(el.currentTime-want)>.05) try{ el.currentTime=want; }catch(e){} var p=el.play(); if(p&&p.catch) p.catch(function(){}); } else if(Math.abs(el.currentTime-want)>.35) try{ el.currentTime=want; }catch(e){} }
       else { if(!el.paused) el.pause(); if(Math.abs(el.currentTime-want)>(rv?.05:.03)) try{ el.currentTime=want; }catch(e){} } }
     else if(!el.paused) el.pause();
@@ -129,6 +130,7 @@ function render(tt){
   srt.forEach(function(c){ if(!active(c,tt)||laneOff(c.track)) return; if(c.type==='text') drawText(c,tt,W,H); else if(c.type==='shape') drawShape(c,tt,W,H); });
   g.globalAlpha=1; g.filter='none';
 }
+function volCurveUi(c){ var V=c.vkfs||[]; return '<div class="btns"><button class="tbtn" data-vkadd="1">소리 곡선 지점 추가 (재생 막대 위치)</button>'+(V.length?'<button class="tbtn" data-vkclear="1">곡선 지우기</button>':'')+'</div>'+V.map(function(k,i){ return '<div class="row"><span class="v" style="flex:0 0 18px">'+(i+1)+'</span>'+'<input type="number" class="nv" data-k="vkfs.'+i+'.p" min="0" max="100" step="1" value="'+Math.round(k.u*100)+'" title="위치(%)"><span class="u">%</span><input type="range" data-k="vkfs.'+i+'.v" min="0" max="200" value="'+k.v+'"><input type="number" class="nv" data-k="vkfs.'+i+'.v" min="0" max="200" value="'+Math.round(k.v)+'"><button class="tbtn" data-vkdel="'+i+'" style="height:26px;padding:0 8px">×</button></div>'; }).join('')+(V.length?'<div class="note">곡선이 있으면 위의 소리 크기·변화 대신 이 곡선을 써요. 앞에서부터 위치(%)와 크기예요.</div>':''); }
 function sdirRow(c){ if(c.anim!=='slide') return ''; var sd=c.sdir||'left'; return '<div class="row"><label>들어오는 쪽</label><select data-k="sdir">'+[['left','왼쪽에서'],['right','오른쪽에서'],['up','위에서'],['down','아래에서']].map(function(a){ return '<option value="'+a[0]+'"'+(sd===a[0]?' selected':'')+'>'+a[1]+'</option>'; }).join('')+'</select></div>'; }
 function animOf(c,tt){ var r=tt-c.start, d=Math.min(.6,c.dur/2), k=r<d?r/d:1, o={a:1,dx:0,dy:0,s:1}; if(c.anim==='fade') o.a=k; else if(c.anim==='slide'){ var sd=c.sdir||'left'; if(sd==='left') o.dx=(1-k)*-.25; else if(sd==='right') o.dx=(1-k)*.25; else if(sd==='up') o.dy=(1-k)*-.2; else o.dy=(1-k)*.2; o.a=k; } else if(c.anim==='rise'){ o.dy=(1-k)*.12; o.a=k; } else if(c.anim==='zoom'){ o.s=.7+.3*k; o.a=k; } else if(c.anim==='bounce'){ o.dy=-Math.abs(Math.sin(r*5))*.05; } else if(c.anim==='pulse'){ o.s=1+.08*Math.sin(r*6); } else if(c.anim==='shake'){ o.dx=Math.sin(r*70)*.005; o.dy=Math.cos(r*61)*.005; } else if(c.anim==='pop'){ o.s=k<1?(.4+.6*k)+(Math.sin(k*Math.PI)*.15):1; o.a=Math.min(1,k*2); } return o; }
 var tcv=document.createElement('canvas'), tg=tcv.getContext('2d');
@@ -139,11 +141,15 @@ function keyed(s,w,h,ck){
   tg.putImageData(im,0,0); return tcv;
 }
 function lerp(a,b,u){ return a+(b-a)*u; }
+function easeK(e,k){ return e==='hold'?0:e==='lin'?k:e==='in'?k*k:e==='out'?1-(1-k)*(1-k):k*k*(3-2*k); }
+function tfAt(c,u){
+  var P=c.kfs&&c.kfs.length?c.kfs.slice().sort(function(a,b){ return a.u-b.u; }):null;
+  if(P){ if(u<=P[0].u) return P[0]; var L=P[P.length-1]; if(u>=L.u) return L; for(var i=0;i<P.length-1;i++) if(u<P[i+1].u){ var a=P[i], b=P[i+1], k=easeK(a.e,(u-a.u)/Math.max(.0001,b.u-a.u)); return {s:lerp(a.s,b.s,k),x:lerp(a.x,b.x,k),y:lerp(a.y,b.y,k),r:lerp(a.r,b.r,k)}; } return L; }
+  var kf=c.kf&&c.kf.on?c.kf:null, e=u*u*(3-2*u); return kf?{s:lerp(c.scale,kf.s,e),x:lerp(c.x,kf.x,e),y:lerp(c.y,kf.y,e),r:lerp(c.rot,kf.r,e)}:{s:c.scale,x:c.x,y:c.y,r:c.rot}; }
 function drawVisual(c,tt,W,H){
   var s=srcOf(c); if(!s) return; var sw=s.videoWidth||s.naturalWidth, sh=s.videoHeight||s.naturalHeight; if(!sw) return;
   var fit=c.fit==='fill'?Math.max(W/sw,H/sh):Math.min(W/sw,H/sh), an=animOf(c,tt);
-  var u=Math.max(0,Math.min(1,(tt-c.start)/Math.max(.01,c.dur))), e=u*u*(3-2*u), kf=c.kf&&c.kf.on?c.kf:null;
-  var scV=kf?lerp(c.scale,kf.s,e):c.scale, xV=kf?lerp(c.x,kf.x,e):c.x, yV=kf?lerp(c.y,kf.y,e):c.y, rV=kf?lerp(c.rot,kf.r,e):c.rot;
+  var u=Math.max(0,Math.min(1,(tt-c.start)/Math.max(.01,c.dur))), tf=tfAt(c,u), scV=tf.s, xV=tf.x, yV=tf.y, rV=tf.r;
   var clipMode='', al=1, dx=0, dy=0, zs=1, clipK=1, tr=c.tr&&c.tr.t&&c.tr.t!=='none'?c.tr:null;
   if(tr){ var rr=tt-c.start; if(rr<tr.d){ var k=rr/tr.d; k=k*k*(3-2*k); if(tr.t==='dissolve') al=k; else if(tr.t==='slideL') dx=(1-k)*W; else if(tr.t==='slideR') dx=-(1-k)*W; else if(tr.t==='slideU') dy=(1-k)*H; else if(tr.t==='wipe') clipK=k; else if(tr.t==='wipeR'){ clipK=k; clipMode='r'; } else if(tr.t==='iris'){ clipK=k; clipMode='i'; } else if(tr.t==='slideD') dy=-(1-k)*H; else if(tr.t==='zoom'){ zs=1.5-.5*k; al=k; } else if(tr.t==='spin'){ rV+= (1-k)*90; zs=k; al=k; } } }
   var sc=fit*(scV/100)*an.s*zs, w=sw*sc, h=sh*sc;
@@ -204,6 +210,7 @@ function ensurePeaks(m){
   .then(function(buf){ var d=buf.getChannelData(0), N=600, step=Math.max(1,Math.floor(d.length/N)), pk=[]; for(var i=0;i<N;i++){ var mx=0, a=i*step, b=Math.min(d.length,a+step); for(var j=a;j<b;j+=Math.max(1,Math.floor(step/40))){ var v=Math.abs(d[j]); if(v>mx) mx=v; } pk.push(+Math.min(1,mx*1.6).toFixed(2)); } m.peaks=pk; drawTl(); })
   .catch(function(){});
 }
+function kfDots(c){ return (c.kfs||[]).map(function(k){ return '<i class="kd" style="left:'+(k.u*100)+'%"></i>'; }).join(''); }
 function waveSvg(c,m,wpx){
   if(!m||!m.peaks||c.type==='text'||c.type==='shape'||c.type==='image') return ''; var N=m.peaks.length, i0=Math.floor(c.in/m.dur*N), i1=Math.min(N,Math.ceil((c.in+c.dur*c.speed)/m.dur*N)); if(i1<=i0) return '';
   var d='', span=i1-i0; for(var i=i0;i<i1;i++){ var x=(i-i0)/span*100, a=m.peaks[i]*18; d+='M'+f(x)+' '+f(20-a)+'V'+f(20+a); }
@@ -214,13 +221,14 @@ function waveSvg(c,m,wpx){
 var LANES=[['V2',0],['V1',1],['T',2],['A',3]], LH=46, RH=24, LBL=34;
 function laneY(tr){ for(var i=0;i<LANES.length;i++) if(LANES[i][0]===tr) return RH+i*LH; return RH; }
 function drawTl(keepScroll){
+  Object.keys(msel).forEach(function(k){ if(!clipById(k)) delete msel[k]; });
   var tl=$('tlin'), len=Math.max(30,total()+10), wpx=len*pxs+LBL;
   var o='<div class="ruler" style="width:'+wpx+'px">', step=pxs>=80?1:pxs>=40?2:pxs>=20?5:10;
   for(var s=0;s<=len;s+=step) o+='<i style="left:'+(LBL+s*pxs)+'px">'+Math.floor(s/60)+':'+('0'+(s%60)).slice(-2)+'</i>';
   proj.markers.forEach(function(mk,i){ o+='<b class="mk" data-mk="'+i+'" title="표시 '+(i+1)+' · '+tcs(mk)+'" style="left:'+(LBL+mk*pxs-6)+'px"></b>'; }); o+='</div>';
   LANES.forEach(function(l,i){ o+='<div class="lane'+(laneOff(l[0])?' off':'')+(laneLock(l[0])?' lock':'')+'" style="top:'+(RH+i*LH)+'px;width:'+wpx+'px"><span class="lb" data-lane="'+l[0]+'" title="눌러서 줄 설정">'+({V1:'영상',V2:'겹침',T:'글자',A:'소리'}[l[0]])+(laneLock(l[0])?'<small>🔒</small>':'')+(laneOff(l[0])?'<small>'+(l[0]==='A'?'🔇':'🚫')+'</small>':'')+'</span></div>'; });
   proj.clips.forEach(function(c){ var m=media[c.mid], name=c.type==='text'?'T '+c.txt.s.replace(/\n/g,' '):(c.type==='shape'?'■ 도형':(m?m.name:'?'));
-    o+='<div class="clip '+c.track+(c.id===sel?' sel':'')+(laneOff(c.track)?' off':'')+(laneLock(c.track)?' lock':'')+'" data-c="'+c.id+'" style="left:'+(LBL+c.start*pxs)+'px;top:'+(laneY(c.track)+4)+'px;width:'+Math.max(6,c.dur*pxs)+'px">'+waveSvg(c,m)+'<span class="nm">'+esc(name)+'</span><span class="hl"></span><span class="hr"></span></div>'; });
+    o+='<div class="clip '+c.track+(c.id===sel?' sel':'')+(msel[c.id]?' sel2':'')+(laneOff(c.track)?' off':'')+(laneLock(c.track)?' lock':'')+'" data-c="'+c.id+'" style="left:'+(LBL+c.start*pxs)+'px;top:'+(laneY(c.track)+4)+'px;width:'+Math.max(6,c.dur*pxs)+'px">'+waveSvg(c,m)+kfDots(c)+'<span class="nm">'+esc(name)+'</span><span class="hl"></span><span class="hr"></span></div>'; });
   o+='<div id="phead" style="left:'+(LBL+t*pxs)+'px;height:'+(RH+LANES.length*LH)+'px"></div>';
   var tlc=$('tl'), sl=tlc.scrollLeft, st=tlc.scrollTop; tl.innerHTML=o; tl.style.width=wpx+'px'; tl.style.height=(RH+LANES.length*LH)+'px'; tlc.scrollLeft=sl; tlc.scrollTop=st;
   $('zl').textContent=pxs+'px/초'; markBtn(); $('bUndo').disabled=hi<=0; $('bRedo').disabled=hi>=hist.length-1;
@@ -230,7 +238,9 @@ function updateHead(){
   if(playing){ var tlc=$('tl'), x=LBL+t*pxs; if(x>tlc.scrollLeft+tlc.clientWidth-40) tlc.scrollLeft=x-60; }
 }
 function tlX(e){ var tlc=$('tl'), r=tlc.getBoundingClientRect(); return e.clientX-r.left+tlc.scrollLeft; }
-var drag=null;
+var drag=null, msel={}, multiMode=false;
+function selClick(c,e){ var mod=e.shiftKey||e.ctrlKey||e.metaKey||multiMode; if(mod){ if(!Object.keys(msel).length&&sel) msel[sel]=true; if(msel[c.id]) delete msel[c.id]; else msel[c.id]=true; var ks=Object.keys(msel); sel=msel[c.id]?c.id:(ks[0]||null); if(ks.length<2&&!multiMode){ msel={}; } return true; } if(!msel[c.id]||Object.keys(msel).length<2){ msel={}; } sel=c.id; return false; }
+function selList(){ var L=Object.keys(msel).map(clipById).filter(Boolean); if(L.length<2){ var c=curClip(); L=c?[c]:[]; } return L; }
 var ptrs={}, pinch=null;
 function pinchDist(){ var k=Object.keys(ptrs); if(k.length<2) return 0; var a=ptrs[k[0]], b=ptrs[k[1]]; return Math.hypot(a.x-b.x,a.y-b.y); }
 $('tl').addEventListener('pointerdown',function(e){ ptrs[e.pointerId]={x:e.clientX,y:e.clientY}; if(Object.keys(ptrs).length===2){ drag=null; pinch={d:pinchDist(),p:pxs}; } },true);
@@ -241,10 +251,10 @@ $('tl').addEventListener('pointerdown',function(e){ if(pinch) return;
   closeMenu(); if(lbl){ laneMenu(lbl.dataset.lane,e.clientX,e.clientY); return; }
   var mkEl=e.target.closest('.mk'); if(mkEl){ seek(proj.markers[+mkEl.dataset.mk]); return; }
   if(rul&&!el){ drag={k:'seek'}; $('tl').setPointerCapture(e.pointerId); seek((tlX(e)-LBL)/pxs); return; }
-  if(!el){ var y=e.clientY-$('tl').getBoundingClientRect().top+$('tl').scrollTop; if(y>RH){ sel=null; drawTl(); panel(); seek((tlX(e)-LBL)/pxs); } return; }
-  var c=clipById(el.dataset.c); sel=c.id; var edge=e.target.classList.contains('hl')?'l':e.target.classList.contains('hr')?'r':'m';
+  if(!el){ var y=e.clientY-$('tl').getBoundingClientRect().top+$('tl').scrollTop; if(y>RH){ sel=null; msel={}; drawTl(); panel(); seek((tlX(e)-LBL)/pxs); } return; }
+  var c=clipById(el.dataset.c); if(selClick(c,e)){ drawTl(); panel(); drag=null; return; } var edge=e.target.classList.contains('hl')?'l':e.target.classList.contains('hr')?'r':'m';
   if(laneLock(c.track)){ drawTl(); panel(); drag=null; return; }
-  drag={k:edge,c:c,x:e.clientX,y:e.clientY,start:c.start,dur:c.dur,in:c.in,track:c.track,moved:false}; $('tl').setPointerCapture(e.pointerId); drawTl(); panel();
+  drag={k:edge,c:c,x:e.clientX,y:e.clientY,start:c.start,dur:c.dur,in:c.in,track:c.track,moved:false,group:(edge==='m'&&Object.keys(msel).length>1)?Object.keys(msel).map(clipById).filter(function(o){ return o&&o!==c&&!laneLock(o.track); }).map(function(o){ return {c:o,start:o.start}; }):null}; $('tl').setPointerCapture(e.pointerId); drawTl(); panel();
 });
 function snapPts(c){ var p=[0,t].concat(proj.markers); proj.clips.forEach(function(o){ if(o!==c){ p.push(o.start,endOf(o)); } }); return p; }
 function snapTo(v,c,thr){ var best=v, bd=thr; snapPts(c).forEach(function(p){ if(Math.abs(p-v)<bd){ bd=Math.abs(p-v); best=p; } }); return best; }
@@ -253,8 +263,8 @@ $('tl').addEventListener('pointermove',function(e){
   if(!drag) return; if(drag.k==='seek'){ seek((tlX(e)-LBL)/pxs); return; }
   var c=drag.c, dx=(e.clientX-drag.x)/pxs, thr=8/pxs; if(Math.abs(e.clientX-drag.x)+Math.abs(e.clientY-drag.y)>3) drag.moved=true; if(!drag.moved) return;
   var m=media[c.mid], maxSrc=c.type==='text'||c.type==='image'?1e9:(m?m.dur:1e9);
-  if(drag.k==='m'){ var ns=Math.max(0,snapTo(drag.start+dx,c,thr)); var ne=snapTo(ns+c.dur,c,thr)-c.dur; if(ne>=0&&Math.abs(ne-ns)>0&&Math.abs(snapTo(ns+c.dur,c,thr)-(ns+c.dur))>0) ns=ne; c.start=Math.max(0,ns);
-    var y=e.clientY-$('tl').getBoundingClientRect().top+$('tl').scrollTop, li=Math.floor((y-RH)/LH); if(li>=0&&li<LANES.length){ var tr=LANES[li][0], ok=((c.type==='text'||c.type==='shape')&&tr==='T')||(c.type==='audio'&&tr==='A')||((c.type==='video'||c.type==='image')&&(tr==='V1'||tr==='V2')); if(ok&&!laneLock(tr)) c.track=tr; } }
+  if(drag.k==='m'){ var ns=Math.max(0,snapTo(drag.start+dx,c,thr)); var ne=snapTo(ns+c.dur,c,thr)-c.dur; if(ne>=0&&Math.abs(ne-ns)>0&&Math.abs(snapTo(ns+c.dur,c,thr)-(ns+c.dur))>0) ns=ne; c.start=Math.max(0,ns); if(drag.group){ var dl0=c.start-drag.start; drag.group.forEach(function(g2){ g2.c.start=Math.max(0,g2.start+dl0); }); }
+    var y=e.clientY-$('tl').getBoundingClientRect().top+$('tl').scrollTop, li=Math.floor((y-RH)/LH); if(li>=0&&li<LANES.length){ var tr=LANES[li][0], ok=((c.type==='text'||c.type==='shape')&&tr==='T')||(c.type==='audio'&&tr==='A')||((c.type==='video'||c.type==='image')&&(tr==='V1'||tr==='V2')); if(ok&&!laneLock(tr)&&!drag.group) c.track=tr; } }
   else if(drag.k==='l'){ var ns2=Math.max(0,snapTo(drag.start+dx,c,thr)), d=ns2-drag.start; var ni=drag.in+d*c.speed; if(ni<0){ d=-drag.in/c.speed; ni=0; ns2=drag.start+d; } if(drag.dur-d<.1){ d=drag.dur-.1; ns2=drag.start+d; ni=drag.in+d*c.speed; } c.start=ns2; c.in=ni; c.dur=drag.dur-d; }
   else if(drag.k==='r'){ var nd=snapTo(drag.start+drag.dur+dx,c,thr)-drag.start; nd=Math.max(.1,nd); if(maxSrc<1e8) nd=Math.min(nd,(maxSrc-c.in)/c.speed); c.dur=nd; }
   drawTl(); drag.keep=true;
@@ -291,9 +301,10 @@ function split(){ var c=curClip(); if(!c){ // split the clip under the playhead 
   if(c.rev){ n.in=c.in; c.in=c.in+c.speed*(c.dur-r); } else { n.in=c.in+srcOff(c,r); if(c.speed2!=null){ var sm=spAt(c,r); n.speed=sm; c.speed2=sm; } }
   n.fadeIn=0; c.dur=r; c.fadeOut=0; proj.clips.push(n); sel=n.id; commit(); }
 $('bSplit').onclick=split;
-$('bDup').onclick=function(){ var c=curClip(); if(!c||lockedMsg(c)) return; var n=JSON.parse(JSON.stringify(c)); n.id='c'+(proj.uid++); n.start=endOf(c); proj.clips.push(n); sel=n.id; commit(); };
-function del(ripple){ var c=curClip(); if(!c||lockedMsg(c)) return; proj.clips=proj.clips.filter(function(o){ return o!==c; }); if(ripple) proj.clips.forEach(function(o){ if(o.track===c.track&&o.start>=endOf(c)-.01) o.start=Math.max(0,o.start-c.dur); }); sel=null; cleanElems(); commit(); }
+$('bDup').onclick=function(){ var L=selList(); if(!L.length) return; for(var i=0;i<L.length;i++) if(lockedMsg(L[i])) return; var mn=Math.min.apply(null,L.map(function(o){ return o.start; })), mx=Math.max.apply(null,L.map(endOf)), nm={}, last=null; L.forEach(function(c){ var n=JSON.parse(JSON.stringify(c)); n.id='c'+(proj.uid++); n.start=c.start+(mx-mn); proj.clips.push(n); nm[n.id]=true; last=n.id; }); sel=last; msel=L.length>1?nm:{}; commit(); };
+function del(ripple){ var L=selList(); if(!L.length) return; for(var i=0;i<L.length;i++) if(lockedMsg(L[i])) return; var c=L[0]; proj.clips=proj.clips.filter(function(o){ return L.indexOf(o)<0; }); if(ripple&&L.length===1) proj.clips.forEach(function(o){ if(o.track===c.track&&o.start>=endOf(c)-.01) o.start=Math.max(0,o.start-c.dur); }); sel=null; msel={}; cleanElems(); commit(); }
 $('bDel').onclick=function(){ del(false); };
+$('bMulti').onclick=function(){ multiMode=!multiMode; this.classList.toggle('on',multiMode); if(!multiMode&&Object.keys(msel).length<2) msel={}; drawTl(); toast(multiMode?'여러 개 고르기: 클립을 눌러 하나씩 더하거나 빼세요':'여러 개 고르기를 껐어요'); };
 $('bRip').onclick=function(){ if(!curClip()){ toast('지울 클립을 먼저 고르세요'); return; } del(true); };
 /* freeze frame: stop the picture for 2 seconds at the playhead */
 $('bFreeze').onclick=function(){
@@ -341,14 +352,15 @@ function panel(){
           +'<label class="chk"><input type="checkbox" data-t="sh"'+(T.sh?' checked':'')+'> 그림자</label><div class="row"><label class="chk" style="margin:0;flex:1"><input type="checkbox" data-t="glow"'+(T.glow?' checked':'')+'> 빛나기</label><input type="color" data-t="glowc" value="'+(T.glowc||'#ffe66d')+'"></div><label class="chk"><input type="checkbox" data-t="rainbow"'+(T.rainbow?' checked':'')+'> 무지개 색 (움직여요)</label><label class="chk"><input type="checkbox" data-t="blink"'+(T.blink?' checked':'')+'> 깜빡깜빡</label></div>';
         h+='<div class="sec"><h4>나타나는 방식</h4><div class="row"><select data-k="anim">'+[['none','없음'],['fade','서서히'],['rise','아래서 올라옴'],['slide','옆에서 들어옴'],['zoom','커지며'],['pop','톡 튀어나옴'],['type','한 글자씩'],['bounce','통통 튀기'],['pulse','두근두근'],['shake','덜덜'],['wave','물결 (글자마다)']].map(function(a){ return '<option value="'+a[0]+'"'+(c.anim===a[0]?' selected':'')+'>'+a[1]+'</option>'; }).join('')+'</select></div>'+sdirRow(c)+rng('크기 배율','scale',20,300,c.scale,1,'%')+rng('돌리기','rot',-180,180,c.rot,1,'°')+rng('투명도','op',0,100,c.op,1,'%')+rng('나타날 때 서서히','fadeIn',0,3,c.fadeIn,.1,'초')+rng('사라질 때 서서히','fadeOut',0,3,c.fadeOut,.1,'초')+'</div>';
       } else {
-        if(c.type!=='image'){ h+='<div class="sec"><h4>소리</h4>'+rng('소리 크기','vol',0,200,c.vol,1,'%')+rng('시작할 때 서서히','fadeIn',0,5,c.fadeIn,.1,'초')+rng('끝날 때 서서히','fadeOut',0,5,c.fadeOut,.1,'초')+rng(c.speed2!=null?'처음 빠르기':'빠르기','speed',.25,4,c.speed,.05,'x')+'<label class="chk"><input type="checkbox" data-rampon="1"'+(c.speed2!=null?' checked':'')+'> 빠르기가 흐르며 바뀌기 (천천히→빠르게)</label>'+(c.speed2!=null?rng('끝 빠르기','speed2',.25,4,c.speed2,.05,'x'):'')+(c.type==='video'?'<label class="chk"><input type="checkbox" data-k="rev"'+(c.rev?' checked':'')+'> 거꾸로 재생 (소리 없음, 미리볼 때 조금 끊길 수 있어요)</label>':'')+'<div class="note">빠르기를 바꾸면 클립 길이가 같이 바뀌어요.</div><label class="chk"><input type="checkbox" data-voion="1"'+(c.vol2!=null?' checked':'')+'> 클립이 흐르며 소리 크기 바꾸기</label>'+(c.vol2!=null?rng('끝 소리 크기','vol2',0,200,c.vol2,1,'%'):'')+'<div class="row"><label>우르릉 줄이기</label><select data-k="hp">'+[[0,'끄기'],[80,'약하게 (바람·에어컨)'],[150,'보통'],[300,'세게 (목소리만)']].map(function(a){ return '<option value="'+a[0]+'"'+((c.hp||0)===a[0]?' selected':'')+'>'+a[1]+'</option>'; }).join('')+'</select></div><div class="btns"><button class="tbtn" data-norm="1">소리 크기 자동으로 맞추기</button></div><label class="chk"><input type="checkbox" data-k="duck"'+(c.duck?' checked':'')+'> 다른 소리가 나올 때 이 소리 낮추기 (배경음악용)</label>'+(c.duck?rng('낮추는 정도','duckAmt',10,95,c.duckAmt==null?70:c.duckAmt,1,'%'):'')+'</div>'; }
+        if(c.type!=='image'){ h+='<div class="sec"><h4>소리</h4>'+rng('소리 크기','vol',0,200,c.vol,1,'%')+rng('시작할 때 서서히','fadeIn',0,5,c.fadeIn,.1,'초')+rng('끝날 때 서서히','fadeOut',0,5,c.fadeOut,.1,'초')+rng(c.speed2!=null?'처음 빠르기':'빠르기','speed',.25,4,c.speed,.05,'x')+'<label class="chk"><input type="checkbox" data-rampon="1"'+(c.speed2!=null?' checked':'')+'> 빠르기가 흐르며 바뀌기 (천천히→빠르게)</label>'+(c.speed2!=null?rng('끝 빠르기','speed2',.25,4,c.speed2,.05,'x'):'')+(c.type==='video'?'<label class="chk"><input type="checkbox" data-k="rev"'+(c.rev?' checked':'')+'> 거꾸로 재생 (소리 없음, 미리볼 때 조금 끊길 수 있어요)</label>':'')+'<div class="note">빠르기를 바꾸면 클립 길이가 같이 바뀌어요.</div><label class="chk"><input type="checkbox" data-voion="1"'+(c.vol2!=null?' checked':'')+'> 클립이 흐르며 소리 크기 바꾸기</label>'+(c.vol2!=null?rng('끝 소리 크기','vol2',0,200,c.vol2,1,'%'):'')+'<div class="row"><label>우르릉 줄이기</label><select data-k="hp">'+[[0,'끄기'],[80,'약하게 (바람·에어컨)'],[150,'보통'],[300,'세게 (목소리만)']].map(function(a){ return '<option value="'+a[0]+'"'+((c.hp||0)===a[0]?' selected':'')+'>'+a[1]+'</option>'; }).join('')+'</select></div>'+rng('잡음 끊기 (조용하면 소리 끔)','gate',0,100,c.gate||0,1,'%')+'<div class="note">0이면 꺼져 있어요. 올릴수록 작은 소리(숨소리·잡음)를 더 많이 끊어요. 재생할 때와 내보낼 때 적용돼요.</div>'+volCurveUi(c)+'<div class="sec" style="border:1px solid var(--line);border-radius:8px;padding:6px 8px"><h4>무음 구간 잘라 내기</h4><div class="row"><label>무음 기준</label><input type="range" id="scThr" min="2" max="40" value="8"></div><div class="row"><label>이 길이 넘으면(초)</label><input type="number" id="scLen" value="0.5" step="0.1" min="0.1"></div><div class="btns"><button class="tbtn" data-silcut="1">무음 잘라 내고 붙이기</button></div></div><div class="btns"><button class="tbtn" data-norm="1">소리 크기 자동으로 맞추기</button></div><label class="chk"><input type="checkbox" data-k="duck"'+(c.duck?' checked':'')+'> 다른 소리가 나올 때 이 소리 낮추기 (배경음악용)</label>'+(c.duck?rng('낮추는 정도','duckAmt',10,95,c.duckAmt==null?70:c.duckAmt,1,'%'):'')+'</div>'; }
         if(c.type!=='audio'){
-          h+='<div class="sec"><h4>화면</h4><div class="row"><label>맞추기</label><select data-k="fit"><option value="fit"'+(c.fit==='fit'?' selected':'')+'>안 잘리게 (검은 띠)</option><option value="fill"'+(c.fit==='fill'?' selected':'')+'>꽉 채우기 (잘림)</option></select></div>'+rng('크기','scale',10,400,c.scale,1,'%')+rng('가로 옮기기','x',-100,100,c.x,1,'%')+rng('세로 옮기기','y',-100,100,c.y,1,'%')+rng('돌리기','rot',-180,180,c.rot,1,'°')+rng('투명도','op',0,100,c.op,1,'%')+'<label class="chk"><input type="checkbox" data-k="flip"'+(c.flip?' checked':'')+'> 좌우 뒤집기</label>'+(c.type==='image'?rng('서서히 나타남','fadeIn',0,3,c.fadeIn,.1,'초')+rng('서서히 사라짐','fadeOut',0,3,c.fadeOut,.1,'초'):rng('화면 서서히 나타남','fadeIn',0,5,c.fadeIn,.1,'초')+rng('화면 서서히 사라짐','fadeOut',0,5,c.fadeOut,.1,'초'))+'</div>';
+          h+='<div class="sec"><h4>화면</h4><div class="row"><label>맞추기</label><select data-k="fit"><option value="fit"'+(c.fit==='fit'?' selected':'')+'>안 잘리게 (검은 띠)</option><option value="fill"'+(c.fit==='fill'?' selected':'')+'>꽉 채우기 (잘림)</option></select></div>'+rng('크기','scale',10,400,c.scale,1,'%')+rng('가로 옮기기','x',-100,100,c.x,1,'%')+rng('세로 옮기기','y',-100,100,c.y,1,'%')+rng('돌리기','rot',-180,180,c.rot,1,'°')+rng('투명도','op',0,100,c.op,1,'%')+'<div class="btns"><button class="tbtn" data-dupto="1">'+(c.track==='V2'?'영상(V1) 줄로 복사':'겹침(V2) 줄로 복사')+'</button></div><label class="chk"><input type="checkbox" data-k="flip"'+(c.flip?' checked':'')+'> 좌우 뒤집기</label>'+(c.type==='image'?rng('서서히 나타남','fadeIn',0,3,c.fadeIn,.1,'초')+rng('서서히 사라짐','fadeOut',0,3,c.fadeOut,.1,'초'):rng('화면 서서히 나타남','fadeIn',0,5,c.fadeIn,.1,'초')+rng('화면 서서히 사라짐','fadeOut',0,5,c.fadeOut,.1,'초'))+'</div>';
           h+='<div class="sec"><h4>나타나는 방식</h4><div class="row"><select data-k="anim">'+[['none','없음'],['fade','서서히'],['slide','옆에서 들어옴'],['rise','아래서 올라옴'],['zoom','커지며']].map(function(a){ return '<option value="'+a[0]+'"'+(c.anim===a[0]?' selected':'')+'>'+a[1]+'</option>'; }).join('')+'</select></div>'+sdirRow(c)+'</div>';
           if(c.type!=='audio'){
             var TR=c.tr||{t:'none',d:.6}, KF=c.kf||{on:false,s:c.scale*1.2,x:c.x,y:c.y,r:c.rot}, CK=c.ck||{on:false,col:'#00b140',tol:35};
             h+='<div class="sec"><h4>앞 클립과 이어지는 효과</h4><div class="row"><select data-trt="1">'+[['none','없음'],['dissolve','부드럽게 겹치기'],['slideL','오른쪽에서 밀기'],['slideR','왼쪽에서 밀기'],['slideU','아래서 밀기'],['wipe','왼쪽에서 닦기'],['wipeR','오른쪽에서 닦기'],['iris','동그랗게 열리며'],['slideD','위에서 밀기'],['zoom','확대하며 나타남'],['spin','돌며 나타남']].map(function(a){ return '<option value="'+a[0]+'"'+(TR.t===a[0]?' selected':'')+'>'+a[1]+'</option>'; }).join('')+'</select></div>'+rng('효과 시간','tr.d',.2,2,TR.d,.1,'초')+'<div class="note">앞 클립과 같은 줄에서 딱 붙어 있어야 해요. 고르면 이 클립이 앞 클립 끝과 겹치도록 앞으로 당겨져요.</div></div>';
             h+='<div class="sec"><h4>움직임 (천천히 확대·이동)</h4><label class="chk"><input type="checkbox" data-kfon="1"'+(KF.on?' checked':'')+'> 클립이 흐르는 동안 변하게 하기</label><div class="btns"><button class="tbtn" data-kfp="in">천천히 확대</button><button class="tbtn" data-kfp="out">천천히 축소</button><button class="tbtn" data-kfp="left">왼쪽으로</button><button class="tbtn" data-kfp="right">오른쪽으로</button></div>'+(KF.on?rng('끝 크기','kf.s',10,400,KF.s,1,'%')+rng('끝 가로','kf.x',-100,100,KF.x,1,'%')+rng('끝 세로','kf.y',-100,100,KF.y,1,'%')+rng('끝 돌리기','kf.r',-180,180,KF.r,1,'°'):'')+'<div class="note">위의 크기·옮기기·돌리기가 시작 값이고, 여기 값이 끝 값이에요.</div></div>';
+            h+='<div class="sec"><h4>키프레임 (여러 지점)</h4><div class="btns"><button class="tbtn" data-kfadd="1">재생 막대 위치에 추가</button>'+((c.kfs&&c.kfs.length)?'<button class="tbtn" data-kfclear="1">모두 지우기</button>':'')+'</div>'+(c.kfs||[]).map(function(k,i){ var p='kfs.'+i+'.'; return '<div style="border:1px solid var(--line);border-radius:8px;padding:4px 8px;margin:6px 0"><div class="row"><b style="flex:0 0 auto">◆ '+(i+1)+'</b><span class="sp"></span><button class="tbtn" data-kfdel="'+i+'" style="height:26px;padding:0 8px">지우기</button></div>'+rng('위치',p+'p',0,100,k.u*100,1,'%')+rng('크기',p+'s',10,400,k.s,1,'%')+rng('가로',p+'x',-100,100,k.x,1,'%')+rng('세로',p+'y',-100,100,k.y,1,'%')+rng('돌리기',p+'r',-180,180,k.r,1,'°')+'<div class="row"><label>다음 지점까지</label><select data-k="'+p+'e">'+[['smooth','부드럽게'],['lin','일정하게'],['in','천천히 시작'],['out','천천히 끝'],['hold','딱 바꾸기']].map(function(a){ return '<option value="'+a[0]+'"'+((k.e||'smooth')===a[0]?' selected':'')+'>'+a[1]+'</option>'; }).join('')+'</select></div></div>'; }).join('')+'<div class="note">재생 막대를 옮기고 추가한 뒤 값을 바꾸면 그 지점에서 그 값이 돼요. 타임라인 클립 위의 ◆가 키프레임이에요. 키프레임이 있으면 위의 크기·옮기기·돌리기와 시작·끝 값 대신 써요.</div></div>';
             h+='<div class="sec"><h4>배경 지우기 (크로마키)</h4><label class="chk"><input type="checkbox" data-ckon="1"'+(CK.on?' checked':'')+'> 고른 색을 투명하게</label><div class="row"><label>지울 색</label><input type="color" data-ck="col" value="'+CK.col+'"></div>'+rng('범위','ck.tol',5,90,CK.tol,1)+'<div class="note">초록색 천 앞에서 찍은 영상을 위쪽(겹침) 줄에 올리면 뒤 영상이 비쳐 보여요.</div></div>';
           }
           h+='<div class="sec"><h4>자르기·모양·섞기</h4>'+rng('왼쪽 자르기','cr.l',0,90,(c.crop||{}).l||0,1,'%')+rng('오른쪽 자르기','cr.r',0,90,(c.crop||{}).r||0,1,'%')+rng('위 자르기','cr.t',0,90,(c.crop||{}).t||0,1,'%')+rng('아래 자르기','cr.b',0,90,(c.crop||{}).b||0,1,'%')+'<div class="row"><label>모양</label><select data-k="mask">'+[['none','네모 그대로'],['round','둥근 네모'],['circle','원 / 타원']].map(function(a){ return '<option value="'+a[0]+'"'+((c.mask||'none')===a[0]?' selected':'')+'>'+a[1]+'</option>'; }).join('')+'</select></div><label class="chk"><input type="checkbox" data-k="flipV"'+(c.flipV?' checked':'')+'> 위아래 뒤집기</label><div class="row"><label>섞는 방식</label><select data-k="blend">'+[['none','보통'],['multiply','어둡게 곱하기'],['screen','밝게 겹치기'],['overlay','대비 겹치기'],['lighten','밝은 쪽만'],['darken','어두운 쪽만'],['difference','차이'],['soft-light','부드러운 빛']].map(function(a){ return '<option value="'+a[0]+'"'+((c.blend||'none')===a[0]?' selected':'')+'>'+a[1]+'</option>'; }).join('')+'</select></div><div class="note">섞는 방식은 겹침 줄 클립을 아래 영상과 섞을 때 좋아요.</div></div>';
@@ -361,7 +373,7 @@ function panel(){
 }
 $('ptabs').addEventListener('click',function(e){ var b=e.target.closest('button'); if(b){ ptab=b.dataset.p; panel(); } });
 var pb=$('pbody');
-function setProp(c,k,v){ if(k.indexOf('cr.')===0){ c.crop=c.crop||{l:0,r:0,t:0,b:0}; c.crop[k.slice(3)]=v; } else if(k.indexOf('kf.')===0){ c.kf=c.kf||{on:true,s:c.scale,x:c.x,y:c.y,r:c.rot}; c.kf[k.slice(3)]=v; } else if(k.indexOf('ck.')===0){ c.ck=c.ck||{on:false,col:'#00b140',tol:35}; c.ck[k.slice(3)]=v; } else if(k.indexOf('sp.')===0) c.shp[k.slice(3)]=v; else if(k==='tr.d'){ setTr(c,(c.tr&&c.tr.t)||'none',v); } else if(k.indexOf('f.')===0) c.filt[k.slice(2)]=v; else if(k.indexOf('t.')===0) c.txt[k.slice(2)]=v; else if(k==='speed'||k==='speed2'){ var old=avgSp(c); c[k]=v; c.dur=c.dur*old/avgSp(c); } else if(k==='hp') c.hp=+v; else c[k]=v; }
+function setProp(c,k,v){ if(k.indexOf('kfs.')===0||k.indexOf('vkfs.')===0){ var pp=k.split('.'), arr=c[pp[0]], it=arr&&arr[+pp[1]]; if(it){ if(pp[2]==='p') it.u=Math.max(0,Math.min(1,v/100)); else it[pp[2]]=v; } return; } if(k.indexOf('cr.')===0){ c.crop=c.crop||{l:0,r:0,t:0,b:0}; c.crop[k.slice(3)]=v; } else if(k.indexOf('kf.')===0){ c.kf=c.kf||{on:true,s:c.scale,x:c.x,y:c.y,r:c.rot}; c.kf[k.slice(3)]=v; } else if(k.indexOf('ck.')===0){ c.ck=c.ck||{on:false,col:'#00b140',tol:35}; c.ck[k.slice(3)]=v; } else if(k.indexOf('sp.')===0) c.shp[k.slice(3)]=v; else if(k==='tr.d'){ setTr(c,(c.tr&&c.tr.t)||'none',v); } else if(k.indexOf('f.')===0) c.filt[k.slice(2)]=v; else if(k.indexOf('t.')===0) c.txt[k.slice(2)]=v; else if(k==='speed'||k==='speed2'){ var old=avgSp(c); c[k]=v; c.dur=c.dur*old/avgSp(c); } else if(k==='hp') c.hp=+v; else c[k]=v; }
 pb.addEventListener('input',function(e){ var tg=e.target, c=curClip(); if(tg.dataset.mkn){ if(tg.value) proj.mkNames[tg.dataset.mkn]=tg.value; else delete proj.mkNames[tg.dataset.mkn]; clearTimeout(saveT); saveT=setTimeout(function(){ commit(true); },400); return; } if(!c) return;
   if(tg.dataset.k){ var isNv=tg.classList.contains('nv'), v=tg.type==='checkbox'?tg.checked:(tg.type==='range'||tg.type==='number'?+tg.value:tg.value);
     if(isNv){ if(tg.value===''||!isFinite(v)) return; v=Math.max(+tg.min,Math.min(+tg.max,v)); var rg=tg.previousElementSibling; if(rg&&rg.type==='range') rg.value=v; }
@@ -381,6 +393,7 @@ pb.addEventListener('change',function(e){ var tg=e.target;
   if(cc&&tg.dataset.voion){ if(tg.checked) cc.vol2=cc.vol; else delete cc.vol2; commit(); return; }
   if(cc&&tg.dataset.kfon){ cc.kf=cc.kf||{on:true,s:Math.round(cc.scale*1.2),x:cc.x,y:cc.y,r:cc.rot}; cc.kf.on=tg.checked; commit(); return; }
   if(cc&&tg.dataset.ckon){ cc.ck=cc.ck||{on:true,col:'#00b140',tol:35}; cc.ck.on=tg.checked; commit(); return; }
+  if(cc&&tg.dataset.k&&/^v?kfs\./.test(tg.dataset.k)){ var ar=cc[tg.dataset.k.split('.')[0]]; if(ar) ar.sort(function(a,b){ return a.u-b.u; }); }
   if(tg.dataset.k||tg.dataset.t||tg.dataset.sp||tg.dataset.ck) commit(); });
 pb.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b) return;
   if(b.dataset.emo){ var ct=curClip(); if(ct&&ct.txt){ ct.txt.s+=b.dataset.emo; commit(); } return; }
@@ -390,6 +403,14 @@ pb.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b
   if(b.dataset.tpl){ addTemplate(b.dataset.tpl); return; } if(b.dataset.stk){ addSticker(b.dataset.stk); return; } if(b.dataset.pip){ applyPip(b.dataset.pip); return; }
   if(b.id==='subImp'){ $('subIn').click(); return; } if(b.id==='subSrt'){ exportSubs('srt'); return; } if(b.id==='subVtt'){ exportSubs('vtt'); return; }
   if(b.id==='subGo'){ var n=addSubs($('subTxt').value); toast(n+'개 자막을 넣었어요'); return; }
+  if(b.dataset.kfadd){ var ka=curClip(); if(ka){ var ua=Math.max(0,Math.min(1,(t-ka.start)/Math.max(.01,ka.dur))), tf0=tfAt(ka,ua); ka.kfs=ka.kfs||[]; var near=ka.kfs.filter(function(k){ return Math.abs(k.u-ua)<.01; })[0]; if(near){ toast('이 위치에는 이미 키프레임이 있어요'); return; } ka.kfs.push({u:ua,s:Math.round(tf0.s),x:Math.round(tf0.x),y:Math.round(tf0.y),r:Math.round(tf0.r),e:'smooth'}); ka.kfs.sort(function(a,b){ return a.u-b.u; }); commit(); } return; }
+  if(b.dataset.kfdel){ var kd=curClip(); if(kd&&kd.kfs){ kd.kfs.splice(+b.dataset.kfdel,1); if(!kd.kfs.length) delete kd.kfs; commit(); } return; }
+  if(b.dataset.kfclear){ var kc=curClip(); if(kc){ delete kc.kfs; commit(); } return; }
+  if(b.dataset.vkadd){ var va=curClip(); if(va){ var uv=Math.max(0,Math.min(1,(t-va.start)/Math.max(.01,va.dur))); va.vkfs=va.vkfs||[]; va.vkfs.push({u:uv,v:Math.round(volAt(va,t))}); va.vkfs.sort(function(a,b){ return a.u-b.u; }); commit(); } return; }
+  if(b.dataset.vkdel){ var vd=curClip(); if(vd&&vd.vkfs){ vd.vkfs.splice(+b.dataset.vkdel,1); if(!vd.vkfs.length) delete vd.vkfs; commit(); } return; }
+  if(b.dataset.vkclear){ var vc=curClip(); if(vc){ delete vc.vkfs; commit(); } return; }
+  if(b.dataset.silcut){ silenceCut(+$('scThr').value,+$('scLen').value||.5); return; }
+  if(b.dataset.dupto){ var cd=curClip(); if(cd&&!lockedMsg(cd)){ var nd=JSON.parse(JSON.stringify(cd)); nd.id='c'+(proj.uid++); nd.track=cd.track==='V2'?'V1':'V2'; delete nd.tr; proj.clips.push(nd); sel=nd.id; commit(); toast((nd.track==='V2'?'겹침':'영상')+' 줄로 복사했어요'); } return; }
   if(b.dataset.gom){ seek(proj.markers[+b.dataset.gom]); return; }
   if(b.dataset.gap){ var tr0=b.dataset.gap; if(laneLock(tr0)){ toast('잠긴 줄이에요'); return; } var L0=proj.clips.filter(function(o){ return o.track===tr0; }).sort(function(a,b){ return a.start-b.start; }), pos=0, moved=0; L0.forEach(function(o,i){ var ns=Math.max(0,i&&o.tr&&o.tr.ov?pos-o.tr.ov:pos); if(Math.abs(ns-o.start)>.001){ o.start=ns; moved++; } pos=endOf(o); }); if(moved){ commit(); toast(moved+'개 클립을 붙였어요'); } else toast('붙일 틈이 없어요'); return; }
   if(b.dataset.tsty){ var ctx0=curClip(); if(ctx0&&ctx0.txt){ Object.assign(ctx0.txt,{glow:false,sh:false,rainbow:false,blink:false,it:false,bg:false},TSTY[b.dataset.tsty]); commit(); } return; }
@@ -468,6 +489,22 @@ function insPanel(){
   h+='<div class="sec"><h4>스티커</h4><div class="btns">'+['😀','😂','😍','😎','😭','😡','👍','👏','🙏','💪','❤️','💔','⭐','🔥','✨','🎉','🎵','💯','👀','💡','❓','❗','➡️','🍟'].map(function(em){ return '<button class="tbtn" data-stk="'+em+'" style="padding:0 8px;font-size:18px">'+em+'</button>'; }).join('')+'</div></div>';
   h+='<div class="sec"><h4>작은 화면 (겹쳐 놓기)</h4><div class="pgrid"><button data-pip="tl">왼쪽 위</button><button data-pip="c">가운데</button><button data-pip="tr">오른쪽 위</button><button data-pip="bl">왼쪽 아래</button><button data-pip="full">꽉 채움</button><button data-pip="br">오른쪽 아래</button></div><div class="note">타임라인에서 영상이나 그림 클립을 고른 뒤 누르세요. 겹침 줄로 옮겨져서 아래 영상 위에 작게 떠요.</div></div>';
   return h; }
+function silenceCut(thr,minLen){
+  var c=curClip(), m=c&&media[c.mid]; if(!c||(c.type!=='video'&&c.type!=='audio')){ toast('영상이나 소리 클립을 고르세요'); return; } if(lockedMsg(c)) return;
+  if(c.rev||c.speed2!=null||(c.tr&&c.tr.ov)){ toast('거꾸로·빠르기 변화·전환 효과가 있는 클립은 쓸 수 없어요'); return; }
+  if(!m||!m.peaks){ toast('소리 모양을 아직 읽는 중이에요. 잠시 뒤 다시 눌러 주세요'); return; }
+  var N=m.peaks.length, sec=m.dur/N, i0=Math.floor(c.in/sec), i1=Math.min(N,Math.ceil((c.in+c.dur*c.speed)/sec)), runs=[], a=-1, gapMax=Math.max(1,Math.round(minLen/sec));
+  var lastLoud=-1;
+  for(var i=i0;i<i1;i++){ if(m.peaks[i]>thr/100){ if(a<0) a=i; lastLoud=i; } else if(a>=0&&i-lastLoud>=gapMax){ runs.push([a,lastLoud]); a=-1; } }
+  if(a>=0) runs.push([a,lastLoud]);
+  var s0=c.in, s1=c.in+c.dur*c.speed, pad=.08, keep=runs.map(function(r){ return [Math.max(s0,r[0]*sec-pad),Math.min(s1,(r[1]+1)*sec+pad)]; });
+  if(!keep.length){ toast('거의 전부 무음이에요. 무음 기준을 낮춰 보세요'); return; }
+  if(keep.length===1&&keep[0][0]<=s0+.05&&keep[0][1]>=s1-.05){ toast('자를 무음 구간이 없어요. 무음 기준을 올리거나 길이를 줄여 보세요'); return; }
+  var pos=c.start, news=[], endOld=endOf(c);
+  keep.forEach(function(k,ix){ var n=JSON.parse(JSON.stringify(c)); n.id='c'+(proj.uid++); n.in=k[0]; n.dur=(k[1]-k[0])/c.speed; n.start=pos; if(ix) { n.fadeIn=0; delete n.tr; } if(ix<keep.length-1) n.fadeOut=0; pos+=n.dur; news.push(n); });
+  var removed=endOld-pos; proj.clips=proj.clips.filter(function(o){ return o!==c; }); proj.clips.forEach(function(o){ if(o.track===c.track&&o.start>=endOld-.01) o.start=Math.max(0,o.start-removed); });
+  news.forEach(function(n){ proj.clips.push(n); }); sel=news[0].id; cleanElems(); commit(); toast(keep.length+'조각으로 나누고 무음 '+f(removed)+'초를 잘랐어요');
+}
 var rec=null;
 $('bRec').onclick=function(){
   var b=$('bRec');
@@ -563,6 +600,6 @@ window.addEventListener('beforeunload',function(){ persist(); });
   if(s){ try{ loadSnap(s); }catch(e){} }
   sizeCanvas(); hist=[snap()]; hi=0; drawTl(); drawBin(); panel();
   restoreMedia().then(function(){ Object.keys(media).forEach(function(k){ ensurePeaks(media[k]); }); drawTl(); drawBin(); requestAnimationFrame(loop); });
-  window.FVIDEO={proj:proj,media:media,addFiles:addFiles,addClipFromMedia:addClipFromMedia,render:render,seek:seek,split:split,wantAt:wantAt,lzwGif:lzwGif,volAt:volAt,zoomTo:zoomTo,pxsNow:function(){ return pxs; },duckK:duckK,parseSubFile:parseSubFile,exportSubs:exportSubs,get t(){ return t; }};
+  window.FVIDEO={proj:proj,media:media,addFiles:addFiles,addClipFromMedia:addClipFromMedia,render:render,seek:seek,split:split,tfAt:tfAt,silenceCut:silenceCut,selClick:selClick,getMsel:function(){ return msel; },wantAt:wantAt,lzwGif:lzwGif,volAt:volAt,zoomTo:zoomTo,pxsNow:function(){ return pxs; },duckK:duckK,parseSubFile:parseSubFile,exportSubs:exportSubs,get t(){ return t; }};
 })();
 })();
