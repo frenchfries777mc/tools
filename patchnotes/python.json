@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v31",
+   "title": "BeaconScript publish_short·expose·provide",
+   "items": [
+    "publish_short: 블록(var, aliases, from uuid, type, scope, sign, rule)과 expose \"변수\" to \"%별칭%\" 줄을 검사하고 자동완성해 줘요",
+    "sign·bind·uuid가 서로 맞는지, expose 줄이 있는지도 알려 줘요",
+    "provide %값%, … 줄을 알아보고, 적어 둔 값과 aliases 별칭은 모르는 자리표시로 안 걸려요"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript publish_short, expose, provide",
+     "items": [
+      "Checks and autocompletes the publish_short: block (var, aliases, from uuid, type, scope, sign, rule) and the expose \"var\" to \"%alias%\" line",
+      "Also tells you when sign, bind and uuid do not match, or the expose line is missing",
+      "Understands provide %value%, ... lines; listed values and aliases are no longer flagged as unknown placeholders"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v30",
    "title": "Ctrl+F 찾기",
    "items": [
