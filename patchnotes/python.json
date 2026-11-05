@@ -4,6 +4,22 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v24",
+   "title": "글 안의 %변수% 읽기",
+   "items": [
+    "set variable 등으로 만든 변수는 글 안에서 %이름%으로 써도 에러가 나지 않아요 (potato-api.bs 같은 예제 통과)"
+   ],
+   "tr": {
+    "en": {
+     "title": "%variable% in text",
+     "items": [
+      "Variables made with set variable and friends can be written as %name% in text without errors (example files such as potato-api.bs pass)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v23",
    "title": "%interacted% 값 추가",
    "items": [
