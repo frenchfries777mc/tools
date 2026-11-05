@@ -4,6 +4,22 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v23",
+   "title": "%interacted% 값 추가",
+   "items": [
+    "%interacted%도 %interacted_item%과 같은 값으로 에러 없이 인정해요"
+   ],
+   "tr": {
+    "en": {
+     "title": "%interacted% value",
+     "items": [
+      "%interacted% is accepted as the same value as %interacted_item%"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v22",
    "title": "BeaconScript 새 이벤트 반영",
    "items": [
