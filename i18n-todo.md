@@ -55,3 +55,4 @@ patchnotes/score.json | Fry Score v7 항목 (en만) | score v7 | 2026-11-06
 score/app.js | Fry Score v7 한국어 메시지·버튼 | score v7 | 2026-11-06
 patchnotes/score.json | Fry Score v8 항목 (en만) | score v8 | 2026-11-06
 score/app.js | Fry Score v8 한국어 메시지·버튼 | score v8 | 2026-11-06
+patchnotes/draw.json | Fry Draw v6 항목 (en만), draw/app.js 글자 편집·선 따라 쓰기 한국어 문구 | draw v6 | 2026-11-06

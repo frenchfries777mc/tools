@@ -31,7 +31,7 @@ function mkDef(o,pos,type,col){ var m=MK[type]; if(!m) return ''; var z=3*(o.mks
 function objStr(o,nested){
   if(o.hid) return '';
   var a='', defs='';
-  for(var k in o.a) a+=' '+k+'="'+esc(o.a[k])+'"';
+  for(var k in o.a){ if(o.tp&&(k==='x'||k==='y')) continue; a+=' '+k+'="'+esc(o.a[k])+'"'; }
   var fv=o.fill; if(o.grad){ defs+=gradDef(o); fv='url(#g'+o.id+')'; }
   if(fv!=null) a+=' fill="'+esc(fv)+'"';
   if(o.stroke!=null) a+=' stroke="'+esc(o.stroke)+'"';
@@ -40,7 +40,7 @@ function objStr(o,nested){
   if(o.dash) a+=' stroke-dasharray="'+f(o.dash)+' '+f(o.gap>0?o.gap:o.dash*.8)+'"';
   if(o.tag!=='text'&&o.tag!=='g'&&o.tag!=='grp'){ a+=' stroke-linecap="'+(o.cap||'round')+'" stroke-linejoin="'+(o.join||'round')+'"'; if(o.join==='miter') a+=' stroke-miterlimit="'+f(o.miter||4)+'"'; }
   if(o.mk1||o.mk2){ var mc=(o.stroke&&o.stroke!=='none')?o.stroke:'#000000'; if(o.mk1){ defs+=mkDef(o,'s',o.mk1,mc); a+=' marker-start="url(#ms'+o.id+')"'; } if(o.mk2){ defs+=mkDef(o,'e',o.mk2,mc); a+=' marker-end="url(#me'+o.id+')"'; } }
-  if(o.blend&&o.blend!=='normal') a+=' style="mix-blend-mode:'+esc(o.blend)+'"';
+  var sty=''; if(o.blend&&o.blend!=='normal') sty+='mix-blend-mode:'+esc(o.blend)+';'; if(o.tag==='text') sty+='white-space:pre;'; if(sty) a+=' style="'+sty+'"';
   if(o.blur>0||o.shadow){ defs+=filtDef(o); a+=' filter="url(#f'+o.id+')"'; }
   if(o.lock&&!nested) a+=' pointer-events="none"';
   if(o.tag==='image') a+=' href="'+esc(IMGS[o.imgId]||'')+'"';
@@ -49,7 +49,11 @@ function objStr(o,nested){
   if(o.rot||(o.sx!=null&&(o.sx!==1||o.sy!==1))){ tf+='translate('+f(o.cx||0)+' '+f(o.cy||0)+') rotate('+f4(o.rot||0)+') scale('+f4(o.sx==null?1:o.sx)+' '+f4(o.sy==null?1:o.sy)+') translate('+f(-(o.cx||0))+' '+f(-(o.cy||0))+')'; }
   if(tf) a+=' transform="'+tf.trim()+'"';
   var tag=o.tag==='grp'?'g':o.tag, idA=nested?'':' data-id="'+o.id+'"';
-  if(tag==='text') return defs+'<text'+a+idA+'>'+esc(o.txt||'')+'</text>';
+  if(tag==='text'){ var fs0=+o.a['font-size']||48, ln=String(o.txt||'').split('\n'), body;
+    if(o.tp){ defs+='<path id="tp'+o.id+'" d="'+esc(o.tp)+'" fill="none" stroke="none"/>'; body='<textPath href="#tp'+o.id+'" startOffset="'+f(o.tpo||0)+'%">'+esc(ln.join(' '))+'</textPath>'; }
+    else if(ln.length>1) body=ln.map(function(l,i){ return '<tspan x="'+esc(o.a.x)+'" dy="'+(i?f((o.lh||1.2)*fs0):0)+'">'+esc(l)+'</tspan>'; }).join('');
+    else body=esc(ln[0]);
+    return defs+'<text'+a+idA+'>'+body+'</text>'; }
   if(tag==='g') return defs+'<g'+a+idA+'>'+(o.tag==='grp'?(o.kids||[]).map(function(q){ return objStr(q,true); }).join(''):(o.inner||''))+'</g>';
   return defs+'<'+tag+a+idA+'/>';
 }
@@ -168,7 +172,8 @@ stage.addEventListener('pointerdown',function(e){
   if(tool==='erase'){ if(id!=null){ doc.objs=doc.objs.filter(function(o){ return o.id!==id; }); sel=sel.filter(function(i){ return i!==id; }); commit(); } drag={k:'erase'}; return; }
   if(tool==='eye'){ if(id!=null) eyedrop(id); return; }
   if(tool==='bucket'){ if(id!=null){ var o2=byId(id); o2.fill=st.fill; commit(); } return; }
-  if(tool==='text'){ doc.objs.push(newObj('text',{x:f(p.x),y:f(p.y),'font-size':st.font,'font-family':"'Noto Sans KR',sans-serif"},{txt:st.txt})); sel=[doc.objs[doc.objs.length-1].id]; commit(); setTool('sel'); return; }
+  if(tool==='text'){ var tid0=id!=null?byId(id):null; if(tid0&&tid0.tag==='text'&&!tid0.lock){ sel=[id]; openTextEdit(tid0,false); return; }
+    var tno=newObj('text',{x:f(p.x),y:f(p.y),'font-size':st.font,'font-family':"'Noto Sans KR',sans-serif"},{txt:st.txt}); doc.objs.push(tno); sel=[tno.id]; commit(); setTool('sel'); setTimeout(function(){ openTextEdit(tno,true); },0); return; }
   if(tool==='curve'){
     if(curvePts.length>1&&Math.hypot(p.x-curvePts[curvePts.length-1].x,p.y-curvePts[curvePts.length-1].y)<4/zoom*2){ finishCurve(); return; }
     curvePts.push(p); drawOv(); return;
@@ -227,10 +232,28 @@ stage.addEventListener('pointerup',function(e){
     var o=newObj(s.tag,s.a); if(tool==='line'&&o.fill==='none') {} doc.objs.push(o); sel=[o.id]; commit(); }
 });
 function simplify(pts){ var out=[pts[0]]; for(var i=1;i<pts.length-1;i++){ var l=out[out.length-1]; if(Math.hypot(pts[i].x-l.x,pts[i].y-l.y)>3/zoom) out.push(pts[i]); } out.push(pts[pts.length-1]); return out; }
-stage.addEventListener('dblclick',function(e){ if(tool==='curve'){ finishCurve(); return; }
+stage.addEventListener('dblclick',function(e){ if(tool==='sel'||tool==='text'){ var dti=targetId(e), dto=dti!=null?byId(dti):null; if(!dto){ var pp=P(e); for(var qi=doc.objs.length-1;qi>=0&&!dto;qi--){ var sq=doc.objs[qi]; if(sq.tag!=='text'||sq.hid||sq.lock) continue; var sb=bbox(sq); if(sb&&pp.x>=sb.x&&pp.x<=sb.x+sb.w&&pp.y>=sb.y&&pp.y<=sb.y+sb.h) dto=sq; } } if(dto&&dto.tag==='text'&&!dto.lock){ sel=[dto.id]; openTextEdit(dto,false); return; } }
+  if(tool==='curve'){ finishCurve(); return; }
   if(tool==='node'){ var o=byId(sel[0]); if(!o||!o.pts) return; var tg=document.elementFromPoint(e.clientX,e.clientY), nn=tg&&tg.getAttribute&&tg.getAttribute('data-n');
     if(nn!=null){ if(o.pts.length>(o.cl?3:2)){ o.pts.splice(+nn,1); nodeSel=-1; setD(o); commit(); } return; }
     if(addNode(o,nodePt(o,e))) commit(); } });
+var txEd=null;
+function openTextEdit(o,isNew){ if(txEd) txEd.fin(true); var e0=stage.querySelector('[data-id="'+o.id+'"]'); if(!e0) return; var r=e0.getBoundingClientRect(), fs=(+o.a['font-size']||48)*zoom*Math.abs(o.sy==null?1:o.sy);
+  var ta=document.createElement('textarea'); ta.value=o.txt||''; ta.className='txed'; ta.spellcheck=false;
+  var an=o.a['text-anchor']||'start'; ta.style.cssText='position:fixed;z-index:70;left:'+(r.left-6)+'px;top:'+(r.top-4)+'px;min-width:120px;width:'+Math.max(r.width+36,120)+'px;height:'+(Math.max(r.height,fs*1.3)+10)+'px;font-size:'+fs+'px;line-height:'+(o.lh||1.2)+';font-family:'+(o.a['font-family']||'sans-serif').replace(/"/g,"'")+';font-weight:'+(o.a['font-weight']||400)+';font-style:'+(o.a['font-style']||'normal')+';letter-spacing:'+((+o.a['letter-spacing']||0)*zoom)+'px;text-align:'+(an==='middle'?'center':an==='end'?'right':'left')+';color:'+(o.fill&&o.fill!=='none'?o.fill:'#000')+';white-space:pre;overflow:hidden;';
+  document.body.appendChild(ta); e0.style.visibility='hidden'; ta.focus(); ta.select();
+  var done=false, fin=function(keep){ if(done) return; done=true; txEd=null; var v=ta.value; ta.remove(); e0.style.visibility='';
+    if(!keep){ if(isNew){ doc.objs=doc.objs.filter(function(q){ return q!==o; }); sel=[]; commit(); } return; }
+    if(!v.trim()){ doc.objs=doc.objs.filter(function(q){ return q!==o; }); sel=[]; commit(); return; }
+    if(v!==o.txt||isNew){ o.txt=v; if(isNew) st.txt=v.split('\n')[0]||st.txt; commit(); } };
+  ta.addEventListener('keydown',function(ev){ if(ev.key==='Escape'){ ev.stopPropagation(); fin(!isNew||ta.value.trim()!==''); } else if(ev.key==='Enter'&&(ev.ctrlKey||ev.metaKey)){ ev.preventDefault(); fin(true); } });
+  ta.addEventListener('input',function(){ ta.style.width=Math.max(parseFloat(ta.style.width),ta.scrollWidth+4)+'px'; ta.style.height=Math.max(parseFloat(ta.style.height),ta.scrollHeight)+'px'; });
+  ta.addEventListener('blur',function(){ fin(true); }); txEd={fin:fin}; }
+function textOnPath(){ var so=selObjs(), t=so.filter(function(o){ return o.tag==='text'; })[0], sh=so.filter(function(o){ return o.tag!=='text'&&!o.hid; })[0];
+  if(!t||!sh){ toast('글자 하나와 따라 쓸 선(또는 도형)을 같이 골라 주세요'); return; }
+  var pl=flat(sh,true); if(!pl||!pl.length){ toast('이 도형은 따라 쓸 수 없어요 (그림·묶음은 안 돼요)'); return; }
+  var pts=pl[0].slice(); var closed=['rect','ellipse','circle','polygon'].indexOf(sh.tag)>=0||(sh.tag==='path'&&(sh.cl||/z\s*$/i.test(String(sh.a.d||'')))); if(closed) pts.push(pts[0]); else { try{ var e=document.createElementNS(NS,sh.tag==='line'?'line':sh.tag); for(var k in sh.a) if(k!=='transform') e.setAttribute(k,sh.a[k]); stage.appendChild(e); var L=e.getTotalLength(), q=e.getPointAtLength(L), m=mat(sh), w=mapPt(m,q.x,q.y); e.remove(); pts.push({x:w[0],y:w[1]}); }catch(x){} }
+  t.tp='M'+pts.map(function(p){ var x=p.x!=null?p.x:p[0], y=p.y!=null?p.y:p[1]; return f(x)+' '+f(y); }).join('L'); t.tpo=0; t.tx=0; t.ty=0; t.rot=0; t.sx=1; t.sy=1; t.cx=null; t.cy=null; sel=[t.id]; commit(); toast('글자를 따라 쓰게 했어요. 선은 그대로 남아 있으니 필요 없으면 지워요'); }
 function finishBez(close){ if(bezPts.length<2){ bezPts=[]; drawOv(); return; }
   var o=newObj('path',{d:''},{fill:st.fillOn?st.fill:'none',pts:bezPts.map(function(q){ return JSON.parse(JSON.stringify(q)); }),cl:!!close,sh:false,bz:true}); setD(o); doc.objs.push(o); sel=[o.id]; bezPts=[]; commit(); }
 function finishCurve(){ if(curvePts.length<2){ curvePts=[]; drawOv(); return; }
@@ -358,7 +381,7 @@ function align(how){ var s=selObjs().filter(function(o){ return !o.hid; }); if(!
     if(how==='l') dx=ref.x-b.x; else if(how==='c') dx=ref.x+ref.w/2-(b.x+b.w/2); else if(how==='r') dx=ref.x+ref.w-(b.x+b.w);
     else if(how==='t') dy=ref.y-b.y; else if(how==='m') dy=ref.y+ref.h/2-(b.y+b.h/2); else if(how==='b') dy=ref.y+ref.h-(b.y+b.h);
     o.tx+=dx; o.ty+=dy; }); commit(); }
-function flat(o){ var tg=o.tag; if(['rect','ellipse','circle','polygon','path'].indexOf(tg)<0) return null;
+function flat(o,any){ var tg=o.tag; if(['rect','ellipse','circle','polygon','path'].concat(any?['line','polyline']:[]).indexOf(tg)<0) return null;
   var m=mat(o), polys=[], pieces=tg==='path'?String(o.a.d||'').split(/(?=[Mm])/).filter(function(x){ return x.trim(); }):[null];
   pieces.forEach(function(pc){ var e=document.createElementNS(NS,tg); for(var k in o.a) if(k!=='transform') e.setAttribute(k,o.a[k]); if(pc!=null) e.setAttribute('d',pc); stage.appendChild(e);
     try{ var L=e.getTotalLength(), n=Math.max(24,Math.min(700,Math.round(L/3))), pts=[]; for(var i=0;i<n;i++){ var q=e.getPointAtLength(L*i/n); pts.push(mapPt(m,q.x,q.y)); } if(pts.length>=3) polys.push(pts); }catch(x){}
@@ -483,7 +506,7 @@ function drawPattern(){
 var aiBusy=false;
 function cleanNode(n){
   var okTag={rect:1,circle:1,ellipse:1,line:1,polyline:1,polygon:1,path:1,text:1,g:1,tspan:1};
-  var okAttr={x:1,y:1,x1:1,y1:1,x2:1,y2:1,cx:1,cy:1,r:1,rx:1,ry:1,width:1,height:1,d:1,points:1,fill:1,stroke:1,'stroke-width':1,opacity:1,'fill-opacity':1,'stroke-opacity':1,transform:1,'font-size':1,'font-family':1,'font-weight':1,'text-anchor':1,'stroke-linecap':1,'stroke-linejoin':1,'stroke-dasharray':1,'fill-rule':1,dx:1,dy:1};
+  var okAttr={x:1,y:1,x1:1,y1:1,x2:1,y2:1,cx:1,cy:1,r:1,rx:1,ry:1,width:1,height:1,d:1,points:1,fill:1,stroke:1,'stroke-width':1,opacity:1,'font-style':1,'letter-spacing':1,'text-decoration':1,'fill-opacity':1,'stroke-opacity':1,transform:1,'font-size':1,'font-family':1,'font-weight':1,'text-anchor':1,'stroke-linecap':1,'stroke-linejoin':1,'stroke-dasharray':1,'fill-rule':1,dx:1,dy:1};
   var tag=n.nodeName.toLowerCase(); if(!okTag[tag]) return '';
   var a=''; for(var i=0;i<n.attributes.length;i++){ var at=n.attributes[i]; if(!okAttr[at.name]) continue; if(/url\(|javascript|<|expression/i.test(at.value)) continue; a+=' '+at.name+'="'+esc(at.value)+'"'; }
   var inner=''; for(var j=0;j<n.childNodes.length;j++){ var ch=n.childNodes[j]; if(ch.nodeType===3) inner+=esc(ch.nodeValue); else if(ch.nodeType===1) inner+=cleanNode(ch); }
@@ -504,7 +527,7 @@ function importSvg(markup,asSvgRoot){
         else if(an==='stroke-dasharray'){ var dn=nums(av); if(dn.length&&dn[0]>0){ o.dash=dn[0]; o.gap=dn.length>1?dn[1]:dn[0]; } }
         else o.a[an]=av; }
       if(tag!=='text'&&tag!=='g'){ if(!o.cap) o.cap='butt'; if(!o.join) o.join='miter'; }
-      if(tag==='text'){ o.txt=tmpd.textContent; } }
+      if(tag==='text'){ var tsp=tmpd.querySelectorAll('tspan'); o.txt=tsp.length>1?[].map.call(tsp,function(q){ return q.textContent; }).join('\n'):tmpd.textContent; } }
     if(tag!=='g'&&tag!=='text'&&o.fill==null&&o.stroke==null) o.fill='#888888';
     doc.objs.push(o); made.push(o.id); }
   if(made.length){ sel=made; commit(); }
@@ -585,7 +608,13 @@ function panel(){
       h+='<div class="sec" style="margin-top:10px"><h4>효과</h4>'+'<div class="row"><label>섞기 방식</label><select data-oa="blend">'+[['normal','보통'],['multiply','곱하기 (어둡게)'],['screen','스크린 (밝게)'],['overlay','오버레이'],['darken','어두운 쪽'],['lighten','밝은 쪽'],['color-dodge','색 번쩍'],['color-burn','색 태우기'],['difference','차이'],['exclusion','제외'],['hue','색조'],['luminosity','밝기']].map(function(x){ return '<option value="'+x[0]+'"'+((o.blend||'normal')===x[0]?' selected':'')+'>'+x[1]+'</option>'; }).join('')+'</select></div>'+rowRange('흐리게','blur',0,40,o.blur||0,'px')+'<label class="chk"><input type="checkbox" data-o="shadow"'+(o.shadow?' checked':'')+'> 그림자</label></div>';
       h+='<div class="sec"><h4>정렬</h4><div class="btns">'+[['l','⇤ 왼쪽'],['c','↔ 가운데'],['r','⇥ 오른쪽'],['t','⇧ 위'],['m','↕ 가운데'],['b','⇩ 아래'],['dh','가로 간격 같게'],['dv','세로 간격 같게']].map(function(x){ return '<button class="tbtn" data-al="'+x[0]+'">'+x[1]+'</button>'; }).join('')+'</div><div class="note">'+(so.length===1?'하나만 골랐으면 캔버스에 맞춰요.':'고른 것들끼리 맞춰요.')+'</div></div>';
       h+='<div class="sec"><h4>묶기 · 합치기</h4><div class="btns"><button class="tbtn" data-a="group">묶기 (Ctrl+G)</button><button class="tbtn" data-a="ungroup">풀기 (Ctrl+Shift+G)</button></div><div class="btns"><button class="tbtn" data-a="bu">하나로 합치기</button><button class="tbtn" data-a="bi">겹친 곳만</button><button class="tbtn" data-a="bs">빼기 (아래 − 위)</button><button class="tbtn" data-a="bx">겹친 곳 빼기</button></div><div class="note">합치기는 네모·원·다각형·닫힌 곡선을 두 개 이상 골랐을 때 돼요.</div></div>';
-      if(o.tag==='text') h+='<div class="row"><label>글자</label><input type="text" data-txt="1" value="'+esc(o.txt||'')+'"></div>'+rowRange('글자 크기','fs',8,300,+o.a['font-size']||48,'px')+'<div class="row"><label>글꼴</label><select data-tf="family">'+[['\'Noto Sans KR\',sans-serif','고딕'],['serif','명조'],['monospace','고정폭'],['cursive','필기체'],['Impact,sans-serif','굵은 제목']].map(function(x){ return '<option value="'+esc(x[0])+'"'+((o.a['font-family']||'')===x[0]?' selected':'')+'>'+x[1]+'</option>'; }).join('')+'</select></div><label class="chk"><input type="checkbox" data-tf="bold"'+((o.a['font-weight']||'')==='700'?' checked':'')+'> 굵게</label>';
+      var txo=so.length===1&&o.tag==='text'?o:null, hasShape=so.length>=2&&so.some(function(q){ return q.tag==='text'; })&&so.some(function(q){ return q.tag!=='text'; });
+      if(hasShape) h+='<div class="sec"><h4>글자 + 선</h4><div class="btns"><button class="tbtn pri" data-a="top">글자를 선 따라 쓰기</button></div><div class="note">글자 하나와 선·도형 하나를 같이 골랐어요.</div></div>';
+      if(txo){ var FAM=[['\'Noto Sans KR\',sans-serif','고딕'],['serif','명조'],['Georgia,serif','Georgia (세리프)'],['\'Trebuchet MS\',sans-serif','Trebuchet'],['monospace','고정폭'],['\'Courier New\',monospace','Courier'],['cursive','필기체'],['\'Comic Sans MS\',cursive','Comic'],['Impact,sans-serif','굵은 제목']], an0=txo.a['text-anchor']||'start';
+        h+='<div class="sec"><h4>글자</h4><textarea data-txt="1" rows="3" style="min-height:60px">'+esc(txo.txt||'')+'</textarea><div class="btns"><button class="tbtn" data-a="tedit">캔버스에서 고치기</button></div>'+rowRange('글자 크기','fs',8,300,+txo.a['font-size']||48,'px')+'<div class="row"><label>글꼴</label><select data-tf="family">'+FAM.map(function(x){ return '<option value="'+esc(x[0])+'"'+((txo.a['font-family']||'')===x[0]?' selected':'')+'>'+x[1]+'</option>'; }).join('')+'</select></div>'
+          +'<div class="btns"><label class="chk" style="margin:0"><input type="checkbox" data-tf="bold"'+((txo.a['font-weight']||'')==='700'?' checked':'')+'> 굵게</label><label class="chk" style="margin:0"><input type="checkbox" data-tf="italic"'+(txo.a['font-style']==='italic'?' checked':'')+'> 기울임</label><label class="chk" style="margin:0"><input type="checkbox" data-tf="under"'+(txo.a['text-decoration']==='underline'?' checked':'')+'> 밑줄</label></div>'
+          +(txo.tp?'':'<div class="row"><label>맞춤</label><select data-tf="anchor">'+[['start','왼쪽'],['middle','가운데'],['end','오른쪽']].map(function(x){ return '<option value="'+x[0]+'"'+(an0===x[0]?' selected':'')+'>'+x[1]+'</option>'; }).join('')+'</select></div>')
+          +rowRange('글자 간격','ls',-5,40,+txo.a['letter-spacing']||0,'px',.5)+(txo.tp?rowRange('시작 위치','tpo',0,100,txo.tpo||0,'%')+'<div class="btns"><button class="tbtn" data-a="topoff">선 따라 쓰기 풀기</button></div>':rowRange('줄 간격','lh',.8,3,txo.lh||1.2,'x',.05))+'</div>'; }
       h+='</div>';
     } else {
       if(tool==='poly') h+='<div class="sec"><h4>다각형</h4>'+rowRange('변 개수','sides',3,24,st.sides)+'</div>';
@@ -624,6 +653,7 @@ pb.addEventListener('input',function(e){
   if(t.dataset.st){ st[t.dataset.st]=t.value; return; }
   if(t.dataset.s){ var id=t.dataset.s, v=+t.value, u=t.nextElementSibling; var unit=u.textContent.replace(/[-0-9.]/g,''); u.textContent=f(v)+unit;
     var so=selObjs();
+    if(id==='ls'||id==='lh'||id==='tpo'){ so.forEach(function(o){ if(id==='ls') o.a['letter-spacing']=v; else if(id==='lh') o.lh=v; else o.tpo=v; }); softRender(); clearTimeout(saveT); saveT=setTimeout(commitQuiet,300); return; }
     if(id==='rot'||id==='scl'||id==='fs'||id==='gang'){ so.forEach(function(o){ if(id==='rot') o.rot=v; else if(id==='scl'){ o.sx=(o.sx<0?-1:1)*v; o.sy=(o.sy<0?-1:1)*v; } else if(id==='gang'){ if(o.grad) o.grad.ang=v; } else o.a['font-size']=v; }); softRender(); clearTimeout(saveT); saveT=setTimeout(commitQuiet,300); return; }
     if(so.length&&(id==='sw'||id==='op'||id==='dash'||id==='blur'||id==='gap'||id==='miter'||id==='mks')){ setProp(id,v); }
     if(id==='sw'||id==='op'||id==='dash'||id==='gap'||id==='miter'||id==='mks'||id==='sides'||id==='star'||id==='inner'||id==='round'||id==='sym'||id==='font'||id==='gridSize') st[id]=v;
@@ -637,7 +667,10 @@ pb.addEventListener('change',function(e){
   if(t.dataset.oa){ var ok=t.dataset.oa, ov=t.value; if(ok!=='blend') st[ok]=ov; var so2=selObjs(); if(so2.length){ so2.forEach(function(o){ o[ok]=ov; if(ok==='join'&&ov==='miter'&&!o.miter) o.miter=4; }); commit(); } else panel(); return; }
   if(t.dataset.nb){ boxSet(t.dataset.nb,+t.value); return; }
   if(t.dataset.o){ selObjs().forEach(function(o){ o[t.dataset.o]=t.checked; if(t.dataset.o==='sh'&&o.pts) setD(o); }); commit(); return; }
-  if(t.dataset.tf){ selObjs().forEach(function(o){ if(o.tag!=='text') return; if(t.dataset.tf==='family') o.a['font-family']=t.value; else o.a['font-weight']=t.checked?'700':'400'; }); commit(); return; }
+  if(t.dataset.tf){ selObjs().forEach(function(o){ if(o.tag!=='text') return; var tfk=t.dataset.tf;
+      if(tfk==='italic'){ if(t.checked) o.a['font-style']='italic'; else delete o.a['font-style']; return; } if(tfk==='under'){ if(t.checked) o.a['text-decoration']='underline'; else delete o.a['text-decoration']; return; }
+      if(tfk==='anchor'){ var b0=bbox(o); o.a['text-anchor']=t.value; stage.querySelector('#gobj').innerHTML=doc.objs.map(oS).join(''); var b1=bbox(o); if(b0&&b1) o.tx+=b0.x-b1.x; return; }
+      if(t.dataset.tf==='family') o.a['font-family']=t.value; else o.a['font-weight']=t.checked?'700':'400'; }); commit(); return; }
   if(t.dataset.pc){ patOpt[t.dataset.pc]=t.checked; return; }
   if(t.dataset.k){ st[t.dataset.k]=t.checked; if(t.dataset.k==='fillOn'&&selObjs().length){ selObjs().forEach(function(o){ o.fill=t.checked?st.fill:'none'; }); commit(); } if(t.dataset.k==='grid') drawGrid(); return; }
   if(t.id==='bgc'){ doc.bg=t.value; commit(); return; }
@@ -666,6 +699,7 @@ pb.addEventListener('click',function(e){
   if(t.id==='cvApply'){ var w=Math.max(16,Math.min(8000,+$('cw').value||doc.w)), h=Math.max(16,Math.min(8000,+$('ch').value||doc.h)); doc.w=w; doc.h=h; commit(); fit(); return; }
   if(t.id==='bClear'){ if(doc.objs.length&&!confirmOnce(t)) return; doc.objs=[]; sel=[]; commit(); return; }
   var a=t.dataset.a; if(!a) return;
+  if(a==='tedit'){ var teo=selObjs()[0]; if(teo&&teo.tag==='text') openTextEdit(teo,false); return; } if(a==='top'){ textOnPath(); return; } if(a==='topoff'){ selObjs().forEach(function(o){ if(o.tp){ delete o.tp; delete o.tpo; o.cx=null; o.cy=null; } }); commit(); return; }
   if(a==='bezend'){ finishBez(false); return; } if(a==='bezclose'){ finishBez(true); return; } if(a==='bezcancel'){ bezPts=[]; drawOv(); return; }
   if(a.charAt(0)==='n'&&a!=='nodes'){ var no2=selObjs()[0]; if(no2&&no2.pts){ if(a==='nsmooth'&&nodeSel>=0) toSmooth(no2,nodeSel); else if(a==='ncorner'&&nodeSel>=0){ toCorner(no2,nodeSel); no2.bz=true; } else if(a==='ndel'&&nodeSel>=0){ if(no2.pts.length>(no2.cl?3:2)){ no2.pts.splice(nodeSel,1); nodeSel=-1; } } else if(a==='nallsmooth'){ no2.pts.forEach(function(q,qi){ toSmooth(no2,qi); }); } else if(a==='nallcorner'){ no2.pts.forEach(function(q,qi){ toCorner(no2,qi); }); no2.bz=true; } setD(no2); commit(); } return; }
   if(a==='del') delSel(); else if(a==='dup') dupSel(); else if(a==='hflip') flip('h'); else if(a==='vflip') flip('v'); else if(a==='group') groupSel(); else if(a==='ungroup') ungroupSel(); else if(a==='bu'||a==='bi'||a==='bs'||a==='bx') boolOp(a.charAt(1)); else if(a==='topath'){ var po=selObjs()[0]; if(po&&toPath(po)){ commit(); } else toast('이 도형은 점으로 바꾸지 못해요'); } else order(a);
