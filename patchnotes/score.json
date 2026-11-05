@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v11",
+   "title": "드럼 악보·새 악기 4종·쪽 나눠 인쇄",
+   "items": [
+    "드럼(타악기) 음자리표: 킥·스네어·톰·하이햇(×표)·크래시를 오선 위치로 쓰고 합성 드럼 소리로 재생, MIDI는 10번 채널(GM 드럼)로 저장·읽기, MusicXML도 지원",
+    "악기 추가: 금관악기, 마림바, 하프, 합창",
+    "인쇄 / PDF: 줄 단위로 A4 쪽을 나눠서 잘리는 줄 없이, 쪽 번호와 함께 출력"
+   ],
+   "tr": {
+    "en": {
+     "title": "Drum staff, four new instruments and paginated printing",
+     "items": [
+      "Drum (percussion) clef: kick, snare, toms, hi-hat (x heads) and crash written by staff position, played by a synthesized drum kit, saved to and read from MIDI channel 10 (GM drums) and MusicXML",
+      "Four new instruments: brass, marimba, harp and choir",
+      "Print / PDF: splits into A4 pages between systems so no line is cut, with page numbers"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v10",
    "title": "셋잇단음표와 꾸밈음",
    "items": [
