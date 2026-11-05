@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v5",
+   "title": "재생 개선: 메트로놈·카운트인·반복·속도·혼자 듣기·음표 표시",
+   "items": [
+    "메트로놈 소리와 시작 전 한 마디 세어 주기(박자·6/8 묶음 반영)",
+    "끝나면 처음부터 반복, 고른 범위만 재생(범위 도구와 함께 쓰면 그 구간만 반복)",
+    "재생 속도 40~160%(빠르기 표시는 그대로)",
+    "파트별 혼자 듣기, 재생 중 소리 나는 음표를 악보에 청록색으로 표시"
+   ],
+   "tr": {
+    "en": {
+     "title": "Playback: metronome, count-in, loop, speed, solo and note highlight",
+     "items": [
+      "Metronome click and one-measure count-in (follows the time signature, including compound 6/8)",
+      "Loop playback and play-selection-only (with the range tool, loops just that part)",
+      "Playback speed 40-160% without changing the written tempo",
+      "Solo per part, and the sounding notes are highlighted on the score while playing"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v4",
    "title": "범위 선택·복사 붙여넣기·옮기기·끌어서 음 높이 바꾸기",
    "items": [
