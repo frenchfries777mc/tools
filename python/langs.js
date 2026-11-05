@@ -56,9 +56,9 @@ var HTML_WORDS=[['!doctype','<!DOCTYPE html>','문서 시작'],['html','<html la
 
 /* ---------- BeaconScript (the Beaconfall mod language) ---------- */
 var BS_EVENTS=['world generate','join','mine','chop','kill','craft','fish','place','die','death','respawn','break','destroy','damage','roll','interaction','quit','spawn','eat'];
-var BS_VERBS='on give set remove replace spawn place teleport title chat say button ui key remap chance if else rename fill disable enable add subtract reset play loop heal damage broadcast every mod resource pack load api';
+var BS_VERBS='on give set remove replace spawn place teleport title chat say button ui key remap chance if else rename fill disable enable add subtract reset play loop heal damage broadcast every mod resource pack load api publish_short expose provide';
 var BS_TERRAIN=['land','beach','ocean','mountain'], BS_BIOMES=['start','forest','desert','volcano','jungle','mesa','rock','mangrove','ice'], BS_ALL=['trees','rocks','ores','structures'], BS_SOUNDS=['click','hurt','swing','bow','hit','break'], BS_COLL=['tree','rock','ore','water','sea','ocean','block','iron','log','stone','wood','sword','bench','wolf'], BS_PH=['%player_name%','%player_location%','%world_player_count%','%online_player%','%player_x%','%player_y%','%player_z%','%world_name%','%player_hp%','%player_max_hp%','%player_item%','%player_biome%','%world_day%','%world_time%','%attacker%','%victim%','%player%','%random%','%nearest_player%','%random_player%','%farest_player%','%nearest_mob%','%random_mob%','%farest_mob%','%nearest_monster%','%random_monster%','%farest_monster%',"%player's_uuid%",'%mod_name%','%mod_uuid%','%crafted_item%','%placed_block%','%distroyed_block%',"%player's mod%",'%player_uuid%','%destroyed_block%','%damage%','%interacted_item%','%interacted%','%eaten_item%'];
-var BS_BLOCK=setOf('on button ui chance if else rename loop every');
+var BS_BLOCK=setOf('on button ui chance if else rename loop every publish_short');
 var bsHl=mkHl({com:'#[^\\n]*', str:'"(?:\\\\.|[^"\\\\\\n])*"?', kw:setOf(BS_VERBS), bi:setOf('spawn player tree rock seconds blocks times of in to at near with damage speed name press top bottom left right center'), def:{}});
 var BS_WORDS=[['on world generate:','on world generate:\n    $0','월드를 처음 만들 때'],['on join:','on join:\n    $0','월드에 들어갈 때'],['on key press:','on key "$0" press:\n    ','키를 눌렀을 때'],['on mine:','on mine:\n    $0','돌 캘 때'],['on chop:','on chop:\n    $0','나무 벨 때'],['on kill:','on kill:\n    $0','몬스터 잡을 때'],['on craft:','on craft:\n    $0','만들 때'],['on fish:','on fish:\n    $0','낚시할 때'],['on death:','on death:\n    $0','죽을 때'],['on destroy:','on destroy chest:\n    $0','부쉈을 때'],['on roll:','on roll:\n    $0','구를 때'],['on quit:','on quit:\n    $0','나갈 때'],['give','give $0','아이템 주기'],['set','set $0 damage 10','아이템 데미지/속도/이름'],['remove','remove tree in 20 blocks of spawn','나무/돌 없애기'],['remove all','remove all trees','나무·바위·광석·건물 전부 없애기'],['disable collision','disable collision of tree','나무·바위·광석·물·블록 부딪힘 끄기'],['enable collision','enable collision of water','부딪힘 켜기'],['fill','fill ~0 ~0 ~300 ~300 to land','땅·해변·바다·산 만들기 (새 월드)'],['fill mountain','fill ~0 ~0 ~300 ~300 to mountain $0','산 만들기 (지역: start forest desert volcano jungle mesa rock mangrove ice)'],['spawn','spawn wolf $0 times','몹 소환'],['place','place bench near spawn','구조물 설치'],['teleport','teleport player to spawn','순간이동'],['title','title "$0" for 3 seconds','화면 중앙 글자'],['chat','chat "$0"','채팅'],['%player_name%','%player_name%','플레이어 이름 (Potato API 모드)'],['%online_player%','%online_player%','접속 인원 (Potato API 모드)'],['say','say "$0"','말하기'],['button','button "$0" at top right:\n    ','화면 버튼'],['ui','ui "$0":\n    ','작은 창'],['remap','remap "E" to "R"','키 바꾸기'],['chance','chance 30%:\n    $0','확률'],['if','if $0:\n    ','조건']];
 var BS_ITEMS='iron log stone wood sword bench wolf spawn player';
@@ -69,10 +69,12 @@ var BS_TIPS={break:'부술 때',destroy:'부쉈을 때',contained:'들어 있으
 function orSplit(s){ var mk=s.replace(/"(?:\\.|[^"\\])*"/g,function(m){ return new Array(m.length+1).join('\u0001'); }), out=[], last=0, re=/\s+or\s+/g, m; while((m=re.exec(mk))){ out.push(s.slice(last,m.index)); last=m.index+m[0].length; } out.push(s.slice(last)); return out; }
 function bsItem(str){ var db=window.BS_ITEMDB; if(!db||!str) return null; var x=str.trim().replace(/^"|"$/g,'').trim(), l=x.toLowerCase(); if(!x) return null; if(Object.prototype.hasOwnProperty.call(db,l)) return {id:l,n:db[l][0],ic:db[l][1]}; for(var k in db){ if(db[k][0]===x) return {id:k,n:db[k][0],ic:db[k][1]}; } return null; }
 function bsItemSug(){ var db=window.BS_ITEMDB, out=[]; if(!db) return out; Object.keys(db).forEach(function(k){ out.push({n:k,i:k+':',d:db[k][0]}); }); Object.keys(db).forEach(function(k){ if(/^[^\x00-\x7f]/.test(db[k][0])) out.push({n:db[k][0],i:db[k][0]+':',d:k}); }); return out; }
-function bsSug(before,pre){
+function bsCtx(ctx,before){ if(!ctx) return ''; var ci=(/^ */.exec(before.replace(/\t/g,'    '))||[''])[0].length, ls=ctx.split('\n'); for(var i=ls.length-1;i>=0;i--){ var l=ls[i].replace(/\t/g,'    '); if(!l.trim()||/^\s*#/.test(l)) continue; var ind=/^ */.exec(l)[0].length; if(ind<ci||(ci===0&&ind===0&&false)) return l.trim().toLowerCase(); } return ''; }
+function bsSug(before,pre,ctx){
   var tk=before.replace(/"(?:\\.|[^"\\])*"/g,'"S"').trim().split(/\s+/).filter(Boolean).map(function(x){ return x.toLowerCase(); }), n=tk.length, v=tk[0]||'', M=BS_MEAN;
   function W(list,suffix){ return list.map(function(w){ return {n:w,i:w+(suffix==null?' ':suffix),d:M[w]||BS_TIPS[w]||''}; }); }
   var ITEMS=['iron','log','stone','wood','sword','bench','wolf'];
+  if(n===0){ var pc=bsCtx(ctx,before); if(/^publish_short\s*:/.test(pc)) return [['var','var "$0"','공개할 변수 이름 (소문자·숫자·_)'],['aliases','aliases "%$0%"','다른 모드가 부를 별칭'],['from uuid','from uuid ','이 모드의 uuid'],['type text','type text','값 종류: text 또는 number'],['scope world','scope world','범위: world 또는 mod'],['sign','sign "x" + "모드이름" + "x"','서명'],['rule:','rule:\n    ','읽기 규칙']].map(function(x){ return {n:x[0],i:x[1],d:x[2]}; }); if(/^rule\s*:/.test(pc)) return [['when reader mod is applied','when reader mod is applied','읽는 모드가 적용 중일 때'],['and writer mod','and writer mod "$0" is applied','쓰는 모드(이 모드)가 적용 중일 때'],['and world is host','and world is host','방장일 때'],['bind','bind "%$0%" to {:x:}','별칭을 공유 변수에 연결'],['fallback','fallback ""','못 읽을 때 쓸 글'],['revoke on mod remove','revoke on mod remove','모드를 빼면 취소']].map(function(x){ return {n:x[0],i:x[1],d:x[2]}; }); }
   var oi=tk.lastIndexOf('or'); if(oi>0&&((v==='on'&&tk.indexOf('of')>0&&tk.indexOf('of')<oi)||(/^(chat|say|play|give)$/.test(v)&&tk.indexOf('to')>0&&tk.indexOf('to')<oi))) return W(['player','monster','mob'],''); if(oi>0&&(v==='on'||v==='if')&&!(v==='on'&&tk[1]==='key')){ if(oi===n-1&&v==='if') return W(['variable','has','player','world','mod','not']).concat([{n:'%attacker%',i:'%attacker% is ',d:'공격한 쪽'},{n:'%victim%',i:'%victim% is ',d:'맞은 쪽'}]); if(oi===n-1&&v==='on'&&/^(place|destroy|eat)$/.test(tk[1])) return bsItemSug().concat(bsSug('on ',pre)); return bsSug(v+' '+tk.slice(oi+1).join(' ')+(oi===n-1?'':' '),pre); }
   if(n===0) return W(BS_VERBS.split(' ').filter(function(x){ return x!=='else'||true; })).concat([{n:'use_mod_uuid:',i:'use_mod_uuid: ',d:'다른 모드 uuid (그 모드 공유 변수를 %이름%으로 읽기, 최대 5줄)'}]);
   if(v==='on'){
@@ -106,7 +108,10 @@ function bsSug(before,pre){
   if(v==='load') return [];
   if(v==='if'&&(tk[1]==='mod'||(tk[1]==='not'&&tk[2]==='mod'))){ var mi=tk[1]==='mod'?1:2; if(n===mi+1) return [{n:'"이름"',i:'"$0":',d:'모드 이름 (대소문자 무시)'}]; return []; }
   if(v==='if'&&tk[1]==='not'&&n===2) return W(['mod']);
+  if(v==='provide'){ return []; }
   if(v==='api'){ if(n===1) return W(['potato'],''); return []; }
+  if(v==='expose'){ if(n===2) return W(['to']); return []; }
+  if(v==='publish_short') return [];
   if(v==='resource'){ if(n===1) return W(['pack'],''); return []; }
   if(v==='if'){ if(n===1) return W(['variable','has','player','world','mod','not']); if(n===2&&tk[1]&&/^(\{.*\}|%.*%)$/.test(tk[1])) return W(['contained'],''); if(tk[1]&&tk[1][0]==='%'){ if(n===2) return W(['is']); if(n===3) return W(['not']).concat(W(['player'],':'),W(['contained'],'')); if(n===4&&tk[3]==='not') return W(['player'],':'); } return []; }
   if(v==='remove'){ if(n===1) return W(['all','tree','rock']); if(n===2&&tk[1]==='all') return W(BS_ALL,''); return []; }
@@ -217,12 +222,43 @@ function javaRun(ctx){ var src=ctx.code, bal=balance(src,false); ctx.pv.innerHTM
   ctx.show('pv'); ctx.done(true); }
 
 /* ---------- BeaconScript ---------- */
-function bsCheck(src,nested){ var hasUse=/^\s*use_mod_uuid\s*:/im.test(src), useCount=0, hasUuid=/^\s*[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\s*$/im.test(src), hdrSeen={}, seenCode=false, errs=[], stack=[], lines=src.split('\n'), VERB=BS_VERBS.split(' ');
+function bsCheck(src,nested){ var fUuid=(/^\s*([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\s*$/im.exec(src)||[])[1], fMod=(/^\s*mod\s+"([^"]+)"/im.exec(src)||[])[1], exposed={}, pubN=0;
+  src.replace(/^\s*expose\s+"([a-z0-9_]{1,21})"(?:\s+to\s+"(%[a-z0-9_]{1,21}%)")?\s*$/gim,function(m0,v,a){ v=v.toLowerCase(); (exposed[v]=exposed[v]||[]).push(a?a.toLowerCase():''); return m0; });
+  function finRule(cl,errs){ var R=cl.R, miss=!(R.w&1)?'when reader mod is applied':!(R.w&2)?'and writer mod "이름" is applied':!(R.w&4)?'and world is host':!R.bind?'bind "%별칭%" to {:이름:}':R.fb===null?'fallback "글"':!R.rv?'revoke on mod remove':''; if(miss) errs.push({line:cl.line,msg:'rule 에 빠진 줄이 있어요: '+miss}); }
+  function finPub(cl,errs){ var P=cl.P, ln0=cl.line, miss=!P.v?'var "이름"':!P.al?'aliases "%별칭%"':!P.u?'from uuid …':!P.ty?'type text|number':!P.sc?'scope world|mod':!P.sg?'sign "x" + "모드이름" + "x"':!P.rule?'rule:':''; if(miss){ errs.push({line:ln0,msg:'publish_short 에 빠진 줄이 있어요: '+miss}); return; }
+    if(++pubN>5) errs.push({line:ln0,msg:'publish_short 는 5번까지 쓸 수 있어요'});
+    if(!fUuid) errs.push({line:ln0,msg:'publish_short 는 파일 맨 위 uuid 줄이 필요해요'}); else if(P.u!==fUuid.toLowerCase()) errs.push({line:ln0,msg:'from uuid 는 이 모드의 uuid(맨 위 줄)와 같아야 해요'});
+    if(!fMod) errs.push({line:ln0,msg:'publish_short 는 mod "이름" 줄이 필요해요'}); else { if(P.rule.wn!==undefined&&P.rule.wn!==fMod) errs.push({line:ln0,msg:'writer mod "'+P.rule.wn+'" 은 이 모드 이름 "'+fMod+'" 과 같아야 해요'}); if(P.sg!==P.v+'\n'+fMod+'\n'+P.v) errs.push({line:ln0,msg:'sign 은 꼭 이렇게 써요: "'+P.v+'" + "'+fMod+'" + "'+P.v+'"'}); }
+    if(P.rule.bind&&P.al.indexOf(P.rule.bind)<0) errs.push({line:ln0,msg:'bind '+P.rule.bind+' 가 aliases 에 없어요'}); if(P.rule.bv&&P.rule.bv!==P.v) errs.push({line:ln0,msg:'bind 는 {:'+P.v+':} 를 가리켜야 해요'});
+    var ex=exposed[P.v]; if(!ex||(P.rule.bind&&ex.every(function(a){ return a&&a!==P.rule.bind; }))) errs.push({line:ln0,msg:'on 블록 안에 expose "'+P.v+'" to "'+(P.rule.bind||'%별칭%')+'" 줄이 필요해요'}); }
+  var hasUse=/^\s*use_mod_uuid\s*:/im.test(src), useCount=0, hasUuid=/^\s*[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\s*$/im.test(src), hdrSeen={}, seenCode=false, errs=[], stack=[], lines=src.split('\n'), VERB=BS_VERBS.split(' '), provRx=[];
+  lines.forEach(function(l0){ var m0=/^\s*(?:provide\s+(.*)|aliases\s+(.*))$/i.exec(l0); if(m0) (m0[1]||m0[2]).split(',').forEach(function(x){ x=x.trim().replace(/^"|"$/g,'').toLowerCase(); if(/^%[a-z0-9_'*]{1,40}%$/.test(x)) provRx.push(new RegExp('^'+x.replace(/[.+?^${}()|[\]\\]/g,'\\$&').replace(/\*/g,'[a-z0-9_]*')+'$')); }); });
+  function isProv(ph){ ph=ph.toLowerCase(); return provRx.some(function(r){ return r.test(ph); }); }
   lines.forEach(function(raw,i){ var ln=i+1, line=raw.replace(/\t/g,'    '); if(!line.trim()||/^\s*#/.test(line)) return;
     var ind=/^ */.exec(line)[0].length, t=line.trim(), m;
     var q=t.replace(/"(?:\\.|[^"\\])*"/g,''); if(/"/.test(q)){ errs.push({line:ln,msg:'따옴표(")가 닫히지 않았어요'}); }
-    while(stack.length&&ind<=stack[stack.length-1].ind){ var cl=stack.pop(); if(!cl.kids) errs.push({line:cl.line,msg:'":" 로 끝난 줄 아래에는 안쪽으로 들여쓴 명령이 와야 해요'}); }
+    while(stack.length&&ind<=stack[stack.length-1].ind){ var cl=stack.pop(); if(!cl.kids) errs.push({line:cl.line,msg:'":" 로 끝난 줄 아래에는 안쪽으로 들여쓴 명령이 와야 해요'}); if(cl.rs) finRule(cl,errs); if(cl.ps) finPub(cl,errs); }
     var par=stack[stack.length-1]; if(par){ par.kids++; } else if(ind>0) errs.push({line:ln,msg:'맨 앞 줄은 들여쓰지 않아요'});
+    if(par&&(par.ps||par.rs)){ var pm2;
+      if(par.ps){ var P=par.P;
+        if(pm2=t.match(/^var\s+"([a-z0-9_]{1,21})"$/i)) P.v=pm2[1].toLowerCase();
+        else if(pm2=t.match(/^aliases\s+("%[a-z0-9_]{1,21}%"(?:\s*,\s*"%[a-z0-9_]{1,21}%"){0,4})$/i)) P.al=pm2[1].match(/"([^"]+)"/g).map(function(x){ return x.slice(1,-1).toLowerCase(); });
+        else if(pm2=t.match(/^from\s+uuid\s+([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i)) P.u=pm2[1].toLowerCase();
+        else if(pm2=t.match(/^type\s+(text|number)$/i)) P.ty=pm2[1].toLowerCase();
+        else if(pm2=t.match(/^scope\s+(world|mod)$/i)) P.sc=pm2[1].toLowerCase();
+        else if(pm2=t.match(/^sign\s+"([^"]{1,40})"\s*\+\s*"([^"]{1,40})"\s*\+\s*"([^"]{1,40})"$/i)) P.sg=pm2[1]+'\n'+pm2[2]+'\n'+pm2[3];
+        else if(/^rule\s*:$/i.test(t)){ P.rule={w:0,bind:'',bv:'',fb:null,rv:0}; stack.push({line:ln,ind:ind,kids:0,rs:1,P:P,R:P.rule}); return; }
+        else errs.push({line:ln,msg:"publish_short 안에는 이런 줄만 써요: var \"x\" · aliases \"%a%\", \"%b%\" · from uuid … · type text|number · scope world|mod · sign \"x\" + \"모드이름\" + \"x\" · rule:"});
+        return; }
+      var R2=par.R, rm2;
+      if(/^when\s+reader\s+mod\s+is\s+applied$/i.test(t)) R2.w|=1;
+      else if(rm2=t.match(/^and\s+writer\s+mod\s+"([^"]{1,40})"\s+is\s+applied$/i)){ R2.w|=2; R2.wn=rm2[1]; }
+      else if(/^and\s+world\s+is\s+host$/i.test(t)) R2.w|=4;
+      else if(rm2=t.match(/^bind\s+"(%[a-z0-9_]{1,21}%)"\s+to\s+\{:([a-z0-9_]{1,21}):\}$/i)){ R2.bind=rm2[1].toLowerCase(); R2.bv=rm2[2].toLowerCase(); }
+      else if(rm2=t.match(/^fallback\s+"([^"]{0,40})"$/i)) R2.fb=rm2[1];
+      else if(/^revoke\s+on\s+mod\s+remove$/i.test(t)) R2.rv=1;
+      else errs.push({line:ln,msg:"rule 안에는 이런 줄만 써요: when reader mod is applied · and writer mod \"이름\" is applied · and world is host · bind \"%a%\" to {:x:} · fallback \"글\" · revoke on mod remove"});
+      return; }
     if(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(t)){ if(seenCode) errs.push({line:ln,msg:'uuid 줄은 파일 맨 위(다른 명령보다 앞)에 써요'}); else if(hdrSeen.uuid) errs.push({line:ln,msg:'uuid 줄은 한 번만 써요'}); hdrSeen.uuid=1; if(ind!==0) errs.push({line:ln,msg:'uuid 은 맨 앞 줄에 써요'}); return; }
     if(/^[0-9a-f]{8}-[0-9a-f]/i.test(t)){ errs.push({line:ln,msg:'uuid 모양이 아니에요: 550e8400-e29b-41d4-a716-446655440000 처럼 8-4-4-4-12자리 (0-9, a-f)'}); return; }
     if(/^use_mod_uuid\b/i.test(t)){ if(!/^use_mod_uuid:\s*[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\s*$/i.test(t)) errs.push({line:ln,msg:'이렇게 써요: use_mod_uuid: 550e8400-e29b-41d4-a716-446655440000  (uuid는 8-4-4-4-12자리, 0-9 a-f)'}); else if(seenCode) errs.push({line:ln,msg:'use_mod_uuid 줄은 파일 맨 위(다른 명령보다 앞)에 써요'}); if(++useCount>5) errs.push({line:ln,msg:'use_mod_uuid 줄은 5개까지예요'}); if(ind!==0) errs.push({line:ln,msg:'use_mod_uuid 는 맨 앞 줄에 써요'}); return; }
@@ -231,9 +267,10 @@ function bsCheck(src,nested){ var hasUse=/^\s*use_mod_uuid\s*:/im.test(src), use
     if(!verb){ errs.push({line:ln,msg:'명령으로 시작해야 해요: '+t.slice(0,20)}); return; }
     if(VERB.indexOf(verb)<0){ var g=guess(verb,VERB); errs.push({line:ln,msg:"모르는 명령 '"+verb+"'"+(g?" — 혹시 '"+g+"'?":'')}); return; }
     var first0=!seenCode&&!hdrSeen.name; if(verb==='mod'||verb==='resource'||verb==='pack') hdrSeen.name=1; else if(verb!=='api') seenCode=true;
+    if(verb==='provide'){ if(ind!==0) errs.push({line:ln,msg:'provide 는 맨 앞 줄에 써요'}); else if(!/^provide\s+%[a-z0-9_'*]{1,40}%(\s*,\s*%[a-z0-9_'*]{1,40}%)*\s*$/i.test(t)) errs.push({line:ln,msg:'이렇게 써요: provide %player_name%, %world_day%  (값은 %이름% 형식, * 가능: %player_*_count%)'}); return; }
     if(verb==='api'){ if(!/^api\s+potato\s*$/.test(t)) errs.push({line:ln,msg:'이렇게 써요: api potato'}); else if(seenCode) errs.push({line:ln,msg:'api 줄은 파일 맨 위(mod 이름 줄 아래)에 써요'}); else if(hdrSeen.api) errs.push({line:ln,msg:'api 줄은 한 번만 써요'}); hdrSeen.api=1; if(ind!==0) errs.push({line:ln,msg:'api 는 맨 앞 줄에 써요'}); return; }
     if(verb==='mod'||verb==='resource'||verb==='pack'){ if(!(verb==='mod'&&/^mod\s+"[^"]+"\s*$/.test(t))&&!(verb==='resource'&&/^resource\s+pack\s+"[^"]+"\s*$/.test(t))&&!(verb==='pack'&&/^pack\s+"[^"]+"\s*$/.test(t))) errs.push({line:ln,msg:'이렇게 써요: mod "이름"  (리소스팩은 resource pack "이름" 또는 pack "이름")'}); else if(!first0) errs.push({line:ln,msg:verb+' 줄은 파일 맨 위에 한 번만 써요'}); if(ind!==0) errs.push({line:ln,msg:verb+' 은 맨 앞 줄에 써요'}); return; }
-    if(!par&&!nested){ var topOk=/^(on|every|rename|remap|disable|enable|fill|load)$/.test(verb)||(verb==='remove'&&/^remove\s+all\b/i.test(t))||(verb==='set'&&!/^set\s+(variable|time|weather)\b/i.test(t)&&/^set\s+\S.*\s(damage|speed|name)\b/i.test(t)); if(!topOk){ errs.push({line:ln,msg:verb+' 줄은 on·every 블록 안쪽(들여쓰기)에 써요'}); } }
+    if(!par&&!nested){ var topOk=/^(on|every|rename|remap|disable|enable|fill|load|publish_short|provide)$/.test(verb)||(verb==='remove'&&/^remove\s+all\b/i.test(t))||(verb==='set'&&!/^set\s+(variable|time|weather)\b/i.test(t)&&/^set\s+\S.*\s(damage|speed|name)\b/i.test(t)); if(!topOk){ errs.push({line:ln,msg:verb+' 줄은 on·every 블록 안쪽(들여쓰기)에 써요'}); } }
     var opens=/:\s*$/.test(t);
     if(verb==='on'&&/^on\s+key\s+"[^"]*"(?:\s+or\s+"[^"]*")+\s+press\s*:\s*$/.test(t)){ if(ind!==0) errs.push({line:ln,msg:'on 은 맨 앞 줄에 써요'}); stack.push({line:ln,ind:ind,kids:0}); return; }
     if((verb==='on'||verb==='if')&&opens){ var body0=t.replace(/^(on|if)\s+/i,'').replace(/:\s*$/,''), parts0=orSplit(body0);
@@ -285,14 +322,16 @@ function bsCheck(src,nested){ var hasUse=/^\s*use_mod_uuid\s*:/im.test(src), use
     if(verb==='disable'||verb==='enable'){ var cm=/^(?:disable|enable)\s+collision\s+of\s+([A-Za-z_]+)\s*$/i.exec(t);
       if(!cm) errs.push({line:ln,msg:'이렇게 써요: disable collision of tree (또는 enable collision of water)'});
       else if(BS_COLL.indexOf(cm[1].toLowerCase())<0){ var g5=guess(cm[1].toLowerCase(),BS_COLL); errs.push({line:ln,msg:"모르는 대상 '"+cm[1]+"'"+(g5?" — 혹시 '"+g5+"'?":' (tree·rock·ore·water·block·아이템 이름)')}); } }
-    (t.replace(/%[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}_[^%\s"]+%/gi,'').replace(/%player's mod%/gi,'').replace(/%\{[^}\s]+\}%/g,'').match(/%[^%\s"]*%/g)||[]).forEach(function(ph){ if(!hasUse&&BS_PH.indexOf(ph.toLowerCase())<0&&!/^%var_[a-z0-9_]{1,20}%$/i.test(ph)&&!/^%player_[a-z0-9_]+_count%$/i.test(ph)){ var g6=guess(ph.toLowerCase(),BS_PH); errs.push({line:ln,msg:"모르는 자리표시 '"+ph+"'"+(g6?" — 혹시 '"+g6+"'?":'')}); } });
+    (t.replace(/%[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}_[^%\s"]+%/gi,'').replace(/%player's mod%/gi,'').replace(/%\{[^}\s]+\}%/g,'').match(/%[^%\s"]*%/g)||[]).forEach(function(ph){ if(!hasUse&&!isProv(ph)&&BS_PH.indexOf(ph.toLowerCase())<0&&!/^%var_[a-z0-9_]{1,20}%$/i.test(ph)&&!/^%player_[a-z0-9_]+_count%$/i.test(ph)){ var g6=guess(ph.toLowerCase(),BS_PH); errs.push({line:ln,msg:"모르는 자리표시 '"+ph+"'"+(g6?" — 혹시 '"+g6+"'?":'')}); } });
     if(verb==='teleport'&&!/\sto\s/.test(t)) errs.push({line:ln,msg:'이렇게 써요: teleport player to spawn'});
     if((verb==='title'||verb==='chat'||verb==='say'||verb==='broadcast')&&!/"/.test(t)) errs.push({line:ln,msg:verb+' 뒤에는 "글자"를 큰따옴표로 감싸서 써요'});
-    if(opens) stack.push({line:ln,ind:ind,kids:0,wg:(verb==='on'&&/^on\s+world\s+generate\b/i.test(t))||!!(par&&par.wg)}); });
-  stack.forEach(function(cl){ if(!cl.kids) errs.push({line:cl.line,msg:'":" 로 끝난 줄 아래에는 안쪽으로 들여쓴 명령이 와야 해요'}); });
+    if(verb==='publish_short'&&(!/^publish_short\s*:\s*$/.test(t)||ind!==0)) errs.push({line:ln,msg:'이렇게 맨 앞 줄에 써요: publish_short:'});
+    if(verb==='expose'&&!/^expose\s+"[a-z0-9_]{1,21}"(?:\s+to\s+"%[a-z0-9_]{1,21}%")?\s*$/i.test(t)) errs.push({line:ln,msg:'이렇게 써요: expose "hp" to "%hp%"  (이름은 소문자·숫자·_ 21자까지)'});
+    if(opens) stack.push({line:ln,ind:ind,kids:0,ps:verb==='publish_short'?1:0,P:verb==='publish_short'?{v:'',al:null,u:'',ty:'',sc:'',sg:'',rule:null}:null,wg:(verb==='on'&&/^on\s+world\s+generate\b/i.test(t))||!!(par&&par.wg)}); });
+  stack.forEach(function(cl){ if(!cl.kids) errs.push({line:cl.line,msg:'":" 로 끝난 줄 아래에는 안쪽으로 들여쓴 명령이 와야 해요'}); }); for(var si=stack.length-1;si>=0;si--){ if(stack[si].rs) finRule(stack[si],errs); if(stack[si].ps) finPub(stack[si],errs); }
   return {errs:errs}; }
 /* each word of a line is its own small card: the word and what it means */
-var BS_MEAN={on:'때',world:'월드',generate:'만들어질 때',join:'들어올 때',key:'키',press:'누를 때',mine:'돌 캘 때',chop:'나무 벨 때',kill:'몬스터 잡을 때',craft:'만들 때',fish:'낚시할 때',place:'설치',die:'죽을 때',eat:'먹을 때',api:'API 표시',potato:'Potato API',load:'원래 지형으로',roll:'구를 때',interaction:'상호작용할 때',quit:'나갈 때',trader:'상인',mod:'모드 이름',resource:'리소스',pack:'팩',hp:'체력',biome:'지역',item:'들고 있는 것',players:'플레이어 수',hour:'시각',or:'또는',destroy:'부쉈을 때',every:'마다',monster:'몬스터',mob:'몹',stun:'기절',break:'부술 때',contained:'들어 있으면',
+var BS_MEAN={provide:'풀어줄 값',on:'때',world:'월드',generate:'만들어질 때',join:'들어올 때',key:'키',press:'누를 때',mine:'돌 캘 때',chop:'나무 벨 때',kill:'몬스터 잡을 때',craft:'만들 때',fish:'낚시할 때',place:'설치',die:'죽을 때',publish_short:'짧은 값 공개',expose:'공개하기',aliases:'별칭',var:'변수',from:'에서',uuid:'모드 번호',type:'종류',scope:'범위',sign:'서명',rule:'규칙',when:'~일 때',reader:'읽는 쪽',writer:'쓰는 쪽',applied:'적용됨',host:'호스트',bind:'연결',fallback:'기본값',revoke:'취소',text:'글자',number:'숫자',eat:'먹을 때',api:'API 표시',potato:'Potato API',load:'원래 지형으로',roll:'구를 때',interaction:'상호작용할 때',quit:'나갈 때',trader:'상인',mod:'모드 이름',resource:'리소스',pack:'팩',hp:'체력',biome:'지역',item:'들고 있는 것',players:'플레이어 수',hour:'시각',or:'또는',destroy:'부쉈을 때',every:'마다',monster:'몬스터',mob:'몹',stun:'기절',break:'부술 때',contained:'들어 있으면',
   give:'주기',set:'정하기',remove:'없애기',replace:'바꾸기',teleport:'순간이동',title:'화면 가운데 글자',chat:'채팅',say:'말하기',button:'버튼',ui:'작은 창',remap:'키 바꾸기',chance:'확률',if:'만약',else:'아니면',rename:'이름 바꾸기',fill:'땅 바꾸기',play:'재생',sound:'소리',loop:'반복',heal:'회복',broadcast:'모두에게 알림',effect:'효과',time:'시간',weather:'날씨',day:'낮',noon:'한낮',midnight:'한밤',sunrise:'해 뜰 때',sunset:'해 질 때',clear:'맑음',rain:'비',storm:'폭풍',strength:'힘',defense:'방어',regen:'재생력',haste:'채굴 속도',breath:'물숨',night:'밤',click:'딸깍',hurt:'아픈 소리',swing:'휘두르는 소리',bow:'활',hit:'맞는 소리',break:'부서지는 소리',is:'이면',not:'아니면',random:'무작위',death:'죽을 때',respawn:'다시 살아날 때',variable:'변수',add:'더하기',subtract:'빼기',reset:'처음 값으로',from:'에서',disable:'끄기',enable:'켜기',collision:'부딪힘',all:'전부',land:'땅',beach:'해변',ocean:'바다',mountain:'산',trees:'나무들',rocks:'바위들',ores:'광석들',structures:'건물들',start:'시작 지역',forest:'숲',desert:'사막',volcano:'화산',jungle:'정글',mesa:'붉은 고원',mangrove:'맹그로브',ice:'얼음',
   in:'안에서',of:'의',to:'로',at:'위치',near:'근처',with:'으로',for:'동안',and:'그리고',has:'가지고 있으면',seconds:'초',second:'초',times:'번',blocks:'칸',block:'칸',damage:'데미지',speed:'공격 간격(초)',name:'이름',
   top:'위',bottom:'아래',left:'왼쪽',right:'오른쪽',center:'가운데',player:'플레이어',iron:'철',log:'통나무',stone:'돌',wood:'나무',sword:'검',bench:'작업대',wolf:'늑대',tree:'나무',rock:'바위',grass:'풀',sand:'모래'};
