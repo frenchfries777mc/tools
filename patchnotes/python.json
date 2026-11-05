@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v13",
+   "title": "BeaconScript {변수} 표기와 새 % 값",
+   "items": [
+    "변수를 {score}처럼 중괄호로 쓸 수 있어요 (set variable {score} to 3, if variable {score} >= 5:, 글 안의 {score}). {_이름_}은 지역 변수로 보여 줘요",
+    "%nearest_player% %random_player% %farest_player% %nearest_mob% %random_mob% %farest_mob% %nearest_monster% %random_monster% %farest_monster% %player's_uuid% %mod_name% %mod_uuid% %crafted_item% %placed_block% %distroyed_block% 자리표시 인식 (Potato API 필요)"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript {variable} notation and new % values",
+     "items": [
+      "Variables can be written in braces like {score} (set variable {score} to 3, if variable {score} >= 5:, and inside texts). {_name_} shows as a local variable",
+      "Recognises %nearest_player%, %random_player%, %farest_player%, %nearest_mob%, %random_mob%, %farest_mob%, %nearest_monster%, %random_monster%, %farest_monster%, %player's_uuid%, %mod_name%, %mod_uuid%, %crafted_item%, %placed_block%, %distroyed_block% (Potato API needed)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v12",
    "title": "BeaconScript 소리·반복·회복·시간·날씨 명령",
    "items": [
