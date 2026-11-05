@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v22",
+   "title": "BeaconScript 새 이벤트 반영",
+   "items": [
+    "on roll·interaction·quit·spawn 이벤트와 %interacted_item% 값을 점검해요",
+    "of·to 뒤에도 or로 여러 대상을 쓸 수 있어요 (on spawn of wolf or slime:, chat \"x\" to Bob or Alice)",
+    "자동완성과 예시에는 destroy·death만 보이고, break·die는 계속 에러 없이 써요"
+   ],
+   "tr": {
+    "en": {
+     "title": "New BeaconScript events",
+     "items": [
+      "on roll, interaction, quit, spawn events and the %interacted_item% value are checked",
+      "or works after of and to for several targets (on spawn of wolf or slime:, chat \"x\" to Bob or Alice)",
+      "Autocomplete and examples show only destroy and death; break and die still work without errors"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v21",
    "title": "BeaconScript 맨 위 줄과 새 조건문",
    "items": [
