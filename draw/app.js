@@ -66,10 +66,11 @@ function objStr(o,nested){
   return defs+'<'+tag+a+idA+'/>';
 }
 function bgStr(){ return doc.bgOn?'<rect width="'+doc.w+'" height="'+doc.h+'" fill="'+esc(doc.bg)+'" data-bg="1"/>':''; }
-function docSvg(forExport,embed){
-  var meta=embed?'<metadata id="fdraw-data">'+btoa(unescape(encodeURIComponent(snap(true))))+'</metadata>':'';
-  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+doc.w+' '+doc.h+'" width="'+doc.w+'" height="'+doc.h+'">'+meta+bgStr()+doc.objs.map(oS).join('')+'</svg>';
-}
+function buildSvg(opt){ opt=opt||{}; var box=opt.box||{x:0,y:0,w:doc.w,h:doc.h}, objs=opt.objs||doc.objs, sc=opt.scale||1;
+  var meta=opt.embed?'<metadata id="fdraw-data">'+btoa(unescape(encodeURIComponent(snap(true))))+'</metadata>':'';
+  var bg=(opt.bg!==false&&doc.bgOn)?'<rect x="'+f(box.x)+'" y="'+f(box.y)+'" width="'+f(box.w)+'" height="'+f(box.h)+'" fill="'+esc(doc.bg)+'" data-bg="1"/>':'';
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+f(box.x)+' '+f(box.y)+' '+f(box.w)+' '+f(box.h)+'" width="'+Math.round(box.w*sc)+'" height="'+Math.round(box.h*sc)+'">'+meta+bg+objs.map(oS).join('')+'</svg>'; }
+function docSvg(forExport,embed){ return buildSvg({embed:embed}); }
 function byId(id){ for(var i=0;i<doc.objs.length;i++) if(doc.objs[i].id===id) return doc.objs[i]; }
 function render(){
   stage.setAttribute('viewBox','0 0 '+doc.w+' '+doc.h);
@@ -572,6 +573,44 @@ function askAI(){
 /* ---------- export / import ---------- */
 function download(name,blob){ var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },1500); }
 function fname(ext){ return (doc.name||'draw').replace(/[\\/:*?"<>|]/g,'_')+'.'+ext; }
+var EX={fmt:'png',area:'canvas',scale:2,q:.92,bg:true,embed:true};
+function exArea(mode){ var vis=doc.objs.filter(function(o){ return !o.hid; }), list=mode==='sel'?vis.filter(function(o){ return sel.indexOf(o.id)>=0; }):vis;
+  if(mode==='canvas') return {box:{x:0,y:0,w:doc.w,h:doc.h},objs:doc.objs};
+  if(!list.length) return null; var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9, pad=4;
+  for(var i=0;i<list.length;i++){ var b=bbox(list[i]); if(!b) continue; x0=Math.min(x0,b.x); y0=Math.min(y0,b.y); x1=Math.max(x1,b.x+b.w); y1=Math.max(y1,b.y+b.h); pad=Math.max(pad,(list[i].sw||0)/2*Math.max(Math.abs(list[i].sx||1),Math.abs(list[i].sy||1))+4,(list[i].blur||0)*2,list[i].shadow?30:0); }
+  if(x1<x0) return null; pad=Math.min(pad,60); return {box:{x:Math.floor(x0-pad),y:Math.floor(y0-pad),w:Math.ceil(x1-x0+pad*2),h:Math.ceil(y1-y0+pad*2)},objs:mode==='sel'?list:doc.objs}; }
+function rasterBlob(svg,w,h,fmt,q){ return new Promise(function(res,rej){ var img=new Image(); img.onload=function(){ var c=document.createElement('canvas'); c.width=w; c.height=h; var x=c.getContext('2d'), mime=fmt==='jpg'?'image/jpeg':fmt==='webp'?'image/webp':'image/png';
+    if(fmt!=='png'){ x.fillStyle=doc.bgOn?doc.bg:'#ffffff'; x.fillRect(0,0,w,h); } x.drawImage(img,0,0,w,h); c.toBlob(function(b){ b?res(b):rej(new Error('blob')); },mime,q); }; img.onerror=function(){ rej(new Error('img')); }; img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg); }); }
+function exBuild(){ var ar=exArea(EX.area); if(!ar) return null; var sc=EX.fmt==='svg'||EX.fmt==='pdf'?1:EX.scale;
+  return {ar:ar,sc:sc,w:Math.max(1,Math.round(ar.box.w*sc)),h:Math.max(1,Math.round(ar.box.h*sc)),svg:buildSvg({box:ar.box,objs:ar.objs,scale:sc,bg:EX.bg,embed:EX.fmt==='svg'&&EX.embed&&EX.area==='canvas'})}; }
+function printSvg(svg,w,h){ var fr=document.createElement('iframe'); fr.style.cssText='position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:0;';
+  fr.srcdoc='<!doctype html><meta charset="utf-8"><style>@page{size:'+w+'px '+h+'px;margin:0}html,body{margin:0;background:#fff}svg{display:block;width:'+w+'px;height:'+h+'px}</style>'+svg;
+  fr.onload=function(){ try{ fr.contentWindow.focus(); fr.contentWindow.print(); }catch(e){ toast('인쇄 창을 열지 못했어요'); } setTimeout(function(){ fr.remove(); },60000); }; document.body.appendChild(fr); }
+function openExport(){ var old=document.querySelector('.dlgbg'); if(old) old.remove();
+  var bgd=document.createElement('div'); bgd.className='dlgbg';
+  bgd.innerHTML='<div class="dlg"><h3>내보내기</h3><div class="row"><label>형식</label><select id="exF"><option value="png">PNG (투명 가능)</option><option value="jpg">JPG (작은 용량)</option><option value="webp">WebP</option><option value="svg">SVG (벡터)</option><option value="pdf">PDF·인쇄</option></select></div>'
+   +'<div class="row"><label>범위</label><select id="exA"><option value="canvas">캔버스 전체</option><option value="content">그림 내용에 맞춰 자르기</option><option value="sel">고른 도형만</option></select></div>'
+   +'<div class="row" id="exSr"><label>배율</label><select id="exS"><option value="0.5">0.5배</option><option value="1">1배 (원래 크기)</option><option value="2">2배</option><option value="3">3배</option><option value="4">4배</option></select></div>'
+   +'<div class="row" id="exQr"><label>품질</label><input type="range" id="exQ" min="40" max="100" value="92"><span class="v" id="exQv">92</span></div>'
+   +'<label class="chk" id="exBr"><input type="checkbox" id="exB"> 배경 색 포함 (끄면 투명)</label><label class="chk" id="exEr"><input type="checkbox" id="exE"> SVG에 편집 정보 넣기 (다시 열면 그대로 고칠 수 있어요)</label>'
+   +'<div class="note" id="exInfo"></div><div class="btns"><button class="tbtn pri" id="exGo">내보내기</button><button class="tbtn" id="exCp">그림으로 복사</button><button class="tbtn" id="exX">닫기</button></div></div>';
+  document.body.appendChild(bgd); var q=function(id){ return bgd.querySelector('#'+id); };
+  q('exF').value=EX.fmt; q('exA').value=EX.area; q('exS').value=String(EX.scale); q('exQ').value=Math.round(EX.q*100); q('exB').checked=EX.bg; q('exE').checked=EX.embed;
+  function sync(){ EX.fmt=q('exF').value; EX.area=q('exA').value; EX.scale=+q('exS').value; EX.q=+q('exQ').value/100; EX.bg=q('exB').checked; EX.embed=q('exE').checked; q('exQv').textContent=Math.round(EX.q*100);
+    var r=EX.fmt==='png'||EX.fmt==='jpg'||EX.fmt==='webp'; q('exSr').hidden=!r; q('exQr').hidden=!(EX.fmt==='jpg'||EX.fmt==='webp'); q('exBr').hidden=EX.fmt==='jpg'; q('exEr').hidden=!(EX.fmt==='svg'&&EX.area==='canvas'); q('exCp').hidden=!r; q('exGo').textContent=EX.fmt==='pdf'?'인쇄 창 열기 (PDF로 저장 가능)':'내보내기';
+    var b=exBuild(); if(!b){ q('exInfo').textContent='고른 도형이 없어요. 먼저 도형을 골라 주세요.'; q('exGo').disabled=true; q('exCp').disabled=true; return; } q('exGo').disabled=false; q('exCp').disabled=false;
+    q('exInfo').textContent=b.w+' × '+b.h+' px'+(EX.fmt==='svg'?' · 약 '+Math.max(1,Math.round(b.svg.length/1024))+'KB':'')+(b.w*b.h>1.2e8?' · 너무 커요, 배율을 줄여 주세요':''); }
+  bgd.addEventListener('input',sync); bgd.addEventListener('change',sync); sync();
+  q('exX').onclick=function(){ bgd.remove(); }; bgd.addEventListener('pointerdown',function(e){ if(e.target===bgd) bgd.remove(); });
+  q('exGo').onclick=function(){ var b=exBuild(); if(!b) return; var nm=fname(EX.fmt==='pdf'?'pdf':EX.fmt);
+    if(EX.fmt==='svg'){ download(nm,new Blob([b.svg],{type:'image/svg+xml'})); toast('SVG를 받았어요'); return; }
+    if(EX.fmt==='pdf'){ printSvg(b.svg,b.ar.box.w,b.ar.box.h); return; }
+    if(b.w*b.h>1.2e8){ toast('그림이 너무 커요. 배율을 줄여 주세요'); return; }
+    rasterBlob(b.svg,b.w,b.h,EX.fmt,EX.q).then(function(bl){ download(nm,bl); toast('받았어요 ('+Math.max(1,Math.round(bl.size/1024))+'KB)'); }).catch(function(){ toast('그림으로 바꾸지 못했어요. SVG로 받아 보세요.'); }); };
+  q('exCp').onclick=function(){ var b=exBuild(); if(!b) return; if(!(navigator.clipboard&&window.ClipboardItem)){ toast('이 브라우저는 그림 복사를 지원하지 않아요. 받기를 써 주세요'); return; }
+    var pr=rasterBlob(b.svg,b.w,b.h,'png',1); navigator.clipboard.write([new ClipboardItem({'image/png':pr})]).then(function(){ toast('클립보드에 복사했어요'); }).catch(function(){ toast('복사하지 못했어요. 받기를 써 주세요'); }); }; }
+function cropToContent(){ var vis=doc.objs.filter(function(o){ return !o.hid; }); var ar=exArea('content'); if(!ar){ toast('자를 내용이 없어요'); return; } var bx=ar.box, pad=20, dx=bx.x-pad, dy=bx.y-pad;
+  doc.objs.forEach(function(o){ o.tx-=dx; o.ty-=dy; }); (doc.guides||[]).forEach(function(g){ g.p-=(g.v==='x'?dx:dy); }); doc.w=Math.max(16,Math.min(8000,Math.ceil(bx.w+pad*2))); doc.h=Math.max(16,Math.min(8000,Math.ceil(bx.h+pad*2))); commit(); fit(); toast('캔버스를 그림 크기에 맞췄어요'); }
 function exportPng(scale){
   var svg=docSvg(true), img=new Image(); img.onload=function(){ var c=document.createElement('canvas'); c.width=Math.round(doc.w*scale); c.height=Math.round(doc.h*scale); var x=c.getContext('2d'); x.drawImage(img,0,0,c.width,c.height); c.toBlob(function(b){ download(fname('png'),b); },'image/png'); };
   img.onerror=function(){ toast('PNG로 바꾸지 못했어요. SVG로 받아 보세요.'); }; img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
@@ -660,7 +699,7 @@ function panel(){
     h+='<div class="btns">'+[['정사각 1080',1080,1080],['가로 1920×1080',1920,1080],['세로 1080×1920',1080,1920],['A4 가로',1123,794],['A4 세로',794,1123],['명함 약 1050×600',1050,600]].map(function(s){ return '<button class="tbtn" data-sz="'+s[1]+','+s[2]+'">'+s[0]+'</button>'; }).join('')+'</div><div class="btns"><button class="tbtn pri" id="cvApply">크기 적용</button></div></div>';
     h+='<div class="sec"><h4>배경</h4><div class="row"><label>배경 색</label><input type="color" id="bgc" value="'+hex(doc.bg)+'"><label class="chk" style="margin:0;flex:1"><input type="checkbox" id="bgOn"'+(doc.bgOn?' checked':'')+'> 배경 칠하기</label></div><div class="note">배경을 끄면 PNG가 투명해져요.</div></div>';
     h+='<div class="sec"><h4>격자</h4><label class="chk"><input type="checkbox" data-k="grid"'+(st.grid?' checked':'')+'> 격자 보기</label><label class="chk"><input type="checkbox" data-k="snap"'+(st.snap?' checked':'')+'> 격자에 맞추기</label><label class="chk"><input type="checkbox" data-k="smart"'+(st.smart?' checked':'')+'> 옮길 때 다른 도형·캔버스 가운데와 가장자리에 달라붙기 (분홍 줄)</label>'+rowRange('격자 간격','gridSize',10,200,st.gridSize,'px',5)+'</div>';
-    h+='<div class="sec"><button class="tbtn" id="bClear">모두 지우고 새로 시작</button></div>';
+    h+='<div class="sec"><div class="btns"><button class="tbtn" id="cvCrop">캔버스를 그림 크기에 맞추기</button></div><button class="tbtn" id="bClear">모두 지우고 새로 시작</button></div>';
   }
   b.innerHTML=h;
 }
@@ -731,6 +770,7 @@ pb.addEventListener('click',function(e){
   if(t.id==='aiSet'){ if(window.FFAI) FFAI.settings(); return; }
   if(t.dataset.sz){ var a=t.dataset.sz.split(','); $('cw').value=a[0]; $('ch').value=a[1]; return; }
   if(t.id==='cvApply'){ var w=Math.max(16,Math.min(8000,+$('cw').value||doc.w)), h=Math.max(16,Math.min(8000,+$('ch').value||doc.h)); doc.w=w; doc.h=h; commit(); fit(); return; }
+  if(t.id==='cvCrop'){ cropToContent(); return; }
   if(t.id==='bClear'){ if(doc.objs.length&&!confirmOnce(t)) return; doc.objs=[]; sel=[]; commit(); return; }
   var a=t.dataset.a; if(!a) return;
   if(a==='clipmk'){ clipSel(); return; }
@@ -766,9 +806,9 @@ $('fileIn').addEventListener('change',function(){ if(this.files[0]) openFile(thi
 $('bSave').onclick=function(e){
   var old=document.querySelector('.menu'); if(old){ old.remove(); return; }
   var m=document.createElement('div'); m.className='menu'; var r=this.getBoundingClientRect(); m.style.top=(r.bottom+4)+'px'; m.style.right='8px';
-  m.innerHTML='<button data-x="png1">PNG (원래 크기)</button><button data-x="png2">PNG (2배 크게)</button><button data-x="svg">SVG (벡터)</button><button data-x="json">프로젝트 파일 (.fdraw)</button>';
+  m.innerHTML='<button data-x="dlg">내보내기 설정…</button><button data-x="png1">PNG (원래 크기)</button><button data-x="png2">PNG (2배 크게)</button><button data-x="svg">SVG (벡터)</button><button data-x="json">프로젝트 파일 (.fdraw)</button>';
   m.onclick=function(ev){ var x=ev.target.dataset.x; if(!x) return; m.remove();
-    if(x==='png1') exportPng(1); else if(x==='png2') exportPng(2); else if(x==='svg') download(fname('svg'),new Blob([docSvg(true,true)],{type:'image/svg+xml'})); else download(fname('fdraw'),new Blob([snap(true)],{type:'application/json'})); };
+    if(x==='dlg') openExport(); else if(x==='png1') exportPng(1); else if(x==='png2') exportPng(2); else if(x==='svg') download(fname('svg'),new Blob([docSvg(true,true)],{type:'image/svg+xml'})); else download(fname('fdraw'),new Blob([snap(true)],{type:'application/json'})); };
   document.body.appendChild(m); setTimeout(function(){ document.addEventListener('click',function h(ev){ if(!m.contains(ev.target)){ m.remove(); } document.removeEventListener('click',h); }); },0);
 };
 document.addEventListener('keydown',function(e){
@@ -795,6 +835,6 @@ window.addEventListener('resize',function(){ drawOv(); });
   if(s){ try{ load(s); }catch(e){} }
   $('dname').value=doc.name; hist=[snap()]; hi=0;
   renderTools(); render(); fit(); panel();
-  window.FDRAW={getSel:function(){ return sel; },groupSel:groupSel,ungroupSel:ungroupSel,boolOp:boolOp,align:align,toPath:toPath,select:function(a){ sel=a; drawOv(); panel(); },addNode:addNode,mat:mat,doc:doc,importSvg:importSvg,drawPattern:drawPattern,setTool:setTool,st:st,PATS:PATS,svg:docSvg};
+  window.FDRAW={getSel:function(){ return sel; },groupSel:groupSel,ungroupSel:ungroupSel,boolOp:boolOp,align:align,toPath:toPath,select:function(a){ sel=a; drawOv(); panel(); },addNode:addNode,mat:mat,doc:doc,importSvg:importSvg,drawPattern:drawPattern,setTool:setTool,st:st,PATS:PATS,svg:docSvg,buildSvg:buildSvg,openExport:openExport,exArea:exArea};
 })();
 })();
