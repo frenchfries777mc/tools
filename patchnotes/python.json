@@ -4,6 +4,30 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v12",
+   "title": "BeaconScript 소리·반복·회복·시간·날씨 명령",
+   "items": [
+    "play sound hit (click·hurt·swing·bow·hit·break), loop N times: (1~20), heal/damage player N, broadcast \"글\" 검사",
+    "set time day·night·noon·midnight·sunrise·sunset·0~23, set weather clear·rain·storm, give effect 이름 N seconds, set variable x to random A to B 검사",
+    "on death, on respawn 이벤트와 if %attacker% is (not) player: 조건",
+    "%attacker% %victim% %player% %random% %player_아이템_count% 자리표시 (Potato API 필요)",
+    "자동완성이 play → sound → 소리 이름처럼 한 단어씩 이어지고, 예제 '소리와 반복' 추가"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript sound, loop, heal, time and weather commands",
+     "items": [
+      "Checks play sound hit, loop N times:, heal/damage player N, broadcast \"text\"",
+      "Checks set time, set weather, give effect NAME N seconds, set variable x to random A to B",
+      "on death / on respawn events and if %attacker% is (not) player: conditions",
+      "%attacker% %victim% %player% %random% %player_ITEM_count% placeholders (Potato API needed)",
+      "Suggestions go word by word (play, sound, sound name), plus a new 'Sounds and loops' example"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v11",
    "title": "BeaconScript 자동완성을 한 단어씩, 변수 명령",
    "items": [
