@@ -4,6 +4,30 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v7",
+   "title": "화면: 자르기·모양·섞기·따뜻함·가장자리 어둡게",
+   "items": [
+    "자르기: 영상·그림의 왼쪽·오른쪽·위·아래를 잘라 내요",
+    "모양: 둥근 네모나 원/타원으로 오려 보여 줘요",
+    "위아래 뒤집기, 섞는 방식(곱하기·밝게·대비·차이 등)",
+    "색 효과에 따뜻함/차가움과 가장자리 어둡게(비네트) 추가, 시네마·노을·새벽 프리셋 추가",
+    "효과 복사 / 붙이기로 다른 클립에 같은 느낌을 한 번에 입혀요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Picture: crop, shape mask, blend modes, warmth, vignette",
+     "items": [
+      "Crop the left, right, top and bottom of videos and pictures",
+      "Shape mask: rounded rectangle or ellipse",
+      "Flip vertically and blend modes (multiply, screen, overlay, difference...)",
+      "Colour effects gain warmth/coolness and vignette, plus Cinema, Sunset and Dawn presets",
+      "Copy / paste effects to give another clip the same look in one step"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v6",
    "title": "타임라인: 표시·줄 잠금·당겨 지우기·멈춘 장면",
    "items": [
