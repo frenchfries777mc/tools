@@ -77,6 +77,7 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
 .swr{display:flex;flex-wrap:wrap;gap:5px;} .swb{width:24px;height:24px;border-radius:7px;border:1px solid var(--line);padding:0;cursor:pointer;} .swb.del{outline:2px dashed #e53935;} .grip{cursor:grab;padding:0 5px;color:var(--dim);touch-action:none;user-select:none;} .lyr.drag{opacity:.5;} .lyr.dropb{border-bottom:3px solid var(--fry);} .lyin{flex:1;min-width:0;background:var(--panel2);border:1px solid var(--fry);border-radius:6px;padding:4px 6px;}
 .txed{background:rgba(255,255,255,.88);border:1px dashed #ff8a3d;border-radius:4px;padding:2px 6px;resize:none;outline:none;margin:0;box-sizing:content-box;}
 .row.gs input[type=number]{width:54px;} .row.gs input[type=color]{flex:0 0 38px;}
+.dlgbg{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.55);display:grid;place-items:center;padding:16px;} .dlg{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;width:min(420px,100%);max-height:90vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.6);} .dlg h3{margin:0 0 10px;font-size:16px;}
 .footer-copy{display:none;}
 </style>
 </head>
@@ -104,7 +105,7 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
 <input type="file" id="fileIn" accept=".svg,.json,.fdraw,image/svg+xml,application/json" hidden>
 <script src="../ai.js?v=ai36.l21"></script>
 <script src="lib/polybool.js"></script>
-<script src="app.js?v=dr7"></script>
+<script src="app.js?v=dr8"></script>
 <script src="../pwa.js" defer></script>
 <script src="../ping.js" defer></script>
 </body>
