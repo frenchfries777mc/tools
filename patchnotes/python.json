@@ -493,6 +493,83 @@
       "The language button and list show a logo for Python, JavaScript, Java, HTML, JSON and BeaconScript",
       "The list also shows each file extension, and the My files list shows the language logo"
      ]
+    },
+    "es": {
+     "title": "Logos en la ventana para elegir idioma",
+     "items": [
+      "El botón y la lista para elegir idioma muestran los logos de Python, JavaScript, Java, HTML, JSON y BeaconScript",
+      "La lista muestra también la extensión de cada archivo, y tus archivos también llevan el logo de su lenguaje"
+     ]
+    },
+    "fr": {
+     "title": "Logos dans la fenêtre de choix de langage",
+     "items": [
+      "Le bouton et la liste de choix de langage affichent les logos de Python, JavaScript, Java, HTML, JSON et BeaconScript",
+      "La liste affiche aussi l'extension de chaque fichier, et tes fichiers portent aussi le logo de leur langage"
+     ]
+    },
+    "de": {
+     "title": "Logos im Fenster zur Sprachauswahl",
+     "items": [
+      "Die Schaltfläche und die Liste zur Sprachauswahl zeigen die Logos von Python, JavaScript, Java, HTML, JSON und BeaconScript",
+      "Die Liste zeigt auch die Dateiendung an, und in deiner Dateiliste trägt jede Datei das Sprachlogo"
+     ]
+    },
+    "ja": {
+     "title": "言語選択の窓にロゴ",
+     "items": [
+      "言語を選ぶボタンと一覧に、Python・JavaScript・Java・HTML・JSON・BeaconScriptのロゴが表示されます",
+      "一覧にファイルの拡張子も表示され、自分のファイル一覧にも言語のロゴが付きます"
+     ]
+    },
+    "zh": {
+     "title": "语言选择窗口中显示标志",
+     "items": [
+      "语言选择按钮和列表中显示 Python、JavaScript、Java、HTML、JSON 和 BeaconScript 的标志",
+      "列表中也会显示文件扩展名，你的文件列表中也会显示语言标志"
+     ]
+    },
+    "pt": {
+     "title": "Logotipos na janela de escolha de linguagem",
+     "items": [
+      "O botão e a lista de escolha de linguagem mostram os logotipos de Python, JavaScript, Java, HTML, JSON e BeaconScript",
+      "A lista mostra também a extensão do arquivo, e a sua lista de arquivos também tem o logotipo da linguagem"
+     ]
+    },
+    "ru": {
+     "title": "Логотипы в окне выбора языка",
+     "items": [
+      "Кнопка и список выбора языка показывают логотипы Python, JavaScript, Java, HTML, JSON и BeaconScript",
+      "В списке также указано расширение файла, а в вашем списке файлов у каждого есть логотип языка"
+     ]
+    },
+    "tr": {
+     "title": "Dil seçme penceresinde logolar",
+     "items": [
+      "Dil seçme düğmesi ve listesi Python, JavaScript, Java, HTML, JSON ve BeaconScript logolarını gösterir",
+      "Listede dosya uzantısı da görünür ve dosya listenizde de dil logosu bulunur"
+     ]
+    },
+    "it": {
+     "title": "Loghi nella finestra di scelta del linguaggio",
+     "items": [
+      "Il pulsante e l'elenco di scelta del linguaggio mostrano i loghi di Python, JavaScript, Java, HTML, JSON e BeaconScript",
+      "L'elenco mostra anche l'estensione del file, e nel tuo elenco di file compare il logo del linguaggio"
+     ]
+    },
+    "pl": {
+     "title": "Logo w oknie wyboru języka",
+     "items": [
+      "Przycisk i lista wyboru języka pokazują logo Pythona, JavaScriptu, Javy, HTML, JSON i BeaconScriptu",
+      "Lista pokazuje także rozszerzenie pliku, a na liście twoich plików przy każdym pliku jest logo języka"
+     ]
+    },
+    "ar": {
+     "title": "شعارات في نافذة اختيار اللغة",
+     "items": [
+      "يعرض زر اختيار اللغة وقائمته شعارات Python وJavaScript وJava وHTML وJSON وBeaconScript",
+      "تظهر في القائمة امتدادات الملفات أيضًا، وتظهر شعارات اللغات بجانب ملفاتك في القائمة"
+     ]
     }
    }
   },
@@ -510,6 +587,83 @@
      "items": [
       "The Python logo is replaced by the new Fry Code logo: a yellow terminal window with a blue border",
       "The tool card icon and picture and the browser tab icon use the new logo and a new screenshot"
+     ]
+    },
+    "es": {
+     "title": "Nuevo logo de Fry Code",
+     "items": [
+      "En lugar del logo de Python, ahora hay un nuevo logo de Fry Code: borde azul con una terminal amarilla",
+      "Los iconos y las imágenes de las tarjetas de herramientas, y el icono de la pestaña del navegador, también usan el nuevo logo y la nueva pantalla"
+     ]
+    },
+    "fr": {
+     "title": "Nouveau logo Fry Code",
+     "items": [
+      "Le logo Python est remplacé par le nouveau logo Fry Code : un cadre bleu avec un terminal jaune",
+      "Les icônes et images des cartes d'outils, ainsi que l'icône de l'onglet du navigateur, reprennent le nouveau logo et le nouvel écran"
+     ]
+    },
+    "de": {
+     "title": "Neues Fry-Code-Logo",
+     "items": [
+      "Statt des Python-Logos gibt es das neue Fry-Code-Logo: blauer Rahmen mit gelbem Terminal",
+      "Die Symbole und Bilder der Werkzeugkarten sowie das Tab-Symbol des Browsers verwenden jetzt das neue Logo und die neue Ansicht"
+     ]
+    },
+    "ja": {
+     "title": "Fry Codeの新しいロゴ",
+     "items": [
+      "Pythonのロゴの代わりに、青い枠に黄色いターミナルの新しいFry Codeロゴになりました",
+      "ツールカードのアイコンと絵、ブラウザのタブのアイコンも新しいロゴと新しい画面に変わりました"
+     ]
+    },
+    "zh": {
+     "title": "Fry Code 新标志",
+     "items": [
+      "Python 标志换成了新的 Fry Code 标志：蓝色边框、黄色终端图案",
+      "工具卡片的图标和图片，以及浏览器标签页图标，也都换成了新标志和新界面"
+     ]
+    },
+    "pt": {
+     "title": "Novo logotipo do Fry Code",
+     "items": [
+      "No lugar do logotipo do Python, agora há o novo logotipo do Fry Code: borda azul com um terminal amarelo",
+      "Os ícones e as imagens dos cartões de ferramentas, e o ícone da aba do navegador, também usam o novo logotipo e a nova tela"
+     ]
+    },
+    "ru": {
+     "title": "Новый логотип Fry Code",
+     "items": [
+      "Вместо логотипа Python теперь новый логотип Fry Code: синяя рамка и жёлтый терминал",
+      "Иконки и картинки карточек инструментов и значок вкладки браузера тоже теперь с новым логотипом и новым экраном"
+     ]
+    },
+    "tr": {
+     "title": "Yeni Fry Code logosu",
+     "items": [
+      "Python logosu yerine yeni Fry Code logosu geldi: mavi çerçeve içinde sarı bir terminal",
+      "Araç kartlarının simgeleri ve resimleri ile tarayıcı sekmesi simgesi de yeni logo ve yeni ekrana geçti"
+     ]
+    },
+    "it": {
+     "title": "Nuovo logo di Fry Code",
+     "items": [
+      "Al posto del logo Python c'è il nuovo logo di Fry Code: bordo blu con un terminale giallo",
+      "Anche le icone e le immagini delle schede degli strumenti e l'icona della scheda del browser usano il nuovo logo e la nuova schermata"
+     ]
+    },
+    "pl": {
+     "title": "Nowe logo Fry Code",
+     "items": [
+      "Zamiast logo Pythona jest nowe logo Fry Code: niebieska ramka i żółty terminal",
+      "Ikony i obrazki kart narzędzi oraz ikona karty przeglądarki również mają nowe logo i nowy ekran"
+     ]
+    },
+    "ar": {
+     "title": "شعار Fry Code الجديد",
+     "items": [
+      "بدلًا من شعار Python صار هناك شعار Fry Code الجديد: إطار أزرق وطرفية صفراء",
+      "أيقونات وصور بطاقات الأدوات وأيقونة تبويب المتصفح صارت أيضًا بالشعار والشاشة الجديدين"
      ]
     }
    }
@@ -540,6 +694,149 @@
       "JSON: shows the broken line, a tree view, pretty print and minify",
       "Java: bracket and quote check plus a structure view (it cannot run in the browser)",
       "BeaconScript: syntax check and a rules view; a wrong command suggests a similar one"
+     ]
+    },
+    "es": {
+     "title": "Ahora es Fry Code y eliges el lenguaje",
+     "items": [
+      "Fry Python ahora es Fry Code (la dirección y tus archivos siguen igual)",
+      "Arriba eliges Python, JavaScript, Java, HTML, JSON o BeaconScript (.bs), y cada archivo recuerda su elección",
+      "Cada lenguaje tiene su propio coloreado, autocompletado, ejemplos y extensiones para abrir y guardar",
+      "JavaScript: al ejecutar, el texto aparece en la pestaña de resultado y el código que dibuja va a la pestaña de pantalla",
+      "HTML: la vista previa cambia mientras escribes y hay una pestaña de consola",
+      "JSON: indica las líneas incorrectas, muestra en árbol, da formato y reduce a una sola línea",
+      "Java: revisa paréntesis y comillas y muestra la estructura (no se ejecuta en el navegador)",
+      "BeaconScript: revisa la sintaxis y muestra las reglas; si un comando está mal, sugiere uno parecido"
+     ]
+    },
+    "fr": {
+     "title": "Fry Code et choix du langage",
+     "items": [
+      "Fry Python devient Fry Code (l'adresse et tes fichiers ne changent pas)",
+      "En haut, choisis Python, JavaScript, Java, HTML, JSON ou BeaconScript (.bs) ; chaque fichier retient son choix",
+      "Coloration, complétion, exemples et extensions d'ouverture et d'enregistrement propres à chaque langage",
+      "JavaScript : à l'exécution, le texte apparaît dans l'onglet Résultat et le code qui dessine va dans l'onglet Écran",
+      "HTML : l'aperçu change pendant la frappe et il y a un onglet Console",
+      "JSON : signale les lignes fausses, affichage en arbre, mise en forme et réduction sur une seule ligne",
+      "Java : vérifie parenthèses et guillemets et montre la structure (pas d'exécution dans le navigateur)",
+      "BeaconScript : vérifie la syntaxe et affiche les règles ; une commande fausse suggère une commande proche"
+     ]
+    },
+    "de": {
+     "title": "Umbenannt in Fry Code und Sprachauswahl",
+     "items": [
+      "Fry Python heißt jetzt Fry Code (Adresse und deine Dateien bleiben gleich)",
+      "Oben wählst du Python, JavaScript, Java, HTML, JSON oder BeaconScript (.bs), und jede Datei merkt sich ihre Wahl",
+      "Jede Sprache hat eigene Farben, Autovervollständigung, Beispiele und Dateiendungen zum Öffnen und Speichern",
+      "JavaScript: Beim Ausführen erscheint der Text im Ergebnis-Tab, Code für Zeichnungen geht in den Bildschirm-Tab",
+      "HTML: Die Vorschau ändert sich beim Schreiben, und es gibt einen Konsolen-Tab",
+      "JSON: Zeigt fehlerhafte Zeilen, Baumansicht, schöne Formatierung und Verkürzung auf eine Zeile",
+      "Java: Prüft Klammern und Anführungszeichen und zeigt die Struktur (Ausführung im Browser nicht möglich)",
+      "BeaconScript: Syntaxprüfung und Regelansicht; falsche Befehle schlagen ähnliche vor"
+     ]
+    },
+    "ja": {
+     "title": "Fry Codeに名前変更と言語選択",
+     "items": [
+      "Fry PythonがFry Codeに変わりました（アドレスとファイルはそのまま）",
+      "上部でPython・JavaScript・Java・HTML・JSON・BeaconScript（.bs）から言語を選ぶと、ファイルごとに記憶されます",
+      "言語ごとに色分け・自動補完・例・開く/保存の拡張子が分かれています",
+      "JavaScript：実行すると結果タブに文字が、画面を描くコードは画面タブに表示されます",
+      "HTML：書くとすぐにプレビューが変わり、コンソールタブがあります",
+      "JSON：間違った行を知らせ、ツリー表示・整形・1行への圧縮ができます",
+      "Java：括弧・引用符の検査と構造表示（ブラウザでは実行できません）",
+      "BeaconScript：文法チェックとルール表示。間違ったコマンドには似たコマンドを提案します"
+     ]
+    },
+    "zh": {
+     "title": "改名为 Fry Code 并可选择语言",
+     "items": [
+      "Fry Python 改名为 Fry Code（网址和你的文件不变）",
+      "上方可选择 Python、JavaScript、Java、HTML、JSON 或 BeaconScript（.bs），每个文件都会记住所选语言",
+      "每种语言各自有语法着色、自动补全、示例以及打开/保存时的扩展名",
+      "JavaScript：运行后文字显示在结果标签页，绘图的代码显示在画面标签页",
+      "HTML：边写边更新预览，并带有控制台标签页",
+      "JSON：指出错误行，可树形查看、美化排版或压缩成一行",
+      "Java：检查括号和引号，并显示结构（无法在浏览器中运行）",
+      "BeaconScript：语法检查和规则查看；写错的命令会提示相近的命令"
+     ]
+    },
+    "pt": {
+     "title": "Renomeado para Fry Code e escolha de linguagem",
+     "items": [
+      "Fry Python agora é Fry Code (o endereço e os seus arquivos continuam os mesmos)",
+      "No topo, escolha Python, JavaScript, Java, HTML, JSON ou BeaconScript (.bs); cada arquivo lembra a sua escolha",
+      "Cada linguagem tem coloração, autocompletar, exemplos e extensões próprias para abrir e salvar",
+      "JavaScript: ao executar, o texto aparece na aba de resultado, e o código que desenha vai para a aba de tela",
+      "HTML: a visualização muda enquanto você escreve, e há uma aba de console",
+      "JSON: aponta as linhas erradas, mostra em árvore, formata e reduz a uma linha",
+      "Java: verifica parênteses e aspas e mostra a estrutura (não executa no navegador)",
+      "BeaconScript: verificação de sintaxe e visualização de regras; comando errado sugere um parecido"
+     ]
+    },
+    "ru": {
+     "title": "Переименовано в Fry Code и выбор языка",
+     "items": [
+      "Fry Python теперь называется Fry Code (адрес и ваши файлы не меняются)",
+      "Сверху можно выбрать Python, JavaScript, Java, HTML, JSON или BeaconScript (.bs), и каждый файл запоминает свой язык",
+      "У каждого языка свои подсветка, автодополнение, примеры и расширения для открытия и сохранения",
+      "JavaScript: при запуске текст выводится на вкладку результата, а код с рисованием — на вкладку экрана",
+      "HTML: предпросмотр меняется по мере набора, есть вкладка консоли",
+      "JSON: показывает ошибочные строки, просмотр в виде дерева, форматирование и сжатие в одну строку",
+      "Java: проверка скобок и кавычек и показ структуры (в браузере не запускается)",
+      "BeaconScript: проверка синтаксиса и просмотр правил; неверная команда подсказывает похожую"
+     ]
+    },
+    "tr": {
+     "title": "Fry Code'a adı değişti ve dil seçimi",
+     "items": [
+      "Fry Python artık Fry Code (adres ve dosyalarınız aynı kalır)",
+      "Üstten Python, JavaScript, Java, HTML, JSON veya BeaconScript (.bs) seçebilirsiniz; her dosya seçimini hatırlar",
+      "Her dilin kendi renklendirmesi, otomatik tamamlaması, örnekleri ve açma/kaydetme uzantıları var",
+      "JavaScript: Çalıştırınca metin sonuç sekmesinde, ekran çizen kod ekran sekmesinde görünür",
+      "HTML: Yazdıkça önizleme değişir ve bir konsol sekmesi vardır",
+      "JSON: Hatalı satırları gösterir, ağaç görünümü, düzgün biçimlendirme ve tek satıra küçültme sunar",
+      "Java: Parantez ve tırnak denetimi ile yapıyı gösterir (tarayıcıda çalıştırılmaz)",
+      "BeaconScript: Sözdizimi denetimi ve kural görünümü; yanlış komut benzer komutu önerir"
+     ]
+    },
+    "it": {
+     "title": "Ora si chiama Fry Code e scegli il linguaggio",
+     "items": [
+      "Fry Python diventa Fry Code (indirizzo e file restano uguali)",
+      "In alto scegli Python, JavaScript, Java, HTML, JSON o BeaconScript (.bs); ogni file ricorda la sua scelta",
+      "Ogni linguaggio ha colorazione, completamento automatico, esempi ed estensioni di apertura e salvataggio propri",
+      "JavaScript: eseguendo, il testo appare nella scheda risultato e il codice che disegna va nella scheda schermo",
+      "HTML: l'anteprima cambia mentre scrivi e c'è una scheda console",
+      "JSON: segnala le righe sbagliate, vista ad albero, formattazione e compattazione su una riga",
+      "Java: controlla parentesi e virgolette e mostra la struttura (non si esegue nel browser)",
+      "BeaconScript: controllo della sintassi e vista delle regole; un comando sbagliato suggerisce uno simile"
+     ]
+    },
+    "pl": {
+     "title": "Zmiana nazwy na Fry Code i wybór języka",
+     "items": [
+      "Fry Python zmienił nazwę na Fry Code (adres i twoje pliki bez zmian)",
+      "Na górze wybierzesz Python, JavaScript, Javę, HTML, JSON lub BeaconScript (.bs); każdy plik zapamiętuje wybór",
+      "Każdy język ma własne kolorowanie, podpowiedzi, przykłady i rozszerzenia przy otwieraniu i zapisie",
+      "JavaScript: po uruchomieniu tekst pojawia się w karcie wyniku, a kod rysujący trafia do karty ekranu",
+      "HTML: podgląd zmienia się podczas pisania, jest też karta konsoli",
+      "JSON: wskazuje błędne wiersze, pokazuje drzewo, formatuje i skraca do jednej linii",
+      "Java: sprawdza nawiasy i cudzysłowy oraz pokazuje strukturę (nie uruchamia się w przeglądarce)",
+      "BeaconScript: sprawdzanie składni i widok reguł; błędna komenda podpowiada podobną"
+     ]
+    },
+    "ar": {
+     "title": "تغيير الاسم إلى Fry Code واختيار اللغة",
+     "items": [
+      "تحوّل Fry Python إلى Fry Code (العنوان وملفاتك تبقى كما هي)",
+      "من الأعلى اختر Python أو JavaScript أو Java أو HTML أو JSON أو BeaconScript (.bs)، ويتذكر كل ملف اختياره",
+      "لكل لغة تلوين وإكمال تلقائي وأمثلة وامتدادات خاصة للفتح والحفظ",
+      "JavaScript: عند التشغيل يظهر النص في تبويب النتيجة، ويذهب الكود الذي يرسم إلى تبويب الشاشة",
+      "HTML: تتغير المعاينة أثناء الكتابة، وفيه تبويب للوحدة الطرفية",
+      "JSON: يشير إلى الأسطر الخاطئة، ويعرض شجرة، وينسّق النص، ويضغطه في سطر واحد",
+      "Java: يتحقق من الأقواس والعلامات ويعرض البنية (لا يعمل في المتصفح)",
+      "BeaconScript: فحص الصياغة وعرض القواعد؛ الأمر الخاطئ يقترح أمرًا مشابهًا"
      ]
     }
    }
