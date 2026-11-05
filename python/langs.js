@@ -55,9 +55,9 @@ function htmlHl(src){ var re=/<!--[\s\S]*?(?:-->|$)|<\/?[A-Za-z!][^>]*>?/g, h=''
 var HTML_WORDS=[['!doctype','<!DOCTYPE html>','문서 시작'],['html','<html lang="ko">\n  $0\n</html>','문서'],['head','<head>\n  <meta charset="UTF-8">\n  <title>$0</title>\n</head>','머리'],['body','<body>\n  $0\n</body>','본문'],['h1','<h1>$0</h1>','큰 제목'],['h2','<h2>$0</h2>','제목'],['p','<p>$0</p>','문단'],['a','<a href="$0"></a>','링크'],['img','<img src="$0" alt="">','그림'],['div','<div>$0</div>','칸'],['span','<span>$0</span>','글자 묶음'],['button','<button>$0</button>','버튼'],['input','<input type="text" placeholder="$0">','입력칸'],['ul','<ul>\n  <li>$0</li>\n</ul>','목록'],['li','<li>$0</li>','목록 항목'],['table','<table>\n  <tr>\n    <td>$0</td>\n  </tr>\n</table>','표'],['style','<style>\n  $0\n</style>','꾸미기(CSS)'],['script','<script>\n  $0\n</script>','자바스크립트'],['br','<br>','줄바꿈'],['canvas','<canvas id="c" width="300" height="200"></canvas>','그림판']];
 
 /* ---------- BeaconScript (the Beaconfall mod language) ---------- */
-var BS_EVENTS=['world generate','join','mine','chop','kill','craft','fish','place','die','death','respawn'];
+var BS_EVENTS=['world generate','join','mine','chop','kill','craft','fish','place','die','death','respawn','break'];
 var BS_VERBS='on give set remove replace spawn place teleport title chat say button ui key remap chance if else rename fill disable enable add subtract reset play loop heal damage broadcast';
-var BS_TERRAIN=['land','beach','ocean','mountain'], BS_BIOMES=['start','forest','desert','volcano','jungle','mesa','rock','mangrove','ice'], BS_ALL=['trees','rocks','ores','structures'], BS_SOUNDS=['click','hurt','swing','bow','hit','break'], BS_COLL=['tree','rock','ore','water','sea','ocean','block','iron','log','stone','wood','sword','bench','wolf'], BS_PH=['%player_name%','%player_location%','%world_player_count%','%online_player%','%player_x%','%player_y%','%player_z%','%world_name%','%player_hp%','%player_max_hp%','%player_item%','%player_biome%','%world_day%','%world_time%','%attacker%','%victim%','%player%','%random%','%nearest_player%','%random_player%','%farest_player%','%nearest_mob%','%random_mob%','%farest_mob%','%nearest_monster%','%random_monster%','%farest_monster%',"%player's_uuid%",'%mod_name%','%mod_uuid%','%crafted_item%','%placed_block%','%distroyed_block%'];
+var BS_TERRAIN=['land','beach','ocean','mountain'], BS_BIOMES=['start','forest','desert','volcano','jungle','mesa','rock','mangrove','ice'], BS_ALL=['trees','rocks','ores','structures'], BS_SOUNDS=['click','hurt','swing','bow','hit','break'], BS_COLL=['tree','rock','ore','water','sea','ocean','block','iron','log','stone','wood','sword','bench','wolf'], BS_PH=['%player_name%','%player_location%','%world_player_count%','%online_player%','%player_x%','%player_y%','%player_z%','%world_name%','%player_hp%','%player_max_hp%','%player_item%','%player_biome%','%world_day%','%world_time%','%attacker%','%victim%','%player%','%random%','%nearest_player%','%random_player%','%farest_player%','%nearest_mob%','%random_mob%','%farest_mob%','%nearest_monster%','%random_monster%','%farest_monster%',"%player's_uuid%",'%mod_name%','%mod_uuid%','%crafted_item%','%placed_block%','%distroyed_block%',"%player's mod%",'%player_uuid%','%destroyed_block%'];
 var BS_BLOCK=setOf('on button ui chance if else rename loop');
 var bsHl=mkHl({com:'#[^\\n]*', str:'"(?:\\\\.|[^"\\\\\\n])*"?', kw:setOf(BS_VERBS), bi:setOf('spawn player tree rock seconds blocks times of in to at near with damage speed name press top bottom left right center'), def:{}});
 var BS_WORDS=[['on world generate:','on world generate:\n    $0','월드를 처음 만들 때'],['on join:','on join:\n    $0','월드에 들어갈 때'],['on key press:','on key "$0" press:\n    ','키를 눌렀을 때'],['on mine:','on mine:\n    $0','돌 캘 때'],['on chop:','on chop:\n    $0','나무 벨 때'],['on kill:','on kill:\n    $0','몬스터 잡을 때'],['on craft:','on craft:\n    $0','만들 때'],['on fish:','on fish:\n    $0','낚시할 때'],['on die:','on die:\n    $0','죽을 때'],['give','give $0','아이템 주기'],['set','set $0 damage 10','아이템 데미지/속도/이름'],['remove','remove tree in 20 blocks of spawn','나무/돌 없애기'],['remove all','remove all trees','나무·바위·광석·건물 전부 없애기'],['disable collision','disable collision of tree','나무·바위·광석·물·블록 부딪힘 끄기'],['enable collision','enable collision of water','부딪힘 켜기'],['fill','fill ~0 ~0 ~300 ~300 to land','땅·해변·바다·산 만들기 (새 월드)'],['fill mountain','fill ~0 ~0 ~300 ~300 to mountain $0','산 만들기 (지역: start forest desert volcano jungle mesa rock mangrove ice)'],['spawn','spawn wolf $0 times','몹 소환'],['place','place bench near spawn','구조물 설치'],['teleport','teleport player to spawn','순간이동'],['title','title "$0" for 3 seconds','화면 중앙 글자'],['chat','chat "$0"','채팅'],['%player_name%','%player_name%','플레이어 이름 (Potato API 모드)'],['%online_player%','%online_player%','접속 인원 (Potato API 모드)'],['say','say "$0"','말하기'],['button','button "$0" at top right:\n    ','화면 버튼'],['ui','ui "$0":\n    ','작은 창'],['remap','remap "E" to "R"','키 바꾸기'],['chance','chance 30%:\n    $0','확률'],['if','if $0:\n    ','조건']];
@@ -65,14 +65,14 @@ var BS_ITEMS='iron log stone wood sword bench wolf spawn player';
 
 
 /* word-by-word suggestions: after "on " it offers world, join... one word at a time */
-var BS_TIPS={world:'월드',join:'들어올 때',mine:'돌 캘 때',chop:'나무 벨 때',kill:'몬스터 잡을 때',craft:'만들 때',fish:'낚시할 때',place:'설치할 때',die:'죽을 때',key:'키'};
+var BS_TIPS={break:'부술 때',contained:'들어 있으면',world:'월드',join:'들어올 때',mine:'돌 캘 때',chop:'나무 벨 때',kill:'몬스터 잡을 때',craft:'만들 때',fish:'낚시할 때',place:'설치할 때',die:'죽을 때',key:'키'};
 function bsSug(before,pre){
   var tk=before.replace(/"(?:\\.|[^"\\])*"/g,'"S"').trim().split(/\s+/).filter(Boolean).map(function(x){ return x.toLowerCase(); }), n=tk.length, v=tk[0]||'', M=BS_MEAN;
   function W(list,suffix){ return list.map(function(w){ return {n:w,i:w+(suffix==null?' ':suffix),d:M[w]||BS_TIPS[w]||''}; }); }
   var ITEMS=['iron','log','stone','wood','sword','bench','wolf'];
   if(n===0) return W(BS_VERBS.split(' ').filter(function(x){ return x!=='else'||true; }));
   if(v==='on'){
-    if(n===1) return W(['world']).concat(W(['join','mine','chop','kill','craft','fish','place','die','death','respawn'],':'),W(['key']));
+    if(n===1) return W(['world']).concat(W(['join','mine','chop','kill','craft','fish','place','die','death','respawn','break'],':'),W(['key']));
     if(tk[1]==='world'&&n===2) return W(['generate'],':');
     if(tk[1]==='key'&&n===2) return [{n:'"G"',i:'"$0" press:',d:'누를 키 (글자 하나)'}];
     if(tk[1]==='key'&&n===3) return W(['press'],':');
@@ -86,7 +86,7 @@ function bsSug(before,pre){
   if(v==='add'){ if(n===2) return W(['to']); if(n===3) return W(['variable']); return []; }
   if(v==='subtract'){ if(n===2) return W(['from']); if(n===3) return W(['variable']); return []; }
   if(v==='reset'){ if(n===1) return W(['variable']); return []; }
-  if(v==='if'){ if(n===1) return W(['variable','has']); if(tk[1]&&tk[1][0]==='%'){ if(n===2) return W(['is']); if(n===3) return W(['not','player'],':').slice(0,0).concat(W(['not']),W(['player'],':')); if(n===4&&tk[3]==='not') return W(['player'],':'); } return []; }
+  if(v==='if'){ if(n===1) return W(['variable','has']); if(n===2&&tk[1]&&/^(\{.*\}|%.*%)$/.test(tk[1])) return W(['contained'],''); if(tk[1]&&tk[1][0]==='%'){ if(n===2) return W(['is']); if(n===3) return W(['not']).concat(W(['player'],':'),W(['contained'],'')); if(n===4&&tk[3]==='not') return W(['player'],':'); } return []; }
   if(v==='remove'){ if(n===1) return W(['all','tree','rock']); if(n===2&&tk[1]==='all') return W(BS_ALL,''); return []; }
   if(v==='fill'){ if(n===5) return W(['to']); if(n===6) return W(BS_TERRAIN); if(n===7) return W(BS_BIOMES,''); return []; }
   if(v==='disable'||v==='enable'){ if(n===1) return W(['collision']); if(n===2) return W(['of']); if(n===3) return W(BS_COLL,''); return []; }
@@ -202,6 +202,7 @@ function bsCheck(src){ var errs=[], stack=[], lines=src.split('\n'), VERB=BS_VER
     while(stack.length&&ind<=stack[stack.length-1].ind){ var cl=stack.pop(); if(!cl.kids) errs.push({line:cl.line,msg:'":" 로 끝난 줄 아래에는 안쪽으로 들여쓴 명령이 와야 해요'}); }
     var par=stack[stack.length-1]; if(par){ par.kids++; } else if(ind>0) errs.push({line:ln,msg:'맨 앞 줄은 들여쓰지 않아요'});
     var verb=/^[A-Za-z_]+/.exec(t); verb=verb?verb[0].toLowerCase():'';
+    if(/^\{:/.test(t)){ if(!/^\{:[^:\s{}]{1,22}::(?:"(?:\\.|[^"\\])*"|-?\d+(?:\.\d+)?|%[A-Za-z0-9_' ]+%):\}$/.test(t)) errs.push({line:ln,msg:'이렇게 써요: {:이름::"글자":}  (값은 "글자"·숫자·%…%)'}); return; }
     if(!verb){ errs.push({line:ln,msg:'명령으로 시작해야 해요: '+t.slice(0,20)}); return; }
     if(VERB.indexOf(verb)<0){ var g=guess(verb,VERB); errs.push({line:ln,msg:"모르는 명령 '"+verb+"'"+(g?" — 혹시 '"+g+"'?":'')}); return; }
     var opens=/:\s*$/.test(t);
@@ -224,7 +225,8 @@ function bsCheck(src){ var errs=[], stack=[], lines=src.split('\n'), VERB=BS_VER
     if(verb==='play'){ var pm=/^play\s+sound\s+([a-z]+)\s*$/i.exec(t); if(!pm) errs.push({line:ln,msg:'이렇게 써요: play sound hit'}); else if(BS_SOUNDS.indexOf(pm[1].toLowerCase())<0){ var g7=guess(pm[1].toLowerCase(),BS_SOUNDS); errs.push({line:ln,msg:"모르는 소리 '"+pm[1]+"'"+(g7?" — 혹시 '"+g7+"'?":' (click·hurt·swing·bow·hit·break 중에서)')}); } }
     if(verb==='loop'){ var lm=/^loop\s+(\d+)\s+times\s*:\s*$/.exec(t); if(!lm) errs.push({line:ln,msg:'이렇게 써요: loop 5 times:'}); else if(+lm[1]<1||+lm[1]>20) errs.push({line:ln,msg:'반복은 1~20번까지예요'}); }
     if(verb==='heal'||verb==='damage'){ var hm=/^(heal|damage)\s+player\s+(\d+)\s*$/.exec(t); if(!hm) errs.push({line:ln,msg:'이렇게 써요: '+verb+' player 5'}); else if(+hm[2]<1||+hm[2]>100) errs.push({line:ln,msg:verb+'은 1~100까지예요'}); }
-    if(verb==='if'&&/^if\s+%/.test(t)&&!/^if\s+%[a-z_]+%\s+is\s+(not\s+)?player\s*:\s*$/.test(t)) errs.push({line:ln,msg:'이렇게 써요: if %attacker% is player:  (또는 is not player:)'});
+    if(verb==='if'&&/\scontained\s/.test(t)){ if(!/^if\s+(?:%[A-Za-z0-9_' ]+%|\{[^}\s]+\}|\{:[^:\s{}]+:\})\s+contained\s+"[^"]*"\s*:\s*$/.test(t)) errs.push({line:ln,msg:'이렇게 써요: if %player\'s mod% contained "potato api":'}); }
+    else if(verb==='if'&&/^if\s+%/.test(t)&&!/^if\s+%[a-z_]+%\s+is\s+(not\s+)?player\s*:\s*$/.test(t)) errs.push({line:ln,msg:'이렇게 써요: if %attacker% is player:  (또는 is not player:)'});
     if(verb==='add'&&!/^add\s+-?\d+(\.\d+)?\s+to\s+variable\s+(?:\{[a-z0-9_가-힣]{1,22}\}|[a-z0-9_]{1,20})\s*$/.test(t)) errs.push({line:ln,msg:'이렇게 써요: add 1 to variable score'});
     if(verb==='subtract'&&!/^subtract\s+-?\d+(\.\d+)?\s+from\s+variable\s+(?:\{[a-z0-9_가-힣]{1,22}\}|[a-z0-9_]{1,20})\s*$/.test(t)) errs.push({line:ln,msg:'이렇게 써요: subtract 1 from variable score'});
     if(verb==='reset'&&!/^reset\s+variable\s+(?:\{[a-z0-9_가-힣]{1,22}\}|[a-z0-9_]{1,20})\s*$/.test(t)) errs.push({line:ln,msg:'이렇게 써요: reset variable score'});
@@ -233,20 +235,22 @@ function bsCheck(src){ var errs=[], stack=[], lines=src.split('\n'), VERB=BS_VER
     if(verb==='disable'||verb==='enable'){ var cm=/^(?:disable|enable)\s+collision\s+of\s+([A-Za-z_]+)\s*$/i.exec(t);
       if(!cm) errs.push({line:ln,msg:'이렇게 써요: disable collision of tree (또는 enable collision of water)'});
       else if(BS_COLL.indexOf(cm[1].toLowerCase())<0){ var g5=guess(cm[1].toLowerCase(),BS_COLL); errs.push({line:ln,msg:"모르는 대상 '"+cm[1]+"'"+(g5?" — 혹시 '"+g5+"'?":' (tree·rock·ore·water·block·아이템 이름)')}); } }
-    (t.match(/%[^%\s"]*%/g)||[]).forEach(function(ph){ if(BS_PH.indexOf(ph.toLowerCase())<0&&!/^%var_[a-z0-9_]{1,20}%$/i.test(ph)&&!/^%player_[a-z0-9_]+_count%$/i.test(ph)){ var g6=guess(ph.toLowerCase(),BS_PH); errs.push({line:ln,msg:"모르는 자리표시 '"+ph+"'"+(g6?" — 혹시 '"+g6+"'?":'')}); } });
+    (t.replace(/%player's mod%/gi,'').match(/%[^%\s"]*%/g)||[]).forEach(function(ph){ if(BS_PH.indexOf(ph.toLowerCase())<0&&!/^%var_[a-z0-9_]{1,20}%$/i.test(ph)&&!/^%player_[a-z0-9_]+_count%$/i.test(ph)){ var g6=guess(ph.toLowerCase(),BS_PH); errs.push({line:ln,msg:"모르는 자리표시 '"+ph+"'"+(g6?" — 혹시 '"+g6+"'?":'')}); } });
     if(verb==='teleport'&&!/\sto\s/.test(t)) errs.push({line:ln,msg:'이렇게 써요: teleport player to spawn'});
     if((verb==='title'||verb==='chat'||verb==='say'||verb==='broadcast')&&!/"/.test(t)) errs.push({line:ln,msg:verb+' 뒤에는 "글자"를 큰따옴표로 감싸서 써요'});
     if(opens) stack.push({line:ln,ind:ind,kids:0}); });
   stack.forEach(function(cl){ if(!cl.kids) errs.push({line:cl.line,msg:'":" 로 끝난 줄 아래에는 안쪽으로 들여쓴 명령이 와야 해요'}); });
   return {errs:errs}; }
 /* each word of a line is its own small card: the word and what it means */
-var BS_MEAN={on:'때',world:'월드',generate:'만들어질 때',join:'들어올 때',key:'키',press:'누를 때',mine:'돌 캘 때',chop:'나무 벨 때',kill:'몬스터 잡을 때',craft:'만들 때',fish:'낚시할 때',place:'설치',die:'죽을 때',
+var BS_MEAN={on:'때',world:'월드',generate:'만들어질 때',join:'들어올 때',key:'키',press:'누를 때',mine:'돌 캘 때',chop:'나무 벨 때',kill:'몬스터 잡을 때',craft:'만들 때',fish:'낚시할 때',place:'설치',die:'죽을 때',break:'부술 때',contained:'들어 있으면',
   give:'주기',set:'정하기',remove:'없애기',replace:'바꾸기',teleport:'순간이동',title:'화면 가운데 글자',chat:'채팅',say:'말하기',button:'버튼',ui:'작은 창',remap:'키 바꾸기',chance:'확률',if:'만약',else:'아니면',rename:'이름 바꾸기',fill:'땅 바꾸기',play:'재생',sound:'소리',loop:'반복',heal:'회복',broadcast:'모두에게 알림',effect:'효과',time:'시간',weather:'날씨',day:'낮',noon:'한낮',midnight:'한밤',sunrise:'해 뜰 때',sunset:'해 질 때',clear:'맑음',rain:'비',storm:'폭풍',strength:'힘',defense:'방어',regen:'재생력',haste:'채굴 속도',breath:'물숨',night:'밤',click:'딸깍',hurt:'아픈 소리',swing:'휘두르는 소리',bow:'활',hit:'맞는 소리',break:'부서지는 소리',is:'이면',not:'아니면',random:'무작위',death:'죽을 때',respawn:'다시 살아날 때',variable:'변수',add:'더하기',subtract:'빼기',reset:'처음 값으로',from:'에서',disable:'끄기',enable:'켜기',collision:'부딪힘',all:'전부',land:'땅',beach:'해변',ocean:'바다',mountain:'산',trees:'나무들',rocks:'바위들',ores:'광석들',structures:'건물들',start:'시작 지역',forest:'숲',desert:'사막',volcano:'화산',jungle:'정글',mesa:'붉은 고원',mangrove:'맹그로브',ice:'얼음',
   in:'안에서',of:'의',to:'로',at:'위치',near:'근처',with:'으로',for:'동안',and:'그리고',has:'가지고 있으면',seconds:'초',second:'초',times:'번',blocks:'칸',block:'칸',damage:'데미지',speed:'공격 간격(초)',name:'이름',
   top:'위',bottom:'아래',left:'왼쪽',right:'오른쪽',center:'가운데',player:'플레이어',iron:'철',log:'통나무',stone:'돌',wood:'나무',sword:'검',bench:'작업대',wolf:'늑대',tree:'나무',rock:'바위',grass:'풀',sand:'모래'};
 function bsChip(w,first){ var c=document.createElement('span'); c.className='chip'; var b=document.createElement('b'), m=document.createElement('small'), lw=w.toLowerCase(), mean;
   if(/^"/.test(w)){ b.textContent=w; mean='글자'; c.classList.add('s'); }
   else if(/^\{[^}\s]+\}$/.test(w)){ b.textContent=w; mean=/^\{_.*_\}$/.test(w)?'지역 변수':'변수'; c.classList.add('n'); }
+  else if(/^\{:[^:\s{}]+:\}$/.test(w)){ b.textContent=w; mean='공유 변수'; c.classList.add('n'); }
+  else if(w.toLowerCase()==="%player's mod%"){ b.textContent=w; mean='플레이어 모드 (Potato API 없이 읽기)'; c.classList.add('n'); }
   else if(/^%[A-Za-z0-9_']+%$/.test(w)){ b.textContent=w; mean='(Potato API 필요)'; c.classList.add('n'); }
   else if(/^\d+%$/.test(w)){ b.textContent=w; mean='퍼센트'; c.classList.add('n'); }
   else if(/^~?-?\d+$/.test(w)||w==='~'){ b.textContent=w; mean=w[0]==='~'?'시작 위치 기준':'숫자'; c.classList.add('n'); }
@@ -255,7 +259,7 @@ function bsChip(w,first){ var c=document.createElement('span'); c.className='chi
   else if(/^(>=|<=|!=|<|>)$/.test(w)){ b.textContent=w; mean='비교'; c.classList.add('n'); }
   else { b.textContent=w; if(lw==='spawn') mean=first?'소환':'시작 위치'; else mean=BS_MEAN[lw]; if(BS_VERBS.split(' ').indexOf(lw)>=0||lw==='press') c.classList.add('k'); if(mean==null){ mean='(이름)'; c.classList.add('u'); } }
   m.textContent=mean; c.appendChild(b); c.appendChild(m); return c; }
-function bsChips(t){ var row=document.createElement('span'); row.className='chips'; var re=/"(?:\\.|[^"\\])*"?|~?-?\d+%?|~|%[A-Za-z0-9_']+%|\{[^}\s]+\}|[A-Za-z_][\w]*|>=|<=|!=|[:=]|[^\s]/g, m, i=0; while((m=re.exec(t))){ row.appendChild(bsChip(m[0],i===0)); i++; if(m[0][0]==='"'){ (m[0].match(/%[A-Za-z0-9_']+%/g)||[]).forEach(function(ph){ var c=document.createElement('span'); c.className='chip n'; var b=document.createElement('b'), sm=document.createElement('small'); b.textContent=ph; sm.textContent='(Potato API 필요)'; c.appendChild(b); c.appendChild(sm); row.appendChild(c); }); } } return row; }
+function bsChips(t){ var row=document.createElement('span'); row.className='chips'; if(/^\{:[^:\s{}]{1,22}::.*:\}$/.test(t.trim())){ row.appendChild(bsChip('{:공유:}',false)); var cc=row.lastChild; cc.firstChild.textContent=t.trim(); cc.lastChild.textContent='공유 변수 값 쓰기'; return row; } var re=/"(?:\\.|[^"\\])*"?|~?-?\d+%?|~|%player's mod%|%[A-Za-z0-9_']+%|\{:[^:\s{}]+:\}|\{[^}\s]+\}|[A-Za-z_][\w]*|>=|<=|!=|[:=]|[^\s]/g, m, i=0; while((m=re.exec(t))){ row.appendChild(bsChip(m[0],i===0)); i++; if(m[0][0]==='"'){ (m[0].match(/%[A-Za-z0-9_']+%/g)||[]).filter(function(ph){ return ph.toLowerCase()!=="%player's mod%"; }).forEach(function(ph){ var c=document.createElement('span'); c.className='chip n'; var b=document.createElement('b'), sm=document.createElement('small'); b.textContent=ph; sm.textContent='(Potato API 필요)'; c.appendChild(b); c.appendChild(sm); row.appendChild(c); }); } } return row; }
 function bsRun(ctx){ var src=ctx.code, r=bsCheck(src); ctx.pv.innerHTML='';
   var lines=src.split('\n'), stack=[{ind:-1,el:ctx.pv}], any=false;
   lines.forEach(function(raw,i){ var line=raw.replace(/\t/g,'    '); if(!line.trim()||/^\s*#/.test(line)) return; var ind=/^ */.exec(line)[0].length, t=line.trim(); any=true;
