@@ -23,3 +23,4 @@ patchnotes/python.json | BeaconScript b194·아이템 미리보기 항목 (en만
 patchnotes/python.json | 자동완성 목록 항목 (en만) | python v10 | 2026-11-05
 patchnotes/python.json | BeaconScript b195 항목 (en만) | python v11 | 2026-11-05
 patchnotes/python.json | BeaconScript b196 항목 (en만) | python v12 | 2026-11-05
+patchnotes/python.json | BeaconScript 맨 위 줄·새 조건문 항목 (en만) | python v13 | 2026-11-05
