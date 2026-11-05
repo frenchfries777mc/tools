@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v4",
+   "title": "범위 선택·복사 붙여넣기·옮기기·끌어서 음 높이 바꾸기",
+   "items": [
+    "범위 고르기 도구(▭), Shift+클릭, Shift+←→, 모두 고르기, 마디 고르기로 여러 음표를 한 번에 골라 지우기·위아래로 옮기기",
+    "복사·잘라내기·붙여넣기(Ctrl+C/X/V), 복제, 거꾸로 (다른 곡을 열어도 복사한 내용이 남음)",
+    "반음·온음·옥타브 단위 옮기기 (고른 음표, 없으면 파트 전체)",
+    "음표를 위아래로 끌어 음 높이 바꾸기 (터치는 먼저 음표를 고른 뒤 끌기), 되돌리기 한 번에 되돌아감"
+   ],
+   "tr": {
+    "en": {
+     "title": "Range select, copy/paste, transpose and drag-to-change-pitch",
+     "items": [
+      "Range tool, Shift+click, Shift+arrows, select all and select measure; delete or move many notes at once",
+      "Copy, cut, paste (Ctrl+C/X/V), duplicate and reverse; the clipboard survives opening another score",
+      "Transpose by semitone, whole tone or octave (selection, or the whole part when nothing is selected)",
+      "Drag a note up or down to change its pitch (on touch, select the note first); undo reverts the drag in one step"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v3",
    "title": "높은음자리표·낮은음자리표 다시 그림",
    "items": [
