@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v26",
+   "title": "BeaconScript mod 조건과 load",
+   "items": [
+    "if mod \"이름\": · if not mod \"이름\": 조건을 점검하고 or로도 묶어요",
+    "load ~x ~z ~x2 ~z2 (원래 지형으로 되돌리기)를 점검해요. on world generate: 안에서만 쓸 수 있고, 밖에서 쓰면 알려 줘요",
+    "자동완성에 mod·not·load가 나와요"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript mod condition and load",
+     "items": [
+      "if mod \"name\": and if not mod \"name\": are checked and can be joined with or",
+      "load ~x ~z ~x2 ~z2 (restore natural terrain) is checked; it only works inside on world generate: and is reported elsewhere",
+      "Autocomplete lists mod, not and load"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v25",
    "title": "%변수% 읽기 취소",
    "items": [
