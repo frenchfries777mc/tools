@@ -1,0 +1,82 @@
+/* Fry Video strings: UI translations. Only English so far (other languages fall back to English until they are translated). */
+(function(){
+var E={
+'Tools 홈':'Tools home','이름 없는 영상':'Untitled video','영상 이름':'Video name','되돌리기':'Undo','다시':'Redo','되돌리기 (Ctrl+Z)':'Undo (Ctrl+Z)','다시 (Ctrl+Y)':'Redo (Ctrl+Y)','+ 파일 넣기':'+ Add files','영상 만들기':'Export video',
+'맨 앞으로':'To start','지금 장면을 PNG로':'Save this frame as PNG','클립':'Clip','영상 설정':'Project','넣기':'Insert',
+'✂ 자르기':'✂ Split','재생 막대 위치에서 자르기 (S)':'Split at the playhead (S)','복제':'Duplicate','지우기':'Delete','여러 개 고르기':'Select multiple','당겨 지우기':'Ripple delete','지우고 뒤 클립을 당겨 붙여요':'Delete and pull the following clips in',
+'❄ 멈춘 장면':'❄ Freeze frame','재생 막대 위치에서 2초 멈춘 장면 넣기':'Insert a 2 second freeze frame at the playhead','🚩 표시':'🚩 Marker','🚩 표시 지우기':'🚩 Remove marker','T 글자 넣기':'T Add text','■ 도형 넣기':'■ Add shape','● 녹음':'● Record','■ 녹음 끝내기':'■ Stop recording','맞춤':'Fit','전체가 한눈에 보이게':'Show the whole project',
+'눌러 둔 동안 클립을 누르면 여러 개가 골라져요 (컴퓨터는 Shift+클릭)':'Tap clips to add or remove them from the selection (on a computer: Shift+click)',
+'px/초':'px/s','겹침':'Overlay','영상':'Video','글자':'Text','소리':'Sound','눌러서 줄 설정':'Tap for track settings',
+'표시':'Marker','표시 ':'Marker ','영상 클립을 자르고 이어 붙이고 글자와 소리를 넣어 mp4/webm으로 받는 브라우저 영상 편집 도구.':'A browser video editor: cut and join clips, add text and sound, and export mp4/webm.',
+/* bin */
+'오른쪽 위 ':'Top right ','+ 파일 넣기를 누르거나 파일을 끌어다 놓으세요. 영상·그림·소리를 쓸 수 있어요.':'Press + Add files or drop files here. You can use videos, pictures and sounds.','를 누르거나 파일을 끌어다 놓으세요. 영상·그림·소리를 쓸 수 있어요.':' to add files, or drop files here. You can use videos, pictures and sounds.','오른쪽 위':'Top right','파일은 이 기기 안에서만 쓰이고 서버로 올라가지 않아요.':'Files stay on this device and are never uploaded.',
+'눌러서 재생 막대 위치에 넣기':'Tap to put it at the playhead','그림':'Picture','· 파일 없음':'· file missing',
+/* tabs/panel project */
+'화면 비율':'Aspect ratio','16:9 유튜브, 9:16 쇼츠·릴스, 1:1 인스타, 4:3 옛날 TV, 21:9 영화 같은 와이드예요.':'16:9 YouTube, 9:16 Shorts/Reels, 1:1 Instagram, 4:3 old TV, 21:9 cinematic widescreen.','배경 색':'Background colour','빈 곳 색':'Empty area','재생할 때 소리 듣기':'Hear sound while playing',
+'자막 한꺼번에 넣기':'Add many subtitles at once','자막 넣기':'Add subtitles','시간은 0:05 또는 5.5처럼 쓰고, 끝 시간을 빼면 3초예요.':'Write times like 0:05 or 5.5; without an end time a subtitle lasts 3 seconds.',
+'자막 파일 가져오기 (SRT·VTT)':'Import subtitle file (SRT/VTT)','SRT로 내보내기':'Export as SRT','VTT로 내보내기':'Export as VTT',
+'표시 · 챕터':'Markers · chapters','챕터 이름':'Chapter name','챕터 목록 복사 (유튜브용)':'Copy chapter list (for YouTube)','타임라인 아래 🚩 표시 버튼으로 표시를 만들면 여기서 이름을 붙일 수 있어요.':'Make markers with the 🚩 Marker button under the preview and name them here.',
+'16:9 유튜브, 9:16 쇼츠·릴스, 1:1·4:5 인스타 피드, 3:4 세로 사진, 4:3 옛날 TV, 3:2 사진기, 21:9 영화 같은 와이드예요.':'16:9 YouTube, 9:16 Shorts/Reels, 1:1 and 4:5 Instagram feed, 3:4 portrait photo, 4:3 old TV, 3:2 camera, 21:9 cinematic widescreen.',
+'키프레임이 있어서 아래 크기·옮기기·돌리기는 쓰이지 않아요. 아래쪽 키프레임에서 고쳐 주세요.':'Because keyframes exist, the size, move and rotate values below are not used. Edit them in the keyframes below.',
+'가장자리 부드럽게':'Edge softness','초록 번짐 줄이기 (가장자리 초록빛 없애기)':'Reduce green spill (remove green fringes)','에코 (메아리)':'Echo','울림 (리버브)':'Reverb','남은 초를 세는 숫자로 (카운트다운)':'Show seconds left (countdown)',
+'숫자 · 막대 · 표시 그림':'Numbers · bars · annotations','카운트다운':'Countdown','진행 막대':'Progress bar','네모 테두리':'Box outline','동그라미':'Circle outline','강조 선':'Highlight line',
+'카운트다운은 클립 길이만큼 남은 초를 세요. 진행 막대는 화면 아래에서 영상이 흐르는 만큼 차올라요.':'The countdown counts the seconds left in the clip. The progress bar fills along the bottom as the video plays.',
+'프로젝트 파일':'Project file','프로젝트 파일로 저장':'Save as project file','프로젝트 파일 열기':'Open project file','영상·그림·소리 파일까지 한 파일에 담겨요. 다른 기기에서 이어서 편집할 수 있어요.':'Videos, pictures and sounds are packed into one file so you can continue on another device.',
+'줄 정리':'Tidy tracks','영상 줄 틈 없애기':'Close gaps on video track','소리 줄 틈 없애기':'Close gaps on sound track','줄 안의 클립들을 순서대로 빈틈 없이 붙여요.':'Joins the clips in the track one after another with no gaps.',
+'모두 지우고 새로 시작':'Clear everything and start over','한 번 더 누르면 지워요':'Press again to clear',
+/* clip panel */
+'타임라인의 클립을 누르면 여기서 고칠 수 있어요.':'Tap a clip on the timeline to edit it here.','쓰는 법':'How to use','로 영상·그림·소리를 넣고, 왼쪽 목록에서 눌러 타임라인에 올려요.':' to add videos, pictures and sounds, then tap them in the left list to put them on the timeline.',
+'2. 클립을 끌어 옮기고, 양 끝을 끌어 줄여요. 재생 막대를 놓고':'2. Drag clips to move them and drag the ends to trim. Put the playhead and press ','로 나눠요.':' to split.','3. ':'3. ','로 자막을 넣어요.':' to add a caption.','4. ':'4. ','를 누르면 처음부터 끝까지 재생하면서 파일로 녹화해요. 그동안 이 탭을 켜 두세요.':' plays everything from start to end and records it to a file. Keep this tab open meanwhile.',
+'시작':'Start','길이':'Length','초':'s','클립 ·':'clip ·','소리 크기':'Volume','시작할 때 서서히':'Fade in','끝날 때 서서히':'Fade out','빠르기':'Speed','처음 빠르기':'Start speed','끝 빠르기':'End speed','빠르기를 바꾸면 클립 길이가 같이 바뀌어요.':'Changing the speed also changes the clip length.',
+'빠르기가 흐르며 바뀌기 (천천히→빠르게)':'Change speed over the clip (slow → fast)','거꾸로 재생 (소리 없음, 미리볼 때 조금 끊길 수 있어요)':'Play backwards (silent; the preview may stutter)',
+'클립이 흐르며 소리 크기 바꾸기':'Change volume over the clip','끝 소리 크기':'End volume','우르릉 줄이기':'Reduce rumble','끄기':'Off','약하게 (바람·에어컨)':'Light (wind, air conditioning)','보통':'Medium','세게 (목소리만)':'Strong (voice only)',
+'잡음 끊기 (조용하면 소리 끔)':'Noise gate (mute when quiet)','0이면 꺼져 있어요. 올릴수록 작은 소리(숨소리·잡음)를 더 많이 끊어요. 재생할 때와 내보낼 때 적용돼요.':'0 means off. The higher it is, the more quiet sound (breathing, hiss) is cut. Applies when playing and exporting.',
+'소리 곡선 지점 추가 (재생 막대 위치)':'Add volume curve point (at playhead)','곡선 지우기':'Clear curve','곡선이 있으면 위의 소리 크기·변화 대신 이 곡선을 써요. 앞에서부터 위치(%)와 크기예요.':'When a curve exists it replaces the volume settings above. Each row is a position (%) and a volume.',
+'무음 구간 잘라 내기':'Remove silence','무음 기준':'Silence level','이 길이 넘으면(초)':'Longer than (s)','무음 잘라 내고 붙이기':'Cut silence and join','소리 크기 자동으로 맞추기':'Set volume automatically',
+'다른 소리가 나올 때 이 소리 낮추기 (배경음악용)':'Lower this sound when other sound plays (for music)','낮추는 정도':'Amount',
+'화면':'Picture','맞추기':'Fit','안 잘리게 (검은 띠)':'Keep whole picture (black bars)','꽉 채우기 (잘림)':'Fill the frame (cropped)','크기':'Size','가로 옮기기':'Move horizontally','세로 옮기기':'Move vertically','돌리기':'Rotate','투명도':'Opacity','좌우 뒤집기':'Flip horizontally',
+'영상(V1) 줄로 복사':'Copy to video track (V1)','겹침(V2) 줄로 복사':'Copy to overlay track (V2)','줄로 복사했어요':'track copied','화면 서서히 나타남':'Picture fade in','화면 서서히 사라짐':'Picture fade out','서서히 나타남':'Fade in','서서히 사라짐':'Fade out',
+'나타나는 방식':'Entrance','없음':'None','서서히':'Fade','옆에서 들어옴':'Slide in','아래서 올라옴':'Rise up','커지며':'Grow','톡 튀어나옴':'Pop','한 글자씩':'Typewriter','통통 튀기':'Bounce','두근두근':'Pulse','덜덜':'Shake','물결 (글자마다)':'Wave (per letter)','들어오는 쪽':'Slides in from','왼쪽에서':'Left','오른쪽에서':'Right','위에서':'Top','아래에서':'Bottom',
+'앞 클립과 이어지는 효과':'Transition from previous clip','부드럽게 겹치기':'Dissolve','오른쪽에서 밀기':'Push from right','왼쪽에서 밀기':'Push from left','아래서 밀기':'Push from bottom','위에서 밀기':'Push from top','왼쪽에서 닦기':'Wipe from left','오른쪽에서 닦기':'Wipe from right','동그랗게 열리며':'Iris open','확대하며 나타남':'Zoom in','돌며 나타남':'Spin in','효과 시간':'Duration',
+'앞 클립과 같은 줄에서 딱 붙어 있어야 해요. 고르면 이 클립이 앞 클립 끝과 겹치도록 앞으로 당겨져요.':'It must sit right after the previous clip on the same track. Choosing one pulls this clip forward so it overlaps the end of the previous clip.',
+'앞 클립과 같은 줄에서 딱 붙어 있을 때만 쓸 수 있어요':'Only works when it sits right after the previous clip on the same track',
+'움직임 (천천히 확대·이동)':'Motion (slow zoom and move)','클립이 흐르는 동안 변하게 하기':'Change while the clip plays','천천히 확대':'Slow zoom in','천천히 축소':'Slow zoom out','왼쪽으로':'Drift left','오른쪽으로':'Drift right','끝 크기':'End size','끝 가로':'End horizontal','끝 세로':'End vertical','끝 돌리기':'End rotation','위의 크기·옮기기·돌리기가 시작 값이고, 여기 값이 끝 값이에요.':'The size, move and rotate values above are the start; these are the end.',
+'키프레임 (여러 지점)':'Keyframes (several points)','재생 막대 위치에 추가':'Add at playhead','모두 지우기':'Clear all','위치':'Position','가로':'Horizontal','세로':'Vertical','다음 지점까지':'Until next point','부드럽게':'Smooth','일정하게':'Linear','천천히 시작':'Ease in','천천히 끝':'Ease out','딱 바꾸기':'Hold',
+'재생 막대를 옮기고 추가한 뒤 값을 바꾸면 그 지점에서 그 값이 돼요. 타임라인 클립 위의 ◆가 키프레임이에요. 키프레임이 있으면 위의 크기·옮기기·돌리기와 시작·끝 값 대신 써요.':'Move the playhead, add a point, then change the values. The ◆ on the clip marks each keyframe. With keyframes, they replace the size, move, rotate and start/end values above.',
+'배경 지우기 (크로마키)':'Remove background (chroma key)','고른 색을 투명하게':'Make the chosen colour transparent','지울 색':'Colour to remove','범위':'Range','초록색 천 앞에서 찍은 영상을 위쪽(겹침) 줄에 올리면 뒤 영상이 비쳐 보여요.':'Put footage shot in front of a green screen on the upper (overlay) track and the video behind shows through.',
+'자르기·모양·섞기':'Crop · shape · blend','왼쪽 자르기':'Crop left','오른쪽 자르기':'Crop right','위 자르기':'Crop top','아래 자르기':'Crop bottom','모양':'Shape','네모 그대로':'Rectangle','둥근 네모':'Rounded rectangle','원 / 타원':'Circle / ellipse','위아래 뒤집기':'Flip vertically','섞는 방식':'Blend mode','보통 ':'Normal ','어둡게 곱하기':'Multiply','밝게 겹치기':'Screen','대비 겹치기':'Overlay','밝은 쪽만':'Lighten','어두운 쪽만':'Darken','차이':'Difference','부드러운 빛':'Soft light','섞는 방식은 겹침 줄 클립을 아래 영상과 섞을 때 좋아요.':'Blend modes work best for overlay-track clips mixed with the video below.',
+'색 효과':'Colour effects','원본':'Original','흑백':'Black & white','옛날 사진':'Old photo','선명하게':'Vivid','따뜻하게':'Warm','차갑게':'Cool','흐리게':'Blur','시네마':'Cinema','노을':'Sunset','따뜻한 필름':'Warm film','청록 영화':'Teal cinema','빈티지 흑백':'Vintage B&W','쨍한 색':'Punchy','칙칙한 톤':'Muted','새벽':'Dawn',
+'밝기':'Brightness','대비':'Contrast','색 진하기':'Saturation','옛날 느낌':'Sepia','색 돌리기':'Hue','따뜻함(−차가움)':'Warmth (− cool)','가장자리 어둡게':'Vignette','효과 복사':'Copy effects','효과 붙이기':'Paste effects','효과를 복사했어요':'Effects copied','효과를 붙였어요':'Effects pasted','먼저 다른 클립에서 효과를 복사하세요':'Copy effects from another clip first',
+'색 효과는 크롬·엣지·파이어폭스에서 보이고, 사파리에서는 안 보일 수 있어요.':'Colour effects show in Chrome, Edge and Firefox and may not show in Safari.',
+/* text */
+'글자 색':'Text colour','테두리':'Outline','글자 상자':'Text box','쓰기':'Use','가로 위치':'Horizontal position','세로 위치':'Vertical position','굵기':'Weight','굵게':'Bold','아주 굵게':'Extra bold','글자체':'Font','고딕':'Gothic','명조':'Serif','손글씨':'Handwriting','고정폭':'Monospace','굵은 제목':'Bold title','둥근 글씨':'Rounded','기울이기':'Italic',
+'글자 효과':'Text effects','테두리 색':'Outline colour','테두리 굵기':'Outline width','그림자':'Shadow','빛나기':'Glow','무지개 색 (움직여요)':'Rainbow (animated)','깜빡깜빡':'Blink','크기 배율':'Scale',
+'자막':'Subtitle','큰 제목':'Big title','네온':'Neon','메모지':'Sticky note','만화풍':'Comic','여기에 글자를 쓰세요':'Write your text here',
+'나타날 때 서서히':'Fade in','사라질 때 서서히':'Fade out',
+/* shape */
+'도형':'Shape','네모':'Rectangle','원':'Circle','별':'Star','하트':'Heart','화살표':'Arrow','선':'Line','가로 세로 비율':'Aspect (width/height)','안쪽 색':'Fill colour','채우기':'Fill',
+/* lanes/menus */
+'🔒 잠그기':'🔒 Lock','🔓 잠금 풀기':'🔓 Unlock','옮기기·자르기 막기':'prevents moving and splitting','다시 켜기':'Turn back on','🔇 소리 끄기':'🔇 Mute','🚫 이 줄 숨기기':'🚫 Hide this track','줄 소리 크기':'Track volume','잠겼어요':'locked','잠금을 풀었어요':'unlocked','꺼졌어요':'off','켜졌어요':'on','줄:':'track:','잠긴 줄이에요. 줄 이름을 눌러 잠금을 풀어 주세요':'This track is locked. Tap the track name to unlock it.','잠긴 줄이에요':'This track is locked','겹침 줄이 잠겨 있어요':'The overlay track is locked',
+/* insert tab */
+'템플릿 (재생 막대 위치에 들어가요)':'Templates (inserted at the playhead)','제목 카드':'Title card','이름 띠':'Name tag','인트로':'Intro','아웃트로':'Outro','글자와 도형 클립으로 만들어져서 하나하나 고칠 수 있어요.':'Built from text and shape clips, so you can edit each one.','스티커':'Stickers','작은 화면 (겹쳐 놓기)':'Picture-in-picture',
+'왼쪽 위':'Top left','가운데':'Center','오른쪽 위 ':'Top right ','왼쪽 아래':'Bottom left','꽉 채움':'Full','오른쪽 아래':'Bottom right','타임라인에서 영상이나 그림 클립을 고른 뒤 누르세요. 겹침 줄로 옮겨져서 아래 영상 위에 작게 떠요.':'Select a video or picture clip on the timeline first. It moves to the overlay track and floats small above the video.',
+'제목을 쓰세요':'Write a title','부제목':'Subtitle','이름':'Name','설명 · 직함':'Description · role','자막을 쓰세요':'Write a caption','채널 이름':'Channel name','봐 주셔서 고마워요!':'Thanks for watching!','템플릿을 넣었어요. 글자를 눌러 고쳐 보세요':'Template added. Tap the text to edit it.','원래대로 돌렸어요':'Restored','작은 화면으로 겹쳐 놓았어요':'Placed as a small picture','겹쳐 놓을 영상이나 그림 클립을 먼저 고르세요':'Select a video or picture clip to overlay first',
+/* export */
+'무엇을':'What','영상 (화면 + 소리)':'Video (picture + sound)','소리만':'Sound only','움직이는 그림 (GIF, 소리 없음)':'Animated picture (GIF, no sound)','가로 크기':'Width','초당 장수':'Frames per second','프레임':'Frame rate','화질(비트레이트)':'Quality (bitrate)','낮음 (용량 작게)':'Low (small file)','높음 (용량 크게)':'High (large file)','파일 형식':'File format','알아서':'Automatic','mp4 (어디서나 재생)':'mp4 (plays anywhere)',
+'낮게':'Low','높게':'High','크기 ':'Size ','파일 종류':'File type','알 수 없음':'unknown','(소리 파일)':'(sound file)','GIF는 용량이 커요. 짧은 영상에 알맞아요.':'GIFs get large. Best for short clips.',
+'처음부터 끝까지 한 번 재생하면서 녹화해요. 길이':'It plays everything once from start to end while recording. Length ','만큼 걸리고, 그동안 이 탭을 다른 창에 가리지 말고 켜 두세요.':' will be needed; keep this tab visible meanwhile.',
+'시작 ':'Start ','닫기':'Close','중단':'Stop','멈췄어요':'Stopped','녹화 중…':'Recording…','그림을 만드는 중…':'Making the picture…','완성!':'Done!','gif 파일을 받았어요':'gif file downloaded','파일을 받았어요':'file downloaded','다시 만들기':'Make again','GIF는 60초까지만 만들 수 있어요':'GIFs can be at most 60 seconds','타임라인에 클립을 먼저 올려 주세요':'Put clips on the timeline first',
+'이 브라우저는 영상 녹화를 지원하지 않아요. 크롬이나 엣지를 써 주세요':'This browser cannot record video. Use Chrome or Edge.','녹화를 시작하지 못했어요':'Could not start recording',
+/* toasts & misc */
+'개 자막을 넣었어요':' subtitles added','개 자막을 가져왔어요':' subtitles imported','자막을 찾지 못했어요. SRT나 VTT 파일인지 확인하세요':'No subtitles found. Check that it is an SRT or VTT file.','내보낼 글자 클립이 없어요':'There are no text clips to export','개를 복사했어요':' copied','챕터':'Chapter','프로젝트 파일을 저장했어요':'Project file saved','개 파일은 이 기기에 없어서 빠졌어요':' files were not on this device and were left out',
+'프로젝트를 열었어요':'Project opened','프로젝트 파일을 열지 못했어요':'Could not open the project file','Fry Video 프로젝트 파일이 아니에요':'This is not a Fry Video project file','지금 작업을 이 파일의 내용으로 바꿀까요? (현재 작업은 사라져요)':'Replace your current work with this file? (Current work will be lost.)',
+'은(는) 지원하지 않는 파일이에요':' is not a supported file','을(를) 열지 못했어요. 브라우저가 못 읽는 형식일 수 있어요':' could not be opened. The browser may not support this format.','그림을 열지 못했어요':'Could not open the picture','이 파일이 이 기기에 남아 있지 않아요. 다시 넣어 주세요':'This file is no longer on this device. Please add it again.',
+'이 브라우저는 녹음을 지원하지 않아요':'This browser cannot record audio','마이크를 쓸 수 없어요. 브라우저에서 마이크를 허용해 주세요':'Cannot use the microphone. Allow microphone access in the browser.','녹음 ':'Recording ',
+'자를 클립을 고르고 재생 막대를 클립 안쪽에 놓으세요':'Select a clip and put the playhead inside it','지울 클립을 먼저 고르세요':'Select a clip to delete first','영상 클립 위에 재생 막대를 놓아 주세요':'Put the playhead on a video clip','이 장면을 아직 읽지 못했어요. 잠시 뒤 다시 눌러 주세요':'This frame is not ready yet. Try again in a moment.','장면을 가져오지 못했어요':'Could not capture the frame','2초 동안 멈춘 장면을 넣었어요':'Added a 2 second freeze frame','클립이 없어요':'No clips',
+'여러 개 고르기: 클립을 눌러 하나씩 더하거나 빼세요':'Select multiple: tap clips to add or remove them','여러 개 고르기를 껐어요':'Select multiple is off','이 위치에는 이미 키프레임이 있어요':'There is already a keyframe here',
+'소리 크기를':'Volume set to','%로 맞췄어요':'%','소리 모양을 아직 읽는 중이에요. 잠시 뒤 다시 눌러 주세요':'Still reading the waveform. Try again in a moment.','거의 무음이라 맞출 수 없어요':'Almost silent, cannot adjust','영상이나 소리 클립을 고르세요':'Select a video or sound clip','거꾸로·빠르기 변화·전환 효과가 있는 클립은 쓸 수 없어요':'Not available for clips with reverse, speed change or a transition','거꾸로 + 빠르기 변화 클립은 자를 수 없어요':'A reversed clip with a speed change cannot be split',
+'거의 전부 무음이에요. 무음 기준을 낮춰 보세요':'Almost everything is silent. Lower the silence level.','자를 무음 구간이 없어요. 무음 기준을 올리거나 길이를 줄여 보세요':'No silence to cut. Raise the silence level or shorten the length.','조각으로 나누고 무음':' pieces, removed silence','초를 잘랐어요':'s',
+'붙일 틈이 없어요':'No gaps to close','개 클립을 붙였어요':' clips joined'
+};
+var o={}; for(var k in E) o[k.replace(/\s+$/,'')]=[E[k]]; if(window.FFT) FFT.add(o);
+})();
