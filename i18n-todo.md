@@ -48,6 +48,7 @@ patchnotes/score.json | Fry Score v6 항목 (en만) | score v6 | 2026-11-06
 score/app.js | Fry Score v6 한국어 메시지·버튼 | score v6 | 2026-11-06
 patchnotes/draw.json | Fry Draw v4 항목 (en만), draw/app.js 팔레트·스포이트·레이어·달라붙기 한국어 문구 | draw v4 | 2026-11-06
 patchnotes/video.json | Fry Video v9 소리 섞기·핀치 확대·휴대폰 화면 정리 (en 번역 없음) | video v9 | 2026-11-06
+patchnotes/draw.json | Fry Draw v5 항목 (en만), draw/app.js 펜·점 고치기 한국어 문구 | draw v5 | 2026-11-06
 patchnotes/video.json | Fry Video v10 GIF 만들기·글자 스타일과 움직임 (en 번역 없음) | video v10 | 2026-11-06
 patchnotes/video.json | Fry Video v11 거꾸로 재생·빠르기 변화·새 전환·틈 없애기 (en 번역 없음) | video v11 | 2026-11-06
 patchnotes/score.json | Fry Score v7 항목 (en만) | score v7 | 2026-11-06

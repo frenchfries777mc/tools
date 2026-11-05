@@ -140,8 +140,8 @@ function shapeFor(t,p0,p1,shift){
 }
 
 /* ---------- pointer interaction ---------- */
-var drag=null, tmp=null, curvePts=[];
-function setTool(t){ tool=t; curvePts=[]; tmp=null; stage.style.cursor=t==='sel'?'default':(t==='hand'?'grab':'crosshair'); renderTools(); drawOv(); panel(); }
+var drag=null, tmp=null, curvePts=[], bezPts=[], nodeSel=-1;
+function setTool(t){ tool=t; curvePts=[]; bezPts=[]; nodeSel=-1; tmp=null; stage.style.cursor=t==='sel'?'default':(t==='hand'?'grab':'crosshair'); renderTools(); drawOv(); panel(); }
 function targetId(e){ var n=e.target; while(n&&n!==stage){ if(n.getAttribute&&n.getAttribute('data-id')) return +n.getAttribute('data-id'); n=n.parentNode; } return null; }
 function ovEl(){ return $('ov'); }
 stage.addEventListener('pointerdown',function(e){
@@ -149,10 +149,15 @@ stage.addEventListener('pointerdown',function(e){
   stage.setPointerCapture&&stage.setPointerCapture(e.pointerId);
   var p=P(e), id=targetId(e), h=e.target.getAttribute&&e.target.getAttribute('data-h');
   if(tool==='hand'){ drag={k:'pan',x:e.clientX,y:e.clientY,sl:desk.scrollLeft,st:desk.scrollTop}; return; }
-  if(tool==='node'){ var nn=e.target.getAttribute&&e.target.getAttribute('data-n'), o3=byId(sel[0]);
-    if(nn!=null&&o3&&o3.pts){ drag={k:'node',o:o3,i:+nn,moved:false}; return; }
+  if(tool==='bez'){ var bf=bezPts[0], bl=bezPts[bezPts.length-1];
+    if(bezPts.length>=2&&Math.hypot(p.x-bf.x,p.y-bf.y)<10/zoom){ finishBez(true); return; }
+    if(bezPts.length>=2&&Math.hypot(p.x-bl.x,p.y-bl.y)<6/zoom){ finishBez(false); return; }
+    var np={x:p.x,y:p.y}; bezPts.push(np); drag={k:'bez',pt:np}; drawOv(); return; }
+  if(tool==='node'){ var nn=e.target.getAttribute&&e.target.getAttribute('data-n'), nhh=e.target.getAttribute&&e.target.getAttribute('data-nh'), o3=byId(sel[0]);
+    if(nhh&&o3&&o3.pts&&nodeSel>=0){ drag={k:'nh',o:o3,i:nodeSel,w:nhh,moved:false}; return; }
+    if(nn!=null&&o3&&o3.pts){ nodeSel=+nn; drag={k:'node',o:o3,i:+nn,moved:false}; drawOv(); panel(); return; }
     if(id==null&&o3&&o3.pts&&nearNode(o3,nodePt(o3,e))) return;
-    sel=(id!=null&&!(byId(id)||{}).lock)?[id]:[]; drawOv(); panel(); return; }
+    nodeSel=-1; sel=(id!=null&&!(byId(id)||{}).lock)?[id]:[]; drawOv(); panel(); return; }
   if(tool==='sel'){
     if(h&&sel.length){ var bx=selBox(); if(!bx) return; drag={k:'rs',h:h,box:bx,start:p,orig:bx.list.map(function(o){ return {o:o,tx:o.tx,ty:o.ty,sx:o.sx==null?1:o.sx,sy:o.sy==null?1:o.sy,rot:o.rot||0}; })};
       drag.pv=bx.list.length===1?{x:bx.list[0].tx+(bx.list[0].cx||0),y:bx.list[0].ty+(bx.list[0].cy||0)}:{x:bx.x+bx.w/2,y:bx.y+bx.h/2}; drag.a0=Math.atan2(p.y-drag.pv.y,p.x-drag.pv.x); return; }
@@ -174,7 +179,7 @@ stage.addEventListener('pointerdown',function(e){
 });
 stage.addEventListener('pointermove',function(e){
   var p=P(e);
-  if(!drag){ if(tool==='curve'&&curvePts.length){ drawOv(p); } return; }
+  if(!drag){ if(tool==='curve'&&curvePts.length){ drawOv(p); } else if(tool==='bez'&&bezPts.length){ drawOv(p); } return; }
   if(drag.k==='pan'){ desk.scrollLeft=drag.sl-(e.clientX-drag.x); desk.scrollTop=drag.st-(e.clientY-drag.y); return; }
   if(drag.k==='erase'){ var t=document.elementFromPoint(e.clientX,e.clientY), id=t&&t.closest?targetIdFrom(t):null; if(id!=null){ doc.objs=doc.objs.filter(function(o){ return o.id!==id; }); render(); } return; }
   if(drag.k==='move'){ var dx=p.x-drag.start.x, dy=p.y-drag.start.y; if(!drag.moved&&Math.hypot(dx,dy)<2/zoom) return; drag.moved=true;
@@ -184,7 +189,11 @@ stage.addEventListener('pointermove',function(e){
       [bq.y+dy,bq.y+bq.h/2+dy,bq.y+bq.h+dy].forEach(function(c){ drag.tg.ys.forEach(function(t){ var d=t-c; if(Math.abs(d)<th&&(!bt||Math.abs(d)<Math.abs(bt.d))) bt={d:d,t:t}; }); });
       if(bs){ dx+=bs.d; drag.gx=bs.t; } if(bt){ dy+=bt.d; drag.gy=bt.t; } }
     drag.orig.forEach(function(r){ r[0].tx=r[1]+dx; r[0].ty=r[2]+dy; }); softRender(); return; }
-  if(drag.k==='node'){ var l=nodePt(drag.o,e); drag.o.pts[drag.i]={x:l[0],y:l[1]}; setD(drag.o); drag.moved=true; softRender(); return; }
+  if(drag.k==='bez'){ var bp=drag.pt, bdx=p.x-bp.x, bdy=p.y-bp.y; if(Math.hypot(bdx,bdy)>3/zoom){ bp.ox=p.x; bp.oy=p.y; bp.ix=bp.x-bdx; bp.iy=bp.y-bdy; bp.sm=true; } drawOv(); return; }
+  if(drag.k==='nh'){ var lh=nodePt(drag.o,e), pt=drag.o.pts[drag.i], w=drag.w, ow=w==='i'?'o':'i'; pt[w+'x']=lh[0]; pt[w+'y']=lh[1]; drag.o.bz=true;
+    if(e.altKey) pt.sm=false; else if(pt.sm&&pt[ow+'x']!=null){ var vx=pt.x-lh[0], vy=pt.y-lh[1], vl=Math.hypot(vx,vy)||1, ol=Math.hypot(pt[ow+'x']-pt.x,pt[ow+'y']-pt.y); pt[ow+'x']=pt.x+vx/vl*ol; pt[ow+'y']=pt.y+vy/vl*ol; }
+    setD(drag.o); drag.moved=true; softRender(); return; }
+  if(drag.k==='node'){ var l=nodePt(drag.o,e), pn=drag.o.pts[drag.i], ddx=l[0]-pn.x, ddy=l[1]-pn.y; pn.x=l[0]; pn.y=l[1]; ['i','o'].forEach(function(k){ if(pn[k+'x']!=null){ pn[k+'x']+=ddx; pn[k+'y']+=ddy; } }); setD(drag.o); drag.moved=true; softRender(); return; }
   if(drag.k==='rs'){ var b=drag.box, hh=drag.h;
     if(hh==='rot'){ var dg=(Math.atan2(p.y-drag.pv.y,p.x-drag.pv.x)-drag.a0)*180/Math.PI; if(e.shiftKey) dg=Math.round(dg/15)*15; var cs=Math.cos(dg*Math.PI/180), sn=Math.sin(dg*Math.PI/180);
       drag.orig.forEach(function(r){ var o=r.o, cx=o.cx||0, cy=o.cy||0, wx=r.tx+cx-drag.pv.x, wy=r.ty+cy-drag.pv.y; o.rot=r.rot+dg; o.tx=drag.pv.x+wx*cs-wy*sn-cx; o.ty=drag.pv.y+wx*sn+wy*cs-cy; }); softRender(); return; }
@@ -205,7 +214,8 @@ function softRender(){ var g=stage.querySelector('#gobj'); if(g) g.innerHTML=doc
 stage.addEventListener('pointerup',function(e){
   if(!drag) return; var d=drag; drag=null; var p=P(e);
   if(d.k==='move'){ if(d.moved) commit(); else panel(); return; }
-  if(d.k==='node'){ if(d.moved) commit(); return; }
+  if(d.k==='node'||d.k==='nh'){ if(d.moved) commit(); else drawOv(); return; }
+  if(d.k==='bez'){ drawOv(); return; }
   if(d.k==='rs'){ commit(); return; }
   if(d.k==='pan'||d.k==='erase') return;
   if(d.k==='box'){ if(d.cur){ var x0=Math.min(d.start.x,d.cur.x),x1=Math.max(d.start.x,d.cur.x),y0=Math.min(d.start.y,d.cur.y),y1=Math.max(d.start.y,d.cur.y); sel=[];
@@ -219,8 +229,10 @@ stage.addEventListener('pointerup',function(e){
 function simplify(pts){ var out=[pts[0]]; for(var i=1;i<pts.length-1;i++){ var l=out[out.length-1]; if(Math.hypot(pts[i].x-l.x,pts[i].y-l.y)>3/zoom) out.push(pts[i]); } out.push(pts[pts.length-1]); return out; }
 stage.addEventListener('dblclick',function(e){ if(tool==='curve'){ finishCurve(); return; }
   if(tool==='node'){ var o=byId(sel[0]); if(!o||!o.pts) return; var tg=document.elementFromPoint(e.clientX,e.clientY), nn=tg&&tg.getAttribute&&tg.getAttribute('data-n');
-    if(nn!=null){ if(o.pts.length>(o.cl?3:2)){ o.pts.splice(+nn,1); setD(o); commit(); } return; }
+    if(nn!=null){ if(o.pts.length>(o.cl?3:2)){ o.pts.splice(+nn,1); nodeSel=-1; setD(o); commit(); } return; }
     if(addNode(o,nodePt(o,e))) commit(); } });
+function finishBez(close){ if(bezPts.length<2){ bezPts=[]; drawOv(); return; }
+  var o=newObj('path',{d:''},{fill:st.fillOn?st.fill:'none',pts:bezPts.map(function(q){ return JSON.parse(JSON.stringify(q)); }),cl:!!close,sh:false,bz:true}); setD(o); doc.objs.push(o); sel=[o.id]; bezPts=[]; commit(); }
 function finishCurve(){ if(curvePts.length<2){ curvePts=[]; drawOv(); return; }
   var cex={fill:st.fillOn?st.fill:'none'}; if(st.sym<=1&&!st.mirror){ cex.pts=curvePts.map(function(q){ return {x:q.x,y:q.y}; }); cex.cl=st.closed; cex.sh=false; } doc.objs.push(newObj('path',{d:symPath(curvePts,st.closed)},cex)); sel=[doc.objs[doc.objs.length-1].id]; curvePts=[]; commit(); }
 function bbox(o){
@@ -233,10 +245,17 @@ function drawOv(cur){
     var pts=curvePts.concat(cur?[cur]:[]); g.appendChild(el('path',{d:smooth(pts,false),fill:'none',stroke:'#ff8a3d','stroke-width':2*u,'stroke-dasharray':(6*u)+' '+(4*u)}));
     curvePts.forEach(function(q){ g.appendChild(el('circle',{cx:q.x,cy:q.y,r:4*u,fill:'#ffc93c',stroke:'#000','stroke-width':u})); });
   }
+  if(tool==='bez'&&bezPts.length){ var bpp=bezPts.concat(cur?[{x:cur.x,y:cur.y}]:[]);
+    if(bpp.length>1) g.appendChild(el('path',{d:bezD({pts:bpp,cl:false}),fill:'none',stroke:'#ff8a3d','stroke-width':2*u,'pointer-events':'none'}));
+    bezPts.forEach(function(q,qi){ ['i','o'].forEach(function(k){ if(q[k+'x']!=null){ g.appendChild(el('line',{x1:q.x,y1:q.y,x2:q[k+'x'],y2:q[k+'y'],stroke:'#ff8a3d','stroke-width':u,'pointer-events':'none'})); g.appendChild(el('circle',{cx:q[k+'x'],cy:q[k+'y'],r:3.5*u,fill:'#ff8a3d','pointer-events':'none'})); } });
+      g.appendChild(el('rect',{x:q.x-4*u,y:q.y-4*u,width:8*u,height:8*u,fill:qi===0?'#ffc93c':'#ffffff',stroke:'#ff8a3d','stroke-width':1.5*u,'pointer-events':'none'})); }); }
   if(drag&&drag.k==='box'&&drag.cur){ g.appendChild(el('rect',{x:Math.min(drag.start.x,drag.cur.x),y:Math.min(drag.start.y,drag.cur.y),width:Math.abs(drag.cur.x-drag.start.x),height:Math.abs(drag.cur.y-drag.start.y),fill:'rgba(255,201,60,.12)',stroke:'#ffc93c','stroke-width':u,'stroke-dasharray':(4*u)+' '+(3*u)})); }
   if(tool==='node'){ var no=byId(sel[0]); if(no&&no.pts){ var mm=mat(no), q=no.pts.map(function(p){ return mapPt(mm,p.x,p.y); });
-      g.appendChild(el('path',{d:'M'+q.map(function(z){ return f(z[0])+' '+f(z[1]); }).join('L')+(no.cl?'Z':''),fill:'none',stroke:'#ff8a3d','stroke-width':u,'stroke-dasharray':(4*u)+' '+(3*u),'pointer-events':'none'}));
-      q.forEach(function(z,i){ g.appendChild(el('circle',{cx:z[0],cy:z[1],r:6*u,fill:'#ffffff',stroke:'#ff8a3d','stroke-width':2*u,'data-n':i,style:'cursor:move'})); }); }
+      if(!no.bz) g.appendChild(el('path',{d:'M'+q.map(function(z){ return f(z[0])+' '+f(z[1]); }).join('L')+(no.cl?'Z':''),fill:'none',stroke:'#ff8a3d','stroke-width':u,'stroke-dasharray':(4*u)+' '+(3*u),'pointer-events':'none'}));
+      var sp=no.pts[nodeSel]; if(sp&&nodeSel>=0) ['i','o'].forEach(function(k){ if(sp[k+'x']!=null){ var hp=mapPt(mm,sp[k+'x'],sp[k+'y']), np2=q[nodeSel];
+          g.appendChild(el('line',{x1:np2[0],y1:np2[1],x2:hp[0],y2:hp[1],stroke:'#ff8a3d','stroke-width':u,'pointer-events':'none'}));
+          g.appendChild(el('circle',{cx:hp[0],cy:hp[1],r:5*u,fill:'#ff8a3d',stroke:'#fff','stroke-width':u,'data-nh':k,style:'cursor:move'})); } });
+      q.forEach(function(z,i){ g.appendChild(el('circle',{cx:z[0],cy:z[1],r:6*u,fill:i===nodeSel?'#ff8a3d':'#ffffff',stroke:'#ff8a3d','stroke-width':2*u,'data-n':i,style:'cursor:move'})); }); }
     return; }
   if(tool!=='sel') return;
   var bx=null, hs=(window.matchMedia&&matchMedia('(pointer:coarse)').matches?9:5.5)*u;
@@ -261,24 +280,65 @@ function mat(o){ var cx=o.cx||0, cy=o.cy||0, rr=(o.rot||0)*Math.PI/180, m=[1,0,0
 function mapPt(m,x,y){ return [m[0]*x+m[2]*y+m[4],m[1]*x+m[3]*y+m[5]]; }
 function minv(m){ var d=m[0]*m[3]-m[1]*m[2]||1e-9; return [m[3]/d,-m[1]/d,-m[2]/d,m[0]/d,(m[2]*m[5]-m[3]*m[4])/d,(m[1]*m[4]-m[0]*m[5])/d]; }
 function polyD(pts,cl){ return 'M'+pts.map(function(p){ return f(p.x)+' '+f(p.y); }).join('L')+(cl?'Z':''); }
-function setD(o){ o.a.d=o.sh?polyD(o.pts,o.cl):smooth(o.pts,o.cl); }
+function bezD(o){ var P=o.pts, n=P.length, d='M'+f(P[0].x)+' '+f(P[0].y), segs=o.cl?n:n-1;
+  for(var i=0;i<segs;i++){ var A=P[i], B=P[(i+1)%n], has1=A.ox!=null, has2=B.ix!=null;
+    if(!has1&&!has2) d+='L'+f(B.x)+' '+f(B.y); else d+='C'+f(has1?A.ox:A.x)+' '+f(has1?A.oy:A.y)+' '+f(has2?B.ix:B.x)+' '+f(has2?B.iy:B.y)+' '+f(B.x)+' '+f(B.y); }
+  return d+(o.cl?'Z':''); }
+function setD(o){ o.a.d=o.bz?bezD(o):(o.sh?polyD(o.pts,o.cl):smooth(o.pts,o.cl)); }
+function parsePathD(d){ var tk=String(d).match(/[a-zA-Z]|[-+]?(?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?/g)||[], i=0, cmd='', pts=[], cur=[0,0], st0=null, cl=false, lastC=null, lastQ=null, bad=false;
+  function num(){ return parseFloat(tk[i++]); }
+  function add(x,y){ var q={x:x,y:y}; pts.push(q); cur=[x,y]; return q; }
+  while(i<tk.length&&!bad){ if(/[a-zA-Z]/.test(tk[i])) cmd=tk[i++]; else if(!cmd){ bad=true; break; }
+    var rel=cmd===cmd.toLowerCase(), C=cmd.toUpperCase(), ox=rel?cur[0]:0, oy=rel?cur[1]:0;
+    if(C==='Z'){ cl=true; lastC=lastQ=null; if(i>=tk.length||/[a-zA-Z]/.test(tk[i])) { if(i<tk.length&&/[mM]/.test(tk[i])) bad=true; } continue; }
+    if(C==='M'){ if(pts.length) { bad=true; break; } var mx=ox+num(), my=oy+num(); st0=add(mx,my); cmd=rel?'l':'L'; lastC=lastQ=null; continue; }
+    if(!pts.length){ bad=true; break; }
+    if(C==='L'){ add(ox+num(),oy+num()); lastC=lastQ=null; }
+    else if(C==='H'){ add(rel?cur[0]+num():num(),cur[1]); lastC=lastQ=null; }
+    else if(C==='V'){ add(cur[0],rel?cur[1]+num():num()); lastC=lastQ=null; }
+    else if(C==='C'||C==='S'){ var A=pts[pts.length-1], c1;
+      if(C==='C'){ c1=[ox+num(),oy+num()]; } else c1=lastC?[2*cur[0]-lastC[0],2*cur[1]-lastC[1]]:[cur[0],cur[1]];
+      var c2=[ox+num(),oy+num()], ex=ox+num(), ey=oy+num(); A.ox=c1[0]; A.oy=c1[1]; var q=add(ex,ey); q.ix=c2[0]; q.iy=c2[1]; lastC=c2; lastQ=null; }
+    else if(C==='Q'||C==='T'){ var A2=pts[pts.length-1], qc; if(C==='Q') qc=[ox+num(),oy+num()]; else qc=lastQ?[2*cur[0]-lastQ[0],2*cur[1]-lastQ[1]]:[cur[0],cur[1]];
+      var qx=ox+num(), qy=oy+num(); A2.ox=A2.x+2/3*(qc[0]-A2.x); A2.oy=A2.y+2/3*(qc[1]-A2.y); var q2=add(qx,qy); q2.ix=qx+2/3*(qc[0]-qx); q2.iy=qy+2/3*(qc[1]-qy); lastQ=qc; lastC=null; }
+    else { bad=true; } }
+  if(bad||pts.some(function(p){ return !isFinite(p.x)||!isFinite(p.y); })) return null;
+  if(cl&&pts.length>2){ var l0=pts[pts.length-1], f0=pts[0]; if(Math.abs(l0.x-f0.x)<1e-6&&Math.abs(l0.y-f0.y)<1e-6){ if(l0.ix!=null){ f0.ix=l0.ix; f0.iy=l0.iy; } pts.pop(); } }
+  return {pts:pts,cl:cl}; }
 function nums(str){ return (String(str).match(/-?\d*\.?\d+(?:e-?\d+)?/gi)||[]).map(Number); }
 function toPath(o){
-  var t=o.tag, a=o.a, pts=[], cl=false, sh=true, n;
-  if(t==='path'){ if(o.pts) return true; var d=String(a.d||''); if(/[^MLZ0-9eE.\-\s,]/.test(d)||(d.match(/M/g)||[]).length!==1) return false;
+  var t=o.tag, a=o.a, pts=[], cl=false, sh=true, n, bzf=false;
+  if(t==='path'){ if(o.pts) return true; var d=String(a.d||''); if(/[^MLZ0-9eE.\-\s,]/.test(d)){ var pp=parsePathD(d); if(!pp||pp.pts.length<2) return false; pp.pts.forEach(function(q){ if(q.ix!=null||q.ox!=null) q.sm=false; }); o.tag='path'; o.a={}; o.pts=pp.pts; o.cl=pp.cl; o.sh=false; o.bz=true; setD(o); return true; }
+    if((d.match(/M/g)||[]).length!==1) return false;
     n=nums(d.replace(/[MLZ]/g,' ')); for(var i=0;i+1<n.length;i+=2) pts.push({x:n[i],y:n[i+1]}); cl=/Z/.test(d); }
   else if(t==='line'){ pts=[{x:+a.x1,y:+a.y1},{x:+a.x2,y:+a.y2}]; }
   else if(t==='rect'){ var x=+a.x,y=+a.y,w=+a.width,h=+a.height; pts=[{x:x,y:y},{x:x+w,y:y},{x:x+w,y:y+h},{x:x,y:y+h}]; cl=true; }
   else if(t==='polygon'||t==='polyline'){ n=nums(a.points); for(var j=0;j+1<n.length;j+=2) pts.push({x:n[j],y:n[j+1]}); cl=t==='polygon'; }
-  else if(t==='ellipse'||t==='circle'){ var ex=+a.cx,ey=+a.cy,rx=+(a.rx||a.r),ry=+(a.ry||a.r); for(var q=0;q<24;q++){ var an=2*Math.PI*q/24; pts.push({x:ex+rx*Math.cos(an),y:ey+ry*Math.sin(an)}); } cl=true; sh=false; }
+  else if(t==='ellipse'||t==='circle'){ var ex=+a.cx,ey=+a.cy,rx=+(a.rx||a.r),ry=+(a.ry||a.r), kk=.5523;
+    if(!(rx>0&&ry>0)) return false;
+    pts=[{x:ex+rx,y:ey,ix:ex+rx,iy:ey-ry*kk,ox:ex+rx,oy:ey+ry*kk,sm:true},{x:ex,y:ey+ry,ix:ex+rx*kk,iy:ey+ry,ox:ex-rx*kk,oy:ey+ry,sm:true},{x:ex-rx,y:ey,ix:ex-rx,iy:ey+ry*kk,ox:ex-rx,oy:ey-ry*kk,sm:true},{x:ex,y:ey-ry,ix:ex-rx*kk,iy:ey-ry,ox:ex+rx*kk,oy:ey-ry,sm:true}]; cl=true; sh=false; bzf=true; }
   else return false;
   if(pts.length<2||pts.some(function(p){ return !isFinite(p.x)||!isFinite(p.y); })) return false;
-  o.tag='path'; o.a={}; o.pts=pts; o.cl=cl; o.sh=sh; setD(o); return true; }
+  o.tag='path'; o.a={}; o.pts=pts; o.cl=cl; o.sh=sh; if(bzf) o.bz=true; setD(o); return true; }
 function nodePt(o,e){ var p=P(e), m=minv(mat(o)); return mapPt(m,p.x,p.y); }
-function nearNode(o,l){ var n=o.pts.length, best=-1, bd=1e9, bp=null, segs=o.cl?n:n-1;
-  for(var i=0;i<segs;i++){ var A=o.pts[i], B=o.pts[(i+1)%n], dx=B.x-A.x, dy=B.y-A.y, L2=dx*dx+dy*dy||1, t=Math.max(0,Math.min(1,((l[0]-A.x)*dx+(l[1]-A.y)*dy)/L2)), px=A.x+t*dx, py=A.y+t*dy, d=Math.hypot(l[0]-px,l[1]-py); if(d<bd){ bd=d; best=i; bp={x:px,y:py}; } }
-  return (best<0||bd>16/zoom)?null:{i:best,p:bp}; }
-function addNode(o,l){ var r=nearNode(o,l); if(!r) return false; o.pts.splice(r.i+1,0,r.p); setD(o); return true; }
+function segCurve(o,i){ var P=o.pts, n=P.length, A=P[i], B=P[(i+1)%n]; if(!o.bz||(A.ox==null&&B.ix==null)) return null;
+  return [[A.x,A.y],[A.ox!=null?A.ox:A.x,A.ox!=null?A.oy:A.y],[B.ix!=null?B.ix:B.x,B.ix!=null?B.iy:B.y],[B.x,B.y]]; }
+function bzAt(c,t){ var u=1-t; return [u*u*u*c[0][0]+3*u*u*t*c[1][0]+3*u*t*t*c[2][0]+t*t*t*c[3][0],u*u*u*c[0][1]+3*u*u*t*c[1][1]+3*u*t*t*c[2][1]+t*t*t*c[3][1]]; }
+function nearNode(o,l){ var n=o.pts.length, best=-1, bd=1e9, bp=null, bt=0, bc=null, segs=o.cl?n:n-1;
+  for(var i=0;i<segs;i++){ var c=segCurve(o,i);
+    if(c){ for(var k=0;k<=30;k++){ var t=k/30, q=bzAt(c,t), d=Math.hypot(l[0]-q[0],l[1]-q[1]); if(d<bd){ bd=d; best=i; bp={x:q[0],y:q[1]}; bt=t; bc=c; } } continue; }
+    var A=o.pts[i], B=o.pts[(i+1)%n], dx=B.x-A.x, dy=B.y-A.y, L2=dx*dx+dy*dy||1, t2=Math.max(0,Math.min(1,((l[0]-A.x)*dx+(l[1]-A.y)*dy)/L2)), px=A.x+t2*dx, py=A.y+t2*dy, d2=Math.hypot(l[0]-px,l[1]-py); if(d2<bd){ bd=d2; best=i; bp={x:px,y:py}; bt=t2; bc=null; } }
+  return (best<0||bd>16/zoom)?null:{i:best,p:bp,t:bt,c:bc}; }
+function addNode(o,l){ var r=nearNode(o,l); if(!r) return false; var n=o.pts.length;
+  if(r.c){ var c=r.c, t=r.t, L=function(a,b){ return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t]; }, a=L(c[0],c[1]), b=L(c[1],c[2]), cc=L(c[2],c[3]), d=L(a,b), e=L(b,cc), m=L(d,e), A=o.pts[r.i], B=o.pts[(r.i+1)%n];
+    A.ox=a[0]; A.oy=a[1]; B.ix=cc[0]; B.iy=cc[1]; o.pts.splice(r.i+1,0,{x:m[0],y:m[1],ix:d[0],iy:d[1],ox:e[0],oy:e[1],sm:true}); }
+  else o.pts.splice(r.i+1,0,r.p);
+  nodeSel=r.i+1; setD(o); return true; }
+function toSmooth(o,i){ var P=o.pts, n=P.length, p=P[i], pr=(i>0||o.cl)?P[(i-1+n)%n]:null, nx=(i<n-1||o.cl)?P[(i+1)%n]:null; if(!pr&&!nx) return;
+  var a=pr||p, b=nx||p, vx=b.x-a.x, vy=b.y-a.y, vl=Math.hypot(vx,vy)||1; vx/=vl; vy/=vl;
+  var lp=pr?Math.hypot(p.x-pr.x,p.y-pr.y)/3:0, ln=nx?Math.hypot(nx.x-p.x,nx.y-p.y)/3:0;
+  if(pr){ p.ix=p.x-vx*lp; p.iy=p.y-vy*lp; } if(nx){ p.ox=p.x+vx*ln; p.oy=p.y+vy*ln; } p.sm=true; o.bz=true; }
+function toCorner(o,i){ var p=o.pts[i]; delete p.ix; delete p.iy; delete p.ox; delete p.oy; p.sm=false; }
 function placeNew(list,no){ var out=[], last=-1; doc.objs.forEach(function(o,i){ if(list.indexOf(o)>=0) last=i; });
   doc.objs.forEach(function(o,i){ if(list.indexOf(o)>=0){ if(i===last) out.push(no); } else out.push(o); }); doc.objs=out; }
 function groupSel(){ var kids=doc.objs.filter(function(o){ return sel.indexOf(o.id)>=0; }); if(kids.length<2){ toast('2개 이상 골라서 묶어요'); return; }
@@ -481,7 +541,7 @@ function openFile(file){
 }
 
 /* ---------- ui ---------- */
-var TOOLS=[['sel','↖','고르기 (V)'],['hand','✋','화면 옮기기 (H)'],['pen','✏️','자유 선 (P)'],['line','╱','직선 (L)'],['curve','〰️','곡선: 눌러 점 찍기, 두 번 누르면 끝'],['rect','▭','네모 (R)'],['ellipse','◯','원 (O)'],['poly','⬡','다각형 (G)'],['star','☆','별 (S)'],['node','◇','점 고치기 (N): 흰 점을 끌어 옮겨요'],['text','T','글자 (T)'],['eye','💧','스포이트: 도형을 누르면 색·선 모양을 가져와요. 다른 도형을 먼저 골라 두면 그 도형에 입혀요'],['bucket','🪣','색 채우기'],['erase','🧽','지우개 (E)']];
+var TOOLS=[['sel','↖','고르기 (V)'],['hand','✋','화면 옮기기 (H)'],['pen','✏️','자유 선 (P)'],['line','╱','직선 (L)'],['bez','✒️','펜: 눌러 점을 찍고 끌면 곡선 손잡이가 생겨요'],['curve','〰️','곡선: 눌러 점 찍기, 두 번 누르면 끝'],['rect','▭','네모 (R)'],['ellipse','◯','원 (O)'],['poly','⬡','다각형 (G)'],['star','☆','별 (S)'],['node','◇','점 고치기 (N): 흰 점을 끌어 옮겨요'],['text','T','글자 (T)'],['eye','💧','스포이트: 도형을 누르면 색·선 모양을 가져와요. 다른 도형을 먼저 골라 두면 그 도형에 입혀요'],['bucket','🪣','색 채우기'],['erase','🧽','지우개 (E)']];
 function renderTools(){ $('tools').innerHTML=TOOLS.map(function(t){ return '<button class="tl'+(t[0]===tool?' on':'')+'" data-t="'+t[0]+'" title="'+t[2]+'">'+t[1]+'</button>'; }).join(''); }
 var ptab='prop';
 function rowRange(lbl,id,min,max,val,unit,step){ return '<div class="row"><label>'+lbl+'</label><input type="range" data-s="'+id+'" min="'+min+'" max="'+max+'" step="'+(step||1)+'" value="'+val+'"><span class="v">'+f(val)+(unit||'')+'</span></div>'; }
@@ -490,7 +550,8 @@ function panel(){
   document.querySelectorAll('#ptabs button').forEach(function(x){ x.classList.toggle('on',x.dataset.p===ptab); });
   if(ptab==='prop'){
     var so=selObjs(), o=so[0];
-    if(tool==='node') h+='<div class="sec"><h4>점 고치기</h4>'+(o&&o.pts?'<label class="chk"><input type="checkbox" data-o="sh"'+(o.sh?' checked':'')+'> 꺾인(뾰족한) 선으로</label><div class="note">흰 점을 끌어 옮기고, 선 위를 두 번 누르면 점이 늘고, 점을 두 번 누르면 없어져요.</div>':(o?'<div class="btns"><button class="tbtn pri" data-a="topath">점 고칠 수 있게 바꾸기</button></div><div class="note">네모·원·직선·다각형과 단순한 선은 바꿀 수 있어요.</div>':'<div class="note">고칠 도형을 눌러서 골라요.</div>'))+'</div>';
+    if(tool==='bez') h+='<div class="sec"><h4>펜 (곡선 손잡이)</h4><div class="btns"><button class="tbtn pri" data-a="bezend">여기서 끝내기</button><button class="tbtn" data-a="bezclose">닫아서 끝내기</button><button class="tbtn" data-a="bezcancel">취소</button></div><div class="note">캔버스를 눌러 점을 찍어요. 누른 채 끌면 부드러운 곡선 손잡이가 생겨요. 처음 점을 누르면 닫히고, 마지막 점을 다시 누르면 끝나요.</div></div>';
+    if(tool==='node') h+='<div class="sec"><h4>점 고치기</h4>'+(o&&o.pts?(o.bz?'':'<label class="chk"><input type="checkbox" data-o="sh"'+(o.sh?' checked':'')+'> 꺾인(뾰족한) 선으로</label>')+'<div class="btns"><button class="tbtn" data-a="nsmooth"'+(nodeSel<0?' disabled':'')+'>고른 점 부드럽게</button><button class="tbtn" data-a="ncorner"'+(nodeSel<0?' disabled':'')+'>고른 점 꺾기</button><button class="tbtn" data-a="ndel"'+(nodeSel<0?' disabled':'')+'>고른 점 지우기</button></div><div class="btns"><button class="tbtn" data-a="nallsmooth">모두 부드럽게</button><button class="tbtn" data-a="nallcorner">모두 꺾기</button></div><div class="note">점을 눌러 고르면 주황 손잡이가 보여요. 손잡이를 끌어 곡선을 다듬어요 (Alt: 한쪽만). 선 위를 두 번 누르면 점이 늘고, 점을 두 번 누르면 없어져요.</div>':(o?'<div class="btns"><button class="tbtn pri" data-a="topath">점 고칠 수 있게 바꾸기</button></div><div class="note">네모·원·직선·다각형과 곡선 선은 바꿀 수 있어요.</div>':'<div class="note">고칠 도형을 눌러서 골라요.</div>'))+'</div>';
     h+='<div class="sec"><h4>'+(o?'고른 도형 ('+so.length+'개)':'새로 그릴 도형')+'</h4>';
     var fill=o?(o.fill==null||o.fill==='none'?'none':o.fill):st.fill, strokeC=o?(o.stroke==null||o.stroke==='none'?'none':o.stroke):st.stroke;
     var gr=o&&o.grad;
@@ -605,6 +666,8 @@ pb.addEventListener('click',function(e){
   if(t.id==='cvApply'){ var w=Math.max(16,Math.min(8000,+$('cw').value||doc.w)), h=Math.max(16,Math.min(8000,+$('ch').value||doc.h)); doc.w=w; doc.h=h; commit(); fit(); return; }
   if(t.id==='bClear'){ if(doc.objs.length&&!confirmOnce(t)) return; doc.objs=[]; sel=[]; commit(); return; }
   var a=t.dataset.a; if(!a) return;
+  if(a==='bezend'){ finishBez(false); return; } if(a==='bezclose'){ finishBez(true); return; } if(a==='bezcancel'){ bezPts=[]; drawOv(); return; }
+  if(a.charAt(0)==='n'&&a!=='nodes'){ var no2=selObjs()[0]; if(no2&&no2.pts){ if(a==='nsmooth'&&nodeSel>=0) toSmooth(no2,nodeSel); else if(a==='ncorner'&&nodeSel>=0){ toCorner(no2,nodeSel); no2.bz=true; } else if(a==='ndel'&&nodeSel>=0){ if(no2.pts.length>(no2.cl?3:2)){ no2.pts.splice(nodeSel,1); nodeSel=-1; } } else if(a==='nallsmooth'){ no2.pts.forEach(function(q,qi){ toSmooth(no2,qi); }); } else if(a==='nallcorner'){ no2.pts.forEach(function(q,qi){ toCorner(no2,qi); }); no2.bz=true; } setD(no2); commit(); } return; }
   if(a==='del') delSel(); else if(a==='dup') dupSel(); else if(a==='hflip') flip('h'); else if(a==='vflip') flip('v'); else if(a==='group') groupSel(); else if(a==='ungroup') ungroupSel(); else if(a==='bu'||a==='bi'||a==='bs'||a==='bx') boolOp(a.charAt(1)); else if(a==='topath'){ var po=selObjs()[0]; if(po&&toPath(po)){ commit(); } else toast('이 도형은 점으로 바꾸지 못해요'); } else order(a);
 });
 var lyDrag=null;
@@ -647,8 +710,9 @@ document.addEventListener('keydown',function(e){
   if(ctrl&&k==='d'){ e.preventDefault(); dupSel(); return; }
   if(ctrl&&k==='a'){ e.preventDefault(); sel=doc.objs.map(function(o){ return o.id; }); drawOv(); panel(); return; }
   if(e.key==='Delete'||e.key==='Backspace'){ if(sel.length){ e.preventDefault(); delSel(); } return; }
-  if(e.key==='Escape'){ curvePts=[]; sel=[]; drawOv(); panel(); return; }
+  if(e.key==='Escape'){ curvePts=[]; bezPts=[]; sel=[]; drawOv(); panel(); return; }
   if(e.key==='Enter'&&tool==='curve'){ finishCurve(); return; }
+  if(e.key==='Enter'&&tool==='bez'){ finishBez(false); return; }
   if(e.key.indexOf('Arrow')===0&&sel.length){ e.preventDefault(); var s=e.shiftKey?10:1, dx=e.key==='ArrowLeft'?-s:e.key==='ArrowRight'?s:0, dy=e.key==='ArrowUp'?-s:e.key==='ArrowDown'?s:0; selObjs().forEach(function(o){ o.tx+=dx; o.ty+=dy; }); softRender(); clearTimeout(saveT); saveT=setTimeout(commit,300); return; }
   var map={n:'node',v:'sel',h:'hand',p:'pen',l:'line',r:'rect',o:'ellipse',g:'poly',s:'star',t:'text',e:'erase'};
   if(!ctrl&&map[k]) setTool(map[k]);
