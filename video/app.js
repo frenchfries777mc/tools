@@ -5,7 +5,7 @@ var KEY='ffvideo.v1', DB='ffvideo-media';
 var $=function(id){ return document.getElementById(id); };
 var cv=$('cv'), g=cv.getContext('2d');
 var AR={'16:9':[1280,720],'9:16':[720,1280],'1:1':[1080,1080],'4:3':[960,720],'21:9':[1260,540]};
-var proj={name:'이름 없는 영상',ar:'16:9',bg:'#000000',media:[],clips:[],uid:1,markers:[],lanes:{}};
+var proj={name:'이름 없는 영상',ar:'16:9',bg:'#000000',media:[],clips:[],uid:1,markers:[],lanes:{},mkNames:{}};
 var media={}, elems={}, gains={}, sel=null, t=0, playing=false, wall0=0, t0=0, pxs=60, hist=[], hi=-1, ptab='clip';
 var actx=null, master=null, streamDest=null, monitor=true, exporting=null;
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -26,8 +26,8 @@ function idbGet(id){ return idb().then(function(d){ return new Promise(function(
 function idbDel(id){ return idb().then(function(d){ d.transaction('m','readwrite').objectStore('m').delete(id); }).catch(function(){}); }
 
 /* ---------- history / save ---------- */
-function snap(){ return JSON.stringify({name:proj.name,ar:proj.ar,bg:proj.bg,media:proj.media,clips:proj.clips,uid:proj.uid,markers:proj.markers,lanes:proj.lanes}); }
-function loadSnap(s){ var o=JSON.parse(s); proj.name=o.name; proj.ar=o.ar; proj.bg=o.bg; proj.media=o.media||[]; proj.clips=o.clips||[]; proj.uid=o.uid||1; proj.markers=o.markers||[]; proj.lanes=o.lanes||{}; }
+function snap(){ return JSON.stringify({name:proj.name,ar:proj.ar,bg:proj.bg,media:proj.media,clips:proj.clips,uid:proj.uid,markers:proj.markers,lanes:proj.lanes,mkNames:proj.mkNames}); }
+function loadSnap(s){ var o=JSON.parse(s); proj.name=o.name; proj.ar=o.ar; proj.bg=o.bg; proj.media=o.media||[]; proj.clips=o.clips||[]; proj.uid=o.uid||1; proj.markers=o.markers||[]; proj.lanes=o.lanes||{}; proj.mkNames=o.mkNames||{}; }
 var saveT;
 function commit(keep){ hist=hist.slice(0,hi+1); hist.push(snap()); if(hist.length>80) hist.shift(); hi=hist.length-1; clearTimeout(saveT); saveT=setTimeout(persist,300); sizeCanvas(); drawTl(); drawBin(); if(!keep) panel(); }
 function persist(){ try{ localStorage.setItem(KEY,snap()); }catch(e){} }
@@ -280,7 +280,7 @@ document.addEventListener('pointerdown',function(e){ if(menuEl&&!menuEl.contains
 /* markers */
 function markerAt(){ for(var i=0;i<proj.markers.length;i++) if(Math.abs(proj.markers[i]-t)<.06) return i; return -1; }
 function markBtn(){ var tx=markerAt()>=0?'🚩 표시 지우기':'🚩 표시', b=$('bMark'); if(b.textContent!==tx) b.textContent=tx; }
-$('bMark').onclick=function(){ var i=markerAt(); if(i>=0) proj.markers.splice(i,1); else { proj.markers.push(+t.toFixed(2)); proj.markers.sort(function(a,b){ return a-b; }); } commit(true); markBtn(); };
+$('bMark').onclick=function(){ var i=markerAt(); if(i>=0){ delete proj.mkNames[proj.markers[i].toFixed(2)]; proj.markers.splice(i,1); } else { proj.markers.push(+t.toFixed(2)); proj.markers.sort(function(a,b){ return a-b; }); } commit(true); markBtn(); };
 
 /* ---------- clip ops ---------- */
 function lockedMsg(c){ if(c&&laneLock(c.track)){ toast('잠긴 줄이에요. 줄 이름을 눌러 잠금을 풀어 주세요'); return true; } return false; }
@@ -315,11 +315,14 @@ function rng(l,k,min,max,v,step,unit){ return '<div class="row"><label>'+l+'</la
 var PRESETS={'원본':{br:100,ct:100,sat:100,gray:0,sepia:0,blur:0,hue:0},'흑백':{br:100,ct:110,sat:100,gray:100,sepia:0,blur:0,hue:0},'옛날 사진':{br:100,ct:95,sat:80,gray:0,sepia:70,blur:0,hue:0},'선명하게':{br:104,ct:125,sat:130,gray:0,sepia:0,blur:0,hue:0},'따뜻하게':{br:104,ct:100,sat:115,gray:0,sepia:25,blur:0,hue:-10},'차갑게':{br:100,ct:105,sat:95,gray:0,sepia:0,blur:0,hue:18},'흐리게':{br:100,ct:100,sat:100,gray:0,sepia:0,blur:4,hue:0},'시네마':{br:98,ct:122,sat:88,gray:0,sepia:0,blur:0,hue:0,temp:-25,vig:45},'노을':{br:104,ct:108,sat:125,gray:0,sepia:12,blur:0,hue:0,temp:65,vig:25},'따뜻한 필름':{br:102,ct:112,sat:108,gray:0,sepia:18,blur:0,hue:-6,temp:35,vig:30},'청록 영화':{br:100,ct:118,sat:105,gray:0,sepia:0,blur:0,hue:12,temp:-35,vig:35},'빈티지 흑백':{br:104,ct:118,sat:100,gray:100,sepia:35,blur:0,hue:0,vig:55},'쨍한 색':{br:104,ct:115,sat:175,gray:0,sepia:0,blur:0,hue:0},'칙칙한 톤':{br:98,ct:90,sat:55,gray:0,sepia:8,blur:0,hue:0,temp:-10},'새벽':{br:106,ct:95,sat:85,gray:0,sepia:0,blur:0,hue:0,temp:-55,vig:15}};
 function panel(){
   var b=$('pbody'), h=''; document.querySelectorAll('#ptabs button').forEach(function(x){ x.classList.toggle('on',x.dataset.p===ptab); });
-  if(ptab==='proj'){
+  if(ptab==='ins'){ h=insPanel(); }
+  else if(ptab==='proj'){
     h+='<div class="sec"><h4>화면 비율</h4><div class="row"><select id="arSel">'+Object.keys(AR).map(function(k){ return '<option'+(k===proj.ar?' selected':'')+'>'+k+'</option>'; }).join('')+'</select></div><div class="note">16:9 유튜브, 9:16 쇼츠·릴스, 1:1 인스타, 4:3 옛날 TV, 21:9 영화 같은 와이드예요.</div></div>';
     h+='<div class="sec"><h4>배경 색</h4><div class="row"><label>빈 곳 색</label><input type="color" id="bgc" value="'+proj.bg+'"></div></div>';
     h+='<div class="sec"><h4>소리</h4><label class="chk"><input type="checkbox" id="monChk"'+(monitor?' checked':'')+'> 재생할 때 소리 듣기</label></div>';
     h+='<div class="sec"><h4>자막 한꺼번에 넣기</h4><textarea id="subTxt" style="min-height:96px" placeholder="한 줄에 하나씩\n0:02-0:05 안녕하세요\n5.5-8 오늘은 영상 편집을 해 볼게요\n10 시작 시간만 쓰면 3초" data-notr></textarea><div class="btns"><button class="tbtn" id="subGo">자막 넣기</button></div><div class="note">시간은 0:05 또는 5.5처럼 쓰고, 끝 시간을 빼면 3초예요.</div><div class="btns"><button class="tbtn" id="subImp">자막 파일 가져오기 (SRT·VTT)</button><button class="tbtn" id="subSrt">SRT로 내보내기</button><button class="tbtn" id="subVtt">VTT로 내보내기</button></div></div>';
+    h+='<div class="sec"><h4>표시 · 챕터</h4>'+(proj.markers.length?proj.markers.map(function(m,i){ return '<div class="row"><label style="flex:0 0 46px;cursor:pointer" data-gom="'+i+'">'+tcs(m)+'</label><input type="text" data-mkn="'+m.toFixed(2)+'" value="'+esc(proj.mkNames[m.toFixed(2)]||'')+'" placeholder="챕터 이름" data-notr></div>'; }).join(''):'<div class="note">타임라인 아래 🚩 표시 버튼으로 표시를 만들면 여기서 이름을 붙일 수 있어요.</div>')+'<div class="btns"><button class="tbtn" id="bChap">챕터 목록 복사 (유튜브용)</button></div></div>';
+    h+='<div class="sec"><h4>프로젝트 파일</h4><div class="btns"><button class="tbtn" id="bSaveP">프로젝트 파일로 저장</button><button class="tbtn" id="bLoadP">프로젝트 파일 열기</button></div><div class="note">영상·그림·소리 파일까지 한 파일에 담겨요. 다른 기기에서 이어서 편집할 수 있어요.</div></div>';
     h+='<div class="sec"><h4>줄 정리</h4><div class="btns"><button class="tbtn" data-gap="V1">영상 줄 틈 없애기</button><button class="tbtn" data-gap="A">소리 줄 틈 없애기</button></div><div class="note">줄 안의 클립들을 순서대로 빈틈 없이 붙여요.</div></div>';
     h+='<div class="sec"><button class="tbtn" id="bClear">모두 지우고 새로 시작</button></div>';
   } else {
@@ -359,12 +362,13 @@ function panel(){
 $('ptabs').addEventListener('click',function(e){ var b=e.target.closest('button'); if(b){ ptab=b.dataset.p; panel(); } });
 var pb=$('pbody');
 function setProp(c,k,v){ if(k.indexOf('cr.')===0){ c.crop=c.crop||{l:0,r:0,t:0,b:0}; c.crop[k.slice(3)]=v; } else if(k.indexOf('kf.')===0){ c.kf=c.kf||{on:true,s:c.scale,x:c.x,y:c.y,r:c.rot}; c.kf[k.slice(3)]=v; } else if(k.indexOf('ck.')===0){ c.ck=c.ck||{on:false,col:'#00b140',tol:35}; c.ck[k.slice(3)]=v; } else if(k.indexOf('sp.')===0) c.shp[k.slice(3)]=v; else if(k==='tr.d'){ setTr(c,(c.tr&&c.tr.t)||'none',v); } else if(k.indexOf('f.')===0) c.filt[k.slice(2)]=v; else if(k.indexOf('t.')===0) c.txt[k.slice(2)]=v; else if(k==='speed'||k==='speed2'){ var old=avgSp(c); c[k]=v; c.dur=c.dur*old/avgSp(c); } else if(k==='hp') c.hp=+v; else c[k]=v; }
-pb.addEventListener('input',function(e){ var tg=e.target, c=curClip(); if(!c) return;
+pb.addEventListener('input',function(e){ var tg=e.target, c=curClip(); if(tg.dataset.mkn){ if(tg.value) proj.mkNames[tg.dataset.mkn]=tg.value; else delete proj.mkNames[tg.dataset.mkn]; clearTimeout(saveT); saveT=setTimeout(function(){ commit(true); },400); return; } if(!c) return;
   if(tg.dataset.k){ var isNv=tg.classList.contains('nv'), v=tg.type==='checkbox'?tg.checked:(tg.type==='range'||tg.type==='number'?+tg.value:tg.value);
     if(isNv){ if(tg.value===''||!isFinite(v)) return; v=Math.max(+tg.min,Math.min(+tg.max,v)); var rg=tg.previousElementSibling; if(rg&&rg.type==='range') rg.value=v; }
     setProp(c,tg.dataset.k,v);
     if(tg.type==='range'){ var nvb=tg.nextElementSibling; if(nvb&&nvb.classList.contains('nv')) nvb.value=f(v); }
     if(tg.type==='range'){ clearTimeout(saveT); saveT=setTimeout(function(){ commit(true); },350); drawTlLight(); } }
+  else if(tg.dataset.mkn){ if(tg.value) proj.mkNames[tg.dataset.mkn]=tg.value; else delete proj.mkNames[tg.dataset.mkn]; clearTimeout(saveT); saveT=setTimeout(function(){ commit(true); },400); }
   else if(tg.dataset.sp){ c.shp[tg.dataset.sp]=tg.type==='checkbox'?tg.checked:tg.value; drawTlLight(); }
   else if(tg.dataset.ck){ c.ck=c.ck||{on:false,col:'#00b140',tol:35}; c.ck[tg.dataset.ck]=tg.value; }
   else if(tg.dataset.t){ c.txt[tg.dataset.t]=tg.type==='checkbox'?tg.checked:tg.value; if(tg.dataset.t==='s'){ clearTimeout(saveT); saveT=setTimeout(function(){ commit(true); },400); drawTlLight(); } } });
@@ -381,8 +385,12 @@ pb.addEventListener('change',function(e){ var tg=e.target;
 pb.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b) return;
   if(b.dataset.emo){ var ct=curClip(); if(ct&&ct.txt){ ct.txt.s+=b.dataset.emo; commit(); } return; }
   if(b.dataset.kfp){ var ck=curClip(); if(ck){ var o=b.dataset.kfp; ck.kf={on:true,s:ck.scale,x:ck.x,y:ck.y,r:ck.rot}; if(o==='in') ck.kf.s=Math.round(ck.scale*1.25); else if(o==='out'){ ck.kf.s=Math.round(ck.scale*.8); } else if(o==='left') ck.kf.x=ck.x-12; else ck.kf.x=ck.x+12; if(o==='in'||o==='out') ck.kf.on=true; commit(); } return; }
+  if(b.id==='bChap'){ var ch=proj.markers.slice(), lines=[]; if(!ch.length||ch[0]>.5) ch.unshift(0); ch.forEach(function(m,i){ var nm=proj.mkNames[m.toFixed(2)]||(i?'챕터 '+i:'시작'), x=Math.floor(m), hh=Math.floor(x/3600), mm=Math.floor(x%3600/60), ss=x%60; lines.push((hh?hh+':'+('0'+mm).slice(-2):mm)+':'+('0'+ss).slice(-2)+' '+nm); }); var txt=lines.join('\n'); try{ navigator.clipboard.writeText(txt).then(function(){ toast('챕터 '+lines.length+'개를 복사했어요'); },function(){ dl((proj.name||'chapters')+'-chapters.txt',new Blob([txt],{type:'text/plain;charset=utf-8'})); }); }catch(e){ dl((proj.name||'chapters')+'-chapters.txt',new Blob([txt],{type:'text/plain;charset=utf-8'})); } return; }
+  if(b.id==='bSaveP'){ saveProjectFile(); return; } if(b.id==='bLoadP'){ $('projIn').click(); return; }
+  if(b.dataset.tpl){ addTemplate(b.dataset.tpl); return; } if(b.dataset.stk){ addSticker(b.dataset.stk); return; } if(b.dataset.pip){ applyPip(b.dataset.pip); return; }
   if(b.id==='subImp'){ $('subIn').click(); return; } if(b.id==='subSrt'){ exportSubs('srt'); return; } if(b.id==='subVtt'){ exportSubs('vtt'); return; }
   if(b.id==='subGo'){ var n=addSubs($('subTxt').value); toast(n+'개 자막을 넣었어요'); return; }
+  if(b.dataset.gom){ seek(proj.markers[+b.dataset.gom]); return; }
   if(b.dataset.gap){ var tr0=b.dataset.gap; if(laneLock(tr0)){ toast('잠긴 줄이에요'); return; } var L0=proj.clips.filter(function(o){ return o.track===tr0; }).sort(function(a,b){ return a.start-b.start; }), pos=0, moved=0; L0.forEach(function(o,i){ var ns=Math.max(0,i&&o.tr&&o.tr.ov?pos-o.tr.ov:pos); if(Math.abs(ns-o.start)>.001){ o.start=ns; moved++; } pos=endOf(o); }); if(moved){ commit(); toast(moved+'개 클립을 붙였어요'); } else toast('붙일 틈이 없어요'); return; }
   if(b.dataset.tsty){ var ctx0=curClip(); if(ctx0&&ctx0.txt){ Object.assign(ctx0.txt,{glow:false,sh:false,rainbow:false,blink:false,it:false,bg:false},TSTY[b.dataset.tsty]); commit(); } return; }
   if(b.dataset.norm){ var cn=curClip(), mn=cn&&media[cn.mid]; if(!mn||!mn.peaks){ toast('소리 모양을 아직 읽는 중이에요. 잠시 뒤 다시 눌러 주세요'); return; } var N=mn.peaks.length, i0=Math.floor(cn.in/mn.dur*N), i1=Math.min(N,Math.ceil((cn.in+cn.dur*cn.speed)/mn.dur*N)), pk=0; for(var qi=i0;qi<i1;qi++) pk=Math.max(pk,mn.peaks[qi]); pk/=1.6; if(pk<.01){ toast('거의 무음이라 맞출 수 없어요'); return; } cn.vol=Math.max(10,Math.min(200,Math.round(90/pk))); commit(); toast('소리 크기를 '+cn.vol+'%로 맞췄어요'); return; }
@@ -419,6 +427,47 @@ $('bShape').onclick=function(){
   var c={id:'c'+(proj.uid++),type:'shape',track:'T',start:t,in:0,dur:3,speed:1,vol:0,fadeIn:0,fadeOut:0,op:100,scale:100,x:0,y:0,rot:0,flip:false,fit:'fit',filt:null,anim:'pop',shp:{k:'heart',color:'#ff6a8a',stroke:'#ffffff',sw:0,size:30,asp:100,ox:50,oy:50,fill:true}};
   proj.clips.push(c); sel=c.id; commit();
 };
+/* ---------- project file (JSON header + media blobs) ---------- */
+function saveProjectFile(){
+  var ids=proj.media.map(function(m){ return m.id; });
+  Promise.all(ids.map(function(id){ return idbGet(id); })).then(function(blobs){
+    var head={v:1,snap:JSON.parse(snap()),files:[]}, parts=[];
+    ids.forEach(function(id,i){ var b=blobs[i]; if(b){ head.files.push({id:id,size:b.size,type:b.type}); parts.push(b); } });
+    var hb=new TextEncoder().encode(JSON.stringify(head)), len=new Uint8Array(8); new DataView(len.buffer).setUint32(4,hb.length);
+    var missing=ids.length-head.files.length;
+    dl((proj.name||'project')+'.fryvideo',new Blob([new TextEncoder().encode('FRYVID1\n'),len,hb].concat(parts),{type:'application/octet-stream'})); toast('프로젝트 파일을 저장했어요'+(missing?' (파일 '+missing+'개는 이 기기에 없어서 빠졌어요)':''));
+  });
+}
+$('projIn').addEventListener('change',function(){ var f0=this.files[0]; this.value=''; if(!f0) return; if(!confirm('지금 작업을 이 파일의 내용으로 바꿀까요? (현재 작업은 사라져요)')) return;
+  f0.slice(0,16).arrayBuffer().then(function(ab){ var u=new Uint8Array(ab); if(new TextDecoder().decode(u.slice(0,7))!=='FRYVID1'){ toast('Fry Video 프로젝트 파일이 아니에요'); return; } var hl=new DataView(ab).getUint32(12);
+    return f0.slice(16,16+hl).text().then(function(tx){ var head=JSON.parse(tx), off=16+hl; proj.media.forEach(function(m){ idbDel(m.id); });
+      var jobs=head.files.map(function(fi){ var blob=f0.slice(off,off+fi.size,fi.type); off+=fi.size; return idbPut(fi.id,blob); });
+      return Promise.all(jobs).then(function(){ loadSnap(JSON.stringify(head.snap)); media={}; Object.keys(elems).forEach(function(k){ try{ elems[k].pause(); }catch(e){} }); elems={}; gains={}; hpfs={}; sel=null; t=0; return restoreMedia(); }).then(function(){ Object.keys(media).forEach(function(k){ ensurePeaks(media[k]); }); hist=[]; hi=-1; commit(); toast('프로젝트를 열었어요'); }); }); }).catch(function(){ toast('프로젝트 파일을 열지 못했어요'); });
+});
+/* ---------- templates, stickers, picture-in-picture ---------- */
+function newClip(type,track,o){ var c={id:'c'+(proj.uid++),type:type,track:track,start:t,in:0,dur:3,speed:1,vol:0,fadeIn:0,fadeOut:0,op:100,scale:100,x:0,y:0,rot:0,flip:false,fit:'fit',filt:null,anim:'fade'}; return Object.assign(c,o); }
+function mkTxt(s,o){ return Object.assign({s:s,size:9,color:'#ffffff',bg:false,bgc:'#000000',w:'700',ox:50,oy:50,stroke:false,sw:14}, o); }
+function mkShp(o){ return Object.assign({k:'rect',color:'#1b2a49',stroke:'#ffffff',sw:0,size:100,asp:178,ox:50,oy:50,fill:true}, o); }
+function addTemplate(k){
+  var a=AR[proj.ar], full=Math.min(400,Math.round(a[0]/a[1]*100)+2), made=[];
+  if(k==='title'){ made=[newClip('shape','T',{anim:'none',shp:mkShp({size:102,asp:full,color:'#14213d'})}),newClip('text','T',{anim:'zoom',txt:mkTxt('제목을 쓰세요',{size:13,w:'900',oy:46,font:'impact'})}),newClip('text','T',{anim:'fade',txt:mkTxt('부제목',{size:5.5,color:'#ffc93c',oy:62})})]; }
+  else if(k==='lower'){ made=[newClip('shape','T',{anim:'slide',sdir:'left',shp:mkShp({size:15,asp:300,ox:26,oy:84,color:'#ffc93c',sw:0})}),newClip('text','T',{anim:'slide',sdir:'left',txt:mkTxt('이름',{size:5.5,color:'#1c1405',ox:26,oy:82})}),newClip('text','T',{anim:'slide',sdir:'left',txt:mkTxt('설명 · 직함',{size:3.4,color:'#1c1405',w:'400',ox:26,oy:88})})]; }
+  else if(k==='intro'){ made=[newClip('shape','T',{anim:'none',dur:4,shp:mkShp({size:102,asp:full,color:'#0b0d13'})}),newClip('shape','T',{anim:'pop',dur:4,shp:mkShp({k:'star',size:34,asp:100,ox:50,oy:40,color:'#ffc93c'})}),newClip('text','T',{anim:'rise',dur:4,txt:mkTxt('채널 이름',{size:11,w:'900',oy:68,stroke:true,sc:'#000000',sw:10})})]; }
+  else if(k==='outro'){ made=[newClip('shape','T',{anim:'none',dur:4,shp:mkShp({size:102,asp:full,color:'#0b0d13'})}),newClip('text','T',{anim:'pop',dur:4,txt:mkTxt('봐 주셔서 고마워요!',{size:10,w:'900',oy:42})}),newClip('shape','T',{anim:'pop',dur:4,shp:mkShp({k:'heart',size:24,asp:100,ox:50,oy:66,color:'#ff6a8a'})})]; }
+  else if(k==='caption'){ made=[newClip('text','T',{anim:'fade',txt:mkTxt('자막을 쓰세요',{size:7,bg:true,oy:88,stroke:true})})]; }
+  if(!made.length) return; made.forEach(function(c){ proj.clips.push(c); }); sel=made[made.length-1].id; ptab='clip'; commit(); toast('템플릿을 넣었어요. 글자를 눌러 고쳐 보세요');
+}
+function addSticker(em){ var n=proj.clips.filter(function(o){ return o.type==='text'&&o.txt.sticker&&active(o,t); }).length;
+  var c=newClip('text','T',{anim:'pop',txt:mkTxt(em,{size:16,w:'400',ox:30+((n*17)%45),oy:35+((n*13)%30),stroke:false,sticker:true})}); proj.clips.push(c); sel=c.id; ptab='clip'; commit(); }
+function applyPip(k){ var c=curClip(); if(!c||(c.type!=='video'&&c.type!=='image')){ toast('겹쳐 놓을 영상이나 그림 클립을 먼저 고르세요'); return; } if(lockedMsg(c)) return; if(laneLock('V2')){ toast('겹침 줄이 잠겨 있어요'); return; }
+  var P={tr:[33,-31],tl:[-33,-31],br:[33,31],bl:[-33,31],c:[0,0],full:[0,0]}[k]; if(!P) return;
+  if(k==='full'){ c.scale=100; c.x=0; c.y=0; c.mask='none'; c.track='V1'; } else { c.track='V2'; c.scale=k==='c'?55:30; c.x=P[0]; c.y=P[1]; c.mask=c.mask||'round'; if(c.mask==='none') c.mask='round'; c.fit='fit'; }
+  commit(); toast(k==='full'?'원래대로 돌렸어요':'작은 화면으로 겹쳐 놓았어요'); }
+function insPanel(){
+  var h='<div class="sec"><h4>템플릿 (재생 막대 위치에 들어가요)</h4><div class="pgrid"><button data-tpl="title">제목 카드</button><button data-tpl="lower">이름 띠</button><button data-tpl="caption">자막</button><button data-tpl="intro">인트로</button><button data-tpl="outro">아웃트로</button></div><div class="note">글자와 도형 클립으로 만들어져서 하나하나 고칠 수 있어요.</div></div>';
+  h+='<div class="sec"><h4>스티커</h4><div class="btns">'+['😀','😂','😍','😎','😭','😡','👍','👏','🙏','💪','❤️','💔','⭐','🔥','✨','🎉','🎵','💯','👀','💡','❓','❗','➡️','🍟'].map(function(em){ return '<button class="tbtn" data-stk="'+em+'" style="padding:0 8px;font-size:18px">'+em+'</button>'; }).join('')+'</div></div>';
+  h+='<div class="sec"><h4>작은 화면 (겹쳐 놓기)</h4><div class="pgrid"><button data-pip="tl">왼쪽 위</button><button data-pip="c">가운데</button><button data-pip="tr">오른쪽 위</button><button data-pip="bl">왼쪽 아래</button><button data-pip="full">꽉 채움</button><button data-pip="br">오른쪽 아래</button></div><div class="note">타임라인에서 영상이나 그림 클립을 고른 뒤 누르세요. 겹침 줄로 옮겨져서 아래 영상 위에 작게 떠요.</div></div>';
+  return h; }
 var rec=null;
 $('bRec').onclick=function(){
   var b=$('bRec');
