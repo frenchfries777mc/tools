@@ -4,6 +4,30 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v5",
+   "title": "Fry Draw 5: 베지어 펜, 곡선 손잡이 고치기",
+   "items": [
+    "펜 도구(✒️): 눌러서 점을 찍고 끌면 곡선 손잡이가 생겨요. 처음 점을 누르면 닫히고, 마지막 점을 다시 누르거나 버튼으로 끝내요",
+    "점 고치기에서 점을 누르면 손잡이가 나타나서 끌어 곡선을 다듬을 수 있어요 (Alt: 한쪽 손잡이만)",
+    "고른 점만 부드럽게·꺾기, 모두 부드럽게·모두 꺾기, 고른 점 지우기",
+    "곡선 위를 두 번 누르면 모양이 그대로인 채 점이 늘어요",
+    "원은 점 4개짜리 정확한 곡선으로 바뀌고, 가져온 SVG의 곡선(C·S·Q·T)도 점으로 고칠 수 있어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 5: Bezier pen and curve handles",
+     "items": [
+      "Pen tool: click to place points, drag to pull out curve handles; click the first point to close, or click the last point again or use the buttons to finish",
+      "Node tool: select a point to see its handles and drag them to shape the curve (Alt: move one side only)",
+      "Make the selected point smooth or sharp, all points smooth or sharp, and delete the selected point",
+      "Double-click a curve to add a point without changing the shape",
+      "Ellipses convert to exact 4-point curves, and curves from imported SVG (C, S, Q, T) can be edited as nodes"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v4",
    "title": "Fry Draw 4: 8방향 크기 조절, 여러 개 돌리기, 달라붙기, 스포이트, 색 팔레트, 레이어 이름·끌기",
    "items": [
