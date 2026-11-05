@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v15",
+   "title": "BeaconScript b192 반영",
+   "items": [
+    "on break 이벤트, 공유 변수 {:이름::값:} 쓰기·{:이름:} 읽기, if 값 contained \"글자\": 조건을 오류 없이 점검해요",
+    "%player's mod%(Potato API 없이 읽기), %player_uuid%, %destroyed_block% 값과 자동완성(break, contained) 추가"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript b192 support",
+     "items": [
+      "on break event, shared variables {:name::value:} write / {:name:} read, and if value contained \"text\": are checked without errors",
+      "New values %player's mod% (readable without Potato API), %player_uuid%, %destroyed_block% and autocomplete for break and contained"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v14",
    "title": "BeaconScript 명령 전부 점검",
    "items": [
