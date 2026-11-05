@@ -4,6 +4,54 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v7",
+   "title": "Fry Draw 7: 여러 색 그라데이션, 무늬 채우기, 그림자 설정, 클리핑 마스크",
+   "items": [
+    "그라데이션에 색을 여러 개 넣고, 각 색의 위치와 투명도를 숫자로 고쳐요 (색 추가·지우기·거꾸로). 둥근 그라데이션은 가운데와 퍼짐도 조절",
+    "무늬 채우기: 줄무늬·격자·점·체크 무늬를 무늬 색, 바탕, 칸 크기, 굵기, 각도로 꾸며요",
+    "그림자 설정: 가로·세로 거리, 번짐, 진하기, 색",
+    "클리핑 마스크: 맨 위 도형 모양으로 아래 도형들을 잘라 보여주고, 풀기로 되돌려요",
+    "SVG로 받고 다시 열어도 모두 그대로 이어져요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 7: multi-stop gradients, pattern fills, shadow settings, clipping masks",
+     "items": [
+      "Gradients with many colour stops; edit each stop's position and opacity numerically (add, remove, reverse); radial gradients get centre and spread",
+      "Pattern fills: stripes, grid, dots and checks with colour, background, cell size, thickness and angle",
+      "Drop shadow settings: offset X and Y, blur, opacity and colour",
+      "Clipping masks: the top shape clips the shapes below it; Ungroup releases it",
+      "All of it survives SVG save and reopen"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
+   "build": "v6",
+   "title": "Fry Draw 6: 글자 상자 편집, 여러 줄, 선 따라 쓰기",
+   "items": [
+    "글자를 캔버스에서 바로 쓰고 고쳐요: 글자 도구로 누르면 그 자리에서 입력, 글자를 두 번 누르면 다시 편집 (Ctrl+Enter 또는 바깥을 누르면 끝)",
+    "여러 줄 글자, 왼쪽·가운데·오른쪽 맞춤, 줄 간격, 글자 간격, 기울임, 밑줄",
+    "글자를 선 따라 쓰기: 글자 하나와 선(또는 도형)을 같이 골라 버튼을 누르면 선을 따라 글자가 흘러요. 시작 위치도 조절돼요",
+    "글꼴 목록에 Georgia·Trebuchet·Courier·Comic 추가",
+    "SVG로 받고 다시 열어도 여러 줄·선 따라 쓰기가 그대로 남아요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 6: on-canvas text editing, multi-line, text on a path",
+     "items": [
+      "Type and edit text directly on the canvas: click with the Text tool to type in place, double-click text to edit again (Ctrl+Enter or click outside to finish)",
+      "Multi-line text with left/centre/right alignment, line spacing, letter spacing, italic and underline",
+      "Text on a path: select a text and a line or shape, press the button, and the text flows along it; the start position is adjustable",
+      "Added Georgia, Trebuchet, Courier and Comic to the font list",
+      "Multi-line text and text on a path survive SVG save and reopen"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v5",
    "title": "Fry Draw 5: 베지어 펜, 곡선 손잡이 고치기",
    "items": [

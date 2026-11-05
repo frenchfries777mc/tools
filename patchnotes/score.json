@@ -4,6 +4,46 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v11",
+   "title": "드럼 악보·새 악기 4종·쪽 나눠 인쇄",
+   "items": [
+    "드럼(타악기) 음자리표: 킥·스네어·톰·하이햇(×표)·크래시를 오선 위치로 쓰고 합성 드럼 소리로 재생, MIDI는 10번 채널(GM 드럼)로 저장·읽기, MusicXML도 지원",
+    "악기 추가: 금관악기, 마림바, 하프, 합창",
+    "인쇄 / PDF: 줄 단위로 A4 쪽을 나눠서 잘리는 줄 없이, 쪽 번호와 함께 출력"
+   ],
+   "tr": {
+    "en": {
+     "title": "Drum staff, four new instruments and paginated printing",
+     "items": [
+      "Drum (percussion) clef: kick, snare, toms, hi-hat (x heads) and crash written by staff position, played by a synthesized drum kit, saved to and read from MIDI channel 10 (GM drums) and MusicXML",
+      "Four new instruments: brass, marimba, harp and choir",
+      "Print / PDF: splits into A4 pages between systems so no line is cut, with page numbers"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
+   "build": "v10",
+   "title": "셋잇단음표와 꾸밈음",
+   "items": [
+    "셋잇단음표: 고른 음표 세 개씩 묶어 켜고 끄기, 숫자 3 괄호 표시, 재생·MIDI·MusicXML에 정확한 길이로 반영, 글자 악보는 길이 뒤에 t (예: E5/8t F5 G5)",
+    "꾸밈음: 음표마다 최대 4개까지 작은 음표로 앞에 붙이기(예: D5 E5), 재생할 때는 본음 앞부분을 빌려 빠르게 연주, MusicXML에도 저장·읽기",
+    "마디 안 박자 계산에 오차가 생기지 않도록 정리"
+   ],
+   "tr": {
+    "en": {
+     "title": "Triplets and grace notes",
+     "items": [
+      "Triplets: toggle on any selection (groups of three), drawn with a 3 bracket and played, exported to MIDI/MusicXML with exact timing; in text notation add t after the length (E5/8t F5 G5)",
+      "Grace notes: up to 4 small notes before any note (e.g. D5 E5); on playback they borrow time from the main note; saved to and read from MusicXML",
+      "Measure timing math made tolerant of floating-point error"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v9",
    "title": "D.S.·코다·악보 틀·좌우 위치·음 찾아 바꾸기",
    "items": [
