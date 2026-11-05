@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v34",
+   "title": "BeaconScript else·else if",
+   "items": [
+    "if·chance 블록 바로 아래에 else: 와 else if 조건: 을 쓸 수 있어요",
+    "if 없이 쓰거나 else 를 두 번 쓰거나 else 뒤에 else if 를 쓰면 오류로 알려 줘요",
+    "else 와 else if 도 자동완성돼요"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript else and else if",
+     "items": [
+      "else: and else if condition: can follow an if or chance block",
+      "Using else without an if, twice, or an else if after else is reported as an error",
+      "else and else if are autocompleted"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v33",
    "title": "BeaconScript 글자 색 코드",
    "items": [
