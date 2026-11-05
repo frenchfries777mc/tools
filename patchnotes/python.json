@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v30",
+   "title": "Ctrl+F 찾기",
+   "items": [
+    "코드 칸에서 Ctrl+F (또는 위의 찾기 버튼)로 찾기 창을 열 수 있어요",
+    "찾은 글자는 전부 색으로 표시되고 몇 번째인지 보여 줘요",
+    "Enter·Shift+Enter(또는 ↑↓)로 다음·이전으로 가고, Aa로 대소문자를 구분하고, Esc로 닫아요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Ctrl+F find",
+     "items": [
+      "Open the find bar with Ctrl+F in the code box (or the Find button above it)",
+      "All matches are highlighted and the current position is shown",
+      "Enter and Shift+Enter (or the arrows) jump to next and previous, Aa toggles case sensitivity, Esc closes"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v29",
    "title": "BeaconScript use_mod_uuid",
    "items": [
