@@ -5,7 +5,7 @@ var KEY='ffvideo.v1', DB='ffvideo-media';
 var $=function(id){ return document.getElementById(id); };
 var cv=$('cv'), g=cv.getContext('2d');
 var AR={'16:9':[1280,720],'9:16':[720,1280],'1:1':[1080,1080],'4:3':[960,720],'21:9':[1260,540]};
-var proj={name:'이름 없는 영상',ar:'16:9',bg:'#000000',media:[],clips:[],uid:1};
+var proj={name:'이름 없는 영상',ar:'16:9',bg:'#000000',media:[],clips:[],uid:1,markers:[],lanes:{}};
 var media={}, elems={}, gains={}, sel=null, t=0, playing=false, wall0=0, t0=0, pxs=60, hist=[], hi=-1, ptab='clip';
 var actx=null, master=null, streamDest=null, monitor=true, exporting=null;
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -15,6 +15,8 @@ function tcs(x){ x=Math.max(0,x); var m=Math.floor(x/60), s=x-m*60; return m+':'
 function clipById(id){ for(var i=0;i<proj.clips.length;i++) if(proj.clips[i].id===id) return proj.clips[i]; }
 function endOf(c){ return c.start+c.dur; }
 function total(){ var e=0; proj.clips.forEach(function(c){ e=Math.max(e,endOf(c)); }); return e; }
+function laneOff(tr){ return !!(proj.lanes[tr]&&proj.lanes[tr].off); }
+function laneLock(tr){ return !!(proj.lanes[tr]&&proj.lanes[tr].lock); }
 function curClip(){ return sel!=null?clipById(sel):null; }
 
 /* ---------- media store (IndexedDB so files survive a reload) ---------- */
@@ -24,8 +26,8 @@ function idbGet(id){ return idb().then(function(d){ return new Promise(function(
 function idbDel(id){ return idb().then(function(d){ d.transaction('m','readwrite').objectStore('m').delete(id); }).catch(function(){}); }
 
 /* ---------- history / save ---------- */
-function snap(){ return JSON.stringify({name:proj.name,ar:proj.ar,bg:proj.bg,media:proj.media,clips:proj.clips,uid:proj.uid}); }
-function loadSnap(s){ var o=JSON.parse(s); proj.name=o.name; proj.ar=o.ar; proj.bg=o.bg; proj.media=o.media||[]; proj.clips=o.clips||[]; proj.uid=o.uid||1; }
+function snap(){ return JSON.stringify({name:proj.name,ar:proj.ar,bg:proj.bg,media:proj.media,clips:proj.clips,uid:proj.uid,markers:proj.markers,lanes:proj.lanes}); }
+function loadSnap(s){ var o=JSON.parse(s); proj.name=o.name; proj.ar=o.ar; proj.bg=o.bg; proj.media=o.media||[]; proj.clips=o.clips||[]; proj.uid=o.uid||1; proj.markers=o.markers||[]; proj.lanes=o.lanes||{}; }
 var saveT;
 function commit(keep){ hist=hist.slice(0,hi+1); hist.push(snap()); if(hist.length>80) hist.shift(); hi=hist.length-1; clearTimeout(saveT); saveT=setTimeout(persist,300); sizeCanvas(); drawTl(); drawBin(); if(!keep) panel(); }
 function persist(){ try{ localStorage.setItem(KEY,snap()); }catch(e){} }
@@ -92,7 +94,7 @@ function syncMedia(tt,run){
     if(c.type==='image'||c.type==='text') return; var el=getEl(c); if(!el) return;
     if(actx) wire(c,el);
     var on=active(c,tt), want=c.in+(tt-c.start)*c.speed, gn=gains[c.id];
-    if(gn) gn.gain.value=(c.vol/100)*fadeOf(c,tt)*(c.type==='audio'||c.track!=='V2'||true?1:1); else el.volume=Math.max(0,Math.min(1,(c.vol/100)*fadeOf(c,tt)));
+    var lv=laneOff(c.track)?0:1; if(gn) gn.gain.value=(c.vol/100)*fadeOf(c,tt)*lv; else el.volume=Math.max(0,Math.min(1,(c.vol/100)*fadeOf(c,tt)*lv));
     if(on){ el.playbackRate=Math.max(.0625,Math.min(16,c.speed)); if(run){ if(el.paused){ if(Math.abs(el.currentTime-want)>.05) try{ el.currentTime=want; }catch(e){} var p=el.play(); if(p&&p.catch) p.catch(function(){}); } else if(Math.abs(el.currentTime-want)>.35) try{ el.currentTime=want; }catch(e){} }
       else { if(!el.paused) el.pause(); if(Math.abs(el.currentTime-want)>.03) try{ el.currentTime=want; }catch(e){} } }
     else if(!el.paused) el.pause();
@@ -116,8 +118,8 @@ function srcOf(c){ var m=media[c.mid]; if(!m||m.missing) return null; if(c.type=
 function render(tt){
   var W=cv.width, H=cv.height; g.setTransform(1,0,0,1,0,0); g.globalAlpha=1; g.filter='none'; g.fillStyle=proj.bg; g.fillRect(0,0,W,H);
   var srt=proj.clips.slice().sort(function(a,b){ return a.start-b.start; });
-  ['V1','V2'].forEach(function(tr){ srt.forEach(function(c){ if(c.track!==tr||!active(c,tt)) return; drawVisual(c,tt,W,H); }); });
-  srt.forEach(function(c){ if(!active(c,tt)) return; if(c.type==='text') drawText(c,tt,W,H); else if(c.type==='shape') drawShape(c,tt,W,H); });
+  ['V1','V2'].forEach(function(tr){ srt.forEach(function(c){ if(c.track!==tr||!active(c,tt)||laneOff(tr)) return; drawVisual(c,tt,W,H); }); });
+  srt.forEach(function(c){ if(!active(c,tt)||laneOff(c.track)) return; if(c.type==='text') drawText(c,tt,W,H); else if(c.type==='shape') drawShape(c,tt,W,H); });
   g.globalAlpha=1; g.filter='none';
 }
 function sdirRow(c){ if(c.anim!=='slide') return ''; var sd=c.sdir||'left'; return '<div class="row"><label>들어오는 쪽</label><select data-k="sdir">'+[['left','왼쪽에서'],['right','오른쪽에서'],['up','위에서'],['down','아래에서']].map(function(a){ return '<option value="'+a[0]+'"'+(sd===a[0]?' selected':'')+'>'+a[1]+'</option>'; }).join('')+'</select></div>'; }
@@ -197,51 +199,89 @@ function laneY(tr){ for(var i=0;i<LANES.length;i++) if(LANES[i][0]===tr) return 
 function drawTl(keepScroll){
   var tl=$('tlin'), len=Math.max(30,total()+10), wpx=len*pxs+LBL;
   var o='<div class="ruler" style="width:'+wpx+'px">', step=pxs>=80?1:pxs>=40?2:pxs>=20?5:10;
-  for(var s=0;s<=len;s+=step) o+='<i style="left:'+(LBL+s*pxs)+'px">'+Math.floor(s/60)+':'+('0'+(s%60)).slice(-2)+'</i>'; o+='</div>';
-  LANES.forEach(function(l,i){ o+='<div class="lane" style="top:'+(RH+i*LH)+'px;width:'+wpx+'px"><span class="lb">'+({V1:'영상',V2:'겹침',T:'글자',A:'소리'}[l[0]])+'</span></div>'; });
+  for(var s=0;s<=len;s+=step) o+='<i style="left:'+(LBL+s*pxs)+'px">'+Math.floor(s/60)+':'+('0'+(s%60)).slice(-2)+'</i>';
+  proj.markers.forEach(function(mk,i){ o+='<b class="mk" data-mk="'+i+'" title="표시 '+(i+1)+' · '+tcs(mk)+'" style="left:'+(LBL+mk*pxs-6)+'px"></b>'; }); o+='</div>';
+  LANES.forEach(function(l,i){ o+='<div class="lane'+(laneOff(l[0])?' off':'')+(laneLock(l[0])?' lock':'')+'" style="top:'+(RH+i*LH)+'px;width:'+wpx+'px"><span class="lb" data-lane="'+l[0]+'" title="눌러서 줄 설정">'+({V1:'영상',V2:'겹침',T:'글자',A:'소리'}[l[0]])+(laneLock(l[0])?'<small>🔒</small>':'')+(laneOff(l[0])?'<small>'+(l[0]==='A'?'🔇':'🚫')+'</small>':'')+'</span></div>'; });
   proj.clips.forEach(function(c){ var m=media[c.mid], name=c.type==='text'?'T '+c.txt.s.replace(/\n/g,' '):(c.type==='shape'?'■ 도형':(m?m.name:'?'));
-    o+='<div class="clip '+c.track+(c.id===sel?' sel':'')+'" data-c="'+c.id+'" style="left:'+(LBL+c.start*pxs)+'px;top:'+(laneY(c.track)+4)+'px;width:'+Math.max(6,c.dur*pxs)+'px">'+waveSvg(c,m)+'<span class="nm">'+esc(name)+'</span><span class="hl"></span><span class="hr"></span></div>'; });
+    o+='<div class="clip '+c.track+(c.id===sel?' sel':'')+(laneOff(c.track)?' off':'')+(laneLock(c.track)?' lock':'')+'" data-c="'+c.id+'" style="left:'+(LBL+c.start*pxs)+'px;top:'+(laneY(c.track)+4)+'px;width:'+Math.max(6,c.dur*pxs)+'px">'+waveSvg(c,m)+'<span class="nm">'+esc(name)+'</span><span class="hl"></span><span class="hr"></span></div>'; });
   o+='<div id="phead" style="left:'+(LBL+t*pxs)+'px;height:'+(RH+LANES.length*LH)+'px"></div>';
   var tlc=$('tl'), sl=tlc.scrollLeft, st=tlc.scrollTop; tl.innerHTML=o; tl.style.width=wpx+'px'; tl.style.height=(RH+LANES.length*LH)+'px'; tlc.scrollLeft=sl; tlc.scrollTop=st;
-  $('zl').textContent=pxs+'px/초'; $('bUndo').disabled=hi<=0; $('bRedo').disabled=hi>=hist.length-1;
+  $('zl').textContent=pxs+'px/초'; markBtn(); $('bUndo').disabled=hi<=0; $('bRedo').disabled=hi>=hist.length-1;
 }
 function updateHead(){
-  var h=$('phead'); if(h) h.style.left=(LBL+t*pxs)+'px'; $('tc').textContent=tcs(t)+' / '+tcs(total());
+  markBtn(); var h=$('phead'); if(h) h.style.left=(LBL+t*pxs)+'px'; $('tc').textContent=tcs(t)+' / '+tcs(total());
   if(playing){ var tlc=$('tl'), x=LBL+t*pxs; if(x>tlc.scrollLeft+tlc.clientWidth-40) tlc.scrollLeft=x-60; }
 }
 function tlX(e){ var tlc=$('tl'), r=tlc.getBoundingClientRect(); return e.clientX-r.left+tlc.scrollLeft; }
 var drag=null;
 $('tl').addEventListener('pointerdown',function(e){
-  var el=e.target.closest('.clip'), rul=e.target.closest('.ruler');
+  var el=e.target.closest('.clip'), rul=e.target.closest('.ruler'), lbl=e.target.closest('.lb');
+  closeMenu(); if(lbl){ laneMenu(lbl.dataset.lane,e.clientX,e.clientY); return; }
+  var mkEl=e.target.closest('.mk'); if(mkEl){ seek(proj.markers[+mkEl.dataset.mk]); return; }
   if(rul&&!el){ drag={k:'seek'}; $('tl').setPointerCapture(e.pointerId); seek((tlX(e)-LBL)/pxs); return; }
   if(!el){ var y=e.clientY-$('tl').getBoundingClientRect().top+$('tl').scrollTop; if(y>RH){ sel=null; drawTl(); panel(); seek((tlX(e)-LBL)/pxs); } return; }
   var c=clipById(el.dataset.c); sel=c.id; var edge=e.target.classList.contains('hl')?'l':e.target.classList.contains('hr')?'r':'m';
+  if(laneLock(c.track)){ drawTl(); panel(); drag=null; return; }
   drag={k:edge,c:c,x:e.clientX,y:e.clientY,start:c.start,dur:c.dur,in:c.in,track:c.track,moved:false}; $('tl').setPointerCapture(e.pointerId); drawTl(); panel();
 });
-function snapPts(c){ var p=[0,t]; proj.clips.forEach(function(o){ if(o!==c){ p.push(o.start,endOf(o)); } }); return p; }
+function snapPts(c){ var p=[0,t].concat(proj.markers); proj.clips.forEach(function(o){ if(o!==c){ p.push(o.start,endOf(o)); } }); return p; }
 function snapTo(v,c,thr){ var best=v, bd=thr; snapPts(c).forEach(function(p){ if(Math.abs(p-v)<bd){ bd=Math.abs(p-v); best=p; } }); return best; }
 $('tl').addEventListener('pointermove',function(e){
   if(!drag) return; if(drag.k==='seek'){ seek((tlX(e)-LBL)/pxs); return; }
   var c=drag.c, dx=(e.clientX-drag.x)/pxs, thr=8/pxs; if(Math.abs(e.clientX-drag.x)+Math.abs(e.clientY-drag.y)>3) drag.moved=true; if(!drag.moved) return;
   var m=media[c.mid], maxSrc=c.type==='text'||c.type==='image'?1e9:(m?m.dur:1e9);
   if(drag.k==='m'){ var ns=Math.max(0,snapTo(drag.start+dx,c,thr)); var ne=snapTo(ns+c.dur,c,thr)-c.dur; if(ne>=0&&Math.abs(ne-ns)>0&&Math.abs(snapTo(ns+c.dur,c,thr)-(ns+c.dur))>0) ns=ne; c.start=Math.max(0,ns);
-    var y=e.clientY-$('tl').getBoundingClientRect().top+$('tl').scrollTop, li=Math.floor((y-RH)/LH); if(li>=0&&li<LANES.length){ var tr=LANES[li][0], ok=((c.type==='text'||c.type==='shape')&&tr==='T')||(c.type==='audio'&&tr==='A')||((c.type==='video'||c.type==='image')&&(tr==='V1'||tr==='V2')); if(ok) c.track=tr; } }
+    var y=e.clientY-$('tl').getBoundingClientRect().top+$('tl').scrollTop, li=Math.floor((y-RH)/LH); if(li>=0&&li<LANES.length){ var tr=LANES[li][0], ok=((c.type==='text'||c.type==='shape')&&tr==='T')||(c.type==='audio'&&tr==='A')||((c.type==='video'||c.type==='image')&&(tr==='V1'||tr==='V2')); if(ok&&!laneLock(tr)) c.track=tr; } }
   else if(drag.k==='l'){ var ns2=Math.max(0,snapTo(drag.start+dx,c,thr)), d=ns2-drag.start; var ni=drag.in+d*c.speed; if(ni<0){ d=-drag.in/c.speed; ni=0; ns2=drag.start+d; } if(drag.dur-d<.1){ d=drag.dur-.1; ns2=drag.start+d; ni=drag.in+d*c.speed; } c.start=ns2; c.in=ni; c.dur=drag.dur-d; }
   else if(drag.k==='r'){ var nd=snapTo(drag.start+drag.dur+dx,c,thr)-drag.start; nd=Math.max(.1,nd); if(maxSrc<1e8) nd=Math.min(nd,(maxSrc-c.in)/c.speed); c.dur=nd; }
   drawTl(); drag.keep=true;
 });
 $('tl').addEventListener('pointerup',function(){ if(!drag) return; var d=drag; drag=null; if(d.k!=='seek'&&d.moved) commit(); else if(d.k!=='seek') panel(); });
-$('tl').addEventListener('wheel',function(e){ if(e.ctrlKey||e.metaKey){ e.preventDefault(); pxs=Math.max(10,Math.min(240,Math.round(pxs*(e.deltaY<0?1.15:.87)))); drawTl(); } },{passive:false});
-$('bTp').onclick=function(){ pxs=Math.min(240,Math.round(pxs*1.3)); drawTl(); }; $('bTm').onclick=function(){ pxs=Math.max(10,Math.round(pxs/1.3)); drawTl(); };
+$('tl').addEventListener('wheel',function(e){ if(e.ctrlKey||e.metaKey){ e.preventDefault(); zoomTo(pxs*(e.deltaY<0?1.15:.87)); } },{passive:false});
+function zoomTo(n){ var tlc=$('tl'), old=pxs; pxs=Math.max(4,Math.min(240,Math.round(n))); if(pxs===old) return; var sx=LBL+t*old-tlc.scrollLeft; drawTl(); tlc.scrollLeft=Math.max(0,LBL+t*pxs-sx); }
+$('bTp').onclick=function(){ zoomTo(pxs*1.3); }; $('bTm').onclick=function(){ zoomTo(pxs/1.3); };
+$('bFit').onclick=function(){ var tot=total(); if(!tot){ toast('클립이 없어요'); return; } pxs=Math.max(4,Math.min(240,Math.floor(($('tl').clientWidth-LBL-24)/tot))); drawTl(); $('tl').scrollLeft=0; };
+/* lane menu: lock / hide-mute */
+var menuEl=null;
+function closeMenu(){ if(menuEl){ menuEl.remove(); menuEl=null; } }
+function laneMenu(tr,x,y){
+  var L=proj.lanes[tr]||(proj.lanes[tr]={}), nm={V1:'영상',V2:'겹침',T:'글자',A:'소리'}[tr], d=document.createElement('div'); d.className='menu';
+  d.innerHTML='<button data-a="lock">'+(L.lock?'🔓 잠금 풀기':'🔒 잠그기')+' (옮기기·자르기 막기)</button><button data-a="off">'+(L.off?'다시 켜기':(tr==='A'?'🔇 소리 끄기':'🚫 이 줄 숨기기'))+'</button>';
+  d.style.left=Math.min(x,innerWidth-230)+'px'; d.style.top=Math.max(4,Math.min(y,innerHeight-110))+'px'; document.body.appendChild(d); menuEl=d;
+  d.addEventListener('pointerdown',function(e){ e.stopPropagation(); });
+  d.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b) return; L[b.dataset.a]=!L[b.dataset.a]; if(!L.lock&&!L.off) delete proj.lanes[tr]; closeMenu(); if(L.lock&&sel){ var c=curClip(); if(c&&c.track===tr&&false) sel=null; } commit(); syncMedia(t,playing); toast(nm+' 줄: '+(b.dataset.a==='lock'?(L.lock?'잠겼어요':'잠금을 풀었어요'):(L.off?'꺼졌어요':'켜졌어요'))); });
+}
+document.addEventListener('pointerdown',function(e){ if(menuEl&&!menuEl.contains(e.target)) closeMenu(); },true);
+/* markers */
+function markerAt(){ for(var i=0;i<proj.markers.length;i++) if(Math.abs(proj.markers[i]-t)<.06) return i; return -1; }
+function markBtn(){ var tx=markerAt()>=0?'🚩 표시 지우기':'🚩 표시', b=$('bMark'); if(b.textContent!==tx) b.textContent=tx; }
+$('bMark').onclick=function(){ var i=markerAt(); if(i>=0) proj.markers.splice(i,1); else { proj.markers.push(+t.toFixed(2)); proj.markers.sort(function(a,b){ return a-b; }); } commit(true); markBtn(); };
 
 /* ---------- clip ops ---------- */
+function lockedMsg(c){ if(c&&laneLock(c.track)){ toast('잠긴 줄이에요. 줄 이름을 눌러 잠금을 풀어 주세요'); return true; } return false; }
 function split(){ var c=curClip(); if(!c){ // split the clip under the playhead on the lowest video track
     c=proj.clips.filter(function(o){ return active(o,t); })[0]; } if(!c||t<=c.start+.05||t>=endOf(c)-.05){ toast('자를 클립을 고르고 재생 막대를 클립 안쪽에 놓으세요'); return; }
+  if(lockedMsg(c)) return;
   var r=t-c.start, n=JSON.parse(JSON.stringify(c)); n.id='c'+(proj.uid++); n.start=t; n.dur=c.dur-r; n.in=c.in+r*c.speed; n.fadeIn=0; c.dur=r; c.fadeOut=0; proj.clips.push(n); sel=n.id; commit(); }
 $('bSplit').onclick=split;
-$('bDup').onclick=function(){ var c=curClip(); if(!c) return; var n=JSON.parse(JSON.stringify(c)); n.id='c'+(proj.uid++); n.start=endOf(c); proj.clips.push(n); sel=n.id; commit(); };
-function del(ripple){ var c=curClip(); if(!c) return; proj.clips=proj.clips.filter(function(o){ return o!==c; }); if(ripple) proj.clips.forEach(function(o){ if(o.track===c.track&&o.start>=endOf(c)-.01) o.start=Math.max(0,o.start-c.dur); }); sel=null; cleanElems(); commit(); }
+$('bDup').onclick=function(){ var c=curClip(); if(!c||lockedMsg(c)) return; var n=JSON.parse(JSON.stringify(c)); n.id='c'+(proj.uid++); n.start=endOf(c); proj.clips.push(n); sel=n.id; commit(); };
+function del(ripple){ var c=curClip(); if(!c||lockedMsg(c)) return; proj.clips=proj.clips.filter(function(o){ return o!==c; }); if(ripple) proj.clips.forEach(function(o){ if(o.track===c.track&&o.start>=endOf(c)-.01) o.start=Math.max(0,o.start-c.dur); }); sel=null; cleanElems(); commit(); }
 $('bDel').onclick=function(){ del(false); };
+$('bRip').onclick=function(){ if(!curClip()){ toast('지울 클립을 먼저 고르세요'); return; } del(true); };
+/* freeze frame: stop the picture for 2 seconds at the playhead */
+$('bFreeze').onclick=function(){
+  var c=curClip(); if(!c||c.type!=='video'||!active(c,t)) c=proj.clips.filter(function(o){ return o.type==='video'&&active(o,t)&&!laneOff(o.track); }).pop();
+  if(!c){ toast('영상 클립 위에 재생 막대를 놓아 주세요'); return; } if(lockedMsg(c)) return;
+  var s=srcOf(c); if(!s||!s.videoWidth){ toast('이 장면을 아직 읽지 못했어요. 잠시 뒤 다시 눌러 주세요'); return; }
+  var fc=document.createElement('canvas'); fc.width=s.videoWidth; fc.height=s.videoHeight; try{ fc.getContext('2d').drawImage(s,0,0); }catch(e){ toast('장면을 가져오지 못했어요'); return; }
+  var at=t, cid=c.id; fc.toBlob(function(b){ if(!b) return; var file=new File([b],'멈춘 장면 '+tcs(at)+'.png',{type:'image/png'});
+    addFiles([file],function(mid){ var c0=clipById(cid); if(!c0) return; var d=2, r=at-c0.start, ins=at;
+      if(r>.05&&r<c0.dur-.05){ var tail=JSON.parse(JSON.stringify(c0)); tail.id='c'+(proj.uid++); tail.start=at; tail.dur=c0.dur-r; tail.in=c0.in+r*c0.speed; tail.fadeIn=0; delete tail.tr; c0.dur=r; c0.fadeOut=0; proj.clips.push(tail); }
+      else if(r<=.05) ins=c0.start; else ins=endOf(c0);
+      proj.clips.forEach(function(o){ if(o.track===c0.track&&o.start>=ins-.001) o.start+=d; });
+      var im={id:'c'+(proj.uid++),mid:mid,type:'image',track:c0.track,start:ins,in:0,dur:d,speed:1,vol:0,fadeIn:0,fadeOut:0,op:c0.op,scale:c0.scale,x:c0.x,y:c0.y,rot:c0.rot,flip:c0.flip,fit:c0.fit,filt:Object.assign({},c0.filt),anim:'none'};
+      proj.clips.push(im); sel=im.id; commit(); toast('2초 동안 멈춘 장면을 넣었어요'); }); },'image/png');
+};
 
 /* ---------- panel ---------- */
 function rng(l,k,min,max,v,step,unit){ return '<div class="row"><label>'+l+'</label><input type="range" data-k="'+k+'" min="'+min+'" max="'+max+'" step="'+(step||1)+'" value="'+v+'"><input type="number" class="nv" data-k="'+k+'" min="'+min+'" max="'+max+'" step="'+(step||1)+'" value="'+f(v)+'"><span class="u">'+(unit||'')+'</span></div>'; }
