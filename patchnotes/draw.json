@@ -4,6 +4,30 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v4",
+   "title": "Fry Draw 4: 8방향 크기 조절, 여러 개 돌리기, 달라붙기, 스포이트, 색 팔레트, 레이어 이름·끌기",
+   "items": [
+    "고른 도형 둘레에 8개의 크기 조절 점이 생겨요. 여러 개를 골라도 한꺼번에 늘이고 줄이고 돌릴 수 있어요 (Shift: 비율 유지·15도씩)",
+    "도형을 옮길 때 다른 도형이나 캔버스의 가장자리·가운데에 달라붙고 분홍 줄로 알려줘요 (캔버스 탭에서 끌 수 있어요)",
+    "스포이트 도구: 도형의 색과 선 모양을 가져오거나, 먼저 다른 도형을 골라 두면 그 도형에 입혀요",
+    "색 팔레트와 내 색 저장·지우기, 화면에서 색 고르기",
+    "레이어: 이름 두 번 눌러 이름 바꾸기, ⠿를 끌어서 순서 바꾸기, Shift로 여러 개 고르기"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 4: 8-way resize, group rotate, smart snapping, eyedropper, palette, layer rename and drag",
+     "items": [
+      "Selections get 8 resize handles; resize and rotate several objects together (Shift: keep ratio, 15 degree steps)",
+      "Objects snap to the edges and centres of other objects and the canvas while moving, with pink guide lines (can be turned off in the Canvas tab)",
+      "Eyedropper tool: copy fill and stroke style from an object, or paint it onto the object you selected first",
+      "Colour palette with saved swatches and a screen colour picker",
+      "Layers: double-click to rename, drag the grip to reorder, Shift-click to select several"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v3",
    "title": "Fry Draw 3: 선 모양, 화살표, 섞기 방식, 숫자로 크기 고치기",
    "items": [
