@@ -34,3 +34,4 @@ patchnotes/python.json | BeaconScript 신호·publish_aliases 항목 (en만) | p
 patchnotes/python.json | BeaconScript 글자 색 코드 항목 (en만) | python v33 | 2026-11-05
 patchnotes/python.json | BeaconScript else·else if 항목 (en만) | python v34 | 2026-11-05
 patchnotes/python.json | BeaconScript 변수 중괄호 항목 (en만) | python v35 | 2026-11-06
+patchnotes/draw.json | Fry Draw v3 항목 (en만), draw/app.js 선 모양·화살표·섞기·위치와 크기 한국어 문구 | draw v3 | 2026-11-06
