@@ -34,3 +34,5 @@ patchnotes/python.json | BeaconScript 신호·publish_aliases 항목 (en만) | p
 patchnotes/python.json | BeaconScript 글자 색 코드 항목 (en만) | python v33 | 2026-11-05
 patchnotes/python.json | BeaconScript else·else if 항목 (en만) | python v34 | 2026-11-05
 patchnotes/python.json | BeaconScript 변수 중괄호 항목 (en만) | python v35 | 2026-11-06
+patchnotes/score.json | Fry Score v3 항목 (en만) | score v3 | 2026-11-06
+score/app.js | Fry Score v3 한국어 메시지·버튼 | score v3 | 2026-11-06
