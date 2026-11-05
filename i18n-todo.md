@@ -20,3 +20,4 @@ patchnotes/video.json | Fry Video v5 글자체·효과·방향 (en 번역 없음
 patchnotes/python.json | BeaconScript b192 항목 (en만) | python v7 | 2026-11-05
 patchnotes/python.json | BeaconScript b193 항목 (en만) | python v8 | 2026-11-05
 patchnotes/python.json | BeaconScript b194·아이템 미리보기 항목 (en만) | python v9 | 2026-11-05
+patchnotes/python.json | 자동완성 목록 항목 (en만) | python v10 | 2026-11-05
