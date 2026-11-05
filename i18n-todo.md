@@ -68,3 +68,4 @@ patchnotes/score.json | Fry Score v11 항목 (en만) | score v11 | 2026-11-06
 score/app.js | Fry Score v11 한국어 메시지·버튼 | score v11 | 2026-11-06
 patchnotes/draw.json | Fry Draw v7 항목 (en만), draw/app.js 그라데이션·무늬·그림자·마스크 한국어 문구 | draw v7 | 2026-11-06
 patchnotes/draw.json | Fry Draw v8 항목 (en만), draw/app.js 내보내기 창 한국어 문구 | draw v8 | 2026-11-06
+patchnotes/draw.json | Fry Draw v9 항목 (en만), draw/app.js 눈금자·가이드·반복 복제·윤곽 한국어 문구 | draw v9 | 2026-11-06
