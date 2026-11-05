@@ -4,6 +4,22 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v10",
+   "title": "BeaconScript %player_z% 추가",
+   "items": [
+    "%player_z% 자리표시를 알아봄 (Potato API 필요)"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript %player_z%",
+     "items": [
+      "Recognises the %player_z% placeholder (Potato API needed)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v9",
    "title": "BeaconScript 미리보기에 %…% 표시",
    "items": [
