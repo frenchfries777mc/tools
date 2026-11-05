@@ -4,6 +4,34 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v14",
+   "title": "영어 화면·에코/리버브·화면 속 표시 그림·카운트다운",
+   "items": [
+    "Fry Video 화면 글자 전체에 영어 번역을 넣었어요 (다른 언어는 영어로 보여요)",
+    "에코(메아리)와 울림(리버브)을 클립마다 넣을 수 있어요. 내보내기에도 들어가요",
+    "넣기 탭에 카운트다운(남은 초 세기), 진행 막대, 네모·동그라미 테두리, 화살표, 강조 선 추가",
+    "크로마키: 가장자리 부드럽게, 초록 번짐 줄이기 추가",
+    "화면 비율에 4:5, 3:4, 3:2 추가",
+    "잡음 끊기를 실제 소리 크기를 재서 확인했어요 (조용한 구간은 꺼지고 큰 소리는 그대로)",
+    "키프레임이 있으면 예전 '움직임(시작·끝)' 칸은 숨기고, 안 쓰이는 크기·옮기기 값은 안내가 나와요"
+   ],
+   "tr": {
+    "en": {
+     "title": "English UI, echo/reverb, annotation shapes, countdown",
+     "items": [
+      "The whole Fry Video interface now has English translations (other languages show English)",
+      "Echo and reverb per clip, included in exports",
+      "Insert tab gains countdown (seconds left), progress bar, box and circle outlines, arrow and highlight line",
+      "Chroma key: edge softness and green spill reduction",
+      "Aspect ratios 4:5, 3:4 and 3:2 added",
+      "Noise gate verified by measuring the output level (quiet parts go silent, loud parts are untouched)",
+      "When keyframes exist the old start/end motion controls are hidden and the unused size/move/rotate values show a note"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v13",
    "title": "키프레임·소리 곡선·잡음 끊기·무음 자르기·여러 개 고르기",
    "items": [
