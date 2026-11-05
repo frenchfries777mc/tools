@@ -4,6 +4,30 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v6",
+   "title": "점점 크게·작게, 알토·기타 음자리표, 연습 기호, 트릴",
+   "items": [
+    "점점 크게(<)·점점 작게(>) 기호: 악보에 쐐기로 그려지고 재생·MIDI 소리 크기가 다음 셈여림까지 서서히 변함",
+    "알토(가온 C)와 기타용 높은음자리(한 옥타브 아래) 음자리표 추가, 조표 위치도 음자리표에 맞춤. 기타용은 한 옥타브 낮게 재생",
+    "마디마다 연습 기호(A B C…)와 \"Allegro\" 같은 글자 붙이기",
+    "마르카토, 트릴(재생하면 윗음과 빠르게 번갈아 울림) 기호",
+    "음표 줄기 방향 바로잡음: 가운데 줄 위의 음은 줄기가 아래로"
+   ],
+   "tr": {
+    "en": {
+     "title": "Hairpins, alto and guitar clefs, rehearsal marks, trills",
+     "items": [
+      "Crescendo (<) and decrescendo (>) hairpins drawn as wedges; playback and MIDI volume glides to the next dynamic",
+      "Alto (C) clef and an octave-down treble clef for guitar, with key signatures placed correctly for each clef; the guitar part sounds an octave lower",
+      "Rehearsal marks (A B C...) and text such as \"Allegro\" above any measure",
+      "Marcato and trill marks (the trill alternates with the upper note on playback)",
+      "Stem directions fixed: notes on or above the middle line now have stems down"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v5",
    "title": "재생 개선: 메트로놈·카운트인·반복·속도·혼자 듣기·음표 표시",
    "items": [
