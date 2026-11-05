@@ -4,6 +4,30 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v12",
+   "title": "넣기 탭: 템플릿·스티커·작은 화면, 프로젝트 파일, 챕터",
+   "items": [
+    "새 '넣기' 탭: 제목 카드, 이름 띠, 자막, 인트로, 아웃트로 템플릿 (글자·도형 클립으로 만들어져서 하나하나 고칠 수 있어요)",
+    "스티커: 이모지 24개를 눌러 재생 막대 위치에 톡 튀어나오게 넣어요",
+    "작은 화면(화면 속 화면): 고른 영상·그림을 네 모서리나 가운데에 작게 겹쳐 놓고, '꽉 채움'으로 되돌려요",
+    "프로젝트 파일(.fryvideo)로 저장·열기: 영상·그림·소리까지 한 파일에 담아서 다른 기기에서 이어 편집해요",
+    "표시에 챕터 이름을 붙이고, 유튜브 설명란에 붙여 넣을 챕터 목록을 복사해요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Insert tab: templates, stickers, picture-in-picture, project files, chapters",
+     "items": [
+      "New Insert tab: title card, lower third, caption, intro and outro templates (built from text and shape clips you can edit one by one)",
+      "Stickers: tap one of 24 emoji to pop it in at the playhead",
+      "Picture-in-picture: put the selected video or picture small in a corner or the centre, or restore it to full screen",
+      "Save and open project files (.fryvideo) that include the media, so you can continue on another device",
+      "Name your markers as chapters and copy a chapter list ready for a YouTube description"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v11",
    "title": "거꾸로 재생·빠르기 변화·새 전환·틈 없애기",
    "items": [

@@ -130,16 +130,17 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
     <div class="prev"><div class="pwrap"><canvas id="cv" width="1280" height="720"></canvas></div>
       <div class="tr"><button class="tbtn" id="bBack" title="맨 앞으로">⏮</button><button class="tbtn pri" id="bPlay">▶</button><button class="tbtn" id="bFrame" title="지금 장면을 PNG로">📷</button><span class="tc" id="tc">0:00.0 / 0:00.0</span></div>
     </div>
-    <div class="panel"><div class="ptabs" id="ptabs"><button data-p="clip" class="on">클립</button><button data-p="proj">영상 설정</button></div><div class="pbody" id="pbody"></div></div>
+    <div class="panel"><div class="ptabs" id="ptabs"><button data-p="clip" class="on">클립</button><button data-p="ins">넣기</button><button data-p="proj">영상 설정</button></div><div class="pbody" id="pbody"></div></div>
   </div>
   <div class="tlbar"><button class="tbtn" id="bSplit" title="재생 막대 위치에서 자르기 (S)">✂ 자르기</button><button class="tbtn" id="bDup">복제</button><button class="tbtn" id="bDel">지우기</button><button class="tbtn" id="bRip" title="지우고 뒤 클립을 당겨 붙여요">당겨 지우기</button><button class="tbtn" id="bFreeze" title="재생 막대 위치에서 2초 멈춘 장면 넣기">❄ 멈춘 장면</button><button class="tbtn" id="bMark">🚩 표시</button><button class="tbtn" id="bText">T 글자 넣기</button><button class="tbtn" id="bShape">■ 도형 넣기</button><button class="tbtn" id="bRec">● 녹음</button><span class="sp"></span><button class="tbtn" id="bTm">−</button><span class="zoom" id="zl">60px/초</span><button class="tbtn" id="bTp">+</button><button class="tbtn" id="bFit" title="전체가 한눈에 보이게">맞춤</button></div>
   <div class="tlw" id="tl"><div class="tlin" id="tlin"></div></div>
 </div>
 <div id="expbox" class="expbox" hidden></div>
+<input type="file" id="projIn" accept=".fryvideo" hidden>
 <input type="file" id="subIn" accept=".srt,.vtt,text/vtt,text/plain" hidden>
 <input type="file" id="fileIn" accept="video/*,image/*,audio/*" multiple hidden>
 <script src="../ai.js?v=ai36.l21"></script>
-<script src="app.js?v=vd12"></script>
+<script src="app.js?v=vd13"></script>
 <script src="../pwa.js" defer></script>
 <script src="../ping.js" defer></script>
 </body>
