@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v21",
+   "title": "BeaconScript 맨 위 줄과 새 조건문",
+   "items": [
+    "파일 맨 위 mod \"이름\" · resource pack \"이름\" · pack \"이름\" 줄이 에러 없이 통과해요 (한 번만, 맨 위에만)",
+    "맨 앞 줄에는 on·every·rename·remap·fill·disable/enable·remove all·set 아이템 damage만 올 수 있고, 그 밖의 명령은 on/every 안쪽에 쓰라고 알려 줘요",
+    "if player hp|max hp|x|y|z, if world day|hour|players 비교와 if player biome|item|name is (not) … 를 점검하고 or로도 묶어요",
+    "새 조건과 아이템 카드가 미리보기·자동완성에 나와요"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript header lines and new conditions",
+     "items": [
+      "Top-of-file mod \"name\", resource pack \"name\" and pack \"name\" lines pass without errors (once, at the top only)",
+      "Only on, every, rename, remap, fill, disable/enable, remove all and set <item> damage may start at column 0; other commands are reported as needing an on/every block",
+      "if player hp|max hp|x|y|z, if world day|hour|players comparisons and if player biome|item|name is (not) ... are checked and can be joined with or",
+      "New conditions and item cards show in the preview and autocomplete"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v20",
    "title": "BeaconScript b196 반영",
    "items": [
