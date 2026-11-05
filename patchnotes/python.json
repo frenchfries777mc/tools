@@ -4,6 +4,22 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v9",
+   "title": "BeaconScript 미리보기에 %…% 표시",
+   "items": [
+    "글 안의 %player_name% 같은 자리표시가 미리보기에 따로 카드로 나오고 '(Potato API 필요)'가 붙음"
+   ],
+   "tr": {
+    "en": {
+     "title": "%…% shown in the BeaconScript preview",
+     "items": [
+      "Placeholders such as %player_name% inside texts get their own card in the preview, marked '(Potato API needed)'"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v8",
    "title": "BeaconScript 부딪힘 끄기와 자리표시",
    "items": [
