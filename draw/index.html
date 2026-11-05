@@ -78,6 +78,8 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
 .txed{background:rgba(255,255,255,.88);border:1px dashed #ff8a3d;border-radius:4px;padding:2px 6px;resize:none;outline:none;margin:0;box-sizing:content-box;}
 .row.gs input[type=number]{width:54px;} .row.gs input[type=color]{flex:0 0 38px;}
 .dlgbg{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.55);display:grid;place-items:center;padding:16px;} .dlg{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;width:min(420px,100%);max-height:90vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.6);} .dlg h3{margin:0 0 10px;font-size:16px;}
+.deskw{flex:1 1 auto;min-width:0;min-height:0;display:flex;flex-direction:column;} .rtop{display:flex;height:20px;flex:0 0 20px;border-bottom:1px solid var(--line);} .rcorner{width:20px;flex:0 0 20px;background:var(--panel);border-right:1px solid var(--line);} #rh{flex:1 1 auto;min-width:0;width:100%;height:20px;display:block;cursor:s-resize;touch-action:none;} .rbody{flex:1 1 auto;display:flex;min-height:0;min-width:0;} #rv{flex:0 0 20px;width:20px;height:100%;display:block;cursor:e-resize;touch-action:none;border-right:1px solid var(--line);} .deskw.norul .rtop,.deskw.norul #rv{display:none;}
+@media(max-width:820px){ .deskw{order:1;} }
 .footer-copy{display:none;}
 </style>
 </head>
@@ -95,7 +97,8 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
 </div>
 <div class="main">
   <div class="tools" id="tools"></div>
-  <div class="desk" id="desk"><div class="stagew"><svg id="stage" xmlns="http://www.w3.org/2000/svg"></svg></div></div>
+  <div class="deskw" id="deskw"><div class="rtop"><div class="rcorner"></div><canvas id="rh" title="여기서 캔버스로 끌면 가로 가이드 선이 생겨요"></canvas></div><div class="rbody"><canvas id="rv" title="여기서 캔버스로 끌면 세로 가이드 선이 생겨요"></canvas>
+  <div class="desk" id="desk"><div class="stagew"><svg id="stage" xmlns="http://www.w3.org/2000/svg"></svg></div></div></div></div>
   <div class="panel">
     <div class="ptabs" id="ptabs"><button data-p="prop" class="on">속성</button><button data-p="pat">무늬</button><button data-p="ly">레이어</button><button data-p="ai">AI</button><button data-p="cv">캔버스</button></div>
     <div class="pbody" id="pbody"></div>
@@ -105,7 +108,7 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
 <input type="file" id="fileIn" accept=".svg,.json,.fdraw,image/svg+xml,application/json" hidden>
 <script src="../ai.js?v=ai36.l21"></script>
 <script src="lib/polybool.js"></script>
-<script src="app.js?v=dr8"></script>
+<script src="app.js?v=dr9"></script>
 <script src="../pwa.js" defer></script>
 <script src="../ping.js" defer></script>
 </body>
