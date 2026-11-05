@@ -4,6 +4,30 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v6",
+   "title": "Fry Draw 6: 글자 상자 편집, 여러 줄, 선 따라 쓰기",
+   "items": [
+    "글자를 캔버스에서 바로 쓰고 고쳐요: 글자 도구로 누르면 그 자리에서 입력, 글자를 두 번 누르면 다시 편집 (Ctrl+Enter 또는 바깥을 누르면 끝)",
+    "여러 줄 글자, 왼쪽·가운데·오른쪽 맞춤, 줄 간격, 글자 간격, 기울임, 밑줄",
+    "글자를 선 따라 쓰기: 글자 하나와 선(또는 도형)을 같이 골라 버튼을 누르면 선을 따라 글자가 흘러요. 시작 위치도 조절돼요",
+    "글꼴 목록에 Georgia·Trebuchet·Courier·Comic 추가",
+    "SVG로 받고 다시 열어도 여러 줄·선 따라 쓰기가 그대로 남아요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 6: on-canvas text editing, multi-line, text on a path",
+     "items": [
+      "Type and edit text directly on the canvas: click with the Text tool to type in place, double-click text to edit again (Ctrl+Enter or click outside to finish)",
+      "Multi-line text with left/centre/right alignment, line spacing, letter spacing, italic and underline",
+      "Text on a path: select a text and a line or shape, press the button, and the text flows along it; the start position is adjustable",
+      "Added Georgia, Trebuchet, Courier and Comic to the font list",
+      "Multi-line text and text on a path survive SVG save and reopen"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v5",
    "title": "Fry Draw 5: 베지어 펜, 곡선 손잡이 고치기",
    "items": [
