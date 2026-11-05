@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v8",
+   "title": "BeaconScript 부딪힘 끄기와 자리표시",
+   "items": [
+    "disable collision of / enable collision of (tree·rock·ore·water·block·아이템 이름) 검사와 미리보기",
+    "글 안의 %player_name% %player_location% %world_player_count% %online_player% %player_x% %player_y% %world_name% 를 알아보고, 틀리면 '혹시 …?'로 알려 줌 (Potato API 모드에서만 값으로 바뀜)"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript collision and placeholders",
+     "items": [
+      "Checks and previews disable/enable collision of (tree, rock, ore, water, block, item names)",
+      "Recognises %player_name%, %player_location%, %world_player_count%, %online_player%, %player_x%, %player_y%, %world_name% in texts and suggests the right one for typos (they only turn into values with the Potato API mod)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v7",
    "title": "BeaconScript 땅 바꾸기 명령",
    "items": [
