@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v11",
+   "title": "BeaconScript 자동완성을 한 단어씩, 변수 명령",
+   "items": [
+    "o를 치면 on, on 다음에는 world·join·mine…, world 다음에는 generate 처럼 한 단어씩 이어서 추천 (Tab으로 넣으면 다음 단어 목록이 바로 떠요)",
+    "변수 명령 검사·미리보기: set variable, add … to variable, subtract … from variable, reset variable, if variable … (>= <= > < = !=)",
+    "%var_이름%, %player_hp%, %player_max_hp%, %player_item%, %player_biome%, %world_day%, %world_time% 자리표시 인식, say/chat 100자 검사, 예제 '돌 세기' 추가"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript word-by-word suggestions and variables",
+     "items": [
+      "Typing o suggests on, then world/join/mine..., then generate, one word at a time (Tab inserts it and the next list opens)",
+      "Checks and previews the variable commands: set variable, add ... to variable, subtract ... from variable, reset variable, if variable ...",
+      "Recognises %var_name%, %player_hp%, %player_max_hp%, %player_item%, %player_biome%, %world_day%, %world_time%, checks the 100-character limit for say/chat, new 'Stone counter' example"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v10",
    "title": "BeaconScript %player_z% 추가",
    "items": [
