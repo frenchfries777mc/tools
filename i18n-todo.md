@@ -52,3 +52,5 @@ patchnotes/video.json | Fry Video v10 GIF 만들기·글자 스타일과 움직�
 patchnotes/video.json | Fry Video v11 거꾸로 재생·빠르기 변화·새 전환·틈 없애기 (en 번역 없음) | video v11 | 2026-11-06
 patchnotes/score.json | Fry Score v7 항목 (en만) | score v7 | 2026-11-06
 score/app.js | Fry Score v7 한국어 메시지·버튼 | score v7 | 2026-11-06
+patchnotes/score.json | Fry Score v8 항목 (en만) | score v8 | 2026-11-06
+score/app.js | Fry Score v8 한국어 메시지·버튼 | score v8 | 2026-11-06
