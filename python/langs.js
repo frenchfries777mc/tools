@@ -216,17 +216,19 @@ function javaRun(ctx){ var src=ctx.code, bal=balance(src,false); ctx.pv.innerHTM
   ctx.show('pv'); ctx.done(true); }
 
 /* ---------- BeaconScript ---------- */
-function bsCheck(src,nested){ var seenCode=false, errs=[], stack=[], lines=src.split('\n'), VERB=BS_VERBS.split(' ');
+function bsCheck(src,nested){ var hasUuid=/^\s*[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\s*$/im.test(src), hdrSeen={}, seenCode=false, errs=[], stack=[], lines=src.split('\n'), VERB=BS_VERBS.split(' ');
   lines.forEach(function(raw,i){ var ln=i+1, line=raw.replace(/\t/g,'    '); if(!line.trim()||/^\s*#/.test(line)) return;
     var ind=/^ */.exec(line)[0].length, t=line.trim(), m;
     var q=t.replace(/"(?:\\.|[^"\\])*"/g,''); if(/"/.test(q)){ errs.push({line:ln,msg:'따옴표(")가 닫히지 않았어요'}); }
     while(stack.length&&ind<=stack[stack.length-1].ind){ var cl=stack.pop(); if(!cl.kids) errs.push({line:cl.line,msg:'":" 로 끝난 줄 아래에는 안쪽으로 들여쓴 명령이 와야 해요'}); }
     var par=stack[stack.length-1]; if(par){ par.kids++; } else if(ind>0) errs.push({line:ln,msg:'맨 앞 줄은 들여쓰지 않아요'});
+    if(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(t)){ if(seenCode) errs.push({line:ln,msg:'uuid 줄은 파일 맨 위(다른 명령보다 앞)에 써요'}); else if(hdrSeen.uuid) errs.push({line:ln,msg:'uuid 줄은 한 번만 써요'}); hdrSeen.uuid=1; if(ind!==0) errs.push({line:ln,msg:'uuid 은 맨 앞 줄에 써요'}); return; }
+    if(/^[0-9a-f]{8}-[0-9a-f]/i.test(t)){ errs.push({line:ln,msg:'uuid 모양이 아니에요: 550e8400-e29b-41d4-a716-446655440000 처럼 8-4-4-4-12자리 (0-9, a-f)'}); return; }
     var verb=/^[A-Za-z_]+/.exec(t); verb=verb?verb[0].toLowerCase():'';
-    if(/^\{:/.test(t)){ if(!/^\{:[^:\s{}]{1,22}::(?:"(?:\\.|[^"\\])*"|-?\d+(?:\.\d+)?|%[A-Za-z0-9_' ]+%):\}$/.test(t)) errs.push({line:ln,msg:'이렇게 써요: {:이름::"글자":}  (값은 "글자"·숫자·%…%)'}); return; }
+    if(/^\{:/.test(t)){ if(!/^\{:[^:\s{}]{1,22}::(?:"(?:\\.|[^"\\])*"|-?\d+(?:\.\d+)?|%[A-Za-z0-9_' ]+%):\}$/.test(t)) errs.push({line:ln,msg:'이렇게 써요: {:이름::"글자":}  (값은 "글자"·숫자·%…%)'}); else if(hasUuid&&/^\{:([^:\s{}]+)::/.exec(t)[1].length>21) errs.push({line:ln,msg:'uuid가 있는 모드는 공유 변수 이름이 21자까지예요'}); return; }
     if(!verb){ errs.push({line:ln,msg:'명령으로 시작해야 해요: '+t.slice(0,20)}); return; }
     if(VERB.indexOf(verb)<0){ var g=guess(verb,VERB); errs.push({line:ln,msg:"모르는 명령 '"+verb+"'"+(g?" — 혹시 '"+g+"'?":'')}); return; }
-    var first0=!seenCode; seenCode=true;
+    var first0=!seenCode&&!hdrSeen.name; if(verb==='mod'||verb==='resource'||verb==='pack') hdrSeen.name=1; else seenCode=true;
     if(verb==='mod'||verb==='resource'||verb==='pack'){ if(!(verb==='mod'&&/^mod\s+"[^"]+"\s*$/.test(t))&&!(verb==='resource'&&/^resource\s+pack\s+"[^"]+"\s*$/.test(t))&&!(verb==='pack'&&/^pack\s+"[^"]+"\s*$/.test(t))) errs.push({line:ln,msg:'이렇게 써요: mod "이름"  (리소스팩은 resource pack "이름" 또는 pack "이름")'}); else if(!first0) errs.push({line:ln,msg:verb+' 줄은 파일 맨 위에 한 번만 써요'}); if(ind!==0) errs.push({line:ln,msg:verb+' 은 맨 앞 줄에 써요'}); return; }
     if(!par&&!nested){ var topOk=/^(on|every|rename|remap|disable|enable|fill|load)$/.test(verb)||(verb==='remove'&&/^remove\s+all\b/i.test(t))||(verb==='set'&&!/^set\s+(variable|time|weather)\b/i.test(t)&&/^set\s+\S.*\s(damage|speed|name)\b/i.test(t)); if(!topOk){ errs.push({line:ln,msg:verb+' 줄은 on·every 블록 안쪽(들여쓰기)에 써요'}); } }
     var opens=/:\s*$/.test(t);
@@ -280,7 +282,7 @@ function bsCheck(src,nested){ var seenCode=false, errs=[], stack=[], lines=src.s
     if(verb==='disable'||verb==='enable'){ var cm=/^(?:disable|enable)\s+collision\s+of\s+([A-Za-z_]+)\s*$/i.exec(t);
       if(!cm) errs.push({line:ln,msg:'이렇게 써요: disable collision of tree (또는 enable collision of water)'});
       else if(BS_COLL.indexOf(cm[1].toLowerCase())<0){ var g5=guess(cm[1].toLowerCase(),BS_COLL); errs.push({line:ln,msg:"모르는 대상 '"+cm[1]+"'"+(g5?" — 혹시 '"+g5+"'?":' (tree·rock·ore·water·block·아이템 이름)')}); } }
-    (t.replace(/%player's mod%/gi,'').replace(/%\{[^}\s]+\}%/g,'').match(/%[^%\s"]*%/g)||[]).forEach(function(ph){ if(BS_PH.indexOf(ph.toLowerCase())<0&&!/^%var_[a-z0-9_]{1,20}%$/i.test(ph)&&!/^%player_[a-z0-9_]+_count%$/i.test(ph)){ var g6=guess(ph.toLowerCase(),BS_PH); errs.push({line:ln,msg:"모르는 자리표시 '"+ph+"'"+(g6?" — 혹시 '"+g6+"'?":'')}); } });
+    (t.replace(/%[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}_[^%\s"]+%/gi,'').replace(/%player's mod%/gi,'').replace(/%\{[^}\s]+\}%/g,'').match(/%[^%\s"]*%/g)||[]).forEach(function(ph){ if(BS_PH.indexOf(ph.toLowerCase())<0&&!/^%var_[a-z0-9_]{1,20}%$/i.test(ph)&&!/^%player_[a-z0-9_]+_count%$/i.test(ph)){ var g6=guess(ph.toLowerCase(),BS_PH); errs.push({line:ln,msg:"모르는 자리표시 '"+ph+"'"+(g6?" — 혹시 '"+g6+"'?":'')}); } });
     if(verb==='teleport'&&!/\sto\s/.test(t)) errs.push({line:ln,msg:'이렇게 써요: teleport player to spawn'});
     if((verb==='title'||verb==='chat'||verb==='say'||verb==='broadcast')&&!/"/.test(t)) errs.push({line:ln,msg:verb+' 뒤에는 "글자"를 큰따옴표로 감싸서 써요'});
     if(opens) stack.push({line:ln,ind:ind,kids:0,wg:(verb==='on'&&/^on\s+world\s+generate\b/i.test(t))||!!(par&&par.wg)}); });
@@ -294,6 +296,7 @@ var BS_MEAN={on:'때',world:'월드',generate:'만들어질 때',join:'들어올
 function bsChip(w,first){ var c=document.createElement('span'); c.className='chip'; var b=document.createElement('b'), m=document.createElement('small'), lw=w.toLowerCase(), mean;
   if(/^"/.test(w)){ b.textContent=w; mean='글자'; c.classList.add('s'); }
   else if(/^\{[^}\s]+\}$/.test(w)){ b.textContent=w; mean=/^\{_.*_\}$/.test(w)?'지역 변수':'변수'; c.classList.add('n'); }
+  else if(/^%[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}_[^%\s]+%$/i.test(w)){ b.textContent=w; mean='다른 모드의 공유 변수'; c.classList.add('n'); }
   else if(/^%\{[^}\s]+\}%$/.test(w)){ b.textContent=w; mean='변수 값'; c.classList.add('n'); }
   else if(/^\{:[^:\s{}]+:\}$/.test(w)){ b.textContent=w; mean='공유 변수'; c.classList.add('n'); }
   else if(w.toLowerCase()==="%player's mod%"){ b.textContent=w; mean='플레이어 모드 (Potato API 없이 읽기)'; c.classList.add('n'); }
@@ -307,7 +310,7 @@ function bsChip(w,first){ var c=document.createElement('span'); c.className='chi
   m.textContent=mean; c.appendChild(b); c.appendChild(m); return c; }
 function bsItemCard(t){ var m=/^give\s+(?!effect\b)(.+)$/i.exec(t)||/^on\s+(?:place|destroy)\s+(.+?)\s*:?\s*$/i.exec(t)||/^set\s+(.+?)\s+damage\b/i.exec(t)||/^if\s+player\s+item\s+is\s+(?:not\s+)?(.+?)\s*:\s*$/i.exec(t); if(!m) return null; var c=m[1].replace(/:\s*$/,'').replace(/\s+of\s+\S+$/i,'').trim(), it=bsItem(c)||bsItem(c.replace(/\s+\d+(\s+to\s+\S+)?$/i,''))||bsItem(c.replace(/\s+to\s+\S+$/i,'')); if(!it) return null; var card=document.createElement('span'); card.className='chip item'; var im=document.createElement('img'); im.src=it.ic; im.alt=it.n; im.className='bsic'; var b=document.createElement('b'), sm=document.createElement('small'); b.textContent=it.n; sm.textContent=it.id; card.appendChild(im); card.appendChild(b); card.appendChild(sm); return card; }
 function bsChips(t){ var row=document.createElement('span'); row.className='chips'; var itc=bsItemCard(t.trim()); if(itc){ var done=bsChips0(t,row); row.appendChild(itc); return row; } return bsChips0(t,row); }
-function bsChips0(t,row){ if(/^\{:[^:\s{}]{1,22}::.*:\}$/.test(t.trim())){ row.appendChild(bsChip('{:공유:}',false)); var cc=row.lastChild; cc.firstChild.textContent=t.trim(); cc.lastChild.textContent='공유 변수 값 쓰기'; return row; } var re=/"(?:\\.|[^"\\])*"?|~?-?\d+%?|~|%\{[^}\s]+\}%|%player's mod%|%[A-Za-z0-9_']+%|\{:[^:\s{}]+:\}|\{[^}\s]+\}|[A-Za-z_\uac00-\ud7a3][\w\uac00-\ud7a3]*|>=|<=|!=|[:=]|[^\s]/g, m, i=0; while((m=re.exec(t))){ row.appendChild(bsChip(m[0],i===0)); i++; if(m[0][0]==='"'){ (m[0].match(/%[A-Za-z0-9_']+%/g)||[]).filter(function(ph){ return ph.toLowerCase()!=="%player's mod%"; }).forEach(function(ph){ var c=document.createElement('span'); c.className='chip n'; var b=document.createElement('b'), sm=document.createElement('small'); b.textContent=ph; sm.textContent='(Potato API 필요)'; c.appendChild(b); c.appendChild(sm); row.appendChild(c); }); } } return row; }
+function bsChips0(t,row){ if(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(t.trim())){ row.appendChild(bsChip('uuid',false)); var uc=row.lastChild; uc.firstChild.textContent=t.trim(); uc.lastChild.textContent='모드 고유 번호'; return row; } if(/^\{:[^:\s{}]{1,22}::.*:\}$/.test(t.trim())){ row.appendChild(bsChip('{:공유:}',false)); var cc=row.lastChild; cc.firstChild.textContent=t.trim(); cc.lastChild.textContent='공유 변수 값 쓰기'; return row; } var re=/"(?:\\.|[^"\\])*"?|~?-?\d+%?|~|%[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}_[^%\s]+%|%\{[^}\s]+\}%|%player's mod%|%[A-Za-z0-9_']+%|\{:[^:\s{}]+:\}|\{[^}\s]+\}|[A-Za-z_\uac00-\ud7a3][\w\uac00-\ud7a3]*|>=|<=|!=|[:=]|[^\s]/g, m, i=0; while((m=re.exec(t))){ row.appendChild(bsChip(m[0],i===0)); i++; if(m[0][0]==='"'){ (m[0].match(/%[A-Za-z0-9_']+%/g)||[]).filter(function(ph){ return ph.toLowerCase()!=="%player's mod%"; }).forEach(function(ph){ var c=document.createElement('span'); c.className='chip n'; var b=document.createElement('b'), sm=document.createElement('small'); b.textContent=ph; sm.textContent='(Potato API 필요)'; c.appendChild(b); c.appendChild(sm); row.appendChild(c); }); } } return row; }
 function bsRun(ctx){ var src=ctx.code, r=bsCheck(src); ctx.pv.innerHTML='';
   var lines=src.split('\n'), stack=[{ind:-1,el:ctx.pv}], any=false;
   lines.forEach(function(raw,i){ var line=raw.replace(/\t/g,'    '); if(!line.trim()||/^\s*#/.test(line)) return; var ind=/^ */.exec(line)[0].length, t=line.trim(); any=true;

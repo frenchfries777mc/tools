@@ -28,3 +28,4 @@ patchnotes/python.json | BeaconScript 새 이벤트 항목 (en만) | python v14 
 patchnotes/python.json | %interacted% 항목 (en만) | python v15 | 2026-11-05
 patchnotes/python.json | %변수% 읽기 취소 항목 (en만) | python v17 | 2026-11-05
 patchnotes/python.json | BeaconScript mod 조건·load 항목 (en만) | python v18 | 2026-11-05
+patchnotes/python.json | BeaconScript uuid 항목 (en만) | python v19 | 2026-11-05
