@@ -48,3 +48,4 @@ patchnotes/score.json | Fry Score v6 항목 (en만) | score v6 | 2026-11-06
 score/app.js | Fry Score v6 한국어 메시지·버튼 | score v6 | 2026-11-06
 patchnotes/draw.json | Fry Draw v4 항목 (en만), draw/app.js 팔레트·스포이트·레이어·달라붙기 한국어 문구 | draw v4 | 2026-11-06
 patchnotes/video.json | Fry Video v9 소리 섞기·핀치 확대·휴대폰 화면 정리 (en 번역 없음) | video v9 | 2026-11-06
+patchnotes/draw.json | Fry Draw v5 항목 (en만), draw/app.js 펜·점 고치기 한국어 문구 | draw v5 | 2026-11-06
