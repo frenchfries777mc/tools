@@ -30,3 +30,4 @@ patchnotes/python.json | %변수% 읽기 취소 항목 (en만) | python v17 | 20
 patchnotes/python.json | BeaconScript mod 조건·load 항목 (en만) | python v18 | 2026-11-05
 patchnotes/python.json | BeaconScript uuid 항목 (en만) | python v19 | 2026-11-05
 patchnotes/python.json | BeaconScript eat·api potato 항목 (en만) | python v20 | 2026-11-05
+patchnotes/python.json | BeaconScript use_mod_uuid 항목 (en만) | python v21 | 2026-11-05
