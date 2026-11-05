@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v27",
+   "title": "BeaconScript 모드 uuid",
+   "items": [
+    "파일 맨 위 uuid 한 줄(예: 550e8400-e29b-41d4-a716-446655440000)을 에러 없이 통과시켜요. mod 이름 줄과 함께 맨 위에 쓸 수 있고, 모양이 틀리면 알려 줘요",
+    "uuid가 있는 모드는 공유 변수 {:이름::값:}의 이름을 21자까지만 허용해요",
+    "다른 모드의 공유 변수 %uuid_이름%을 모르는 자리표시로 보지 않아요"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript mod uuid",
+     "items": [
+      "A top-of-file uuid line (e.g. 550e8400-e29b-41d4-a716-446655440000) passes, together with the mod name line; a malformed uuid is reported",
+      "Mods with a uuid limit shared variable names {:name::value:} to 21 characters",
+      "Another mod's shared variable %uuid_name% is no longer reported as an unknown placeholder"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v26",
    "title": "BeaconScript mod 조건과 load",
    "items": [
