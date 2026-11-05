@@ -66,6 +66,8 @@ var BS_ITEMS='iron log stone wood sword bench wolf spawn player';
 
 /* word-by-word suggestions: after "on " it offers world, join... one word at a time */
 var BS_TIPS={break:'부술 때',contained:'들어 있으면',world:'월드',join:'들어올 때',mine:'돌 캘 때',chop:'나무 벨 때',kill:'몬스터 잡을 때',craft:'만들 때',fish:'낚시할 때',place:'설치할 때',die:'죽을 때',key:'키'};
+function bsItem(str){ var db=window.BS_ITEMDB; if(!db||!str) return null; var x=str.trim().replace(/^"|"$/g,'').trim(), l=x.toLowerCase(); if(!x) return null; if(Object.prototype.hasOwnProperty.call(db,l)) return {id:l,n:db[l][0],ic:db[l][1]}; for(var k in db){ if(db[k][0]===x) return {id:k,n:db[k][0],ic:db[k][1]}; } return null; }
+function bsItemSug(){ var db=window.BS_ITEMDB, out=[]; if(!db) return out; Object.keys(db).forEach(function(k){ out.push({n:k,i:k+':',d:db[k][0]}); }); Object.keys(db).forEach(function(k){ if(/^[^\x00-\x7f]/.test(db[k][0])) out.push({n:db[k][0],i:db[k][0]+':',d:k}); }); return out; }
 function bsSug(before,pre){
   var tk=before.replace(/"(?:\\.|[^"\\])*"/g,'"S"').trim().split(/\s+/).filter(Boolean).map(function(x){ return x.toLowerCase(); }), n=tk.length, v=tk[0]||'', M=BS_MEAN;
   function W(list,suffix){ return list.map(function(w){ return {n:w,i:w+(suffix==null?' ':suffix),d:M[w]||BS_TIPS[w]||''}; }); }
@@ -76,6 +78,7 @@ function bsSug(before,pre){
     if(tk[1]==='world'&&n===2) return W(['generate'],':');
     if(tk[1]==='key'&&n===2) return [{n:'"G"',i:'"$0" press:',d:'누를 키 (글자 하나)'}];
     if(tk[1]==='key'&&n===3) return W(['press'],':');
+    if(tk[1]==='place'&&n===2) return bsItemSug();
     if(tk[n-1]==='of') return W(['player','monster','mob'],':');
     if(n>=2&&tk[1]!=='key') return W(['of']);
     return [];
@@ -213,7 +216,8 @@ function bsCheck(src){ var errs=[], stack=[], lines=src.split('\n'), VERB=BS_VER
     var opens=/:\s*$/.test(t);
     if(verb==='on'){ var ev=t.replace(/^on\s+/i,'').replace(/:\s*$/,'').trim(), ofm=/^(.+?)\s+of\s+(.+)$/.exec(ev), ofT=null; if(!ofm&&/\sof$/.test(ev)){ errs.push({line:ln,msg:'of 뒤에는 player·monster·mob·이름을 써요: on damage of monster:'}); ev=ev.replace(/\s+of$/,''); } if(ofm){ ev=ofm[1].trim(); ofT=ofm[2].trim(); if(!/^(?:player|monster|mob|"[^"]*"|%[^%\s"]+%|[A-Za-z0-9_가-힣]+)$/.test(ofT)) errs.push({line:ln,msg:'of 뒤에는 player·monster·mob·이름을 써요: on damage of monster:'}); }
       var base=ev.replace(/\s*"[^"]*"\s*/,' ').replace(/\s+/g,' ').trim();
-      var okEv=/^key\s+press$/.test(base)||BS_EVENTS.indexOf(base)>=0||BS_EVENTS.indexOf(base.split(' ')[0])>=0&&base.split(' ').length<=2;
+      var plm=/^place\s+(\S.*)$/i.exec(ev); if(plm&&window.BS_ITEMDB&&!bsItem(plm[1])){ var ids=Object.keys(window.BS_ITEMDB), g8=guess(plm[1].trim().toLowerCase(),ids); errs.push({line:ln,msg:"unknown item '"+plm[1].trim()+"' — 없는 아이템이에요"+(g8?" — 혹시 '"+g8+"'?":'')}); }
+      var okEv=!!plm||/^key\s+press$/.test(base)||BS_EVENTS.indexOf(base)>=0||BS_EVENTS.indexOf(base.split(' ')[0])>=0&&base.split(' ').length<=2;
       if(!okEv){ var g2=guess(base,BS_EVENTS); errs.push({line:ln,msg:"모르는 때 'on "+ev+"'"+(g2?" — 혹시 'on "+g2+"'?":'')}); }
       if(!opens) errs.push({line:ln,msg:"on 줄은 ':' 로 끝나야 해요"}); if(ind!==0) errs.push({line:ln,msg:'on 은 맨 앞 줄에 써요'}); }
     else if(BS_BLOCK[verb]&&!opens&&verb!=='rename'&&!(verb==='place'||verb==='set')) errs.push({line:ln,msg:verb+" 줄은 ':' 로 끝나야 해요"});
@@ -267,7 +271,9 @@ function bsChip(w,first){ var c=document.createElement('span'); c.className='chi
   else if(/^(>=|<=|!=|<|>)$/.test(w)){ b.textContent=w; mean='비교'; c.classList.add('n'); }
   else { b.textContent=w; if(lw==='spawn') mean=first?'소환':'시작 위치'; else mean=BS_MEAN[lw]; if(BS_VERBS.split(' ').indexOf(lw)>=0||lw==='press') c.classList.add('k'); if(mean==null){ mean='(이름)'; c.classList.add('u'); } }
   m.textContent=mean; c.appendChild(b); c.appendChild(m); return c; }
-function bsChips(t){ var row=document.createElement('span'); row.className='chips'; if(/^\{:[^:\s{}]{1,22}::.*:\}$/.test(t.trim())){ row.appendChild(bsChip('{:공유:}',false)); var cc=row.lastChild; cc.firstChild.textContent=t.trim(); cc.lastChild.textContent='공유 변수 값 쓰기'; return row; } var re=/"(?:\\.|[^"\\])*"?|~?-?\d+%?|~|%player's mod%|%[A-Za-z0-9_']+%|\{:[^:\s{}]+:\}|\{[^}\s]+\}|[A-Za-z_][\w]*|>=|<=|!=|[:=]|[^\s]/g, m, i=0; while((m=re.exec(t))){ row.appendChild(bsChip(m[0],i===0)); i++; if(m[0][0]==='"'){ (m[0].match(/%[A-Za-z0-9_']+%/g)||[]).filter(function(ph){ return ph.toLowerCase()!=="%player's mod%"; }).forEach(function(ph){ var c=document.createElement('span'); c.className='chip n'; var b=document.createElement('b'), sm=document.createElement('small'); b.textContent=ph; sm.textContent='(Potato API 필요)'; c.appendChild(b); c.appendChild(sm); row.appendChild(c); }); } } return row; }
+function bsItemCard(t){ var m=/^give\s+(?!effect\b)(.+)$/i.exec(t)||/^on\s+place\s+(.+?)\s*:?\s*$/i.exec(t)||/^set\s+(.+?)\s+damage\b/i.exec(t); if(!m) return null; var c=m[1].replace(/:\s*$/,'').replace(/\s+of\s+\S+$/i,'').trim(), it=bsItem(c)||bsItem(c.replace(/\s+\d+(\s+to\s+\S+)?$/i,''))||bsItem(c.replace(/\s+to\s+\S+$/i,'')); if(!it) return null; var card=document.createElement('span'); card.className='chip item'; var im=document.createElement('img'); im.src=it.ic; im.alt=it.n; im.className='bsic'; var b=document.createElement('b'), sm=document.createElement('small'); b.textContent=it.n; sm.textContent=it.id; card.appendChild(im); card.appendChild(b); card.appendChild(sm); return card; }
+function bsChips(t){ var row=document.createElement('span'); row.className='chips'; var itc=bsItemCard(t.trim()); if(itc){ var done=bsChips0(t,row); row.appendChild(itc); return row; } return bsChips0(t,row); }
+function bsChips0(t,row){ if(/^\{:[^:\s{}]{1,22}::.*:\}$/.test(t.trim())){ row.appendChild(bsChip('{:공유:}',false)); var cc=row.lastChild; cc.firstChild.textContent=t.trim(); cc.lastChild.textContent='공유 변수 값 쓰기'; return row; } var re=/"(?:\\.|[^"\\])*"?|~?-?\d+%?|~|%player's mod%|%[A-Za-z0-9_']+%|\{:[^:\s{}]+:\}|\{[^}\s]+\}|[A-Za-z_\uac00-\ud7a3][\w\uac00-\ud7a3]*|>=|<=|!=|[:=]|[^\s]/g, m, i=0; while((m=re.exec(t))){ row.appendChild(bsChip(m[0],i===0)); i++; if(m[0][0]==='"'){ (m[0].match(/%[A-Za-z0-9_']+%/g)||[]).filter(function(ph){ return ph.toLowerCase()!=="%player's mod%"; }).forEach(function(ph){ var c=document.createElement('span'); c.className='chip n'; var b=document.createElement('b'), sm=document.createElement('small'); b.textContent=ph; sm.textContent='(Potato API 필요)'; c.appendChild(b); c.appendChild(sm); row.appendChild(c); }); } } return row; }
 function bsRun(ctx){ var src=ctx.code, r=bsCheck(src); ctx.pv.innerHTML='';
   var lines=src.split('\n'), stack=[{ind:-1,el:ctx.pv}], any=false;
   lines.forEach(function(raw,i){ var line=raw.replace(/\t/g,'    '); if(!line.trim()||/^\s*#/.test(line)) return; var ind=/^ */.exec(line)[0].length, t=line.trim(); any=true;
