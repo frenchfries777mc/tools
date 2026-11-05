@@ -44,3 +44,5 @@ patchnotes/video.json | Fry Video v7 화면: 자르기·모양·섞기·따뜻�
 patchnotes/video.json | Fry Video v8 내보내기 선택지·자막 파일·소리 자동 맞춤 (en 번역 없음) | video v8 | 2026-11-06
 patchnotes/score.json | Fry Score v5 항목 (en만) | score v5 | 2026-11-06
 score/app.js | Fry Score v5 한국어 메시지·버튼 | score v5 | 2026-11-06
+patchnotes/score.json | Fry Score v6 항목 (en만) | score v6 | 2026-11-06
+score/app.js | Fry Score v6 한국어 메시지·버튼 | score v6 | 2026-11-06
