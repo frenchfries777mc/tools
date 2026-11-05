@@ -34,6 +34,7 @@ patchnotes/python.json | BeaconScript 신호·publish_aliases 항목 (en만) | p
 patchnotes/python.json | BeaconScript 글자 색 코드 항목 (en만) | python v33 | 2026-11-05
 patchnotes/python.json | BeaconScript else·else if 항목 (en만) | python v34 | 2026-11-05
 patchnotes/python.json | BeaconScript 변수 중괄호 항목 (en만) | python v35 | 2026-11-06
+patchnotes/draw.json | Fry Draw v3 항목 (en만), draw/app.js 선 모양·화살표·섞기·위치와 크기 한국어 문구 | draw v3 | 2026-11-06
 patchnotes/video.json | Fry Video v6 타임라인: 표시·줄 잠금·당겨 지우기·멈춘 장면 (en 번역 없음) | video v6 | 2026-11-06
 patchnotes/score.json | Fry Score v3 항목 (en만) | score v3 | 2026-11-06
 score/app.js | Fry Score v3 한국어 메시지·버튼 | score v3 | 2026-11-06
@@ -41,3 +42,5 @@ patchnotes/score.json | Fry Score v4 항목 (en만) | score v4 | 2026-11-06
 score/app.js | Fry Score v4 한국어 메시지·버튼 | score v4 | 2026-11-06
 patchnotes/video.json | Fry Video v7 화면: 자르기·모양·섞기·따뜻함·가장자리 어둡게 (en 번역 없음) | video v7 | 2026-11-06
 patchnotes/video.json | Fry Video v8 내보내기 선택지·자막 파일·소리 자동 맞춤 (en 번역 없음) | video v8 | 2026-11-06
+patchnotes/score.json | Fry Score v5 항목 (en만) | score v5 | 2026-11-06
+score/app.js | Fry Score v5 한국어 메시지·버튼 | score v5 | 2026-11-06

@@ -3,6 +3,32 @@
  "name": "Fry Draw",
  "notes": [
   {
+   "date": "2026-11-06",
+   "build": "v3",
+   "title": "Fry Draw 3: 선 모양, 화살표, 섞기 방식, 숫자로 크기 고치기",
+   "items": [
+    "선 모양: 점선 길이·간격, 동그란 점선, 끝 모양(둥글게·평평하게·네모), 꺾이는 곳(둥글게·뾰족하게·깎아서)",
+    "화살표: 선과 곡선의 양쪽 끝에 화살표·열린 화살표·동그라미·마름모·막대 달기, 크기 조절",
+    "섞기 방식: 곱하기·스크린·오버레이 등 12가지",
+    "위치와 크기를 X·Y·가로·세로 숫자로 고치기 (여러 개를 골라도 되고 비율 지키기 가능)",
+    "SVG로 받으면 편집 정보가 함께 들어가서 다시 열면 그대로 이어서 고칠 수 있어요",
+    "크기를 바꿀 때 소수점 오차가 생기던 문제 고침"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 3: stroke styles, arrowheads, blend modes, numeric size",
+     "items": [
+      "Stroke styles: dash length and gap, round dots, line caps (round, butt, square) and joins (round, miter, bevel)",
+      "Arrowheads: add an arrow, open arrow, dot, diamond or bar to either end of lines and curves, with adjustable size",
+      "Blend modes: 12 modes such as multiply, screen and overlay",
+      "Edit position and size with X, Y, width and height numbers (works for several objects, with aspect lock)",
+      "SVG downloads now carry editing data, so reopening the file restores everything exactly",
+      "Fixed rounding errors when scaling objects"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-05",
    "build": "v2",
    "title": "Fry Draw 2: 점 고치기, 묶기, 합치기, 레이어",
