@@ -4,6 +4,32 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v8",
+   "title": "Fry Draw 8: 내보내기 설정, 고른 도형만 받기, 클립보드 복사, 인쇄",
+   "items": [
+    "받기 ▸ 내보내기 설정: PNG·JPG·WebP·SVG·PDF(인쇄) 중에서 고르고 배율(0.5~4배)과 품질을 정해요. 결과 크기와 SVG 용량을 미리 보여줘요",
+    "범위 고르기: 캔버스 전체, 그림 내용에 맞춰 자르기, 고른 도형만",
+    "그림으로 클립보드에 복사해서 다른 앱에 바로 붙여 넣기",
+    "PDF·인쇄: 캔버스 크기 그대로 인쇄 창을 열어 PDF로 저장할 수 있어요",
+    "캔버스 탭의 '캔버스를 그림 크기에 맞추기'로 빈 공간 잘라내기",
+    "SVG는 배경 포함 여부와 편집 정보 포함 여부를 고를 수 있어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 8: export settings, selection-only export, clipboard copy, print",
+     "items": [
+      "Save > Export settings: choose PNG, JPG, WebP, SVG or PDF (print), pick a 0.5x to 4x scale and quality; the resulting size and SVG file size are shown up front",
+      "Choose the area: whole canvas, crop to content, or selected shapes only",
+      "Copy the picture to the clipboard to paste it into other apps",
+      "PDF / print: opens the print dialog at the canvas size so you can save as PDF",
+      "Canvas tab: Fit canvas to artwork trims empty space",
+      "SVG export lets you include or omit the background and the editing data"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v7",
    "title": "Fry Draw 7: 여러 색 그라데이션, 무늬 채우기, 그림자 설정, 클리핑 마스크",
    "items": [
