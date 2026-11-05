@@ -4,6 +4,48 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v11",
+   "title": "거꾸로 재생·빠르기 변화·새 전환·틈 없애기",
+   "items": [
+    "거꾸로 재생: 영상 클립을 끝에서 처음 쪽으로 보여 줘요 (소리는 나지 않아요)",
+    "빠르기가 흐르며 바뀌기: 천천히에서 빠르게(또는 반대로) 부드럽게 변해요. 자르면 양쪽 클립이 이어지게 나뉘어요",
+    "전환 효과 3개 추가: 오른쪽에서 닦기, 동그랗게 열리며, 위에서 밀기",
+    "영상 설정 탭의 '줄 정리': 영상 줄·소리 줄의 틈을 한 번에 없애요 (잠긴 줄은 건드리지 않아요)"
+   ],
+   "tr": {
+    "en": {
+     "title": "Reverse, speed ramp, new transitions, close gaps",
+     "items": [
+      "Reverse playback for video clips (silent)",
+      "Speed ramp: speed changes smoothly across the clip (slow to fast or the reverse); splitting keeps both halves continuous",
+      "Three more transitions: wipe from right, iris open, push from top",
+      "Project tab 'Tidy tracks': close gaps on the video or audio track in one click (locked tracks are left alone)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
+   "build": "v10",
+   "title": "GIF 만들기·글자 스타일과 움직임",
+   "items": [
+    "영상 만들기에서 '움직이는 그림(GIF)'을 고르면 실시간 녹화가 아니라 한 장씩 그려서 GIF로 받아요 (가로 320·480·640, 초당 8·12·15장, 60초까지)",
+    "글자 스타일 한 번에 입히기: 자막, 큰 제목, 네온, 메모지, 만화풍",
+    "글자 움직임 추가: 통통 튀기, 두근두근, 덜덜, 물결(글자마다 출렁)"
+   ],
+   "tr": {
+    "en": {
+     "title": "GIF export, text styles and motion",
+     "items": [
+      "Export as an animated GIF: frames are rendered one by one instead of real-time recording (width 320/480/640, 8/12/15 fps, up to 60 s)",
+      "One-click text styles: Subtitle, Big title, Neon, Sticky note, Comic",
+      "New text motions: bounce, pulse, shake and wave (letters ripple one by one)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v9",
    "title": "소리 섞기·핀치 확대·휴대폰 화면 정리",
    "items": [
