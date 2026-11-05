@@ -3,6 +3,56 @@
  "name": "Fry Video",
  "notes": [
   {
+   "date": "2026-11-06",
+   "build": "v7",
+   "title": "화면: 자르기·모양·섞기·따뜻함·가장자리 어둡게",
+   "items": [
+    "자르기: 영상·그림의 왼쪽·오른쪽·위·아래를 잘라 내요",
+    "모양: 둥근 네모나 원/타원으로 오려 보여 줘요",
+    "위아래 뒤집기, 섞는 방식(곱하기·밝게·대비·차이 등)",
+    "색 효과에 따뜻함/차가움과 가장자리 어둡게(비네트) 추가, 시네마·노을·새벽 프리셋 추가",
+    "효과 복사 / 붙이기로 다른 클립에 같은 느낌을 한 번에 입혀요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Picture: crop, shape mask, blend modes, warmth, vignette",
+     "items": [
+      "Crop the left, right, top and bottom of videos and pictures",
+      "Shape mask: rounded rectangle or ellipse",
+      "Flip vertically and blend modes (multiply, screen, overlay, difference...)",
+      "Colour effects gain warmth/coolness and vignette, plus Cinema, Sunset and Dawn presets",
+      "Copy / paste effects to give another clip the same look in one step"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
+   "build": "v6",
+   "title": "타임라인: 표시·줄 잠금·당겨 지우기·멈춘 장면",
+   "items": [
+    "🚩 표시: 재생 막대 위치에 표시를 달고, 눈금자의 표시를 누르면 거기로 가요 (클립이 표시에 딱 붙어요). 표시 위에서 다시 누르면 지워져요",
+    "줄 이름(영상·겹침·글자·소리)을 누르면 줄 잠그기, 줄 숨기기(소리 줄은 소리 끄기)를 고를 수 있어요",
+    "당겨 지우기: 클립을 지우고 뒤 클립을 당겨 붙여요 (되돌리기 가능)",
+    "❄ 멈춘 장면: 재생 막대 위치의 화면을 2초 동안 멈춰 넣어요 (영상은 그 자리에서 나뉘어요)",
+    "맞춤 버튼으로 전체가 한눈에 보이게, 확대·축소는 재생 막대를 기준으로 해요",
+    "표시와 줄 설정은 저장되고 되돌리기에도 들어가요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Timeline: markers, track lock/hide, ripple delete, freeze frame",
+     "items": [
+      "Markers: drop a marker at the playhead, click one on the ruler to jump there (clips snap to markers); press the button again on a marker to remove it",
+      "Click a track name to lock it or hide it (mute for the audio track)",
+      "Ripple delete removes a clip and pulls the following clips in (undoable)",
+      "Freeze frame holds the picture at the playhead for 2 seconds (the video is split there)",
+      "Fit button shows the whole project; zoom now keeps the playhead in place",
+      "Markers and track settings are saved and covered by undo"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-05",
    "build": "v5",
    "title": "글자체·글자 효과·들어오는 방향",
