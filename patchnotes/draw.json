@@ -4,6 +4,30 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v9",
+   "title": "Fry Draw 9: 눈금자와 가이드, 아이소메트릭 격자, 반복·거울 복사, 윤곽·넓히기",
+   "items": [
+    "눈금자: 캔버스 위·왼쪽에 눈금자를 보여주고, 눈금자에서 캔버스로 끌면 가이드 선이 생겨요. 도형이 가이드에 달라붙고, 가이드를 끌어 옮기거나 캔버스 밖으로 끌어 지울 수 있어요 (숨기기·잠그기·숫자로 고치기도 가능)",
+    "격자 모양 고르기: 네모·점·삼각(아이소메트릭) 격자, 격자에 맞추기도 같은 모양으로 맞아요",
+    "반복 복제: 격자로 늘어놓기, 둥글게 돌려 놓기(개수·펼칠 각도·가운데 고르기), 거울 복사(오른쪽·아래쪽·캔버스 가운데 기준)",
+    "윤곽·넓히기: 도형을 바깥으로 넓히거나 안으로 좁히고, 선을 선 굵기만큼의 도형으로 바꿔요",
+    "가이드와 격자 설정이 SVG·프로젝트 파일에 함께 저장돼요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 9: rulers and guides, isometric grid, repeat and mirror copy, offset and outline",
+     "items": [
+      "Rulers along the top and left; drag from a ruler onto the canvas to create guides. Shapes snap to guides; drag a guide to move it or off the canvas to delete it (hide, lock and numeric edit too)",
+      "Grid styles: square, dot and triangular (isometric) grids, and snap-to-grid follows the style",
+      "Repeat: grid array, radial array (count, spread angle, pivot), and mirror copy (right, below, or around the canvas centre)",
+      "Offset and outline: grow or shrink a shape by an amount, and convert a stroke into a filled shape of its width",
+      "Guides are saved with SVG and project files"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v8",
    "title": "Fry Draw 8: 내보내기 설정, 고른 도형만 받기, 클립보드 복사, 인쇄",
    "items": [
