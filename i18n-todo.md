@@ -15,3 +15,4 @@ patchnotes/score.json | Fry Score v2 항목 (en 번역 없음), score/app.js 한
 patchnotes/video.json | Fry Video v2 항목 (en 번역 없음), video/ 안 한국어 | video v2 | 2026-11-05
 patchnotes/draw.json | Fry Draw v2 항목 (en 번역 없음), draw/app.js 한국어 메시지 | draw v2 | 2026-11-05
 patchnotes/video.json | Fry Video v3 슬라이더 숫자칸 (en 번역 없음) | video v3 | 2026-11-05
+patchnotes/video.json | Fry Video v4 슬라이더·글자 입력 고침 (en 번역 없음) | video v4 | 2026-11-05

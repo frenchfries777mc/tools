@@ -27,7 +27,7 @@ function idbDel(id){ return idb().then(function(d){ d.transaction('m','readwrite
 function snap(){ return JSON.stringify({name:proj.name,ar:proj.ar,bg:proj.bg,media:proj.media,clips:proj.clips,uid:proj.uid}); }
 function loadSnap(s){ var o=JSON.parse(s); proj.name=o.name; proj.ar=o.ar; proj.bg=o.bg; proj.media=o.media||[]; proj.clips=o.clips||[]; proj.uid=o.uid||1; }
 var saveT;
-function commit(){ hist=hist.slice(0,hi+1); hist.push(snap()); if(hist.length>80) hist.shift(); hi=hist.length-1; clearTimeout(saveT); saveT=setTimeout(persist,300); sizeCanvas(); drawTl(); drawBin(); panel(); }
+function commit(keep){ hist=hist.slice(0,hi+1); hist.push(snap()); if(hist.length>80) hist.shift(); hi=hist.length-1; clearTimeout(saveT); saveT=setTimeout(persist,300); sizeCanvas(); drawTl(); drawBin(); if(!keep) panel(); }
 function persist(){ try{ localStorage.setItem(KEY,snap()); }catch(e){} }
 function undo(){ if(hi>0){ hi--; loadSnap(hist[hi]); cleanElems(); drawTl(); drawBin(); panel(); sizeCanvas(); persist(); } }
 function redo(){ if(hi<hist.length-1){ hi++; loadSnap(hist[hi]); cleanElems(); drawTl(); drawBin(); panel(); sizeCanvas(); persist(); } }
@@ -285,10 +285,10 @@ pb.addEventListener('input',function(e){ var tg=e.target, c=curClip(); if(!c) re
     if(isNv){ if(tg.value===''||!isFinite(v)) return; v=Math.max(+tg.min,Math.min(+tg.max,v)); var rg=tg.previousElementSibling; if(rg&&rg.type==='range') rg.value=v; }
     setProp(c,tg.dataset.k,v);
     if(tg.type==='range'){ var nvb=tg.nextElementSibling; if(nvb&&nvb.classList.contains('nv')) nvb.value=f(v); }
-    if(tg.type==='range'){ clearTimeout(saveT); saveT=setTimeout(function(){ commit(); },350); drawTlLight(); } }
+    if(tg.type==='range'){ clearTimeout(saveT); saveT=setTimeout(function(){ commit(true); },350); drawTlLight(); } }
   else if(tg.dataset.sp){ c.shp[tg.dataset.sp]=tg.type==='checkbox'?tg.checked:tg.value; drawTlLight(); }
   else if(tg.dataset.ck){ c.ck=c.ck||{on:false,col:'#00b140',tol:35}; c.ck[tg.dataset.ck]=tg.value; }
-  else if(tg.dataset.t){ c.txt[tg.dataset.t]=tg.type==='checkbox'?tg.checked:tg.value; if(tg.dataset.t==='s'){ clearTimeout(saveT); saveT=setTimeout(commit,400); drawTlLight(); } } });
+  else if(tg.dataset.t){ c.txt[tg.dataset.t]=tg.type==='checkbox'?tg.checked:tg.value; if(tg.dataset.t==='s'){ clearTimeout(saveT); saveT=setTimeout(function(){ commit(true); },400); drawTlLight(); } } });
 function drawTlLight(){ var el=document.querySelector('.clip.sel'); var c=curClip(); if(el&&c){ el.style.left=(LBL+c.start*pxs)+'px'; el.style.width=Math.max(6,c.dur*pxs)+'px'; } }
 pb.addEventListener('change',function(e){ var tg=e.target;
   if(tg.id==='arSel'){ proj.ar=tg.value; commit(); return; } if(tg.id==='bgc'){ proj.bg=tg.value; commit(); return; } if(tg.id==='monChk'){ setMonitor(tg.checked); return; }
