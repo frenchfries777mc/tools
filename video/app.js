@@ -89,12 +89,13 @@ function setMonitor(on){ monitor=on; if(!master) return; try{ master.disconnect(
 /* ---------- playback ---------- */
 function active(c,tt){ return tt>=c.start-0.0001&&tt<endOf(c)-0.0001; }
 function fadeOf(c,tt){ var a=1, r=tt-c.start, l=endOf(c)-tt; if(c.fadeIn>0&&r<c.fadeIn) a*=r/c.fadeIn; if(c.fadeOut>0&&l<c.fadeOut) a*=l/c.fadeOut; return Math.max(0,Math.min(1,a)); }
+function duckK(c,tt){ var d=(c.duckAmt==null?70:c.duckAmt)/100; var on=proj.clips.some(function(o){ return o!==c&&!o.duck&&(o.type==='video'||o.type==='audio')&&o.vol>0&&!laneOff(o.track)&&active(o,tt)&&(o.type==='audio'||media[o.mid]&&media[o.mid].hasAudio!==false); }); return on?1-d:1; }
 function syncMedia(tt,run){
   proj.clips.forEach(function(c){
     if(c.type==='image'||c.type==='text') return; var el=getEl(c); if(!el) return;
     if(actx) wire(c,el);
     var on=active(c,tt), want=c.in+(tt-c.start)*c.speed, gn=gains[c.id];
-    var lv=laneOff(c.track)?0:1; if(gn) gn.gain.value=(c.vol/100)*fadeOf(c,tt)*lv; else el.volume=Math.max(0,Math.min(1,(c.vol/100)*fadeOf(c,tt)*lv));
+    var lv=laneOff(c.track)?0:1, dk=c.duck?duckK(c,tt):1; if(gn&&c.duck&&actx) gn.gain.setTargetAtTime((c.vol/100)*fadeOf(c,tt)*lv*dk,actx.currentTime,.12); else if(gn) gn.gain.value=(c.vol/100)*fadeOf(c,tt)*lv; else el.volume=Math.max(0,Math.min(1,(c.vol/100)*fadeOf(c,tt)*lv));
     if(on){ el.playbackRate=Math.max(.0625,Math.min(16,c.speed)); if(run){ if(el.paused){ if(Math.abs(el.currentTime-want)>.05) try{ el.currentTime=want; }catch(e){} var p=el.play(); if(p&&p.catch) p.catch(function(){}); } else if(Math.abs(el.currentTime-want)>.35) try{ el.currentTime=want; }catch(e){} }
       else { if(!el.paused) el.pause(); if(Math.abs(el.currentTime-want)>.03) try{ el.currentTime=want; }catch(e){} } }
     else if(!el.paused) el.pause();
@@ -299,7 +300,7 @@ function panel(){
     h+='<div class="sec"><h4>화면 비율</h4><div class="row"><select id="arSel">'+Object.keys(AR).map(function(k){ return '<option'+(k===proj.ar?' selected':'')+'>'+k+'</option>'; }).join('')+'</select></div><div class="note">16:9 유튜브, 9:16 쇼츠·릴스, 1:1 인스타, 4:3 옛날 TV, 21:9 영화 같은 와이드예요.</div></div>';
     h+='<div class="sec"><h4>배경 색</h4><div class="row"><label>빈 곳 색</label><input type="color" id="bgc" value="'+proj.bg+'"></div></div>';
     h+='<div class="sec"><h4>소리</h4><label class="chk"><input type="checkbox" id="monChk"'+(monitor?' checked':'')+'> 재생할 때 소리 듣기</label></div>';
-    h+='<div class="sec"><h4>자막 한꺼번에 넣기</h4><textarea id="subTxt" style="min-height:96px" placeholder="한 줄에 하나씩\n0:02-0:05 안녕하세요\n5.5-8 오늘은 영상 편집을 해 볼게요\n10 시작 시간만 쓰면 3초" data-notr></textarea><div class="btns"><button class="tbtn" id="subGo">자막 넣기</button></div><div class="note">시간은 0:05 또는 5.5처럼 쓰고, 끝 시간을 빼면 3초예요.</div></div>';
+    h+='<div class="sec"><h4>자막 한꺼번에 넣기</h4><textarea id="subTxt" style="min-height:96px" placeholder="한 줄에 하나씩\n0:02-0:05 안녕하세요\n5.5-8 오늘은 영상 편집을 해 볼게요\n10 시작 시간만 쓰면 3초" data-notr></textarea><div class="btns"><button class="tbtn" id="subGo">자막 넣기</button></div><div class="note">시간은 0:05 또는 5.5처럼 쓰고, 끝 시간을 빼면 3초예요.</div><div class="btns"><button class="tbtn" id="subImp">자막 파일 가져오기 (SRT·VTT)</button><button class="tbtn" id="subSrt">SRT로 내보내기</button><button class="tbtn" id="subVtt">VTT로 내보내기</button></div></div>';
     h+='<div class="sec"><button class="tbtn" id="bClear">모두 지우고 새로 시작</button></div>';
   } else {
     var c=curClip();
@@ -317,7 +318,7 @@ function panel(){
           +'<label class="chk"><input type="checkbox" data-t="sh"'+(T.sh?' checked':'')+'> 그림자</label><div class="row"><label class="chk" style="margin:0;flex:1"><input type="checkbox" data-t="glow"'+(T.glow?' checked':'')+'> 빛나기</label><input type="color" data-t="glowc" value="'+(T.glowc||'#ffe66d')+'"></div><label class="chk"><input type="checkbox" data-t="rainbow"'+(T.rainbow?' checked':'')+'> 무지개 색 (움직여요)</label><label class="chk"><input type="checkbox" data-t="blink"'+(T.blink?' checked':'')+'> 깜빡깜빡</label></div>';
         h+='<div class="sec"><h4>나타나는 방식</h4><div class="row"><select data-k="anim">'+[['none','없음'],['fade','서서히'],['rise','아래서 올라옴'],['slide','옆에서 들어옴'],['zoom','커지며'],['pop','톡 튀어나옴'],['type','한 글자씩']].map(function(a){ return '<option value="'+a[0]+'"'+(c.anim===a[0]?' selected':'')+'>'+a[1]+'</option>'; }).join('')+'</select></div>'+sdirRow(c)+rng('크기 배율','scale',20,300,c.scale,1,'%')+rng('돌리기','rot',-180,180,c.rot,1,'°')+rng('투명도','op',0,100,c.op,1,'%')+rng('나타날 때 서서히','fadeIn',0,3,c.fadeIn,.1,'초')+rng('사라질 때 서서히','fadeOut',0,3,c.fadeOut,.1,'초')+'</div>';
       } else {
-        if(c.type!=='image'){ h+='<div class="sec"><h4>소리</h4>'+rng('소리 크기','vol',0,200,c.vol,1,'%')+rng('시작할 때 서서히','fadeIn',0,5,c.fadeIn,.1,'초')+rng('끝날 때 서서히','fadeOut',0,5,c.fadeOut,.1,'초')+rng('빠르기','speed',.25,4,c.speed,.05,'x')+'<div class="note">빠르기를 바꾸면 클립 길이가 같이 바뀌어요.</div></div>'; }
+        if(c.type!=='image'){ h+='<div class="sec"><h4>소리</h4>'+rng('소리 크기','vol',0,200,c.vol,1,'%')+rng('시작할 때 서서히','fadeIn',0,5,c.fadeIn,.1,'초')+rng('끝날 때 서서히','fadeOut',0,5,c.fadeOut,.1,'초')+rng('빠르기','speed',.25,4,c.speed,.05,'x')+'<div class="note">빠르기를 바꾸면 클립 길이가 같이 바뀌어요.</div><div class="btns"><button class="tbtn" data-norm="1">소리 크기 자동으로 맞추기</button></div><label class="chk"><input type="checkbox" data-k="duck"'+(c.duck?' checked':'')+'> 다른 소리가 나올 때 이 소리 낮추기 (배경음악용)</label>'+(c.duck?rng('낮추는 정도','duckAmt',10,95,c.duckAmt==null?70:c.duckAmt,1,'%'):'')+'</div>'; }
         if(c.type!=='audio'){
           h+='<div class="sec"><h4>화면</h4><div class="row"><label>맞추기</label><select data-k="fit"><option value="fit"'+(c.fit==='fit'?' selected':'')+'>안 잘리게 (검은 띠)</option><option value="fill"'+(c.fit==='fill'?' selected':'')+'>꽉 채우기 (잘림)</option></select></div>'+rng('크기','scale',10,400,c.scale,1,'%')+rng('가로 옮기기','x',-100,100,c.x,1,'%')+rng('세로 옮기기','y',-100,100,c.y,1,'%')+rng('돌리기','rot',-180,180,c.rot,1,'°')+rng('투명도','op',0,100,c.op,1,'%')+'<label class="chk"><input type="checkbox" data-k="flip"'+(c.flip?' checked':'')+'> 좌우 뒤집기</label>'+(c.type==='image'?rng('서서히 나타남','fadeIn',0,3,c.fadeIn,.1,'초')+rng('서서히 사라짐','fadeOut',0,3,c.fadeOut,.1,'초'):rng('화면 서서히 나타남','fadeIn',0,5,c.fadeIn,.1,'초')+rng('화면 서서히 사라짐','fadeOut',0,5,c.fadeOut,.1,'초'))+'</div>';
           h+='<div class="sec"><h4>나타나는 방식</h4><div class="row"><select data-k="anim">'+[['none','없음'],['fade','서서히'],['slide','옆에서 들어옴'],['rise','아래서 올라옴'],['zoom','커지며']].map(function(a){ return '<option value="'+a[0]+'"'+(c.anim===a[0]?' selected':'')+'>'+a[1]+'</option>'; }).join('')+'</select></div>'+sdirRow(c)+'</div>';
@@ -358,7 +359,9 @@ pb.addEventListener('change',function(e){ var tg=e.target;
 pb.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b) return;
   if(b.dataset.emo){ var ct=curClip(); if(ct&&ct.txt){ ct.txt.s+=b.dataset.emo; commit(); } return; }
   if(b.dataset.kfp){ var ck=curClip(); if(ck){ var o=b.dataset.kfp; ck.kf={on:true,s:ck.scale,x:ck.x,y:ck.y,r:ck.rot}; if(o==='in') ck.kf.s=Math.round(ck.scale*1.25); else if(o==='out'){ ck.kf.s=Math.round(ck.scale*.8); } else if(o==='left') ck.kf.x=ck.x-12; else ck.kf.x=ck.x+12; if(o==='in'||o==='out') ck.kf.on=true; commit(); } return; }
+  if(b.id==='subImp'){ $('subIn').click(); return; } if(b.id==='subSrt'){ exportSubs('srt'); return; } if(b.id==='subVtt'){ exportSubs('vtt'); return; }
   if(b.id==='subGo'){ var n=addSubs($('subTxt').value); toast(n+'개 자막을 넣었어요'); return; }
+  if(b.dataset.norm){ var cn=curClip(), mn=cn&&media[cn.mid]; if(!mn||!mn.peaks){ toast('소리 모양을 아직 읽는 중이에요. 잠시 뒤 다시 눌러 주세요'); return; } var N=mn.peaks.length, i0=Math.floor(cn.in/mn.dur*N), i1=Math.min(N,Math.ceil((cn.in+cn.dur*cn.speed)/mn.dur*N)), pk=0; for(var qi=i0;qi<i1;qi++) pk=Math.max(pk,mn.peaks[qi]); pk/=1.6; if(pk<.01){ toast('거의 무음이라 맞출 수 없어요'); return; } cn.vol=Math.max(10,Math.min(200,Math.round(90/pk))); commit(); toast('소리 크기를 '+cn.vol+'%로 맞췄어요'); return; }
   if(b.dataset.fx){ var cf=curClip(); if(!cf) return; if(b.dataset.fx==='copy'){ fxClip=JSON.parse(JSON.stringify({filt:cf.filt,crop:cf.crop,mask:cf.mask,blend:cf.blend,flipV:cf.flipV,ck:cf.ck,op:cf.op})); toast('효과를 복사했어요'); } else if(fxClip&&cf.type!=='audio'&&cf.type!=='text'){ var o=JSON.parse(JSON.stringify(fxClip)); Object.keys(o).forEach(function(k){ if(o[k]!==undefined) cf[k]=o[k]; }); commit(); toast('효과를 붙였어요'); } else toast('먼저 다른 클립에서 효과를 복사하세요'); return; }
   if(b.dataset.pre){ var c=curClip(); if(c){ c.filt=Object.assign({},PRESETS[b.dataset.pre]); commit(); } return; }
   if(b.id==='bClear'){ if(!confirmOnce(b)) return; proj.clips=[]; proj.media.forEach(function(m){ idbDel(m.id); }); proj.media=[]; media={}; elems={}; gains={}; sel=null; t=0; commit(); } });
@@ -380,6 +383,14 @@ function addSubs(txt){
     proj.clips.push({id:'c'+(proj.uid++),type:'text',track:'T',start:st,in:0,dur:en-st,speed:1,vol:0,fadeIn:0,fadeOut:0,op:100,scale:100,x:0,y:0,rot:0,flip:false,fit:'fit',filt:null,anim:'fade',txt:{s:m[3],size:7,color:'#ffffff',bg:true,bgc:'#000000',w:'700',ox:50,oy:88,stroke:true}}); n++; });
   if(n) commit(); return n;
 }
+function srtTime(x){ x=Math.max(0,x); var h=Math.floor(x/3600), m=Math.floor(x%3600/60), sec=Math.floor(x%60), ms=Math.round((x-Math.floor(x))*1000); if(ms>=1000){ ms=999; } function p(n,l){ return ('000'+n).slice(-l); } return p(h,2)+':'+p(m,2)+':'+p(sec,2)+'.'+p(ms,3); }
+function subClips(){ return proj.clips.filter(function(c){ return c.type==='text'&&c.txt&&c.txt.s; }).sort(function(a,b){ return a.start-b.start; }); }
+function exportSubs(fmt){ var L=subClips(); if(!L.length){ toast('내보낼 글자 클립이 없어요'); return; } var o=fmt==='vtt'?'WEBVTT\n\n':''; L.forEach(function(c,i){ var a=srtTime(c.start), b=srtTime(endOf(c)); if(fmt==='srt'){ a=a.replace('.',','); b=b.replace('.',','); } o+=(fmt==='srt'?(i+1)+'\n':'')+a+' --> '+b+'\n'+c.txt.s.replace(/\n\s*\n/g,'\n')+'\n\n'; }); dl((proj.name||'subtitles')+'.'+fmt,new Blob([o],{type:'text/plain;charset=utf-8'})); }
+function parseSubFile(txt){ var n=0, blocks=String(txt).replace(/\r/g,'').replace(/^\uFEFF/,'').split(/\n\s*\n/); function tm(x){ var p=x.trim().replace(',','.').split(':').map(parseFloat); return p.length===3?p[0]*3600+p[1]*60+p[2]:p.length===2?p[0]*60+p[1]:p[0]; }
+  blocks.forEach(function(bl){ var ls=bl.split('\n').filter(function(x){ return x.trim()!==''; }), k=-1; for(var i=0;i<ls.length;i++) if(/-->/.test(ls[i])){ k=i; break; } if(k<0) return; var m=ls[k].match(/([\d:.,]+)\s*-->\s*([\d:.,]+)/); if(!m) return; var st=tm(m[1]), en=tm(m[2]), tx=ls.slice(k+1).join('\n').replace(/<[^>]+>/g,'').replace(/\{\\[^}]*\}/g,'').trim(); if(!tx||!(st>=0)||!(en>st)) return;
+    proj.clips.push({id:'c'+(proj.uid++),type:'text',track:'T',start:st,in:0,dur:en-st,speed:1,vol:0,fadeIn:0,fadeOut:0,op:100,scale:100,x:0,y:0,rot:0,flip:false,fit:'fit',filt:null,anim:'fade',txt:{s:tx,size:7,color:'#ffffff',bg:true,bgc:'#000000',w:'700',ox:50,oy:88,stroke:true}}); n++; });
+  if(n) commit(); return n; }
+$('subIn').addEventListener('change',function(){ var f0=this.files[0]; this.value=''; if(!f0) return; var fr=new FileReader(); fr.onload=function(){ var n=parseSubFile(fr.result); toast(n?n+'개 자막을 가져왔어요':'자막을 찾지 못했어요. SRT나 VTT 파일인지 확인하세요'); }; fr.readAsText(f0); });
 $('bShape').onclick=function(){
   var c={id:'c'+(proj.uid++),type:'shape',track:'T',start:t,in:0,dur:3,speed:1,vol:0,fadeIn:0,fadeOut:0,op:100,scale:100,x:0,y:0,rot:0,flip:false,fit:'fit',filt:null,anim:'pop',shp:{k:'heart',color:'#ff6a8a',stroke:'#ffffff',sw:0,size:30,asp:100,ox:50,oy:50,fill:true}};
   proj.clips.push(c); sel=c.id; commit();
@@ -401,27 +412,37 @@ $('bRec').onclick=function(){
 };
 
 /* ---------- export ---------- */
-function pickMime(){ var L=['video/mp4;codecs=avc1.42E01E,mp4a.40.2','video/mp4','video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm']; for(var i=0;i<L.length;i++){ try{ if(MediaRecorder.isTypeSupported(L[i])) return L[i]; }catch(e){} } return ''; }
+function pickMime(pref,audioOnly){
+  var L=audioOnly?['audio/mp4;codecs=mp4a.40.2','audio/webm;codecs=opus','audio/webm','audio/mp4']:['video/mp4;codecs=avc1.42E01E,mp4a.40.2','video/mp4','video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'];
+  if(pref==='mp4'||pref==='webm') L=L.filter(function(x){ return x.indexOf(pref)>=0; }).concat(L.filter(function(x){ return x.indexOf(pref)<0; }));
+  for(var i=0;i<L.length;i++){ try{ if(MediaRecorder.isTypeSupported(L[i])) return L[i]; }catch(e){} } return ''; }
 $('bFrame').onclick=function(){ cv.toBlob(function(b){ dl((proj.name||'frame')+'.png',b); }); };
 function dl(name,blob){ var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name.replace(/[\\/:*?"<>|]/g,'_'); document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },2000); }
+function exOpt(id,label,opts){ return '<div class="row"><label>'+label+'</label><select id="'+id+'">'+opts.map(function(o){ return '<option value="'+o[0]+'"'+(o[2]?' selected':'')+'>'+o[1]+'</option>'; }).join('')+'</select></div>'; }
 $('bExp').onclick=function(){
   if(!total()){ toast('타임라인에 클립을 먼저 올려 주세요'); return; } if(!window.MediaRecorder||!cv.captureStream){ toast('이 브라우저는 영상 녹화를 지원하지 않아요. 크롬이나 엣지를 써 주세요'); return; }
-  var box=$('expbox'); box.hidden=false; var a=AR[proj.ar];
-  box.innerHTML='<div><h3 style="margin:0 0 8px">영상 만들기</h3><div class="row"><label>화질</label><select id="exQ"><option value="0.5">낮게 (빠름)</option><option value="1" selected>보통 ('+a[0]+'×'+a[1]+')</option><option value="1.5">높게 ('+Math.round(a[0]*1.5)+'×'+Math.round(a[1]*1.5)+')</option></select></div><div class="note">처음부터 끝까지 한 번 재생하면서 녹화해요. 길이 '+tcs(total())+' 만큼 걸리고, 그동안 이 탭을 다른 창에 가리지 말고 켜 두세요. 소리는 나지 않아요.</div><div class="bar"><i id="exBar"></i></div><div class="note" id="exMsg"></div><div class="btns"><button class="tbtn pri" id="exGo">시작</button><button class="tbtn" id="exCancel">닫기</button></div></div>';
-  $('exCancel').onclick=function(){ if(exporting) abortExport(); box.hidden=true; };
+  var box=$('expbox'); box.hidden=false; var a=AR[proj.ar], mp4=false, webm=false; try{ mp4=MediaRecorder.isTypeSupported('video/mp4'); webm=MediaRecorder.isTypeSupported('video/webm'); }catch(e){}
+  box.innerHTML='<div><h3 style="margin:0 0 8px">영상 만들기</h3>'+exOpt('exMode','무엇을',[['v','영상 (화면 + 소리)',1],['a','소리만']])+exOpt('exQ','크기',[['0.5','낮게 ('+Math.round(a[0]*.5)+'×'+Math.round(a[1]*.5)+')'],['1','보통 ('+a[0]+'×'+a[1]+')',1],['1.5','높게 ('+Math.round(a[0]*1.5)+'×'+Math.round(a[1]*1.5)+')']])
+    +'<div id="exVopt">'+exOpt('exFps','프레임',[['24','24'],['30','30',1],['60','60']])+exOpt('exBr','화질(비트레이트)',[['0.4','낮음 (용량 작게)'],['1','보통',1],['2','높음 (용량 크게)']])+'</div>'
+    +exOpt('exFmt','파일 형식',[['auto','알아서'+(mp4?'':'')+'',1]].concat(mp4?[['mp4','mp4 (어디서나 재생)']]:[]).concat(webm?[['webm','webm']]:[]))
+    +'<div class="note" id="exInfo"></div><div class="note">처음부터 끝까지 한 번 재생하면서 녹화해요. 길이 '+tcs(total())+' 만큼 걸리고, 그동안 이 탭을 다른 창에 가리지 말고 켜 두세요.</div><div class="bar"><i id="exBar"></i></div><div class="note" id="exMsg"></div><div class="btns"><button class="tbtn pri" id="exGo">시작</button><button class="tbtn" id="exCancel">닫기</button></div></div>';
+  function upd(){ var ao=$('exMode').value==='a'; $('exVopt').hidden=ao; $('exQ').parentNode.hidden=ao; var fm=$('exFmt').value, mm=pickMime(fm,ao); $('exInfo').textContent='파일 종류: '+(mm?mm.split(';')[0].replace('video/','').replace('audio/',''):'알 수 없음')+(ao?' (소리 파일)':''); }
+  $('exMode').onchange=upd; $('exFmt').onchange=upd; upd();
+  $('exCancel').onclick=function(){ if(exporting){ abortExport(); $('exMsg').textContent='멈췄어요'; $('exGo').disabled=false; $('exGo').textContent='시작'; $('exCancel').textContent='닫기'; $('exBar').style.width='0'; return; } box.hidden=true; };
   $('exGo').onclick=startExport;
 };
 function startExport(){
-  pause(); ensureAudio(); var q=+$('exQ').value, a=AR[proj.ar], prevMon=monitor; setMonitor(false);
-  cv.width=Math.round(a[0]*q); cv.height=Math.round(a[1]*q); var mime=pickMime(), chunks=[];
-  var vs=cv.captureStream(30), as=streamDest.stream.getAudioTracks(), ms=new MediaStream(vs.getVideoTracks().concat(as)), rec;
-  try{ rec=new MediaRecorder(ms,mime?{mimeType:mime,videoBitsPerSecond:Math.round(5000000*q*q)}:undefined); }catch(e){ setMonitor(prevMon); toast('녹화를 시작하지 못했어요'); return; }
+  pause(); ensureAudio(); var ao=$('exMode').value==='a', q=ao?1:+$('exQ').value, a=AR[proj.ar], prevMon=monitor, fps=+$('exFps').value||30, brm=+$('exBr').value||1; setMonitor(false);
+  var mime=pickMime($('exFmt').value,ao), chunks=[], as=streamDest.stream.getAudioTracks(), ms, rec;
+  if(!ao){ cv.width=Math.round(a[0]*q); cv.height=Math.round(a[1]*q); var vs=cv.captureStream(fps); ms=new MediaStream(vs.getVideoTracks().concat(as)); } else ms=new MediaStream(as);
+  var opt={}; if(mime) opt.mimeType=mime; if(!ao) opt.videoBitsPerSecond=Math.round(5000000*q*q*brm*(fps/30)); else opt.audioBitsPerSecond=192000;
+  try{ rec=new MediaRecorder(ms,opt); }catch(e){ setMonitor(prevMon); sizeCanvas(); toast('녹화를 시작하지 못했어요'); return; }
   rec.ondataavailable=function(e){ if(e.data&&e.data.size) chunks.push(e.data); };
-  exporting={rec:rec,chunks:chunks,mime:rec.mimeType||mime||'video/webm',prevMon:prevMon,q:q,canceled:false};
-  rec.onstop=function(){ var ex=exporting; exporting=null; sizeCanvas(); setMonitor(ex.prevMon); if(ex.canceled){ return; } var blob=new Blob(ex.chunks,{type:ex.mime}), ext=/mp4/.test(ex.mime)?'mp4':'webm'; dl((proj.name||'video')+'.'+ext,blob); $('exMsg').textContent='완성! '+ext+' 파일을 받았어요 ('+(blob.size/1048576).toFixed(1)+'MB)'; $('exBar').style.width='100%'; $('exGo').disabled=false; $('exGo').textContent='다시 만들기'; };
-  $('exGo').disabled=true; $('exMsg').textContent='녹화 중…'; rec.start(500); t=0; syncMedia(0,false);
+  exporting={rec:rec,chunks:chunks,mime:rec.mimeType||mime||(ao?'audio/webm':'video/webm'),prevMon:prevMon,q:q,canceled:false,ao:ao};
+  rec.onstop=function(){ var ex=exporting; exporting=null; sizeCanvas(); setMonitor(ex.prevMon); $('exGo').disabled=false; $('exCancel').textContent='닫기'; if(ex.canceled){ return; } var blob=new Blob(ex.chunks,{type:ex.mime}), ext=ex.ao?(/mp4/.test(ex.mime)?'m4a':'webm'):(/mp4/.test(ex.mime)?'mp4':'webm'); dl((proj.name||'video')+'.'+ext,blob); $('exMsg').textContent='완성! '+ext+' 파일을 받았어요 ('+(blob.size/1048576).toFixed(1)+'MB)'; $('exBar').style.width='100%'; $('exGo').textContent='다시 만들기'; };
+  $('exGo').disabled=true; $('exCancel').textContent='중단'; $('exMsg').textContent='녹화 중…'; rec.start(500); t=0; syncMedia(0,false);
   setTimeout(function(){ play(); },300);
-  var tot=total(), iv=setInterval(function(){ if(!exporting){ clearInterval(iv); return; } $('exBar').style.width=Math.min(99,t/tot*100)+'%'; },200);
+  var tot=total(), iv=setInterval(function(){ if(!exporting){ clearInterval(iv); return; } $('exBar').style.width=Math.min(99,t/tot*100)+'%'; $('exMsg').textContent='녹화 중… '+tcs(t)+' / '+tcs(tot); },200);
 }
 function finishExport(){ var ex=exporting; if(!ex||ex.rec.state==='inactive') return; setTimeout(function(){ try{ ex.rec.stop(); }catch(e){} },400); }
 function abortExport(){ var ex=exporting; if(!ex) return; ex.canceled=true; pause(); try{ ex.rec.stop(); }catch(e){} }
@@ -440,6 +461,6 @@ window.addEventListener('beforeunload',function(){ persist(); });
   if(s){ try{ loadSnap(s); }catch(e){} }
   sizeCanvas(); hist=[snap()]; hi=0; drawTl(); drawBin(); panel();
   restoreMedia().then(function(){ Object.keys(media).forEach(function(k){ ensurePeaks(media[k]); }); drawTl(); drawBin(); requestAnimationFrame(loop); });
-  window.FVIDEO={proj:proj,media:media,addFiles:addFiles,addClipFromMedia:addClipFromMedia,render:render,seek:seek,split:split,get t(){ return t; }};
+  window.FVIDEO={proj:proj,media:media,addFiles:addFiles,addClipFromMedia:addClipFromMedia,render:render,seek:seek,split:split,duckK:duckK,parseSubFile:parseSubFile,exportSubs:exportSubs,get t(){ return t; }};
 })();
 })();

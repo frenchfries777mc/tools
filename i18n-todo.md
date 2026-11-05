@@ -40,3 +40,4 @@ score/app.js | Fry Score v3 한국어 메시지·버튼 | score v3 | 2026-11-06
 patchnotes/score.json | Fry Score v4 항목 (en만) | score v4 | 2026-11-06
 score/app.js | Fry Score v4 한국어 메시지·버튼 | score v4 | 2026-11-06
 patchnotes/video.json | Fry Video v7 화면: 자르기·모양·섞기·따뜻함·가장자리 어둡게 (en 번역 없음) | video v7 | 2026-11-06
+patchnotes/video.json | Fry Video v8 내보내기 선택지·자막 파일·소리 자동 맞춤 (en 번역 없음) | video v8 | 2026-11-06
