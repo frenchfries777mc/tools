@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v4",
+   "title": "슬라이더·글자 입력 고침",
+   "items": [
+    "슬라이더를 끌다가 잠깐 멈췄다 반대로 끌면 끊기던 것을 고쳤어요",
+    "글자를 치다가 Backspace를 누르면 글자 대신 클립이 지워지던 것을 고쳤어요 (입력 중에는 오른쪽 창이 새로 그려지지 않아요)"
+   ],
+   "tr": {
+    "en": {
+     "title": "Slider and text input fixes",
+     "items": [
+      "Dragging a slider, pausing and reversing direction no longer breaks the drag",
+      "Backspace while typing a caption no longer deletes the clip (the side panel is not rebuilt while you type)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v3",
    "title": "슬라이더 옆에 숫자 입력 칸",
    "items": [
