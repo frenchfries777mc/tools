@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v19",
+   "title": "BeaconScript b195 반영",
+   "items": [
+    "on destroy 대상: 지원 (tree·rock·아이템/건물 id나 한글 이름), 없는 이름은 unknown item 오류",
+    "destroy 뒤 아이템도 미리보기에 아이콘 카드로 보여요",
+    "on 다음 목록에 destroy 추가"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript b195 support",
+     "items": [
+      "on destroy <target>: supported (tree, rock, item/building id or Korean name); unknown names give an 'unknown item' error",
+      "Items after destroy show as an icon card in the preview",
+      "destroy added to the list after on"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v18",
    "title": "자동완성 목록 전부 보이기",
    "items": [
