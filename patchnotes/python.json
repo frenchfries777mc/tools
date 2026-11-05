@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-05",
+   "build": "v28",
+   "title": "BeaconScript eat와 api potato",
+   "items": [
+    "on eat 아이템: 이벤트와 %eaten_item% 값을 점검하고, 이벤트 뒤 or로 아이템을 여러 개 쓸 수 있어요 (on eat bread or wheat:, on place torch or lamp:)",
+    "맨 위 api potato 줄을 허용해요 (mod 이름 줄 아래, 한 번만)",
+    "아이템 목록을 Beaconfall 최신 도감(499개)으로 갱신했어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript eat and api potato",
+     "items": [
+      "on eat <item>: event and %eaten_item% are checked; or after an event takes several items (on eat bread or wheat:, on place torch or lamp:)",
+      "A top-of-file api potato line is allowed (below the mod name line, once)",
+      "Item list refreshed from the latest Beaconfall codex (499 items)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-05",
    "build": "v27",
    "title": "BeaconScript 모드 uuid",
    "items": [
