@@ -336,8 +336,8 @@ function shiftSemi(p,dir){ var m=midi(p)+dir, o=Math.floor(m/12)-1, pc=((m%12)+1
 function setDur(d){ ui.dur=d; var ev=curEv(); if(ev&&cur.idx>=0){ ev.d=ui.dot?d*3/2:d; commit(); } else panel(); renderTools(); }
 
 /* ---------- audio ---------- */
-var ctx=null, master=null;
-function audio(){ if(!ctx){ var A=window.AudioContext||window.webkitAudioContext; ctx=new A(); var comp=ctx.createDynamicsCompressor(); master=ctx.createGain(); master.gain.value=.7; master.connect(comp); comp.connect(ctx.destination); } if(ctx.state==='suspended') ctx.resume(); return ctx; }
+var ctx=null, master=null, offlineMode=false;
+function audio(){ if(!ctx){ var A=window.AudioContext||window.webkitAudioContext; ctx=new A(); var comp=ctx.createDynamicsCompressor(); master=ctx.createGain(); master.gain.value=.7; master.connect(comp); comp.connect(ctx.destination); } if(ctx.state==='suspended'&&!offlineMode) ctx.resume(); return ctx; }
 function env(g,t0,a,peak,dec,dur,rel){ g.gain.setValueAtTime(0.0001,t0); g.gain.linearRampToValueAtTime(peak,t0+a); g.gain.exponentialRampToValueAtTime(Math.max(0.0002,peak*dec),t0+Math.max(a+.02,dur)); g.gain.linearRampToValueAtTime(0,t0+dur+rel); }
 function playNote(inst,fr,t0,dur,vol){
   var c=ctx, g=c.createGain(), end=t0+dur+.4; g.connect(master);
@@ -384,6 +384,7 @@ function schedule(from,to,startAt){
       n.p.forEach(function(pp){ if(n.art==='tr'&&n.d>=6){ var cnt=Math.floor(n.d/2), nn=pp.o*7+pp.s+1, us=((nn%7)+7)%7, up={s:us,o:Math.floor(nn/7),a:keyAlter(us)}; for(var j=0;j<cnt;j++) playNote(n.inst,freq(midi(j%2?up:pp)+n.tr),t0+sec+(n.off-skip+j*2)*spu,2*spu*.95,n.vol); }
         else playNote(n.inst,freq(midi(pp)+n.tr),t0+sec+(n.off-skip)*spu,Math.max(.06,dur),n.vol); }); }); });
     sec+=len; }
+  if(offlineMode) return sec;
   var was=!!play, lp=was&&play.loop;
   play={t0:t0,sec:sec,segs:segs,end:t0+sec+.8,M:M,from:from,to:to,starts:starts,hk:'',loop:lp};
   $('bPlay').textContent='⏸ 멈춤'; if(!was) requestAnimationFrame(tick);
@@ -451,8 +452,98 @@ function download(name,blob){ var a=document.createElement('a'); a.href=URL.crea
 function fname(ext){ return (score.name||'score').replace(/[\\/:*?"<>|]/g,'_')+'.'+ext; }
 function svgStr(){ var c=sheet.cloneNode(true); var cu=c.querySelector('#pcur'); if(cu) cu.remove(); var h=c.querySelector('#hits'); if(h) h.remove(); c.removeAttribute('style'); c.setAttribute('width',W); c.setAttribute('height',L.H+10); return new XMLSerializer().serializeToString(c); }
 function exportPng(sc){ var img=new Image(), s=svgStr(); img.onload=function(){ var cv=document.createElement('canvas'); cv.width=W*sc; cv.height=(L.H+10)*sc; var x=cv.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,cv.width,cv.height); x.drawImage(img,0,0,cv.width,cv.height); cv.toBlob(function(b){ download(fname('png'),b); }); }; img.onerror=function(){ toast('PNG로 바꾸지 못했어요'); }; img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(s); }
+
+/* ---------- MusicXML / WAV ---------- */
+function xe(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+var XT={64:'whole',32:'half',16:'quarter',8:'eighth',4:'16th'};
+function exportXml(){
+  layout(); var M=ml(), nM=L.ms.length, mk=score.mk||{}, o='<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">\n<score-partwise version="3.1">\n<work><work-title>'+xe(score.name)+'</work-title></work>\n<identification>'+(score.composer?'<creator type="composer">'+xe(score.composer)+'</creator>':'')+'<encoding><software>Fry Score</software></encoding></identification>\n<part-list>';
+  score.parts.forEach(function(p,i){ o+='<score-part id="P'+(i+1)+'"><part-name>'+xe(p.name)+'</part-name></score-part>'; });
+  o+='</part-list>\n';
+  var CL={treble:'<sign>G</sign><line>2</line>',treble8:'<sign>G</sign><line>2</line><clef-octave-change>-1</clef-octave-change>',bass:'<sign>F</sign><line>4</line>',alto:'<sign>C</sign><line>3</line>'};
+  var dirw=function(x){ return '<direction placement="above"><direction-type>'+x+'</direction-type></direction>'; };
+  score.parts.forEach(function(p,pi){
+    var pcs=L.pcs[pi], hp=hairpins(p), hs={}, stops={}, prevTie=false; hp.forEach(function(h){ hs[h.i0]=h; stops[h.i1]=1; });
+    o+='<part id="P'+(pi+1)+'">\n';
+    for(var m=0;m<nM;m++){
+      var q=mk[m]||{}, pc=pcs[m]||[]; o+='<measure number="'+(m+1)+'">';
+      if(q.rs||q.volta) o+='<barline location="left">'+(q.volta?'<ending number="'+q.volta+'" type="start"/>':'')+(q.rs?'<repeat direction="forward"/>':'')+'</barline>';
+      if(m===0) o+='<attributes><divisions>16</divisions><key><fifths>'+score.key+'</fifths></key><time><beats>'+score.ts[0]+'</beats><beat-type>'+score.ts[1]+'</beat-type></time><clef>'+(CL[p.clef]||CL.treble)+'</clef></attributes>';
+      if(pi===0&&m===0) o+='<direction placement="above"><direction-type><metronome><beat-unit>quarter</beat-unit><per-minute>'+score.tempo+'</per-minute></metronome></direction-type><sound tempo="'+score.tempo+'"/></direction>';
+      else if(pi===0&&q.tempo) o+='<direction placement="above"><direction-type><metronome><beat-unit>quarter</beat-unit><per-minute>'+q.tempo+'</per-minute></metronome></direction-type><sound tempo="'+q.tempo+'"/></direction>';
+      if(pi===0&&q.reh) o+=dirw('<rehearsal>'+xe(String.fromCharCode(65+Object.keys(mk).map(Number).filter(function(k){ return mk[k]&&mk[k].reh&&k<m; }).length%26))+'</rehearsal>');
+      if(pi===0&&q.txt) o+=dirw('<words>'+xe(q.txt)+'</words>');
+      if(!pc.length) o+='<note><rest measure="yes"/><duration>'+M+'</duration></note>';
+      pc.forEach(function(c){ var e=p.ev[c.ev], type=XT[baseDur(c.d)]||'16th', dot=dotted(c.d)?'<dot/>':'';
+        if(c.first){ if(stops[c.ev]) o+='<direction><direction-type><wedge type="stop"/></direction-type></direction>';
+          if(e.ch) o+=dirw('<words>'+xe(e.ch)+'</words>');
+          if(e.dyn) o+='<direction placement="below"><direction-type><dynamics><'+e.dyn+'/></dynamics></direction-type></direction>';
+          if(hs[c.ev]) o+='<direction placement="below"><direction-type><wedge type="'+(hs[c.ev].type==='cr'?'crescendo':'diminuendo')+'"/></direction-type></direction>'; }
+        if(!c.p.length){ o+='<note><rest/><duration>'+c.d+'</duration><type>'+type+'</type>'+dot+'</note>'; return; }
+        c.p.forEach(function(pp,k){
+          var nt='';
+          if(prevTie) nt+='<tied type="stop"/>'; if(c.tieNext) nt+='<tied type="start"/>';
+          if(c.first){ var ar=({stac:'<staccato/>',acc:'<accent/>',ten:'<tenuto/>',marc:'<strong-accent/>'})[e.art]; if(ar) nt+='<articulations>'+ar+'</articulations>'; if(e.art==='tr') nt+='<ornaments><trill-mark/></ornaments>'; if(e.art==='ferm') nt+='<fermata/>'; }
+          o+='<note>'+(k?'<chord/>':'')+'<pitch><step>'+STEPS[pp.s]+'</step>'+(pp.a?'<alter>'+pp.a+'</alter>':'')+'<octave>'+pp.o+'</octave></pitch><duration>'+c.d+'</duration>'+(prevTie?'<tie type="stop"/>':'')+(c.tieNext?'<tie type="start"/>':'')+'<type>'+type+'</type>'+dot+(nt?'<notations>'+nt+'</notations>':'')+(c.first&&k===0&&e.ly?'<lyric><syllabic>single</syllabic><text>'+xe(e.ly)+'</text></lyric>':'')+'</note>'; });
+        prevTie=!!c.tieNext; });
+      if(m===nM-1&&stops[p.ev.length]) o+='<direction><direction-type><wedge type="stop"/></direction-type></direction>';
+      if(q.re||q.volta) o+='<barline location="right">'+(q.volta?'<ending number="'+q.volta+'" type="stop"/>':'')+(q.re?'<repeat direction="backward"/>':'')+'</barline>';
+      o+='</measure>\n'; }
+    o+='</part>\n'; });
+  return new Blob([o+'</score-partwise>\n'],{type:'application/vnd.recordare.musicxml+xml'});
+}
+function readXml(txt,fallbackName){
+  var d=new DOMParser().parseFromString(txt,'application/xml'); if(d.getElementsByTagName('parsererror').length||!d.getElementsByTagName('score-partwise').length) throw 0;
+  var T=function(el,n){ var x=el.getElementsByTagName(n)[0]; return x?x.textContent:''; }, A=function(l){ return Array.prototype.slice.call(l); };
+  var names={}, mk={}, tempo=null, ts=null, key=null, out=[];
+  A(d.getElementsByTagName('score-part')).forEach(function(sp){ names[sp.getAttribute('id')]=T(sp,'part-name'); });
+  A(d.documentElement.children).filter(function(n){ return n.nodeName==='part'; }).forEach(function(pe,pidx){
+    var div=1, staves={}, clefs={}, mi=0, pdyn=null;
+    A(pe.children).forEach(function(me){ if(me.nodeName!=='measure') return;
+      A(me.children).forEach(function(c){ var nm=c.nodeName;
+        if(nm==='attributes'){ var v=T(c,'divisions'); if(v) div=+v||1; var fi=c.getElementsByTagName('fifths')[0]; if(fi&&key==null) key=Math.max(-6,Math.min(6,+fi.textContent||0)); var tm=c.getElementsByTagName('time')[0]; if(tm&&!ts) ts=[+T(tm,'beats')||4,+T(tm,'beat-type')||4];
+          A(c.getElementsByTagName('clef')).forEach(function(ce){ var n=ce.getAttribute('number')||'1', sg=T(ce,'sign'); clefs[n]=sg==='F'?'bass':sg==='C'?'alto':(+T(ce,'clef-octave-change')<0?'treble8':'treble'); }); }
+        else if(nm==='direction'){ var so=c.getElementsByTagName('sound')[0]; if(so&&so.getAttribute('tempo')){ var tp=Math.round(+so.getAttribute('tempo')); if(tp>=30&&tp<=260){ if(tempo==null) tempo=tp; else if(pidx===0&&mi>0) (mk[mi]=mk[mi]||{}).tempo=tp; } }
+          var dy=c.getElementsByTagName('dynamics')[0]; if(dy) ['pp','p','mp','mf','f','ff'].forEach(function(dn){ if(dy.getElementsByTagName(dn).length) pdyn=dn; });
+          var w=c.getElementsByTagName('words')[0]; if(pidx===0&&w&&w.textContent.trim()&&!c.getElementsByTagName('dynamics').length) (mk[mi]=mk[mi]||{}).txt=w.textContent.trim().slice(0,30);
+          if(pidx===0&&c.getElementsByTagName('rehearsal').length) (mk[mi]=mk[mi]||{}).reh=true; }
+        else if(nm==='barline'&&pidx===0){ var rp=c.getElementsByTagName('repeat')[0], en=c.getElementsByTagName('ending')[0], q=mk[mi]=mk[mi]||{};
+          if(rp){ if(rp.getAttribute('direction')==='forward') q.rs=true; else q.re=true; } if(en&&en.getAttribute('type')==='start'){ var vn=parseInt(en.getAttribute('number'),10); if(vn===1||vn===2) q.volta=vn; } }
+        else if(nm==='note'){ if(c.getElementsByTagName('grace').length) return;
+          var st=T(c,'staff')||'1', vo=T(c,'voice')||'1', S=staves[st]||(staves[st]={ev:[],voice:vo}); if(vo!==S.voice) return;
+          var pe2=c.getElementsByTagName('pitch')[0], pp=null; if(pe2) pp={s:STEPS.indexOf(T(pe2,'step')),a:Math.round(+T(pe2,'alter')||0),o:+T(pe2,'octave')}; if(pp&&pp.s<0) return;
+          if(c.getElementsByTagName('chord').length){ var lastE=S.ev[S.ev.length-1]; if(lastE&&pp&&lastE.p.length) lastE.p.push(pp); return; }
+          var units=Math.max(4,Math.round(+T(c,'duration')*16/div/4)*4), ev={p:pp?[pp]:[],d:units,tie:false};
+          if(pdyn&&pp){ ev.dyn=pdyn; pdyn=null; }
+          if(pp&&A(c.getElementsByTagName('tie')).some(function(t){ return t.getAttribute('type')==='start'; })) ev.tie=true;
+          var ly=c.getElementsByTagName('lyric')[0]; if(ly&&T(ly,'text')) ev.ly=T(ly,'text');
+          if(c.getElementsByTagName('staccato').length) ev.art='stac'; else if(c.getElementsByTagName('accent').length) ev.art='acc'; else if(c.getElementsByTagName('tenuto').length) ev.art='ten'; else if(c.getElementsByTagName('strong-accent').length) ev.art='marc'; else if(c.getElementsByTagName('trill-mark').length) ev.art='tr'; else if(c.getElementsByTagName('fermata').length) ev.art='ferm';
+          S.ev.push(ev); } });
+      mi++; });
+    var ks=Object.keys(staves).sort(); ks.forEach(function(k){ if(!staves[k].ev.length) return; out.push({name:(names[pe.getAttribute('id')]||('파트 '+(out.length+1)))+(ks.length>1?' '+k:''),clef:clefs[k]||(k==='2'?'bass':'treble'),inst:'piano',vol:80,mute:false,ev:staves[k].ev}); }); });
+  if(!out.length) throw 0;
+  var title=T(d,'work-title')||T(d,'movement-title')||fallbackName||'MusicXML', comp=''; A(d.getElementsByTagName('creator')).forEach(function(c){ if(c.getAttribute('type')==='composer') comp=c.textContent; });
+  setScore({name:title,composer:comp,tempo:tempo||100,ts:ts||[4,4],key:key||0,mk:mk,parts:out.slice(0,8)});
+}
+function songSec(){ var M=ml(), mk=score.mk||{}, tp=score.tempo, sec=0; playOrder(L.ms.length).forEach(function(m){ if(mk[m]&&mk[m].tempo) tp=mk[m].tempo; sec+=M*60/tp/16; }); return sec; }
+function exportWav(){
+  if(play) stopPlay(); layout(); toast('소리 파일을 만드는 중이에요…');
+  var sr=44100, secs=songSec()+3, OA=window.OfflineAudioContext||window.webkitOfflineAudioContext; if(!OA){ toast('이 브라우저는 소리 파일 만들기를 지원하지 않아요'); return; }
+  var sc=ctx, sm=master, sp=pbs, off=new OA(2,Math.ceil(secs*sr),sr);
+  try{ ctx=off; var comp=off.createDynamicsCompressor(); master=off.createGain(); master.gain.value=.7; master.connect(comp); comp.connect(off.destination); offlineMode=true; pbs=Object.assign({},pbs,{metro:false,count:false,speed:100,loop:false}); schedule(0,null,.05); }
+  catch(e){ toast('소리 파일을 만들지 못했어요'); return; }
+  finally{ ctx=sc; master=sm; pbs=sp; offlineMode=false; }
+  off.startRendering().then(function(buf){
+    var n=buf.length, a=buf.getChannelData(0), b=buf.getChannelData(1), end=n; while(end>sr/2&&Math.abs(a[end-1])<1e-4&&Math.abs(b[end-1])<1e-4) end--; end=Math.min(n,end+sr/4);
+    var data=new DataView(new ArrayBuffer(44+end*4)); function w(o,s){ for(var i=0;i<s.length;i++) data.setUint8(o+i,s.charCodeAt(i)); }
+    w(0,'RIFF'); data.setUint32(4,36+end*4,true); w(8,'WAVE'); w(12,'fmt '); data.setUint32(16,16,true); data.setUint16(20,1,true); data.setUint16(22,2,true); data.setUint32(24,sr,true); data.setUint32(28,sr*4,true); data.setUint16(32,4,true); data.setUint16(34,16,true); w(36,'data'); data.setUint32(40,end*4,true);
+    for(var i=0;i<end;i++){ data.setInt16(44+i*4,Math.max(-1,Math.min(1,a[i]))*32767,true); data.setInt16(46+i*4,Math.max(-1,Math.min(1,b[i]))*32767,true); }
+    download(fname('wav'),new Blob([data],{type:'audio/wav'})); toast('WAV 파일을 만들었어요');
+  }).catch(function(){ toast('소리 파일을 만들지 못했어요'); });
+}
 function openFile(file){
   var r=new FileReader();
+  if(/\.(musicxml|xml)$/i.test(file.name)){ r.onload=function(){ var keep=snap(); try{ readXml(String(r.result),file.name.replace(/\.[^.]+$/,'')); cur={part:0,idx:-1}; $('dname').value=score.name; commit(); toast('MusicXML을 열었어요. 연음표 같은 복잡한 리듬은 가까운 길이로 바뀔 수 있어요'); }catch(e){ setScore(JSON.parse(keep)); toast('이 MusicXML 파일을 열지 못했어요'); } }; r.readAsText(file); return; }
   if(/\.midi?$/i.test(file.name)){ r.onload=function(){ var keep=snap(); try{ readMidi(r.result); score.name=file.name.replace(/\.[^.]+$/,''); cur={part:0,idx:-1}; $('dname').value=score.name; commit(); toast('MIDI를 열었어요. 리듬은 16분음표 칸에 맞춰져요'); }catch(e){ setScore(JSON.parse(keep)); toast('이 MIDI 파일을 열지 못했어요'); } }; r.readAsArrayBuffer(file); return; }
   r.onload=function(){ try{ var o=JSON.parse(String(r.result)); if(!o.parts) throw 0; setScore(o); cur={part:0,idx:-1}; $('dname').value=score.name; commit(); }catch(e){ toast('이 파일을 열지 못했어요'); } }; r.readAsText(file);
 }
@@ -583,9 +674,9 @@ $('fileIn').addEventListener('change',function(){ if(this.files[0]) openFile(thi
 $('bSave').onclick=function(){
   var old=document.querySelector('.menu'); if(old){ old.remove(); return; }
   var m=document.createElement('div'); m.className='menu'; var r=this.getBoundingClientRect(); m.style.top=(r.bottom+4)+'px'; m.style.right='8px';
-  m.innerHTML='<button data-x="midi">MIDI (.mid)</button><button data-x="png">PNG 그림</button><button data-x="svg">SVG</button><button data-x="print">인쇄 / PDF로 저장</button><button data-x="json">프로젝트 파일 (.fscore)</button>';
+  m.innerHTML='<button data-x="midi">MIDI (.mid)</button><button data-x="xml">MusicXML (.musicxml)</button><button data-x="wav">소리 파일 (.wav)</button><button data-x="png">PNG 그림</button><button data-x="svg">SVG</button><button data-x="print">인쇄 / PDF로 저장</button><button data-x="json">프로젝트 파일 (.fscore)</button>';
   m.onclick=function(ev){ var x=ev.target.dataset.x; if(!x) return; m.remove();
-    if(x==='midi') download(fname('mid'),exportMidi()); else if(x==='png') exportPng(2); else if(x==='svg') download(fname('svg'),new Blob([svgStr()],{type:'image/svg+xml'})); else if(x==='print') window.print(); else download(fname('fscore'),new Blob([snap()],{type:'application/json'})); };
+    if(x==='midi') download(fname('mid'),exportMidi()); else if(x==='xml') download(fname('musicxml'),exportXml()); else if(x==='wav') exportWav(); else if(x==='png') exportPng(2); else if(x==='svg') download(fname('svg'),new Blob([svgStr()],{type:'image/svg+xml'})); else if(x==='print') window.print(); else download(fname('fscore'),new Blob([snap()],{type:'application/json'})); };
   document.body.appendChild(m); setTimeout(function(){ document.addEventListener('click',function h(ev){ if(!m.contains(ev.target)) m.remove(); document.removeEventListener('click',h); }); },0);
 };
 document.addEventListener('keydown',function(e){
@@ -619,6 +710,6 @@ document.addEventListener('keydown',function(e){
   if(!s) loadExampleSilent('twinkle');
   $('dname').value=score.name; hist=[snap()]; hi=0; renderTools(); draw(); panel();
   function loadExampleSilent(k){ var e=EX[k]; score={name:e.name,composer:e.composer||'',tempo:e.tempo,ts:e.ts,key:e.key,parts:e.parts.map(function(p){ return {name:p[0],clef:p[1],inst:p[2],vol:80,mute:false,ev:parseText(p[3],p[1])}; })}; score.mk=e.mk||{}; if(e.ly) lyr(score.parts[0],e.ly); }
-  window.FSCORE={score:function(){ return score; },load:loadExample,parseText:parseText,layout:layout,midi:exportMidi,readMidi:readMidi,svg:svgStr};
+  window.FSCORE={score:function(){ return score; },load:loadExample,parseText:parseText,layout:layout,midi:exportMidi,xml:exportXml,readXml:readXml,readMidi:readMidi,svg:svgStr};
 })();
 })();

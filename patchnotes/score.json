@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v7",
+   "title": "MusicXML 열기·내보내기, WAV 소리 파일",
+   "items": [
+    "MusicXML(.musicxml) 내보내기: 음표·화음·붙임줄·가사·셈여림·점점 크게/작게·기호·도돌이표·괄호·빠르기·음자리표·조·박자. MuseScore 등 다른 악보 프로그램에서 열 수 있어요",
+    "MusicXML 열기: 여러 파트·두 줄 악보(피아노)·조·박자·빠르기·도돌이표·가사를 읽어 옴(꾸밈음과 복잡한 연음표는 가까운 길이로)",
+    "소리 파일(WAV) 내보내기: 지금 악기·소리 크기·도돌이표 그대로 소리만 뽑아 저장"
+   ],
+   "tr": {
+    "en": {
+     "title": "MusicXML import/export and WAV audio export",
+     "items": [
+      "MusicXML export: notes, chords, ties, lyrics, dynamics, hairpins, articulations, repeats, endings, tempo, clefs, key and time signatures; opens in MuseScore and similar apps",
+      "MusicXML import: multiple parts, two-staff piano parts, key, time, tempo, repeats and lyrics (grace notes are skipped and complex tuplets are rounded)",
+      "WAV export: renders the audio with the current instruments, volumes and repeats"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v6",
    "title": "점점 크게·작게, 알토·기타 음자리표, 연습 기호, 트릴",
    "items": [
