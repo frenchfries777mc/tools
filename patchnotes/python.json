@@ -3,6 +3,26 @@
  "name": "Fry Code",
  "notes": [
   {
+   "date": "2026-11-06",
+   "build": "v35",
+   "title": "BeaconScript 변수는 중괄호로",
+   "items": [
+    "변수는 꼭 {x}로 써요. {x}는 일반, {_x_}는 이 이벤트 안에서만, {:x:}는 공유 변수예요 (variable x 처럼 중괄호가 없으면 오류)",
+    "공유 변수 {:x:}를 set·add·subtract·reset·if variable에서도 쓸 수 있어요 (이름 17자까지)",
+    "if variable {x} is 1: 과 is not도 되고, 예제도 중괄호로 바꿨어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript variables in braces",
+     "items": [
+      "Variables must be written as {x}: {x} normal, {_x_} only inside this event, {:x:} shared (variable x without braces is an error)",
+      "Shared variables {:x:} work in set, add, subtract, reset and if variable (names up to 17 characters)",
+      "if variable {x} is 1: and is not work too, and the examples now use braces"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-05",
    "build": "v34",
    "title": "BeaconScript else·else if",

@@ -117,6 +117,7 @@ function bsSug(before,pre,ctx){
   if(v==='api'){ if(n===1) return W(['potato'],''); return []; }
   if(v==='resource'){ if(n===1) return W(['pack'],''); return []; }
   if(v==='if'&&tk[1]==='signal'){ var sg={2:'receive',4:'into',6:'run',7:'text',8:'replace',10:'to'}; return sg[n]?W([sg[n]]):[]; }
+  if(v==='if'&&tk[1]==='variable'){ if(n===2) return [{n:'{이름}',i:'{$0}',d:'변수 (공유 변수는 {:이름:})'}]; if(n===3) return ['<','<=','>','>=','=','!='].map(function(o){ return {n:o,i:o+' ',d:'비교'}; }).concat(W(['is'])); if(n===4&&tk[3]==='is') return W(['not']); return []; }
   if(v==='if'){ if(n===1) return W(['variable','has','player','world','mod','not','signal']); if(n===2&&tk[1]&&/^(\{.*\}|%.*%)$/.test(tk[1])) return W(['contained'],''); if(tk[1]&&tk[1][0]==='%'){ if(n===2) return W(['is']); if(n===3) return W(['not']).concat(W(['player'],':'),W(['contained'],'')); if(n===4&&tk[3]==='not') return W(['player'],':'); } return []; }
   if(v==='remove'){ if(n===1) return W(['all','tree','rock']); if(n===2&&tk[1]==='all') return W(BS_ALL,''); return []; }
   if(v==='fill'){ if(n===5) return W(['to']); if(n===6) return W(BS_TERRAIN); if(n===7) return W(BS_BIOMES,''); return []; }
@@ -226,7 +227,7 @@ function javaRun(ctx){ var src=ctx.code, bal=balance(src,false); ctx.pv.innerHTM
   ctx.show('pv'); ctx.done(true); }
 
 /* ---------- BeaconScript ---------- */
-function bsCheck(src,nested){ var lastK={}, V='(?:\\{[a-z0-9_가-힣]{1,22}\\}|[a-z0-9_]{1,20})', NUM='-?\\d{1,9}(?:\\.\\d{1,3})?', aliasSet={}, hasUse=/^\s*use_mod_uuid\s*:/im.test(src), useCount=0, hasUuid=/^\s*[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\s*$/im.test(src), hdrSeen={}, seenCode=false, errs=[], stack=[], lines=src.split('\n'), VERB=BS_VERBS.split(' ');
+function bsCheck(src,nested){ var lastK={}, V='(?:\\{:[a-z0-9_]{1,17}:\\}|\\{[a-z0-9_가-힣]{1,22}\\})', NUM='-?\\d{1,9}(?:\\.\\d{1,3})?', aliasSet={}, hasUse=/^\s*use_mod_uuid\s*:/im.test(src), useCount=0, hasUuid=/^\s*[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\s*$/im.test(src), hdrSeen={}, seenCode=false, errs=[], stack=[], lines=src.split('\n'), VERB=BS_VERBS.split(' ');
   lines.forEach(function(l0){ var m0=/^\s*aliases_name\s*:\s*"(%[a-z0-9_]{1,30}%)"\s*$/i.exec(l0); if(m0) aliasSet[m0[1].toLowerCase()]=1; });
   lines.forEach(function(raw,i){ var ln=i+1, line=raw.replace(/\t/g,'    '); if(!line.trim()||/^\s*#/.test(line)) return;
     var ind=/^ */.exec(line)[0].length, t=line.trim(), m;
@@ -299,14 +300,15 @@ function bsCheck(src,nested){ var lastK={}, V='(?:\\{[a-z0-9_가-힣]{1,22}\\}|[
     if(verb==='if'&&/^if\s+has\b/i.test(t)&&!/^if\s+has\s+(?:\d+\s+)?\S.*:\s*$/.test(t)) errs.push({line:ln,msg:'이렇게 써요: if has 3 iron:'});
     if(verb==='if'&&/\scontained\s/.test(t)){ if(!/^if\s+(?:%[A-Za-z0-9_' ]+%|\{[^}\s]+\}|\{:[^:\s{}]+:\})\s+contained\s+"[^"]*"\s*:\s*$/.test(t)) errs.push({line:ln,msg:'이렇게 써요: if %player\'s mod% contained "potato api":'}); }
     else if(verb==='if'&&/^if\s+%/.test(t)&&!/^if\s+%[a-z_]+%\s+is\s+(not\s+)?player\s*:\s*$/.test(t)) errs.push({line:ln,msg:'이렇게 써요: if %attacker% is player:  (또는 is not player:)'});
-    if(verb==='add'&&!new RegExp('^add\\s+(?:'+NUM+'|variable\\s+'+V+')\\s+to\\s+variable\\s+'+V+'\\s*$','i').test(t)) errs.push({line:ln,msg:'이렇게 써요: add 1 to variable score  (또는 add variable {y} to variable {x})'});
-    if(verb==='subtract'&&!new RegExp('^subtract\\s+(?:'+NUM+'|variable\\s+'+V+')\\s+from\\s+variable\\s+'+V+'\\s*$','i').test(t)) errs.push({line:ln,msg:'이렇게 써요: subtract 1 from variable score  (또는 subtract variable {y} from variable {x})'});
+    if(verb==='add'&&!new RegExp('^add\\s+(?:'+NUM+'|variable\\s+'+V+')\\s+to\\s+variable\\s+'+V+'\\s*$','i').test(t)) errs.push({line:ln,msg:'이렇게 써요: add 1 to variable {score}  (또는 add variable {y} to variable {x})'});
+    if(verb==='subtract'&&!new RegExp('^subtract\\s+(?:'+NUM+'|variable\\s+'+V+')\\s+from\\s+variable\\s+'+V+'\\s*$','i').test(t)) errs.push({line:ln,msg:'이렇게 써요: subtract 1 from variable {score}  (또는 subtract variable {y} from variable {x})'});
     if(verb==='multiply'||verb==='divide'){ var mdm=new RegExp('^(?:multiply|divide)\\s+variable\\s+'+V+'\\s+by\\s+('+NUM+'|variable\\s+'+V+')\\s*$','i').exec(t); if(!mdm) errs.push({line:ln,msg:'이렇게 써요: multiply variable {x} by 2  (또는 divide variable {x} by variable {y})'}); else if(verb==='divide'&&/^-?0+(\.0+)?$/.test(mdm[1])) errs.push({line:ln,msg:'0으로는 나눌 수 없어요'}); }
     if(verb==='signal'&&!new RegExp('^signal\\s+send\\s+"[^"]{1,40}"(?:\\s+(?:"[^"]{0,60}"|'+V+'))?\\s+to\\s+mod\\s+(?:"[^"]{1,40}"|back)\\s*$','i').test(t)) errs.push({line:ln,msg:'이렇게 써요: signal send "이름" "값" to mod "모드이름"  (값은 "글자" 또는 {변수}, 답장은 to mod back)'});
     if(verb==='if'&&/^if\s+signal\b/i.test(t)&&!new RegExp('^if\\s+signal\\s+receive\\s+"[^"]{1,40}"\\s+into\\s+'+V+'\\s+run\\s+text\\s+replace\\s+"[^"]{1,40}"\\s+to\\s+'+V+'\\s*$','i').test(t)) errs.push({line:ln,msg:'이렇게 써요: if signal receive "이름" into {x} run text replace "%이름%" to {x}'});
     if(verb==='publish_aliases'&&(!/^publish_aliases\s*:\s*$/.test(t)||ind!==0)) errs.push({line:ln,msg:'이렇게 맨 앞 줄에 써요: publish_aliases:'});
 
-    if(verb==='if'&&/^if\s+variable\b/i.test(t)&&!/^if\s+variable\s+(?:\{[a-z0-9_가-힣]{1,22}\}|[a-z0-9_]{1,20})\s*(>=|<=|!=|>|<|=)\s*(-?\d+(\.\d+)?|"[^"]*")\s*:\s*$/.test(t)) errs.push({line:ln,msg:'이렇게 써요: if variable score >= 10:  (비교: >= <= > < = !=)'});
+    if(verb==='if'&&/^if\s+variable\b/i.test(t)&&!new RegExp('^if\\s+variable\\s+'+V+'\\s*(?:>=|<=|!=|>|<|=|is\\s+not|is)\\s*(?:-?\\d+(?:\\.\\d+)?|"[^"]*")\\s*:\\s*$','i').test(t)) errs.push({line:ln,msg:'이렇게 써요: if variable {score} >= 10:  (비교: >= <= > < = != is, is not · 변수는 {x}, 공유 변수는 {:x:})'});
+    if(verb==='reset'&&!new RegExp('^reset\\s+variable\\s+'+V+'\\s*$','i').test(t)) errs.push({line:ln,msg:'이렇게 써요: reset variable {score}'});
     if((verb==='say'||verb==='chat'||verb==='broadcast')){ var sm=/"((?:\\.|[^"\\])*)"/.exec(t); if(sm&&sm[1].length>100) errs.push({line:ln,msg:'글자는 100자까지예요'}); }
     if(verb==='disable'||verb==='enable'){ var cm=/^(?:disable|enable)\s+collision\s+of\s+([A-Za-z_]+)\s*$/i.exec(t);
       if(!cm) errs.push({line:ln,msg:'이렇게 써요: disable collision of tree (또는 enable collision of water)'});
@@ -372,7 +374,7 @@ var EXHT=[['👋 첫 웹페이지','<!DOCTYPE html>\n<html lang="ko">\n<head>\n 
 var EXJN=[['👤 사람 정보','{\n  "이름": "철수",\n  "나이": 12,\n  "취미": ["축구", "게임"],\n  "학교": { "이름": "행복초", "학년": 6 },\n  "안경": false\n}\n'],
 ['📋 목록','[\n  { "id": 1, "할일": "숙제하기", "끝": true },\n  { "id": 2, "할일": "운동하기", "끝": false }\n]\n'],
 ['🐞 틀린 JSON','{\n  "이름": "철수",\n  나이: 12,\n  "취미": ["축구", "게임",],\n}\n']];
-var EXBS=[['⚔️ 소리와 반복','on kill:\n    play sound hit\n    loop 3 times:\n        give 1 iron\n    heal player 5\n    give effect speed 5 seconds\n    broadcast "%player%가 해냈어요"\n'],['🔢 돌 세기 (변수)','on mine:\n    add 1 to variable stones\n    if variable stones >= 10:\n        say "돌을 %var_stones%개 캤어요"\n        reset variable stones\n'],['🏝️ 빈 시작 섬','# 새 월드의 땅을 바꿔요 (좌표는 픽셀, ~ 는 시작 위치 기준)\non world generate:\n    remove all trees\n    remove all rocks\n    fill ~-600 ~-600 ~600 ~600 to ocean\n    fill ~-150 ~-150 ~150 ~150 to land start\n    fill ~200 ~-100 ~320 ~20 to mountain volcano\n'],['🎁 기본 모드','# Beaconfall 모드 (BeaconScript)\non join:\n    chat "어서 와요!"\n    give 2 iron\n\non key "G" press:\n    teleport player to spawn\n    title "Welcome!" for 3 seconds\n'],
+var EXBS=[['⚔️ 소리와 반복','on kill:\n    play sound hit\n    loop 3 times:\n        give 1 iron\n    heal player 5\n    give effect speed 5 seconds\n    broadcast "%player%가 해냈어요"\n'],['🔢 돌 세기 (변수)','on mine:\n    add 1 to variable {stones}\n    if variable {stones} >= 10:\n        say "돌을 %var_stones%개 캤어요"\n        reset variable {stones}\n'],['🏝️ 빈 시작 섬','# 새 월드의 땅을 바꿔요 (좌표는 픽셀, ~ 는 시작 위치 기준)\non world generate:\n    remove all trees\n    remove all rocks\n    fill ~-600 ~-600 ~600 ~600 to ocean\n    fill ~-150 ~-150 ~150 ~150 to land start\n    fill ~200 ~-100 ~320 ~20 to mountain volcano\n'],['🎁 기본 모드','# Beaconfall 모드 (BeaconScript)\non join:\n    chat "어서 와요!"\n    give 2 iron\n\non key "G" press:\n    teleport player to spawn\n    title "Welcome!" for 3 seconds\n'],
 ['🌍 월드 만들기','on world generate:\n    remove tree in 20 blocks of spawn\n    spawn wolf 5 times\n    place bench near spawn\n'],
 ['🗡️ 아이템 바꾸기','set iron_sword damage 12\nset iron_sword speed 0.4\nset iron_sword name "Big Sword"\n'],
 ['🔘 버튼과 확률','on join:\n    button "Shop" at top right:\n        give 1 iron\n    chance 30%:\n        chat "행운이에요!"\n'],
