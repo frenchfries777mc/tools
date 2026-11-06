@@ -130,3 +130,4 @@ patchnotes/score.json | Fry Score v34 항목 (en만) | score v34 | 2026-11-06
 score/app.js | Fry Score v34 한국어 메시지·버튼 | score v34 | 2026-11-06
 patchnotes/score.json | Fry Score v35 항목 (en만) | score v35 | 2026-11-06
 score/app.js | Fry Score v35 한국어 메시지·버튼 | score v35 | 2026-11-06
+patchnotes/video.json | Fry Video v30 9칸 위치 맞추기·안 쓰는 파일 정리·프레임 이동 키 (en 번역 없음) | video v30 | 2026-11-06
