@@ -31,7 +31,7 @@ function keyAlter(step){ var k=keyCtx==null?score.key:keyCtx; if(k>0) return SHA
 var CLEFNB={treble:30,treble8:30,bass:18,alto:24,drum:30}, CLEFN={drum:'타악기(드럼)',treble:'높은음자리',treble8:'높은음자리 (한 옥타브 아래, 기타)',bass:'낮은음자리',alto:'알토(가온 C)'};
 var KSP={treble:[[8,5,9,6,3,7,4],[4,7,3,6,2,5,1]],bass:[[6,3,7,4,1,5,2],[2,5,1,4,0,3,6]],alto:[[7,4,8,5,2,6,3],[3,6,2,5,1,4,0]]};
 function nbOf(part){ return CLEFNB[part.clef]||30; }
-function trOf(part){ return part.clef==='treble8'?-12:0; }
+function trOf(part){ return (part.clef==='treble8'?-12:0)+(+part.trans||0); }
 function total(part){ var t=0; part.ev.forEach(function(e){ t+=e.d; }); return t; }
 
 /* ---------- text notation ---------- */
@@ -83,7 +83,7 @@ function layout(){
   var avail0=W-2*MARG;
   for(var i=0;i<ms.length;i++){
     var need=ms[i].w, hw=head(first,row.length?row[0].i:ms[i].i);
-    if(row.length&&rw+need+hw>avail0){ sys.push({ms:row,first:first,hw:head(first,row[0].i),rw:rw}); row=[]; rw=0; first=false; }
+    if(row.length&&(rw+need+hw>avail0||(score.mps>0&&row.length>=score.mps))){ sys.push({ms:row,first:first,hw:head(first,row[0].i),rw:rw}); row=[]; rw=0; first=false; }
     if(!row.length&&ms[i].kx){ ms[i].slots.forEach(function(sl){ sl.x-=ms[i].kx; }); ms[i].w-=ms[i].kx; ms[i].kx=0; }
     row.push(ms[i]); rw+=ms[i].w;
   }
@@ -119,6 +119,9 @@ function draw(){
   var h=L.H+10; sheet.setAttribute('viewBox','0 0 '+W+' '+h); sheet.style.width=f(W*zoom)+'px'; sheet.style.height=f(h*zoom)+'px';
   var o='<rect width="'+W+'" height="'+h+'" fill="#fff"/>';
   o+='<text x="'+W/2+'" y="40" text-anchor="middle" font-size="26" font-weight="700" fill="#111" font-family="Noto Sans KR,sans-serif">'+esc(score.name)+'</text>';
+  if(score.sub) o+='<text x="'+W/2+'" y="60" text-anchor="middle" font-size="14" fill="#444" font-family="Noto Sans KR,sans-serif">'+esc(score.sub)+'</text>';
+  if(score.lyr) o+='<text x="'+(W-MARG)+'" y="44" text-anchor="end" font-size="13" fill="#444" font-family="Noto Sans KR,sans-serif">'+esc(score.lyr)+'</text>';
+  if(score.cpy) o+='<text x="'+W/2+'" y="'+(h-6)+'" text-anchor="middle" font-size="10" fill="#666" font-family="Noto Sans KR,sans-serif">'+esc(score.cpy)+'</text>';
   if(score.composer) o+='<text x="'+(W-MARG)+'" y="62" text-anchor="end" font-size="13" fill="#444" font-family="Noto Sans KR,sans-serif">'+esc(score.composer)+'</text>';
   o+='<text x="'+MARG+'" y="62" font-size="12" fill="#444" font-family="Noto Sans KR,sans-serif">♩ = '+score.tempo+'</text>';
   var np=score.parts.length, ns=score.parts.filter(function(q,i){ return !isV2(i); }).length, hit='', REHL={}, rn=0; Object.keys(score.mk||{}).map(Number).sort(function(a,b){ return a-b; }).forEach(function(k){ if(score.mk[k]&&score.mk[k].reh) REHL[k]=String.fromCharCode(65+(rn++%26)); });
@@ -126,6 +129,7 @@ function draw(){
     var topAll=staffY(si,0), botAll=staffY(si,np-1)+STAFF;
     score.parts.forEach(function(part,pi){
       var top=staffY(si,pi), xs=s.x0+(s.first?0:0), xe=s.x1, V=isV2(pi);
+      if(score.pl&&s.first&&!V) o+='<text x="'+(s.x0+36)+'" y="'+(top-6)+'" font-size="10" font-weight="700" fill="#777" font-family="Noto Sans KR,sans-serif">'+esc(part.name)+'</text>';
       if(!V) for(var l=0;l<5;l++) o+='<line x1="'+s.x0+'" y1="'+(top+l*10)+'" x2="'+xe+'" y2="'+(top+l*10)+'" stroke="#222" stroke-width="1"/>';
       if(part.tab&&!V){ var tn=(TUN[part.tab]||TUN.gtr).length, tyy=top+STAFF+60; for(var tl=0;tl<tn;tl++) o+='<line x1="'+s.x0+'" y1="'+(tyy+tl*8)+'" x2="'+xe+'" y2="'+(tyy+tl*8)+'" stroke="#222" stroke-width="1"/>'; o+='<line x1="'+s.x0+'" y1="'+tyy+'" x2="'+s.x0+'" y2="'+(tyy+(tn-1)*8)+'" stroke="#222" stroke-width="1.6"/>'; ['T','A','B'].forEach(function(ch,ci){ o+='<text x="'+(s.x0+16)+'" y="'+(tyy+(tn-1)*4-10+ci*12+4)+'" text-anchor="middle" font-size="12" font-weight="800" fill="#111" font-family="Noto Sans KR,sans-serif">'+ch+'</text>'; }); }
       if(pi===cur.part) o+='<rect x="'+(s.x0-6)+'" y="'+(top-8)+'" width="4" height="'+(STAFF+16)+'" fill="#2ec4b6" opacity=".7"/>';
@@ -313,7 +317,7 @@ function sanitize(o){ if(!o||typeof o!=='object'||Array.isArray(o)) throw 0;
   o.parts=(Array.isArray(o.parts)?o.parts:[]).slice(0,8).map(function(p){ p=p&&typeof p==='object'?p:{};
     var ev=(Array.isArray(p.ev)?p.ev:[]).filter(function(e){ return e&&typeof e==='object'; }).map(function(e){ var d=+e.d; if(!(d>0)||d>256) d=16; e.d=d; e.tie=!!e.tie;
       e.p=(Array.isArray(e.p)?e.p:[]).filter(function(q){ return q&&q.s>=0&&q.s<=6&&isFinite(q.o); }).map(function(q){ return {s:q.s|0,a:Math.max(-2,Math.min(2,q.a|0)),o:Math.max(0,Math.min(9,q.o|0))}; }); return e; });
-    p.name=String(p.name||'파트'); p.clef=CLEFNB[p.clef]?p.clef:'treble'; p.inst=INSTS.some(function(x){ return x[0]===p.inst; })?p.inst:'piano'; p.vol=isFinite(+p.vol)?Math.max(0,Math.min(100,+p.vol)):80; p.mute=!!p.mute; p.ev=ev; p.v2=!!p.v2; return p; });
+    p.name=String(p.name||'파트'); p.clef=CLEFNB[p.clef]?p.clef:'treble'; p.inst=INSTS.some(function(x){ return x[0]===p.inst; })?p.inst:'piano'; p.vol=isFinite(+p.vol)?Math.max(0,Math.min(100,+p.vol)):80; p.mute=!!p.mute; p.ev=ev; p.v2=!!p.v2; if(p.trans!=null){ p.trans=Math.max(-24,Math.min(24,Math.round(+p.trans||0))); if(!p.trans) delete p.trans; } return p; });
   o.parts.forEach(function(p,i){ if(i===0) p.v2=false; else if(p.v2){ var j=i-1; while(j>0&&o.parts[j].v2) j--; p.clef=o.parts[j].clef; delete p.tab; } });
   return o; }
 function setScore(o){ cur.end=-1; score=sanitize(o); if(!score.mk) score.mk={}; if(!score.parts||!score.parts.length) score.parts=[{name:'멜로디',clef:'treble',inst:'piano',vol:80,mute:false,ev:[]}]; if(cur.part>=score.parts.length) cur.part=0; }
@@ -582,6 +586,20 @@ function printScore(){
   area.innerHTML=pages.map(function(pg,k){ return '<div class="ppage"><svg xmlns="'+NS+'" viewBox="0 '+f(pg[0])+' '+W+' '+f(pg[1]-pg[0])+'" preserveAspectRatio="xMidYMin meet" style="width:100%;height:'+f(190*(pg[1]-pg[0])/W*1.0)+'mm">'+inner+'</svg>'+(pages.length>1?'<div class="pno">'+(k+1)+' / '+pages.length+'</div>':'')+'</div>'; }).join('');
   var done=function(){ area.innerHTML=''; window.removeEventListener('afterprint',done); }; window.addEventListener('afterprint',done); setTimeout(function(){ window.print(); },50); return pages.length;
 }
+function b64u(buf){ var b=new Uint8Array(buf), t=''; for(var i=0;i<b.length;i+=8192) t+=String.fromCharCode.apply(null,b.subarray(i,i+8192)); return btoa(t).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
+function unb64u(str){ var t=atob(str.replace(/-/g,'+').replace(/_/g,'/')), b=new Uint8Array(t.length); for(var i=0;i<t.length;i++) b[i]=t.charCodeAt(i); return b; }
+function makeLink(){ var json=snap(), enc=new TextEncoder().encode(json), base=location.href.split('#')[0];
+  if(window.CompressionStream){ var cs=new CompressionStream('gzip'), w=cs.writable.getWriter(); w.write(enc); w.close(); return new Response(cs.readable).arrayBuffer().then(function(buf){ return base+'#z='+b64u(buf); }); }
+  return Promise.resolve(base+'#j='+b64u(enc)); }
+function shareLink(){ makeLink().then(function(url){ if(url.length>30000){ toast('악보가 길어서 링크로 만들 수 없어요. 프로젝트 파일(.fscore)로 보내 주세요'); return; }
+    var ok=function(){ toast('링크를 복사했어요 ('+Math.ceil(url.length/1000)+'KB). 받은 사람이 열면 이 악보가 열려요'); };
+    if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(ok,function(){ window.prompt('이 링크를 복사하세요',url); }); else window.prompt('이 링크를 복사하세요',url); }); }
+function loadHash(){ var m=location.hash.match(/^#([zj])=([\w-]+)$/); if(!m) return Promise.resolve(false);
+  var bytes; try{ bytes=unb64u(m[2]); }catch(e){ return Promise.resolve(false); }
+  var get=m[1]==='z'&&window.DecompressionStream?(function(){ var ds=new DecompressionStream('gzip'), w=ds.writable.getWriter(); w.write(bytes); w.close(); return new Response(ds.readable).arrayBuffer().then(function(b){ return new TextDecoder().decode(b); }); })():Promise.resolve(new TextDecoder().decode(bytes));
+  return get.then(function(json){ var o=JSON.parse(json), had=score.parts.some(function(p){ return p.ev.length; })&&score.libId!==o.libId;
+    if(had){ var a=libGet(), keep=JSON.parse(snap()); keep.libId=keep.libId||Date.now().toString(36); keep.name=(keep.name||'')+' (링크 열기 전)'; a.unshift({id:keep.libId,name:keep.name,t:Date.now(),data:JSON.stringify(keep)}); libSet(a); }
+    setScore(o); cur={part:0,idx:-1}; $('dname').value=score.name; commit(); try{ history.replaceState(null,'',location.href.split('#')[0]); }catch(e){} toast('링크로 받은 악보를 열었어요'+(had?' (이전 악보는 보관함에 있어요)':'')); return true; }).catch(function(){ toast('링크의 악보를 열지 못했어요'); return false; }); }
 function exportPng(sc){ var img=new Image(), s=svgStr(); img.onload=function(){ var cv=document.createElement('canvas'); cv.width=W*sc; cv.height=(L.H+10)*sc; var x=cv.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,cv.width,cv.height); x.drawImage(img,0,0,cv.width,cv.height); cv.toBlob(function(b){ download(fname('png'),b); }); }; img.onerror=function(){ toast('PNG로 바꾸지 못했어요'); }; img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(s); }
 
 /* ---------- MusicXML / WAV ---------- */
@@ -727,9 +745,10 @@ function panel(){
     if(cur.m!=null&&cur.m>=0){ h+='<div class="sec"><h4>'+(cur.m+1)+'번째 마디</h4><div class="btns"><button class="tbtn'+(mk.rs?' on':'')+'" data-mk="rs">도돌이표 시작 |:</button><button class="tbtn'+(mk.re?' on':'')+'" data-mk="re">도돌이표 끝 :|</button><button class="tbtn'+(mk.volta===1?' on':'')+'" data-mk="v1">1번 괄호</button><button class="tbtn'+(mk.volta===2?' on':'')+'" data-mk="v2">2번 괄호</button><button class="tbtn'+(mk.reh?' on':'')+'" data-mk="reh">연습 기호 (A B C…)</button></div><div class="btns">'+[['segno','Segno'],['coda','Coda'],['tocoda','To Coda'],['ds','D.S.'],['dc','D.C.'],['fine','Fine']].map(function(j){ return '<button class="tbtn'+(mk[j[0]]?' on':'')+'" data-mk="'+j[0]+'">'+j[1]+'</button>'; }).join('')+'</div><div class="row"><label>조 바꾸기</label><select data-mkk="1"><option value="">바꾸지 않음</option>'+KEYS.map(function(k){ return '<option value="'+k[1]+'"'+(mk.key===k[1]?' selected':'')+'>'+k[0]+'</option>'; }).join('')+'</select></div><div class="row"><label>박자 바꾸기</label><select data-mkts="1"><option value="">바꾸지 않음</option>'+['4/4','3/4','2/4','6/8','2/2','5/4','12/8','7/8','9/8','3/8'].map(function(v){ return '<option value="'+v+'"'+(mk.ts&&mk.ts[0]+'/'+mk.ts[1]===v?' selected':'')+'>'+v+'</option>'; }).join('')+'</select></div><div class="row"><label>마디 글자</label><input type="text" data-mkx="1" value="'+esc(mk.txt||'')+'" placeholder="예: Allegro, rit." data-notr></div><div class="row"><label>빠르기 바꾸기</label><input type="number" min="30" max="260" data-mkt="1" value="'+(mk.tempo||'')+'" placeholder="그대로"><span class="v">BPM</span></div></div>'; }
     h+='<div class="sec"><h4>쓰는 법</h4><div class="note">오선을 누르면 왼쪽에서 고른 길이의 음표가 찍혀요. 키보드에서 <b>A~G</b>를 누르면 이어서 음이 들어가고, <b>1~5</b>는 길이, <b>R</b>은 쉼표, <b>↑↓</b>는 음 높이, <b>Delete</b>는 지우기, <b>Space</b>는 재생이에요. 같은 줄을 여러 마디 이어 쓰면 마디는 알아서 나뉘고 걸치는 음은 붙임줄이 돼요.</div></div>';
   } else if(ptab==='song'){
-    h+='<div class="sec"><h4>곡 정보</h4><div class="row"><label>작곡</label><input type="text" id="comp" value="'+esc(score.composer||'')+'" data-notr></div>';
+    h+='<div class="sec"><h4>곡 정보</h4><div class="row"><label>작곡</label><input type="text" id="comp" value="'+esc(score.composer||'')+'" data-notr></div><div class="row"><label>작사</label><input type="text" id="lyr" value="'+esc(score.lyr||'')+'" data-notr></div><div class="row"><label>부제</label><input type="text" id="sub" value="'+esc(score.sub||'')+'" data-notr></div><div class="row"><label>저작권 글</label><input type="text" id="cpy" value="'+esc(score.cpy||'')+'" placeholder="예: © 2026 홍길동" data-notr></div>';
     h+='<div class="row"><label>빠르기</label><input type="range" id="tempo" min="40" max="220" value="'+score.tempo+'"><span class="v" id="tempoV">'+score.tempo+'</span></div>';
     h+='<div class="row"><label>박자</label>'+sel('tsel',[['4/4',"4/4"],['3/4',"3/4"],['2/4',"2/4"],['6/8',"6/8"],['2/2',"2/2"],['5/4',"5/4"],['12/8',"12/8"]],score.ts[0]+'/'+score.ts[1])+'</div>';
+    h+='<div class="row"><label>한 줄에 마디</label><select data-opt="mps"><option value="0"'+(!score.mps?' selected':'')+'>자동</option>'+[1,2,3,4,5,6,8].map(function(n){ return '<option value="'+n+'"'+(score.mps===n?' selected':'')+'>'+n+'마디씩</option>'; }).join('')+'</select></div><label class="chk"><input type="checkbox" data-opt="pl"'+(score.pl?' checked':'')+'> 파트 이름을 오선 위에 쓰기</label>';
     h+='<div class="row"><label>마디 번호</label><select data-opt="mn"><option value="0"'+(!score.mn?' selected':'')+'>안 보임</option><option value="1"'+(score.mn===1?' selected':'')+'>줄 첫머리</option><option value="2"'+(score.mn===2?' selected':'')+'>모든 마디</option></select></div>';
     h+='<div class="row"><label>음 이름 표시</label><select data-opt="nn"><option value="0"'+(!score.nn?' selected':'')+'>안 보임</option><option value="1"'+(score.nn===1?' selected':'')+'>C D E (영어)</option><option value="2"'+(score.nn===2?' selected':'')+'>도 레 미</option></select></div><label class="chk"><input type="checkbox" data-opt="nc"'+(score.nc?' checked':'')+'> 음마다 색깔로 칠하기 (도=빨강 … 시=보라)</label>';
     h+='<div class="row"><label>조</label>'+sel('ksel',KEYS,score.key)+'</div><label class="chk"><input type="checkbox" data-pb="keyMove"'+(pbs.keyMove?' checked':'')+'> 조를 바꿀 때 음도 같이 옮기기</label></div>';
@@ -738,6 +757,7 @@ function panel(){
     score.parts.forEach(function(p,i){ h+='<div style="border:1px solid '+(i===cur.part?'var(--fry)':'var(--line)')+';border-radius:9px;padding:8px;margin:6px 0"><div class="row"><input type="text" data-pn="'+i+'" value="'+esc(p.name)+'" data-notr><button class="tbtn" data-pa="sel'+i+'" style="height:28px">'+(i===cur.part?'쓰는 중':'고르기')+'</button></div>'
       +'<div class="row"><label>음자리표</label><select data-pc="'+i+'"'+(p.v2?' disabled':'')+'>'+Object.keys(CLEFN).map(function(c){ return '<option value="'+c+'"'+(p.clef===c?' selected':'')+'>'+CLEFN[c]+'</option>'; }).join('')+'</select></div>'
       +(i>0?'<label class="chk"><input type="checkbox" data-pv2="'+i+'"'+(p.v2?' checked':'')+'> 위 파트와 같은 오선에 겹쳐 쓰기 (둘째 성부)</label>':'')
+      +'<div class="row"><label>이조 악기</label><select data-ptr="'+i+'">'+[[0,'없음 (쓴 대로 들림)'],[-2,'B♭ 악기 (클라리넷·트럼펫)'],[-9,'E♭ 악기 (알토 색소폰)'],[-7,'F 악기 (호른)'],[12,'한 옥타브 위 (피콜로)'],[-12,'한 옥타브 아래 (더블베이스)']].map(function(x){ return '<option value="'+x[0]+'"'+((+p.trans||0)===x[0]?' selected':'')+'>'+x[1]+'</option>'; }).join('')+'</select></div>'
       +'<div class="row"><label>TAB 악보</label><select data-ptab="'+i+'"><option value=""'+(!p.tab?' selected':'')+'>없음</option><option value="gtr"'+(p.tab==='gtr'?' selected':'')+'>기타 (6줄)</option><option value="bass"'+(p.tab==='bass'?' selected':'')+'>베이스 (4줄)</option></select></div>'
       +'<div class="row"><label>악기</label><select data-pi="'+i+'">'+INSTS.map(function(x){ return '<option value="'+x[0]+'"'+(p.inst===x[0]?' selected':'')+'>'+x[1]+'</option>'; }).join('')+'</select></div>'
       +'<div class="row"><label>소리 크기</label><input type="range" data-pv="'+i+'" min="0" max="100" value="'+p.vol+'"><label class="chk" style="margin:0"><input type="checkbox" data-pm="'+i+'"'+(p.mute?' checked':'')+'> 끄기</label><label class="chk" style="margin:0"><input type="checkbox" data-ps="'+i+'"'+(p.solo?' checked':'')+'> 혼자</label></div>'
@@ -791,20 +811,23 @@ pb.addEventListener('click',function(e){
 var cf=0; function bnConfirm(b){ if(cf){ cf=0; return true; } cf=1; b.textContent='한 번 더 누르면 지워요'; setTimeout(function(){ cf=0; if(b.isConnected) b.textContent='모두 지우고 새로 시작'; },3000); return false; }
 pb.addEventListener('input',function(e){ var t=e.target;
   if(t.dataset.pbs){ pbs.speed=+t.value; $('pbsV').textContent=t.value+'%'; savePbs(); return; }
-  if(t.id==='tempo'){ score.tempo=+t.value; $('tempoV').textContent=t.value; } else if(t.id==='comp'){ score.composer=t.value; } else if(t.dataset.pv!=null){ score.parts[+t.dataset.pv].vol=+t.value; } else if(t.dataset.pp!=null){ score.parts[+t.dataset.pp].pan=+t.value/100; } else if(t.dataset.pn!=null){ score.parts[+t.dataset.pn].name=t.value; } });
+  if(t.id==='tempo'){ score.tempo=+t.value; $('tempoV').textContent=t.value; } else if(t.id==='comp'){ score.composer=t.value; } else if(t.id==='lyr'){ score.lyr=t.value; } else if(t.id==='sub'){ score.sub=t.value; } else if(t.id==='cpy'){ score.cpy=t.value; } else if(t.dataset.pv!=null){ score.parts[+t.dataset.pv].vol=+t.value; } else if(t.dataset.pp!=null){ score.parts[+t.dataset.pp].pan=+t.value/100; } else if(t.dataset.pn!=null){ score.parts[+t.dataset.pn].name=t.value; } });
 pb.addEventListener('change',function(e){ var t=e.target;
+  if(t.dataset.opt==='mps'){ score.mps=+t.value; commit(); return; }
+  if(t.dataset.opt==='pl'){ score.pl=t.checked; commit(); return; }
   if(t.dataset.opt==='mn'){ score.mn=+t.value; commit(); return; }
   if(t.dataset.opt==='nn'){ score.nn=+t.value; commit(); return; }
   if(t.dataset.opt==='nc'){ score.nc=t.checked; commit(); return; }
   if(t.dataset.pbsel){ pbs[t.dataset.pbsel]=isNaN(+t.value)?t.value:+t.value; savePbs(); return; }
   if(t.dataset.pb){ pbs[t.dataset.pb]=t.checked; savePbs(); if(play&&t.dataset.pb==='loop') play.loop=t.checked; return; }
   if(t.dataset.ps!=null){ score.parts[+t.dataset.ps].solo=t.checked; commit(); return; }
-  if(t.id==='tempo'||t.id==='comp'||t.dataset.pv!=null||t.dataset.pn!=null||t.dataset.pp!=null){ commit(); return; }
+  if(t.id==='tempo'||t.id==='comp'||t.id==='lyr'||t.id==='sub'||t.id==='cpy'||t.dataset.pv!=null||t.dataset.pn!=null||t.dataset.pp!=null){ commit(); return; }
   if(t.id==='tsel'){ var a=t.value.split('/'); score.ts=[+a[0],+a[1]]; commit(); return; }
   if(t.id==='ksel'){ var k0=score.key, k1=+t.value; if(pbs.keyMove&&k1!==k0){ var n=((7*(k1-k0))%12+12)%12; if(n>6) n-=12; score.parts.forEach(function(pt){ pt.ev.forEach(function(e){ e.p.forEach(function(pp){ shiftSemi(pp,n,k1>=0); }); if(e.ch) e.ch=transChord(e.ch,n,k1<0); }); }); } score.key=k1; commit(); return; }
   if(t.dataset.pc!=null){ var pci=+t.dataset.pc; score.parts[pci].clef=t.value; for(var jj=pci+1;jj<score.parts.length&&score.parts[jj].v2;jj++) score.parts[jj].clef=t.value; commit(); return; }
   if(t.dataset.pv2!=null){ var vi=+t.dataset.pv2, vp=score.parts[vi]; vp.v2=t.checked; if(t.checked){ vp.clef=score.parts[parentOf(vi-1)].clef; delete vp.tab; } commit(); return; }
   if(t.dataset.curpart!=null){ cur.part=+t.value; cur.idx=-1; cur.end=-1; draw(); panel(); return; }
+  if(t.dataset.ptr!=null){ var ptr=score.parts[+t.dataset.ptr]; if(+t.value) ptr.trans=+t.value; else delete ptr.trans; commit(); return; }
   if(t.dataset.ptab!=null){ var ptb=score.parts[+t.dataset.ptab]; if(t.value) ptb.tab=t.value; else delete ptb.tab; commit(); return; }
   if(t.dataset.pi!=null){ score.parts[+t.dataset.pi].inst=t.value; commit(); return; }
   if(t.dataset.pm!=null){ score.parts[+t.dataset.pm].mute=t.checked; commit(); return; }
@@ -855,9 +878,9 @@ $('fileIn').addEventListener('change',function(){ if(this.files[0]) openFile(thi
 $('bSave').onclick=function(){
   var old=document.querySelector('.menu'); if(old){ old.remove(); return; }
   var m=document.createElement('div'); m.className='menu'; var r=this.getBoundingClientRect(); m.style.top=(r.bottom+4)+'px'; m.style.right='8px';
-  m.innerHTML='<button data-x="midi">MIDI (.mid)</button><button data-x="xml">MusicXML (.musicxml)</button><button data-x="wav">소리 파일 (.wav)</button><button data-x="png">PNG 그림</button><button data-x="svg">SVG</button><button data-x="print">인쇄 / PDF로 저장</button><button data-x="json">프로젝트 파일 (.fscore)</button>';
+  m.innerHTML='<button data-x="midi">MIDI (.mid)</button><button data-x="xml">MusicXML (.musicxml)</button><button data-x="wav">소리 파일 (.wav)</button><button data-x="png">PNG 그림</button><button data-x="svg">SVG</button><button data-x="print">인쇄 / PDF로 저장</button><button data-x="json">프로젝트 파일 (.fscore)</button><button data-x="link">링크로 공유 (복사)</button>';
   m.onclick=function(ev){ var x=ev.target.dataset.x; if(!x) return; m.remove();
-    if(x==='midi') download(fname('mid'),exportMidi()); else if(x==='xml') download(fname('musicxml'),exportXml()); else if(x==='wav') exportWav(); else if(x==='png') exportPng(2); else if(x==='svg') download(fname('svg'),new Blob([svgStr()],{type:'image/svg+xml'})); else if(x==='print') printScore(); else download(fname('fscore'),new Blob([snap()],{type:'application/json'})); };
+    if(x==='midi') download(fname('mid'),exportMidi()); else if(x==='link') shareLink(); else if(x==='xml') download(fname('musicxml'),exportXml()); else if(x==='wav') exportWav(); else if(x==='png') exportPng(2); else if(x==='svg') download(fname('svg'),new Blob([svgStr()],{type:'image/svg+xml'})); else if(x==='print') printScore(); else download(fname('fscore'),new Blob([snap()],{type:'application/json'})); };
   document.body.appendChild(m); setTimeout(function(){ document.addEventListener('click',function h(ev){ if(!m.contains(ev.target)) m.remove(); document.removeEventListener('click',h); }); },0);
 };
 document.addEventListener('keydown',function(e){
@@ -891,6 +914,7 @@ document.addEventListener('keydown',function(e){
   if(!s) loadExampleSilent('twinkle');
   $('dname').value=score.name; hist=[snap()]; hi=0; renderTools(); draw(); panel(); if(window.innerWidth<=820) $('bZf').click();
   function loadExampleSilent(k){ var e=EX[k]; score={name:e.name,composer:e.composer||'',tempo:e.tempo,ts:e.ts,key:e.key,parts:e.parts.map(function(p){ return {name:p[0],clef:p[1],inst:p[2],vol:80,mute:false,ev:parseText(p[3],p[1])}; })}; score.mk=e.mk||{}; if(e.ly) lyr(score.parts[0],e.ly); }
-  window.FSCORE={score:function(){ return score; },load:loadExample,parseText:parseText,layout:layout,midi:exportMidi,parseChord:parseChord,transChord:transChord,print:printScore,order:playOrder,xml:exportXml,readXml:readXml,readMidi:readMidi,svg:svgStr};
+  loadHash();
+  window.FSCORE={link:makeLink,score:function(){ return score; },load:loadExample,parseText:parseText,layout:layout,midi:exportMidi,parseChord:parseChord,transChord:transChord,print:printScore,order:playOrder,xml:exportXml,readXml:readXml,readMidi:readMidi,svg:svgStr};
 })();
 })();
