@@ -81,7 +81,7 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
 .bin .hint{color:var(--dim);font-size:12px;line-height:1.5;padding:6px;}
 .prev{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;background:var(--desk);align-items:center;padding:10px;gap:8px;}
 .pwrap{flex:1 1 0;min-height:0;width:100%;position:relative;}
-#cv{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:transparent;}
+#cv{touch-action:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:transparent;}
 .tr{display:flex;align-items:center;gap:8px;} .tc{font-variant-numeric:tabular-nums;color:var(--dim);font-size:13px;}
 .tlbar{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:6px 10px;overflow-x:auto;scrollbar-width:none;} .tlbar>*{flex-shrink:0;} .tlbar{background:var(--panel);border-top:1px solid var(--line);}
 .tlw{touch-action:pan-x pan-y;flex:0 0 232px;background:var(--panel);overflow:auto;position:relative;border-top:1px solid var(--line);}
@@ -128,7 +128,7 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
 <div class="main vmain">
   <div class="vtop">
     <div class="bin" id="bin"></div>
-    <div class="prev"><div class="pwrap"><canvas id="cv" width="1280" height="720"></canvas></div>
+    <div class="prev"><div class="pwrap"><canvas id="cv" width="1280" height="720" title="화면 속 클립을 끌면 옮겨지고, 노란 네모 모서리를 끌면 크기가 바뀌어요"></canvas></div>
       <div class="tr"><button class="tbtn" id="bBack" title="맨 앞으로">⏮</button><button class="tbtn pri" id="bPlay">▶</button><button class="tbtn" id="bFrame" title="지금 장면을 PNG로">📷</button><span class="tc" id="tc">0:00.0 / 0:00.0</span></div>
     </div>
     <div class="panel"><div class="ptabs" id="ptabs"><button data-p="clip" class="on">클립</button><button data-p="ins">넣기</button><button data-p="proj">영상 설정</button></div><div class="pbody" id="pbody"></div></div>
@@ -141,8 +141,8 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
 <input type="file" id="subIn" accept=".srt,.vtt,text/vtt,text/plain" hidden>
 <input type="file" id="fileIn" accept="video/*,image/*,audio/*" multiple hidden>
 <script src="../ai.js?v=ai36.l21"></script>
-<script src="strings.js?v=vs4"></script>
-<script src="app.js?v=vd19"></script>
+<script src="strings.js?v=vs5"></script>
+<script src="app.js?v=vd20"></script>
 <script src="../pwa.js" defer></script>
 <script src="../ping.js" defer></script>
 </body>
