@@ -4,6 +4,30 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v15",
+   "title": "Fry Draw 15: 도형 합치기 다듬기, 정렬·간격·크기 맞추기, 단축키",
+   "items": [
+    "도형 합치기: '조각으로 나누기'(겹친 곳과 아닌 곳을 모두 따로 떼기), '빼기 (위 − 아래)'를 더하고, '원래 도형 남기기'를 고를 수 있어요",
+    "정렬 기준을 캔버스 / 고른 것 전체 / 맨 위 도형(움직이지 않는 기준)으로 고를 수 있어요. 간격 숫자를 넣어 가로·세로로 똑같이 띄우고, 맨 위 도형 크기에 가로·세로·둘 다 맞출 수 있어요",
+    "복사·붙이기: Ctrl+C / X / V (Shift+V는 제자리). 다른 페이지나 새로 연 탭으로도 붙여 넣어요",
+    "Ctrl+[ ] 한 칸 뒤·앞(Shift는 맨 뒤·앞), Ctrl+0 화면에 맞춤, Ctrl+1 100%, Ctrl +/- 확대·축소, 스페이스를 누른 채 끌면 화면 옮기기, B로 붓",
+    "캔버스 탭에 단축키 목록을 넣었어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 15: boolean polish, align, spacing and size matching, shortcuts",
+     "items": [
+      "Boolean ops: new Divide into pieces and Top minus bottom, plus a Keep originals option",
+      "Align relative to the canvas, the whole selection or a key object (the topmost shape stays put); set exact horizontal or vertical spacing; match width, height or both to the key object",
+      "Copy and paste: Ctrl+C / X / V (Shift+V pastes in place), also across pages and tabs",
+      "Ctrl+[ and ] to move one step back or forward (Shift for back or front), Ctrl+0 fit, Ctrl+1 100%, Ctrl +/- zoom, hold Space to pan, B for brush",
+      "Shortcut list added to the Canvas tab"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v14",
    "title": "Fry Draw 14: SVG 가져오기 대폭 개선, 붓 종류",
    "items": [
