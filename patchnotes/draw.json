@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v12",
+   "title": "Fry Draw 12: 그라데이션 손잡이, 글자 윤곽선, 크기 목록",
+   "items": [
+    "그라데이션 손잡이: 그라데이션을 칠한 도형을 고르면 캔버스에 손잡이가 나와요. 선형은 시작·끝 점을 끌어 방향을 바꾸고(Shift: 15도씩), 원형은 가운데와 반지름을 끌어요",
+    "글자 윤곽선 도형으로 바꾸기: 글자를 점을 고칠 수 있는 도형으로 바꿔요. 색·그림자 같은 꾸밈은 그대로 가져가요",
+    "캔버스 크기 목록: SNS, 화면, 종이(A3~명함), 아이콘 크기를 목록에서 고르고 가로↔세로를 바꿔요",
+    "벡터로 따기에서 일부 윤곽이 어긋나던 문제를 고쳤어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 12: gradient handles, text to outlines, size presets",
+     "items": [
+      "Gradient handles: select a gradient-filled shape to get on-canvas handles. Drag the start/end of a linear gradient to change direction (Shift snaps to 15 degrees), or the centre and radius of a radial one",
+      "Convert text to outlines: turn text into an editable path shape, keeping fill, effects and shadow",
+      "Canvas size list: SNS, screen, paper (A3 to business card) and icon presets, plus swap width and height",
+      "Fixed some contours being misjoined in image trace"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v11",
    "title": "Fry Draw 11: 붓, 도형 모음, 벡터로 따기, 비슷한 도형 고르기",
    "items": [
