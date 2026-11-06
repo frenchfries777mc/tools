@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v36",
+   "title": "BeaconScript 새로 만들기 (define item·mob)",
+   "items": [
+    "define item \"이름\": 아래에 base(바탕 아이템)·recipe(작업대 칸 순서대로 재료, 최대 7칸)·makes(한 번에 만드는 개수)를 쓰면 검사해 줘요",
+    "define mob \"이름\": 아래에 base(바탕 몹)·biome(start forest desert volcano jungle mesa rock mangrove ice)·rate(1분에 나오는 정도)·max(동시에 최대 마릿수)를 검사해요",
+    "define 줄 자동완성(item·mob, 안쪽 줄 이름, 재료와 지역 목록)과 단어 설명도 넣었어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript define item and mob",
+     "items": [
+      "define item \"name\": checks base (base item), recipe (ingredients in crafting-table slot order, up to 7 slots) and makes (amount per craft)",
+      "define mob \"name\": checks base (base mob), biome (start forest desert volcano jungle mesa rock mangrove ice), rate (spawn rate per minute) and max (most alive at once)",
+      "Auto-complete for define lines (item/mob, inner line names, ingredient and biome lists) and word meanings added"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v35",
    "title": "BeaconScript 변수는 중괄호로",
    "items": [
