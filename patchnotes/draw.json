@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v16",
+   "title": "Fry Draw 16: 모양 비틀기, 선 따라 놓기",
+   "items": [
+    "모양 비틀기: 도형의 윤곽을 물결·지그재그·지글지글·부풀리기(오목하게)·소용돌이로 비틀어요. 높이·주기·무작위 번호를 정할 수 있고 선, 네모, 원, 곡선 모두 돼요",
+    "선 따라 놓기: 도형과 선(또는 도형)을 함께 고르면 맨 위 도형을 따라 나머지를 정해 둔 개수만큼 줄지어 놓아요. 선 방향으로 돌리기와 크기 들쭉날쭉도 고를 수 있어요",
+    "두 기능 모두 되돌리기와 저장에 그대로 들어가요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 16: warp effects and place along path",
+     "items": [
+      "Warp effects: wave, zigzag, roughen, bulge or pinch and swirl the outline of any line, rectangle, ellipse or curve, with amount, period and seed controls",
+      "Place along path: select a shape and a path (the topmost is the path) and line up copies at a set count, optionally rotated to the path and with random size variation",
+      "Both are covered by undo and saving"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v15",
    "title": "Fry Draw 15: 도형 합치기 다듬기, 정렬·간격·크기 맞추기, 단축키",
    "items": [
