@@ -73,3 +73,4 @@ patchnotes/draw.json | Fry Draw v10 항목 (en만), draw/app.js 페이지·색 �
 patchnotes/draw.json | Fry Draw v11 항목 (en만), draw/app.js 붓·도형 모음·벡터 따기 한국어 문구 | draw v11 | 2026-11-06
 patchnotes/score.json | Fry Score v12 항목 (en만) | score v12 | 2026-11-06
 score/app.js | Fry Score v12 한국어 메시지·버튼 | score v12 | 2026-11-06
+patchnotes/video.json | Fry Video v15 색 보정·샤프닝·단축키·프로젝트 틀 (en 번역 없음) | video v15 | 2026-11-06
