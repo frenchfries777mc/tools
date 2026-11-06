@@ -20,12 +20,19 @@
 
   function partMetrics(S) {
     return S.parts.map((P, i) => {
-      const prevBrace = i > 0 && S.parts[i - 1].brace;
-      const hasLyr = P.m.some((V) => V.some((E) => E.some((e) => e.ly || e.ly2)));
-      const hasDyn = P.m.some((V) => V.some((E) => E.some((e) => e.dyn || e.hp)));
-      const lyrLines = P.m.some((V) => V.some((E) => E.some((e) => e.ly2))) ? 2 : hasLyr ? 1 : 0;
-      const tab = P.tab ? 74 : 0;
-      return { above: prevBrace ? 22 : 40, below: 22 + (hasDyn ? 12 : 0) + lyrLines * 16 + tab, tab };
+      const prevBrace = i > 0 && S.parts[i - 1].brace, ev = [];
+      P.m.forEach((V) => V.forEach((E) => E.forEach((e) => ev.push(e))));
+      const has = (fn) => ev.some(fn);
+      const hasCh = has((e) => e.ch), hasTx = has((e) => e.tx), hasOv = has((e) => e.ov != null), hasDyn = has((e) => e.dyn || e.hp), hasPed = has((e) => e.ped);
+      const ly2 = has((e) => e.ly2), ly1 = has((e) => e.ly) || ly2;
+      const above = (prevBrace ? 22 : 30) + (hasCh ? 14 : 0) + (hasTx || hasOv ? 14 : 0);
+      let c = hasDyn ? 24 : 8; const dynY = 17;
+      let ly1Y = 0, ly2Y = 0, pedY = 0;
+      if (ly1) { ly1Y = c + 13; c += 16; }
+      if (ly2) { ly2Y = c + 13; c += 16; }
+      if (hasPed) { pedY = c + 12; c += 16; }
+      const tab = P.tab ? 56 : 0, tabTop = c + 8;
+      return { above, below: c + tab + 12 + (P.tab ? 8 : 0), dynY, ly1Y, ly2Y, pedY, tab, tabTop, hasCh, hasTx, hasOv };
     });
   }
 

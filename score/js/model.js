@@ -364,7 +364,7 @@
       EV_STR.forEach((k) => { if (e[k]) ev[k] = String(e[k]).slice(0, 30); });
       if (EV_ART.indexOf(e.art) >= 0) ev.art = e.art;
       if (DYNS.indexOf(e.dyn) >= 0) ev.dyn = e.dyn;
-      if (e.hp === 'cr' || e.hp === 'de') ev.hp = e.hp;
+      if (e.hp === 'cr' || e.hp === 'de' || e.hp === 'end') ev.hp = e.hp;
       if (e.slur) ev.slur = FS.clamp(Math.round(+e.slur === 1 || e.slur === true ? 1 : +e.slur) || 1, 1, 4);
       if (e.hd === 'x' || e.hd === 'dia' || e.hd === 'tri') ev.hd = e.hd;
       if (e.ped === 'd' || e.ped === 'u') ev.ped = e.ped;

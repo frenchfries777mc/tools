@@ -101,6 +101,7 @@
     while (m + 1 < T.n && s >= ST.sec[m + 1] - 1e-9) m++;
     return T.start[m] + ((s - ST.sec[m]) * ST.tempo[m] * 16) / 60;
   };
+  const DYNV = { ppp: 0.3, pp: 0.4, p: 0.55, mp: 0.7, mf: 0.85, f: 1, ff: 1.15, fff: 1.3, sfz: 1.1 };
   FS.noteList = function (S, opts) {
     opts = opts || {};
     const T = FS.mtab(S), out = [], solo = S.parts.some((P) => P.solo);
@@ -110,12 +111,47 @@
       for (let v = 0; v < nvoices; v++) {
         const flat = [];
         for (let m = 0; m < T.n; m++) { const E = P.m[m][v]; if (!E) continue; let t = T.start[m]; E.forEach((e) => { flat.push({ e, t }); t += e.d; }); }
+        // dynamics: level per event, with hairpin ramps
+        let lvl = 0.85, oct = 0; const levels = new Array(flat.length), octs = new Array(flat.length), slurred = new Array(flat.length).fill(false);
+        for (let k = 0; k < flat.length; k++) {
+          const e = flat[k].e;
+          if (e.dyn) lvl = DYNV[e.dyn] || lvl;
+          if (e.ov != null) oct = e.ov * 12;
+          levels[k] = lvl; octs[k] = oct;
+          if (e.hp === 'cr' || e.hp === 'de') {
+            let j = k + 1; while (j < flat.length && !flat[j].e.dyn && !flat[j].e.hp) j++;
+            const to = j < flat.length && flat[j].e.dyn ? DYNV[flat[j].e.dyn] : Math.max(0.2, Math.min(1.4, lvl * (e.hp === 'cr' ? 1.35 : 0.7)));
+            const span = (j < flat.length ? flat[j].t : flat[flat.length - 1].t + flat[flat.length - 1].e.d) - flat[k].t || 1;
+            for (let q = k; q < Math.min(j, flat.length); q++) levels[q] = lvl + (to - lvl) * ((flat[q].t - flat[k].t) / span);
+            lvl = to;
+          }
+          if (e.slur && e.p.length) {
+            let want = +e.slur || 1;
+            for (let j = k; j < flat.length && want > 0; j++) { if (j > k && flat[j].e.p.length) want--; if (want > 0) slurred[j] = true; }
+          }
+        }
         for (let k = 0; k < flat.length; k++) {
           const { e, t } = flat[k];
           if (!e.p.length || flat[k].skip) continue;
           let d = e.d, cur = e, j = k;
           while (cur.tie && flat[j + 1] && flat[j + 1].e.p.length && e.p.every((p) => flat[j + 1].e.p.some((q) => FS.samePitch(p, q)))) { j++; flat[j].skip = true; d += flat[j].e.d; cur = flat[j].e; }
-          out.push({ t, d, midi: e.p.map((p) => FS.midi(p) + shift), pi, inst: instOf(P), vol: P.vol / 100, pan: P.pan || 0, art: e.art, e });
+          const base = { pi, inst: instOf(P), pan: P.pan || 0, art: e.art, e, leg: slurred[k] && !!flat[j + 1] };
+          const vol = (P.vol / 100) * levels[k] * (e.dyn === 'sfz' ? 1.35 : 1);
+          let midi = e.p.map((p) => FS.midi(p) + shift + octs[k]), tt = t, dd = d;
+          // grace notes borrow time from the main note
+          if (e.gr && e.gr.length) {
+            const gd = Math.min(2, dd / (e.gr.length * 3));
+            e.gr.forEach((g, gi) => out.push(Object.assign({}, base, { t: tt + gi * gd, d: gd, midi: [FS.midi(g) + shift + octs[k]], vol: vol * 0.8, art: null })));
+            tt += gd * e.gr.length; dd -= gd * e.gr.length;
+          }
+          const emit = (ts, ds, mm, vv) => out.push(Object.assign({}, base, { t: ts, d: ds, midi: mm, vol: vv == null ? vol : vv }));
+          const up = (mm, n) => mm.map((x) => x + n);
+          if (e.art === 'tr' && dd >= 4) { for (let q = 0, x = tt; x < tt + dd - 1e-6; q++, x += 2) emit(x, Math.min(2, tt + dd - x), q % 2 ? up(midi, 2) : midi); }
+          else if (e.art === 'mord' && dd >= 6) { emit(tt, 2, midi); emit(tt + 2, 2, up(midi, 2)); emit(tt + 4, dd - 4, midi); }
+          else if (e.art === 'turn' && dd >= 8) { const q = dd / 4; emit(tt, q, up(midi, 2)); emit(tt + q, q, midi); emit(tt + 2 * q, q, up(midi, -1)); emit(tt + 3 * q, q, midi); }
+          else if (e.art === 'trem' && dd >= 4) { for (let x = tt; x < tt + dd - 1e-6; x += 2) emit(x, Math.min(2, tt + dd - x), midi); }
+          else if (e.art === 'arp' && midi.length > 1) { const st = Math.min(2, dd / (midi.length * 2)); midi.slice().sort((a, b) => a - b).forEach((mm, q) => emit(tt + q * st, dd - q * st, [mm])); }
+          else emit(tt, dd, midi);
         }
       }
     });
@@ -129,8 +165,8 @@
     notes.forEach((n) => {
       if (n.t + n.d <= from + EPS) return;
       const startSec = FS.unitsToSec(ST, Math.max(n.t, from)) - base, endSec = FS.unitsToSec(ST, n.t + n.d) - base;
-      const dur = Math.max(0.05, (endSec - startSec) * (n.art === 'stac' ? 0.45 : 0.96));
-      n.midi.forEach((mm) => FS.synth(c, A.master, n.inst, freq(mm), t0 + startSec, dur, n.vol * (n.art === 'acc' ? 1.3 : 1), n.pan));
+      const dur = Math.max(0.05, (endSec - startSec) * (n.art === 'stac' ? 0.45 : n.leg ? 1.03 : n.art === 'ten' ? 1 : 0.94));
+      n.midi.forEach((mm) => FS.synth(c, A.master, n.inst, freq(mm), t0 + startSec, dur, n.vol * (n.art === 'acc' || n.art === 'marc' ? 1.3 : 1), n.pan));
     });
     const total = ST.total - base;
     A.play = { t0, base, ST, total, onTick, onEnd, raf: 0 };
