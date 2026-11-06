@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v37",
+   "title": "BeaconScript 광물 만들기 (define ore)",
+   "items": [
+    "define ore \"이름\": 아래에 base(iron·gold·copper·zinc 중 하나)·color(\"#e0245e\")·drop(아이템 최소 최대)·biome·chance(바위 중 이 광물이 되는 비율 %)를 검사해요",
+    "define ore 는 모드당 4개까지, 자동완성과 단어 설명도 넣었어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript define ore",
+     "items": [
+      "define ore \"name\": checks base (one of iron, gold, copper, zinc), color (\"#e0245e\"), drop (item, min, max), biome and chance (percent of rocks that become this ore)",
+      "At most 4 define ore per mod; auto-complete and word meanings added"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v36",
    "title": "BeaconScript 새로 만들기 (define item·mob)",
    "items": [
