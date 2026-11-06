@@ -1,6 +1,6 @@
-/* Frenchfries777 Tools 서버 전용 저장 (FFSrv): the documents of Fry Docs, Sheet, Slides, Block HTML and Python are kept ONLY on the Oracle
+/* Frenchfries777 Tools 서버 전용 저장 (FFSrv): the documents of Fry Docs, Sheet, Slides, Block HTML, Python, Draw, Score and Video are kept ONLY on the Oracle
    server (server/fry-store), not in this browser. Load this file first on each program page. It makes localStorage send the document keys
-   (ffdocs.* ffsheet.* ffslides.v1 ffblocks.* ffpy.* ffver.v1.*) to the server and read them from there; every other key stays in the browser.
+   (ffdocs.* ffsheet.* ffslides.v1 ffblocks.* ffpy.* ffdraw.v1 ffscore.v2 ffscore.lib2 ffvideo.v1 ffver.v1.*) to the server and read them from there; every other key stays in the browser.
    Reads are synchronous (the list of keys is fetched once when the page starts; a document is fetched the first time it is read), writes are sent
    a moment later. Old copies still in this browser are moved to the server once, then removed. When the server cannot be reached nothing is
    written (so the real documents on the server can never be overwritten by an empty list) and a red bar says so. */
@@ -8,7 +8,7 @@
 'use strict';
 if(!root.document||!root.Storage||root.FFSrv) return;
 var BASE=root.FFSRV_URL||'https://140-238-55-153.sslip.io', MAXK=4e6, MAXO=16e6, DELAY=400;
-var ROUTE=/^(ffdocs\.v1|ffdocs\.doc\.[A-Za-z0-9_-]+|ffsheet\.docs|ffsheet\.doc\.[A-Za-z0-9_-]+|ffslides\.v1|ffblocks\.projects|ffblocks\.(p|store|ai)\.[A-Za-z0-9_-]+|ffpy\.v1|ffpy\.file\.[A-Za-z0-9_-]+|ffver\.v1\.[A-Za-z0-9._-]+)$/;
+var ROUTE=/^(ffdocs\.v1|ffdocs\.doc\.[A-Za-z0-9_-]+|ffsheet\.docs|ffsheet\.doc\.[A-Za-z0-9_-]+|ffslides\.v1|ffblocks\.projects|ffblocks\.(p|store|ai)\.[A-Za-z0-9_-]+|ffpy\.v1|ffpy\.file\.[A-Za-z0-9_-]+|ffver\.v1\.[A-Za-z0-9._-]+|ffdraw\.v1|ffscore\.(v2|lib2)|ffvideo\.v1)$/;
 var P=Storage.prototype, oGet=P.getItem, oSet=P.setItem, oDel=P.removeItem, oKey=P.key, oLen=Object.getOwnPropertyDescriptor(P,'length').get;
 var real=root.localStorage;
 function isLS(s){ return s===real; }
