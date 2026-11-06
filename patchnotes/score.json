@@ -4,6 +4,30 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v31",
+   "title": "Fry Score 새로 만들기 2: 셈여림·꾸밈 기호",
+   "items": [
+    "셈여림(ppp~fff, sfz)과 점점 세게·여리게 표시를 넣을 수 있어요",
+    "스타카토·악센트·트릴·모르덴트·턴·트레몰로·아르페지오 같은 연주 기호",
+    "이음줄, 꾸밈음, 3·5·6·7·9잇단음표(괄호와 숫자 표시)",
+    "가사 2줄, 코드 이름, 지시어, 운지, 8va 선, 페달, 음표 머리 모양",
+    "재생에도 셈여림 변화, 이음줄, 꾸밈음, 트릴 등이 반영돼요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Score rebuild 2: dynamics and ornaments",
+     "items": [
+      "Dynamics ppp-fff and sfz plus crescendo/diminuendo hairpins",
+      "Articulations and ornaments: staccato, accent, trill, mordent, turn, tremolo, arpeggio",
+      "Slurs, grace notes and 3/5/6/7/9 tuplets with brackets",
+      "Two lyric lines, chord symbols, expression text, fingering, 8va lines, pedal and note head shapes",
+      "Playback honours dynamics, slurs, grace notes and trills"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v30",
    "title": "Fry Score 새로 만들기 (1/4): 새 악보 엔진",
    "items": [
