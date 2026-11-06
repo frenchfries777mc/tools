@@ -4,29 +4,40 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Tools 키</title>
+<title>Claude와 연결하기</title>
 <style>
 body{font-family:system-ui,sans-serif;background:#111;color:#eee;display:flex;justify-content:center;padding:40px 16px;margin:0}
 main{width:100%;max-width:420px;display:flex;flex-direction:column;gap:10px}
 input,button{padding:10px;border-radius:8px;border:1px solid #444;background:#1c1c1c;color:#eee;font-size:16px}
-button{background:#e8b04a;color:#111;border:0;font-weight:700;cursor:pointer}
+button,.btn{background:#e8b04a;color:#111;border:0;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;padding:10px;border-radius:8px;font-size:16px}
+label{font-size:14px;color:#aaa;margin-top:8px}
 footer{margin-top:24px;font-size:12px;color:#888;display:flex;flex-direction:column;gap:4px}
 footer a{color:#aaa}
 </style>
 </head>
 <body>
 <main>
-<h2>Tools 키</h2>
+<h2>Claude와 연결하기</h2>
+<label>1. 커넥터 주소</label>
+<input id="u" readonly value="https://ff-tools-mcp.frenchfries777mc.workers.dev/mcp">
+<button data-copy="u">복사</button>
+<label>2. 커넥터 추가 화면</label>
+<a class="btn" href="https://claude.ai/settings/connectors" target="_blank" rel="noopener">Claude 커넥터 설정 열기</a>
+<label>3. Tools 키 (로그인 때 한 번)</label>
 <input id="k" readonly>
-<button id="c">복사</button>
+<button data-copy="k">복사</button>
 <footer><span>Created by Frenchfries777</span><span class="ff-copy">© 2026 Frenchfries777 · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.ko" target="_blank" rel="noopener">CC BY-NC-ND 4.0</a></span></footer>
 </main>
 <script>
 (function(){
-  var k=document.getElementById('k'),b=document.getElementById('c'),v='';
+  var k=document.getElementById('k'),v='';
   try{ v=localStorage.getItem('ffstore.owner')||''; }catch(e){}
   k.value=/^[0-9a-f]{32}$/.test(v)?v:'키가 없어요. Tools에서 문서를 먼저 저장해 주세요.';
-  b.onclick=function(){ k.select(); try{ navigator.clipboard.writeText(k.value).then(function(){ b.textContent='복사됨'; },function(){ document.execCommand('copy'); b.textContent='복사됨'; }); }catch(e){ document.execCommand('copy'); b.textContent='복사됨'; } };
+  Array.prototype.forEach.call(document.querySelectorAll('button[data-copy]'),function(b){
+    b.onclick=function(){ var f=document.getElementById(b.getAttribute('data-copy')); f.select();
+      var done=function(){ b.textContent='복사됨'; };
+      try{ navigator.clipboard.writeText(f.value).then(done,function(){ document.execCommand('copy'); done(); }); }catch(e){ document.execCommand('copy'); done(); } };
+  });
 })();
 </script>
 </body>
