@@ -4,6 +4,48 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v19",
+   "title": "타임라인 미리보기 그림·색 표시·반복 재생",
+   "items": [
+    "영상 클립에 장면 그림(필름 띠)이 깔려요. 자르거나 줄여도 알맞은 부분이 보여요",
+    "클립 색 표시: 빨강·주황·노랑·초록·파랑·보라 띠를 달아 클립을 구분해요",
+    "🔁 반복 재생: 끝까지 가면 처음부터 다시 재생해요 (내보낼 때는 적용되지 않아요)"
+   ],
+   "tr": {
+    "en": {
+     "title": "Timeline thumbnails, colour labels, loop playback",
+     "items": [
+      "Video clips show a filmstrip of scenes; trimmed and split clips show the matching part",
+      "Clip colour labels: mark clips with a red, orange, yellow, green, blue or purple strip",
+      "🔁 Loop playback: starts again from the beginning at the end (not applied when exporting)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
+   "build": "v18",
+   "title": "미리보기에서 바로 옮기고 크기 바꾸기",
+   "items": [
+    "미리보기 화면에서 클립을 끌어 옮길 수 있어요 (영상·그림·글자·도형 모두). 고른 클립에는 노란 점선 상자가 보여요",
+    "노란 상자 오른쪽 아래 모서리를 끌면 크기가 바뀌어요 (손가락으로도 돼요)",
+    "다른 클립 위를 누르면 그 클립이 골라져요. 키프레임이 있는 클립은 경로 전체가 함께 움직여요. 잠긴 줄은 건드리지 않아요",
+    "'지금 장면을 PNG로'에는 점선 상자가 찍히지 않아요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Move and resize directly in the preview",
+     "items": [
+      "Drag clips in the preview to move them (video, pictures, text and shapes); the selected clip shows a dashed yellow box",
+      "Drag the bottom-right corner of the yellow box to resize (works with a finger too)",
+      "Tap another clip in the picture to select it; clips with keyframes move their whole path; locked tracks are left alone",
+      "The dashed box is not included in 'Save this frame as PNG'"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v17",
    "title": "전환 5개·빠르기 프리셋·글자 움직임 2개",
    "items": [

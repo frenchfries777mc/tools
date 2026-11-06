@@ -4,6 +4,48 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v16",
+   "title": "코드 반주 재생, 코드 고르기, 2절 가사, 마디 번호, 스윙",
+   "items": [
+    "코드 이름(C, Am7, G7/B, F#m7♭5, Dsus4 …)을 읽어서 화음 또는 펼침화음으로 반주를 같이 재생(WAV에도 들어감)",
+    "음표 패널에서 으뜸음·종류로 코드를 골라 넣기, 옮기기·조 바꾸기를 하면 코드 이름도 함께 옮겨짐",
+    "2절 가사: 음표마다 입력하거나 한꺼번에 붙이기, 악보와 MusicXML에 아래줄로 표시·저장",
+    "마디 번호 표시(줄 첫머리/모든 마디), 재생 스윙(살짝/3연음 느낌)"
+   ],
+   "tr": {
+    "en": {
+     "title": "Chord accompaniment, chord picker, verse 2 lyrics, measure numbers, swing",
+     "items": [
+      "Chord names (C, Am7, G7/B, F#m7b5, Dsus4 ...) are read and played as block or arpeggiated accompaniment, also rendered into WAV",
+      "Pick chords by root and type in the note panel; chord names transpose along with notes and key changes",
+      "Verse 2 lyrics: type per note or paste in bulk, shown on a second line and saved to MusicXML",
+      "Measure numbers (system start or every measure) and swing playback (light / triplet feel)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
+   "build": "v15",
+   "title": "중간에 박자 바꾸기",
+   "items": [
+    "마디 설정에서 \"박자 바꾸기\"로 어느 마디부터든 박자(3/4, 6/8, 5/4, 7/8 등)를 바꿈: 새 박자가 그려지고 마디 나누기·붙임줄·묶음·메트로놈·카운트인이 새 박자를 따름",
+    "재생(도돌이표·D.S. 포함)·WAV·MIDI(박자 메타 이벤트)·MusicXML 저장·읽기가 박자 변화를 반영",
+    "마디마다 길이가 달라도 재생 위치 표시와 음표 강조가 어긋나지 않음"
+   ],
+   "tr": {
+    "en": {
+     "title": "Mid-score time signature changes",
+     "items": [
+      "Change the time signature (3/4, 6/8, 5/4, 7/8 ...) from any measure via \"change time signature\" in the measure settings: the new meter is drawn and barlines, ties, beaming, metronome and count-in follow it",
+      "Playback (including repeats and D.S.), WAV, MIDI (time-signature meta events) and MusicXML import/export honour the change",
+      "Playback cursor and note highlight stay aligned with measures of different lengths"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v14",
    "title": "한 오선에 두 성부 겹쳐 쓰기",
    "items": [

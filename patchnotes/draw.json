@@ -17,7 +17,7 @@
     "en": {
      "title": "Fry Draw 14: much better SVG import, brush presets",
      "items": [
-      "SVG import: gradients, patterns, clip paths, masks, filters, CSS classes and style attributes, use elements, embedded images and grouped shapes now arrive as separate editable objects",
+      "SVG import: gradients, patterns, clip paths, masks, filters, CSS classes and style attributes, reused (use) elements, embedded images and grouped shapes now arrive as separate editable objects",
       "Rotated and scaled shapes get a proper rotation centre so they turn naturally; skews are preserved",
       "Imported gradients and clips survive export to SVG, PNG and PDF",
       "Brush presets: basic, fine pen, marker, highlighter, calligraphy, brush pen and big brush, with an adjustable nib angle for calligraphy",

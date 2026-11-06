@@ -114,9 +114,10 @@ function seek(x){ t=Math.max(0,x); if(playing){ wall0=performance.now(); t0=t; }
 function play(){ if(playing) return; ensureAudio(); var tot=total(); if(t>=tot-.05) t=0; playing=true; wall0=performance.now(); t0=t; $('bPlay').textContent='⏸'; }
 function pause(){ playing=false; $('bPlay').textContent='▶'; Object.keys(elems).forEach(function(id){ try{ elems[id].pause(); }catch(e){} }); }
 $('bPlay').onclick=function(){ if(playing) pause(); else play(); };
+$('bLoop').onclick=function(){ loopOn=!loopOn; this.classList.toggle('on',loopOn); };
 $('bBack').onclick=function(){ seek(0); };
 function loop(){
-  if(playing){ t=t0+(performance.now()-wall0)/1000; var tot=total(); if(t>=tot){ t=tot; pause(); if(exporting) finishExport(); } syncMedia(t,playing); }
+  if(playing){ t=t0+(performance.now()-wall0)/1000; var tot=total(); if(t>=tot){ if(loopOn&&!exporting&&tot>0){ t=0; t0=0; wall0=performance.now(); } else { t=tot; pause(); if(exporting) finishExport(); } } syncMedia(t,playing); }
   else if(!exporting){ /* keep stills in step while scrubbing */ }
   render(t); updateHead();
   requestAnimationFrame(loop);
@@ -137,9 +138,37 @@ function render(tt){
   var srt=proj.clips.slice().sort(function(a,b){ return a.start-b.start; });
   ['V1','V2'].forEach(function(tr){ srt.forEach(function(c){ if(c.track!==tr||!active(c,tt)||laneOff(tr)) return; drawVisual(c,tt,W,H); }); });
   srt.forEach(function(c){ if(!active(c,tt)||laneOff(c.track)) return; if(c.type==='text') drawText(c,tt,W,H); else if(c.type==='shape') drawShape(c,tt,W,H); });
-  g.globalAlpha=1; g.filter='none';
+  g.globalAlpha=1; g.filter='none'; g.globalCompositeOperation='source-over';
+  if(!exporting&&!overlayOff) drawSelBox(tt);
 }
+var bbs={}, overlayOff=false, cdrag=null;
 function volCurveUi(c){ var V=c.vkfs||[]; return '<div class="btns"><button class="tbtn" data-vkadd="1">소리 곡선 지점 추가 (재생 막대 위치)</button>'+(V.length?'<button class="tbtn" data-vkclear="1">곡선 지우기</button>':'')+'</div>'+V.map(function(k,i){ return '<div class="row"><span class="v" style="flex:0 0 18px">'+(i+1)+'</span>'+'<input type="number" class="nv" data-k="vkfs.'+i+'.p" min="0" max="100" step="1" value="'+Math.round(k.u*100)+'" title="위치(%)"><span class="u">%</span><input type="range" data-k="vkfs.'+i+'.v" min="0" max="200" value="'+k.v+'"><input type="number" class="nv" data-k="vkfs.'+i+'.v" min="0" max="200" value="'+Math.round(k.v)+'"><button class="tbtn" data-vkdel="'+i+'" style="height:26px;padding:0 8px">×</button></div>'; }).join('')+(V.length?'<div class="note">곡선이 있으면 위의 소리 크기·변화 대신 이 곡선을 써요. 앞에서부터 위치(%)와 크기예요.</div>':''); }
+function drawSelBox(tt){ var c=curClip(); if(!c||!active(c,tt)) return; var b=bbs[c.id]; if(!b) return; var ds=Math.min(cv.clientWidth/cv.width,cv.clientHeight/cv.height)||1, hx=Math.max(b.w/2,12), hy=Math.max(b.h/2,12);
+  g.save(); g.translate(b.x,b.y); g.rotate((b.r||0)*Math.PI/180); g.lineWidth=2/ds; g.strokeStyle='#ffc93c'; g.setLineDash([6/ds,4/ds]); g.strokeRect(-hx,-hy,hx*2,hy*2); g.setLineDash([]); g.fillStyle='#ffc93c'; var hs=12/ds; g.fillRect(hx-hs/2,hy-hs/2,hs,hs); g.restore(); }
+function cvPt(e){ var r=cv.getBoundingClientRect(), sc=Math.min(r.width/cv.width,r.height/cv.height); return {x:(e.clientX-r.left-(r.width-cv.width*sc)/2)/sc,y:(e.clientY-r.top-(r.height-cv.height*sc)/2)/sc,sc:sc}; }
+function bbHit(b,p,pad){ var a=-(b.r||0)*Math.PI/180, dx=p.x-b.x, dy=p.y-b.y, lx=dx*Math.cos(a)-dy*Math.sin(a), ly=dx*Math.sin(a)+dy*Math.cos(a); return Math.abs(lx)<=Math.max(b.w/2,12)+pad&&Math.abs(ly)<=Math.max(b.h/2,12)+pad; }
+function handlePt(b){ var a=(b.r||0)*Math.PI/180, hx=Math.max(b.w/2,12), hy=Math.max(b.h/2,12); return {x:b.x+hx*Math.cos(a)-hy*Math.sin(a),y:b.y+hx*Math.sin(a)+hy*Math.cos(a)}; }
+function posGet(c){ return c.type==='text'?[c.txt.ox,c.txt.oy]:c.type==='shape'?[c.shp.ox,c.shp.oy]:[c.x,c.y]; }
+cv.addEventListener('pointerdown',function(e){
+  if(exporting) return; var p=cvPt(e), c=curClip(), b=c&&bbs[c.id]&&active(c,t)?bbs[c.id]:null, mode=null;
+  if(b){ var hp=handlePt(b); if(Math.hypot(hp.x-p.x,hp.y-p.y)<18/p.sc) mode='s'; else if(bbHit(b,p,4/p.sc)) mode='m'; }
+  if(!mode){ var cand=proj.clips.filter(function(o){ return active(o,t)&&bbs[o.id]&&!laneOff(o.track)&&bbHit(bbs[o.id],p,0); }); if(!cand.length) return;
+    var rank=function(o){ return (o.type==='text'||o.type==='shape'?10:o.track==='V2'?5:0)+o.start*1e-6; }; cand.sort(function(a,b2){ return rank(a)-rank(b2); }); c=cand[cand.length-1]; b=bbs[c.id]; sel=c.id; msel={}; mode='m'; drawTl(); panel(); }
+  if(laneLock(c.track)){ toast('잠긴 줄이에요. 줄 이름을 눌러 잠금을 풀어 주세요'); return; }
+  var kfo=(c.kfs&&c.kfs.length)?JSON.parse(JSON.stringify(c.kfs)):null;
+  cdrag={mode:mode,c:c,x0:p.x,y0:p.y,pos:posGet(c),scale:c.scale,kfs:kfo,d0:Math.max(8,Math.hypot(p.x-b.x,p.y-b.y)),b:b,moved:false}; try{ cv.setPointerCapture(e.pointerId); }catch(er){} e.preventDefault(); });
+cv.addEventListener('pointermove',function(e){
+  if(!cdrag) return; var p=cvPt(e), d=cdrag, c=d.c, W=cv.width, H=cv.height; if(!d.moved&&Math.hypot(p.x-d.x0,p.y-d.y0)*p.sc<3) return; d.moved=true;
+  if(d.mode==='m'){ var dx=(p.x-d.x0)/W*100, dy=(p.y-d.y0)/H*100;
+    if(c.type==='text'){ c.txt.ox=f(Math.max(-20,Math.min(120,d.pos[0]+dx))); c.txt.oy=f(Math.max(-20,Math.min(120,d.pos[1]+dy))); }
+    else if(c.type==='shape'){ c.shp.ox=f(Math.max(-20,Math.min(120,d.pos[0]+dx))); c.shp.oy=f(Math.max(-20,Math.min(120,d.pos[1]+dy))); }
+    else if(d.kfs){ c.kfs.forEach(function(k,i){ k.x=f(d.kfs[i].x+dx); k.y=f(d.kfs[i].y+dy); }); }
+    else { c.x=f(Math.max(-150,Math.min(150,d.pos[0]+dx))); c.y=f(Math.max(-150,Math.min(150,d.pos[1]+dy))); } }
+  else { var fct=Math.max(.1,Math.hypot(p.x-d.b.x,p.y-d.b.y)/d.d0), lo=(c.type==='text'||c.type==='shape')?20:10, hi=(c.type==='text'||c.type==='shape')?300:400;
+    if(c.type!=='text'&&c.type!=='shape'&&d.kfs){ c.kfs.forEach(function(k,i){ k.s=Math.round(Math.max(lo,Math.min(hi,d.kfs[i].s*fct))); }); } else c.scale=Math.round(Math.max(lo,Math.min(hi,d.scale*fct))); }
+});
+function cvUp(){ if(!cdrag) return; var d=cdrag; cdrag=null; if(d.moved) commit(); }
+cv.addEventListener('pointerup',cvUp); cv.addEventListener('pointercancel',cvUp);
 function sdirRow(c){ if(c.anim!=='slide') return ''; var sd=c.sdir||'left'; return '<div class="row"><label>들어오는 쪽</label><select data-k="sdir">'+[['left','왼쪽에서'],['right','오른쪽에서'],['up','위에서'],['down','아래에서']].map(function(a){ return '<option value="'+a[0]+'"'+(sd===a[0]?' selected':'')+'>'+a[1]+'</option>'; }).join('')+'</select></div>'; }
 function animOf(c,tt){ var r=tt-c.start, d=Math.min(.6,c.dur/2), k=r<d?r/d:1, o={a:1,dx:0,dy:0,s:1}; if(c.anim==='fade') o.a=k; else if(c.anim==='slide'){ var sd=c.sdir||'left'; if(sd==='left') o.dx=(1-k)*-.25; else if(sd==='right') o.dx=(1-k)*.25; else if(sd==='up') o.dy=(1-k)*-.2; else o.dy=(1-k)*.2; o.a=k; } else if(c.anim==='rise'){ o.dy=(1-k)*.12; o.a=k; } else if(c.anim==='zoom'){ o.s=.7+.3*k; o.a=k; } else if(c.anim==='bounce'){ o.dy=-Math.abs(Math.sin(r*5))*.05; } else if(c.anim==='pulse'){ o.s=1+.08*Math.sin(r*6); } else if(c.anim==='shake'){ o.dx=Math.sin(r*70)*.005; o.dy=Math.cos(r*61)*.005; } else if(c.anim==='elastic'){ o.s=k>=1?1:Math.max(0,1-Math.exp(-6*k)*Math.cos(11*k)); o.a=Math.min(1,k*3); } else if(c.anim==='pop'){ o.s=k<1?(.4+.6*k)+(Math.sin(k*Math.PI)*.15):1; o.a=Math.min(1,k*2); } return o; }
 var tcv=document.createElement('canvas'), tg=tcv.getContext('2d');
@@ -162,7 +191,7 @@ function drawVisual(c,tt,W,H){
   var u=Math.max(0,Math.min(1,(tt-c.start)/Math.max(.01,c.dur))), tf=tfAt(c,u), scV=tf.s, xV=tf.x, yV=tf.y, rV=tf.r;
   var blurPx=0, zx=1, glitch=0, clipMode='', al=1, dx=0, dy=0, zs=1, clipK=1, tr=c.tr&&c.tr.t&&c.tr.t!=='none'?c.tr:null;
   if(tr){ var rr=tt-c.start; if(rr<tr.d){ var k=rr/tr.d; k=k*k*(3-2*k); if(tr.t==='dissolve') al=k; else if(tr.t==='slideL') dx=(1-k)*W; else if(tr.t==='slideR') dx=-(1-k)*W; else if(tr.t==='slideU') dy=(1-k)*H; else if(tr.t==='wipe') clipK=k; else if(tr.t==='wipeR'){ clipK=k; clipMode='r'; } else if(tr.t==='iris'){ clipK=k; clipMode='i'; } else if(tr.t==='slideD') dy=-(1-k)*H; else if(tr.t==='zoom'){ zs=1.5-.5*k; al=k; } else if(tr.t==='spin'){ rV+= (1-k)*90; zs=k; al=k; } else if(tr.t==='dipB'||tr.t==='dipW'){ var ov=k<.5?2*k:1; g.save(); g.globalAlpha=ov; g.fillStyle=tr.t==='dipB'?'#000':'#fff'; g.fillRect(0,0,W,H); g.restore(); al=k<.5?0:2*k-1; } else if(tr.t==='blur'){ al=Math.min(1,k*1.6); blurPx=(1-k)*24; } else if(tr.t==='flip'){ zx=Math.max(.02,k); al=Math.min(1,k*2); } else if(tr.t==='glitch'){ dx=Math.sin(k*47)*(1-k)*W*.07; al=(Math.floor(k*14)%2)?1:.55; blurPx=0; glitch=(1-k); } } }
-  var stb=stabAt(c,tt), sz=stb?(c.stab.z||108)/100:1, sc=fit*(scV/100)*an.s*zs*sz, w=sw*sc, h=sh*sc;
+  var stb=stabAt(c,tt), sz=stb?(c.stab.z||108)/100:1, sc=fit*(scV/100)*an.s*zs*sz, w=sw*sc, h=sh*sc; bbs[c.id]={x:W/2+(xV/100)*W+an.dx*W+dx,y:H/2+(yV/100)*H+an.dy*H+dy,w:w,h:h,r:rV};
   g.save(); if(clipK<1){ g.beginPath(); if(clipMode==='r') g.rect(W*(1-clipK),0,W*clipK,H); else if(clipMode==='i') g.arc(W/2,H/2,Math.hypot(W,H)/2*clipK,0,Math.PI*2); else g.rect(0,0,W*clipK,H); g.clip(); }
   g.globalAlpha=(c.op/100)*fadeOf(c,tt)*(c.anim==='none'?1:an.a)*al; g.filter=filterStr(c.filt); if(blurPx>.3){ g.filter=(g.filter==='none'?'':g.filter+' ')+'blur('+blurPx.toFixed(1)+'px)'; }
   g.translate(W/2+(xV/100)*W+an.dx*W+dx,H/2+(yV/100)*H+an.dy*H+dy); if(rV) g.rotate(rV*Math.PI/180); if(stb) g.translate(stb[0]*w/sz,stb[1]*h/sz); if(zx<1) g.scale(zx,1); if(c.flip) g.scale(-1,1); if(c.flipV) g.scale(1,-1);
@@ -179,6 +208,7 @@ function drawVisual(c,tt,W,H){
 }
 function drawShape(c,tt,W,H){
   var S=c.shp, an=animOf(c,tt), sz=S.size/100*H*(c.scale/100)*an.s, w=sz*S.asp/100, h=sz;
+  bbs[c.id]={x:S.ox/100*W+an.dx*W,y:S.oy/100*H+an.dy*H,w:w,h:h,r:c.rot};
   g.save(); g.globalAlpha=(c.op/100)*fadeOf(c,tt)*(c.anim==='none'?1:an.a); g.filter='none'; g.translate(S.ox/100*W+an.dx*W,S.oy/100*H+an.dy*H); if(c.rot) g.rotate(c.rot*Math.PI/180);
   if(S.prog){ var pu=Math.max(0,Math.min(1,(tt-c.start)/Math.max(.01,c.dur))), fw=w; w=fw*pu; g.translate(-(fw-w)/2,0); }
   g.beginPath(); var k=S.k;
@@ -202,7 +232,7 @@ function drawText(c,tt,W,H){
   g.font=(T.it?'italic ':'')+T.w+' '+size+'px '+(TFAM[T.font||'gothic']||TFAM.gothic); g.textAlign='center'; g.textBaseline='middle';
   var lh=size*1.25, y0=-(lines.length-1)*lh/2;
   if(T.bg){ var mw=0; lines.forEach(function(l){ mw=Math.max(mw,g.measureText(l).width); }); g.fillStyle=T.bgc; g.globalAlpha*=.7; var pad=size*.4; g.fillRect(-mw/2-pad,y0-lh/2-pad*.5,mw+pad*2,lines.length*lh+pad); g.globalAlpha=(c.op/100)*fadeOf(c,tt)*((c.anim==='none'||c.anim==='type')?1:an.a); }
-  var fw=0; lines.forEach(function(l){ fw=Math.max(fw,g.measureText(l).width); }); var fillS=T.color;
+  var fw=0; lines.forEach(function(l){ fw=Math.max(fw,g.measureText(l).width); }); var fillS=T.color; bbs[c.id]={x:T.ox/100*W+an.dx*W,y:T.oy/100*H+an.dy*H,w:fw+size*.4,h:lines.length*lh,r:c.rot};
   if(T.rainbow){ var gr=g.createLinearGradient(-fw/2,0,fw/2,0); for(var q=0;q<=6;q++) gr.addColorStop(q/6,'hsl('+Math.round((q*60+tt*90)%360)+',90%,60%)'); fillS=gr; }
   if(T.blink&&Math.floor(tt*3)%2) g.globalAlpha*=.2;
   if(T.sh){ g.shadowColor='rgba(0,0,0,.65)'; g.shadowBlur=size*.18; g.shadowOffsetX=size*.07; g.shadowOffsetY=size*.07; }
@@ -215,12 +245,23 @@ function drawText(c,tt,W,H){
 
 
 /* ---------- waveform ---------- */
-function ensurePeaks(m){
+var stripCss=null;
+function ensureStrip(m){
+  if(!m||m.strip||m.stripTry||m.missing||m.type!=='video'||!m.url||!(m.dur>0)) return; m.stripTry=true;
+  var v=document.createElement('video'); v.muted=true; v.preload='auto'; v.playsInline=true; v.src=m.url; var N=Math.max(4,Math.min(24,Math.ceil(m.dur/2))), FW=64, FH=36, cc=document.createElement('canvas'); cc.width=N*FW; cc.height=FH; var x=cc.getContext('2d'), i=0; x.fillStyle='#000'; x.fillRect(0,0,cc.width,FH);
+  function seekTo(tm){ return new Promise(function(res){ var d=false; function f1(){ if(!d){ d=true; v.removeEventListener('seeked',f1); res(); } } v.addEventListener('seeked',f1); setTimeout(f1,1200); try{ v.currentTime=Math.min(tm,Math.max(0,v.duration-.05)); }catch(e){ f1(); } }); }
+  function step(){ if(i>=N){ try{ m.strip=cc.toDataURL('image/jpeg',.55); m.stripN=N; }catch(e){} v.removeAttribute('src'); v.load(); if(m.strip){ if(!stripCss){ stripCss=document.createElement('style'); document.head.appendChild(stripCss); } stripCss.textContent+='.clip.st-'+m.id+'{background-image:linear-gradient(rgba(0,0,0,.28),rgba(0,0,0,.28)),url('+m.strip+');background-repeat:no-repeat;}'; drawTl(true); } return; }
+    seekTo((i+.5)/N*m.dur).then(function(){ var vw=v.videoWidth||FW, vh=v.videoHeight||FH, r=Math.max(FW/vw,FH/vh); try{ x.drawImage(v,i*FW+(FW-vw*r)/2,(FH-vh*r)/2,vw*r,vh*r); }catch(e){} i++; setTimeout(step,0); }); }
+  v.onloadeddata=function(){ v.onloadeddata=null; step(); }; v.onerror=function(){};
+}
+function ensurePeaks(m){ ensureStrip(m);
   if(!m||m.peaks||m.peaksTry||m.missing||m.type==='image'||!m.url||m.dur>1200) return; m.peaksTry=true;
   fetch(m.url).then(function(r){ return r.arrayBuffer(); }).then(function(ab){ var oc=new (window.OfflineAudioContext||window.webkitOfflineAudioContext)(1,1,44100); return new Promise(function(res,rej){ var p=oc.decodeAudioData(ab,res,rej); if(p&&p.catch) p.catch(rej); }); })
   .then(function(buf){ var d=buf.getChannelData(0), N=600, step=Math.max(1,Math.floor(d.length/N)), pk=[]; for(var i=0;i<N;i++){ var mx=0, a=i*step, b=Math.min(d.length,a+step); for(var j=a;j<b;j+=Math.max(1,Math.floor(step/40))){ var v=Math.abs(d[j]); if(v>mx) mx=v; } pk.push(+Math.min(1,mx*1.6).toFixed(2)); } m.peaks=pk; drawTl(); })
   .catch(function(){});
 }
+function stripStyle(c,m){ if(c.type!=='video'||!m||!m.strip) return ''; var span=Math.max(.05,c.dur*c.speed), wpx=Math.max(6,c.dur*pxs), iw=wpx*(m.dur/span), off=-(c.in/span)*wpx; return 'background-size:auto,'+iw.toFixed(1)+'px 100%;background-position:0 0,'+off.toFixed(1)+'px 0;'; }
+var LABS=['#e8453c','#ff9a1e','#ffd23c','#3fbf6a','#3b8cf0','#a05be8'];
 function kfDots(c){ return (c.kfs||[]).map(function(k){ return '<i class="kd" style="left:'+(k.u*100)+'%"></i>'; }).join(''); }
 function waveSvg(c,m,wpx){
   if(!m||!m.peaks||c.type==='text'||c.type==='shape'||c.type==='image') return ''; var N=m.peaks.length, i0=Math.floor(c.in/m.dur*N), i1=Math.min(N,Math.ceil((c.in+c.dur*c.speed)/m.dur*N)); if(i1<=i0) return '';
@@ -239,7 +280,7 @@ function drawTl(keepScroll){
   proj.markers.forEach(function(mk,i){ o+='<b class="mk" data-mk="'+i+'" title="표시 '+(i+1)+' · '+tcs(mk)+'" style="left:'+(LBL+mk*pxs-6)+'px"></b>'; }); o+='</div>';
   LANES.forEach(function(l,i){ o+='<div class="lane'+(laneOff(l[0])?' off':'')+(laneLock(l[0])?' lock':'')+'" style="top:'+(RH+i*LH)+'px;width:'+wpx+'px"><span class="lb" data-lane="'+l[0]+'" title="눌러서 줄 설정">'+({V1:'영상',V2:'겹침',T:'글자',A:'소리'}[l[0]])+(laneLock(l[0])?'<small>🔒</small>':'')+(laneOff(l[0])?'<small>'+(l[0]==='A'?'🔇':'🚫')+'</small>':'')+'</span></div>'; });
   proj.clips.forEach(function(c){ var m=media[c.mid], name=c.type==='text'?'T '+c.txt.s.replace(/\n/g,' '):(c.type==='shape'?'■ 도형':(m?m.name:'?'));
-    o+='<div class="clip '+c.track+(c.id===sel?' sel':'')+(msel[c.id]?' sel2':'')+(c.grp?' grp':'')+(laneOff(c.track)?' off':'')+(laneLock(c.track)?' lock':'')+'" data-c="'+c.id+'" style="'+(c.grp?'--gh:'+grpHue(c.grp)+';':'')+'left:'+(LBL+c.start*pxs)+'px;top:'+(laneY(c.track)+4)+'px;width:'+Math.max(6,c.dur*pxs)+'px">'+waveSvg(c,m)+kfDots(c)+'<span class="nm">'+esc(name)+'</span><span class="hl"></span><span class="hr"></span></div>'; });
+    o+='<div class="clip '+c.track+(c.id===sel?' sel':'')+(msel[c.id]?' sel2':'')+(c.grp?' grp':'')+(laneOff(c.track)?' off':'')+(laneLock(c.track)?' lock':'')+(c.type==='video'&&m&&m.strip?' st-'+m.id:'')+(c.lab?' lab':'')+'" data-c="'+c.id+'" style="'+(c.grp?'--gh:'+grpHue(c.grp)+';':'')+(c.lab?'--lab:'+c.lab+';':'')+stripStyle(c,m)+'left:'+(LBL+c.start*pxs)+'px;top:'+(laneY(c.track)+4)+'px;width:'+Math.max(6,c.dur*pxs)+'px">'+waveSvg(c,m)+kfDots(c)+'<span class="nm">'+esc(name)+'</span><span class="hl"></span><span class="hr"></span></div>'; });
   o+='<div id="phead" style="left:'+(LBL+t*pxs)+'px;height:'+(RH+LANES.length*LH)+'px"></div>';
   var tlc=$('tl'), sl=tlc.scrollLeft, st=tlc.scrollTop; tl.innerHTML=o; tl.style.width=wpx+'px'; tl.style.height=(RH+LANES.length*LH)+'px'; tlc.scrollLeft=sl; tlc.scrollTop=st;
   $('zl').textContent=pxs+'px/초'; markBtn(); $('bUndo').disabled=hi<=0; $('bRedo').disabled=hi>=hist.length-1;
@@ -251,7 +292,7 @@ function updateHead(){
 function tlX(e){ var tlc=$('tl'), r=tlc.getBoundingClientRect(); return e.clientX-r.left+tlc.scrollLeft; }
 var drag=null, msel={}, multiMode=false;
 function selClick(c,e){ var mod=e.shiftKey||e.ctrlKey||e.metaKey||multiMode; if(mod){ if(!Object.keys(msel).length&&sel) msel[sel]=true; if(msel[c.id]) delete msel[c.id]; else msel[c.id]=true; var ks=Object.keys(msel); sel=msel[c.id]?c.id:(ks[0]||null); if(ks.length<2&&!multiMode){ msel={}; } return true; } if(!msel[c.id]||Object.keys(msel).length<2){ msel={}; if(c.grp){ proj.clips.forEach(function(o){ if(o.grp===c.grp) msel[o.id]=true; }); if(Object.keys(msel).length<2) msel={}; } } sel=c.id; return false; }
-var clipBoard=null;
+var clipBoard=null, loopOn=false;
 function grpHue(g){ var h=0; for(var i=0;i<g.length;i++) h=(h*31+g.charCodeAt(i))%360; return h; }
 function regrp(list){ var m={}; list.forEach(function(n){ if(n.grp){ m[n.grp]=m[n.grp]||('g'+(proj.uid++)); n.grp=m[n.grp]; } }); }
 function pasteClips(){ if(!clipBoard||!clipBoard.length){ toast('먼저 클립을 복사하세요 (Ctrl+C)'); return; } var mn=Math.min.apply(null,clipBoard.map(function(o){ return o.start; })), nm={}, last=null; clipBoard.forEach(function(c){ var n=JSON.parse(JSON.stringify(c)); n.id='c'+(proj.uid++); n.start=Math.max(0,t+(c.start-mn)); if(laneLock(n.track)) return; proj.clips.push(n); nm[n.id]=true; last=n.id; }); regrp(proj.clips.filter(function(o){ return nm[o.id]; })); if(!last){ toast('붙여 넣을 줄이 잠겨 있어요'); return; } sel=last; msel=Object.keys(nm).length>1?nm:{}; commit(); }
@@ -361,7 +402,7 @@ function panel(){
     if(!c) h+='<div class="note">타임라인의 클립을 누르면 여기서 고칠 수 있어요.<br><br><b>쓰는 법</b><br>1. <b>+ 파일 넣기</b>로 영상·그림·소리를 넣고, 왼쪽 목록에서 눌러 타임라인에 올려요.<br>2. 클립을 끌어 옮기고, 양 끝을 끌어 줄여요. 재생 막대를 놓고 <b>✂ 자르기</b>(S)로 나눠요.<br>3. <b>T 글자 넣기</b>로 자막을 넣어요.<br>4. <b>영상 만들기</b>를 누르면 처음부터 끝까지 재생하면서 파일로 녹화해요. 그동안 이 탭을 켜 두세요.</div>';
     else {
       h+='<div class="sec"><h4>'+({video:'영상',image:'그림',audio:'소리',text:'글자',shape:'도형'}[c.type])+' 클립 · '+tcs(c.dur)+'</h4>';
-      h+='<div class="row"><label>시작</label><input type="number" data-k="start" step="0.1" min="0" value="'+f(c.start)+'"><span class="v">초</span></div><div class="row"><label>길이</label><input type="number" data-k="dur" step="0.1" min="0.1" value="'+f(c.dur)+'"><span class="v">초</span></div></div>';
+      h+='<div class="row"><label>시작</label><input type="number" data-k="start" step="0.1" min="0" value="'+f(c.start)+'"><span class="v">초</span></div><div class="row"><label>길이</label><input type="number" data-k="dur" step="0.1" min="0.1" value="'+f(c.dur)+'"><span class="v">초</span></div><div class="row"><label>색 표시</label><div class="btns" style="margin:0">'+LABS.map(function(col){ return '<button class="tbtn" data-lab="'+col+'" style="width:24px;height:24px;padding:0;background:'+col+';'+(c.lab===col?'outline:2px solid var(--text)':'')+'"></button>'; }).join('')+'<button class="tbtn" data-lab="" style="height:24px;padding:0 6px">없음</button></div></div></div>';
       if(c.type==='shape'){ var S=c.shp;
         h+='<div class="sec"><h4>도형</h4><div class="row"><select data-sp="k">'+[['rect','네모'],['round','둥근 네모'],['circle','원'],['star','별'],['heart','하트'],['arrow','화살표'],['line','선']].map(function(a){ return '<option value="'+a[0]+'"'+(S.k===a[0]?' selected':'')+'>'+a[1]+'</option>'; }).join('')+'</select></div>'+rng('크기','sp.size',3,120,S.size,1,'%')+rng('가로 세로 비율','sp.asp',20,400,S.asp,1,'%')+rng('가로 위치','sp.ox',0,100,S.ox,1,'%')+rng('세로 위치','sp.oy',0,100,S.oy,1,'%')+'<div class="row"><label>안쪽 색</label><input type="color" data-sp="color" value="'+S.color+'"><label class="chk" style="margin:0 0 0 8px"><input type="checkbox" data-sp="fill"'+(S.fill?' checked':'')+'> 채우기</label></div><div class="row"><label>테두리 색</label><input type="color" data-sp="stroke" value="'+S.stroke+'"></div>'+rng('테두리 굵기','sp.sw',0,10,S.sw,.5,'%')+'</div>';
         h+='<div class="sec"><h4>나타나는 방식</h4><div class="row"><select data-k="anim">'+[['none','없음'],['fade','서서히'],['rise','아래서 올라옴'],['slide','옆에서 들어옴'],['zoom','커지며'],['pop','톡 튀어나옴']].map(function(a){ return '<option value="'+a[0]+'"'+(c.anim===a[0]?' selected':'')+'>'+a[1]+'</option>'; }).join('')+'</select></div>'+sdirRow(c)+rng('크기 배율','scale',20,300,c.scale,1,'%')+rng('돌리기','rot',-180,180,c.rot,1,'°')+rng('투명도','op',0,100,c.op,1,'%')+rng('나타날 때 서서히','fadeIn',0,3,c.fadeIn,.1,'초')+rng('사라질 때 서서히','fadeOut',0,3,c.fadeOut,.1,'초')+'</div>';
@@ -429,6 +470,7 @@ pb.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b
   if(b.dataset.tplsave){ var nmI=$('tplName'), nmv=(nmI&&nmI.value.trim())||('틀 '+(tplGet().length+1)), Lt=tplGet(); Lt.push({name:nmv.slice(0,30),ar:proj.ar,bg:proj.bg,clips:proj.clips.filter(function(o){ return o.type==='text'||o.type==='shape'; }).map(function(o){ return JSON.parse(JSON.stringify(o)); })}); if(Lt.length>8) Lt.shift(); tplPut(Lt); panel(); toast('틀을 저장했어요'); return; }
   if(b.dataset.tplload){ var tp=tplGet()[+b.dataset.tplload]; if(tp){ proj.ar=tp.ar; proj.bg=tp.bg; tp.clips.forEach(function(o){ var n=JSON.parse(JSON.stringify(o)); n.id='c'+(proj.uid++); proj.clips.push(n); }); commit(); toast('틀을 불러왔어요'); } return; }
   if(b.dataset.tpldel){ var Ld=tplGet(); Ld.splice(+b.dataset.tpldel,1); tplPut(Ld); panel(); return; }
+  if(b.dataset.lab!==undefined){ var cl2=curClip(); if(cl2){ if(b.dataset.lab) cl2.lab=b.dataset.lab; else delete cl2.lab; commit(); } return; }
   if(b.dataset.spr){ var csp=curClip(); if(csp&&csp.speed2!=null){ var pr=b.dataset.spr.split(',').map(parseFloat), oldA=avgSp(csp); csp.speed=pr[0]; csp.speed2=pr[1]; csp.dur=csp.dur*oldA/avgSp(csp); commit(); } return; }
   if(b.dataset.stab){ var cs=curClip(); if(cs){ if(b.dataset.stab==='go') stabilize(cs); else { delete cs.stab; commit(); } } return; }
   if(b.dataset.kfadd){ var ka=curClip(); if(ka){ var ua=Math.max(0,Math.min(1,(t-ka.start)/Math.max(.01,ka.dur))), tf0=tfAt(ka,ua); ka.kfs=ka.kfs||[]; var near=ka.kfs.filter(function(k){ return Math.abs(k.u-ua)<.01; })[0]; if(near){ toast('이 위치에는 이미 키프레임이 있어요'); return; } ka.kfs.push({u:ua,s:Math.round(tf0.s),x:Math.round(tf0.x),y:Math.round(tf0.y),r:Math.round(tf0.r),e:'smooth'}); ka.kfs.sort(function(a,b){ return a.u-b.u; }); commit(); } return; }
@@ -581,7 +623,7 @@ function pickMime(pref,audioOnly){
   var L=audioOnly?['audio/mp4;codecs=mp4a.40.2','audio/webm;codecs=opus','audio/webm','audio/mp4']:['video/mp4;codecs=avc1.42E01E,mp4a.40.2','video/mp4','video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'];
   if(pref==='mp4'||pref==='webm') L=L.filter(function(x){ return x.indexOf(pref)>=0; }).concat(L.filter(function(x){ return x.indexOf(pref)<0; }));
   for(var i=0;i<L.length;i++){ try{ if(MediaRecorder.isTypeSupported(L[i])) return L[i]; }catch(e){} } return ''; }
-$('bFrame').onclick=function(){ cv.toBlob(function(b){ dl((proj.name||'frame')+'.png',b); }); };
+$('bFrame').onclick=function(){ overlayOff=true; render(t); overlayOff=false; cv.toBlob(function(b){ dl((proj.name||'frame')+'.png',b); }); };
 function dl(name,blob){ var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name.replace(/[\\/:*?"<>|]/g,'_'); document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },2000); }
 /* GIF: frames are rendered one by one (not real time), 216-colour palette with ordered dithering */
 function lzwGif(idx){ var out=[],cur=0,nb=0,size=9,next=258,dict=new Map();
@@ -661,6 +703,6 @@ window.addEventListener('beforeunload',function(){ persist(); });
   if(s){ try{ loadSnap(s); }catch(e){} }
   sizeCanvas(); hist=[snap()]; hi=0; drawTl(); drawBin(); panel();
   restoreMedia().then(function(){ Object.keys(media).forEach(function(k){ ensurePeaks(media[k]); }); drawTl(); drawBin(); requestAnimationFrame(loop); });
-  window.FVIDEO={proj:proj,media:media,addFiles:addFiles,addClipFromMedia:addClipFromMedia,render:render,seek:seek,split:split,stabilize:stabilize,stabAt:stabAt,fxState:function(){ return fxs; },audio:function(){ return {actx:actx,master:master}; },tfAt:tfAt,silenceCut:silenceCut,selClick:selClick,getMsel:function(){ return msel; },wantAt:wantAt,lzwGif:lzwGif,volAt:volAt,zoomTo:zoomTo,pxsNow:function(){ return pxs; },duckK:duckK,parseSubFile:parseSubFile,exportSubs:exportSubs,get t(){ return t; }};
+  window.FVIDEO={proj:proj,media:media,addFiles:addFiles,addClipFromMedia:addClipFromMedia,render:render,seek:seek,split:split,ensureStrip:ensureStrip,bbs:bbs,stabilize:stabilize,stabAt:stabAt,fxState:function(){ return fxs; },audio:function(){ return {actx:actx,master:master}; },tfAt:tfAt,silenceCut:silenceCut,selClick:selClick,getMsel:function(){ return msel; },wantAt:wantAt,lzwGif:lzwGif,volAt:volAt,zoomTo:zoomTo,pxsNow:function(){ return pxs; },duckK:duckK,parseSubFile:parseSubFile,exportSubs:exportSubs,get t(){ return t; }};
 })();
 })();
