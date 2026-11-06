@@ -120,3 +120,5 @@ score/app.js | Fry Score v30 한국어 메시지·버튼 | score v30 | 2026-11-0
 patchnotes/video.json | Fry Video v27 자동 색 보정·그라데이션 도형·둥근 글자 상자·끝까지 늘리기 (en 번역 없음) | video v27 | 2026-11-06
 patchnotes/video.json | Fry Video v28 미리보기 속도·선택 확대·가운데 자르기·보조선 (en 번역 없음) | video v28 | 2026-11-06
 patchnotes/video.json | Fry Video v29 물들이기·거울 대칭·빠르기 버튼·버전 저장 (en 번역 없음) | video v29 | 2026-11-06
+patchnotes/score.json | Fry Score v31 항목 (en만) | score v31 | 2026-11-06
+score/app.js | Fry Score v31 한국어 메시지·버튼 | score v31 | 2026-11-06

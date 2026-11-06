@@ -120,6 +120,7 @@
         if (state.hlM === m && state.hlP == null) { /* measure selected without part */ }
       });
       sys.curves.forEach((c) => o.push(G.curve(c.x1, c.y1, c.x2, c.y2, c.dir, INK, 1.6)));
+      if (FS.decor) o.push(FS.decor(S, L, sys));
     });
     if (state.extra) o.push(state.extra);
     return o.join('');
