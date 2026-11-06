@@ -1,5 +1,5 @@
-:root{ --bg:#08090d; --panel:#10131b; --panel2:#151925; --line:#222837; --text:#eef0f5; --dim:#8a93a6; --fry:#ffc93c; --fry2:#ff8a3d; --desk:#0b0d13; }
-html[data-ff-theme=light]{ --bg:#f6f3ec; --panel:#ffffff; --panel2:#f1ede4; --line:#e2dccf; --text:#1f1b14; --dim:#6d6658; --desk:#e6e1d6; }
+:root{ --bg:#0e0e0e; --panel:#171717; --panel2:#121212; --line:#2e2b25; --text:#ece6d8; --dim:#a39c8c; --fry:#d9b45f; --fry2:#b8923a; --desk:#0a0a0a; }
+html[data-ff-theme=light]{ --bg:#ffffff; --panel:#ffffff; --panel2:#f6f4ee; --line:#e4dfd2; --text:#111111; --dim:#4b4b4b; --fry:#a67c00; --fry2:#d4a62a; --desk:#efeeea; }
 *{box-sizing:border-box;}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--text);overscroll-behavior:none;}
 body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;font-size:14px;display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;
@@ -16,14 +16,14 @@ button,input,select,textarea{font:inherit;color:inherit;}
 .tbtn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:34px;padding:0 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);cursor:pointer;white-space:nowrap;}
 .tbtn:hover:not(:disabled){border-color:#3a4256;} .tbtn:disabled{opacity:.4;cursor:default;}
 .tbtn.pri{background:linear-gradient(90deg,var(--fry),var(--fry2));color:#1c1405;border:0;font-weight:700;}
-.tbtn.on{background:rgba(255,201,60,.14);border-color:rgba(255,201,60,.5);color:var(--fry);}
+.tbtn.on{background:rgba(217,180,95,.14);border-color:rgba(217,180,95,.5);color:var(--fry);}
 .zoom{color:var(--dim);font-size:12px;min-width:44px;text-align:center;}
 .main{flex:1 1 auto;display:grid;grid-template-columns:minmax(0,1fr) 310px;grid-template-rows:auto minmax(0,1fr);min-height:0;}
 .main>.center{grid-column:1;grid-row:2;min-height:0;} .main>.panel{grid-column:2;grid-row:2;}
 .tools{grid-column:1/-1;grid-row:1;background:var(--panel);border-bottom:1px solid var(--line);display:flex;flex-direction:row;align-items:center;gap:4px;padding:5px 8px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;}
 .tools::-webkit-scrollbar{display:none;}
 .tl{width:40px;height:40px;border-radius:9px;border:1px solid transparent;background:transparent;cursor:pointer;display:grid;place-items:center;font-size:18px;flex:0 0 auto;}
-.tl:hover{background:var(--panel2);} .tl.on{background:rgba(255,201,60,.14);border-color:rgba(255,201,60,.55);}
+.tl:hover{background:var(--panel2);} .tl.on{background:rgba(217,180,95,.14);border-color:rgba(217,180,95,.55);}
 .tl svg{width:26px;height:26px;} .tbtn svg{width:19px;height:19px;flex:0 0 auto;}
 .desk{flex:1 1 auto;min-width:0;overflow:auto;background:var(--desk);position:relative;display:grid;}
 .stagew{margin:auto;padding:30px;}
@@ -49,7 +49,7 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
 .note{color:var(--dim);font-size:12px;line-height:1.5;margin:6px 0;}
 .pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;}
 .pgrid button{padding:7px 4px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);cursor:pointer;font-size:12.5px;}
-.pgrid button.on{border-color:var(--fry);color:var(--fry);background:rgba(255,201,60,.1);}
+.pgrid button.on{border-color:var(--fry);color:var(--fry);background:rgba(217,180,95,.1);}
 .menu{position:fixed;z-index:50;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px;min-width:170px;box-shadow:0 10px 30px rgba(0,0,0,.5);}
 .menu button{display:block;width:100%;text-align:left;border:0;background:transparent;padding:8px 10px;border-radius:7px;cursor:pointer;} .menu button:hover{background:var(--panel2);}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--panel);border:1px solid var(--line);padding:9px 16px;border-radius:10px;z-index:60;box-shadow:0 8px 24px rgba(0,0,0,.5);max-width:90vw;}
@@ -83,4 +83,26 @@ button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-vis
 /* uniform side-panel buttons: text buttons share one grid, symbol buttons are all the same square */
 .btns{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:6px;} .btns .tbtn{height:auto;min-height:32px;padding:5px 8px;white-space:normal;line-height:1.25;text-align:center;}
 .btns.sym{grid-template-columns:repeat(auto-fill,minmax(52px,1fr));} .btns.sym .tbtn.sb{height:40px;min-height:40px;padding:0;}
-.btns.sym .tbtn.sb svg{width:34px;height:24px;} .tbtn.sb.on{background:rgba(255,201,60,.18);border-color:rgba(255,201,60,.6);color:var(--fry);}
+.btns.sym .tbtn.sb svg{width:34px;height:24px;} .tbtn.sb.on{background:rgba(217,180,95,.18);border-color:rgba(217,180,95,.6);color:var(--fry);}
+/* site design 2026-11-06: site gold + white light theme (chrome only; drawings/scores/videos keep their own colours) */
+:root{--desk:#0a0a0a;}
+html[data-ff-theme=light]{--desk:#efeeea;}
+.tbtn:hover:not(:disabled){border-color:var(--fry2);}
+.home{color:#1c1405;background:linear-gradient(135deg,#d9b45f,#b8923a);}
+html[data-ff-theme=light] .top,html[data-ff-theme=light] .tools,html[data-ff-theme=light] .panel,html[data-ff-theme=light] .rcorner,html[data-ff-theme=light] .ptabs{background:#fff;}
+html[data-ff-theme=light] .brand{color:#111;} html[data-ff-theme=light] .brand b{color:#8a6500;}
+html[data-ff-theme=light] .tbtn{background:#fff;color:#161616;border-radius:10px;}
+html[data-ff-theme=light] .tbtn:hover:not(:disabled){background:#faf8f3;}
+html[data-ff-theme=light] .tbtn.pri{background:linear-gradient(90deg,#e0b93f,#d4a62a);color:#161616;border:0;}
+html[data-ff-theme=light] .tbtn.on{background:#fbf3d9;border-color:#a67c00;color:#6b4f00;}
+html[data-ff-theme=light] .tbtn:disabled{opacity:1;color:#3f3f3f;background:#f3f1ea;}
+html[data-ff-theme=light] .tl{color:#222;} html[data-ff-theme=light] .tl:hover{background:#f3f0e7;}
+html[data-ff-theme=light] .tl.on,html[data-ff-theme=light] .lyr.on,html[data-ff-theme=light] .pgrid button.on{background:#fbf3d9;border-color:#a67c00;color:#6b4f00;}
+html[data-ff-theme=light] .ptabs button{color:#333;} html[data-ff-theme=light] .ptabs button.on{color:#6b4f00;border-bottom-color:#a67c00;}
+html[data-ff-theme=light] .zoom,html[data-ff-theme=light] .note,html[data-ff-theme=light] .row label,html[data-ff-theme=light] .sec h4,html[data-ff-theme=light] .row .v{color:#444;}
+html[data-ff-theme=light] .menu,html[data-ff-theme=light] .dlg,html[data-ff-theme=light] .toast{background:#fff;box-shadow:0 16px 44px rgba(0,0,0,.16);}
+html[data-ff-theme=light] .dlgbg{background:rgba(20,18,12,.4);}
+html[data-ff-theme=light] .menu button:hover,html[data-ff-theme=light] .lyr button:hover{background:#f3f0e7;}
+html[data-ff-theme=light] .row input[type=number],html[data-ff-theme=light] .row select,html[data-ff-theme=light] .row input[type=text],html[data-ff-theme=light] textarea,html[data-ff-theme=light] .nb input,html[data-ff-theme=light] .pgrid button{background:#fff;color:#161616;}
+html[data-ff-theme=light] #dname:hover,html[data-ff-theme=light] #dname:focus{background:#faf8f3;}
+html[data-ff-theme=light] #stage,html[data-ff-theme=light] .stagew svg{box-shadow:0 6px 24px rgba(0,0,0,.14);}
