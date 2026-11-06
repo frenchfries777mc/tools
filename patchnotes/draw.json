@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v23",
+   "title": "Fry Draw 23: 효과 모음, 투명하게 사라지기",
+   "items": [
+    "효과 모음: 부드러운 그림자, 딱딱한 그림자, 빛나기, 네온, 떠 있는 느낌을 한 번에 적용해요. 적용한 뒤 효과 칸에서 더 고칠 수 있어요",
+    "투명하게 사라지기: 도형이나 그림이 한쪽 끝에서 다른 쪽 끝으로 점점 투명해지게 해요. 방향, 시작, 끝 위치를 정해요. SVG·PNG로 내보내도 그대로 나오고 스타일 복사에도 따라가요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 23: effect presets and fade-out",
+     "items": [
+      "Effect presets: soft shadow, hard shadow, glow, neon and floating in one click; fine-tune them in the Effects section afterwards",
+      "Fade out: make a shape or picture gradually transparent from one side to the other, with direction, start and end controls; it survives export and style copy"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v22",
    "title": "Fry Draw 22: 손떨림 보정",
    "items": [
