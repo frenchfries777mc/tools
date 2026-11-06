@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v36",
+   "title": "Fry Score: 그림 아이콘 도구 모음",
+   "items": [
+    "음표 입력 도구 모음을 MuseScore처럼 위쪽 가로줄로 옮기고, 온음표~64분음표·점음표·쉼표·샤프·플랫·제자리표·붙임줄·화음·성부(색깔 1~4)·건반·지우기를 그림 아이콘으로 바꿨어요",
+    "위쪽 줄의 되돌리기·재생·정지·확대·축소·열기·받기도 아이콘으로 바꾸고, 마우스를 올리면 한국어 이름이 보여요",
+    "T 키로 붙임줄을 걸 수 있어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Score: picture icon toolbars",
+     "items": [
+      "Note input toolbar moved to a MuseScore-style top row with drawn icons for note values, dot, rest, accidentals, tie, chord, coloured voices 1-4, piano pad and delete",
+      "Top bar buttons (undo, play, stop, zoom, open, save) now have icons with tooltips",
+      "T key toggles a tie"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v35",
    "title": "Fry Score 새로 만들기 6: 휴대폰 화면, 안정성, 접근성",
    "items": [
