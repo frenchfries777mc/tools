@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v22",
+   "title": "흐린 배경 채우기·글자 맞춤·좌우 소리·파일 바꾸기",
+   "items": [
+    "클립 '화면'에 '빈 곳을 흐린 배경으로 채우기'가 생겼어요. 세로 화면에 가로 영상을 넣을 때 검은 띠 대신 흐린 같은 영상이 깔려요",
+    "글자 클립에 '줄 맞춤'(가운데/왼쪽/오른쪽)과 '글자 사이 간격'이 생겼어요",
+    "소리에 '왼쪽 ↔ 오른쪽 소리' 조절이 생겼어요 (이어폰으로 들으면 잘 느껴져요)",
+    "'다른 파일로 바꾸기': 클립의 자르기·효과·위치는 그대로 두고 파일만 갈아 끼워요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Blurred background fill, text alignment, stereo pan, replace file",
+     "items": [
+      "Clip 'Picture' has 'Fill empty space with a blurred background' so a landscape clip in a vertical frame gets a blurred copy instead of black bars",
+      "Text clips gain 'Align' (centre/left/right) and 'Letter spacing'",
+      "Sound has a 'Left <-> right' pan control (easy to hear with headphones)",
+      "'Replace with another file' swaps the media while keeping the clip's trims, effects and position"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v21",
    "title": "클립 이름·앞뒤 자르기·편집점 이동",
    "items": [
