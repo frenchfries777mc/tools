@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v34",
+   "title": "Fry Score 새로 만들기 5: 글자 탭, 예시 곡, 조옮김",
+   "items": [
+    "글자 탭: 글자로 악보 쓰기·이어 붙이기, 음 이어 쓰기, 가사 한꺼번에 붙이기, 음 찾아 바꾸기, 예시 곡, AI 멜로디, 곡 통계",
+    "곡 전체 조옮김(조표 포함), 파트별 소리 높이(B♭ 악기 등)와 이 파트만 듣기",
+    "못갖춘마디, 마디 번호, C 박자 기호, 부제·오른쪽 위·아래 글씨",
+    "낮은 음 아래 가사·셈여림이 겹치지 않게 간격 조정"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Score rebuild 5: text tab, examples, transposition",
+     "items": [
+      "Text tab: write notation as text, append, step entry, bulk lyrics, find and replace, examples, AI melody, statistics",
+      "Whole-score transposition with key signature, per-part sounding pitch (Bb instruments etc.) and solo",
+      "Pickup measure, measure numbers, C time symbol, subtitle and header/footer text",
+      "Lyrics and dynamics spaced below low ledger-line notes"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v33",
    "title": "Fry Score 새로 만들기 4: 파일 가져오기·내보내기, 인쇄, 재생 설정",
    "items": [
