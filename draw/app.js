@@ -75,8 +75,8 @@ function objStr(o,nested){
 }
 function bgStr(){ return doc.bgOn?'<rect width="'+doc.w+'" height="'+doc.h+'" fill="'+esc(doc.bg)+'" data-bg="1"/>':''; }
 function syncPage(){ if(doc.pages) doc.pages[doc.pi]={n:doc.pn||('페이지 '+(doc.pi+1)),w:doc.w,h:doc.h,bg:doc.bg,bgOn:doc.bgOn,objs:doc.objs,guides:doc.guides||[]}; }
-function gotoPage(i){ if(!doc.pages||i<0||i>=doc.pages.length||i===doc.pi) return; syncPage(); var r=doc.pages[i]; doc.pi=i; doc.pn=r.n; doc.w=r.w; doc.h=r.h; doc.bg=r.bg; doc.bgOn=r.bgOn; doc.objs=r.objs; doc.guides=r.guides||[]; sel=[]; commit(); fit(); }
-function pageOp(op,arg){ if(!doc.pages){ doc.pages=[]; doc.pi=0; doc.pn='페이지 1'; syncPage(); } syncPage(); var pg=doc.pages, i=doc.pi;
+function gotoPage(i){ if(doc.edit){ toast('심볼 고치기를 끝낸 뒤에 옮길 수 있어요'); return; } if(!doc.pages||i<0||i>=doc.pages.length||i===doc.pi) return; syncPage(); var r=doc.pages[i]; doc.pi=i; doc.pn=r.n; doc.w=r.w; doc.h=r.h; doc.bg=r.bg; doc.bgOn=r.bgOn; doc.objs=r.objs; doc.guides=r.guides||[]; sel=[]; commit(); fit(); }
+function pageOp(op,arg){ if(doc.edit){ toast('심볼 고치기를 끝낸 뒤에 할 수 있어요'); return; } if(!doc.pages){ doc.pages=[]; doc.pi=0; doc.pn='페이지 1'; syncPage(); } syncPage(); var pg=doc.pages, i=doc.pi;
   if(op==='add'){ pg.push({n:'페이지 '+(pg.length+1),w:doc.w,h:doc.h,bg:doc.bg,bgOn:doc.bgOn,objs:[],guides:[]}); gotoPage(pg.length-1); return; }
   if(op==='dup'){ var cp=JSON.parse(JSON.stringify(pg[i])); cp.n=cp.n+' 복사'; cp.objs.forEach(function(o){ o.id=uid++; }); pg.splice(i+1,0,cp); gotoPage(i+1); return; }
   if(op==='del'){ if(pg.length<2){ toast('페이지가 하나뿐이에요'); return; } pg.splice(i,1); var j=Math.min(i,pg.length-1); var r=pg[j]; doc.pi=j; doc.pn=r.n; doc.w=r.w; doc.h=r.h; doc.bg=r.bg; doc.bgOn=r.bgOn; doc.objs=r.objs; doc.guides=r.guides||[]; if(pg.length===1) doc.pages=null; sel=[]; commit(); fit(); return; }
@@ -142,10 +142,10 @@ function rulerDrag(e,v){ e.preventDefault(); var elx=e.currentTarget; elx.setPoi
   elx.addEventListener('pointermove',mv); elx.addEventListener('pointerup',up); mv(e); }
 
 /* ---------- history / save ---------- */
-function snap(full){ syncPage(); var o={pn:doc.pn,pi:doc.pi,pages:doc.pages?doc.pages.map(function(p,i){ return i===doc.pi?{n:p.n}:p; }):undefined,w:doc.w,h:doc.h,bg:doc.bg,bgOn:doc.bgOn,name:doc.name,objs:doc.objs,guides:doc.guides||[],uid:uid};
-  if(full){ var im={}; var use=function(os){ os.forEach(function(x){ if(x.imgId!=null&&IMGS[x.imgId]) im[x.imgId]=IMGS[x.imgId]; if(x.kids) use(x.kids); }); }; use(doc.objs); if(doc.pages) doc.pages.forEach(function(p,i){ if(i!==doc.pi&&p&&p.objs) use(p.objs); }); o.imgs=im; }
+function snap(full){ syncPage(); var o={syms:doc.syms||{},edit:doc.edit||null,pn:doc.pn,pi:doc.pi,pages:doc.pages?doc.pages.map(function(p,i){ return i===doc.pi?{n:p.n}:p; }):undefined,w:doc.w,h:doc.h,bg:doc.bg,bgOn:doc.bgOn,name:doc.name,objs:doc.objs,guides:doc.guides||[],uid:uid};
+  if(full){ var im={}; var use=function(os){ os.forEach(function(x){ if(x.imgId!=null&&IMGS[x.imgId]) im[x.imgId]=IMGS[x.imgId]; if(x.kids) use(x.kids); }); }; use(doc.objs); Object.keys(doc.syms||{}).forEach(function(k){ use(doc.syms[k].kids||[]); }); if(doc.edit&&doc.edit.stash) use(doc.edit.stash); if(doc.pages) doc.pages.forEach(function(p,i){ if(i!==doc.pi&&p&&p.objs) use(p.objs); }); o.imgs=im; }
   return JSON.stringify(o); }
-function load(s){ var o=JSON.parse(s); if(o.imgs) for(var ik in o.imgs) IMGS[ik]=o.imgs[ik]; doc.w=o.w; doc.h=o.h; doc.bg=o.bg; doc.bgOn=o.bgOn!==false; doc.name=o.name||'이름 없는 그림'; doc.objs=o.objs||[]; doc.guides=o.guides||[]; uid=Math.max(uid,o.uid||1); doc.objs.forEach(function(x){ if(x.id>=uid) uid=x.id+1; }); doc.pages=o.pages||null; doc.pi=o.pi||0; doc.pn=o.pn||''; if(doc.pages){ if(doc.pi>=doc.pages.length) doc.pi=0; doc.pages.forEach(function(p,i){ if(i!==doc.pi&&p&&p.objs) p.objs.forEach(function(x){ if(x.id>=uid) uid=x.id+1; }); }); syncPage(); } }
+function load(s){ var o=JSON.parse(s); if(o.imgs) for(var ik in o.imgs) IMGS[ik]=o.imgs[ik]; doc.w=o.w; doc.h=o.h; doc.bg=o.bg; doc.bgOn=o.bgOn!==false; doc.name=o.name||'이름 없는 그림'; doc.objs=o.objs||[]; doc.guides=o.guides||[]; uid=Math.max(uid,o.uid||1); doc.objs.forEach(function(x){ if(x.id>=uid) uid=x.id+1; }); doc.syms=o.syms||{}; doc.edit=o.edit||null; doc.pages=o.pages||null; doc.pi=o.pi||0; doc.pn=o.pn||''; if(doc.pages){ if(doc.pi>=doc.pages.length) doc.pi=0; doc.pages.forEach(function(p,i){ if(i!==doc.pi&&p&&p.objs) p.objs.forEach(function(x){ if(x.id>=uid) uid=x.id+1; }); }); syncPage(); } }
 var saveT;
 function commit(){
   hist=hist.slice(0,hi+1); hist.push(snap()); if(hist.length>80) hist.shift(); hi=hist.length-1;
@@ -328,7 +328,7 @@ function brushD(P,taper){ var n=P.length, i, k, out=[];
   poly=poly.concat(R.slice().reverse()); var s0=Q[0], rs=Math.max(.2,s0.w/2); for(k=1;k<8;k++){ var an2=ang[0]-Math.PI/2-Math.PI*k/8; poly.push([s0.x+rs*Math.cos(an2),s0.y+rs*Math.sin(an2)]); }
   return 'M'+poly.map(function(q){ return f(q[0])+' '+f(q[1]); }).join('L')+'Z'; }
 function simplify(pts){ var out=[pts[0]]; for(var i=1;i<pts.length-1;i++){ var l=out[out.length-1]; if(Math.hypot(pts[i].x-l.x,pts[i].y-l.y)>3/zoom) out.push(pts[i]); } out.push(pts[pts.length-1]); return out; }
-stage.addEventListener('dblclick',function(e){ if(tool==='sel'||tool==='text'){ var dti=targetId(e), dto=dti!=null?byId(dti):null; if(!dto){ var pp=P(e); for(var qi=doc.objs.length-1;qi>=0&&!dto;qi--){ var sq=doc.objs[qi]; if(sq.tag!=='text'||sq.hid||sq.lock) continue; var sb=bbox(sq); if(sb&&pp.x>=sb.x&&pp.x<=sb.x+sb.w&&pp.y>=sb.y&&pp.y<=sb.y+sb.h) dto=sq; } } if(dto&&dto.tag==='text'&&!dto.lock){ sel=[dto.id]; openTextEdit(dto,false); return; } }
+stage.addEventListener('dblclick',function(e){ if(tool==='sel'||tool==='text'){ var dti=targetId(e), dto=dti!=null?byId(dti):null; if(tool==='sel'&&dto&&dto.tag==='grp'&&!dto.clip&&!doc.edit){ symEdit(dto); return; } if(!dto){ var pp=P(e); for(var qi=doc.objs.length-1;qi>=0&&!dto;qi--){ var sq=doc.objs[qi]; if(sq.tag!=='text'||sq.hid||sq.lock) continue; var sb=bbox(sq); if(sb&&pp.x>=sb.x&&pp.x<=sb.x+sb.w&&pp.y>=sb.y&&pp.y<=sb.y+sb.h) dto=sq; } } if(dto&&dto.tag==='text'&&!dto.lock){ sel=[dto.id]; openTextEdit(dto,false); return; } }
   if(tool==='curve'){ finishCurve(); return; }
   if(tool==='node'){ var o=byId(sel[0]); if(!o||!o.pts) return; var tg=document.elementFromPoint(e.clientX,e.clientY), nn=tg&&tg.getAttribute&&tg.getAttribute('data-n');
     if(nn!=null){ if(o.pts.length>(o.cl?3:2)){ o.pts.splice(+nn,1); nodeSel=-1; setD(o); commit(); } return; }
@@ -581,6 +581,42 @@ function toSmooth(o,i){ var P=o.pts, n=P.length, p=P[i], pr=(i>0||o.cl)?P[(i-1+n
 function toCorner(o,i){ var p=o.pts[i]; delete p.ix; delete p.iy; delete p.ox; delete p.oy; p.sm=false; }
 function placeNew(list,no){ var out=[], last=-1; doc.objs.forEach(function(o,i){ if(list.indexOf(o)>=0) last=i; });
   doc.objs.forEach(function(o,i){ if(list.indexOf(o)>=0){ if(i===last) out.push(no); } else out.push(o); }); doc.objs=out; }
+function deepClone(o){ var c=JSON.parse(JSON.stringify(o)); (function ri(x){ x.id=uid++; if(x.kids) x.kids.forEach(ri); if(x.clip) ri(x.clip); })(c); return c; }
+function findObj(list,id){ for(var i=0;i<list.length;i++){ var o=list[i]; if(o.id===id) return o; if(o.kids){ var r=findObj(o.kids,id); if(r) return r; } } return null; }
+function symDefs(){ if(!doc.syms) doc.syms={}; return doc.syms; }
+function eachInst(sid,fn){ var walk=function(l){ (l||[]).forEach(function(o){ if(o.tag==='grp'){ if(o.sym===sid) fn(o); if(o.kids) walk(o.kids); } }); };
+  walk(doc.objs); if(doc.edit&&doc.edit.stash) walk(doc.edit.stash); (doc.pages||[]).forEach(function(p,i){ if(i!==doc.pi&&p&&p.objs) walk(p.objs); }); Object.keys(symDefs()).forEach(function(k){ if(k!==sid) walk(symDefs()[k].kids); }); }
+function symRefresh(sid){ var d=symDefs()[sid]; if(!d) return; eachInst(sid,function(g){ g.kids=d.kids.map(deepClone); }); }
+function symMake(){ if(doc.edit){ toast('고치는 중에는 새 심볼을 만들 수 없어요'); return; } var list=selObjs(); if(!list.length){ toast('심볼로 만들 도형을 골라 주세요'); return; }
+  var g;
+  if(list.length===1&&list[0].tag==='grp'&&!list[0].sym&&!list[0].clip) g=list[0];
+  else { list.forEach(function(k){ k.hid=false; k.lock=false; }); g={id:uid++,tag:'grp',a:{},kids:list,tx:0,ty:0,rot:0,sx:1,sy:1,fill:null,stroke:null,sw:null,op:null,dash:0}; var b0=selBox(); if(b0){ g.cx=b0.x+b0.w/2; g.cy=b0.y+b0.h/2; } placeNew(list,g); }
+  var sid='s'+(uid++), n=Object.keys(symDefs()).length+1, cx=g.cx==null?0:g.cx, cy=g.cy==null?0:g.cy;
+  symDefs()[sid]={name:'심볼 '+n,kids:g.kids.map(deepClone),cx:cx,cy:cy}; g.sym=sid; g.name=symDefs()[sid].name; sel=[g.id]; commit(); toast('심볼로 만들었어요. 레이어 탭 아래 목록에서 또 놓을 수 있어요'); }
+function symPut(sid){ var d=symDefs()[sid]; if(!d){ return; } if(doc.edit){ toast('고치는 중에는 놓을 수 없어요'); return; } var n=0; eachInst(sid,function(){ n++; });
+  var g={id:uid++,tag:'grp',a:{},kids:d.kids.map(deepClone),sym:sid,name:d.name,tx:doc.w/2-(d.cx||0)+(n*24)%144,ty:doc.h/2-(d.cy||0)+(n*24)%144,rot:0,sx:1,sy:1,cx:d.cx||0,cy:d.cy||0,fill:null,stroke:null,sw:null,op:null,dash:0};
+  doc.objs.push(g); sel=[g.id]; commit(); }
+function symEdit(o){ if(doc.edit) return; var d=o&&o.sym?symDefs()[o.sym]:null;
+  if(d){ doc.edit={k:'sym',id:o.sym,stash:doc.objs,name:d.name}; doc.objs=d.kids; }
+  else if(o&&o.tag==='grp'&&!o.sym&&!o.clip){ if(o.rot||(o.sx!=null&&o.sx!==1)||(o.sy!=null&&o.sy!==1)||o.tx||o.ty){ toast('옮기거나 돌린 묶음은 먼저 풀었다가 다시 묶어 주세요'); return; } doc.edit={k:'grp',id:o.id,stash:doc.objs,name:o.name||'묶음'}; doc.objs=o.kids; }
+  else { toast('묶음이나 심볼을 골라 주세요'); return; }
+  sel=[]; commit(); fit(); }
+function symDone(){ var e=doc.edit; if(!e) return; var cur=doc.objs; doc.objs=e.stash; doc.edit=null;
+  if(e.k==='sym'){ var d=symDefs()[e.id]; if(d){ d.kids=cur; symRefresh(e.id); } } else { var g=findObj(doc.objs,e.id); if(g) g.kids=cur; }
+  sel=[]; commit(); }
+function symDetach(o){ delete o.sym; commit(); }
+function symDelete(sid){ eachInst(sid,function(g){ delete g.sym; }); delete symDefs()[sid]; commit(); }
+function symUI(so,o){ if(doc.edit) return ''; var one=so.length===1&&o.tag==='grp'&&!o.clip, d=one&&o.sym?symDefs()[o.sym]:null, h='<div class="sec"><h4>심볼</h4><div class="btns">';
+  if(d) h+='<button class="tbtn pri" data-a="symedit">심볼 고치기</button><button class="tbtn" data-a="symput" data-sid="'+o.sym+'">복사본 놓기</button><button class="tbtn" data-a="symdet">심볼에서 떼기</button>';
+  else { h+='<button class="tbtn pri" data-a="symmk">심볼로 만들기</button>'; if(one) h+='<button class="tbtn" data-a="symedit">묶음 안 고치기</button>'; }
+  return h+'</div><div class="note">'+(d?'"'+esc(d.name)+'" 심볼이에요. 고치면 놓아 둔 모든 복사본이 함께 바뀌어요.':'여러 번 쓰는 그림을 심볼로 만들어 두고 놓으면, 한 번만 고쳐도 모두 바뀌어요.')+'</div></div>'; }
+function symLibUI(){ var ks=Object.keys(symDefs()); if(!ks.length) return ''; var h='<div class="sec"><h4>심볼 ('+ks.length+')</h4>';
+  ks.forEach(function(k){ var d=symDefs()[k], n=0; eachInst(k,function(){ n++; }); h+='<div class="row"><input type="text" data-symn="'+k+'" value="'+esc(d.name)+'" maxlength="30" style="flex:1"><span class="v">'+n+'개</span></div><div class="btns"><button class="tbtn" data-a="symput" data-sid="'+k+'">놓기</button><button class="tbtn" data-a="symdel" data-sid="'+k+'">심볼 지우기</button></div>'; });
+  return h+'<div class="note">심볼을 지우면 놓아 둔 것들은 그냥 묶음으로 남아요.</div></div>'; }
+function symBar(){ var bar=document.getElementById('symbar'); if(!doc.edit){ if(bar) bar.remove(); return; }
+  if(!bar){ bar=document.createElement('div'); bar.id='symbar'; bar.style.cssText='position:fixed;top:56px;left:50%;transform:translateX(-50%);z-index:60;background:#ffc93c;color:#111;border-radius:10px;padding:8px 12px;display:flex;gap:10px;align-items:center;box-shadow:0 4px 16px rgba(0,0,0,.4);font:600 14px system-ui,sans-serif';
+    bar.innerHTML='<span id="symt"></span><button id="symdone" style="background:#111;color:#fff;border:0;border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer">고치기 끝내기</button>'; document.body.appendChild(bar); bar.querySelector('#symdone').onclick=symDone; }
+  bar.querySelector('#symt').textContent=(doc.edit.k==='sym'?'심볼 고치는 중: ':'묶음 고치는 중: ')+(doc.edit.name||''); }
 function groupSel(){ var kids=doc.objs.filter(function(o){ return sel.indexOf(o.id)>=0; }); if(kids.length<2){ toast('2개 이상 골라서 묶어요'); return; }
   var g={id:uid++,tag:'grp',a:{},kids:kids,tx:0,ty:0,rot:0,sx:1,sy:1,fill:null,stroke:null,sw:null,op:null,dash:0};
   kids.forEach(function(k){ k.hid=false; k.lock=false; }); placeNew(kids,g); sel=[g.id]; commit(); }
@@ -834,7 +870,7 @@ var TOOLS=[['sel','↖','고르기 (V)'],['hand','✋','화면 옮기기 (H)'],[
 function renderTools(){ $('tools').innerHTML=TOOLS.map(function(t){ return '<button class="tl'+(t[0]===tool?' on':'')+'" data-t="'+t[0]+'" title="'+t[2]+'">'+t[1]+'</button>'; }).join(''); }
 var ptab='prop';
 function rowRange(lbl,id,min,max,val,unit,step){ return '<div class="row"><label>'+lbl+'</label><input type="range" data-s="'+id+'" min="'+min+'" max="'+max+'" step="'+(step||1)+'" value="'+val+'"><span class="v">'+f(val)+(unit||'')+'</span></div>'; }
-function panel(){
+function panel(){ symBar();
   var b=$('pbody'), h='';
   document.querySelectorAll('#ptabs button').forEach(function(x){ x.classList.toggle('on',x.dataset.p===ptab); });
   if(ptab==='prop'){
@@ -876,7 +912,7 @@ function panel(){
       h+='<div class="sec" style="margin-top:10px"><h4>효과</h4>'+'<div class="row"><label>섞기 방식</label><select data-oa="blend">'+[['normal','보통'],['multiply','곱하기 (어둡게)'],['screen','스크린 (밝게)'],['overlay','오버레이'],['darken','어두운 쪽'],['lighten','밝은 쪽'],['color-dodge','색 번쩍'],['color-burn','색 태우기'],['difference','차이'],['exclusion','제외'],['hue','색조'],['luminosity','밝기']].map(function(x){ return '<option value="'+x[0]+'"'+((o.blend||'normal')===x[0]?' selected':'')+'>'+x[1]+'</option>'; }).join('')+'</select></div>'+rowRange('흐리게','blur',0,40,o.blur||0,'px')+'<label class="chk"><input type="checkbox" data-o="shadow"'+(o.shadow?' checked':'')+'> 그림자</label>'+(o.shadow?shadowUI(o):'')+'</div>';
       h+='<div class="sec"><h4>정렬</h4><div class="btns">'+[['l','⇤ 왼쪽'],['c','↔ 가운데'],['r','⇥ 오른쪽'],['t','⇧ 위'],['m','↕ 가운데'],['b','⇩ 아래'],['dh','가로 간격 같게'],['dv','세로 간격 같게']].map(function(x){ return '<button class="tbtn" data-al="'+x[0]+'">'+x[1]+'</button>'; }).join('')+'</div><div class="note">'+(so.length===1?'하나만 골랐으면 캔버스에 맞춰요.':'고른 것들끼리 맞춰요.')+'</div></div>';
       h+='<div class="sec"><h4>묶기 · 합치기</h4><div class="btns"><button class="tbtn" data-a="group">묶기 (Ctrl+G)</button><button class="tbtn" data-a="ungroup">풀기 (Ctrl+Shift+G)</button><button class="tbtn" data-a="clipmk">클리핑 마스크</button></div><div class="btns"><button class="tbtn" data-a="bu">하나로 합치기</button><button class="tbtn" data-a="bi">겹친 곳만</button><button class="tbtn" data-a="bs">빼기 (아래 − 위)</button><button class="tbtn" data-a="bx">겹친 곳 빼기</button></div><div class="note">합치기는 네모·원·다각형·닫힌 곡선을 두 개 이상 골랐을 때 돼요. 클리핑 마스크는 맨 위 도형 모양으로 아래 도형들을 잘라 보여줘요.</div></div>';
-      h+=simUI(o)+(o.tag==='image'?traceUI():'')+adjUI(o)+arrUI()+offUI();
+      h+=symUI(so,o)+simUI(o)+(o.tag==='image'?traceUI():'')+adjUI(o)+arrUI()+offUI();
       var txo=so.length===1&&o.tag==='text'?o:null, hasShape=so.length>=2&&so.some(function(q){ return q.tag==='text'; })&&so.some(function(q){ return q.tag!=='text'; });
       if(hasShape) h+='<div class="sec"><h4>글자 + 선</h4><div class="btns"><button class="tbtn pri" data-a="top">글자를 선 따라 쓰기</button></div><div class="note">글자 하나와 선·도형 하나를 같이 골랐어요.</div></div>';
       if(txo){ var FAM=[['\'Noto Sans KR\',sans-serif','고딕'],['serif','명조'],['Georgia,serif','Georgia (세리프)'],['\'Trebuchet MS\',sans-serif','Trebuchet'],['monospace','고정폭'],['\'Courier New\',monospace','Courier'],['cursive','필기체'],['\'Comic Sans MS\',cursive','Comic'],['Impact,sans-serif','굵은 제목']], an0=txo.a['text-anchor']||'start';
@@ -895,7 +931,7 @@ function panel(){
     }
   } else if(ptab==='pat') h=patUI();
   else if(ptab==='ly'){
-    h=pagesUI()+'<div class="sec"><h4>레이어 (위쪽이 앞에 있어요)</h4><div class="note" style="margin:0 0 6px">이름을 두 번 누르면 이름을 바꿔요. ⠿를 끌면 순서가 바뀌고, Shift를 누른 채 누르면 여러 개를 골라요.</div>'+(doc.objs.length?doc.objs.slice().reverse().map(function(o){ return '<div class="lyr'+(sel.indexOf(o.id)>=0?' on':'')+'" data-row="'+o.id+'"><span class="grip" data-ly="grip" data-i="'+o.id+'" title="끌어서 순서 바꾸기">⠿</span><button data-ly="eye" data-i="'+o.id+'" title="보이기/숨기기">'+(o.hid?'🚫':'👁')+'</button><button data-ly="lock" data-i="'+o.id+'" title="잠그기">'+(o.lock?'🔒':'🔓')+'</button><button class="nm" data-ly="pick" data-i="'+o.id+'">'+esc(layerName(o))+'</button><button data-ly="up" data-i="'+o.id+'" title="앞으로">▲</button><button data-ly="down" data-i="'+o.id+'" title="뒤로">▼</button></div>'; }).join(''):'<div class="note">아직 도형이 없어요</div>')+'<div class="btns"><button class="tbtn" data-a="showall">모두 보이기</button><button class="tbtn" data-a="unlockall">잠금 모두 풀기</button></div></div>'; }
+    h=pagesUI()+symLibUI()+'<div class="sec"><h4>레이어 (위쪽이 앞에 있어요)</h4><div class="note" style="margin:0 0 6px">이름을 두 번 누르면 이름을 바꿔요. ⠿를 끌면 순서가 바뀌고, Shift를 누른 채 누르면 여러 개를 골라요.</div>'+(doc.objs.length?doc.objs.slice().reverse().map(function(o){ return '<div class="lyr'+(sel.indexOf(o.id)>=0?' on':'')+'" data-row="'+o.id+'"><span class="grip" data-ly="grip" data-i="'+o.id+'" title="끌어서 순서 바꾸기">⠿</span><button data-ly="eye" data-i="'+o.id+'" title="보이기/숨기기">'+(o.hid?'🚫':'👁')+'</button><button data-ly="lock" data-i="'+o.id+'" title="잠그기">'+(o.lock?'🔒':'🔓')+'</button><button class="nm" data-ly="pick" data-i="'+o.id+'">'+esc(layerName(o))+'</button><button data-ly="up" data-i="'+o.id+'" title="앞으로">▲</button><button data-ly="down" data-i="'+o.id+'" title="뒤로">▼</button></div>'; }).join(''):'<div class="note">아직 도형이 없어요</div>')+'<div class="btns"><button class="tbtn" data-a="showall">모두 보이기</button><button class="tbtn" data-a="unlockall">잠금 모두 풀기</button></div></div>'; }
   else if(ptab==='ai'){
     h='<div class="sec"><h4>AI에게 그림 시키기 (시험 기능)</h4><textarea id="aiQ" placeholder="예: 파란 별 12개를 원 모양으로 배치해줘 / 노란 해와 초록 언덕 / 무지개색 동심원"></textarea><div class="btns"><button class="tbtn pri" id="aiGo">그리기</button><button class="tbtn" id="aiSet">AI 설정</button></div><div class="note" id="aiOut">AI는 도형·무늬·간단한 그림만 그려요. 사진 같은 그림은 못 그리고 결과가 엉뚱할 수 있어요. 마음에 안 들면 되돌리기를 눌러요.</div></div>';
   } else {
@@ -945,6 +981,7 @@ pb.addEventListener('change',function(e){
   if(t.dataset.ps){ selObjs().forEach(function(o){ if(!o.pat) return; var k=t.dataset.ps; if(k==='bgOn') o.pat.bg=t.checked?(o.pat.bgc||'#ffffff'):''; else if(k==='bg'){ o.pat.bg=t.value; o.pat.bgc=t.value; } else if(t.type==='color') o.pat[k]=t.value; else if(t.tagName==='SELECT') o.pat[k]=t.value; else o.pat[k]=+t.value; }); clearTimeout(saveT); commit(); return; }
   if(t.dataset.gs||t.dataset.sdc){ clearTimeout(saveT); selObjs().forEach(function(o){ if(o.grad&&o.grad.st) gradSync(o.grad); }); commit(); return; }
   if(t.dataset.presel!=null){ if(t.value){ var pq2=t.value.split(','); $('cw').value=pq2[0]; $('ch').value=pq2[1]; } return; }
+  if(t.dataset.symn){ var sd=symDefs()[t.dataset.symn]; if(sd){ sd.name=t.value.trim().slice(0,30)||sd.name; eachInst(t.dataset.symn,function(g){ g.name=sd.name; }); commit(); } return; }
   if(t.dataset.pgn){ doc.pn=t.value.trim()||('페이지 '+((doc.pi||0)+1)); commit(); return; }
   if(t.dataset.ar){ var ark=t.dataset.ar; st.arr[ark]=(ark==='mode'||ark==='pivot')?t.value:+t.value; if(ark==='mode') panel(); return; }
   if(t.dataset.gopt){ doc[t.dataset.gopt]=t.checked; drawGuides(); commit(); return; }
@@ -988,8 +1025,9 @@ pb.addEventListener('click',function(e){
   if(t.dataset.sz){ var a=t.dataset.sz.split(','); $('cw').value=a[0]; $('ch').value=a[1]; return; }
   if(t.id==='cvApply'){ var w=Math.max(16,Math.min(8000,+$('cw').value||doc.w)), h=Math.max(16,Math.min(8000,+$('ch').value||doc.h)); doc.w=w; doc.h=h; commit(); fit(); return; }
   if(t.id==='cvCrop'){ cropToContent(); return; }
-  if(t.id==='bClear'){ if(doc.objs.length&&!confirmOnce(t)) return; doc.objs=[]; sel=[]; commit(); return; }
+  if(t.id==='bClear'){ if(doc.objs.length&&!confirmOnce(t)) return; doc.objs=[]; doc.edit=null; sel=[]; commit(); return; }
   var a=t.dataset.a; if(!a) return;
+  if(a==='symmk'){ symMake(); return; } if(a==='symedit'){ symEdit(selObjs()[0]); return; } if(a==='symput'){ symPut(t.dataset.sid); return; } if(a==='symdet'){ var sdo=selObjs()[0]; if(sdo) symDetach(sdo); return; } if(a==='symdel'){ symDelete(t.dataset.sid); return; }
   if(a==='clipmk'){ clipSel(); return; }
   if(a==='simf'||a==='sims'||a==='simt'||a==='siminv'){ selSimilar(a); return; } if(a==='trace'){ var tio=selObjs()[0]; if(tio&&tio.tag==='image') traceImage(tio); return; }
   if(a==='showall'||a==='unlockall'){ doc.objs.forEach(function(o){ if(a==='showall') o.hid=false; else o.lock=false; }); commit(); return; }
@@ -1067,6 +1105,6 @@ desk.addEventListener('scroll',drawRulers); $('rh').addEventListener('pointerdow
   if(s){ try{ load(s); }catch(e){} }
   $('dname').value=doc.name; hist=[snap()]; hi=0;
   renderTools(); render(); fit(); panel();
-  window.FDRAW={gradPts:gradPts,textOutline:textOutline,traceImage:traceImage,SHAPES:SHAPES,flat:flat,rdp:rdp,strokePieces:strokePieces,pbUnionAll:pbUnionAll,getSel:function(){ return sel; },groupSel:groupSel,ungroupSel:ungroupSel,boolOp:boolOp,align:align,toPath:toPath,select:function(a){ sel=a; drawOv(); panel(); },addNode:addNode,mat:mat,doc:doc,importSvg:importSvg,drawPattern:drawPattern,setTool:setTool,st:st,PATS:PATS,svg:docSvg,buildSvg:buildSvg,openExport:openExport,exArea:exArea};
+  window.FDRAW={symMake:symMake,symPut:symPut,symEdit:symEdit,symDone:symDone,gradPts:gradPts,textOutline:textOutline,traceImage:traceImage,SHAPES:SHAPES,flat:flat,rdp:rdp,strokePieces:strokePieces,pbUnionAll:pbUnionAll,getSel:function(){ return sel; },groupSel:groupSel,ungroupSel:ungroupSel,boolOp:boolOp,align:align,toPath:toPath,select:function(a){ sel=a; drawOv(); panel(); },addNode:addNode,mat:mat,doc:doc,importSvg:importSvg,drawPattern:drawPattern,setTool:setTool,st:st,PATS:PATS,svg:docSvg,buildSvg:buildSvg,openExport:openExport,exArea:exArea};
 })();
 })();
