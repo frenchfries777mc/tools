@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v19",
+   "title": "옥타브선·페달·새 연주 기호",
+   "items": [
+    "8va/8vb 옥타브선: 악보에 점선 괄호로 표시되고 소리·MIDI·MusicXML에 반영",
+    "페달 표시(Ped. / ✱): 밟는 동안 음이 이어서 울려요",
+    "트레몰로, 턴(회전음), 아래활/위활 기호 추가 (소리·MusicXML 가져오기/내보내기 포함)",
+    "빠르기말 고르기: Largo~Presto, rit., accel., a tempo를 마디에 한 번에 넣기"
+   ],
+   "tr": {
+    "en": {
+     "title": "Octave lines, pedal marks, new ornaments",
+     "items": [
+      "8va/8vb octave lines drawn as dashed brackets, applied to playback, MIDI and MusicXML",
+      "Pedal marks (Ped. / star): notes keep ringing while the pedal is down",
+      "Tremolo, turn, down-bow and up-bow marks (playback and MusicXML import/export)",
+      "Tempo word presets: Largo to Presto, rit., accel., a tempo in one pick"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v18",
    "title": "이조 악기·곡 정보·링크 공유",
    "items": [
