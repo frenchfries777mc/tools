@@ -1,0 +1,4 @@
+name = "ff-tools-mcp"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+# Secrets (set in Cloudflare, not here): OWNER_ID, URL_TOKEN
