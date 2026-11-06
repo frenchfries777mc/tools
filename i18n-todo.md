@@ -105,4 +105,5 @@ patchnotes/score.json | Fry Score v20 항목 (en만) | score v20 | 2026-11-06
 score/app.js | Fry Score v20 한국어 메시지·버튼 | score v20 | 2026-11-06
 patchnotes/video.json | Fry Video v22 흐린 배경 채우기·글자 맞춤·좌우 소리·파일 바꾸기 (en 번역 없음) | video v22 | 2026-11-06
 patchnotes/draw.json | Fry Draw v18 항목 (en만), draw/app.js 단계 만들기·크기 표시·윤곽선 보기 한국어 문구 | draw v18 | 2026-11-06
+patchnotes/video.json | Fry Video v23 모자이크·필름 입자·카메라 흔들림·영화 띠·음악 길이 맞추기 (en 번역 없음) | video v23 | 2026-11-06
 patchnotes/draw.json | Fry Draw v19 항목 (en만), draw/app.js 모서리 둥글게·조각으로 떼어내기 한국어 문구 | draw v19 | 2026-11-06
