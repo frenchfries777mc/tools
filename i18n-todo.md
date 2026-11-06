@@ -81,3 +81,5 @@ score/app.js | Fry Score v13 한국어 메시지·버튼 | score v13 | 2026-11-0
 patchnotes/score.json | Fry Score v14 항목 (en만) | score v14 | 2026-11-06
 score/app.js | Fry Score v14 한국어 메시지·버튼 | score v14 | 2026-11-06
 patchnotes/video.json | Fry Video v17 전환 5개·빠르기 프리셋·글자 움직임 2개 (en 번역 없음) | video v17 | 2026-11-06
+patchnotes/score.json | Fry Score v15 항목 (en만) | score v15 | 2026-11-06
+score/app.js | Fry Score v15 한국어 메시지·버튼 | score v15 | 2026-11-06
