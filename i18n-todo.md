@@ -133,3 +133,4 @@ score/app.js | Fry Score v35 한국어 메시지·버튼 | score v35 | 2026-11-0
 patchnotes/video.json | Fry Video v30 9칸 위치 맞추기·안 쓰는 파일 정리·프레임 이동 키 (en 번역 없음) | video v30 | 2026-11-06
 patchnotes/draw.json | Fry Draw v23 항목 (en만), draw/app.js 효과 모음·사라지기 한국어 문구 | draw v23 | 2026-11-06
 patchnotes/draw.json | Fry Draw v24 항목 (en만), draw/app.js 글자 휘기·어울리는 색·색 뽑기 한국어 문구 | draw v24 | 2026-11-06
+patchnotes/draw.json | Fry Draw v25 항목 (en만), draw/app.js 버전 저장·시작 틀 한국어 문구 | draw v25 | 2026-11-06
