@@ -196,11 +196,9 @@
     return out.sort((a, b) => a.t - b.t);
   };
 
-  /* ---------- transport ---------- */
-  A.start = function (S, fromUnits, onTick, onEnd) {
-    A.stop(true);
-    const c = A.context(), ST = FS.secTable(S, A.speed), t0 = c.currentTime + 0.12, from = FS.unitsToExpanded(ST, fromUnits || 0), base = FS.unitsToSec(ST, from);
-    const raw = FS.noteList(S), notes = [];
+  /** note list along the playback order (repeats expanded), times in expanded units */
+  FS.playNotes = function (S, speed) {
+    const ST = FS.secTable(S, speed), raw = FS.noteList(S), notes = [];
     ST.segs.forEach((g, gi) => {
       let end = g.start + g.len; for (let k = gi + 1; k < ST.segs.length && ST.segs[k].cont; k++) end += ST.segs[k].len;
       raw.forEach((n) => {
@@ -208,18 +206,57 @@
         notes.push(Object.assign({}, n, { t: g.eu + (n.t - g.start), d: Math.min(n.d, end - n.t) }));
       });
     });
-    notes.forEach((n) => {
+    return { ST, notes };
+  };
+
+  /* ---------- transport ---------- */
+  A.makeMaster = makeMaster;
+  const beatUnits = (ts) => (ts[1] === 8 && ts[0] > 3 && ts[0] % 3 === 0 ? 24 : 64 / ts[1]);
+  function click(c, master, t, strong) {
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = 'square'; o.frequency.value = strong ? 1568 : 1046;
+    g.gain.setValueAtTime(strong ? 0.22 : 0.14, t); g.gain.exponentialRampToValueAtTime(0.0005, t + 0.05);
+    o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.07);
+  }
+  /** schedule all notes (and optional metronome) of a playback plan on context c; times relative to t0 */
+  A.schedule = function (c, master, PN, from, t0, metro) {
+    const ST = PN.ST, base = FS.unitsToSec(ST, from);
+    PN.notes.forEach((n) => {
       if (n.t + n.d <= from + EPS) return;
       const startSec = FS.unitsToSec(ST, Math.max(n.t, from)) - base, endSec = FS.unitsToSec(ST, n.t + n.d) - base;
       const dur = Math.max(0.05, (endSec - startSec) * (n.art === 'stac' ? 0.45 : n.leg ? 1.03 : n.art === 'ten' ? 1 : 0.94));
-      n.midi.forEach((mm) => FS.synth(c, A.master, n.inst, freq(mm), t0 + startSec, dur, n.vol * (n.art === 'acc' || n.art === 'marc' ? 1.3 : 1), n.pan));
+      n.midi.forEach((mm) => FS.synth(c, master, n.inst, freq(mm), t0 + startSec, dur, n.vol * (n.art === 'acc' || n.art === 'marc' ? 1.3 : 1), n.pan));
     });
+    if (metro) {
+      ST.segs.forEach((g) => {
+        const bu = beatUnits(ST.T.ts[g.m]);
+        for (let u = 0, k = 0; u < g.len - 1e-6; u += bu, k++) {
+          const eu = g.eu + u; if (eu < from - 1e-6) continue;
+          click(c, master, t0 + FS.unitsToSec(ST, eu) - base, k === 0);
+        }
+      });
+    }
+    return base;
+  };
+  A.start = function (S, fromUnits, onTick, onEnd, noLead) {
+    A.stop(true);
+    const c = A.context(), PN = FS.playNotes(S, A.speed), ST = PN.ST, from = FS.unitsToExpanded(ST, fromUnits || 0);
+    let lead = 0;
+    if (A.countIn && !noLead) {
+      const q = ST.segs[0], m0 = ST.segs.filter((g) => g.eu <= from + 1e-9).pop() || q, bu = beatUnits(ST.T.ts[m0.m]), nb = Math.max(1, Math.round(m0.len / bu));
+      lead = (nb * bu * 60) / m0.tempo / 16;
+      for (let k = 0; k < nb; k++) click(c, A.master, c.currentTime + 0.12 + (k * lead) / nb, k === 0);
+    }
+    const t0 = c.currentTime + 0.12 + lead, base = A.schedule(c, A.master, PN, from, t0, A.metro);
     const total = ST.total - base;
     A.play = { t0, base, ST, total, onTick, onEnd, raf: 0 };
     const tick = () => {
       if (!A.play) return;
       const el = c.currentTime - t0;
-      if (el >= total + 0.3) { const e = A.play.onEnd; A.stop(true); if (e) e(); return; }
+      if (el >= total + 0.3) {
+        if (A.loop) { A.start(S, fromUnits, onTick, onEnd, true); return; }
+        const e = A.play.onEnd; A.stop(true); if (e) e(); return;
+      }
       if (el >= 0 && onTick) onTick(FS.secToUnits(ST, Math.max(0, el) + base));
       A.play.raf = requestAnimationFrame(tick);
     };
