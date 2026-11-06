@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v13",
+   "title": "Fry Draw 13: 심볼과 묶음 안 고치기",
+   "items": [
+    "심볼: 도형을 골라 '심볼로 만들기'를 누르면 심볼이 돼요. 레이어 탭 아래 목록에서 '놓기'로 몇 개든 놓을 수 있어요",
+    "심볼 고치기: 심볼 하나를 고치면 놓아 둔 모든 복사본이 같이 바뀌어요. 묶음을 두 번 누르거나 '심볼 고치기'를 누르면 묶음 안으로 들어가고, 위쪽 '고치기 끝내기'로 나와요",
+    "'묶음 안 고치기'로 일반 묶음 안의 도형도 풀지 않고 바로 고칠 수 있어요",
+    "심볼은 되돌리기, 자동 저장, 프로젝트 파일에 그대로 저장돼요. 이름을 바꾸거나 심볼에서 떼어낼 수도 있어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 13: symbols and group edit mode",
+     "items": [
+      "Symbols: select shapes and choose Make symbol, then place as many copies as you like from the symbol list under the Layers tab",
+      "Edit a symbol once and every placed copy updates. Double-click a group or press Edit symbol to enter it, and Finish editing at the top to leave",
+      "Edit group contents lets you work inside a regular group without ungrouping",
+      "Symbols are covered by undo, autosave and project files; you can rename them or detach a copy from its symbol"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v12",
    "title": "Fry Draw 12: 그라데이션 손잡이, 글자 윤곽선, 크기 목록",
    "items": [
