@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v17",
+   "title": "Fry Draw 17: 글상자 줄바꿈, 선 그라데이션",
+   "items": [
+    "글상자: 글자를 고르고 '글상자 너비'를 정하면 그 너비에서 글이 알아서 줄바꿈돼요. 영어는 낱말 단위로, 한글은 글자 단위로 줄이 바뀌고 왼쪽·가운데·오른쪽 맞춤도 그대로 돼요",
+    "선도 그라데이션으로 칠할 수 있어요 (선형·원형, 두 색과 방향). 스포이트와 스타일 복사에도 같이 따라가요",
+    "글꼴 목록에 맑은 고딕, 애플 고딕, 나눔고딕, Arial, Times New Roman, Verdana를 더했어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 17: text boxes with wrapping, gradient strokes",
+     "items": [
+      "Text box: set a box width on a text and it wraps automatically, by word for Latin text and by character for Korean, honouring left, centre and right alignment",
+      "Strokes can now use linear or radial gradients with two colours and a direction; eyedropper and style copy carry them along",
+      "Font list gains Malgun Gothic, Apple SD Gothic Neo, Nanum Gothic, Arial, Times New Roman and Verdana"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v16",
    "title": "Fry Draw 16: 모양 비틀기, 선 따라 놓기",
    "items": [
