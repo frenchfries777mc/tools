@@ -4,6 +4,30 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v31",
+   "title": "그라데이션 글자·그림자 색·잔상·소리 채우기·90도 돌리기",
+   "items": [
+    "글자에 '위아래 그라데이션 글자'(두 가지 색)가 생겼어요",
+    "글자 그림자의 색과 퍼짐을 고를 수 있어요",
+    "프로젝트 탭에 '잔상 (움직임 꼬리)'가 생겼어요. 작은 화면·글자·도형이 움직일 때 꼬리가 남아요 (재생·내보내기 때만)",
+    "소리 클립에 '영상 끝까지 반복해서 채우기'가 생겼어요. 짧은 배경음악을 영상 길이만큼 이어 줘요",
+    "영상·그림에 '↻ ↺ 90° 돌리기' 버튼이 생겼어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Gradient text, shadow colour, motion trails, loop sound to fill, rotate 90",
+     "items": [
+      "Text can use a 'Top-to-bottom gradient' with two colours",
+      "Text shadow has a colour and blur amount",
+      "The Project tab has 'Motion trails': moving overlays, text and shapes leave a trail (while playing and exporting only)",
+      "Sound clips have 'Loop to fill the video', repeating a short music bed until the video ends",
+      "Video and pictures have '↻ ↺ Rotate 90°' buttons"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v30",
    "title": "9칸 위치 맞추기·안 쓰는 파일 정리·프레임 이동 키",
    "items": [
