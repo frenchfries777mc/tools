@@ -89,3 +89,4 @@ patchnotes/video.json | Fry Video v18 미리보기에서 바로 옮기고 크기
 patchnotes/video.json | Fry Video v19 타임라인 미리보기 그림·색 표시·반복 재생 (en 번역 없음) | video v19 | 2026-11-06
 patchnotes/score.json | Fry Score v16 항목 (en만) | score v16 | 2026-11-06
 score/app.js | Fry Score v16 한국어 메시지·버튼 | score v16 | 2026-11-06
+patchnotes/draw.json | Fry Draw v15 항목 (en만), draw/app.js 합치기·정렬·단축키 한국어 문구 | draw v15 | 2026-11-06
