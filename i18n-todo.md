@@ -108,3 +108,4 @@ patchnotes/draw.json | Fry Draw v18 항목 (en만), draw/app.js 단계 만들기
 patchnotes/video.json | Fry Video v23 모자이크·필름 입자·카메라 흔들림·영화 띠·음악 길이 맞추기 (en 번역 없음) | video v23 | 2026-11-06
 patchnotes/draw.json | Fry Draw v19 항목 (en만), draw/app.js 모서리 둥글게·조각으로 떼어내기 한국어 문구 | draw v19 | 2026-11-06
 patchnotes/draw.json | Fry Draw v20 항목 (en만), draw/app.js 하나씩 내보내기·ZIP 한국어 문구 | draw v20 | 2026-11-06
+patchnotes/draw.json | Fry Draw v21 항목 (en만), draw/app.js 그림 다루기 한국어 문구 | draw v21 | 2026-11-06
