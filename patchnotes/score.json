@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v14",
+   "title": "한 오선에 두 성부 겹쳐 쓰기",
+   "items": [
+    "파트 설정에서 \"위 파트와 같은 오선에 겹쳐 쓰기\"를 켜면 둘째 성부가 같은 오선에 그려짐: 위 성부는 줄기가 위, 아래 성부는 줄기가 아래, 쉼표도 위아래로 갈라짐",
+    "겹친 성부의 음표도 악보를 눌러 고르고 끌 수 있고, 오른쪽 패널의 \"쓰는 파트\" 목록으로 성부를 바꿔 가며 입력, 재생·소리 크기·TAB은 파트별로 그대로 동작",
+    "MusicXML 열기: 한 오선의 여러 성부(voice, backup)를 겹친 성부로 읽고, 빈 박은 쉼표로 채워 마디가 어긋나지 않게 함"
+   ],
+   "tr": {
+    "en": {
+     "title": "Two voices on one staff",
+     "items": [
+      "Turn on \"write on the same staff as the part above\" in part settings to get a second voice: upper voice stems up, lower voice stems down, rests split",
+      "Notes of both voices can be clicked and dragged on the score; a new \"current part\" list in the side panel switches voices while entering; playback, volume and TAB work per part as before",
+      "MusicXML import reads multiple voices (voice/backup) as overlaid voices and pads missing beats with rests so measures stay aligned"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v13",
    "title": "TAB 악보, 긴 슬러, 붙임줄 다듬기, 새 셈여림·장식음",
    "items": [
