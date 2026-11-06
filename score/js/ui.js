@@ -481,7 +481,7 @@
     h += `<div class="row"><label>조</label><select data-chg="key">${FS.KEYS.map((k) => `<option value="${k[1]}"${T.key[m] === k[1] ? ' selected' : ''}>${k[0]}</option>`).join('')}</select></div>`;
     if (m > 0 && (S.meas[m].ts || S.meas[m].key != null)) h += '<div class="btns"><button class="tbtn" data-act="clearchg">이 마디의 박자·조 바꿈 지우기</button></div>';
     h += '</div>';
-    h += `<div class="sec"><h4>보기</h4><div class="row"><label>한 줄에 마디</label><select data-chg="mps"><option value="0">자동</option>${[1, 2, 3, 4, 6, 8].map((n) => `<option value="${n}"${S.mps === n ? ' selected' : ''}>${n}마디씩</option>`).join('')}</select></div><label class="chk"><input type="checkbox" data-chg="pl"${S.pl ? ' checked' : ''}> 파트 이름을 오선 위에 쓰기</label></div>`;
+    h += `<div class="sec"><h4>보기</h4><div class="row"><label>한 줄에 마디</label><select data-chg="mps"><option value="0">자동</option>${[1, 2, 3, 4, 6, 8].map((n) => `<option value="${n}"${S.mps === n ? ' selected' : ''}>${n}마디씩</option>`).join('')}</select></div><label class="chk"><input type="checkbox" data-chg="pl"${S.pl ? ' checked' : ''}> 파트 이름을 오선 위에 쓰기</label><label class="chk"><input type="checkbox" data-chg="nc"${S.nc ? ' checked' : ''}> 음 높이별로 색 칠하기</label><div class="row"><label>음 이름</label><select data-chg="nn"><option value="0">안 쓰기</option><option value="1"${S.nn === 1 ? ' selected' : ''}>C D E (알파벳)</option><option value="2"${S.nn === 2 ? ' selected' : ''}>도 레 미</option></select></div></div>`;
     UI.sections.song.forEach((fn) => { h += fn(S) || ''; });
     h += '<div class="sec"><h4>새 악보 틀</h4><div class="btns">' + [['lead', '한 줄 악보'], ['piano', '피아노 (두 줄)'], ['quartet', '현악 4중주'], ['band', '밴드 (멜로디·베이스·드럼)']].map((x) => `<button class="tbtn" data-act="tpl" data-v="${x[0]}">${x[1]}</button>`).join('') + '</div></div>';
     const lib = FS.io.libGet();
@@ -543,6 +543,8 @@
     },
     key: (el) => { const S = A.score, m = A.sel ? A.sel.m : 0; if (m === 0) S.key = +el.value; else S.meas[m].key = +el.value; UI.commit('조를 바꿨어요'); },
     mps: (el) => { A.score.mps = +el.value || undefined; if (!A.score.mps) delete A.score.mps; UI.commit(); },
+    nc: (el) => { if (el.checked) A.score.nc = true; else delete A.score.nc; UI.commit(); },
+    nn: (el) => { const v = +el.value; if (v) A.score.nn = v; else delete A.score.nn; UI.commit(); },
     pl: (el) => { if (el.checked) A.score.pl = true; else delete A.score.pl; UI.commit(); },
     pname: (el) => { A.score.parts[+el.dataset.i].name = el.value; UI.commit(); },
     ptab: (el) => { const P = A.score.parts[+el.dataset.i]; if (el.value) P.tab = el.value; else delete P.tab; UI.commit(); },
