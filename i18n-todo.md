@@ -134,3 +134,4 @@ patchnotes/video.json | Fry Video v30 9칸 위치 맞추기·안 쓰는 파일 �
 patchnotes/draw.json | Fry Draw v23 항목 (en만), draw/app.js 효과 모음·사라지기 한국어 문구 | draw v23 | 2026-11-06
 patchnotes/video.json | Fry Video v31 그라데이션 글자·그림자 색·잔상·소리 채우기·90도 돌리기 (en 번역 없음) | video v31 | 2026-11-06
 patchnotes/draw.json | Fry Draw v24 항목 (en만), draw/app.js 글자 휘기·어울리는 색·색 뽑기 한국어 문구 | draw v24 | 2026-11-06
+patchnotes/draw.json | Fry Draw v25 항목 (en만), draw/app.js 버전 저장·시작 틀 한국어 문구 | draw v25 | 2026-11-06
