@@ -958,7 +958,7 @@ function askAI(){
 /* ---------- export / import ---------- */
 function download(name,blob){ var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },1500); }
 function fname(ext){ return (doc.name||'draw').replace(/[\\/:*?"<>|]/g,'_')+'.'+ext; }
-var EX={fmt:'png',area:'canvas',scale:2,q:.92,bg:true,embed:true};
+var EX={fmt:'png',area:'canvas',scale:2,q:.92,bg:true,embed:true,zip:true};
 function exArea(mode){ var vis=doc.objs.filter(function(o){ return !o.hid; }), list=mode==='sel'?vis.filter(function(o){ return sel.indexOf(o.id)>=0; }):vis;
   if(mode==='canvas'||mode==='all') return {box:{x:0,y:0,w:doc.w,h:doc.h},objs:doc.objs};
   if(!list.length) return null; var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9, pad=4;
@@ -966,7 +966,21 @@ function exArea(mode){ var vis=doc.objs.filter(function(o){ return !o.hid; }), l
   if(x1<x0) return null; pad=Math.min(pad,60); return {box:{x:Math.floor(x0-pad),y:Math.floor(y0-pad),w:Math.ceil(x1-x0+pad*2),h:Math.ceil(y1-y0+pad*2)},objs:mode==='sel'?list:doc.objs}; }
 function rasterBlob(svg,w,h,fmt,q,bgc){ return new Promise(function(res,rej){ var img=new Image(); img.onload=function(){ var c=document.createElement('canvas'); c.width=w; c.height=h; var x=c.getContext('2d'), mime=fmt==='jpg'?'image/jpeg':fmt==='webp'?'image/webp':'image/png';
     if(fmt!=='png'){ x.fillStyle=bgc||(doc.bgOn?doc.bg:'#ffffff'); x.fillRect(0,0,w,h); } x.drawImage(img,0,0,w,h); c.toBlob(function(b){ b?res(b):rej(new Error('blob')); },mime,q); }; img.onerror=function(){ rej(new Error('img')); }; img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg); }); }
-function exBuild(){ var ar=exArea(EX.area); if(!ar) return null; var sc=EX.fmt==='svg'||EX.fmt==='pdf'?1:EX.scale;
+var CRCT=null;
+function crc32(u8){ if(!CRCT){ CRCT=[]; for(var n=0;n<256;n++){ var c=n; for(var k=0;k<8;k++) c=c&1?0xEDB88320^(c>>>1):c>>>1; CRCT[n]=c>>>0; } } var c2=0xFFFFFFFF; for(var i=0;i<u8.length;i++) c2=CRCT[(c2^u8[i])&255]^(c2>>>8); return (c2^0xFFFFFFFF)>>>0; }
+function zipBlob(files){ var parts=[], cd=[], off=0, enc=new TextEncoder(), now=new Date(), dt=((now.getFullYear()-1980)<<9)|((now.getMonth()+1)<<5)|now.getDate(), tm=(now.getHours()<<11)|(now.getMinutes()<<5)|(now.getSeconds()>>1), cdSize=0;
+  files.forEach(function(fl){ var nm=enc.encode(fl.name), d=fl.data, crc=crc32(d), h=new DataView(new ArrayBuffer(30)); h.setUint32(0,0x04034b50,true); h.setUint16(4,20,true); h.setUint16(6,0x0800,true); h.setUint16(8,0,true); h.setUint16(10,tm,true); h.setUint16(12,dt,true); h.setUint32(14,crc,true); h.setUint32(18,d.length,true); h.setUint32(22,d.length,true); h.setUint16(26,nm.length,true); h.setUint16(28,0,true); parts.push(h.buffer,nm,d);
+    var c=new DataView(new ArrayBuffer(46)); c.setUint32(0,0x02014b50,true); c.setUint16(4,20,true); c.setUint16(6,20,true); c.setUint16(8,0x0800,true); c.setUint16(10,0,true); c.setUint16(12,tm,true); c.setUint16(14,dt,true); c.setUint32(16,crc,true); c.setUint32(20,d.length,true); c.setUint32(24,d.length,true); c.setUint16(28,nm.length,true); c.setUint32(42,off,true); cd.push(c.buffer,nm); cdSize+=46+nm.length; off+=30+nm.length+d.length; });
+  var e=new DataView(new ArrayBuffer(22)); e.setUint32(0,0x06054b50,true); e.setUint16(8,files.length,true); e.setUint16(10,files.length,true); e.setUint32(12,cdSize,true); e.setUint32(16,off,true); return new Blob(parts.concat(cd,[e.buffer]),{type:'application/zip'}); }
+function exportBatch(items){ var ext=EX.fmt, wait=function(){ return new Promise(function(r){ setTimeout(r,300); }); }, chain=Promise.resolve(), files=[], useZip=EX.zip!==false&&items.length>1;
+  items.forEach(function(it){ chain=chain.then(function(){ var p=ext==='svg'?Promise.resolve(new Blob([it.svg],{type:'image/svg+xml'})):rasterBlob(it.svg,it.w,it.h,ext,EX.q,it.bgc);
+    return p.then(function(bl){ if(useZip) return bl.arrayBuffer().then(function(ab){ files.push({name:it.name,data:new Uint8Array(ab)}); }); download(it.name,bl); return wait(); }); }); });
+  chain.then(function(){ if(useZip){ download(fname('zip'),zipBlob(files)); toast(items.length+'개 파일을 ZIP 하나로 받았어요'); } else toast(items.length+'개를 받았어요'); }).catch(function(){ toast('일부를 그림으로 바꾸지 못했어요. 배율을 줄이거나 SVG로 받아 보세요'); }); }
+function exportEach(){ var so=selObjs().filter(function(o){ return !o.hid; }); if(!so.length){ toast('도형을 먼저 골라 주세요'); return; } if(so.length>200){ toast('한 번에 200개까지만 돼요'); return; } var keep=sel.slice(), sc=(EX.fmt==='svg')?1:EX.scale, items=[], used={};
+  so.forEach(function(o,i){ sel=[o.id]; var ar=exArea('sel'); if(!ar) return; var base=layerName(o).replace(/[\\/:*?"<>|]/g,'_').slice(0,24)||'도형', nm=(i+1)+'-'+base; if(used[nm]) nm+='-'+i; used[nm]=1;
+    items.push({name:nm+'.'+EX.fmt,w:Math.max(1,Math.round(ar.box.w*sc)),h:Math.max(1,Math.round(ar.box.h*sc)),bgc:doc.bgOn?doc.bg:'#ffffff',svg:buildSvg({box:ar.box,objs:ar.objs,scale:sc,bg:EX.bg})}); });
+  sel=keep; if(!items.length){ toast('내보낼 수 있는 도형이 없어요'); return; } exportBatch(items); }
+function exBuild(){ var ar=exArea(EX.area==='each'?'sel':EX.area); if(!ar) return null; var sc=EX.fmt==='svg'||EX.fmt==='pdf'?1:EX.scale;
   return {ar:ar,sc:sc,w:Math.max(1,Math.round(ar.box.w*sc)),h:Math.max(1,Math.round(ar.box.h*sc)),svg:buildSvg({box:ar.box,objs:ar.objs,scale:sc,bg:EX.bg,embed:EX.fmt==='svg'&&EX.embed&&EX.area==='canvas'})}; }
 function printMulti(items){ var fr=document.createElement('iframe'); fr.style.cssText='position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:0;';
   var css='html,body{margin:0;background:#fff}', body=''; items.forEach(function(it,i){ css+='@page pg'+i+'{size:'+it.pw+'px '+it.ph+'px;margin:0}.p'+i+'{page:pg'+i+';break-after:page;width:'+it.pw+'px;height:'+it.ph+'px;overflow:hidden}.p'+i+' svg{display:block;width:'+it.pw+'px;height:'+it.ph+'px}'; body+='<div class="p'+i+'">'+it.svg+'</div>'; });
@@ -974,31 +988,27 @@ function printMulti(items){ var fr=document.createElement('iframe'); fr.style.cs
 function exportAllPages(){ syncPage(); var pgs=doc.pages, ext=EX.fmt, sc=(ext==='svg'||ext==='pdf')?1:EX.scale;
   var items=pgs.map(function(p,i){ return {i:i,pw:p.w,ph:p.h,bgc:p.bgOn?p.bg:'#ffffff',w:Math.round(p.w*sc),h:Math.round(p.h*sc),svg:buildSvg({box:{x:0,y:0,w:p.w,h:p.h},objs:p.objs,scale:sc,bg:EX.bg,bgc:p.bg,bgOn:p.bgOn})}; });
   if(ext==='pdf'){ printMulti(items); return; }
-  var wait=function(){ return new Promise(function(r){ setTimeout(r,300); }); }, chain=Promise.resolve();
-  items.forEach(function(it){ chain=chain.then(function(){ var nm=fname(ext).replace(/\.([^.]+)$/,'-'+(it.i+1)+'.$1');
-    if(ext==='svg'){ download(nm,new Blob([it.svg],{type:'image/svg+xml'})); return wait(); }
-    return rasterBlob(it.svg,it.w,it.h,ext,EX.q,it.bgc).then(function(bl){ download(nm,bl); return wait(); }); }); });
-  chain.then(function(){ toast(items.length+'장을 받았어요'); }).catch(function(){ toast('일부를 그림으로 바꾸지 못했어요'); }); }
+  items.forEach(function(it){ it.name=fname(ext).replace(/\.([^.]+)$/,'-'+(it.i+1)+'.$1'); }); exportBatch(items); }
 function printSvg(svg,w,h){ var fr=document.createElement('iframe'); fr.style.cssText='position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:0;';
   fr.srcdoc='<!doctype html><meta charset="utf-8"><style>@page{size:'+w+'px '+h+'px;margin:0}html,body{margin:0;background:#fff}svg{display:block;width:'+w+'px;height:'+h+'px}</style>'+svg;
   fr.onload=function(){ try{ fr.contentWindow.focus(); fr.contentWindow.print(); }catch(e){ toast('인쇄 창을 열지 못했어요'); } setTimeout(function(){ fr.remove(); },60000); }; document.body.appendChild(fr); }
 function openExport(){ var old=document.querySelector('.dlgbg'); if(old) old.remove();
   var bgd=document.createElement('div'); bgd.className='dlgbg';
   bgd.innerHTML='<div class="dlg"><h3>내보내기</h3><div class="row"><label>형식</label><select id="exF"><option value="png">PNG (투명 가능)</option><option value="jpg">JPG (작은 용량)</option><option value="webp">WebP</option><option value="svg">SVG (벡터)</option><option value="pdf">PDF·인쇄</option></select></div>'
-   +'<div class="row"><label>범위</label><select id="exA"><option value="canvas">캔버스 전체</option><option value="content">그림 내용에 맞춰 자르기</option><option value="sel">고른 도형만</option>'+(doc.pages?'<option value="all">모든 페이지 ('+doc.pages.length+'장)</option>':'')+'</select></div>'
+   +'<div class="row"><label>범위</label><select id="exA"><option value="canvas">캔버스 전체</option><option value="content">그림 내용에 맞춰 자르기</option><option value="sel">고른 도형만 (한 파일)</option><option value="each">고른 도형 하나씩 따로 (여러 파일)</option>'+(doc.pages?'<option value="all">모든 페이지 ('+doc.pages.length+'장)</option>':'')+'</select></div>'
    +'<div class="row" id="exSr"><label>배율</label><select id="exS"><option value="0.5">0.5배</option><option value="1">1배 (원래 크기)</option><option value="2">2배</option><option value="3">3배</option><option value="4">4배</option></select></div>'
    +'<div class="row" id="exQr"><label>품질</label><input type="range" id="exQ" min="40" max="100" value="92"><span class="v" id="exQv">92</span></div>'
-   +'<label class="chk" id="exBr"><input type="checkbox" id="exB"> 배경 색 포함 (끄면 투명)</label><label class="chk" id="exEr"><input type="checkbox" id="exE"> SVG에 편집 정보 넣기 (다시 열면 그대로 고칠 수 있어요)</label>'
+   +'<label class="chk" id="exZr"><input type="checkbox" id="exZ"> 여러 파일이면 ZIP 하나로 묶기</label><label class="chk" id="exBr"><input type="checkbox" id="exB"> 배경 색 포함 (끄면 투명)</label><label class="chk" id="exEr"><input type="checkbox" id="exE"> SVG에 편집 정보 넣기 (다시 열면 그대로 고칠 수 있어요)</label>'
    +'<div class="note" id="exInfo"></div><div class="btns"><button class="tbtn pri" id="exGo">내보내기</button><button class="tbtn" id="exCp">그림으로 복사</button><button class="tbtn" id="exX">닫기</button></div></div>';
   document.body.appendChild(bgd); var q=function(id){ return bgd.querySelector('#'+id); };
-  q('exF').value=EX.fmt; q('exA').value=EX.area; q('exS').value=String(EX.scale); q('exQ').value=Math.round(EX.q*100); q('exB').checked=EX.bg; q('exE').checked=EX.embed;
-  function sync(){ EX.fmt=q('exF').value; EX.area=q('exA').value; EX.scale=+q('exS').value; EX.q=+q('exQ').value/100; EX.bg=q('exB').checked; EX.embed=q('exE').checked; q('exQv').textContent=Math.round(EX.q*100);
-    var r=EX.fmt==='png'||EX.fmt==='jpg'||EX.fmt==='webp'; q('exSr').hidden=!r; q('exQr').hidden=!(EX.fmt==='jpg'||EX.fmt==='webp'); q('exBr').hidden=EX.fmt==='jpg'; q('exEr').hidden=!(EX.fmt==='svg'&&EX.area==='canvas'); q('exCp').hidden=!r||EX.area==='all'; q('exGo').textContent=EX.fmt==='pdf'?'인쇄 창 열기 (PDF로 저장 가능)':'내보내기';
+  q('exF').value=EX.fmt; q('exA').value=EX.area; q('exS').value=String(EX.scale); q('exQ').value=Math.round(EX.q*100); q('exB').checked=EX.bg; q('exE').checked=EX.embed; q('exZ').checked=EX.zip!==false;
+  function sync(){ EX.fmt=q('exF').value; EX.area=q('exA').value; EX.scale=+q('exS').value; EX.q=+q('exQ').value/100; EX.bg=q('exB').checked; EX.embed=q('exE').checked; EX.zip=q('exZ').checked; q('exZr').hidden=!((EX.area==='all'||EX.area==='each')&&EX.fmt!=='pdf'); q('exQv').textContent=Math.round(EX.q*100);
+    var r=EX.fmt==='png'||EX.fmt==='jpg'||EX.fmt==='webp'; q('exSr').hidden=!r; q('exQr').hidden=!(EX.fmt==='jpg'||EX.fmt==='webp'); q('exBr').hidden=EX.fmt==='jpg'; q('exEr').hidden=!(EX.fmt==='svg'&&EX.area==='canvas'); q('exInfo').dataset.each=EX.area==='each'?'1':''; q('exCp').hidden=!r||EX.area==='all'||EX.area==='each'; q('exGo').textContent=EX.fmt==='pdf'?'인쇄 창 열기 (PDF로 저장 가능)':'내보내기';
     var b=exBuild(); if(!b){ q('exInfo').textContent='고른 도형이 없어요. 먼저 도형을 골라 주세요.'; q('exGo').disabled=true; q('exCp').disabled=true; return; } q('exGo').disabled=false; q('exCp').disabled=false;
     q('exInfo').textContent=b.w+' × '+b.h+' px'+(EX.fmt==='svg'?' · 약 '+Math.max(1,Math.round(b.svg.length/1024))+'KB':'')+(b.w*b.h>1.2e8?' · 너무 커요, 배율을 줄여 주세요':''); }
   bgd.addEventListener('input',sync); bgd.addEventListener('change',sync); sync();
   q('exX').onclick=function(){ bgd.remove(); }; bgd.addEventListener('pointerdown',function(e){ if(e.target===bgd) bgd.remove(); });
-  q('exGo').onclick=function(){ var b=exBuild(); if(!b) return; if(EX.area==='all'&&doc.pages){ exportAllPages(); return; } var nm=fname(EX.fmt==='pdf'?'pdf':EX.fmt);
+  q('exGo').onclick=function(){ var b=exBuild(); if(!b) return; if(EX.area==='all'&&doc.pages){ exportAllPages(); return; } if(EX.area==='each'){ if(EX.fmt==='pdf'){ toast('PDF는 하나씩 따로 받을 수 없어요. 다른 형식을 골라 주세요'); return; } exportEach(); return; } var nm=fname(EX.fmt==='pdf'?'pdf':EX.fmt);
     if(EX.fmt==='svg'){ download(nm,new Blob([b.svg],{type:'image/svg+xml'})); toast('SVG를 받았어요'); return; }
     if(EX.fmt==='pdf'){ printSvg(b.svg,b.ar.box.w,b.ar.box.h); return; }
     if(b.w*b.h>1.2e8){ toast('그림이 너무 커요. 배율을 줄여 주세요'); return; }
@@ -1282,6 +1292,6 @@ desk.addEventListener('scroll',drawRulers); $('rh').addEventListener('pointerdow
   if(s){ try{ load(s); }catch(e){} }
   $('dname').value=doc.name; hist=[snap()]; hi=0;
   renderTools(); render(); fit(); panel();
-  window.FDRAW={roundCorners:roundCorners,breakApartSel:breakApartSel,blendGo:blendGo,zoomSel:zoomSel,wrapLines:wrapLines,fxApply:fxApply,scatterGo:scatterGo,boolOp:boolOp,copySel:copySel,pasteSel:pasteSel,align:align,spaceSel:spaceSel,matchSize:matchSize,importSvgRoot:importSvgRoot,parseXform:parseXform,symMake:symMake,symPut:symPut,symEdit:symEdit,symDone:symDone,gradPts:gradPts,textOutline:textOutline,traceImage:traceImage,SHAPES:SHAPES,flat:flat,rdp:rdp,strokePieces:strokePieces,pbUnionAll:pbUnionAll,getSel:function(){ return sel; },groupSel:groupSel,ungroupSel:ungroupSel,boolOp:boolOp,align:align,toPath:toPath,select:function(a){ sel=a; drawOv(); panel(); },addNode:addNode,mat:mat,doc:doc,importSvg:importSvg,drawPattern:drawPattern,setTool:setTool,st:st,PATS:PATS,svg:docSvg,buildSvg:buildSvg,openExport:openExport,exArea:exArea};
+  window.FDRAW={zipBlob:zipBlob,crc32:crc32,exportEach:exportEach,EX:EX,roundCorners:roundCorners,breakApartSel:breakApartSel,blendGo:blendGo,zoomSel:zoomSel,wrapLines:wrapLines,fxApply:fxApply,scatterGo:scatterGo,boolOp:boolOp,copySel:copySel,pasteSel:pasteSel,align:align,spaceSel:spaceSel,matchSize:matchSize,importSvgRoot:importSvgRoot,parseXform:parseXform,symMake:symMake,symPut:symPut,symEdit:symEdit,symDone:symDone,gradPts:gradPts,textOutline:textOutline,traceImage:traceImage,SHAPES:SHAPES,flat:flat,rdp:rdp,strokePieces:strokePieces,pbUnionAll:pbUnionAll,getSel:function(){ return sel; },groupSel:groupSel,ungroupSel:ungroupSel,boolOp:boolOp,align:align,toPath:toPath,select:function(a){ sel=a; drawOv(); panel(); },addNode:addNode,mat:mat,doc:doc,importSvg:importSvg,drawPattern:drawPattern,setTool:setTool,st:st,PATS:PATS,svg:docSvg,buildSvg:buildSvg,openExport:openExport,exArea:exArea};
 })();
 })();
