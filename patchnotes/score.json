@@ -4,6 +4,30 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v33",
+   "title": "Fry Score 새로 만들기 4: 파일 가져오기·내보내기, 인쇄, 재생 설정",
+   "items": [
+    "MIDI(.mid) 내보내기와 열기: 악기, 빠르기, 박자, 조, 반복 재생 순서까지 담아요",
+    "MusicXML(.musicxml) 내보내기와 열기: 음표, 쉼표, 잇단음표, 붙임줄, 이음줄, 가사, 코드, 셈여림, 연주 기호, 반복·괄호",
+    "소리 파일(.wav), 그림(.png) 내보내기",
+    "인쇄와 PDF 저장: 시스템 경계에서 A4 페이지로 나눠요",
+    "재생 속도, 메트로놈, 시작 전 한 마디 세기, 반복 재생"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Score rebuild 4: file import/export, printing and playback settings",
+     "items": [
+      "MIDI export and import with instruments, tempo, time and key, following repeat order",
+      "MusicXML export and import: notes, rests, tuplets, ties, slurs, lyrics, chords, dynamics, articulations, repeats and endings",
+      "WAV and PNG export",
+      "Print and PDF save with A4 pagination at system breaks",
+      "Playback speed, metronome, count-in and loop"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v32",
    "title": "Fry Score 새로 만들기 3: 반복·이동 기호, 드럼, TAB",
    "items": [
