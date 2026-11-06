@@ -81,25 +81,63 @@
   };
 
   /* ---------- score -> note list ---------- */
-  /** seconds at the start of each measure, honouring tempo changes (set per measure) */
-  FS.secTable = function (S) {
-    const T = FS.mtab(S), sec = [], tempo = []; let t = 0, tp = S.tempo;
-    for (let m = 0; m < T.n; m++) {
-      const mk = S.meas[m] || {}; if (mk.tempo) tp = mk.tempo;
-      tempo.push(tp); sec.push(t); t += (T.len[m] * 60) / tp / 16;
+  /** order in which measures are played (repeats, voltas, D.S./D.C., Fine, To Coda) */
+  FS.playOrder = function (S) {
+    const N = FS.mtab(S).n, mk = (i) => S.meas[i] || {};
+    let segno = -1, coda = -1;
+    for (let i = 0; i < N; i++) { if (mk(i).segno && segno < 0) segno = i; if (mk(i).coda) coda = i; }
+    const order = []; let m = 0, pass = 1, rep = 0, jumped = false, guard = 0;
+    while (m < N && guard++ < N * 10 + 50) {
+      const k = mk(m);
+      if (k.rs && rep !== m && !(pass === 2 && !jumped)) { rep = m; pass = 1; }
+      if (k.volta === 1 && (pass >= 2 || jumped)) { m++; continue; }
+      order.push(m);
+      if (jumped && k.fine) break;
+      if (jumped && k.tocoda && coda > m) { m = coda; continue; }
+      if (k.re && !jumped) {
+        if (pass === 1) { pass = 2; m = rep; continue; }
+        pass = 1; rep = m + 1;
+      }
+      if (!jumped && (k.ds || k.dc)) { jumped = true; m = k.ds && segno >= 0 ? segno : 0; pass = 1; continue; }
+      m++;
     }
-    return { T, sec, tempo, total: t };
+    return order;
   };
-  /** units (1/64 whole) -> seconds */
+  /** playback plan: expanded measure list with tempo (incl. ramps) and cumulative seconds */
+  FS.secTable = function (S, speed) {
+    const T = FS.mtab(S), order = FS.playOrder(S), sp = speed || 1;
+    // tempo per score measure
+    const tempo = []; let tp = S.tempo, ramp = null;
+    for (let m = 0; m < T.n; m++) {
+      const mk = S.meas[m] || {};
+      if (mk.tempo) { tp = mk.tempo; ramp = null; }
+      if (mk.ramp) ramp = { left: mk.ramp.n, from: tp, to: mk.ramp.to, n: mk.ramp.n };
+      if (ramp && ramp.left > 0) { const q = (ramp.n - ramp.left + 1) / ramp.n; tempo.push(ramp.from + (ramp.to - ramp.from) * (q - 0.5 / ramp.n)); ramp.left--; if (!ramp.left) tp = ramp.to; } else tempo.push(tp);
+    }
+    const segs = []; let sec = 0, eu = 0;
+    order.forEach((m, k) => {
+      const tpo = tempo[m] * sp, len = T.len[m];
+      segs.push({ m, eu, sec, tempo: tpo, start: T.start[m], len, cont: k > 0 && order[k - 1] === m - 1 });
+      sec += (len * 60) / tpo / 16; eu += len;
+    });
+    return { T, segs, order, total: sec, units: eu };
+  };
+  /** expanded units -> seconds */
   FS.unitsToSec = function (ST, u) {
-    const T = ST.T; let m = 0;
-    while (m + 1 < T.n && u >= T.start[m + 1] - 1e-9) m++;
-    return ST.sec[m] + ((u - T.start[m]) * 60) / ST.tempo[m] / 16;
+    let q = ST.segs[0];
+    for (const g of ST.segs) { if (u >= g.eu - 1e-9) q = g; else break; }
+    return q.sec + ((u - q.eu) * 60) / q.tempo / 16;
   };
+  /** seconds -> score units (for the cursor) */
   FS.secToUnits = function (ST, s) {
-    const T = ST.T; let m = 0;
-    while (m + 1 < T.n && s >= ST.sec[m + 1] - 1e-9) m++;
-    return T.start[m] + ((s - ST.sec[m]) * ST.tempo[m] * 16) / 60;
+    let q = ST.segs[0];
+    for (const g of ST.segs) { if (s >= g.sec - 1e-9) q = g; else break; }
+    return q.start + Math.min(q.len, ((s - q.sec) * q.tempo * 16) / 60);
+  };
+  /** score unit -> first expanded unit where it is played */
+  FS.unitsToExpanded = function (ST, u) {
+    for (const g of ST.segs) if (u >= g.start - 1e-9 && u < g.start + g.len - 1e-9) return g.eu + (u - g.start);
+    return 0;
   };
   const DYNV = { ppp: 0.3, pp: 0.4, p: 0.55, mp: 0.7, mf: 0.85, f: 1, ff: 1.15, fff: 1.3, sfz: 1.1 };
   FS.noteList = function (S, opts) {
@@ -161,7 +199,15 @@
   /* ---------- transport ---------- */
   A.start = function (S, fromUnits, onTick, onEnd) {
     A.stop(true);
-    const c = A.context(), ST = FS.secTable(S), notes = FS.noteList(S), t0 = c.currentTime + 0.12, from = fromUnits || 0, base = FS.unitsToSec(ST, from);
+    const c = A.context(), ST = FS.secTable(S, A.speed), t0 = c.currentTime + 0.12, from = FS.unitsToExpanded(ST, fromUnits || 0), base = FS.unitsToSec(ST, from);
+    const raw = FS.noteList(S), notes = [];
+    ST.segs.forEach((g, gi) => {
+      let end = g.start + g.len; for (let k = gi + 1; k < ST.segs.length && ST.segs[k].cont; k++) end += ST.segs[k].len;
+      raw.forEach((n) => {
+        if (n.t < g.start - 1e-9 || n.t >= g.start + g.len - 1e-9) return;
+        notes.push(Object.assign({}, n, { t: g.eu + (n.t - g.start), d: Math.min(n.d, end - n.t) }));
+      });
+    });
     notes.forEach((n) => {
       if (n.t + n.d <= from + EPS) return;
       const startSec = FS.unitsToSec(ST, Math.max(n.t, from)) - base, endSec = FS.unitsToSec(ST, n.t + n.d) - base;
