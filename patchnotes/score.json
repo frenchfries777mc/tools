@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v35",
+   "title": "Fry Score 새로 만들기 6: 휴대폰 화면, 안정성, 접근성",
+   "items": [
+    "휴대폰에서는 악보를 좁은 폭으로 다시 배치해 화면에 꽉 차게 보여요",
+    "음표를 고르면 스크린 리더가 파트·마디·음 이름과 길이를 읽어 줘요",
+    "마디 지우기·박자 바꿈·잇단음표가 겹칠 때 생기던 오류를 무작위 편집 시험으로 찾아 고쳤어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Score rebuild 6: phone layout, robustness, accessibility",
+     "items": [
+      "Narrow-screen layout reflows the score to fit phones",
+      "Screen readers announce part, measure, pitch and duration when a note is selected",
+      "Fixed errors in measure deletion, time changes and tuplets found by randomised edit tests"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v34",
    "title": "Fry Score 새로 만들기 5: 글자 탭, 예시 곡, 조옮김",
    "items": [
