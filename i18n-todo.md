@@ -111,5 +111,6 @@ patchnotes/draw.json | Fry Draw v20 항목 (en만), draw/app.js 하나씩 내보
 patchnotes/score.json | Fry Score v21 항목 (en만) | score v21 | 2026-11-06
 score/app.js | Fry Score v21 한국어 메시지·버튼 | score v21 | 2026-11-06
 patchnotes/draw.json | Fry Draw v21 항목 (en만), draw/app.js 그림 다루기 한국어 문구 | draw v21 | 2026-11-06
+patchnotes/draw.json | Fry Draw v22 항목 (en만), draw/app.js 손떨림 보정 한국어 문구 | draw v22 | 2026-11-06
 patchnotes/video.json | Fry Video v24 박자 편집·이어 붙이기·처음 끝 페이드 (en 번역 없음) | video v24 | 2026-11-06
 patchnotes/video.json | Fry Video v25 시간으로 가기·자동 줄바꿈·크레딧·반복·자막 밀기 (en 번역 없음) | video v25 | 2026-11-06
