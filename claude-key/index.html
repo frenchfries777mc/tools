@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Tools 키</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#111;color:#eee;display:flex;justify-content:center;padding:40px 16px;margin:0}
+main{width:100%;max-width:420px;display:flex;flex-direction:column;gap:10px}
+input,button{padding:10px;border-radius:8px;border:1px solid #444;background:#1c1c1c;color:#eee;font-size:16px}
+button{background:#e8b04a;color:#111;border:0;font-weight:700;cursor:pointer}
+footer{margin-top:24px;font-size:12px;color:#888;display:flex;flex-direction:column;gap:4px}
+footer a{color:#aaa}
+</style>
+</head>
+<body>
+<main>
+<h2>Tools 키</h2>
+<input id="k" readonly>
+<button id="c">복사</button>
+<footer><span>Created by Frenchfries777</span><span class="ff-copy">© 2026 Frenchfries777 · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.ko" target="_blank" rel="noopener">CC BY-NC-ND 4.0</a></span></footer>
+</main>
+<script>
+(function(){
+  var k=document.getElementById('k'),b=document.getElementById('c'),v='';
+  try{ v=localStorage.getItem('ffstore.owner')||''; }catch(e){}
+  k.value=/^[0-9a-f]{32}$/.test(v)?v:'키가 없어요. Tools에서 문서를 먼저 저장해 주세요.';
+  b.onclick=function(){ k.select(); try{ navigator.clipboard.writeText(k.value).then(function(){ b.textContent='복사됨'; },function(){ document.execCommand('copy'); b.textContent='복사됨'; }); }catch(e){ document.execCommand('copy'); b.textContent='복사됨'; } };
+})();
+</script>
+</body>
+</html>
