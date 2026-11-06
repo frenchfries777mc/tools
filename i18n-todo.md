@@ -141,3 +141,5 @@ patchnotes/python.json | BeaconScript define ore 항목 (en만) | python v37 | 2
 patchnotes/python.json | BeaconScript define structure·build 항목 (en만) | python v38 | 2026-11-06
 patchnotes/score.json | Fry Score v36 항목 (en만) | score v36 | 2026-11-06
 score/app.js | Fry Score v36 한국어 메시지·버튼 | score v36 | 2026-11-06
+index.html | 푸터 'Claude와 연결하기' 링크 | site | 2026-11-06
+claude-key/index.html | Claude와 연결하기 페이지 한국어 글자 | site | 2026-11-06
