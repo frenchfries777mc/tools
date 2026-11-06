@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v30",
+   "title": "9칸 위치 맞추기·안 쓰는 파일 정리·프레임 이동 키",
+   "items": [
+    "글자·도형 설정에 9칸 '위치 맞추기' 버튼이 생겼어요. 모서리·가운데로 한 번에 보내요",
+    "왼쪽 파일 목록에 각 파일을 타임라인에서 몇 번 썼는지(×1, ×0) 표시해요",
+    "프로젝트 탭 '안 쓰는 파일 정리하기': 한 번도 안 쓴 파일을 목록에서 지워요",
+    "키보드 , . 로 한 프레임씩 앞뒤로 이동해요 (단축키 안내에도 ↑↓ 편집점과 함께 적었어요)"
+   ],
+   "tr": {
+    "en": {
+     "title": "9-position snap, remove unused files, frame-step keys",
+     "items": [
+      "Text and shape settings have a 9-cell 'Snap to position' grid to send them to corners or centre in one click",
+      "The file list shows how many times each file is used on the timeline (x1, x0)",
+      "Project tab 'Remove unused files' clears files never used on the timeline",
+      "Keys , and . step one frame back/forward (the shortcut list now also mentions Up/Down edit points)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v29",
    "title": "물들이기·거울 대칭·빠르기 버튼·버전 저장",
    "items": [
