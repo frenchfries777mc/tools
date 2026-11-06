@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v20",
+   "title": "마디 편집·작업 기록·곡 통계",
+   "items": [
+    "마디 편집: 앞/뒤에 빈 마디 끼우기, 뒤에 복제, 복사·붙여넣기(덮어쓰기), 비우기, 지우기 (끼우기·지우기는 모든 파트·반복 기호까지 같이 이동)",
+    "작업 기록: 최근 12번의 상태를 시각과 음표 수로 보고 눌러서 그때로 돌아가기",
+    "곡 통계: 마디 수, 길이, 파트별 음표·쉼표 수와 음역"
+   ],
+   "tr": {
+    "en": {
+     "title": "Measure editing, history list, song stats",
+     "items": [
+      "Measure editing: insert blank measure before/after, duplicate, copy and paste over, clear, delete (insert/delete apply to all parts and shift repeat marks)",
+      "Work history: see the last 12 states with time and note count and jump back to any",
+      "Song statistics: measures, duration, notes and rests and range per part"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v19",
    "title": "옥타브선·페달·새 연주 기호",
    "items": [
