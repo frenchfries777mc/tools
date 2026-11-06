@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v20",
+   "title": "Fry Draw 20: 도형 하나씩 내보내기, ZIP으로 묶기",
+   "items": [
+    "내보내기 범위에 '고른 도형 하나씩 따로'를 더했어요. 로고 부품이나 스티커처럼 도형마다 PNG·JPG·WebP·SVG 파일을 한 번에 만들어요. 파일 이름은 순서와 도형 이름으로 붙어요",
+    "여러 파일을 내보낼 때(도형 하나씩, 모든 페이지) 'ZIP 하나로 묶기'를 켜면 파일 하나로 받아요. 끄면 하나씩 받아요",
+    "ZIP은 브라우저 안에서 만들어서 그림이 밖으로 나가지 않아요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 20: export each shape, ZIP bundles",
+     "items": [
+      "New export range: each selected shape as its own file, in PNG, JPG, WebP or SVG, named by order and shape name, handy for logo parts or stickers",
+      "When exporting several files (each shape, all pages) the Bundle as one ZIP option downloads a single archive; turn it off to get separate files",
+      "The ZIP is built inside the browser, so nothing leaves your device"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v19",
    "title": "Fry Draw 19: 모서리 둥글게, 조각으로 떼어내기",
    "items": [
