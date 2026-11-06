@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v15",
+   "title": "색 보정·샤프닝·단축키·프로젝트 틀",
+   "items": [
+    "색 보정(그레이딩): 중간 밝기(감마), 어두운 곳 색과 밝은 곳 색(색+세기), 또렷하게(샤프닝) 추가. '틸 앤 오렌지', '푸르스름한 밤' 프리셋 포함",
+    "단축키: Ctrl+C/X/V 복사·잘라내기·붙이기(재생 막대 위치에 붙음), Ctrl+D 복제, Ctrl+A 모두 고르기, Home/End, Esc. 영상 설정 탭에 단축키 목록",
+    "프로젝트 틀: 유튜브 가로·쇼츠 세로·인스타 피드 비율을 한 번에 고르고, 지금의 화면 비율·배경 색·글자/도형 클립을 내 틀로 저장해 불러와요 (최대 8개)"
+   ],
+   "tr": {
+    "en": {
+     "title": "Colour grading, sharpen, shortcuts, project templates",
+     "items": [
+      "Colour grading: midtone gamma, shadow and highlight tints (colour + strength) and sharpen, with Teal & orange and Blue night presets",
+      "Shortcuts: Ctrl+C/X/V copy, cut and paste (pastes at the playhead), Ctrl+D duplicate, Ctrl+A select all, Home/End, Esc; the Project tab lists them",
+      "Project templates: pick YouTube landscape, Shorts portrait or Instagram feed in one click, and save your aspect ratio, background and text/shape clips as your own template (up to 8)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v14",
    "title": "영어 화면·에코/리버브·화면 속 표시 그림·카운트다운",
    "items": [

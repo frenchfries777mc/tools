@@ -4,6 +4,50 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v13",
+   "title": "TAB 악보, 긴 슬러, 붙임줄 다듬기, 새 셈여림·장식음",
+   "items": [
+    "TAB 악보: 파트마다 기타(6줄)·베이스(4줄) TAB을 오선 아래에 같이 보여 줌 — 같은 음이면 가장 낮은 프렛으로 줄을 자동으로 배정하고 화음은 줄이 겹치지 않게 나눔",
+    "슬러를 1~4음 뒤까지 이어 그리기(누를 때마다 늘어남), 재생도 그 구간을 이어서 연주",
+    "붙임줄: 다음 음 위치까지 정확히 그리고, 화음의 모든 음과 마디·줄을 넘어가는 붙임줄도 표시",
+    "셈여림 ppp·fff·sfz 추가, 모르덴트와 펼침화음(재생도 아르페지오, MusicXML 저장) 추가"
+   ],
+   "tr": {
+    "en": {
+     "title": "Tab staff, longer slurs, better ties, more dynamics and ornaments",
+     "items": [
+      "TAB staff: show a guitar (6-string) or bass (4-string) tab under any part; frets are assigned automatically (lowest fret, chords spread over strings)",
+      "Slurs can span 1-4 notes (tap again to extend), and playback plays that span legato",
+      "Ties now reach the next note exactly, cover every note of a chord and continue across barlines and systems",
+      "New dynamics ppp, fff, sfz; mordent and arpeggio (played as a rolled chord, saved in MusicXML)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
+   "build": "v12",
+   "title": "중간에 조 바꾸기, 접근성, 파일 안전 검사",
+   "items": [
+    "마디마다 조표 바꾸기: 그 마디부터 조표가 새로 그려지고(줄 시작에서는 줄머리 조표), 이후 입력·음 높이 이동·끌기가 바뀐 조에 맞춰짐, MusicXML 저장·읽기 지원",
+    "화면 읽기 프로그램 지원: 고른 음표를 읽어 주는 안내 영역, 도구 단추 설명과 눌림 상태, 탭 역할 표시, 악보 요약, 키보드 초점 표시",
+    "열기·보관함·되돌리기 때 악보 파일을 검사해서 깨진 값(엉뚱한 박자·음 높이·길이)은 안전한 값으로 고침",
+    "되돌리기·다시 단추에 남은 단계 수 표시"
+   ],
+   "tr": {
+    "en": {
+     "title": "Mid-score key changes, accessibility, safer file loading",
+     "items": [
+      "Key signature changes at any measure: drawn from that measure on (and in the system header), input/move/drag follow the new key, saved to and read from MusicXML",
+      "Screen-reader support: live announcement of the selected note, button labels and pressed state, tab roles, score summary and visible keyboard focus",
+      "Score files are validated on open, library load and undo; bad values (time signature, pitch, duration) are replaced with safe ones",
+      "Undo/redo buttons show how many steps are left"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v11",
    "title": "드럼 악보·새 악기 4종·쪽 나눠 인쇄",
    "items": [
