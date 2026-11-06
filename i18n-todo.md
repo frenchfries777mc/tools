@@ -109,3 +109,4 @@ patchnotes/video.json | Fry Video v23 모자이크·필름 입자·카메라 흔
 patchnotes/draw.json | Fry Draw v19 항목 (en만), draw/app.js 모서리 둥글게·조각으로 떼어내기 한국어 문구 | draw v19 | 2026-11-06
 patchnotes/draw.json | Fry Draw v20 항목 (en만), draw/app.js 하나씩 내보내기·ZIP 한국어 문구 | draw v20 | 2026-11-06
 patchnotes/draw.json | Fry Draw v21 항목 (en만), draw/app.js 그림 다루기 한국어 문구 | draw v21 | 2026-11-06
+patchnotes/draw.json | Fry Draw v22 항목 (en만), draw/app.js 손떨림 보정 한국어 문구 | draw v22 | 2026-11-06
