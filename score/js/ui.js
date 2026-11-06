@@ -375,6 +375,7 @@
       else if (k === ' ') { e.preventDefault(); UI.togglePlay(); }
       else if (/^[1-7]$/.test(k)) { e.preventDefault(); UI.setDur([64, 32, 16, 8, 4, 2, 1][7 - +k] , false); }
       else if (k === '.') { e.preventDefault(); UI.toggleDot(); }
+      else if (kl === 't') { e.preventDefault(); UI.toggleTie(); }
       else if (kl === 'r') { e.preventDefault(); UI.enterRest(); }
       else if (/^[a-g]$/.test(kl)) { e.preventDefault(); UI.enterLetter(kl, e.shiftKey); }
     });
@@ -385,8 +386,8 @@
     if (FS.audio.playing()) { FS.audio.stop(); return; }
     const S = A.score; let from = 0;
     if (A.sel) from = FS.mtab(S).start[A.sel.m] + curStart();
-    $('bPlay').textContent = '■ 멈춤';
-    FS.audio.start(S, from, onTick, () => { $('bPlay').textContent = '▶ 재생'; const c = $('pcur'); if (c) c.setAttribute('opacity', '0'); });
+    $('bPlay').innerHTML = FS.icons.stop + '<span class="lb">멈춤</span>';
+    FS.audio.start(S, from, onTick, () => { $('bPlay').innerHTML = FS.icons.play + '<span class="lb">재생</span>'; const c = $('pcur'); if (c) c.setAttribute('opacity', '0'); });
   };
   function onTick(u) {
     const L = A.L, T = L.T; let m = 0;
@@ -402,21 +403,22 @@
   function renderTools() {
     const u = A.ui, b = (cls, act, v, label, title, on, extra) => `<button class="tl ${cls || ''}${on ? ' on' : ''}" data-act="${act}" data-v="${v == null ? '' : v}" title="${title}" aria-label="${title}" aria-pressed="${!!on}"${extra || ''}>${label}</button>`;
     let h = '';
-    h += b('', 'tool', 'input', '✎', '입력 도구 (누르면 음표가 찍혀요)', u.tool === 'input');
-    h += b('', 'tool', 'select', '↖', '선택 도구', u.tool === 'select');
+    const I = FS.icons;
+    h += b('', 'tool', 'input', I.pencil, '입력 도구 — 누르면 음표가 찍혀요', u.tool === 'input');
+    h += b('', 'tool', 'select', I.arrow, '선택 도구', u.tool === 'select');
     h += '<div class="tsep"></div>';
-    DURS.forEach((d) => { h += b('sm', 'dur', d[0], d[1], d[2], u.dur === d[0]); });
-    h += b('', 'dot', '', '•', '점음표', u.dot);
-    h += b('', 'rest', '', '쉼', '쉼표 입력', u.rest);
+    DURS.forEach((d, k) => { h += b('', 'dur', d[0], I.byDur[d[0]], d[2] + ' (' + (7 - k) + ')', u.dur === d[0]); });
+    h += b('', 'dot', '', I.dot, '점음표 (.)', u.dot);
+    h += b('', 'rest', '', I.rest, '쉼표 입력 (R)', u.rest);
     h += '<div class="tsep"></div>';
-    h += b('', 'acc', 1, '♯', '샤프', u.acc === 1) + b('', 'acc', -1, '♭', '플랫', u.acc === -1) + b('', 'acc', 0, '♮', '제자리표', u.acc === 0);
-    h += b('', 'tie', '', '⁀', '붙임줄', false);
-    h += b('', 'chord', '', '화음', '화음 쌓기 (켜면 같은 음표에 음이 쌓여요)', u.chord);
+    h += b('', 'acc', 1, I.sharp, '샤프 (올림표)', u.acc === 1) + b('', 'acc', -1, I.flat, '플랫 (내림표)', u.acc === -1) + b('', 'acc', 0, I.natural, '제자리표', u.acc === 0);
+    h += b('', 'tie', '', I.tie, '붙임줄 (T)', false);
+    h += b('', 'chord', '', I.chord, '화음 쌓기 (켜면 같은 음표에 음이 쌓여요)', u.chord);
     h += '<div class="tsep"></div>';
-    for (let v = 0; v < 4; v++) h += b('sm', 'voice', v, 'V' + (v + 1), (v + 1) + '번 성부', u.voice === v);
+    for (let v = 0; v < 4; v++) h += b('', 'voice', v, I.voice(v), (v + 1) + '번 성부', u.voice === v);
     h += '<div class="tsep"></div>';
-    h += b('', 'pad', '', '🎹', '건반 보이기/숨기기', u.pad);
-    h += b('', 'del', '', '🗑', '고른 음표 지우기', false);
+    h += b('', 'pad', '', I.piano, '건반 보이기/숨기기', u.pad);
+    h += b('', 'del', '', I.trash, '고른 음표 지우기 (Delete)', false);
     $('tools').innerHTML = h;
     $('pad').hidden = !u.pad;
     if (u.pad) buildPad();
@@ -442,11 +444,11 @@
   function buildPad() {
     A.padKind = padPart() && padPart().clef === 'drum' ? 'drum' : 'piano';
     if (A.padKind === 'drum') {
-      $('pad').innerHTML = '<div class="padbar"><span class="zoom">드럼 건반</span><button class="tbtn" data-act="rest" data-v="">쉼표</button></div><div class="drums">' + DRUMS.map((d) => `<button class="tbtn" data-pk="${d[1]}">${d[0]}</button>`).join('') + '</div>';
+      $('pad').innerHTML = '<div class="padbar"><span class="zoom">드럼 건반</span><button class="tbtn" data-act="rest" data-v="" title="쉼표 입력">' + FS.icons.rest + ' 쉼표</button></div><div class="drums">' + DRUMS.map((d) => `<button class="tbtn" data-pk="${d[1]}">${d[0]}</button>`).join('') + '</div>';
       return;
     }
     const W7 = [0, 2, 4, 5, 7, 9, 11];
-    let h = '<div class="padbar"><button class="tbtn" data-act="padoct" data-v="-1" aria-label="옥타브 낮게">◀ 낮게</button><span class="zoom">옥타브 ' + padOct + '</span><button class="tbtn" data-act="padoct" data-v="1" aria-label="옥타브 높게">높게 ▶</button><button class="tbtn" data-act="rest" data-v="">쉼표</button></div><div class="pk">';
+    let h = '<div class="padbar"><button class="tbtn" data-act="padoct" data-v="-1" aria-label="옥타브 낮게">◀ 낮게</button><span class="zoom">옥타브 ' + padOct + '</span><button class="tbtn" data-act="padoct" data-v="1" aria-label="옥타브 높게">높게 ▶</button><button class="tbtn" data-act="rest" data-v="" title="쉼표 입력">' + FS.icons.rest + ' 쉼표</button></div><div class="pk">';
     for (let i = 0; i < 15; i++) {
       const oct = padOct + Math.floor(i / 7), m = (oct + 1) * 12 + W7[i % 7];
       h += `<button class="w" data-pk="${m}" aria-label="${FS.STEPS[i % 7]}${oct}" style="left:${(i * 100) / 15}%;width:${100 / 15}%">${i % 7 === 0 ? 'C' + oct : ''}</button>`;
@@ -471,7 +473,7 @@
       h += '<div class="btns"><button class="tbtn" data-act="shift" data-v="1">+반음</button><button class="tbtn" data-act="shift" data-v="-1">−반음</button><button class="tbtn" data-act="oct" data-v="1">+1옥타브</button><button class="tbtn" data-act="oct" data-v="-1">−1옥타브</button></div>';
       h += '<div class="btns"><button class="tbtn" data-act="copy">복사</button><button class="tbtn" data-act="cut">잘라내기</button><button class="tbtn" data-act="paste">붙여넣기</button><button class="tbtn" data-act="del">지우기</button></div></div>';
     } else {
-      h += '<div class="sec"><h4>음표 입력</h4><div class="note">오선을 누르면 왼쪽에서 고른 길이의 음표가 찍혀요. 키보드에서 <b>A~G</b>는 음, <b>1~7</b>은 길이(5=4분음표), <b>R</b>은 쉼표, <b>↑↓</b>는 음 높이, <b>←→</b>는 이동, <b>Shift</b>를 누르면 범위·화음, <b>Space</b>는 재생이에요. 휴대폰에서는 🎹 건반을 켜 보세요.</div></div>';
+      h += '<div class="sec"><h4>음표 입력</h4><div class="note">오선을 누르면 위쪽 도구 모음에서 고른 길이의 음표가 찍혀요. 키보드에서 <b>A~G</b>는 음, <b>1~7</b>은 길이(5=4분음표), <b>R</b>은 쉼표, <b>↑↓</b>는 음 높이, <b>←→</b>는 이동, <b>Shift</b>를 누르면 범위·화음, <b>Space</b>는 재생이에요. 휴대폰에서는 🎹 건반을 켜 보세요.</div></div>';
       h += '<div class="btns"><button class="tbtn" data-act="paste">붙여넣기</button></div>';
     }
     UI.sections.note.forEach((fn) => { h += fn(S, s, e) || ''; });
@@ -583,6 +585,7 @@
 
   UI.init = function () {
     sheet = $('sheet'); desk = $('desk');
+    [['bUndo', 'undo', '되돌리기'], ['bRedo', 'redo', '다시'], ['bPlay', 'play', '재생'], ['bStop', 'stop', ''], ['bZm', 'zoomOut', ''], ['bZp', 'zoomIn', ''], ['bZf', 'fit', ''], ['bOpen', 'open', '열기'], ['bSave', 'save', '받기']].forEach((r) => { $(r[0]).innerHTML = FS.icons[r[1]] + (r[2] ? '<span class="lb">' + r[2] + '</span>' : ''); });
     bindPointer(); bindKeys();
     document.addEventListener('click', (e) => {
       const el = e.target.closest('[data-act]'); if (!el) return;
