@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v19",
+   "title": "Fry Draw 19: 모서리 둥글게, 조각으로 떼어내기",
+   "items": [
+    "모서리 둥글게: 네모·다각형·별·꺾은 선의 뾰족한 꼭짓점을 정한 크기로 둥글게 깎아요. 여러 개를 한꺼번에 고를 수 있고, 결과는 곡선 점이 되어 '점 고치기'에서 더 다듬을 수 있어요",
+    "조각으로 떼어내기: 합치기·글자 윤곽·벡터 따기 결과처럼 하나로 합쳐진 도형을 조각별 도형으로 나눠요. O, B, 8 같은 글자의 구멍은 그 글자에 그대로 남아요",
+    "두 기능 모두 되돌리기·저장이 돼요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 19: round corners, break apart",
+     "items": [
+      "Round corners: soften sharp vertices of rectangles, polygons, stars and polylines by a set radius, on many shapes at once; the result becomes curve nodes you can refine in node edit",
+      "Break apart: split a combined shape such as a boolean result, text outline or traced image into separate pieces, keeping holes (the counters in O, B or 8) with their letter",
+      "Both support undo and saving"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v18",
    "title": "Fry Draw 18: 단계 만들기, 크기 표시, 윤곽선 보기, 확대 버튼",
    "items": [
