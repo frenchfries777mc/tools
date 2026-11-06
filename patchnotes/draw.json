@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v25",
+   "title": "Fry Draw 25: 버전 저장, 시작 틀",
+   "items": [
+    "버전 저장: 지금 그림에 이름을 붙여 이 브라우저에 저장해 두고, 나중에 불러오거나 지울 수 있어요. 최대 12개까지 보관해요",
+    "시작 틀: 인스타 카드, 유튜브 썸네일, 명함, 포스터, 초대장, 로고 틀을 눌러 바로 시작해요. 글자·색·도형은 마음대로 고쳐요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 25: named versions and starter templates",
+     "items": [
+      "Named versions: save the current drawing under a name in this browser, then load or delete it later (up to 12)",
+      "Starter templates: Instagram card, YouTube thumbnail, business card, poster, invitation and logo frame in one click; edit text, colours and shapes freely"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v24",
    "title": "Fry Draw 24: 글자 둥글게 휘기, 어울리는 색, 그림에서 색 뽑기",
    "items": [
