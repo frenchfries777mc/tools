@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v29",
+   "title": "물들이기·거울 대칭·빠르기 버튼·버전 저장",
+   "items": [
+    "색 효과에 '한 가지 색으로 물들이기'(색과 세기)가 생겼어요",
+    "클립 '화면'에 '거울처럼 대칭'이 생겼어요: 왼쪽→오른쪽, 위→아래, 네 방향(만화경)",
+    "빠르기 옆에 0.5x · 1x · 1.5x · 2x · 3x 버튼이 생겼어요",
+    "프로젝트 탭 '버전 저장': 이름을 붙여 지금 편집 상태를 저장해 두고 나중에 열 수 있어요 (영상 파일은 복사하지 않아 가벼워요)"
+   ],
+   "tr": {
+    "en": {
+     "title": "Tint, mirror symmetry, speed buttons, saved versions",
+     "items": [
+      "Colour effects gain 'Tint with one colour' (colour and strength)",
+      "Clip 'Picture' has 'Mirror symmetry': left to right, top to bottom, or four-way kaleidoscope",
+      "Speed has quick buttons 0.5x, 1x, 1.5x, 2x, 3x",
+      "The Project tab has 'Save versions': store the current edit under a name and reopen it later (media files are not copied, so it stays light)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v28",
    "title": "미리보기 속도·선택 확대·가운데 자르기·보조선",
    "items": [
