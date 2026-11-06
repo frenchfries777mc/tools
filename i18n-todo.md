@@ -77,3 +77,5 @@ score/app.js | Fry Score v12 한국어 메시지·버튼 | score v12 | 2026-11-0
 patchnotes/video.json | Fry Video v15 색 보정·샤프닝·단축키·프로젝트 틀 (en 번역 없음) | video v15 | 2026-11-06
 patchnotes/score.json | Fry Score v13 항목 (en만) | score v13 | 2026-11-06
 score/app.js | Fry Score v13 한국어 메시지·버튼 | score v13 | 2026-11-06
+patchnotes/score.json | Fry Score v14 항목 (en만) | score v14 | 2026-11-06
+score/app.js | Fry Score v14 한국어 메시지·버튼 | score v14 | 2026-11-06
