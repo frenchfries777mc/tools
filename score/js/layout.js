@@ -27,7 +27,10 @@
       const ly2 = has((e) => e.ly2), ly1 = has((e) => e.ly) || ly2;
       const mkb = i === 0 && S.meas.some((q, mi) => q && (q.reh || q.txt || q.volta || q.segno || q.coda || q.tocoda || q.ds || q.dc || q.fine || q.ramp || (mi > 0 && q.tempo)));
       const above = (prevBrace ? 22 : 30) + (hasCh ? 14 : 0) + (hasTx || hasOv ? 14 : 0) + (mkb ? 18 : 0);
-      let c = hasDyn ? 24 : 8; const dynY = 17;
+      let lowPos = 0; const base = FS.CLEFS[P.clef].base;
+      ev.forEach((e) => e.p.forEach((q) => { const ps = FS.abs(q) - base; if (ps < lowPos) lowPos = ps; }));
+      const lowShift = (hasDyn || ev.some((e) => e.ly || e.ly2 || e.ped)) && P.clef !== 'drum' ? Math.max(0, -lowPos * 5 - 6) : 0;
+      let c = (hasDyn ? 24 : 8) + lowShift; const dynY = 17 + lowShift;
       let ly1Y = 0, ly2Y = 0, pedY = 0;
       if (ly1) { ly1Y = c + 13; c += 16; }
       if (ly2) { ly2Y = c + 13; c += 16; }
