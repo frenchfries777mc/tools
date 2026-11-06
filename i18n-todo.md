@@ -136,3 +136,4 @@ patchnotes/video.json | Fry Video v31 그라데이션 글자·그림자 색·잔
 patchnotes/draw.json | Fry Draw v24 항목 (en만), draw/app.js 글자 휘기·어울리는 색·색 뽑기 한국어 문구 | draw v24 | 2026-11-06
 patchnotes/video.json | Fry Video v32 장면 전환 6가지 더·한꺼번에 넣기 (en 번역 없음) | video v32 | 2026-11-06
 patchnotes/draw.json | Fry Draw v25 항목 (en만), draw/app.js 버전 저장·시작 틀 한국어 문구 | draw v25 | 2026-11-06
+patchnotes/python.json | BeaconScript define item·mob 항목 (en만) | python v36 | 2026-11-06
