@@ -4,6 +4,46 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v17",
+   "title": "Fry Draw 17: 글상자 줄바꿈, 선 그라데이션",
+   "items": [
+    "글상자: 글자를 고르고 '글상자 너비'를 정하면 그 너비에서 글이 알아서 줄바꿈돼요. 영어는 낱말 단위로, 한글은 글자 단위로 줄이 바뀌고 왼쪽·가운데·오른쪽 맞춤도 그대로 돼요",
+    "선도 그라데이션으로 칠할 수 있어요 (선형·원형, 두 색과 방향). 스포이트와 스타일 복사에도 같이 따라가요",
+    "글꼴 목록에 맑은 고딕, 애플 고딕, 나눔고딕, Arial, Times New Roman, Verdana를 더했어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 17: text boxes with wrapping, gradient strokes",
+     "items": [
+      "Text box: set a box width on a text and it wraps automatically, by word for Latin text and by character for Korean, honouring left, centre and right alignment",
+      "Strokes can now use linear or radial gradients with two colours and a direction; eyedropper and style copy carry them along",
+      "Font list gains Malgun Gothic, Apple SD Gothic Neo, Nanum Gothic, Arial, Times New Roman and Verdana"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
+   "build": "v16",
+   "title": "Fry Draw 16: 모양 비틀기, 선 따라 놓기",
+   "items": [
+    "모양 비틀기: 도형의 윤곽을 물결·지그재그·지글지글·부풀리기(오목하게)·소용돌이로 비틀어요. 높이·주기·무작위 번호를 정할 수 있고 선, 네모, 원, 곡선 모두 돼요",
+    "선 따라 놓기: 도형과 선(또는 도형)을 함께 고르면 맨 위 도형을 따라 나머지를 정해 둔 개수만큼 줄지어 놓아요. 선 방향으로 돌리기와 크기 들쭉날쭉도 고를 수 있어요",
+    "두 기능 모두 되돌리기와 저장에 그대로 들어가요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 16: warp effects and place along path",
+     "items": [
+      "Warp effects: wave, zigzag, roughen, bulge or pinch and swirl the outline of any line, rectangle, ellipse or curve, with amount, period and seed controls",
+      "Place along path: select a shape and a path (the topmost is the path) and line up copies at a set count, optionally rotated to the path and with random size variation",
+      "Both are covered by undo and saving"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v15",
    "title": "Fry Draw 15: 도형 합치기 다듬기, 정렬·간격·크기 맞추기, 단축키",
    "items": [
