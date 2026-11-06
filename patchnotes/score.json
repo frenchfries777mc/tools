@@ -4,6 +4,30 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v32",
+   "title": "Fry Score 새로 만들기 3: 반복·이동 기호, 드럼, TAB",
+   "items": [
+    "반복 기호(|: :|), 1·2번 괄호, 세뇨, 코다, To Coda, D.S., D.C., Fine이 악보에 그려지고 재생 순서에도 반영돼요",
+    "겹세로줄·끝세로줄, 연습 기호(A, B…), 마디 글씨, 마디별 빠르기와 점점 빠르게·느리게",
+    "드럼 파트용 건반(베이스드럼·스네어·하이햇 등)",
+    "기타·베이스·우쿨렐레 TAB 악보를 오선 아래에 함께 표시",
+    "음표 색 칠하기(계이름 색)"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Score rebuild 3: repeats, navigation, drums and TAB",
+     "items": [
+      "Repeat signs, 1st/2nd endings, segno, coda, To Coda, D.S., D.C. and Fine are drawn and followed during playback",
+      "Double and final barlines, rehearsal marks, measure text, per-measure tempo and accel./rit.",
+      "Drum pad for drum parts (kick, snare, hi-hat, ...)",
+      "Guitar, bass and ukulele TAB staff shown under the notation",
+      "Pitch-coloured note heads"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v31",
    "title": "Fry Score 새로 만들기 2: 셈여림·꾸밈 기호",
    "items": [

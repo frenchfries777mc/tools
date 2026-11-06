@@ -76,3 +76,5 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
 .footer-copy{display:none;}
 .sr{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
 button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,#sheet:focus-visible{outline:2px solid var(--fry);outline-offset:2px;}
+.drums{display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:6px;padding:6px;max-width:620px;margin:0 auto}
+.drums .tbtn{padding:14px 6px;font-size:13px}

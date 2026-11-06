@@ -122,3 +122,5 @@ patchnotes/video.json | Fry Video v28 미리보기 속도·선택 확대·가운
 patchnotes/video.json | Fry Video v29 물들이기·거울 대칭·빠르기 버튼·버전 저장 (en 번역 없음) | video v29 | 2026-11-06
 patchnotes/score.json | Fry Score v31 항목 (en만) | score v31 | 2026-11-06
 score/app.js | Fry Score v31 한국어 메시지·버튼 | score v31 | 2026-11-06
+patchnotes/score.json | Fry Score v32 항목 (en만) | score v32 | 2026-11-06
+score/app.js | Fry Score v32 한국어 메시지·버튼 | score v32 | 2026-11-06
