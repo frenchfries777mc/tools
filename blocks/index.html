@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Fry Blocks · Frenchfries777 Tools</title>
 <meta name="description" content="자바스크립트를 블록으로 조립해서 HTML 파일로 받는 웹페이지 만들기 도구.">
-<meta name="theme-color" content="#08090d">
+<meta name="theme-color" content="#0e0e0e">
 <link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,8 @@
 <script src="lib/javascript_compressed.js"></script>
 <script>document.write('<script src="lib/msg/'+({nw:'en',gk:'ko'}[FFT.lang]||FFT.lang)+'.js"><\/script>');</script>
 <style>
-:root{ --bg:#08090d; --panel:#10131b; --panel2:#151925; --line:#222837; --text:#eef0f5; --dim:#8a93a6; --fry:#ffc93c; --fry2:#ff8a3d; }
+:root{ --bg:#0e0e0e; --panel:#171717; --panel2:#121212; --line:#2e2b25; --text:#ece6d8; --dim:#a39c8c; --fry:#d9b45f; --fry2:#b8923a; }
+html[data-ff-theme=light]{ --bg:#ffffff; --panel:#f7f5ef; --panel2:#fbfaf6; --line:#e4dfd2; --text:#111111; --dim:#4b4b4b; --fry:#a67c00; --fry2:#d4a62a; }
 *{box-sizing:border-box;}
 html,body{margin:0; height:100%; background:var(--bg); color:var(--text); overscroll-behavior:none;}
 body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif; font-size:14px; display:flex; flex-direction:column; height:100vh; height:100dvh; overflow:hidden;
@@ -61,9 +62,9 @@ button,input,select{font:inherit; color:inherit;}
 .pane{flex:1; min-height:0; display:none; position:relative;}
 .pane.on{display:flex; flex-direction:column;}
 #frame{flex:1; width:100%; border:0; background:#fff;}
-#codeWrap{flex:1; min-height:0; position:relative; background:#0b0d13;}
-#codeEdit{position:absolute; inset:0; width:100%; height:100%; margin:0; border:0; outline:0; resize:none; padding:14px; box-sizing:border-box; font-family:'JetBrains Mono',monospace; font-size:12.5px; line-height:1.6; white-space:pre; overflow:auto; tab-size:2; background:#0b0d13; color:#d6dbe6; caret-color:#ffc93c;}
-#prog{position:fixed; left:50%; bottom:24px; transform:translateX(-50%); z-index:60; min-width:240px; max-width:86vw; padding:12px 16px; border-radius:12px; background:rgba(20,22,30,.94); color:#fff; font-size:13px; box-shadow:0 6px 24px rgba(0,0,0,.4);} #prog[hidden]{display:none;} #progTrack{height:6px; margin-top:8px; background:rgba(255,255,255,.18); border-radius:3px; overflow:hidden;} #progBar{height:100%; width:0; background:#ffc93c; transition:width .25s;}
+#codeWrap{flex:1; min-height:0; position:relative; background:#0e0e0e;}
+#codeEdit{position:absolute; inset:0; width:100%; height:100%; margin:0; border:0; outline:0; resize:none; padding:14px; box-sizing:border-box; font-family:'JetBrains Mono',monospace; font-size:12.5px; line-height:1.6; white-space:pre; overflow:auto; tab-size:2; background:#0e0e0e; color:#d6dbe6; caret-color:#d9b45f;}
+#prog{position:fixed; left:50%; bottom:24px; transform:translateX(-50%); z-index:60; min-width:240px; max-width:86vw; padding:12px 16px; border-radius:12px; background:rgba(20,22,30,.94); color:#fff; font-size:13px; box-shadow:0 6px 24px rgba(0,0,0,.4);} #prog[hidden]{display:none;} #progTrack{height:6px; margin-top:8px; background:rgba(255,255,255,.18); border-radius:3px; overflow:hidden;} #progBar{height:100%; width:0; background:#d9b45f; transition:width .25s;}
 #codeBar{display:flex; align-items:center; gap:8px; padding:6px 8px; border-bottom:1px solid var(--line); flex-wrap:wrap;} #codeBar .tbtn{height:32px;} #codeBar [hidden]{display:none;} #codeNote{font-size:12px; color:#ffb86b;}
 
 .hint{font-size:12px; color:var(--dim); padding:6px 12px; border-top:1px solid var(--line);}
@@ -84,7 +85,7 @@ button,input,select{font:inherit; color:inherit;}
 .menu button:hover{background:var(--panel2);}
 .menu button.dang{color:#ff7b7b;}
 .menu hr{border:0; border-top:1px solid var(--line); margin:6px 4px;}
-#shareLink{width:100%; min-height:84px; resize:vertical; background:#0b0d13; color:#cfd5e1; border:1px solid var(--line); border-radius:10px; padding:8px 10px; font:12px/1.4 'JetBrains Mono',monospace; word-break:break-all;}
+#shareLink{width:100%; min-height:84px; resize:vertical; background:#0e0e0e; color:#cfd5e1; border:1px solid var(--line); border-radius:10px; padding:8px 10px; font:12px/1.4 'JetBrains Mono',monospace; word-break:break-all;}
 #shareInfo{padding:2px 2px 0; color:var(--dim); font-size:13px; line-height:1.5;} #shareInfo.warn{color:#ffd37a;}
 .shareBody{padding:12px 16px; display:flex; flex-direction:column; gap:8px;} .shareFoot{display:flex; gap:8px; justify-content:flex-end; padding:10px 16px 14px;}
 #playView{position:fixed; inset:0; z-index:90; background:var(--bg); display:none; flex-direction:column;} #playView.open{display:flex;}
@@ -230,20 +231,20 @@ button,input,select{font:inherit; color:inherit;}
 #dbgCur{font-size:13px; padding:5px 8px; border-radius:8px; background:var(--bg); border-left:5px solid #38bdf8; word-break:break-all;}
 #dbgVars{display:flex; flex-wrap:wrap; gap:5px;}
 #dbgVars span{font-size:12.5px; padding:3px 8px; border-radius:8px; background:var(--panel2); border:1px solid var(--line);} #dbgVars span b{color:var(--dim); font-weight:500;}
-#dbgVars span.ch{border-color:#ffc93c; background:#2a2410; color:#ffc93c;}
+#dbgVars span.ch{border-color:#d9b45f; background:#2a2410; color:#d9b45f;}
 #dbgVars .none{color:var(--dim); border:0; background:none;}
 /* v40: 🔗 연결 보기, 🍎 오브젝트 넣기 under the preview, the block that is running lights up */
 .lnk{height:34px; padding:0 10px; border-radius:8px; border:1px solid var(--line); background:transparent; color:var(--dim); cursor:pointer; font-size:12.5px; font-weight:700; white-space:nowrap;}
-.lnk.on{background:#2b2410; border-color:#ffc93c; color:#ffc93c;}
+.lnk.on{background:#2b2410; border-color:#d9b45f; color:#d9b45f;}
 #objBar{flex:0 0 auto; display:flex; padding:6px 8px; border-top:1px solid var(--line); background:var(--panel);}
-#objPrevBtn{flex:1; height:44px; min-height:44px; justify-content:center; font-size:15px; font-weight:700; background:#2b2410; border-color:#ffc93c; color:#ffd36b;}
+#objPrevBtn{flex:1; height:44px; min-height:44px; justify-content:center; font-size:15px; font-weight:700; background:#2b2410; border-color:#d9b45f; color:#ffd36b;}
 .ffRun>.blocklyPath{filter:drop-shadow(0 0 5px #fff3a0) drop-shadow(0 0 2px #ffffff); stroke:#fff6c2!important; stroke-width:3px!important;}
 .blocklyDraggable>.blocklyPath{transition:filter .35s ease-out, stroke-width .35s ease-out;}
 #varBar{flex:0 0 auto; display:flex; align-items:flex-start; gap:8px; border-top:2px solid #a55b80; background:var(--panel); padding:6px 10px; max-height:30%; overflow:auto;}
 #varBar[hidden]{display:none;} #varBar>b{font-size:12.5px; color:#e48bb8; padding:3px 0; flex:0 0 auto;}
 #varList{display:flex; flex-wrap:wrap; gap:5px; min-width:0;}
 #varList span{font-size:12.5px; padding:3px 8px; border-radius:8px; background:var(--panel2); border:1px solid var(--line); word-break:break-all; transition:background .4s,border-color .4s;} #varList span b{color:var(--dim); font-weight:500;}
-#varList span.ch{border-color:#ffc93c; background:#2a2410; color:#ffc93c; transition:none;}
+#varList span.ch{border-color:#d9b45f; background:#2a2410; color:#d9b45f; transition:none;}
 #varList .none{color:var(--dim); border:0; background:none;}
 #varBtn.on{background:#2a1624; border-color:#e48bb8; color:#e48bb8;}
 #logBar{display:flex; align-items:center; gap:6px; padding:3px 8px; border-top:1px solid var(--line); background:var(--panel); flex:0 0 auto;}
@@ -282,6 +283,59 @@ button,input,select{font:inherit; color:inherit;}
 .baiNote{color:var(--dim); font-size:12.5px; margin:0;}
 .baiFoot{display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap; padding:10px 16px; border-top:1px solid var(--line);}
 .baiFoot .sp{flex:1;}
+
+/* site design 2026-11-06: light theme is a clean white one */
+.tbtn:hover{border-color:var(--fry2);}
+.tbtn.aib{border-color:var(--fry2);}
+html[data-ff-theme=light] .top,html[data-ff-theme=light] #side,html[data-ff-theme=light] #logBar,html[data-ff-theme=light] #objBar,html[data-ff-theme=light] .pvTop,html[data-ff-theme=light] #dbgBar,html[data-ff-theme=light] #varBar{background:#fff;}
+html[data-ff-theme=light] .brand{color:#111;} html[data-ff-theme=light] .brand b{color:#8a6500;}
+html[data-ff-theme=light] .tbtn{background:#fff; color:#161616; border-radius:10px;}
+html[data-ff-theme=light] .tbtn.pri{background:linear-gradient(90deg,#e0b93f,#d4a62a); color:#161616;}
+html[data-ff-theme=light] .tbtn.run{color:#0d7a43; border-color:#7cc9a2; background:#f2fbf6;}
+html[data-ff-theme=light] .tbtn.rb.on{background:#e3f6ec; border-color:#0d7a43; color:#0d7a43;}
+html[data-ff-theme=light] #pauseBtn.on{background:#fbf3d9; border-color:#a67c00; color:#6b4f00;}
+html[data-ff-theme=light] #stopBtn.on{background:#fde9e9; border-color:#d63b33; color:#b3261e;}
+html[data-ff-theme=light] #stepBtn.on{background:#e4f3fb; border-color:#0f7fb0; color:#0b6a95;}
+html[data-ff-theme=light] .tbtn.dang{background:#fde9e9; color:#b3261e; border-color:#d63b33;}
+html[data-ff-theme=light] .tbtn.aib{color:#6b4f00; background:#fffaf0;}
+html[data-ff-theme=light] .tbtn:disabled,html[data-ff-theme=light] .tbtn[disabled]{opacity:1; color:#5a5a5a; background:#f3f1ea;}
+html[data-ff-theme=light] .langSel,html[data-ff-theme=light] .seg button,html[data-ff-theme=light] .stab,html[data-ff-theme=light] .ib,html[data-ff-theme=light] .lnk,html[data-ff-theme=light] #logBar button,html[data-ff-theme=light] .x{color:#333;}
+html[data-ff-theme=light] .langSel,html[data-ff-theme=light] .seg{background:#fff;}
+html[data-ff-theme=light] .seg button.on{color:#161616;}
+html[data-ff-theme=light] .stab.on{background:#f3f0e7; color:#111;}
+html[data-ff-theme=light] .lnk.on{background:#fbf3d9; border-color:#a67c00; color:#6b4f00;}
+html[data-ff-theme=light] #projName:hover,html[data-ff-theme=light] #projName:focus{background:#faf8f3;}
+html[data-ff-theme=light] #codeWrap,html[data-ff-theme=light] #codeEdit,html[data-ff-theme=light] #shareLink{background:#fff; color:#161616; caret-color:#8a6500;}
+html[data-ff-theme=light] #codeNote{color:#9a5a00;}
+html[data-ff-theme=light] #logBox{background:#faf9f5; color:#222;} html[data-ff-theme=light] .lg{color:#222;} html[data-ff-theme=light] .lg.error{color:#c42b22;} html[data-ff-theme=light] .lg.warn{color:#8a5a00;}
+html[data-ff-theme=light] #logBar.err #logN{background:#c42b22; color:#fff;}
+html[data-ff-theme=light] .menu,html[data-ff-theme=light] .dlg,html[data-ff-theme=light] .shMenu{background:#fff; box-shadow:0 16px 44px rgba(0,0,0,.16);}
+html[data-ff-theme=light] .ov{background:rgba(20,18,12,.4);}
+html[data-ff-theme=light] .menu button:hover,html[data-ff-theme=light] .ib:hover,html[data-ff-theme=light] .x:hover,html[data-ff-theme=light] .shMenu button:hover,html[data-ff-theme=light] #logBar button:hover,html[data-ff-theme=light] #editBar button:hover:not(:disabled){background:#f3f0e7;}
+html[data-ff-theme=light] .menu button.dang,html[data-ff-theme=light] .pbt button.dang,html[data-ff-theme=light] .pa button.dang,html[data-ff-theme=light] .shMenu button.dang,html[data-ff-theme=light] #editBar button.dang,html[data-ff-theme=light] .baiMsg.bad,html[data-ff-theme=light] .sdMsg.bad{color:#b3261e;}
+html[data-ff-theme=light] #editBar{background:rgba(255,255,255,.96); box-shadow:0 6px 20px rgba(0,0,0,.14);}
+html[data-ff-theme=light] #editBar button:disabled{opacity:1; color:#6a6a6a;}
+html[data-ff-theme=light] #toast{background:#222; color:#fff;}
+html[data-ff-theme=light] #prog{background:rgba(255,255,255,.97); color:#161616; box-shadow:0 6px 24px rgba(0,0,0,.18);}
+html[data-ff-theme=light] .tl.on,html[data-ff-theme=light] #dbgVars span.ch,html[data-ff-theme=light] #varList span.ch{background:#fbf3d9; color:#6b4f00; border-color:#a67c00;}
+html[data-ff-theme=light] #objPrevBtn{background:#e0b93f; border-color:#c9a02a; color:#161616;}
+html[data-ff-theme=light] #objTabs button.on{color:#fff; background:#a67c00; border-color:#a67c00;}
+html[data-ff-theme=light] .dbgTop b,html[data-ff-theme=light] .baiH .hq i{color:#0b6a95;} html[data-ff-theme=light] #varBar>b{color:#a63d78;}
+html[data-ff-theme=light] #varBtn.on{background:#fbe9f3; border-color:#a63d78; color:#a63d78;}
+html[data-ff-theme=light] .baiMsg.ok{color:#0d7a43;}
+html[data-ff-theme=light] #baiLive{background:#faf9f5; color:#14633a;}
+html[data-ff-theme=light] .shMore{background:#fff;}
+html[data-ff-theme=light] .pvTag,html[data-ff-theme=light] .lnkBtn,html[data-ff-theme=light] .mgrShare,html[data-ff-theme=light] .padTr:has(input:checked),html[data-ff-theme=light] .baiChips button:hover,html[data-ff-theme=light] .baiH .hq:hover{color:#7a5a00;}
+/* Blockly chrome */
+html[data-ff-theme=light] .blocklyToolboxDiv{background:#fff!important; border-right-color:#e4dfd2;}
+html[data-ff-theme=light] .blocklyTreeLabel{color:#161616!important;}
+html[data-ff-theme=light] .blocklyTreeSelected .blocklyTreeLabel{color:#000!important;}
+html[data-ff-theme=light] .blocklyTreeSelected.blocklyTreeRow{background-color:#f3f0e7!important;}
+html[data-ff-theme=light] .blocklyFlyoutLabelText{fill:#333!important;}
+html[data-ff-theme=light] .blocklyFlyoutButtonBackground{fill:#f3f0e7!important; stroke:#d8d2c3!important;}
+html[data-ff-theme=light] .blocklyFlyoutButton .blocklyText{fill:#161616!important;}
+html[data-ff-theme=light] .blocklyGridPattern line{stroke:#ece8dd!important;}
+html[data-ff-theme=light] .blocklyMainBackground{fill:#ffffff;}
 </style>
 </head>
 <body class="v-blocks">

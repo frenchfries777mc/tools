@@ -1,3 +1,21 @@
+/* site theme (dark | light) for pages without ff-lang.js: same storage key, attribute and CSS variables as ff-lang.js, follows the 'fftheme' event and other tabs */
+(function(){
+  if(window.FFTheme||window.__ffThemeTools) return; window.__ffThemeTools=1;
+  var TK='ff.theme', h=document.documentElement;
+  function get(){ var t='dark'; try{ var v=localStorage.getItem(TK); if(v==='light'||v==='yellow') t='light'; }catch(e){} return t; }
+  function apply(){ var t=get(); if(h.getAttribute('data-ff-theme')!==t) h.setAttribute('data-ff-theme',t); }
+  try{
+    var st=document.createElement('style'); st.id='ff-tools-theme';
+    st.textContent='html[data-ff-theme=dark]:root{--bg:#0e0e0e;--panel:#171717;--panel2:#121212;--line:#2e2b25;--text:#ece6d8;--dim:#a39c8c;--fry:#d9b45f;--fry2:#b8923a;color-scheme:dark}'+
+      'html[data-ff-theme=light]:root{--bg:#ffffff;--panel:#ffffff;--panel2:#f6f4ee;--line:#e4dfd2;--text:#111111;--dim:#4b4b4b;--fry:#a67c00;--fry2:#d4a62a;color-scheme:light}'+
+      'html[data-ff-theme=light] *{scrollbar-color:rgba(60,56,48,.35) transparent}html[data-ff-theme=light] ::-webkit-scrollbar-thumb{background:rgba(60,56,48,.35);background-clip:content-box}';
+    (document.head||h).appendChild(st);
+  }catch(e){}
+  apply();
+  window.addEventListener('storage',function(e){ if(e.key===TK){ apply(); try{ window.dispatchEvent(new Event('fftheme')); }catch(x){} } });
+  window.addEventListener('fftheme',apply);
+  window.addEventListener('pageshow',apply);
+})();
 /* thin dark scrollbars on every Tools page (the browser's white default clashes with the dark theme; scrolling itself is unchanged) */
 (function(){
   try{
