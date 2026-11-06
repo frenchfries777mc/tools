@@ -4,6 +4,44 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v17",
+   "title": "전환 5개·빠르기 프리셋·글자 움직임 2개",
+   "items": [
+    "전환 효과 5개 추가: 검정을 거쳐서, 하얗게 번쩍, 뭉개졌다 또렷해짐, 뒤집히며, 지직거리며(조각이 어긋나는 화면 깨짐)",
+    "빠르기가 흐르며 바뀌기에 프리셋 4개: 슬로모→빠르게, 빠르게→슬로모, 점점 빨라짐, 점점 느려짐",
+    "글자 움직임 2개 추가: 탱탱 튀어나옴, 글자 하나씩 떠오름"
+   ],
+   "tr": {
+    "en": {
+     "title": "5 transitions, speed ramp presets, 2 text motions",
+     "items": [
+      "Five new transitions: dip to black, flash to white, blur in, flip in and glitch in (sliced picture tearing)",
+      "Speed ramp presets: slow-mo to fast, fast to slow-mo, gradually faster, gradually slower",
+      "Two new text motions: elastic pop and letters rising one by one"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
+   "build": "v16",
+   "title": "흔들림 줄이기·클립 묶기",
+   "items": [
+    "흔들림 줄이기(스태빌라이저): 영상을 10장/초로 살펴 손 떨림을 계산하고 부드럽게 펴요. 가장자리를 가리려고 조금 키우는 정도를 고를 수 있어요 (흔들리는 영상으로 시험: 위아래 떨림이 96% 줄었어요)",
+    "클립 묶기·풀기: 여러 클립을 묶으면 하나처럼 고르고, 옮기고, 복제하고, 지울 수 있어요. 묶은 클립은 위쪽에 같은 색 띠가 보여요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Stabilize and clip groups",
+     "items": [
+      "Stabilize: tracks motion at 10 frames/s and smooths out camera shake; choose how much to zoom to hide the edges (on a shaky test clip the vertical jitter dropped by 96%)",
+      "Group / ungroup clips: grouped clips are selected, moved, duplicated and deleted as one; they show a coloured strip on top"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v15",
    "title": "색 보정·샤프닝·단축키·프로젝트 틀",
    "items": [
