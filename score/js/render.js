@@ -132,6 +132,10 @@
     for (let i = 0; i < n; i++) o.push(G.acc(key > 0 ? 1 : -1, x + i * 9.5 + 4, top + STAFF - pos[i] * 5, INK));
   }
   function drawTs(o, S, ts, cx, top) {
+    if (S.tsym && ((ts[0] === 4 && ts[1] === 4) || (ts[0] === 2 && ts[1] === 2))) {
+      o.push(`<text x="${f(cx)}" y="${top + 27}" text-anchor="middle" font-size="32" font-weight="700" fill="${INK}" font-family="Georgia,serif">C</text>` + (ts[0] === 2 ? `<line x1="${f(cx)}" y1="${top + 6}" x2="${f(cx)}" y2="${top + 34}" stroke="${INK}" stroke-width="1.8"/>` : ''));
+      return;
+    }
     const st = `text-anchor="middle" font-size="22" font-weight="700" fill="${INK}" font-family="Oswald,sans-serif"`;
     o.push(`<text x="${f(cx)}" y="${top + 17}" ${st}>${ts[0]}</text><text x="${f(cx)}" y="${top + 37}" ${st}>${ts[1]}</text>`);
   }

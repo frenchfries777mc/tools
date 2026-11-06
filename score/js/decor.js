@@ -204,6 +204,7 @@
       if (mk.ds || mk.dc) o.push(txt(rx, base, (mk.ds ? 'D.S.' : 'D.C.') + (hasFine ? ' al Fine' : hasCoda ? ' al Coda' : ''), 'font-style="italic" font-weight="700"', 'end'));
       if (mk.volta) { const prev = vruns[vruns.length - 1]; if (prev && prev.v === mk.volta && prev.mEnd === m - 1) { prev.mEnd = m; prev.x2 = mo.xEnd; } else vruns.push({ v: mk.volta, m0: m, mEnd: m, x1: mo.x + (mk.rs ? 12 : 3), x2: mo.xEnd }); }
     });
+    if (S.mn) sys.ms.forEach((mo, j) => { if (S.mn === 2 || j === 0) { if (mo.m > 0 || S.mn === 2) o.push(`<text x="${f(mo.x + 3)}" y="${f(top - 5)}" font-size="9.5" font-style="italic" fill="#777" ${FONT}>${mo.m + 1}</text>`); } });
     vruns.forEach((r) => {
       const y = base + 6, startsHere = !(r.m0 === sys.ms[0].m && r.m0 > 0 && S.meas[r.m0 - 1] && S.meas[r.m0 - 1].volta === r.v), endsHere = r.mEnd + 1 >= T.n || !(S.meas[r.mEnd + 1] && S.meas[r.mEnd + 1].volta === r.v);
       o.push(`<path d="M${f(r.x1)} ${f(y + (startsHere ? 12 : 0))}V${f(y)}H${f(r.x2 - 2)}${r.v === 1 && endsHere ? 'v12' : ''}" fill="none" stroke="${c}" stroke-width="1.2"/>`);
