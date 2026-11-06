@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v21",
+   "title": "클립 이름·앞뒤 자르기·편집점 이동",
+   "items": [
+    "클립 설정에서 '이름'을 적으면 타임라인 클립에 그 이름이 보여요",
+    "'◧ 앞 자르기' / '◨ 뒤 자르기': 재생 막대 앞쪽이나 뒤쪽을 한 번에 잘라내요",
+    "⇤ ⇥ 버튼(또는 키보드 ↑ ↓)으로 이전/다음 편집점(클립 시작·끝, 표시)으로 바로 이동해요",
+    "'같은 색 표시 모두 고르기', '이 줄 클립 모두 고르기'로 여러 클립을 한 번에 골라요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Clip names, trim to playhead, jump between edits",
+     "items": [
+      "Give a clip a name in its settings and it shows on the timeline",
+      "'Trim start' / 'Trim end' remove everything before or after the playhead in one step",
+      "The ⇤ ⇥ buttons (or Up/Down keys) jump to the previous/next edit point (clip starts, ends, markers)",
+      "'Select all with this colour label' and 'Select all clips on this track' pick many clips at once"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v20",
    "title": "장면 자동 나누기·소리 크기 표시·내보낼 구간 고르기",
    "items": [
