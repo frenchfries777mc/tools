@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v21",
+   "title": "기타 코드표·점점 느리게/빠르게",
+   "items": [
+    "악보 아래에 기타 코드표 그리기: 코드 이름에서 손가락 모양(개방·바레)을 자동으로 만들어요",
+    "점점 느리게/빠르게(rit./accel.): 마디 수와 목표 BPM을 정하면 재생·MIDI·곡 길이에 반영되고 악보에 표시",
+    "빠르기 변화는 반복·마디 편집과 함께 저장돼요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Guitar chord chart, gradual tempo change",
+     "items": [
+      "Guitar chord chart below the score: open and barre shapes are generated from chord names",
+      "Gradual tempo change (rit./accel.): set measures and target BPM; applied to playback, MIDI and duration, and shown on the score",
+      "Tempo ramps are saved with the score"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v20",
    "title": "마디 편집·작업 기록·곡 통계",
    "items": [
