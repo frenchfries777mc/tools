@@ -56,7 +56,7 @@ var HTML_WORDS=[['!doctype','<!DOCTYPE html>','문서 시작'],['html','<html la
 
 /* ---------- BeaconScript (the Beaconfall mod language) ---------- */
 var BS_EVENTS=['world generate','join','mine','chop','kill','craft','fish','place','die','death','respawn','break','destroy','damage','roll','interaction','quit','spawn','eat','signal'];
-var BS_VERBS='on give set remove replace spawn place teleport title chat say button ui key remap chance if else rename fill disable enable add subtract reset play loop heal damage broadcast every mod resource pack load api multiply divide signal publish_aliases define build window';
+var BS_VERBS='on give set remove replace spawn place teleport title chat say button ui key remap chance if else rename fill disable enable add subtract reset play loop heal damage broadcast every mod resource pack load api multiply divide signal publish_aliases define build window clear';
 var BS_WPOS=['top left','top right','bottom left','bottom right','center'];
 var BS_HELD=['speed','strength','defense','regen','haste','breath','night'];
 var BS_ORES=['iron','gold','copper','zinc'];
@@ -239,7 +239,7 @@ function javaRun(ctx){ var src=ctx.code, bal=balance(src,false); ctx.pv.innerHTM
 
 /* ---------- BeaconScript ---------- */
 function bsCheck(src,nested){ var lastK={}, V='(?:\\{:[a-z0-9_]{1,17}:\\}|\\{[a-z0-9_가-힣]{1,22}\\})', NUM='-?\\d{1,9}(?:\\.\\d{1,3})?', aliasSet={}, hasUse=/^\s*use_mod_uuid\s*:/im.test(src), useCount=0, hasUuid=/^\s*[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\s*$/im.test(src), hdrSeen={}, seenCode=false, errs=[], stack=[], lines=src.split('\n'), VERB=BS_VERBS.split(' ');
-  var oreN=0, structSet={}, defSet={}; lines.forEach(function(l0){ var md=/^\s*define\s+(?:item|mob)\s+"([^"]{1,40})"\s*:/i.exec(l0); if(md) defSet[md[1]]=1; }); lines.forEach(function(l0){ var ms=/^\s*define\s+structure\s+"([^"]{1,40})"\s*:/i.exec(l0); if(ms) structSet[ms[1]]=1; });
+  var oreN=0, structSet={}, defSet={}, itemSet={}; lines.forEach(function(l0){ var mi=/^\s*define\s+item\s+"([^"]{1,40})"\s*:/i.exec(l0); if(mi) itemSet[mi[1]]=1; }); lines.forEach(function(l0){ var md=/^\s*define\s+(?:item|mob)\s+"([^"]{1,40})"\s*:/i.exec(l0); if(md) defSet[md[1]]=1; }); lines.forEach(function(l0){ var ms=/^\s*define\s+structure\s+"([^"]{1,40})"\s*:/i.exec(l0); if(ms) structSet[ms[1]]=1; });
   function chkDf(cl){ if(cl.df==='structure'&&!cl.bad&&cl.kids&&!cl.seen.block) errs.push({line:cl.line,msg:'block 줄이 하나 이상 필요해요'}); if((cl.df==='item'||cl.df==='mob')&&!cl.bad&&cl.kids&&!cl.seen.image) errs.push({line:cl.line,msg:'define '+cl.df+' needs an image line — image: "king" 줄이 꼭 필요해요 (폴더 안 PNG 이름, .png는 생략해도 돼요, 또는 게임 속 이름 "wolf")'}); if(cl.df&&cl.df!=='structure'&&!cl.bad&&cl.kids&&!cl.seen.base) errs.push({line:cl.line,msg:'base 줄이 필요해요 (바탕이 되는 '+(cl.df==='item'?'아이템':cl.df==='ore'?'광물(iron·gold·copper·zinc)':'몹')+')'}); }
   lines.forEach(function(l0){ var m0=/^\s*aliases_name\s*:\s*"(%[a-z0-9_]{1,30}%)"\s*$/i.exec(l0); if(m0) aliasSet[m0[1].toLowerCase()]=1; });
   lines.forEach(function(raw,i){ var ln=i+1, line=raw.replace(/\t/g,'    '); if(!line.trim()||/^\s*#/.test(line)) return;
@@ -330,7 +330,16 @@ function bsCheck(src,nested){ var lastK={}, V='(?:\\{:[a-z0-9_]{1,17}:\\}|\\{[a-
       if(!fm) errs.push({line:ln,msg:'이렇게 써요: fill ~0 ~0 ~200 ~200 to land (또는 beach·ocean·mountain, 뒤에 지역 이름)'});
       else { var tt=fm[5].toLowerCase(); if(BS_TERRAIN.indexOf(tt)<0){ var g3=guess(tt,BS_TERRAIN); errs.push({line:ln,msg:"모르는 땅 '"+tt+"'"+(g3?" — 혹시 '"+g3+"'?":' (land·beach·ocean·mountain 중에서)')}); }
         if(fm[6]){ var bb=fm[6].toLowerCase(); if(BS_BIOMES.indexOf(bb)<0){ var g4=guess(bb,BS_BIOMES); errs.push({line:ln,msg:"모르는 지역 '"+bb+"'"+(g4?" — 혹시 '"+g4+"'?":' ('+BS_BIOMES.join('·')+' 중에서)')}); } } } }
-    if(verb==='remove'&&/^remove\s+all\b/i.test(t)){ var ra=t.split(/\s+/)[2]; if(!ra||BS_ALL.indexOf(ra.toLowerCase())<0) errs.push({line:ln,msg:'이렇게 써요: remove all trees (또는 rocks·ores·structures)'}); }
+    if((verb==='give'||verb==='remove'||verb==='clear')&&/\binventory\b/i.test(t)){ var im2=/^(give|remove|clear)\s+(\d{1,4}|all)\s+("[^"]{1,40}"|[a-z0-9_:]{1,40})\s+(to|from)\s+player\s+inventory(?:\s+(\S+))?\s*$/i.exec(t);
+      if(!im2) errs.push({line:ln,msg:verb==='give'?'이렇게 써요: give 1 iron to player inventory 5  (칸 번호 1~7은 생략해도 돼요, to 대신 from 도 돼요)':'이렇게 써요: '+verb+' 12 coin from player inventory  (개수 대신 all, 끝에 칸 번호 1~7 을 붙이면 그 칸에서만 빼요)'});
+      else { var iv=im2[1].toLowerCase(), ik=im2[3];
+        if(iv==='give'&&im2[2].toLowerCase()==='all') errs.push({line:ln,msg:'give 는 개수를 숫자로 써요 (all 은 remove·clear 에서만 돼요)'});
+        else if(im2[2]!=='all'&&+im2[2]<1) errs.push({line:ln,msg:'개수는 1 이상이에요'});
+        if(iv!=='give'&&im2[4].toLowerCase()!=='from') errs.push({line:ln,msg:iv+' 는 from 을 써요: '+iv+' 12 coin from player inventory'});
+        if(im2[5]!==undefined&&!/^[1-7]$/.test(im2[5])) errs.push({line:ln,msg:'칸 번호는 1~7까지예요'});
+        if(ik[0]==='"'){ var qn=ik.slice(1,-1); if(!itemSet[qn]) errs.push({line:ln,msg:"'"+qn+"' — 따옴표 이름은 이 파일에서 define item 으로 만든 이름이에요. 기본 아이템은 따옴표 없이 써요 (iron)"}); }
+        else if(window.BS_ITEMDB&&!bsItem(ik)){ var gI=guess(ik.toLowerCase(),Object.keys(window.BS_ITEMDB)); errs.push({line:ln,msg:"unknown item '"+ik+"' — 없는 아이템이에요"+(gI?" — 혹시 '"+gI+"'?":'')}); } } }
+    if(verb==='remove'&&!/\binventory\b/i.test(t)&&/^remove\s+all\b/i.test(t)){ var ra=t.split(/\s+/)[2]; if(!ra||BS_ALL.indexOf(ra.toLowerCase())<0) errs.push({line:ln,msg:'이렇게 써요: remove all trees (또는 rocks·ores·structures)'}); }
     if(verb==='set'&&/^set\s+variable\b/i.test(t)&&!new RegExp('^set\\s+variable\\s+'+V+'\\s+to\\s+(?:'+NUM+'|"[^"]*"|random\\s+-?\\d+\\s+to\\s+-?\\d+|variable\\s+'+V+'|player\\s+(?:name|uuid)|distance\\s+player\\s+to\\s+(?:nearest\\s+monster|nearest\\s+mob|[a-z0-9_]{1,30}))\\s*$','i').test(t)) errs.push({line:ln,msg:'이렇게 써요: set variable {score} to 0  (값: 숫자·"글자"·random 1 to 5·variable {y}·player name·player uuid·distance player to nearest monster)'});
     if(verb==='set'&&/^set\s+time\b/i.test(t)&&!/^set\s+time\s+(day|night|noon|midnight|sunrise|sunset|\d+)\s*$/.test(t)) errs.push({line:ln,msg:'이렇게 써요: set time day (day·night·noon·midnight·sunrise·sunset 또는 0~23)'});
     if(verb==='set'&&/^set\s+weather\b/i.test(t)&&!/^set\s+weather\s+(clear|rain|storm)\s*$/.test(t)) errs.push({line:ln,msg:'이렇게 써요: set weather rain (clear·rain·storm)'});
