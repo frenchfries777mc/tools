@@ -26,8 +26,8 @@ function idbGet(id){ return idb().then(function(d){ return new Promise(function(
 function idbDel(id){ return idb().then(function(d){ d.transaction('m','readwrite').objectStore('m').delete(id); }).catch(function(){}); }
 
 /* ---------- history / save ---------- */
-function snap(){ return JSON.stringify({name:proj.name,ar:proj.ar,bg:proj.bg,media:proj.media,clips:proj.clips,uid:proj.uid,markers:proj.markers,lanes:proj.lanes,mkNames:proj.mkNames,cine:proj.cine||0}); }
-function loadSnap(s){ var o=JSON.parse(s); proj.name=o.name; proj.ar=o.ar; proj.bg=o.bg; proj.media=o.media||[]; proj.clips=o.clips||[]; proj.uid=o.uid||1; proj.markers=o.markers||[]; proj.lanes=o.lanes||{}; proj.mkNames=o.mkNames||{}; proj.cine=o.cine||0; }
+function snap(){ return JSON.stringify({name:proj.name,ar:proj.ar,bg:proj.bg,media:proj.media,clips:proj.clips,uid:proj.uid,markers:proj.markers,lanes:proj.lanes,mkNames:proj.mkNames,cine:proj.cine||0,fin:proj.fin||0,fout:proj.fout||0}); }
+function loadSnap(s){ var o=JSON.parse(s); proj.name=o.name; proj.ar=o.ar; proj.bg=o.bg; proj.media=o.media||[]; proj.clips=o.clips||[]; proj.uid=o.uid||1; proj.markers=o.markers||[]; proj.lanes=o.lanes||{}; proj.mkNames=o.mkNames||{}; proj.cine=o.cine||0; proj.fin=o.fin||0; proj.fout=o.fout||0; }
 var saveT;
 function commit(keep){ hist=hist.slice(0,hi+1); hist.push(snap()); if(hist.length>80) hist.shift(); hi=hist.length-1; clearTimeout(saveT); saveT=setTimeout(persist,300); sizeCanvas(); drawTl(); drawBin(); if(!keep) panel(); }
 function persist(){ try{ localStorage.setItem(KEY,snap()); }catch(e){} }
@@ -125,6 +125,7 @@ function meterTick(){ var el=$('meterI'); if(!el) return; var v=0; if(mAn&&playi
 function loop(){
   if(playing){ t=t0+(performance.now()-wall0)/1000; var tot=exporting&&exporting.to!=null?exporting.to:total(); if(t>=tot){ if(loopOn&&!exporting&&tot>0){ t=0; t0=0; wall0=performance.now(); } else { t=tot; pause(); if(exporting) finishExport(); } } syncMedia(t,playing); }
   else if(!exporting){ /* keep stills in step while scrubbing */ }
+  if(master&&(proj.fin>0||proj.fout>0)) master.gain.value=projFade(t); else if(master&&master.gain.value!==1) master.gain.value=1;
   render(t); updateHead(); meterTick();
   requestAnimationFrame(loop);
 }
@@ -139,12 +140,14 @@ function gradeUrl(fl){
   return gradeCache[key]='url("data:image/svg+xml;utf8,'+encodeURIComponent(svg)+'#f")'; }
 function filterStr(fl){ if(!fl) return 'none'; var a=[]; if(fl.gam||fl.sha||fl.hia||fl.shp) a.push(gradeUrl(fl)); if(fl.br!==100) a.push('brightness('+fl.br+'%)'); if(fl.ct!==100) a.push('contrast('+fl.ct+'%)'); if(fl.sat!==100) a.push('saturate('+fl.sat+'%)'); if(fl.gray) a.push('grayscale('+fl.gray+'%)'); if(fl.sepia) a.push('sepia('+fl.sepia+'%)'); if(fl.hue) a.push('hue-rotate('+fl.hue+'deg)'); if(fl.blur) a.push('blur('+fl.blur+'px)'); return a.length?a.join(' '):'none'; }
 function srcOf(c){ var m=media[c.mid]; if(!m||m.missing) return null; if(c.type==='image') return m.img&&m.img.complete?m.img:null; var el=elems[c.id]; return el&&el.readyState>=2?el:null; }
+function projFade(tt){ var k=1; if(proj.fin>0&&tt<proj.fin) k=Math.min(k,tt/proj.fin); if(proj.fout>0){ var rem=total()-tt; if(rem<proj.fout) k=Math.min(k,Math.max(0,rem)/proj.fout); } return Math.max(0,Math.min(1,k)); }
 function render(tt){
   var W=cv.width, H=cv.height; g.setTransform(1,0,0,1,0,0); g.globalAlpha=1; g.filter='none'; g.fillStyle=proj.bg; g.fillRect(0,0,W,H);
   var srt=proj.clips.slice().sort(function(a,b){ return a.start-b.start; });
   ['V1','V2'].forEach(function(tr){ srt.forEach(function(c){ if(c.track!==tr||!active(c,tt)||laneOff(tr)) return; drawVisual(c,tt,W,H); }); });
   srt.forEach(function(c){ if(!active(c,tt)||laneOff(c.track)) return; if(c.type==='text') drawText(c,tt,W,H); else if(c.type==='shape') drawShape(c,tt,W,H); });
   g.globalAlpha=1; g.filter='none'; g.globalCompositeOperation='source-over';
+  var pf=projFade(tt); if(pf<1){ g.fillStyle='rgba(0,0,0,'+(1-pf).toFixed(3)+')'; g.fillRect(0,0,W,H); }
   if(proj.cine>0){ var bh=(H-W/proj.cine)/2; if(bh>1){ g.fillStyle='#000'; g.fillRect(0,0,W,bh); g.fillRect(0,H-bh,W,bh); } }
   if(!exporting&&!overlayOff) drawSelBox(tt);
 }
@@ -411,6 +414,8 @@ function panel(){
   if(ptab==='ins'){ h=insPanel(); }
   else if(ptab==='proj'){
     h+='<div class="sec"><h4>화면 비율</h4><div class="row"><select id="arSel">'+Object.keys(AR).map(function(k){ return '<option'+(k===proj.ar?' selected':'')+'>'+k+'</option>'; }).join('')+'</select></div><div class="note">16:9 유튜브, 9:16 쇼츠·릴스, 1:1·4:5 인스타 피드, 3:4 세로 사진, 4:3 옛날 TV, 3:2 사진기, 21:9 영화 같은 와이드예요.</div></div>';
+    h+='<div class="sec"><h4>처음·끝 페이드</h4><div class="row"><label>검정에서 시작</label><input type="number" id="finN" min="0" max="10" step="0.5" value="'+(proj.fin||0)+'"><span class="v">초</span></div><div class="row"><label>검정으로 끝</label><input type="number" id="foutN" min="0" max="10" step="0.5" value="'+(proj.fout||0)+'"><span class="v">초</span></div><div class="note">화면과 소리가 함께 서서히 나타나고 사라져요. 0이면 꺼져요.</div></div>';
+    h+='<div class="sec"><h4>이어 붙이기·슬라이드쇼</h4><div class="note">클립을 여러 개 골라 두고 누르세요. 고르지 않으면 영상 1줄의 모든 클립을 써요.</div><div class="row"><label>그림 한 장 길이</label><input type="number" id="joinLen" min="0.5" max="30" step="0.5" value="3"><span class="v">초</span></div><label class="chk"><input type="checkbox" id="joinDis" checked> 부드럽게 넘어가기 (디졸브)</label><div class="btns"><button class="tbtn" id="joinGo">이어 붙이기</button></div></div>';
     h+='<div class="sec"><h4>영화 같은 검은 띠</h4><div class="row"><select id="cineSel">'+[[0,'없음'],[2.39,'2.39 : 1 (영화관)'],[2,'2 : 1'],[1.85,'1.85 : 1']].map(function(a){ return '<option value="'+a[0]+'"'+(+(proj.cine||0)===a[0]?' selected':'')+'>'+a[1]+'</option>'; }).join('')+'</select></div><div class="note">위아래에 검은 띠를 덮어요. 내보내는 영상에도 들어가요.</div></div>';
     h+='<div class="sec"><h4>배경 색</h4><div class="row"><label>빈 곳 색</label><input type="color" id="bgc" value="'+proj.bg+'"></div></div>';
     h+='<div class="sec"><h4>소리</h4><label class="chk"><input type="checkbox" id="monChk"'+(monitor?' checked':'')+'> 재생할 때 소리 듣기</label></div>';
@@ -438,6 +443,7 @@ function panel(){
         h+='<div class="sec"><h4>나타나는 방식</h4><div class="row"><select data-k="anim">'+[['none','없음'],['fade','서서히'],['rise','아래서 올라옴'],['slide','옆에서 들어옴'],['zoom','커지며'],['pop','톡 튀어나옴'],['type','한 글자씩'],['bounce','통통 튀기'],['pulse','두근두근'],['shake','덜덜'],['wave','물결 (글자마다)'],['elastic','탱탱 튀어나옴'],['letters','글자 하나씩 떠오름']].map(function(a){ return '<option value="'+a[0]+'"'+(c.anim===a[0]?' selected':'')+'>'+a[1]+'</option>'; }).join('')+'</select></div>'+sdirRow(c)+rng('크기 배율','scale',20,300,c.scale,1,'%')+rng('돌리기','rot',-180,180,c.rot,1,'°')+rng('투명도','op',0,100,c.op,1,'%')+rng('나타날 때 서서히','fadeIn',0,3,c.fadeIn,.1,'초')+rng('사라질 때 서서히','fadeOut',0,3,c.fadeOut,.1,'초')+'</div>';
       } else {
         if(c.type==='video'){ h+='<div class="sec"><h4>장면 나누기</h4><div class="row"><label>바뀜 기준</label><input type="number" id="scnThr" min="5" max="120" step="1" value="28"></div><div class="btns"><button class="tbtn" data-scn="1">장면이 바뀌는 곳에서 자동으로 자르기</button></div><div class="note">숫자가 낮을수록 더 잘게 잘라요.</div></div>'; }
+        if(c.type==='video'||c.type==='audio'){ h+='<div class="sec"><h4>박자에 맞춰 편집</h4><div class="row"><label>민감도</label><input type="number" id="beatSens" min="0.3" max="3" step="0.1" value="1"></div><div class="btns"><button class="tbtn" data-beat="1">소리 박자마다 표시 달기</button><button class="tbtn" data-mcut="1">표시마다 자르기</button></div><div class="note">숫자가 낮을수록 표시가 많아져요. 표시를 단 뒤 \'표시마다 자르기\'를 누르면 박자에 맞춰 잘려요.</div></div>'; }
         if(c.type!=='image'){ h+='<div class="sec"><h4>소리</h4>'+rng('소리 크기','vol',0,200,c.vol,1,'%')+rng('시작할 때 서서히','fadeIn',0,5,c.fadeIn,.1,'초')+rng('끝날 때 서서히','fadeOut',0,5,c.fadeOut,.1,'초')+rng(c.speed2!=null?'처음 빠르기':'빠르기','speed',.25,4,c.speed,.05,'x')+'<label class="chk"><input type="checkbox" data-rampon="1"'+(c.speed2!=null?' checked':'')+'> 빠르기가 흐르며 바뀌기 (천천히→빠르게)</label>'+(c.speed2!=null?rng('끝 빠르기','speed2',.25,4,c.speed2,.05,'x')+'<div class="btns"><button class="tbtn" data-spr="0.4,2">슬로모 → 빠르게</button><button class="tbtn" data-spr="2,0.4">빠르게 → 슬로모</button><button class="tbtn" data-spr="1,3">점점 빨라짐</button><button class="tbtn" data-spr="3,1">점점 느려짐</button></div>':'')+(c.type==='video'?'<label class="chk"><input type="checkbox" data-k="rev"'+(c.rev?' checked':'')+'> 거꾸로 재생 (소리 없음, 미리볼 때 조금 끊길 수 있어요)</label>':'')+'<div class="note">빠르기를 바꾸면 클립 길이가 같이 바뀌어요.</div><label class="chk"><input type="checkbox" data-voion="1"'+(c.vol2!=null?' checked':'')+'> 클립이 흐르며 소리 크기 바꾸기</label>'+(c.vol2!=null?rng('끝 소리 크기','vol2',0,200,c.vol2,1,'%'):'')+'<div class="row"><label>우르릉 줄이기</label><select data-k="hp">'+[[0,'끄기'],[80,'약하게 (바람·에어컨)'],[150,'보통'],[300,'세게 (목소리만)']].map(function(a){ return '<option value="'+a[0]+'"'+((c.hp||0)===a[0]?' selected':'')+'>'+a[1]+'</option>'; }).join('')+'</select></div>'+rng('잡음 끊기 (조용하면 소리 끔)','gate',0,100,c.gate||0,1,'%')+'<div class="note">0이면 꺼져 있어요. 올릴수록 작은 소리(숨소리·잡음)를 더 많이 끊어요. 재생할 때와 내보낼 때 적용돼요.</div>'+rng('에코 (메아리)','echo',0,100,c.echo||0,1,'%')+rng('울림 (리버브)','reverb',0,100,c.reverb||0,1,'%')+rng('왼쪽 ↔ 오른쪽 소리','pan',-100,100,c.pan||0,1,'')+volCurveUi(c)+'<div class="sec" style="border:1px solid var(--line);border-radius:8px;padding:6px 8px"><h4>무음 구간 잘라 내기</h4><div class="row"><label>무음 기준</label><input type="range" id="scThr" min="2" max="40" value="8"></div><div class="row"><label>이 길이 넘으면(초)</label><input type="number" id="scLen" value="0.5" step="0.1" min="0.1"></div><div class="btns"><button class="tbtn" data-silcut="1">무음 잘라 내고 붙이기</button></div></div><div class="btns"><button class="tbtn" data-norm="1">소리 크기 자동으로 맞추기</button></div><label class="chk"><input type="checkbox" data-k="duck"'+(c.duck?' checked':'')+'> 다른 소리가 나올 때 이 소리 낮추기 (배경음악용)</label>'+(c.duck?rng('낮추는 정도','duckAmt',10,95,c.duckAmt==null?70:c.duckAmt,1,'%'):'')+'</div>'; }
         if(c.type!=='audio'){
           h+='<div class="sec"><h4>화면</h4>'+((c.kfs&&c.kfs.length)?'<div class="note">키프레임이 있어서 아래 크기·옮기기·돌리기는 쓰이지 않아요. 아래쪽 키프레임에서 고쳐 주세요.</div>':'')+'<div class="row"><label>맞추기</label><select data-k="fit"><option value="fit"'+(c.fit==='fit'?' selected':'')+'>안 잘리게 (검은 띠)</option><option value="fill"'+(c.fit==='fill'?' selected':'')+'>꽉 채우기 (잘림)</option></select></div><label class="chk"><input type="checkbox" data-k="bgb"'+(c.bgb?' checked':'')+'> 빈 곳을 흐린 배경으로 채우기</label>'+rng('카메라 흔들림','shk',0,100,c.shk||0,1,'%')+''+rng('크기','scale',10,400,c.scale,1,'%')+rng('가로 옮기기','x',-100,100,c.x,1,'%')+rng('세로 옮기기','y',-100,100,c.y,1,'%')+rng('돌리기','rot',-180,180,c.rot,1,'°')+rng('투명도','op',0,100,c.op,1,'%')+'<div class="btns"><button class="tbtn" data-dupto="1">'+(c.track==='V2'?'영상(V1) 줄로 복사':'겹침(V2) 줄로 복사')+'</button></div><label class="chk"><input type="checkbox" data-k="flip"'+(c.flip?' checked':'')+'> 좌우 뒤집기</label>'+(c.type==='image'?rng('서서히 나타남','fadeIn',0,3,c.fadeIn,.1,'초')+rng('서서히 사라짐','fadeOut',0,3,c.fadeOut,.1,'초'):rng('화면 서서히 나타남','fadeIn',0,5,c.fadeIn,.1,'초')+rng('화면 서서히 사라짐','fadeOut',0,5,c.fadeOut,.1,'초'))+'</div>';
@@ -474,7 +480,7 @@ pb.addEventListener('input',function(e){ var tg=e.target, c=curClip(); if(tg.dat
   else if(tg.dataset.t){ c.txt[tg.dataset.t]=tg.type==='checkbox'?tg.checked:tg.value; if(tg.dataset.t==='s'){ clearTimeout(saveT); saveT=setTimeout(function(){ commit(true); },400); drawTlLight(); } } });
 function drawTlLight(){ var el=document.querySelector('.clip.sel'); var c=curClip(); if(el&&c){ el.style.left=(LBL+c.start*pxs)+'px'; el.style.width=Math.max(6,c.dur*pxs)+'px'; } }
 pb.addEventListener('change',function(e){ var tg=e.target;
-  if(tg.id==='cineSel'){ proj.cine=+tg.value; commit(); return; } if(tg.id==='arSel'){ proj.ar=tg.value; commit(); return; } if(tg.id==='bgc'){ proj.bg=tg.value; commit(); return; } if(tg.id==='monChk'){ setMonitor(tg.checked); return; }
+  if(tg.id==='finN'||tg.id==='foutN'){ var fv=Math.max(0,Math.min(10,+tg.value||0)); if(tg.id==='finN') proj.fin=fv; else proj.fout=fv; commit(true); return; } if(tg.id==='cineSel'){ proj.cine=+tg.value; commit(); return; } if(tg.id==='arSel'){ proj.ar=tg.value; commit(); return; } if(tg.id==='bgc'){ proj.bg=tg.value; commit(); return; } if(tg.id==='monChk'){ setMonitor(tg.checked); return; }
   var cc=curClip();
   if(cc&&tg.dataset.trt){ setTr(cc,tg.value,(cc.tr&&cc.tr.d)||.6); commit(); return; }
   if(cc&&tg.dataset.stabon){ if(cc.stab) cc.stab.on=tg.checked; commit(); return; }
@@ -511,6 +517,9 @@ pb.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b
   if(b.dataset.gap){ var tr0=b.dataset.gap; if(laneLock(tr0)){ toast('잠긴 줄이에요'); return; } var L0=proj.clips.filter(function(o){ return o.track===tr0; }).sort(function(a,b){ return a.start-b.start; }), pos=0, moved=0; L0.forEach(function(o,i){ var ns=Math.max(0,i&&o.tr&&o.tr.ov?pos-o.tr.ov:pos); if(Math.abs(ns-o.start)>.001){ o.start=ns; moved++; } pos=endOf(o); }); if(moved){ commit(); toast(moved+'개 클립을 붙였어요'); } else toast('붙일 틈이 없어요'); return; }
   if(b.dataset.tall){ var ct=curClip(); if(ct&&ct.txt){ var nT=0; proj.clips.forEach(function(o){ if(o===ct||o.type!=='text'||laneLock(o.track)) return; var keep={s:o.txt.s,ox:o.txt.ox,oy:o.txt.oy,cd:o.txt.cd}, cp=JSON.parse(JSON.stringify(ct.txt)); o.txt=Object.assign(cp,keep); ['anim','sdir','scale','rot','op','fadeIn','fadeOut'].forEach(function(k){ if(ct[k]!==undefined) o[k]=ct[k]; }); nT++; }); if(!nT){ toast('바꿀 다른 글자 클립이 없어요'); return; } commit(); toast('글자 클립 '+nT+'개에 같은 모양을 적용했어요'); } return; }
   if(b.dataset.selx){ var cs=curClip(); if(cs){ var nm2={}; proj.clips.forEach(function(o){ if(b.dataset.selx==='lab'?o.lab===cs.lab:o.track===cs.track) nm2[o.id]=true; }); msel=nm2; drawTl(); panel(); toast(Object.keys(nm2).length+'개를 골랐어요'); } return; }
+  if(b.id==='joinGo'){ joinClips(+$('joinLen').value||3,$('joinDis').checked); return; }
+  if(b.dataset.beat){ beatMarks(+$('beatSens').value||1); return; }
+  if(b.dataset.mcut){ cutAtMarks(); return; }
   if(b.dataset.mfit){ var cm=curClip(), mm2=cm&&media[cm.mid]; if(cm&&mm2&&!lockedMsg(cm)){ var ve=0; proj.clips.forEach(function(o){ if(o.type==='video'||o.type==='image') ve=Math.max(ve,endOf(o)); }); if(ve<=cm.start+.3){ toast('영상이나 그림이 이 소리보다 먼저 끝나요'); return; }
       var av=Math.max(.3,(mm2.dur-cm.in)/(cm.speed||1)), nd=Math.min(ve-cm.start,av); cm.dur=nd; cm.fadeOut=Math.min(nd/2,Math.max(cm.fadeOut||0,2)); commit(); toast('영상 끝에 맞췄어요 ('+f(nd)+'초, 끝에서 서서히 줄어들어요)'); } return; }
   if(b.dataset.repl){ var cr0=curClip(); if(cr0&&!lockedMsg(cr0)){ replId=cr0.id; $('replIn').click(); } return; }
@@ -634,6 +643,24 @@ function sceneCut(thr){
   v.onloadeddata=function(){ v.onloadeddata=null; step(); }; v.onerror=function(){ sceneBusy=false; toast('영상을 읽지 못했어요'); };
 }
 var sceneBusy=false;
+function joinClips(imgLen,dis){
+  var L=selList(); if(L.length<2) L=proj.clips.filter(function(o){ return o.track==='V1'; }); L=L.filter(function(o){ return o.type==='video'||o.type==='image'; }).sort(function(a,b){ return a.start-b.start; });
+  if(L.length<2){ toast('이어 붙일 영상·그림 클립이 2개 이상 필요해요'); return; } for(var i=0;i<L.length;i++) if(lockedMsg(L[i])) return;
+  var tr=L[0].track, cur=L[0].start; L.forEach(function(c){ c.track=tr; c.tr={t:'none',d:.5,ov:0}; if(c.type==='image') c.dur=imgLen; c.start=cur; cur+=c.dur; });
+  var n=0; if(dis){ for(var j=1;j<L.length;j++){ var before=L[j].tr.ov; setTr(L[j],'dissolve',Math.min(.6,L[j].dur/2,L[j-1].dur/2)); if(L[j].tr.ov) n++; } }
+  proj.clips.forEach(function(c){ if(c.grp&&L.indexOf(c)>=0){ delete c.grp; } }); cleanElems(); commit(); toast(L.length+'개를 이어 붙였어요'+(n?' (디졸브 '+n+'곳)':'')); }
+function beatMarks(sens){
+  var c=curClip(), m=c&&media[c.mid]; if(!c||(c.type!=='video'&&c.type!=='audio')){ toast('영상이나 소리 클립을 고르세요'); return; }
+  if(!m||!m.peaks){ toast('소리 모양을 아직 읽는 중이에요. 잠시 뒤 다시 눌러 주세요'); return; }
+  var pk=m.peaks, N=pk.length, d=[], i; for(i=0;i<N;i++){ var a=0, k2=0; for(var j=Math.max(0,i-4);j<i;j++){ a+=pk[j]; k2++; } d.push(Math.max(0,pk[i]-(k2?a/k2:0))); }
+  var mean=d.reduce(function(x,y){ return x+y; },0)/N, sd=Math.sqrt(d.reduce(function(x,y){ return x+(y-mean)*(y-mean); },0)/N), th=mean+Math.max(.2,sens)*1.2*sd, add=0, last=-9, sp=c.speed||1;
+  for(i=1;i<N-1;i++){ if(d[i]>th&&d[i]>=d[i-1]&&d[i]>=d[i+1]){ var srcT=i/N*m.dur, tl=c.start+(srcT-c.in)/sp; if(tl<c.start||tl>endOf(c)-.05||tl-last<.25) continue; last=tl; tl=+tl.toFixed(2); if(!proj.markers.some(function(x){ return Math.abs(x-tl)<.08; })){ proj.markers.push(tl); add++; } } }
+  if(!add){ toast('박자를 못 찾았어요. 민감도를 높여 보세요 (숫자를 낮춰요)'); return; }
+  proj.markers.sort(function(a,b){ return a-b; }); commit(); toast('표시 '+add+'개를 달았어요'); }
+function cutAtMarks(){
+  var c=curClip(); if(!c||c.type==='text'||c.type==='shape'){ toast('영상·그림·소리 클립을 고르세요'); return; } if(lockedMsg(c)) return;
+  var pts=proj.markers.filter(function(x){ return x>c.start+.1&&x<endOf(c)-.1; }); if(!pts.length){ toast('이 클립 안에 표시가 없어요. 🚩 표시를 먼저 달아 주세요'); return; }
+  var sv=t, cur=c; pts.forEach(function(x){ var tgt=null; proj.clips.forEach(function(o){ if(o.mid===c.mid&&o.track===c.track&&x>o.start+.05&&x<endOf(o)-.05) tgt=o; }); if(!tgt) return; sel=tgt.id; t=x; split(); }); t=sv; cleanElems(); commit(); toast(pts.length+'곳에서 잘랐어요'); }
 function silenceCut(thr,minLen){
   var c=curClip(), m=c&&media[c.mid]; if(!c||(c.type!=='video'&&c.type!=='audio')){ toast('영상이나 소리 클립을 고르세요'); return; } if(lockedMsg(c)) return;
   if(c.rev||c.speed2!=null||(c.tr&&c.tr.ov)){ toast('거꾸로·빠르기 변화·전환 효과가 있는 클립은 쓸 수 없어요'); return; }

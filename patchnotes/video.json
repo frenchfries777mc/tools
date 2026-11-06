@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v24",
+   "title": "박자 편집·이어 붙이기·처음 끝 페이드",
+   "items": [
+    "영상·소리 클립에 '소리 박자마다 표시 달기'가 생겼어요. 음악의 박자를 찾아 🚩 표시를 달아 줘요",
+    "'표시마다 자르기': 클립을 표시 위치에서 한꺼번에 잘라 박자에 맞춘 편집을 쉽게 해요",
+    "프로젝트 탭 '이어 붙이기·슬라이드쇼': 고른 클립(또는 영상 1줄 전체)을 빈틈 없이 붙이고, 그림 길이와 디졸브를 한 번에 정해요",
+    "프로젝트 탭 '처음·끝 페이드': 영상이 검정에서 시작하고 검정으로 끝나요 (소리도 함께 줄어요)"
+   ],
+   "tr": {
+    "en": {
+     "title": "Cut to the beat, join clips / slideshow, project fade in/out",
+     "items": [
+      "Video and sound clips get 'Mark every beat', which finds the music's beats and drops 🚩 markers",
+      "'Cut at every marker' splits a clip at all markers at once for beat-synced edits",
+      "Project tab 'Join clips / slideshow' packs the selected clips (or all of Video 1) back to back, setting picture length and dissolves in one go",
+      "Project tab 'Fade in / out' starts from black and ends to black (sound fades too)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v23",
    "title": "모자이크·필름 입자·카메라 흔들림·영화 띠·음악 길이 맞추기",
    "items": [
