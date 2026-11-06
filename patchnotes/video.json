@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v32",
+   "title": "장면 전환 6가지 더·한꺼번에 넣기",
+   "items": [
+    "장면 전환에 '위에서 닦기', '가운데에서 갈라지며', '블라인드처럼', '네모 알갱이로 또렷해짐', '통통 튀며 나타남', '휙 스치며'가 늘었어요",
+    "프로젝트 탭 '모든 장면 전환 한꺼번에': 영상 1줄에서 딱 붙은 클립 사이마다 같은 전환을 한 번에 넣어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Six more transitions, apply to every cut",
+     "items": [
+      "Six new transitions: Wipe from top, Split from centre, Blinds, Pixelate in, Bounce in and Whip pan",
+      "Project tab 'Transition on every cut' applies one transition to every touching join on Video 1 at once"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v31",
    "title": "그라데이션 글자·그림자 색·잔상·소리 채우기·90도 돌리기",
    "items": [
