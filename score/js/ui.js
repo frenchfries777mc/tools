@@ -427,7 +427,14 @@
 
   /* ================= on-screen keyboard (touch friendly) ================= */
   let padOct = 4;
+  const DRUMS = [['베이스드럼', 65], ['로우 탐', 69], ['스네어', 72], ['미들 탐', 74], ['하이 탐', 76], ['하이햇', 79], ['크래시', 81]];
+  function padPart() { return A.score.parts[A.sel ? A.sel.pi : 0]; }
   function buildPad() {
+    A.padKind = padPart() && padPart().clef === 'drum' ? 'drum' : 'piano';
+    if (A.padKind === 'drum') {
+      $('pad').innerHTML = '<div class="padbar"><span class="zoom">드럼 건반</span><button class="tbtn" data-act="rest" data-v="">쉼표</button></div><div class="drums">' + DRUMS.map((d) => `<button class="tbtn" data-pk="${d[1]}">${d[0]}</button>`).join('') + '</div>';
+      return;
+    }
     const W7 = [0, 2, 4, 5, 7, 9, 11];
     let h = '<div class="padbar"><button class="tbtn" data-act="padoct" data-v="-1" aria-label="옥타브 낮게">◀ 낮게</button><span class="zoom">옥타브 ' + padOct + '</span><button class="tbtn" data-act="padoct" data-v="1" aria-label="옥타브 높게">높게 ▶</button><button class="tbtn" data-act="rest" data-v="">쉼표</button></div><div class="pk">';
     for (let i = 0; i < 15; i++) {
@@ -489,6 +496,7 @@
       h += `<div class="sec" style="border:1px solid var(--line);border-radius:10px;padding:8px"><div class="row"><label>이름</label><input type="text" data-chg="pname" data-i="${i}" value="${FS.esc(P.name)}" data-notr></div>`;
       h += `<div class="row"><label>음자리표</label><select data-chg="pclef" data-i="${i}">${Object.keys(FS.CLEFS).map((c) => `<option value="${c}"${P.clef === c ? ' selected' : ''}>${FS.CLEFS[c].name}</option>`).join('')}</select></div>`;
       h += `<div class="row"><label>악기</label><select data-chg="pinst" data-i="${i}">${FS.INSTS.map((x) => `<option value="${x[0]}"${P.inst === x[0] ? ' selected' : ''}>${x[1]}</option>`).join('')}</select></div>`;
+      h += `<div class="row"><label>TAB 악보</label><select data-chg="ptab" data-i="${i}"><option value="">없음</option>${Object.keys(FS.TABS).map((k) => `<option value="${k}"${P.tab === k ? ' selected' : ''}>${{ guitar: '기타 6줄', bass: '베이스 4줄', ukulele: '우쿨렐레' }[k]}</option>`).join('')}</select></div>`;
       h += `<div class="row"><label>음량</label><input type="range" min="0" max="100" value="${P.vol}" data-chg="pvol" data-i="${i}"><span class="v">${P.vol}</span></div>`;
       h += `<div class="row"><label>좌우</label><input type="range" min="-100" max="100" value="${Math.round((P.pan || 0) * 100)}" data-chg="ppan" data-i="${i}"></div>`;
       h += `<label class="chk"><input type="checkbox" data-chg="pmute" data-i="${i}"${P.mute ? ' checked' : ''}> 소리 끄기</label>`;
@@ -499,6 +507,7 @@
     return h;
   }
   UI.panel = function () {
+    if (A.padKind && (padPart().clef === 'drum' ? 'drum' : 'piano') !== A.padKind) buildPad();
     document.querySelectorAll('#ptabs button').forEach((b) => b.classList.toggle('on', b.dataset.p === A.tab));
     const body = $('pbody'), st = body.scrollTop;
     // do not rebuild while a field inside the panel has focus (typing)
@@ -536,6 +545,7 @@
     mps: (el) => { A.score.mps = +el.value || undefined; if (!A.score.mps) delete A.score.mps; UI.commit(); },
     pl: (el) => { if (el.checked) A.score.pl = true; else delete A.score.pl; UI.commit(); },
     pname: (el) => { A.score.parts[+el.dataset.i].name = el.value; UI.commit(); },
+    ptab: (el) => { const P = A.score.parts[+el.dataset.i]; if (el.value) P.tab = el.value; else delete P.tab; UI.commit(); },
     pclef: (el) => { A.score.parts[+el.dataset.i].clef = el.value; UI.commit(); },
     pinst: (el) => { A.score.parts[+el.dataset.i].inst = el.value; UI.commit(); },
     pvol: (el) => { A.score.parts[+el.dataset.i].vol = +el.value; UI.commit(); },
@@ -566,7 +576,7 @@
     $('pad').addEventListener('pointerdown', (e) => {
       const k = e.target.closest('[data-pk]'); if (!k) return; e.preventDefault();
       const S = A.score, pos = enterPos(), key = FS.mtab(S).key[pos.m];
-      UI.enterPitch(FS.fromMidi(+k.dataset.pk, key));
+      UI.enterPitch(FS.fromMidi(+k.dataset.pk, A.padKind === 'drum' ? 0 : key));
     });
     $('ptabs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; A.tab = b.dataset.p; UI.panel(); });
     $('bUndo').onclick = UI.undo; $('bRedo').onclick = UI.redo;

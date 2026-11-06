@@ -102,4 +102,39 @@
     h += '<div class="btns">' + btn('evset', 'data-k="ped" data-v="d" data-tg="1"', '페달 밟기', e.ped === 'd') + btn('evset', 'data-k="ped" data-v="u" data-tg="1"', '페달 떼기', e.ped === 'u') + '</div></div>';
     return h;
   });
+
+  /* ---------- measure marks: repeats, navigation, text, tempo ---------- */
+  const MK = [['rs', '반복 시작 |:'], ['re', '반복 끝 :|'], ['volta:1', '1번 괄호'], ['volta:2', '2번 괄호'], ['segno', '세뇨 𝄋'], ['coda', '코다'], ['tocoda', 'To Coda'], ['ds', 'D.S.'], ['dc', 'D.C.'], ['fine', 'Fine'], ['reh', '연습 기호'], ['bar:dbl', '겹세로줄'], ['bar:fin', '끝세로줄']];
+  function markOf(m) { return A.score.meas[m] || (A.score.meas[m] = {}); }
+  Object.assign(UI.actions, {
+    mkset: (el) => {
+      const s = A.sel; if (!s) return; const q = markOf(s.m), [k, v] = el.dataset.k.split(':');
+      const m2 = s.m2 != null ? Math.max(s.m, s.m2) : s.m;
+      const on = v ? q[k] === (isNaN(+v) ? v : +v) : !!q[k];
+      for (let m = s.m; m <= m2; m++) { const r = markOf(m); if (on) delete r[k]; else r[k] = v ? (isNaN(+v) ? v : +v) : true; }
+      UI.commit();
+    },
+    mkramp: (el) => {
+      const s = A.sel; if (!s) return; const q = markOf(s.m);
+      if (el.dataset.v === 'x') delete q.ramp; else { const to = Math.max(30, Math.min(240, Math.round(+el.dataset.to))); q.ramp = { n: Math.min(8, Math.max(1, s.m2 != null ? Math.abs(s.m2 - s.m) + 1 : 2)), to }; }
+      UI.commit();
+    },
+  });
+  Object.assign(UI.changes, {
+    mktxt: (el) => { const s = A.sel; if (!s) return; const q = markOf(s.m), v = el.value.trim().slice(0, 30); if (v) q.txt = v; else delete q.txt; UI.commit(); },
+    mktempo: (el) => { const s = A.sel; if (!s) return; const q = markOf(s.m), v = Math.round(+el.value); if (v >= 20 && v <= 300) { if (s.m === 0) A.score.tempo = v; else q.tempo = v; } else if (s.m > 0) delete q.tempo; UI.commit(); },
+  });
+  UI.sections.note.push(function (S, s) {
+    if (!s) return '';
+    const q = S.meas[s.m] || {}, T = FS.mtab(S);
+    let h = `<div class="sec"><h4>마디 ${s.m + 1} 표시</h4><div class="btns">` + MK.map((x) => {
+      const [k, v] = x[0].split(':'); const on = v ? q[k] === (isNaN(+v) ? v : +v) : !!q[k];
+      return btn('mkset', `data-k="${x[0]}"`, x[1], on);
+    }).join('') + '</div>';
+    h += `<div class="row"><label>마디 글씨</label><input type="text" data-chg="mktxt" value="${esc(q.txt || '')}" maxlength="30" data-notr></div>`;
+    h += `<div class="row"><label>빠르기</label><input type="number" min="20" max="300" data-chg="mktempo" value="${s.m === 0 ? S.tempo : (q.tempo || '')}" placeholder="그대로"></div>`;
+    h += '<div class="btns">' + btn('mkramp', 'data-to="140"', '점점 빠르게 → 140') + btn('mkramp', 'data-to="70"', '점점 느리게 → 70') + (q.ramp ? btn('mkramp', 'data-v="x"', '속도 변화 지우기') : '') + '</div>';
+    h += '<div class="note">여러 마디를 고르면 속도 변화는 그 마디 수만큼, 괄호·세로줄은 모든 마디에 적용돼요.</div></div>';
+    return h;
+  });
 })();
