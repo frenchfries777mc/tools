@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v17",
+   "title": "건반으로 쓰기, 도레미 표시, 색깔 음표, 손가락 번호",
+   "items": [
+    "화면 건반(한 옥타브, 옥타브 이동)을 눌러 소리를 듣고 바로 음표 입력 — 검은 건반은 조에 맞춰 ♯/♭로, 화음 도구와 함께 쓰면 화음 쌓기, 터치 지원",
+    "음 이름 표시: 음표 머리 안에 C D E 또는 도 레 미를 써 넣기",
+    "음마다 색깔로 칠하기(도=빨강 … 시=보라): 어린이 교재·벨 연주용",
+    "음표마다 손가락 번호 붙이기"
+   ],
+   "tr": {
+    "en": {
+     "title": "On-screen piano, note names, colored notes and fingering",
+     "items": [
+      "On-screen piano keyboard (one octave, shiftable) to hear and enter notes at once; black keys spell with sharps or flats by key, works with chord mode, touch friendly",
+      "Note names inside the noteheads: C D E or do re mi",
+      "Color every pitch (C red ... B purple) for teaching and handbell charts",
+      "Fingering numbers on any note"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v16",
    "title": "코드 반주 재생, 코드 고르기, 2절 가사, 마디 번호, 스윙",
    "items": [
