@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v24",
+   "title": "Fry Draw 24: 글자 둥글게 휘기, 어울리는 색, 그림에서 색 뽑기",
+   "items": [
+    "글자 둥글게 휘기: 글자를 고르고 휘는 정도(+는 위로 볼록한 아치, −는 아래로 웃는 모양)를 정해 누르면 글자가 호를 따라가요. 풀려면 '선 따라 쓰기 풀기'를 눌러요",
+    "어울리는 색: 지금 고른 색을 기준으로 보색, 이웃색, 3색·4색 조화, 보색 이웃, 한 색 밝기 변화 다섯 칸을 보여줘요. 눌러서 바로 칠해요",
+    "그림에서 색 뽑기: 그림을 고르고 누르면 많이 쓰인 색을 최대 8가지 뽑아 '내 색'에 넣어 둬요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 24: arc text, colour harmonies, palette from picture",
+     "items": [
+      "Arc text: choose how much to bend (positive for an arch, negative for a smile) and the text follows a circular arc; release it with Release text from path",
+      "Colour harmonies: complementary, analogous, triad, tetrad, split-complementary and monochrome swatches based on the current colour, applied with one click",
+      "Palette from picture: pull up to 8 dominant colours out of a picture into My colours"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v23",
    "title": "Fry Draw 23: 효과 모음, 투명하게 사라지기",
    "items": [
