@@ -115,3 +115,4 @@ patchnotes/draw.json | Fry Draw v22 항목 (en만), draw/app.js 손떨림 보정
 patchnotes/video.json | Fry Video v24 박자 편집·이어 붙이기·처음 끝 페이드 (en 번역 없음) | video v24 | 2026-11-06
 patchnotes/video.json | Fry Video v25 시간으로 가기·자동 줄바꿈·크레딧·반복·자막 밀기 (en 번역 없음) | video v25 | 2026-11-06
 patchnotes/video.json | Fry Video v26 소리 톤·효과 복사 붙여넣기·자석 끄기 (en 번역 없음) | video v26 | 2026-11-06
+patchnotes/video.json | Fry Video v27 자동 색 보정·그라데이션 도형·둥근 글자 상자·끝까지 늘리기 (en 번역 없음) | video v27 | 2026-11-06
