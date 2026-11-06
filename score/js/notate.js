@@ -9,6 +9,11 @@
   const CHORDS = ['C', 'Dm', 'Em', 'F', 'G', 'G7', 'Am', 'Bdim', 'C7', 'Fmaj7', 'Cmaj7', 'Dm7', 'Em7', 'Am7', 'Bb', 'A', 'D', 'E', 'E7', 'A7', 'D7', 'Bm'];
 
   const btn = (act, attrs, label, on) => `<button class="tbtn${on ? ' on' : ''}" data-act="${act}" ${attrs}>${label}</button>`;
+  /* square symbol button: a real notation sign, the Korean name stays as tooltip / screen-reader label */
+  const sbtn = (act, attrs, sym, name, on) => `<button class="tbtn sb${on ? ' on' : ''}" data-act="${act}" ${attrs} title="${esc(name)}" aria-label="${esc(name)}">${FS.sym[sym]}</button>`;
+  const DYNK = {}, ARTK = { stac: 'stac', acc: 'acc', ten: 'ten', marc: 'marc', ferm: 'ferm', tr: 'tr', mord: 'mord', turn: 'turn', trem: 'trem', arp: 'arp', dbow: 'dbow', ubow: 'ubow' };
+  const HEADK = { '': 'hdN', x: 'hdX', dia: 'hdDia', tri: 'hdTri' };
+  const MKK = { rs: 'rs', re: 're', 'volta:1': 'volta1', 'volta:2': 'volta2', segno: 'segno', coda: 'coda', tocoda: 'tocoda', ds: 'ds', dc: 'dc', fine: 'fine', reh: 'reh', 'bar:dbl': 'bdbl', 'bar:fin': 'bfin' };
   const sels = () => UI.selEvents();
 
   function setField(k, v, toggle) {
@@ -85,21 +90,21 @@
   UI.sections.note.push(function (S, s, e) {
     if (!s || !e) return '';
     const evs = sels(), has = (k, v) => evs.length && evs.every((x) => x.e[k] === v);
-    let h = '<div class="sec"><h4>셈여림 · 표현</h4><div class="btns">';
-    DYN.forEach((d) => { h += btn('evset', `data-k="dyn" data-v="${d}" data-tg="1"`, `<i style="font-family:serif;font-weight:700">${d}</i>`, has('dyn', d)); });
-    h += '</div><div class="btns">' + btn('evset', 'data-k="hp" data-v="cr" data-tg="1"', '점점 세게 &lt;', has('hp', 'cr')) + btn('evset', 'data-k="hp" data-v="de" data-tg="1"', '점점 여리게 &gt;', has('hp', 'de')) + btn('evset', 'data-k="hp" data-v="end" data-tg="1"', '끝', has('hp', 'end')) + '</div></div>';
-    h += '<div class="sec"><h4>연주 기호</h4><div class="btns">' + ART.map((a) => btn('evset', `data-k="art" data-v="${a[0]}" data-tg="1"`, a[1], has('art', a[0]))).join('') + '</div></div>';
-    h += '<div class="sec"><h4>이음줄 · 꾸밈음 · 잇단음표</h4><div class="note">이음줄은 여러 음을 고른 뒤 누르면 끝 음까지 이어져요.</div><div class="btns">' + btn('slur', '', '이음줄', !!e.slur) + btn('grace', 'data-v="-1"', '꾸밈음 (아래)') + btn('grace', 'data-v="1"', '꾸밈음 (위)') + (e.gr ? btn('nograce', '', '꾸밈음 지우기') : '') + '</div>';
-    h += '<div class="btns">' + [3, 5, 6, 7, 9].map((n) => btn('mktp', `data-v="${n}"`, n + '잇단')).join('') + (e.tp ? btn('rmtp', '', '잇단음표 풀기') : '') + '</div></div>';
+    let h = '<div class="sec"><h4>셈여림 · 표현</h4><div class="btns sym">';
+    DYN.forEach((d) => { h += sbtn('evset', `data-k="dyn" data-v="${d}" data-tg="1"`, 'dyn_' + d, d, has('dyn', d)); });
+    h += sbtn('evset', 'data-k="hp" data-v="cr" data-tg="1"', 'cr', '점점 세게', has('hp', 'cr')) + sbtn('evset', 'data-k="hp" data-v="de" data-tg="1"', 'de', '점점 여리게', has('hp', 'de')) + sbtn('evset', 'data-k="hp" data-v="end" data-tg="1"', 'hend', '점점 세게·여리게 끝', has('hp', 'end')) + '</div></div>';
+    h += '<div class="sec"><h4>연주 기호</h4><div class="btns sym">' + ART.map((a) => sbtn('evset', `data-k="art" data-v="${a[0]}" data-tg="1"`, ARTK[a[0]], a[1], has('art', a[0]))).join('') + '</div></div>';
+    h += '<div class="sec"><h4>이음줄 · 꾸밈음 · 잇단음표</h4><div class="note">이음줄은 여러 음을 고른 뒤 누르면 끝 음까지 이어져요.</div><div class="btns sym">' + sbtn('slur', '', 'slur', '이음줄', !!e.slur) + sbtn('grace', 'data-v="-1"', 'graceDn', '꾸밈음 (아래)') + sbtn('grace', 'data-v="1"', 'graceUp', '꾸밈음 (위)') + (e.gr ? sbtn('nograce', '', 'nograce', '꾸밈음 지우기') : '');
+    h += [3, 5, 6, 7, 9].map((n) => sbtn('mktp', `data-v="${n}"`, 'tup' + n, n + '잇단음표')).join('') + (e.tp ? sbtn('rmtp', '', 'notup', '잇단음표 풀기') : '') + '</div></div>';
     h += '<div class="sec"><h4>글씨</h4>';
     [['ly', '가사 1'], ['ly2', '가사 2'], ['ch', '코드'], ['tx', '지시어'], ['fg', '운지']].forEach((r) => {
       h += `<div class="row"><label>${r[1]}</label><input type="text" data-chg="evtxt" data-k="${r[0]}" value="${esc(e[r[0]] || '')}" maxlength="30" data-notr${r[0] === 'ch' ? ' list="chordlist"' : ''}></div>`;
     });
     h += '<datalist id="chordlist">' + CHORDS.map((c) => `<option value="${c}">`).join('') + '</datalist>';
     h += '<div class="note">가사는 음표마다 한 음절, 이어지면 끝에 - 를 붙여요.</div></div>';
-    h += '<div class="sec"><h4>음표 모양 · 옥타브 · 페달</h4><div class="btns">' + HEADS.map((x) => btn('evset', `data-k="hd" data-v="${x[0]}"`, x[1], (e.hd || '') === x[0])).join('') + '</div>';
-    h += '<div class="btns">' + btn('evset', 'data-k="ov" data-v="1" data-tg="1"', '8va 시작') + btn('evset', 'data-k="ov" data-v="-1" data-tg="1"', '8vb 시작') + btn('evset', 'data-k="ov" data-v="0" data-tg="1"', '옥타브 끝') + '</div>';
-    h += '<div class="btns">' + btn('evset', 'data-k="ped" data-v="d" data-tg="1"', '페달 밟기', e.ped === 'd') + btn('evset', 'data-k="ped" data-v="u" data-tg="1"', '페달 떼기', e.ped === 'u') + '</div></div>';
+    h += '<div class="sec"><h4>음표 모양 · 옥타브 · 페달</h4><div class="btns sym">' + HEADS.map((x) => sbtn('evset', `data-k="hd" data-v="${x[0]}"`, HEADK[x[0]], x[1], (e.hd || '') === x[0])).join('')
+      + sbtn('evset', 'data-k="ov" data-v="1" data-tg="1"', 'o8va', '8va 시작 (한 옥타브 위)') + sbtn('evset', 'data-k="ov" data-v="-1" data-tg="1"', 'o8vb', '8vb 시작 (한 옥타브 아래)') + sbtn('evset', 'data-k="ov" data-v="0" data-tg="1"', 'o8end', '옥타브 표시 끝')
+      + sbtn('evset', 'data-k="ped" data-v="d" data-tg="1"', 'pedD', '페달 밟기', e.ped === 'd') + sbtn('evset', 'data-k="ped" data-v="u" data-tg="1"', 'pedU', '페달 떼기', e.ped === 'u') + '</div></div>';
     return h;
   });
 
@@ -127,9 +132,9 @@
   UI.sections.note.push(function (S, s) {
     if (!s) return '';
     const q = S.meas[s.m] || {}, T = FS.mtab(S);
-    let h = `<div class="sec"><h4>마디 ${s.m + 1} 표시</h4><div class="btns">` + MK.map((x) => {
+    let h = `<div class="sec"><h4>마디 ${s.m + 1} 표시</h4><div class="btns sym">` + MK.map((x) => {
       const [k, v] = x[0].split(':'); const on = v ? q[k] === (isNaN(+v) ? v : +v) : !!q[k];
-      return btn('mkset', `data-k="${x[0]}"`, x[1], on);
+      return sbtn('mkset', `data-k="${x[0]}"`, MKK[x[0]], x[1].replace(/ ?[|:𝄋]+$/, ''), on);
     }).join('') + '</div>';
     h += `<div class="row"><label>마디 글씨</label><input type="text" data-chg="mktxt" value="${esc(q.txt || '')}" maxlength="30" data-notr></div>`;
     h += `<div class="row"><label>빠르기</label><input type="number" min="20" max="300" data-chg="mktempo" value="${s.m === 0 ? S.tempo : (q.tempo || '')}" placeholder="그대로"></div>`;
