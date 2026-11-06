@@ -25,13 +25,14 @@
       const has = (fn) => ev.some(fn);
       const hasCh = has((e) => e.ch), hasTx = has((e) => e.tx), hasOv = has((e) => e.ov != null), hasDyn = has((e) => e.dyn || e.hp), hasPed = has((e) => e.ped);
       const ly2 = has((e) => e.ly2), ly1 = has((e) => e.ly) || ly2;
-      const above = (prevBrace ? 22 : 30) + (hasCh ? 14 : 0) + (hasTx || hasOv ? 14 : 0);
+      const mkb = i === 0 && S.meas.some((q, mi) => q && (q.reh || q.txt || q.volta || q.segno || q.coda || q.tocoda || q.ds || q.dc || q.fine || q.ramp || (mi > 0 && q.tempo)));
+      const above = (prevBrace ? 22 : 30) + (hasCh ? 14 : 0) + (hasTx || hasOv ? 14 : 0) + (mkb ? 18 : 0);
       let c = hasDyn ? 24 : 8; const dynY = 17;
       let ly1Y = 0, ly2Y = 0, pedY = 0;
       if (ly1) { ly1Y = c + 13; c += 16; }
       if (ly2) { ly2Y = c + 13; c += 16; }
       if (hasPed) { pedY = c + 12; c += 16; }
-      const tab = P.tab ? 56 : 0, tabTop = c + 8;
+      const tab = P.tab ? 56 : 0, tabTop = c + 16;
       return { above, below: c + tab + 12 + (P.tab ? 8 : 0), dynY, ly1Y, ly2Y, pedY, tab, tabTop, hasCh, hasTx, hasOv };
     });
   }

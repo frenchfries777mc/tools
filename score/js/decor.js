@@ -169,6 +169,85 @@
     return deco;
   }
 
+  /* ---------- barlines, repeats and navigation marks ---------- */
+  FS.barline = function (S, m, last, xl, xr, top, spanTo) {
+    const mk = S.meas[m] || {}, o = [], ln = (x, w) => `<line x1="${f(x)}" y1="${top}" x2="${f(x)}" y2="${spanTo}" stroke="#222"${w ? ` stroke-width="${w}"` : ''}/>`;
+    const dots = (x) => [15, 25].map((y) => `<circle cx="${f(x)}" cy="${top + y}" r="2" fill="#222"/>`).join('');
+    if (mk.re) o.push(ln(xr - 8.5) + ln(xr - 2.5, 3.2) + dots(xr - 13.5));
+    else if (last || mk.bar === 'fin') o.push(ln(xr - 4.5) + ln(xr - 1, 3.2));
+    else if (mk.bar === 'dbl') o.push(ln(xr - 4) + ln(xr));
+    else o.push(ln(xr));
+    if (mk.rs) o.push(ln(xl + 2, 3.2) + ln(xl + 6.5) + dots(xl + 12));
+    return o.join('');
+  };
+  function segnoSvg(x, y, c) { return `<g transform="translate(${f(x)},${f(y)})" fill="none" stroke="${c}" stroke-width="1.5"><path d="M7 -9C4 -13 -2 -10 0 -6S9 0 8 5S0 10 -3 6"/><line x1="9" y1="-12" x2="-4" y2="10"/></g><circle cx="${f(x + 1)}" cy="${f(y - 3)}" r="1.1" fill="${c}"/><circle cx="${f(x + 7)}" cy="${f(y + 3)}" r="1.1" fill="${c}"/>`; }
+  function codaSvg(x, y, c) { return `<g fill="none" stroke="${c}" stroke-width="1.4"><circle cx="${f(x + 6)}" cy="${f(y)}" r="5.2"/><line x1="${f(x + 6)}" y1="${f(y - 9)}" x2="${f(x + 6)}" y2="${f(y + 9)}"/><line x1="${f(x - 3)}" y1="${f(y)}" x2="${f(x + 15)}" y2="${f(y)}"/></g>`; }
+  FS.marks = function (S, L, sys) {
+    const o = [], T = L.T, top = sys.partTop[0], base = top - L.pm[0].above + 14, c = INK;
+    const hasFine = S.meas.some((q) => q && q.fine), hasCoda = S.meas.some((q) => q && q.tocoda);
+    const txt = (x, y, t, st, anc) => `<text x="${f(x)}" y="${f(y)}"${anc ? ` text-anchor="${anc}"` : ''} font-size="12" ${st || ''} fill="${c}" ${SERIF}>${esc(t)}</text>`;
+    let tempo = S.tempo; for (let i = 0; i < sys.ms[0].m; i++) if (S.meas[i] && S.meas[i].tempo) tempo = S.meas[i].tempo;
+    let rehN = 0; for (let i = 0; i < sys.ms[0].m; i++) if (S.meas[i] && S.meas[i].reh) rehN++;
+    const vruns = [];
+    sys.ms.forEach((mo, j) => {
+      const m = mo.m, mk = S.meas[m] || {}; let x = mo.x + 4 + (mk.rs ? 12 : 0);
+      if (mk.tempo && m > 0) { o.push(txt(x, base, '♩ = ' + mk.tempo, 'font-weight="700"')); x += 56; }
+      if (mk.reh) { const lab = String.fromCharCode(65 + (rehN++ % 26)); o.push(`<rect x="${f(x)}" y="${f(base - 12)}" width="18" height="17" fill="none" stroke="${c}" stroke-width="1.6"/>` + txt(x + 9, base + 1, lab, 'font-weight="700" font-size="13"', 'middle')); x += 24; }
+      if (mk.segno) { o.push(segnoSvg(x + 2, base - 2, c)); x += 22; }
+      if (mk.coda) { o.push(codaSvg(x, base - 2, c)); x += 24; }
+      if (mk.txt) { o.push(txt(x, base, mk.txt, 'font-weight="700" font-style="italic"')); x += 10 + mk.txt.length * 7; }
+      if (mk.ramp) { const up = mk.ramp.to > tempo; o.push(txt(x, base, up ? 'accel.' : 'rit.', 'font-style="italic"') + `<line x1="${f(x + 36)}" y1="${f(base - 3)}" x2="${f(Math.min(mo.xEnd - 4, x + 36 + 40 * mk.ramp.n))}" y2="${f(base - 3)}" stroke="${c}" stroke-dasharray="4 3"/>`); }
+      if (mk.tempo) tempo = mk.tempo;
+      const rx = mo.xEnd - 5;
+      if (mk.tocoda) o.push(txt(rx, base, 'To Coda', 'font-style="italic" font-weight="700"', 'end'));
+      if (mk.fine) o.push(txt(rx, base, 'Fine', 'font-style="italic" font-weight="700"', 'end'));
+      if (mk.ds || mk.dc) o.push(txt(rx, base, (mk.ds ? 'D.S.' : 'D.C.') + (hasFine ? ' al Fine' : hasCoda ? ' al Coda' : ''), 'font-style="italic" font-weight="700"', 'end'));
+      if (mk.volta) { const prev = vruns[vruns.length - 1]; if (prev && prev.v === mk.volta && prev.mEnd === m - 1) { prev.mEnd = m; prev.x2 = mo.xEnd; } else vruns.push({ v: mk.volta, m0: m, mEnd: m, x1: mo.x + (mk.rs ? 12 : 3), x2: mo.xEnd }); }
+    });
+    vruns.forEach((r) => {
+      const y = base + 6, startsHere = !(r.m0 === sys.ms[0].m && r.m0 > 0 && S.meas[r.m0 - 1] && S.meas[r.m0 - 1].volta === r.v), endsHere = r.mEnd + 1 >= T.n || !(S.meas[r.mEnd + 1] && S.meas[r.mEnd + 1].volta === r.v);
+      o.push(`<path d="M${f(r.x1)} ${f(y + (startsHere ? 12 : 0))}V${f(y)}H${f(r.x2 - 2)}${r.v === 1 && endsHere ? 'v12' : ''}" fill="none" stroke="${c}" stroke-width="1.2"/>`);
+      if (startsHere) o.push(txt(r.x1 + 4, y + 11, r.v + '.', 'font-weight="700"'));
+    });
+    return o.join('');
+  };
+
+
+  /* ---------- tablature staff ---------- */
+  function tabFret(tune, midis) {
+    const used = new Set(), out = new Map();
+    midis.slice().sort((a, b) => b - a).forEach((mm) => {
+      let best = null;
+      tune.forEach((open, si) => { const fr = mm - open; if (fr >= 0 && fr <= 20 && !used.has(si) && (!best || fr < best.fr)) best = { si, fr }; });
+      if (!best) { const si = tune.findIndex((open, i) => !used.has(i)); if (si >= 0) best = { si, fr: Math.max(0, mm - tune[si]) }; }
+      if (best) { used.add(best.si); out.set(mm, best); }
+    });
+    return out;
+  }
+  FS.tabs = function (S, L, sys) {
+    const o = [];
+    S.parts.forEach((P, pi) => {
+      if (!P.tab || !FS.TABS[P.tab]) return;
+      const tune = FS.TABS[P.tab], n = tune.length, pm = L.pm[pi], shift = FS.CLEFS[P.clef].shift + (P.trans || 0), sp = n > 4 ? 10 : 12;
+      const y0 = sys.partTop[pi] + STAFF + pm.tabTop, y1 = y0 + (n - 1) * sp, xa = sys.hx - 6, xb = sys.ms[sys.ms.length - 1].xEnd;
+      o.push(`<line x1="${f(sys.x0)}" y1="${f(y0)}" x2="${f(sys.x0)}" y2="${f(y1)}" stroke="#222" stroke-width="1.6"/>`);
+      for (let k = 0; k < n; k++) o.push(`<line x1="${f(sys.x0)}" y1="${f(y0 + k * sp)}" x2="${f(xb)}" y2="${f(y0 + k * sp)}" stroke="#222" stroke-width=".9"/>`);
+      ['T', 'A', 'B'].forEach((ch, i) => o.push(`<text x="${f(sys.x0 + 16)}" y="${f(y0 + (y1 - y0) / 2 + (i - 1) * 13 + 4.5)}" text-anchor="middle" font-size="13" font-weight="800" fill="#222" ${SERIF}>${ch}</text>`));
+      sys.ms.forEach((mo) => {
+        o.push(`<line x1="${f(mo.xEnd)}" y1="${f(y0)}" x2="${f(mo.xEnd)}" y2="${f(y1)}" stroke="#222"/>`);
+        (L.items[pi + '|' + mo.m] || []).forEach((items) => items.forEach((it) => {
+          if (it.rest || !it.heads) return;
+          const mm = it.e.p.map((p) => FS.midi(p) + shift), asg = tabFret(tune, mm);
+          mm.forEach((q) => {
+            const a = asg.get(q); if (!a) return; const y = y0 + a.si * sp, t = String(a.fr);
+            o.push(`<rect x="${f(it.x - 4.5 * t.length - 1)}" y="${f(y - 6)}" width="${9 * t.length + 2}" height="12" fill="#fff"/><text x="${f(it.x)}" y="${f(y + 4)}" text-anchor="middle" font-size="12" font-weight="700" fill="${INK}" ${FONT}>${t}</text>`);
+          });
+        }));
+      });
+    });
+    return o.join('');
+  };
+
   FS.decor = function (S, L, sys) {
     if (!L._deco) L._deco = spanners(S, L);
     const o = [];
@@ -178,6 +257,6 @@
         lists.forEach((items) => items.forEach((it) => itemDecor(it, S, L, o)));
       });
     });
-    return o.join('') + L._deco[sys.index].join('');
+    return FS.marks(S, L, sys) + FS.tabs(S, L, sys) + o.join('') + L._deco[sys.index].join('');
   };
 })();

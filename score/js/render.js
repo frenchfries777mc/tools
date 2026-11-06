@@ -33,8 +33,9 @@
     // heads, accidentals, dots
     heads.forEach((h) => {
       const hx = it.x + h.dx;
-      if (drum && FS.midi(h.p) >= 77) g.push(G.head(it.dur.base, hx, h.y, c, 'x'));
-      else g.push(G.head(it.dur.base, hx, h.y, c, e.hd));
+      const hc = S.nc && c === INK && FS.NPAL ? FS.NPAL[h.p.s] : c;
+      if (drum && FS.midi(h.p) >= 77) g.push(G.head(it.dur.base, hx, h.y, hc, 'x'));
+      else g.push(G.head(it.dur.base, hx, h.y, hc, e.hd));
       if (h.acc != null) g.push(G.acc(h.acc, it.x - 15 - h.accCol * 11 + Math.min(0, h.dx), h.y, c));
       for (let d = 0; d < it.dur.dots; d++) g.push(G.dot(it.x + 10 + Math.max(0, ...heads.map((q) => q.dx)) + d * 5, h.y + (h.pos % 2 === 0 ? -5 : 0), c));
     });
@@ -105,8 +106,7 @@
           if (j > 0 && mo.tsChange) drawTs(o, S, T.ts[m], mo.x + 6 + (mo.keyChange ? mo.kx : 0) + 8, top);
           const xr = mo.xEnd;
           const spanTo = P.brace && S.parts[pi + 1] ? sys.partBot[pi + 1] : top + STAFF;
-          if (last) o.push(`<line x1="${f(xr - 4.5)}" y1="${top}" x2="${f(xr - 4.5)}" y2="${spanTo}" stroke="#222"/><line x1="${f(xr - 1)}" y1="${top}" x2="${f(xr - 1)}" y2="${spanTo}" stroke="#222" stroke-width="3.2"/>`);
-          else o.push(`<line x1="${f(xr)}" y1="${top}" x2="${f(xr)}" y2="${spanTo}" stroke="#222"/>`);
+          o.push(FS.barline(S, m, last, mo.x, xr, top, spanTo));
           const lists = L.items[pi + '|' + m] || [];
           lists.forEach((items) => {
             items.forEach((it) => {

@@ -52,6 +52,7 @@
 
   /* ---------- events ---------- */
   FS.rest = (d) => ({ d, p: [] });
+  FS.TABS = { guitar: [64, 59, 55, 50, 45, 40], bass: [43, 38, 33, 28], ukulele: [69, 64, 60, 67] };
   FS.note = (d, p) => ({ d, p: [p] });
   FS.isRest = (e) => !e.p.length;
   FS.tpBase = (a) => { let b = 1; while (b * 2 < a) b *= 2; return b; };
@@ -316,7 +317,7 @@
       ['brace', 'solo'].forEach((k) => { if (p[k]) P[k] = true; });
       if (p.trans) P.trans = Math.round(NUM(p.trans, -24, 24, 0)) || undefined;
       if (!P.trans) delete P.trans;
-      if (p.tab) P.tab = p.tab;
+      if (p.tab && FS.TABS[p.tab]) P.tab = p.tab;
       P.m = Array.isArray(p.m) ? p.m : [];
       return P;
     });
