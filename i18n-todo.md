@@ -82,7 +82,7 @@ patchnotes/draw.json | Fry Draw v13 항목 (en만), draw/app.js 심볼·묶음 �
 patchnotes/score.json | Fry Score v14 항목 (en만) | score v14 | 2026-11-06
 score/app.js | Fry Score v14 한국어 메시지·버튼 | score v14 | 2026-11-06
 patchnotes/video.json | Fry Video v17 전환 5개·빠르기 프리셋·글자 움직임 2개 (en 번역 없음) | video v17 | 2026-11-06
-patchnotes/draw.json | Fry Draw v14 항목 (en만), draw/app.js SVG 가져오기 안내·붓 종류 한국어 문구 | draw v14 | 2026-11-06
+draw/app.js | SVG 가져오기 안내·붓 종류 한국어 문구 | draw v14 | 2026-11-06
 patchnotes/score.json | Fry Score v15 항목 (en만) | score v15 | 2026-11-06
 score/app.js | Fry Score v15 한국어 메시지·버튼 | score v15 | 2026-11-06
 patchnotes/video.json | Fry Video v18 미리보기에서 바로 옮기고 크기 바꾸기 (en 번역 없음) | video v18 | 2026-11-06
@@ -91,27 +91,27 @@ patchnotes/video.json | Fry Video v20 장면 자동 나누기·소리 크기 표
 video/strings.js | Fry Video 장면 나누기·내보낼 구간 UI 문구 (en 추가됨, 다른 언어 없음) | video v20 | 2026-11-06
 patchnotes/score.json | Fry Score v16 항목 (en만) | score v16 | 2026-11-06
 score/app.js | Fry Score v16 한국어 메시지·버튼 | score v16 | 2026-11-06
-patchnotes/draw.json | Fry Draw v15 항목 (en만), draw/app.js 합치기·정렬·단축키 한국어 문구 | draw v15 | 2026-11-06
+draw/app.js | 합치기·정렬·단축키 한국어 문구 | draw v15 | 2026-11-06
 patchnotes/score.json | Fry Score v17 항목 (en만) | score v17 | 2026-11-06
 score/app.js | Fry Score v17 한국어 메시지·버튼 | score v17 | 2026-11-06
-patchnotes/draw.json | Fry Draw v16 항목 (en만), draw/app.js 모양 비틀기·선 따라 놓기 한국어 문구 | draw v16 | 2026-11-06
+draw/app.js | 모양 비틀기·선 따라 놓기 한국어 문구 | draw v16 | 2026-11-06
 patchnotes/score.json | Fry Score v18 항목 (en만) | score v18 | 2026-11-06
 score/app.js | Fry Score v18 한국어 메시지·버튼 | score v18 | 2026-11-06
 patchnotes/score.json | Fry Score v19 항목 (en만) | score v19 | 2026-11-06
 score/app.js | Fry Score v19 한국어 메시지·버튼 | score v19 | 2026-11-06
-patchnotes/draw.json | Fry Draw v17 항목 (en만), draw/app.js 글상자·선 그라데이션·글꼴 한국어 문구 | draw v17 | 2026-11-06
+draw/app.js | 글상자·선 그라데이션·글꼴 한국어 문구 | draw v17 | 2026-11-06
 patchnotes/video.json | Fry Video v21 클립 이름·앞뒤 자르기·편집점 이동 (en 번역 없음) | video v21 | 2026-11-06
 patchnotes/score.json | Fry Score v20 항목 (en만) | score v20 | 2026-11-06
 score/app.js | Fry Score v20 한국어 메시지·버튼 | score v20 | 2026-11-06
 patchnotes/video.json | Fry Video v22 흐린 배경 채우기·글자 맞춤·좌우 소리·파일 바꾸기 (en 번역 없음) | video v22 | 2026-11-06
-patchnotes/draw.json | Fry Draw v18 항목 (en만), draw/app.js 단계 만들기·크기 표시·윤곽선 보기 한국어 문구 | draw v18 | 2026-11-06
+draw/app.js | 단계 만들기·크기 표시·윤곽선 보기 한국어 문구 | draw v18 | 2026-11-06
 patchnotes/video.json | Fry Video v23 모자이크·필름 입자·카메라 흔들림·영화 띠·음악 길이 맞추기 (en 번역 없음) | video v23 | 2026-11-06
-patchnotes/draw.json | Fry Draw v19 항목 (en만), draw/app.js 모서리 둥글게·조각으로 떼어내기 한국어 문구 | draw v19 | 2026-11-06
-patchnotes/draw.json | Fry Draw v20 항목 (en만), draw/app.js 하나씩 내보내기·ZIP 한국어 문구 | draw v20 | 2026-11-06
+draw/app.js | 모서리 둥글게·조각으로 떼어내기 한국어 문구 | draw v19 | 2026-11-06
+draw/app.js | 하나씩 내보내기·ZIP 한국어 문구 | draw v20 | 2026-11-06
 patchnotes/score.json | Fry Score v21 항목 (en만) | score v21 | 2026-11-06
 score/app.js | Fry Score v21 한국어 메시지·버튼 | score v21 | 2026-11-06
-patchnotes/draw.json | Fry Draw v21 항목 (en만), draw/app.js 그림 다루기 한국어 문구 | draw v21 | 2026-11-06
-patchnotes/draw.json | Fry Draw v22 항목 (en만), draw/app.js 손떨림 보정 한국어 문구 | draw v22 | 2026-11-06
+draw/app.js | 그림 다루기 한국어 문구 | draw v21 | 2026-11-06
+draw/app.js | 손떨림 보정 한국어 문구 | draw v22 | 2026-11-06
 patchnotes/video.json | Fry Video v24 박자 편집·이어 붙이기·처음 끝 페이드 (en 번역 없음) | video v24 | 2026-11-06
 patchnotes/video.json | Fry Video v25 시간으로 가기·자동 줄바꿈·크레딧·반복·자막 밀기 (en 번역 없음) | video v25 | 2026-11-06
 patchnotes/video.json | Fry Video v26 소리 톤·효과 복사 붙여넣기·자석 끄기 (en 번역 없음) | video v26 | 2026-11-06
@@ -131,11 +131,11 @@ score/app.js | Fry Score v34 한국어 메시지·버튼 | score v34 | 2026-11-0
 patchnotes/score.json | Fry Score v35 항목 (en만) | score v35 | 2026-11-06
 score/app.js | Fry Score v35 한국어 메시지·버튼 | score v35 | 2026-11-06
 patchnotes/video.json | Fry Video v30 9칸 위치 맞추기·안 쓰는 파일 정리·프레임 이동 키 (en 번역 없음) | video v30 | 2026-11-06
-patchnotes/draw.json | Fry Draw v23 항목 (en만), draw/app.js 효과 모음·사라지기 한국어 문구 | draw v23 | 2026-11-06
+draw/app.js | 효과 모음·사라지기 한국어 문구 | draw v23 | 2026-11-06
 patchnotes/video.json | Fry Video v31 그라데이션 글자·그림자 색·잔상·소리 채우기·90도 돌리기 (en 번역 없음) | video v31 | 2026-11-06
-patchnotes/draw.json | Fry Draw v24 항목 (en만), draw/app.js 글자 휘기·어울리는 색·색 뽑기 한국어 문구 | draw v24 | 2026-11-06
+draw/app.js | 글자 휘기·어울리는 색·색 뽑기 한국어 문구 | draw v24 | 2026-11-06
 patchnotes/video.json | Fry Video v32 장면 전환 6가지 더·한꺼번에 넣기 (en 번역 없음) | video v32 | 2026-11-06
-patchnotes/draw.json | Fry Draw v25 항목 (en만), draw/app.js 버전 저장·시작 틀 한국어 문구 | draw v25 | 2026-11-06
+draw/app.js | 버전 저장·시작 틀 한국어 문구 | draw v25 | 2026-11-06
 patchnotes/python.json | BeaconScript define item·mob 항목 (en만) | python v36 | 2026-11-06
 patchnotes/python.json | BeaconScript define ore 항목 (en만) | python v37 | 2026-11-06
 patchnotes/python.json | BeaconScript define structure·build 항목 (en만) | python v38 | 2026-11-06
