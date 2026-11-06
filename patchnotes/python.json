@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v38",
+   "title": "BeaconScript 구조물 (define structure, build)",
+   "items": [
+    "define structure \"이름\": 아래에 block 아이템 x y (칸 좌표 -20~20) 줄을 써서 구조물을 만들면 검사해 줘요",
+    "build \"이름\" near player 로 짓는 줄을 검사하고, 없는 구조물 이름이면 알려 줘요 (자동완성과 단어 설명도 있어요)"
+   ],
+   "tr": {
+    "en": {
+     "title": "BeaconScript structures (define structure, build)",
+     "items": [
+      "define structure \"name\": checks block item x y lines (cell coordinates -20 to 20)",
+      "build \"name\" near player is checked and an unknown structure name is reported (auto-complete and word meanings added)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v37",
    "title": "BeaconScript 광물 만들기 (define ore)",
    "items": [
