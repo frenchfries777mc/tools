@@ -4,6 +4,26 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v26",
+   "title": "소리 톤·효과 복사 붙여넣기·자석 끄기",
+   "items": [
+    "소리에 '소리 톤'이 생겼어요: 목소리 또렷하게, 저음 강조, 맑고 밝게, 전화기 소리, 먹먹하게(벽 너머)",
+    "클립 설정에 '효과 복사' / '효과 붙여넣기': 색 효과·모양 자르기·소리 설정 등을 한 번에 다른 클립에 옮겨요",
+    "타임라인에 '🧲 자석' 버튼이 생겼어요. 끄면 클립이 다른 클립이나 표시에 달라붙지 않고 마음대로 놓여요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Sound tone presets, copy/paste effects, snap toggle",
+     "items": [
+      "Sound has a 'Sound tone' preset: clear voice, more bass, bright, telephone, muffled (behind a wall)",
+      "Clip settings have 'Copy effects' / 'Paste effects' to move colour effects, masks and sound settings to other clips in one go",
+      "A '🧲 Snap' button on the timeline; turn it off to place clips freely without sticking to other clips or markers"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v25",
    "title": "시간으로 가기·자동 줄바꿈·크레딧·반복·자막 밀기",
    "items": [
