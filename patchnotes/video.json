@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v27",
+   "title": "자동 색 보정·그라데이션 도형·둥근 글자 상자·끝까지 늘리기",
+   "items": [
+    "색 효과에 '✨ 자동 색 보정'이 생겼어요. 어두운 영상은 밝게, 흐린 영상은 또렷하게 한 번에 맞춰요",
+    "도형에 '그라데이션'(두 가지 색과 방향)이 생겼어요",
+    "글자 상자에 '상자 모서리 둥글게'가 생겼어요",
+    "글자·도형·그림 클립에 '영상 끝까지 늘리기'가 생겼어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Auto colour fix, gradient shapes, rounded text box, stretch to end",
+     "items": [
+      "Colour effects have '✨ Auto colour fix' to brighten dark footage and add punch to flat footage in one click",
+      "Shapes can have a 'Gradient' (two colours and an angle)",
+      "The text box can have rounded corners",
+      "Text, shape and picture clips have 'Stretch to end of video'"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v26",
    "title": "소리 톤·효과 복사 붙여넣기·자석 끄기",
    "items": [
