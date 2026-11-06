@@ -138,3 +138,4 @@ patchnotes/video.json | Fry Video v32 장면 전환 6가지 더·한꺼번에 �
 patchnotes/draw.json | Fry Draw v25 항목 (en만), draw/app.js 버전 저장·시작 틀 한국어 문구 | draw v25 | 2026-11-06
 patchnotes/python.json | BeaconScript define item·mob 항목 (en만) | python v36 | 2026-11-06
 patchnotes/python.json | BeaconScript define ore 항목 (en만) | python v37 | 2026-11-06
+patchnotes/python.json | BeaconScript define structure·build 항목 (en만) | python v38 | 2026-11-06
