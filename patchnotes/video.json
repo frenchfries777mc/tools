@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v28",
+   "title": "미리보기 속도·선택 확대·가운데 자르기·보조선",
+   "items": [
+    "재생 버튼 옆 '1x' 버튼으로 미리보기 속도를 1배 → 1.5배 → 2배 → 0.5배로 바꿔요. 내보낼 때는 항상 1배예요",
+    "'🔍 선택 확대': 고른 클립이 타임라인에 꽉 차게 확대해요",
+    "자르기에 '가운데 1:1 / 9:16 / 4:5' 버튼이 생겼어요. 가로 영상에서 한가운데를 한 번에 잘라 줘요",
+    "프로젝트 탭에 '미리보기 보조선'(3분할 격자, 안전 영역, 가운데 십자)이 생겼어요. 내보낼 때는 안 들어가요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Preview speed, zoom to selection, centre crop, guides",
+     "items": [
+      "The '1x' button next to play cycles preview speed 1x, 1.5x, 2x, 0.5x; exports are always 1x",
+      "'🔍 Zoom to selection' zooms the timeline so the selected clip fills it",
+      "Crop has 'Centre 1:1 / 9:16 / 4:5' buttons to cut the middle of a landscape clip in one click",
+      "The Project tab has 'Preview guides' (thirds grid, safe area, centre cross); they are never exported"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v27",
    "title": "자동 색 보정·그라데이션 도형·둥근 글자 상자·끝까지 늘리기",
    "items": [
