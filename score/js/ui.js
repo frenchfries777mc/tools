@@ -305,7 +305,7 @@
       drag = { x0: e.clientX, y0: e.clientY, t0: Date.now(), pt, h, type: e.pointerType, moved: false, shift: e.shiftKey };
       if (h) {
         const it = hitItem(h, pt.x, pt.y, A.ui.voice);
-        if (it && !it.rest && e.pointerType !== 'touch' && A.sel && selSet().has(key(it.pi, it.m, it.v, it.i)) && !e.shiftKey) {
+        if (it && !A.ui.erase && !it.rest && e.pointerType !== 'touch' && A.sel && selSet().has(key(it.pi, it.m, it.v, it.i)) && !e.shiftKey) {
           drag.pitch = { it, pos0: Math.round((it.top + STAFF - pt.y) / 5), orig: FS.clone(it.e.p), changed: false };
           try { sheet.setPointerCapture(e.pointerId); } catch (er) { /* ignore */ }
         }
@@ -333,6 +333,10 @@
       const pt = d.pt, h = d.h;
       if (!h) { if (A.sel) { A.sel = null; UI.draw(); UI.panel(); } return; }
       const it = hitItem(h, pt.x, pt.y, A.ui.voice), inputMode = A.ui.tool === 'input';
+      if (A.ui.erase) {
+        if (it) { FS.clearEvent(A.score, it.pi, it.m, it.v, it.i); A.sel = null; UI.commit('지움'); }
+        return;
+      }
       if (it && !(inputMode && (it.rest || A.ui.chord))) {
         select(it.pi, it.m, it.v, it.i, d.shift);
         if (!it.rest) FS.audio.preview(A.score, it.pi, it.e.p[it.e.p.length - 1]);
@@ -404,8 +408,8 @@
     const u = A.ui, b = (cls, act, v, label, title, on, extra) => `<button class="tl ${cls || ''}${on ? ' on' : ''}" data-act="${act}" data-v="${v == null ? '' : v}" title="${title}" aria-label="${title}" aria-pressed="${!!on}"${extra || ''}>${label}</button>`;
     let h = '';
     const I = FS.icons;
-    h += b('', 'tool', 'input', I.pencil, '입력 도구 — 누르면 음표가 찍혀요', u.tool === 'input');
-    h += b('', 'tool', 'select', I.arrow, '선택 도구', u.tool === 'select');
+    h += b('', 'tool', 'input', I.pencil, '입력 도구 — 누르면 음표가 찍혀요', u.tool === 'input' && !u.erase);
+    h += b('', 'tool', 'select', I.arrow, '선택 도구', u.tool === 'select' && !u.erase);
     h += '<div class="tsep"></div>';
     DURS.forEach((d, k) => { h += b('', 'dur', d[0], I.byDur[d[0]], d[2] + ' (' + (7 - k) + ')', u.dur === d[0]); });
     h += b('', 'dot', '', I.dot, '점음표 (.)', u.dot);
@@ -418,14 +422,14 @@
     for (let v = 0; v < 4; v++) h += b('', 'voice', v, I.voice(v), (v + 1) + '번 성부', u.voice === v);
     h += '<div class="tsep"></div>';
     h += b('', 'pad', '', I.piano, '건반 보이기/숨기기', u.pad);
-    h += b('', 'del', '', I.trash, '고른 음표 지우기 (Delete)', false);
+    h += b('', 'del', '', I.trash, '지우개 — 켜고 음표를 누르면 지워져요 (고른 음표는 Delete 키)', u.erase);
     $('tools').innerHTML = h;
     $('pad').hidden = !u.pad;
     if (u.pad) buildPad();
   }
   UI.renderTools = renderTools;
   Object.assign(UI.actions, {
-    tool: (el) => { A.ui.tool = el.dataset.v; renderTools(); },
+    tool: (el) => { A.ui.tool = el.dataset.v; A.ui.erase = false; renderTools(); },
     dur: (el) => UI.setDur(+el.dataset.v, null),
     dot: () => UI.toggleDot(),
     rest: () => { A.ui.rest = !A.ui.rest; renderTools(); },
@@ -434,7 +438,7 @@
     chord: () => { A.ui.chord = !A.ui.chord; renderTools(); },
     voice: (el) => { A.ui.voice = +el.dataset.v; if (A.sel && A.score.parts[A.sel.pi].m[A.sel.m][A.ui.voice]) A.sel.v = A.ui.voice; renderTools(); UI.draw(); },
     pad: () => { A.ui.pad = !A.ui.pad; renderTools(); },
-    del: () => UI.deleteSel()
+    del: () => { A.ui.erase = !A.ui.erase; renderTools(); }
   });
 
   /* ================= on-screen keyboard (touch friendly) ================= */
