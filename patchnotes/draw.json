@@ -4,6 +4,48 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v18",
+   "title": "Fry Draw 18: 단계 만들기, 크기 표시, 윤곽선 보기, 확대 버튼",
+   "items": [
+    "단계 만들기: 두 도형을 고르고 중간 개수를 정하면, 아래 도형에서 위 도형으로 위치·크기·각도·색·굵기·투명도가 조금씩 변하는 도형들이 사이에 만들어져요",
+    "그리는 동안과 크기를 바꾸는 동안 커서 옆에 가로×세로가 나와요. 직선은 길이와 각도, 옮길 때는 옮긴 거리, 돌릴 때는 각도를 보여줘요",
+    "윤곽선만 보기: 캔버스 탭에서 켜면 색 없이 선만 보여서 겹친 도형을 살피기 좋아요. 내보내기에는 영향이 없어요",
+    "캔버스 탭에 '고른 도형에 맞춤', '화면에 맞춤', '100%' 보기 버튼이 생겼어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 18: blend steps, live measurements, outline view, zoom buttons",
+     "items": [
+      "Blend steps: select two shapes and set the number of in-betweens; position, size, angle, colour, stroke width and opacity change step by step from the lower to the upper shape",
+      "A live label next to the cursor shows width x height while drawing and resizing, length and angle for lines, distance while moving and degrees while rotating",
+      "Outline view: toggle in the Canvas tab to see only outlines, without affecting export",
+      "Canvas tab gains Zoom to selection, Fit to screen and 100% buttons"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
+   "build": "v17",
+   "title": "Fry Draw 17: 글상자 줄바꿈, 선 그라데이션",
+   "items": [
+    "글상자: 글자를 고르고 '글상자 너비'를 정하면 그 너비에서 글이 알아서 줄바꿈돼요. 영어는 낱말 단위로, 한글은 글자 단위로 줄이 바뀌고 왼쪽·가운데·오른쪽 맞춤도 그대로 돼요",
+    "선도 그라데이션으로 칠할 수 있어요 (선형·원형, 두 색과 방향). 스포이트와 스타일 복사에도 같이 따라가요",
+    "글꼴 목록에 맑은 고딕, 애플 고딕, 나눔고딕, Arial, Times New Roman, Verdana를 더했어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 17: text boxes with wrapping, gradient strokes",
+     "items": [
+      "Text box: set a box width on a text and it wraps automatically, by word for Latin text and by character for Korean, honouring left, centre and right alignment",
+      "Strokes can now use linear or radial gradients with two colours and a direction; eyedropper and style copy carry them along",
+      "Font list gains Malgun Gothic, Apple SD Gothic Neo, Nanum Gothic, Arial, Times New Roman and Verdana"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v16",
    "title": "Fry Draw 16: 모양 비틀기, 선 따라 놓기",
    "items": [
