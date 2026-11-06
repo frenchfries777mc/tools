@@ -4,6 +4,24 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v22",
+   "title": "Fry Draw 22: 손떨림 보정",
+   "items": [
+    "손떨림 보정: 자유 선과 붓에서 값을 올리면 손이 떨리거나 마우스가 거칠어도 선이 매끄럽게 정리돼요 (0~20)",
+    "자유 선과 붓을 고른 채로 막 그린 도형이 골라져 있어도 옵션이 계속 보여요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 22: stroke stabiliser",
+     "items": [
+      "Stabiliser: raise the value for freehand pen and brush to smooth out shaky hands or rough mouse input (0 to 20)",
+      "Pen and brush options stay visible even while the stroke you just drew is selected"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v21",
    "title": "Fry Draw 21: 그림 다루기 (배경 지우기, 그림 바꾸기, 캔버스에 맞추기)",
    "items": [
