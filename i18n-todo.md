@@ -78,3 +78,4 @@ patchnotes/video.json | Fry Video v15 색 보정·샤프닝·단축키·프로�
 patchnotes/video.json | Fry Video v16 흔들림 줄이기·클립 묶기 (en 번역 없음) | video v16 | 2026-11-06
 patchnotes/score.json | Fry Score v13 항목 (en만) | score v13 | 2026-11-06
 score/app.js | Fry Score v13 한국어 메시지·버튼 | score v13 | 2026-11-06
+patchnotes/draw.json | Fry Draw v13 항목 (en만), draw/app.js 심볼·묶음 안 고치기 한국어 문구 | draw v13 | 2026-11-06
