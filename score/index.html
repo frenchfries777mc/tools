@@ -75,6 +75,8 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
   .brand,.tbtn .lb{display:none;} .stagew{padding:12px;}
 }
 .footer-copy{display:none;}
+.sr{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,#sheet:focus-visible{outline:2px solid var(--fry);outline-offset:2px;}
 </style>
 </head>
 <body>
@@ -86,22 +88,23 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
   <button class="tbtn" id="bRedo" title="다시 (Ctrl+Y)">↷<span class="lb"> 다시</span></button>
   <span class="sp"></span>
   <button class="tbtn pri" id="bPlay">▶ 재생</button>
-  <button class="tbtn" id="bStop">■</button>
-  <button class="tbtn" id="bZm">−</button><span class="zoom" id="zl">100%</span><button class="tbtn" id="bZp">+</button><button class="tbtn" id="bZf" title="너비에 맞추기">↔</button>
+  <button class="tbtn" id="bStop" aria-label="정지" title="정지">■</button>
+  <button class="tbtn" id="bZm" aria-label="축소" title="축소">−</button><span class="zoom" id="zl">100%</span><button class="tbtn" id="bZp" aria-label="확대" title="확대">+</button><button class="tbtn" id="bZf" title="너비에 맞추기">↔</button>
   <button class="tbtn" id="bOpen">열기</button>
   <button class="tbtn pri" id="bSave">받기 ▾</button>
 </div>
+<div id="live" class="sr" role="status" aria-live="polite"></div>
 <div class="main">
   <div class="tools" id="tools"></div>
-  <div class="desk" id="desk"><div class="stagew"><svg id="sheet" xmlns="http://www.w3.org/2000/svg"></svg></div></div>
+  <div class="desk" id="desk"><div class="stagew"><svg id="sheet" role="img" tabindex="0" xmlns="http://www.w3.org/2000/svg"></svg></div></div>
   <div class="panel">
-    <div class="ptabs" id="ptabs"><button data-p="note" class="on">음표</button><button data-p="song">악보</button><button data-p="text">글자로</button><button data-p="ai">AI</button></div>
+    <div class="ptabs" id="ptabs" role="tablist"><button data-p="note" class="on">음표</button><button data-p="song">악보</button><button data-p="text">글자로</button><button data-p="ai">AI</button></div>
     <div class="pbody" id="pbody"></div>
   </div>
 </div>
 <input type="file" id="fileIn" accept=".fscore,.json,.mid,.midi,.musicxml,.xml,application/json" hidden>
 <script src="../ai.js?v=ai36.l21"></script>
-<script src="app.js?v=sc11"></script>
+<script src="app.js?v=sc12"></script>
 <script src="../pwa.js" defer></script>
 <script src="../ping.js" defer></script>
 </body>
