@@ -139,3 +139,5 @@ patchnotes/draw.json | Fry Draw v25 항목 (en만), draw/app.js 버전 저장·�
 patchnotes/python.json | BeaconScript define item·mob 항목 (en만) | python v36 | 2026-11-06
 patchnotes/python.json | BeaconScript define ore 항목 (en만) | python v37 | 2026-11-06
 patchnotes/python.json | BeaconScript define structure·build 항목 (en만) | python v38 | 2026-11-06
+patchnotes/score.json | Fry Score v36 항목 (en만) | score v36 | 2026-11-06
+score/app.js | Fry Score v36 한국어 메시지·버튼 | score v36 | 2026-11-06
