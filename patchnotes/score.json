@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v12",
+   "title": "중간에 조 바꾸기, 접근성, 파일 안전 검사",
+   "items": [
+    "마디마다 조표 바꾸기: 그 마디부터 조표가 새로 그려지고(줄 시작에서는 줄머리 조표), 이후 입력·음 높이 이동·끌기가 바뀐 조에 맞춰짐, MusicXML 저장·읽기 지원",
+    "화면 읽기 프로그램 지원: 고른 음표를 읽어 주는 안내 영역, 도구 단추 설명과 눌림 상태, 탭 역할 표시, 악보 요약, 키보드 초점 표시",
+    "열기·보관함·되돌리기 때 악보 파일을 검사해서 깨진 값(엉뚱한 박자·음 높이·길이)은 안전한 값으로 고침",
+    "되돌리기·다시 단추에 남은 단계 수 표시"
+   ],
+   "tr": {
+    "en": {
+     "title": "Mid-score key changes, accessibility, safer file loading",
+     "items": [
+      "Key signature changes at any measure: drawn from that measure on (and in the system header), input/move/drag follow the new key, saved to and read from MusicXML",
+      "Screen-reader support: live announcement of the selected note, button labels and pressed state, tab roles, score summary and visible keyboard focus",
+      "Score files are validated on open, library load and undo; bad values (time signature, pitch, duration) are replaced with safe ones",
+      "Undo/redo buttons show how many steps are left"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v11",
    "title": "드럼 악보·새 악기 4종·쪽 나눠 인쇄",
    "items": [
