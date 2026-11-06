@@ -116,3 +116,4 @@ patchnotes/video.json | Fry Video v24 박자 편집·이어 붙이기·처음 �
 patchnotes/video.json | Fry Video v25 시간으로 가기·자동 줄바꿈·크레딧·반복·자막 밀기 (en 번역 없음) | video v25 | 2026-11-06
 patchnotes/video.json | Fry Video v26 소리 톤·효과 복사 붙여넣기·자석 끄기 (en 번역 없음) | video v26 | 2026-11-06
 patchnotes/video.json | Fry Video v27 자동 색 보정·그라데이션 도형·둥근 글자 상자·끝까지 늘리기 (en 번역 없음) | video v27 | 2026-11-06
+patchnotes/video.json | Fry Video v28 미리보기 속도·선택 확대·가운데 자르기·보조선 (en 번역 없음) | video v28 | 2026-11-06
