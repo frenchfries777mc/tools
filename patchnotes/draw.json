@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v11",
+   "title": "Fry Draw 11: 붓, 도형 모음, 벡터로 따기, 비슷한 도형 고르기",
+   "items": [
+    "붓 도구: 천천히 그으면 굵고 빠르게 그으면 가늘어져요. 펜은 누르는 힘도 반영하고, 처음과 끝을 뾰족하게 할 수 있어요",
+    "도형 모음: 말풍선·톱니·고리 등 16가지 도형을 끌어서 그려요",
+    "그림 벡터로 따기: 불러온 그림의 윤곽을 기준·단계·단순화 정도를 정해 도형으로 바꿔요",
+    "비슷한 도형 고르기: 같은 색·같은 종류의 도형을 한 번에 골라요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 11: brush, shape library, image trace, select similar",
+     "items": [
+      "Brush tool: strokes get thicker when slow and thinner when fast, respect pen pressure, and can taper at both ends",
+      "Shape library: draw 16 shapes such as speech bubble, gear and ring by dragging",
+      "Trace image to vector: convert a placed picture into shapes with threshold, levels and simplify controls",
+      "Select similar: pick all shapes with the same colour or type at once"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v10",
    "title": "Fry Draw 10: 여러 페이지, 색 보정, 두 손가락 확대·이동",
    "items": [
