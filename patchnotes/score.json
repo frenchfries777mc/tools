@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v18",
+   "title": "이조 악기·곡 정보·링크 공유",
+   "items": [
+    "이조 악기 설정(B♭·E♭·F·옥타브)으로 소리만 옮겨 재생",
+    "부제·작사·저작권 글을 악보에 표시",
+    "한 줄에 마디 수 고정, 파트 이름을 오선 위에 표시",
+    "링크로 공유: 악보를 링크 하나로 복사해 열 수 있어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Transposing instruments, title info, share link",
+     "items": [
+      "Transposing instruments (B-flat, E-flat, F, octave) shift playback pitch",
+      "Subtitle, lyricist and copyright text printed on the score",
+      "Fixed measures per system and part names above the staff",
+      "Share link: copy the whole score as a single link that opens it"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v17",
    "title": "건반으로 쓰기, 도레미 표시, 색깔 음표, 손가락 번호",
    "items": [
