@@ -415,7 +415,7 @@
     h += b('', 'dot', '', I.dot, '점음표 (.)', u.dot);
     h += b('', 'rest', '', I.rest, '쉼표 입력 (R)', u.rest);
     h += '<div class="tsep"></div>';
-    h += b('', 'acc', 1, I.sharp, '샤프 (올림표)', u.acc === 1) + b('', 'acc', -1, I.flat, '플랫 (내림표)', u.acc === -1) + b('', 'acc', 0, I.natural, '제자리표', u.acc === 0);
+    h += b('', 'acc', 1, I.sharp, '샤프 (올림표)', u.acc === 1) + b('', 'acc', -1, I.flat, '플랫 (내림표)', u.acc === -1) + b('', 'acc', 0, I.natural, '제자리표', u.acc === 0) + b('', 'acc', 2, I.dsharp, '겹올림표 (더블 샤프)', u.acc === 2) + b('', 'acc', -2, I.dflat, '겹내림표 (더블 플랫)', u.acc === -2);
     h += b('', 'tie', '', I.tie, '붙임줄 (T)', false);
     h += b('', 'chord', '', I.chord, '화음 쌓기 (켜면 같은 음표에 음이 쌓여요)', u.chord);
     h += '<div class="tsep"></div>';
@@ -438,6 +438,7 @@
     chord: () => { A.ui.chord = !A.ui.chord; renderTools(); },
     voice: (el) => { A.ui.voice = +el.dataset.v; if (A.sel && A.score.parts[A.sel.pi].m[A.sel.m][A.ui.voice]) A.sel.v = A.ui.voice; renderTools(); UI.draw(); },
     pad: () => { A.ui.pad = !A.ui.pad; renderTools(); },
+    delsel: () => UI.deleteSel(),
     del: () => { A.ui.erase = !A.ui.erase; renderTools(); }
   });
 
@@ -474,8 +475,9 @@
     if (s && e) {
       const evs = UI.selEvents(), d = FS.dur(e), names = { 64: '온음표', 32: '2분음표', 16: '4분음표', 8: '8분음표', 4: '16분음표', 2: '32분음표', 1: '64분음표' };
       h += `<div class="sec"><h4>고른 음표 · ${FS.esc(S.parts[s.pi].name)} ${s.m + 1}번째 마디${evs.length > 1 ? ' · ' + evs.length + '개' : ''}</h4><div class="note">${e.p.length ? e.p.map(FS.pname).join(' ') + ' · ' : '쉼표 · '}${names[d.base]}${'•'.repeat(d.dots)}${e.tie ? ' · 붙임줄' : ''}</div>`;
-      h += '<div class="btns"><button class="tbtn" data-act="shift" data-v="1">+반음</button><button class="tbtn" data-act="shift" data-v="-1">−반음</button><button class="tbtn" data-act="oct" data-v="1">+1옥타브</button><button class="tbtn" data-act="oct" data-v="-1">−1옥타브</button></div>';
-      h += '<div class="btns"><button class="tbtn" data-act="copy">복사</button><button class="tbtn" data-act="cut">잘라내기</button><button class="tbtn" data-act="paste">붙여넣기</button><button class="tbtn" data-act="del">지우기</button></div></div>';
+      const sb = (act, v, ic, name) => `<button class="tbtn sb" data-act="${act}"${v != null ? ` data-v="${v}"` : ''} title="${name}" aria-label="${name}">${ic}</button>`, Y = FS.sym;
+      h += '<div class="btns sym">' + sb('shift', 1, FS.icons.sharp, '반음 올리기') + sb('shift', -1, FS.icons.flat, '반음 내리기') + sb('oct', 1, Y.octUp, '한 옥타브 올리기') + sb('oct', -1, Y.octDn, '한 옥타브 내리기')
+        + sb('copy', null, Y.copy, '복사') + sb('cut', null, Y.cut, '잘라내기') + sb('paste', null, Y.paste, '붙여넣기') + sb('delsel', null, Y.trash, '지우기') + '</div></div>';
     } else {
       h += '<div class="sec"><h4>음표 입력</h4><div class="note">오선을 누르면 위쪽 도구 모음에서 고른 길이의 음표가 찍혀요. 키보드에서 <b>A~G</b>는 음, <b>1~7</b>은 길이(5=4분음표), <b>R</b>은 쉼표, <b>↑↓</b>는 음 높이, <b>←→</b>는 이동, <b>Shift</b>를 누르면 범위·화음, <b>Space</b>는 재생이에요. 휴대폰에서는 🎹 건반을 켜 보세요.</div></div>';
       h += '<div class="btns"><button class="tbtn" data-act="paste">붙여넣기</button></div>';

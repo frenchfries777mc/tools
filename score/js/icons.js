@@ -14,6 +14,8 @@
     sharp: svg('<g stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="9" y1="3.5" x2="9" y2="20.5"/><line x1="15" y1="2.5" x2="15" y2="19.5"/><line x1="5.5" y1="9.5" x2="18.5" y2="6.8" stroke-width="3"/><line x1="5.5" y1="17.2" x2="18.5" y2="14.5" stroke-width="3"/></g>'),
     flat: svg('<path d="M8.5 2.5v18M8.5 20.5c9-4.2 9.5-9.4 0-9.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'),
     natural: svg('<g stroke="currentColor" stroke-width="1.9" stroke-linecap="round" fill="none"><path d="M8 3v13.5l9-2.4"/><path d="M16 21V7.5l-8 2.4"/></g>'),
+    dsharp: svg('<path d="M6.5 6.5l11 11M17.5 6.5l-11 11" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" fill="none"/>'),
+    dflat: svg('<path d="M5.5 2.5v17M5.5 19.5c6-3.2 6.5-7.4 0-7.6M13.5 2.5v17M13.5 19.5c6-3.2 6.5-7.4 0-7.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'),
     tie: svg('<path d="M3.5 9c3 8.5 14 8.5 17 0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="4" cy="8" r="1.7" fill="currentColor"/><circle cx="20" cy="8" r="1.7" fill="currentColor"/>'),
     chord: svg(head(10, 6.5, true) + head(10, 12.5, true) + head(10, 18.5, true) + '<line x1="14.3" y1="19" x2="14.3" y2="3.5" stroke="currentColor" stroke-width="1.8"/>'),
     pencil: svg('<path d="M4 20l1-4.5L16.5 4a2 2 0 0 1 3 0l.5.5a2 2 0 0 1 0 3L8.5 19z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 6.5l3.5 3.5" stroke="currentColor" stroke-width="1.8"/>'),
