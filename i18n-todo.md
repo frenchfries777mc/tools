@@ -126,3 +126,5 @@ patchnotes/score.json | Fry Score v32 항목 (en만) | score v32 | 2026-11-06
 score/app.js | Fry Score v32 한국어 메시지·버튼 | score v32 | 2026-11-06
 patchnotes/score.json | Fry Score v33 항목 (en만) | score v33 | 2026-11-06
 score/app.js | Fry Score v33 한국어 메시지·버튼 | score v33 | 2026-11-06
+patchnotes/score.json | Fry Score v34 항목 (en만) | score v34 | 2026-11-06
+score/app.js | Fry Score v34 한국어 메시지·버튼 | score v34 | 2026-11-06

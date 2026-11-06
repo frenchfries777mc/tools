@@ -6,7 +6,7 @@
     score: null, sel: null, L: null, zoom: 1, tab: 'note', hist: [], hi: -1, clip: null, lastAbs: {},
     ui: { dur: 16, dot: false, rest: false, acc: null, chord: false, voice: 0, tool: 'input', pad: false }
   });
-  const UI = (FS.ui = { actions: {}, changes: {}, sections: { note: [], song: [], parts: [] }, keys: [] });
+  const UI = (FS.ui = { actions: {}, changes: {}, sections: { note: [], song: [], parts: [] }, tabs: {}, keys: [] });
   let sheet, desk;
 
   /* ================= history / drawing ================= */
@@ -497,6 +497,8 @@
       h += `<div class="row"><label>음자리표</label><select data-chg="pclef" data-i="${i}">${Object.keys(FS.CLEFS).map((c) => `<option value="${c}"${P.clef === c ? ' selected' : ''}>${FS.CLEFS[c].name}</option>`).join('')}</select></div>`;
       h += `<div class="row"><label>악기</label><select data-chg="pinst" data-i="${i}">${FS.INSTS.map((x) => `<option value="${x[0]}"${P.inst === x[0] ? ' selected' : ''}>${x[1]}</option>`).join('')}</select></div>`;
       h += `<div class="row"><label>TAB 악보</label><select data-chg="ptab" data-i="${i}"><option value="">없음</option>${Object.keys(FS.TABS).map((k) => `<option value="${k}"${P.tab === k ? ' selected' : ''}>${{ guitar: '기타 6줄', bass: '베이스 4줄', ukulele: '우쿨렐레' }[k]}</option>`).join('')}</select></div>`;
+      h += `<div class="row"><label>소리 높이</label><select data-chg="ptrans" data-i="${i}">${[[0, '그대로'], [-2, 'B♭ 악기 (−2)'], [-3, 'A 악기 (−3)'], [-7, 'F 호른 (−7)'], [-9, 'E♭ 알토 (−9)'], [12, '한 옥타브 위'], [-12, '한 옥타브 아래']].map((x) => `<option value="${x[0]}"${(P.trans || 0) === x[0] ? ' selected' : ''}>${x[1]}</option>`).join('')}</select></div>`;
+      h += `<div class="row"><label class="chk"><input type="checkbox" data-chg="psolo" data-i="${i}"${P.solo ? ' checked' : ''}> 이 파트만 듣기</label></div>`;
       h += `<div class="row"><label>음량</label><input type="range" min="0" max="100" value="${P.vol}" data-chg="pvol" data-i="${i}"><span class="v">${P.vol}</span></div>`;
       h += `<div class="row"><label>좌우</label><input type="range" min="-100" max="100" value="${Math.round((P.pan || 0) * 100)}" data-chg="ppan" data-i="${i}"></div>`;
       h += `<label class="chk"><input type="checkbox" data-chg="pmute" data-i="${i}"${P.mute ? ' checked' : ''}> 소리 끄기</label>`;
@@ -512,7 +514,7 @@
     const body = $('pbody'), st = body.scrollTop;
     // do not rebuild while a field inside the panel has focus (typing)
     if (document.activeElement && body.contains(document.activeElement) && /INPUT|TEXTAREA/.test(document.activeElement.tagName) && document.activeElement.type !== 'range' && document.activeElement.type !== 'checkbox') return;
-    body.innerHTML = A.tab === 'song' ? songTab() : A.tab === 'parts' ? partsTab() : noteTab();
+    body.innerHTML = A.tab === 'song' ? songTab() : A.tab === 'parts' ? partsTab() : UI.tabs[A.tab] ? UI.tabs[A.tab]() : noteTab();
     body.scrollTop = st;
   };
 
@@ -548,6 +550,8 @@
     pl: (el) => { if (el.checked) A.score.pl = true; else delete A.score.pl; UI.commit(); },
     pname: (el) => { A.score.parts[+el.dataset.i].name = el.value; UI.commit(); },
     ptab: (el) => { const P = A.score.parts[+el.dataset.i]; if (el.value) P.tab = el.value; else delete P.tab; UI.commit(); },
+    ptrans: (el) => { const P = A.score.parts[+el.dataset.i], v = +el.value; if (v) P.trans = v; else delete P.trans; UI.commit(); },
+    psolo: (el) => { const P = A.score.parts[+el.dataset.i]; if (el.checked) P.solo = true; else delete P.solo; UI.commit(); },
     pclef: (el) => { A.score.parts[+el.dataset.i].clef = el.value; UI.commit(); },
     pinst: (el) => { A.score.parts[+el.dataset.i].inst = el.value; UI.commit(); },
     pvol: (el) => { A.score.parts[+el.dataset.i].vol = +el.value; UI.commit(); },
