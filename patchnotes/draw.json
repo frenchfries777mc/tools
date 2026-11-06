@@ -4,6 +4,30 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v14",
+   "title": "Fry Draw 14: SVG 가져오기 대폭 개선, 붓 종류",
+   "items": [
+    "SVG 가져오기: 그라데이션·무늬·클리핑·마스크·필터 정의와 <style> 클래스·style 속성, 재사용 요소(use), 그림(data 이미지), 묶음 안 도형이 모두 따로 고칠 수 있는 도형으로 들어와요",
+    "회전·확대 변환이 있는 도형은 회전 중심을 맞춰서 돌릴 때 자연스럽게 움직여요. 기울임은 그대로 보존돼요",
+    "가져온 SVG를 다시 SVG·PNG·PDF로 내보내도 그라데이션과 클립이 그대로 나와요",
+    "붓 종류: 기본·가는 펜·마커·형광펜·캘리그래피·붓펜·굵은 붓을 한 번에 고르고, 캘리그래피는 펜촉 각도를 정해요",
+    "도형을 옮긴 뒤 변환이 겹쳐 적히던 문제를 고쳤어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 14: much better SVG import, brush presets",
+     "items": [
+      "SVG import: gradients, patterns, clip paths, masks, filters, CSS classes and style attributes, use elements, embedded images and grouped shapes now arrive as separate editable objects",
+      "Rotated and scaled shapes get a proper rotation centre so they turn naturally; skews are preserved",
+      "Imported gradients and clips survive export to SVG, PNG and PDF",
+      "Brush presets: basic, fine pen, marker, highlighter, calligraphy, brush pen and big brush, with an adjustable nib angle for calligraphy",
+      "Fixed duplicated transform attributes after moving imported shapes"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v13",
    "title": "Fry Draw 13: 심볼과 묶음 안 고치기",
    "items": [
