@@ -79,3 +79,4 @@ patchnotes/video.json | Fry Video v16 흔들림 줄이기·클립 묶기 (en 번
 patchnotes/score.json | Fry Score v13 항목 (en만) | score v13 | 2026-11-06
 score/app.js | Fry Score v13 한국어 메시지·버튼 | score v13 | 2026-11-06
 patchnotes/video.json | Fry Video v17 전환 5개·빠르기 프리셋·글자 움직임 2개 (en 번역 없음) | video v17 | 2026-11-06
+patchnotes/video.json | Fry Video v18 미리보기에서 바로 옮기고 크기 바꾸기 (en 번역 없음) | video v18 | 2026-11-06
