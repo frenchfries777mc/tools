@@ -61,7 +61,7 @@
 
   UI.draw = function () {
     validateSel();
-    const S = A.score, L = (A.L = FS.layout(S, { W: 1000 }));
+    const S = A.score, L = (A.L = FS.layout(S, { W: A.W || 1000 }));
     const s = A.sel;
     let hl = {};
     if (s) hl = { hlM: s.m, hlP: s.pi };
@@ -83,13 +83,23 @@
     else if (bot > dr.bottom - 10) desk.scrollTop += bot - dr.bottom + 30;
   }
   UI.setZoom = (z) => { A.zoom = clamp(z, 0.3, 2.5); UI.draw(); };
-  UI.fit = () => { UI.setZoom(Math.max(0.6, (desk.clientWidth - 40) / 1000)); };
+  UI.fit = () => {
+    const narrow = desk.clientWidth < 700, w = narrow ? 640 : 1000;
+    if ((A.W || 1000) !== w) { A.W = w; A.zoom = 1; }
+    UI.setZoom(Math.max(0.35, (desk.clientWidth - (narrow ? 20 : 40)) / w));
+  };
 
   /* ================= selection & note entry ================= */
   function select(pi, m, v, i, extend) {
     if (extend && A.sel && A.sel.pi === pi && A.sel.v === v) { A.sel.m2 = m; A.sel.i2 = i; }
     else A.sel = { pi, m, v, i };
     UI.draw(); UI.panel();
+    announce();
+  }
+  function announce() {
+    const live = $('live'), e = A.sel ? UI.curEvent() : null; if (!live || !e) return;
+    const d = FS.dur(e), nm = { 64: '온음표', 32: '2분음표', 16: '4분음표', 8: '8분음표', 4: '16분음표', 2: '32분음표', 1: '64분음표' }[d.base] || '음표';
+    live.textContent = `${A.score.parts[A.sel.pi].name} ${A.sel.m + 1}마디, ${e.p.length ? e.p.map(FS.pname).join(' ') : '쉼표'} ${nm}`;
   }
   UI.select = select;
   function curDur() { return A.ui.dur * (A.ui.dot ? 1.5 : 1); }
