@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v23",
+   "title": "모자이크·필름 입자·카메라 흔들림·영화 띠·음악 길이 맞추기",
+   "items": [
+    "색 효과에 '모자이크'와 '필름 입자(지글지글)'가 생겼어요",
+    "클립 '화면'에 '카메라 흔들림'이 생겼어요. 손으로 찍은 듯한 떨림을 줘요",
+    "프로젝트 탭에 '영화 같은 검은 띠'(2.39:1, 2:1, 1.85:1)가 생겼어요. 내보낸 영상에도 들어가요",
+    "소리 클립에 '영상 끝에 맞춰 자르기'가 생겼어요. 음악이 영상보다 길면 끝에 맞춰 잘라 주고 서서히 줄여요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Mosaic, film grain, camera shake, cinema bars, fit music to video",
+     "items": [
+      "Colour effects gain 'Mosaic' and 'Film grain'",
+      "Clip 'Picture' has 'Camera shake' for a hand-held look",
+      "Project tab has 'Cinema bars' (2.39:1, 2:1, 1.85:1), included in exports",
+      "Sound clips have 'Fit to end of video': trims music to the end of the video and fades it out"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v22",
    "title": "흐린 배경 채우기·글자 맞춤·좌우 소리·파일 바꾸기",
    "items": [
