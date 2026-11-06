@@ -4,6 +4,50 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v21",
+   "title": "클립 이름·앞뒤 자르기·편집점 이동",
+   "items": [
+    "클립 설정에서 '이름'을 적으면 타임라인 클립에 그 이름이 보여요",
+    "'◧ 앞 자르기' / '◨ 뒤 자르기': 재생 막대 앞쪽이나 뒤쪽을 한 번에 잘라내요",
+    "⇤ ⇥ 버튼(또는 키보드 ↑ ↓)으로 이전/다음 편집점(클립 시작·끝, 표시)으로 바로 이동해요",
+    "'같은 색 표시 모두 고르기', '이 줄 클립 모두 고르기'로 여러 클립을 한 번에 골라요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Clip names, trim to playhead, jump between edits",
+     "items": [
+      "Give a clip a name in its settings and it shows on the timeline",
+      "'Trim start' / 'Trim end' remove everything before or after the playhead in one step",
+      "The ⇤ ⇥ buttons (or Up/Down keys) jump to the previous/next edit point (clip starts, ends, markers)",
+      "'Select all with this colour label' and 'Select all clips on this track' pick many clips at once"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
+   "build": "v20",
+   "title": "장면 자동 나누기·소리 크기 표시·내보낼 구간 고르기",
+   "items": [
+    "영상 클립 설정에 '장면이 바뀌는 곳에서 자동으로 자르기'가 생겼어요. 숫자가 낮을수록 더 잘게 잘라요",
+    "재생 버튼 옆에 소리 크기 표시 막대가 생겼어요. 너무 크면 노랑, 빨강으로 바뀌어요",
+    "글자 클립 설정에 '이 글자 모양을 모든 글자 클립에 적용'이 생겼어요 (글자 내용과 위치는 그대로예요)",
+    "내보낼 때 '전체 / 지금 위치부터 끝까지 / 고른 클립만' 중에서 구간을 고를 수 있어요 (GIF도 돼요)"
+   ],
+   "tr": {
+    "en": {
+     "title": "Auto scene split, level meter, export range",
+     "items": [
+      "Video clip settings now have 'Auto-cut where the scene changes'; a lower number cuts into more pieces",
+      "A volume meter next to the play button turns yellow and then red when the sound is too loud",
+      "Text clip settings have 'Apply this text style to all text clips' (the words and position stay as they are)",
+      "When exporting you can pick the range: everything, from the playhead to the end, or the selected clip (GIF too)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v19",
    "title": "타임라인 미리보기 그림·색 표시·반복 재생",
    "items": [

@@ -87,12 +87,17 @@ patchnotes/score.json | Fry Score v15 항목 (en만) | score v15 | 2026-11-06
 score/app.js | Fry Score v15 한국어 메시지·버튼 | score v15 | 2026-11-06
 patchnotes/video.json | Fry Video v18 미리보기에서 바로 옮기고 크기 바꾸기 (en 번역 없음) | video v18 | 2026-11-06
 patchnotes/video.json | Fry Video v19 타임라인 미리보기 그림·색 표시·반복 재생 (en 번역 없음) | video v19 | 2026-11-06
+patchnotes/video.json | Fry Video v20 장면 자동 나누기·소리 크기 표시·내보낼 구간 고르기 (en 번역 없음) | video v20 | 2026-11-06
+video/strings.js | Fry Video 장면 나누기·내보낼 구간 UI 문구 (en 추가됨, 다른 언어 없음) | video v20 | 2026-11-06
 patchnotes/score.json | Fry Score v16 항목 (en만) | score v16 | 2026-11-06
 score/app.js | Fry Score v16 한국어 메시지·버튼 | score v16 | 2026-11-06
 patchnotes/draw.json | Fry Draw v15 항목 (en만), draw/app.js 합치기·정렬·단축키 한국어 문구 | draw v15 | 2026-11-06
 patchnotes/score.json | Fry Score v17 항목 (en만) | score v17 | 2026-11-06
 score/app.js | Fry Score v17 한국어 메시지·버튼 | score v17 | 2026-11-06
+patchnotes/draw.json | Fry Draw v16 항목 (en만), draw/app.js 모양 비틀기·선 따라 놓기 한국어 문구 | draw v16 | 2026-11-06
 patchnotes/score.json | Fry Score v18 항목 (en만) | score v18 | 2026-11-06
 score/app.js | Fry Score v18 한국어 메시지·버튼 | score v18 | 2026-11-06
 patchnotes/score.json | Fry Score v19 항목 (en만) | score v19 | 2026-11-06
 score/app.js | Fry Score v19 한국어 메시지·버튼 | score v19 | 2026-11-06
+patchnotes/draw.json | Fry Draw v17 항목 (en만), draw/app.js 글상자·선 그라데이션·글꼴 한국어 문구 | draw v17 | 2026-11-06
+patchnotes/video.json | Fry Video v21 클립 이름·앞뒤 자르기·편집점 이동 (en 번역 없음) | video v21 | 2026-11-06
