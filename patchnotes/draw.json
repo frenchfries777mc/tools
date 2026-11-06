@@ -17,6 +17,83 @@
       "Named versions: save the current drawing under a name in this browser, then load or delete it later (up to 12)",
       "Starter templates: Instagram card, YouTube thumbnail, business card, poster, invitation and logo frame in one click; edit text, colours and shapes freely"
      ]
+    },
+    "es": {
+     "title": "Fry Draw 25: versiones con nombre y plantillas de inicio",
+     "items": [
+      "Versiones con nombre: guarda el dibujo actual con un nombre en este navegador y luego cárgalo o bórralo (hasta 12)",
+      "Plantillas de inicio: tarjeta de Instagram, miniatura de YouTube, tarjeta de visita, cartel, invitación y marco de logotipo con un clic; edita texto, colores y formas libremente"
+     ]
+    },
+    "fr": {
+     "title": "Fry Draw 25 : versions nommées et modèles de départ",
+     "items": [
+      "Versions nommées : enregistre le dessin actuel sous un nom dans ce navigateur, puis charge-le ou supprime-le plus tard (jusqu'à 12)",
+      "Modèles de départ : carte Instagram, miniature YouTube, carte de visite, affiche, invitation et cadre de logo en un clic ; modifie librement le texte, les couleurs et les formes"
+     ]
+    },
+    "de": {
+     "title": "Fry Draw 25: benannte Versionen und Startvorlagen",
+     "items": [
+      "Benannte Versionen: Speichere die aktuelle Zeichnung unter einem Namen in diesem Browser und lade oder lösche sie später (bis zu 12)",
+      "Startvorlagen: Instagram-Karte, YouTube-Vorschaubild, Visitenkarte, Poster, Einladung und Logo-Rahmen mit einem Klick; Text, Farben und Formen frei bearbeiten"
+     ]
+    },
+    "ja": {
+     "title": "Fry Draw 25: 名前付きバージョンと開始テンプレート",
+     "items": [
+      "名前付きバージョン: 今の絵に名前を付けてこのブラウザに保存し、後で読み込んだり削除したりできます（最大12個）",
+      "開始テンプレート: インスタカード、YouTubeサムネイル、名刺、ポスター、招待状、ロゴの枠をワンクリックで開始。文字・色・図形は自由に編集できます"
+     ]
+    },
+    "zh": {
+     "title": "Fry Draw 25：命名版本与起始模板",
+     "items": [
+      "命名版本：把当前绘图以名称保存到此浏览器，之后可载入或删除（最多12个）",
+      "起始模板：Instagram卡片、YouTube缩略图、名片、海报、邀请函和徽标框，一键开始；可自由修改文字、颜色和形状"
+     ]
+    },
+    "pt": {
+     "title": "Fry Draw 25: versões nomeadas e modelos iniciais",
+     "items": [
+      "Versões nomeadas: salve o desenho atual com um nome neste navegador e depois carregue ou apague (até 12)",
+      "Modelos iniciais: cartão do Instagram, miniatura do YouTube, cartão de visita, pôster, convite e moldura de logo com um clique; edite texto, cores e formas à vontade"
+     ]
+    },
+    "ru": {
+     "title": "Fry Draw 25: именованные версии и стартовые шаблоны",
+     "items": [
+      "Именованные версии: сохраните текущий рисунок под именем в этом браузере, потом загрузите или удалите его (до 12)",
+      "Стартовые шаблоны: карточка для Instagram, превью для YouTube, визитка, плакат, приглашение и рамка для логотипа в один клик; текст, цвета и фигуры можно менять"
+     ]
+    },
+    "tr": {
+     "title": "Fry Draw 25: adlandırılmış sürümler ve başlangıç şablonları",
+     "items": [
+      "Adlandırılmış sürümler: mevcut çizimi bu tarayıcıda bir adla kaydedin, sonra yükleyin veya silin (en fazla 12)",
+      "Başlangıç şablonları: Instagram kartı, YouTube küçük resmi, kartvizit, poster, davetiye ve logo çerçevesi tek tıkla; metin, renk ve şekiller serbestçe düzenlenir"
+     ]
+    },
+    "it": {
+     "title": "Fry Draw 25: versioni con nome e modelli di partenza",
+     "items": [
+      "Versioni con nome: salva il disegno attuale con un nome in questo browser, poi caricalo o eliminalo (fino a 12)",
+      "Modelli di partenza: card Instagram, miniatura YouTube, biglietto da visita, poster, invito e cornice per logo con un clic; testo, colori e forme si modificano liberamente"
+     ]
+    },
+    "pl": {
+     "title": "Fry Draw 25: nazwane wersje i szablony startowe",
+     "items": [
+      "Nazwane wersje: zapisz obecny rysunek pod nazwą w tej przeglądarce, a potem wczytaj lub usuń go (do 12)",
+      "Szablony startowe: karta na Instagram, miniatura YouTube, wizytówka, plakat, zaproszenie i ramka logo jednym kliknięciem; tekst, kolory i kształty można swobodnie zmieniać"
+     ]
+    },
+    "ar": {
+     "title": "Fry Draw 25: إصدارات مسماة وقوالب بداية",
+     "items": [
+      "إصدارات مسماة: احفظ الرسم الحالي باسم في هذا المتصفح، ثم حمّله أو احذفه لاحقًا (حتى 12)",
+      "قوالب بداية: بطاقة إنستغرام، صورة مصغرة ليوتيوب، بطاقة عمل، ملصق، دعوة وإطار شعار بنقرة واحدة؛ يمكنك تعديل النص والألوان والأشكال بحرية"
+     ]
     }
    }
   },
@@ -37,6 +114,94 @@
       "Colour harmonies: complementary, analogous, triad, tetrad, split-complementary and monochrome swatches based on the current colour, applied with one click",
       "Palette from picture: pull up to 8 dominant colours out of a picture into My colours"
      ]
+    },
+    "es": {
+     "title": "Fry Draw 24: texto en arco, armonías de color y paleta desde una imagen",
+     "items": [
+      "Texto en arco: elige cuánto curvarlo (positivo para un arco, negativo para una sonrisa) y el texto sigue un arco circular; suéltalo con Soltar texto de la ruta",
+      "Armonías de color: muestras complementarias, análogas, tríadas, tetradas, complementarias divididas y monocromáticas a partir del color actual, aplicadas con un clic",
+      "Paleta desde una imagen: extrae hasta 8 colores dominantes de una imagen a Mis colores"
+     ]
+    },
+    "fr": {
+     "title": "Fry Draw 24 : texte en arc, harmonies de couleurs et palette depuis une image",
+     "items": [
+      "Texte en arc : choisis la courbure (positive pour une arche, négative pour un sourire) et le texte suit un arc de cercle ; libère-le avec Libérer le texte du chemin",
+      "Harmonies de couleurs : nuanciers complémentaire, analogue, triade, tétrade, complémentaire scindée et monochrome à partir de la couleur actuelle, appliqués en un clic",
+      "Palette depuis une image : extrais jusqu'à 8 couleurs dominantes d'une image vers Mes couleurs"
+     ]
+    },
+    "de": {
+     "title": "Fry Draw 24: Textbogen, Farbharmonien und Palette aus Bild",
+     "items": [
+      "Textbogen: Wähle, wie stark gebogen wird (positiv für einen Bogen, negativ für ein Lächeln), der Text folgt einem Kreisbogen; mit Text vom Pfad lösen freigeben",
+      "Farbharmonien: Komplementär-, Analog-, Triadische, Tetradische, Split-Komplementär- und Monochrom-Farbfelder auf Basis der aktuellen Farbe, mit einem Klick angewendet",
+      "Palette aus Bild: bis zu 8 dominante Farben aus einem Bild in Meine Farben übernehmen"
+     ]
+    },
+    "ja": {
+     "title": "Fry Draw 24: 円弧テキスト、配色ハーモニー、写真からパレット",
+     "items": [
+      "円弧テキスト: 曲げ具合を選べます（正の値でアーチ、負の値でスマイル）。テキストは円弧に沿います。「パスからテキストを解放」で解除します",
+      "配色ハーモニー: 現在の色をもとに、補色・類似色・トライアド・テトラード・分裂補色・モノクロームの見本を、ワンクリックで適用",
+      "写真からパレット: 写真から主要な色を最大8色取り出して「マイカラー」に入れます"
+     ]
+    },
+    "zh": {
+     "title": "Fry Draw 24：弧形文字、配色和谐与图片取色板",
+     "items": [
+      "弧形文字：选择弯曲程度（正值为拱形，负值为笑脸形），文字会沿圆弧排列；用“从路径释放文字”即可释放",
+      "配色和谐：基于当前颜色，一键应用互补色、类似色、三角色、四角色、分裂互补色和单色的色块",
+      "图片取色板：从图片中提取最多8种主色并加入“我的颜色”"
+     ]
+    },
+    "pt": {
+     "title": "Fry Draw 24: texto em arco, harmonias de cor e paleta da imagem",
+     "items": [
+      "Texto em arco: escolha o quanto curvar (positivo para arco, negativo para sorriso) e o texto segue um arco circular; solte com Soltar texto do caminho",
+      "Harmonias de cor: amostras complementares, análogas, tríade, tétrade, complementar dividida e monocromática com base na cor atual, aplicadas com um clique",
+      "Paleta da imagem: extraia até 8 cores dominantes de uma imagem para Minhas cores"
+     ]
+    },
+    "ru": {
+     "title": "Fry Draw 24: текст по дуге, цветовые гармонии и палитра из картинки",
+     "items": [
+      "Текст по дуге: выберите степень изгиба (плюс для арки, минус для улыбки), текст пойдёт по круговой дуге; отпустить можно кнопкой «Отпустить текст с пути»",
+      "Цветовые гармонии: образцы дополнительных, аналогичных, триадных, тетрадных, раздельно-дополнительных и монохромных цветов на основе текущего, применяются в один клик",
+      "Палитра из картинки: вытащите до 8 доминирующих цветов из картинки в «Мои цвета»"
+     ]
+    },
+    "tr": {
+     "title": "Fry Draw 24: yay biçimli metin, renk uyumları ve resimden palet",
+     "items": [
+      "Yay biçimli metin: ne kadar büküleceğini seçin (pozitif kemer, negatif gülümseme için); metin daire yayını izler. Yoldan metni bırak ile serbest bırakın",
+      "Renk uyumları: mevcut renge göre tamamlayıcı, benzer, üçlü, dörtlü, bölünmüş tamamlayıcı ve tek renk örnekleri, tek tıkla uygulanır",
+      "Resimden palet: bir resimden en fazla 8 baskın rengi Renklerim'e alın"
+     ]
+    },
+    "it": {
+     "title": "Fry Draw 24: testo ad arco, armonie di colore e tavolozza dall'immagine",
+     "items": [
+      "Testo ad arco: scegli quanto piegarlo (positivo per un arco, negativo per un sorriso); il testo segue un arco di cerchio. Rilascialo con Rilascia testo dal percorso",
+      "Armonie di colore: campioni complementari, analoghi, triade, tetrade, complementare separata e monocromatici partendo dal colore attuale, applicati con un clic",
+      "Tavolozza dall'immagine: estrai fino a 8 colori dominanti da un'immagine in I miei colori"
+     ]
+    },
+    "pl": {
+     "title": "Fry Draw 24: tekst po łuku, harmonie kolorów i paleta ze zdjęcia",
+     "items": [
+      "Tekst po łuku: wybierz stopień wygięcia (dodatni to łuk, ujemny to uśmiech), a tekst podąża za łukiem koła; zwolnij przyciskiem Zwolnij tekst ze ścieżki",
+      "Harmonie kolorów: próbniki dopełniające, analogiczne, triadyczne, tetradyczne, dopełniające rozdzielone i monochromatyczne oparte na bieżącym kolorze, stosowane jednym kliknięciem",
+      "Paleta ze zdjęcia: wyciągnij do 8 dominujących kolorów ze zdjęcia do Moich kolorów"
+     ]
+    },
+    "ar": {
+     "title": "Fry Draw 24: نص على قوس وتناسق الألوان ولوحة من صورة",
+     "items": [
+      "نص على قوس: اختر مقدار الانحناء (موجب للقوس، وسالب للابتسامة)، ويتبع النص قوسًا دائريًا؛ حرّره بزر «تحرير النص من المسار»",
+      "تناسق الألوان: عينات متممة ومتشابهة وثلاثية ورباعية ومتممة مقسّمة وأحادية اللون حول اللون الحالي، تُطبَّق بنقرة واحدة",
+      "لوحة من صورة: استخرج حتى 8 ألوان سائدة من صورة إلى ألواني"
+     ]
     }
    }
   },
@@ -55,6 +220,83 @@
       "Effect presets: soft shadow, hard shadow, glow, neon and floating in one click; fine-tune them in the Effects section afterwards",
       "Fade out: make a shape or picture gradually transparent from one side to the other, with direction, start and end controls; it survives export and style copy"
      ]
+    },
+    "es": {
+     "title": "Fry Draw 23: preajustes de efectos y desvanecido",
+     "items": [
+      "Preajustes de efectos: sombra suave, sombra dura, resplandor, neón y flotante con un clic; luego ajústalos en la sección Efectos",
+      "Desvanecer: haz que una forma o imagen se vuelva gradualmente transparente de un lado a otro, con dirección, inicio y fin; se conserva al exportar y al copiar estilo"
+     ]
+    },
+    "fr": {
+     "title": "Fry Draw 23 : préréglages d'effets et fondu",
+     "items": [
+      "Préréglages d'effets : ombre douce, ombre dure, lueur, néon et flottement en un clic ; affine-les ensuite dans la section Effets",
+      "Fondu : rends une forme ou une image progressivement transparente d'un côté à l'autre, avec direction, début et fin ; l'effet survit à l'export et à la copie de style"
+     ]
+    },
+    "de": {
+     "title": "Fry Draw 23: Effekt-Voreinstellungen und Ausblenden",
+     "items": [
+      "Effekt-Voreinstellungen: weicher Schatten, harter Schatten, Leuchten, Neon und Schweben mit einem Klick; danach im Bereich Effekte feinabstimmen",
+      "Ausblenden: eine Form oder ein Bild wird von einer Seite zur anderen schrittweise transparent, mit Richtung, Start und Ende; bleibt beim Export und Stilkopieren erhalten"
+     ]
+    },
+    "ja": {
+     "title": "Fry Draw 23: エフェクトのプリセットとフェードアウト",
+     "items": [
+      "エフェクトのプリセット: ソフトな影、くっきりした影、グロー、ネオン、浮遊をワンクリックで。その後、エフェクトの項目で細かく調整できます",
+      "フェードアウト: 図形や写真を片側からもう一方へ少しずつ透明にします。向き・開始・終了を指定でき、書き出しやスタイルのコピーにも残ります"
+     ]
+    },
+    "zh": {
+     "title": "Fry Draw 23：效果预设与淡出",
+     "items": [
+      "效果预设：柔和阴影、硬阴影、发光、霓虹和悬浮，一键应用；之后可在“效果”中微调",
+      "淡出：让图形或图片从一侧到另一侧逐渐透明，可设置方向、起点和终点；导出和复制样式时会保留"
+     ]
+    },
+    "pt": {
+     "title": "Fry Draw 23: predefinições de efeitos e desvanecimento",
+     "items": [
+      "Predefinições de efeitos: sombra suave, sombra forte, brilho, neon e flutuação com um clique; depois ajuste na seção Efeitos",
+      "Desvanecer: deixe uma forma ou imagem gradualmente transparente de um lado ao outro, com direção, início e fim; a configuração continua na exportação e na cópia de estilo"
+     ]
+    },
+    "ru": {
+     "title": "Fry Draw 23: пресеты эффектов и затухание",
+     "items": [
+      "Пресеты эффектов: мягкая тень, резкая тень, свечение, неон и парение в один клик; потом их можно точно настроить в разделе «Эффекты»",
+      "Затухание: фигура или картинка постепенно становится прозрачной от одной стороны к другой; можно задать направление, начало и конец. Сохраняется при экспорте и копировании стиля"
+     ]
+    },
+    "tr": {
+     "title": "Fry Draw 23: efekt ön ayarları ve soldurma",
+     "items": [
+      "Efekt ön ayarları: yumuşak gölge, sert gölge, parlama, neon ve süzülme tek tıkla; sonra Efektler bölümünden ince ayar yapın",
+      "Soldurma: bir şekli veya resmi bir yandan diğerine doğru kademeli olarak saydam yapın; yön, başlangıç ve bitiş ayarlanabilir, dışa aktarmada ve stil kopyalamada korunur"
+     ]
+    },
+    "it": {
+     "title": "Fry Draw 23: preset di effetti e dissolvenza",
+     "items": [
+      "Preset di effetti: ombra morbida, ombra netta, bagliore, neon e fluttuazione con un clic; poi regolali nella sezione Effetti",
+      "Dissolvenza: rendi una forma o un'immagine gradualmente trasparente da un lato all'altro, con direzione, inizio e fine; resta anche nell'esportazione e nella copia stile"
+     ]
+    },
+    "pl": {
+     "title": "Fry Draw 23: gotowe efekty i zanikanie",
+     "items": [
+      "Gotowe efekty: miękki cień, twardy cień, poświata, neon i unoszenie jednym kliknięciem; potem dopracuj je w sekcji Efekty",
+      "Zanikanie: kształt lub zdjęcie stopniowo staje się przezroczyste od jednej strony do drugiej, z kierunkiem, początkiem i końcem; zachowuje się przy eksporcie i kopiowaniu stylu"
+     ]
+    },
+    "ar": {
+     "title": "Fry Draw 23: إعدادات تأثيرات جاهزة وتلاشٍ",
+     "items": [
+      "إعدادات تأثيرات جاهزة: ظل ناعم، وظل حاد، وتوهج، ونيون، وتعويم بنقرة واحدة؛ ثم اضبطها في قسم التأثيرات",
+      "التلاشي: اجعل شكلًا أو صورة شفافة تدريجيًا من جانب إلى آخر، مع التحكم في الاتجاه والبداية والنهاية؛ يبقى أثره عند التصدير ونسخ الأسلوب"
+     ]
     }
    }
   },
@@ -72,6 +314,83 @@
      "items": [
       "Stabiliser: raise the value for freehand pen and brush to smooth out shaky hands or rough mouse input (0 to 20)",
       "Pen and brush options stay visible even while the stroke you just drew is selected"
+     ]
+    },
+    "es": {
+     "title": "Fry Draw 22: estabilizador de trazo",
+     "items": [
+      "Estabilizador: sube el valor del lápiz y el pincel a mano alzada para suavizar manos temblorosas o entradas de ratón bruscas (0 a 20)",
+      "Las opciones de lápiz y pincel siguen visibles incluso mientras el trazo que acabas de dibujar está seleccionado"
+     ]
+    },
+    "fr": {
+     "title": "Fry Draw 22 : stabilisateur de tracé",
+     "items": [
+      "Stabilisateur : augmente la valeur pour le crayon et le pinceau à main levée afin de lisser une main tremblante ou une souris imprécise (0 à 20)",
+      "Les options du crayon et du pinceau restent visibles même lorsque le tracé que tu viens de faire est sélectionné"
+     ]
+    },
+    "de": {
+     "title": "Fry Draw 22: Strichstabilisator",
+     "items": [
+      "Stabilisator: Erhöhe den Wert für Freihand-Stift und Pinsel, um zittrige Hände oder unruhige Mauseingaben zu glätten (0 bis 20)",
+      "Stift- und Pinseloptionen bleiben auch sichtbar, wenn der gerade gezeichnete Strich ausgewählt ist"
+     ]
+    },
+    "ja": {
+     "title": "Fry Draw 22: 線の手ぶれ補正",
+     "items": [
+      "手ぶれ補正: フリーハンドのペンとブラシの値を上げると、手の震えやマウスの揺れを滑らかにできます（0〜20）",
+      "ペンとブラシのオプションは、描いたばかりの線を選択しているときも表示されたままです"
+     ]
+    },
+    "zh": {
+     "title": "Fry Draw 22：笔画防抖",
+     "items": [
+      "防抖：提高自由绘制的钢笔和画笔的数值，可以平滑手抖或鼠标抖动造成的线条（0到20）",
+      "即使选中了刚画的笔画，钢笔和画笔的选项也会保持显示"
+     ]
+    },
+    "pt": {
+     "title": "Fry Draw 22: estabilizador de traço",
+     "items": [
+      "Estabilizador: aumente o valor da caneta e do pincel à mão livre para suavizar mãos trêmulas ou movimentos bruscos do mouse (0 a 20)",
+      "As opções de caneta e pincel continuam visíveis mesmo quando o traço que você acabou de fazer está selecionado"
+     ]
+    },
+    "ru": {
+     "title": "Fry Draw 22: стабилизатор штриха",
+     "items": [
+      "Стабилизатор: увеличьте значение для карандаша и кисти от руки, чтобы сгладить дрожание руки или неровные движения мыши (от 0 до 20)",
+      "Настройки карандаша и кисти остаются видимыми, даже когда выделен только что нарисованный штрих"
+     ]
+    },
+    "tr": {
+     "title": "Fry Draw 22: çizgi sabitleyici",
+     "items": [
+      "Sabitleyici: el serbest kalem ve fırça için değeri artırarak titrek el veya düzensiz fare hareketlerini yumuşatın (0 ile 20 arası)",
+      "Az önce çizdiğiniz çizgi seçiliyken bile kalem ve fırça seçenekleri görünür kalır"
+     ]
+    },
+    "it": {
+     "title": "Fry Draw 22: stabilizzatore del tratto",
+     "items": [
+      "Stabilizzatore: aumenta il valore per penna e pennello a mano libera per smussare mani tremanti o movimenti irregolari del mouse (da 0 a 20)",
+      "Le opzioni di penna e pennello restano visibili anche quando il tratto appena disegnato è selezionato"
+     ]
+    },
+    "pl": {
+     "title": "Fry Draw 22: stabilizator kreski",
+     "items": [
+      "Stabilizator: zwiększ wartość dla pióra i pędzla odręcznego, aby wygładzić drżącą rękę lub nierówny ruch myszy (0 do 20)",
+      "Opcje pióra i pędzla pozostają widoczne, nawet gdy zaznaczona jest właśnie narysowana kreska"
+     ]
+    },
+    "ar": {
+     "title": "Fry Draw 22: مثبّت الخط",
+     "items": [
+      "المثبّت: ارفع القيمة للقلم والفرشاة الحرة لتنعيم خط اليد المرتجفة أو حركة الفأرة المتقطعة (من 0 إلى 20)",
+      "تبقى خيارات القلم والفرشاة ظاهرة حتى عندما يكون الخط الذي رسمته للتو محددًا"
      ]
     }
    }
@@ -97,6 +416,116 @@
       "Shrink: halve the picture resolution to cut project file size",
       "All covered by undo and saving"
      ]
+    },
+    "es": {
+     "title": "Fry Draw 21: herramientas de imagen (quitar fondo, reemplazar, ajustar al lienzo)",
+     "items": [
+      "Quitar color de fondo: vuelve transparentes los colores parecidos a la esquina superior izquierda; ideal para logotipos y firmas sobre blanco, con intensidad ajustable",
+      "Reemplazar imagen: cambia por otro archivo conservando tamaño, posición y ajustes de color",
+      "Botones Restaurar proporción, Ajustar al lienzo y Llenar lienzo",
+      "Reducir: divide a la mitad la resolución de la imagen para reducir el tamaño del archivo del proyecto",
+      "Todo se puede deshacer y se guarda"
+     ]
+    },
+    "fr": {
+     "title": "Fry Draw 21 : outils d'image (supprimer le fond, remplacer, ajuster au canevas)",
+     "items": [
+      "Supprimer la couleur de fond : rend transparentes les couleurs proches du coin supérieur gauche ; idéal pour les logos et signatures sur blanc, avec une force réglable",
+      "Remplacer l'image : change de fichier en gardant taille, position et réglages de couleur",
+      "Boutons Restaurer le rapport, Ajuster au canevas et Remplir le canevas",
+      "Réduire : divise par deux la résolution de l'image pour alléger le fichier du projet",
+      "Tout est annulable et enregistré"
+     ]
+    },
+    "de": {
+     "title": "Fry Draw 21: Bildwerkzeuge (Hintergrund entfernen, ersetzen, an Leinwand anpassen)",
+     "items": [
+      "Hintergrundfarbe entfernen: macht Farben ähnlich der oberen linken Ecke transparent, ideal für Logos und Unterschriften auf Weiß, mit einstellbarer Stärke",
+      "Bild ersetzen: tausche gegen eine andere Datei aus, Größe, Position und Farbanpassungen bleiben erhalten",
+      "Schaltflächen Seitenverhältnis wiederherstellen, An Leinwand anpassen und Leinwand füllen",
+      "Verkleinern: halbiert die Bildauflösung, um die Projektdatei zu verkleinern",
+      "Alles ist rückgängig machbar und wird gespeichert"
+     ]
+    },
+    "ja": {
+     "title": "Fry Draw 21: 写真ツール（背景を消す、差し替え、キャンバスに合わせる）",
+     "items": [
+      "背景色を消す: 左上の角と似た色を透明にします。白地のロゴや署名に便利で、強さを調整できます",
+      "写真を差し替え: 大きさ・位置・色の調整を保ったまま別のファイルに入れ替えます",
+      "縦横比を戻す、キャンバスに合わせる、キャンバスを埋めるボタン",
+      "縮小: 写真の解像度を半分にしてプロジェクトファイルの容量を減らします",
+      "すべて元に戻せて、保存もされます"
+     ]
+    },
+    "zh": {
+     "title": "Fry Draw 21：图片工具（去背景、替换、适应画布）",
+     "items": [
+      "去除背景色：使与左上角相近的颜色变透明，适合白底上的徽标和签名，强度可调",
+      "替换图片：换成另一个文件，同时保留大小、位置和颜色调整",
+      "保持宽高比、适应画布和填满画布按钮",
+      "缩小：将图片分辨率减半，以减小项目文件大小",
+      "以上操作都可撤销并会保存"
+     ]
+    },
+    "pt": {
+     "title": "Fry Draw 21: ferramentas de imagem (remover fundo, substituir, ajustar à tela)",
+     "items": [
+      "Remover cor de fundo: deixa transparentes as cores parecidas com o canto superior esquerdo; ideal para logos e assinaturas em branco, com força ajustável",
+      "Substituir imagem: troca por outro arquivo mantendo tamanho, posição e ajustes de cor",
+      "Botões Restaurar proporção, Ajustar à tela e Preencher tela",
+      "Reduzir: divide a resolução da imagem pela metade para diminuir o arquivo do projeto",
+      "Tudo pode ser desfeito e fica salvo"
+     ]
+    },
+    "ru": {
+     "title": "Fry Draw 21: инструменты для картинок (убрать фон, заменить, вписать в холст)",
+     "items": [
+      "Убрать цвет фона: делает прозрачными цвета, похожие на цвет левого верхнего угла; удобно для логотипов и подписей на белом, сила настраивается",
+      "Заменить картинку: подставьте другой файл, размер, положение и настройки цвета сохранятся",
+      "Кнопки «Восстановить пропорции», «Вписать в холст» и «Заполнить холст»",
+      "Уменьшить: вдвое снижает разрешение картинки, чтобы уменьшить файл проекта",
+      "Всё отменяется и сохраняется"
+     ]
+    },
+    "tr": {
+     "title": "Fry Draw 21: resim araçları (arka planı kaldır, değiştir, tuvale sığdır)",
+     "items": [
+      "Arka plan rengini kaldır: sol üst köşeye benzeyen renkleri saydam yapar; beyaz zemindeki logo ve imzalar için ideal, güç ayarlanabilir",
+      "Resmi değiştir: boyut, konum ve renk ayarlarını koruyarak başka bir dosya ile değiştirin",
+      "En-boy oranını geri yükle, tuvale sığdır ve tuvali doldur düğmeleri",
+      "Küçült: resim çözünürlüğünü yarıya indirerek proje dosyası boyutunu azaltır",
+      "Hepsi geri alınabilir ve kaydedilir"
+     ]
+    },
+    "it": {
+     "title": "Fry Draw 21: strumenti immagine (rimuovi sfondo, sostituisci, adatta alla tela)",
+     "items": [
+      "Rimuovi colore di sfondo: rende trasparenti i colori simili all'angolo in alto a sinistra; ideale per loghi e firme su bianco, con intensità regolabile",
+      "Sostituisci immagine: scambia con un altro file mantenendo dimensioni, posizione e regolazioni di colore",
+      "Pulsanti Ripristina proporzioni, Adatta alla tela e Riempi tela",
+      "Riduci: dimezza la risoluzione dell'immagine per ridurre la dimensione del file di progetto",
+      "Tutto è annullabile e salvato"
+     ]
+    },
+    "pl": {
+     "title": "Fry Draw 21: narzędzia do zdjęć (usuń tło, zamień, dopasuj do płótna)",
+     "items": [
+      "Usuń kolor tła: przezroczyste stają się kolory podobne do lewego górnego rogu; idealne do logo i podpisów na białym, siła regulowana",
+      "Zamień zdjęcie: podmień plik, zachowując rozmiar, położenie i ustawienia kolorów",
+      "Przyciski Przywróć proporcje, Dopasuj do płótna i Wypełnij płótno",
+      "Zmniejsz: zmniejsza rozdzielczość zdjęcia o połowę, by ograniczyć rozmiar pliku projektu",
+      "Wszystko można cofnąć i jest zapisywane"
+     ]
+    },
+    "ar": {
+     "title": "Fry Draw 21: أدوات الصور (إزالة الخلفية، والاستبدال، والملاءمة للّوحة)",
+     "items": [
+      "إزالة لون الخلفية: تجعل الألوان المشابهة لزاوية الأعلى اليسرى شفافة، وهي مثالية للشعارات والتواقيع على الأبيض، مع قوة قابلة للضبط",
+      "استبدال الصورة: بدّلها بملف آخر مع الحفاظ على الحجم والموضع وإعدادات الألوان",
+      "أزرار استعادة النسبة، وملاءمة اللوحة، وملء اللوحة",
+      "تصغير: ينصّف دقة الصورة لتقليل حجم ملف المشروع",
+      "كل ذلك قابل للتراجع ويُحفظ"
+     ]
     }
    }
   },
@@ -117,6 +546,94 @@
       "When exporting several files (each shape, all pages) the Bundle as one ZIP option downloads a single archive; turn it off to get separate files",
       "The ZIP is built inside the browser, so nothing leaves your device"
      ]
+    },
+    "es": {
+     "title": "Fry Draw 20: exportar cada forma, paquetes ZIP",
+     "items": [
+      "Nuevo intervalo de exportación: cada forma seleccionada como archivo propio, en PNG, JPG, WebP o SVG, con el nombre por orden y tipo de forma; útil para piezas de logotipos o pegatinas",
+      "Al exportar varios archivos (cada forma, todas las páginas), la opción Empaquetar en un ZIP descarga un único archivo; desactívala para obtener archivos separados",
+      "El ZIP se crea dentro del navegador, así que nada sale de tu dispositivo"
+     ]
+    },
+    "fr": {
+     "title": "Fry Draw 20 : exporter chaque forme, archives ZIP",
+     "items": [
+      "Nouvel intervalle d'export : chaque forme sélectionnée dans son propre fichier, en PNG, JPG, WebP ou SVG, nommée par ordre et type de forme ; pratique pour les éléments de logo ou les autocollants",
+      "Lors de l'export de plusieurs fichiers (chaque forme, toutes les pages), l'option Regrouper dans un ZIP télécharge une seule archive ; désactive-la pour obtenir des fichiers séparés",
+      "Le ZIP est créé dans le navigateur, rien ne quitte ton appareil"
+     ]
+    },
+    "de": {
+     "title": "Fry Draw 20: jede Form exportieren, ZIP-Pakete",
+     "items": [
+      "Neuer Exportbereich: jede ausgewählte Form als eigene Datei in PNG, JPG, WebP oder SVG, nach Reihenfolge und Formname benannt; praktisch für Logoteile oder Sticker",
+      "Beim Export mehrerer Dateien (jede Form, alle Seiten) lädt die Option Als ein ZIP bündeln ein einziges Archiv herunter; deaktiviere sie für einzelne Dateien",
+      "Das ZIP entsteht im Browser, nichts verlässt dein Gerät"
+     ]
+    },
+    "ja": {
+     "title": "Fry Draw 20: 図形ごとに書き出し、ZIPにまとめる",
+     "items": [
+      "新しい書き出し範囲: 選んだ図形をそれぞれ別ファイルにします。PNG・JPG・WebP・SVGに対応し、順番と図形名で名前が付きます。ロゴのパーツやステッカー作りに便利です",
+      "複数のファイル（図形ごと、すべてのページ）を書き出すとき、「ZIPにまとめる」を選ぶと1つの圧縮ファイルで保存されます。オフにすると別々のファイルになります",
+      "ZIPはブラウザ内で作られるので、データは端末の外に出ません"
+     ]
+    },
+    "zh": {
+     "title": "Fry Draw 20：逐个导出图形，ZIP 打包",
+     "items": [
+      "新的导出范围：把选中的每个图形单独导出为一个文件，支持PNG、JPG、WebP或SVG，按顺序和图形名称命名，适合制作徽标部件或贴纸",
+      "导出多个文件（每个图形、所有页面）时，“打包为一个ZIP”选项会下载一个压缩包；关闭后则分别下载",
+      "ZIP 在浏览器内生成，内容不会离开你的设备"
+     ]
+    },
+    "pt": {
+     "title": "Fry Draw 20: exportar cada forma, pacotes ZIP",
+     "items": [
+      "Nova faixa de exportação: cada forma selecionada como arquivo próprio, em PNG, JPG, WebP ou SVG, nomeado pela ordem e pelo nome da forma; útil para partes de logo ou adesivos",
+      "Ao exportar vários arquivos (cada forma, todas as páginas), a opção Empacotar em um ZIP baixa um único arquivo; desative para obter arquivos separados",
+      "O ZIP é criado dentro do navegador, então nada sai do seu dispositivo"
+     ]
+    },
+    "ru": {
+     "title": "Fry Draw 20: экспорт каждой фигуры, архивы ZIP",
+     "items": [
+      "Новый диапазон экспорта: каждая выбранная фигура как отдельный файл в PNG, JPG, WebP или SVG; имя задаётся номером по порядку и названием фигуры. Удобно для частей логотипа или стикеров",
+      "При экспорте нескольких файлов (каждая фигура, все страницы) опция «Упаковать в один ZIP» скачивает один архив; отключите её, чтобы получить отдельные файлы",
+      "ZIP собирается в браузере, ничего не покидает ваше устройство"
+     ]
+    },
+    "tr": {
+     "title": "Fry Draw 20: her şekli dışa aktar, ZIP paketleri",
+     "items": [
+      "Yeni dışa aktarma aralığı: seçilen her şekil ayrı bir dosya olarak PNG, JPG, WebP veya SVG biçiminde kaydedilir; ad sıra ve şekil adıyla verilir, logo parçaları veya etiketler için pratiktir",
+      "Birden çok dosya (her şekil, tüm sayfalar) dışa aktarılırken Tek ZIP olarak paketle seçeneği tek bir arşiv indirir; ayrı dosyalar için kapatın",
+      "ZIP tarayıcı içinde oluşturulur, hiçbir şey cihazınızdan çıkmaz"
+     ]
+    },
+    "it": {
+     "title": "Fry Draw 20: esporta ogni forma, pacchetti ZIP",
+     "items": [
+      "Nuovo intervallo di esportazione: ogni forma selezionata come file separato, in PNG, JPG, WebP o SVG, con nome per ordine e nome della forma; utile per parti di loghi o adesivi",
+      "Esportando più file (ogni forma, tutte le pagine), l'opzione Raggruppa in un ZIP scarica un solo archivio; disattivala per ottenere file separati",
+      "Lo ZIP viene creato nel browser, quindi nulla lascia il tuo dispositivo"
+     ]
+    },
+    "pl": {
+     "title": "Fry Draw 20: eksport każdego kształtu, paczki ZIP",
+     "items": [
+      "Nowy zakres eksportu: każdy zaznaczony kształt jako osobny plik w PNG, JPG, WebP lub SVG, nazwany według kolejności i nazwy kształtu; przydatne przy częściach logo i naklejkach",
+      "Przy eksporcie wielu plików (każdy kształt, wszystkie strony) opcja Spakuj do jednego ZIP pobiera jedno archiwum; wyłącz ją, aby dostać osobne pliki",
+      "ZIP tworzy się w przeglądarce, więc nic nie opuszcza urządzenia"
+     ]
+    },
+    "ar": {
+     "title": "Fry Draw 20: تصدير كل شكل، وحزم ZIP",
+     "items": [
+      "نطاق تصدير جديد: كل شكل محدد في ملف خاص به بصيغة PNG أو JPG أو WebP أو SVG، ويُسمّى بالترتيب واسم الشكل؛ مفيد لأجزاء الشعارات والملصقات",
+      "عند تصدير ملفات متعددة (كل شكل، وكل الصفحات) يُنزِل خيار «تجميع في ملف ZIP واحد» أرشيفًا واحدًا؛ أوقفه للحصول على ملفات منفصلة",
+      "يُنشأ ملف ZIP داخل المتصفح، فلا يغادر شيء جهازك"
+     ]
     }
    }
   },
@@ -136,6 +653,94 @@
       "Round corners: soften sharp vertices of rectangles, polygons, stars and polylines by a set radius, on many shapes at once; the result becomes curve nodes you can refine in node edit",
       "Break apart: split a combined shape such as a boolean result, text outline or traced image into separate pieces, keeping holes (the counters in O, B or 8) with their letter",
       "Both support undo and saving"
+     ]
+    },
+    "es": {
+     "title": "Fry Draw 19: redondear esquinas, separar",
+     "items": [
+      "Redondear esquinas: suaviza los vértices afilados de rectángulos, polígonos, estrellas y polilíneas con un radio definido, en muchas formas a la vez; el resultado son nodos de curva que puedes refinar en la edición de nodos",
+      "Separar: divide una forma combinada, como un resultado booleano, el contorno de un texto o una imagen trazada, en piezas separadas conservando los huecos (los contrapuntos de O, B u 8) con su letra",
+      "Ambas opciones admiten deshacer y guardar"
+     ]
+    },
+    "fr": {
+     "title": "Fry Draw 19 : arrondir les angles, séparer",
+     "items": [
+      "Arrondir les angles : adoucit les sommets pointus des rectangles, polygones, étoiles et polylignes selon un rayon défini, sur plusieurs formes à la fois ; le résultat devient des nœuds de courbe que tu peux affiner en édition de nœuds",
+      "Séparer : découpe une forme combinée, comme un résultat booléen, un contour de texte ou une image tracée, en morceaux séparés en gardant les trous (les contre-formes du O, du B ou du 8) avec leur lettre",
+      "Les deux fonctions sont annulables et enregistrées"
+     ]
+    },
+    "de": {
+     "title": "Fry Draw 19: Ecken abrunden, auftrennen",
+     "items": [
+      "Ecken abrunden: weicht die scharfen Ecken von Rechtecken, Polygonen, Sternen und Polylinien um einen festen Radius auf, auch bei vielen Formen gleichzeitig; das Ergebnis sind Kurvenpunkte, die du in der Knotenbearbeitung verfeinern kannst",
+      "Auftrennen: teilt eine kombinierte Form wie ein Boolean-Ergebnis, einen Textumriss oder ein nachgezeichnetes Bild in einzelne Teile auf und behält die Löcher (die Innenräume bei O, B oder 8) mit ihrem Buchstaben",
+      "Beides unterstützt Rückgängig und Speichern"
+     ]
+    },
+    "ja": {
+     "title": "Fry Draw 19: 角を丸める、分解する",
+     "items": [
+      "角を丸める: 長方形・多角形・星・折れ線の鋭い頂点を、指定した半径で丸めます。複数の図形にまとめて使え、結果は曲線の点になり、点の編集で細かく直せます",
+      "分解する: ブール演算の結果、文字の輪郭、トレースした写真などの合成図形を別々のパーツに分けます。O・B・8などの穴は、その文字と一緒に残ります",
+      "どちらも元に戻せて、保存もされます"
+     ]
+    },
+    "zh": {
+     "title": "Fry Draw 19：圆角与拆分",
+     "items": [
+      "圆角：按设定半径圆滑矩形、多边形、星形和折线的尖角，可一次作用于多个图形；结果会变成曲线节点，可在节点编辑中继续调整",
+      "拆分：把布尔运算结果、文字轮廓或描摹图片等组合图形拆成独立部分，保留孔洞（如O、B、8中的空心部分）并与对应字母在一起",
+      "两者都支持撤销和保存"
+     ]
+    },
+    "pt": {
+     "title": "Fry Draw 19: arredondar cantos, separar",
+     "items": [
+      "Arredondar cantos: suaviza os vértices pontiagudos de retângulos, polígonos, estrelas e polilinhas com um raio definido, em várias formas de uma vez; o resultado vira nós de curva que você pode refinar na edição de nós",
+      "Separar: divide uma forma combinada, como resultado booleano, contorno de texto ou imagem vetorizada, em partes separadas, mantendo os furos (os miolos do O, do B ou do 8) com sua letra",
+      "Ambas as opções funcionam com desfazer e salvamento"
+     ]
+    },
+    "ru": {
+     "title": "Fry Draw 19: скруглить углы, разделить",
+     "items": [
+      "Скруглить углы: смягчает острые вершины прямоугольников, многоугольников, звёзд и ломаных с заданным радиусом, сразу на многих фигурах; результат — узлы кривых, которые можно уточнить в редактировании узлов",
+      "Разделить: разбивает составную фигуру, например результат булевой операции, контур текста или обведённую картинку, на отдельные части; отверстия (внутренние части O, B или 8) остаются с своей буквой",
+      "Обе функции поддерживают отмену и сохранение"
+     ]
+    },
+    "tr": {
+     "title": "Fry Draw 19: köşeleri yuvarla, parçala",
+     "items": [
+      "Köşeleri yuvarla: dikdörtgen, çokgen, yıldız ve çizgi köşelerini belirlediğiniz yarıçapla yumuşatır; birçok şekle aynı anda uygulanır ve sonuç, düzenleme modunda ince ayar yapabileceğiniz eğri düğümleri olur",
+      "Parçala: boolean sonucu, metin anahattı veya izlenmiş resim gibi birleşik şekilleri ayrı parçalara böler; O, B veya 8 gibi harflerin delikleri harfleriyle birlikte kalır",
+      "İkisi de geri alma ve kaydetmeyi destekler"
+     ]
+    },
+    "it": {
+     "title": "Fry Draw 19: arrotonda angoli, separa",
+     "items": [
+      "Arrotonda angoli: smussa i vertici appuntiti di rettangoli, poligoni, stelle e polilinee con un raggio impostato, su più forme insieme; il risultato diventa nodi di curva da rifinire nella modifica nodi",
+      "Separa: divide una forma combinata, come un risultato booleano, il contorno di un testo o un'immagine tracciata, in pezzi separati mantenendo i fori (i controfori di O, B o 8) con la loro lettera",
+      "Entrambe supportano annulla e salvataggio"
+     ]
+    },
+    "pl": {
+     "title": "Fry Draw 19: zaokrąglanie rogów, rozdzielanie",
+     "items": [
+      "Zaokrąglanie rogów: łagodzi ostre wierzchołki prostokątów, wielokątów, gwiazd i łamanych o ustawiony promień, na wielu kształtach naraz; wynik to węzły krzywych, które dopracujesz w edycji węzłów",
+      "Rozdziel: dzieli połączony kształt, np. wynik operacji logicznej, kontur tekstu czy obrysowane zdjęcie, na osobne części, zachowując dziury (wnętrza O, B lub 8) przy ich literze",
+      "Obie funkcje działają z cofaniem i zapisem"
+     ]
+    },
+    "ar": {
+     "title": "Fry Draw 19: تدوير الزوايا، وفصل الأجزاء",
+     "items": [
+      "تدوير الزوايا: يُلين الرؤوس الحادة للمستطيلات والمضلعات والنجوم والخطوط المتعددة بنصف قطر محدد، على أشكال كثيرة دفعة واحدة؛ والنتيجة عُقد منحنية يمكنك تحسينها في تحرير العُقد",
+      "فصل الأجزاء: يقسّم شكلًا مركّبًا، مثل نتيجة العمليات المنطقية أو محيط نص أو صورة متتبَّعة، إلى قطع منفصلة مع الاحتفاظ بالثقوب (داخل O أو B أو 8) مع حرفها",
+      "يدعم الأمران التراجع والحفظ"
      ]
     }
    }
@@ -159,6 +764,105 @@
       "Outline view: toggle in the Canvas tab to see only outlines, without affecting export",
       "Canvas tab gains Zoom to selection, Fit to screen and 100% buttons"
      ]
+    },
+    "es": {
+     "title": "Fry Draw 18: pasos de mezcla, medidas en vivo, vista de contorno, botones de zoom",
+     "items": [
+      "Pasos de mezcla: selecciona dos formas y elige cuántos pasos intermedios quieres; la posición, el tamaño, el ángulo, el color, el grosor del trazo y la opacidad cambian paso a paso de la forma inferior a la superior",
+      "Una etiqueta junto al cursor muestra ancho x alto al dibujar y redimensionar, longitud y ángulo en las líneas, distancia al mover y grados al girar",
+      "Vista de contorno: activa la pestaña Lienzo para ver solo los contornos, sin afectar la exportación",
+      "La pestaña Lienzo añade los botones Zoom a la selección, Ajustar a la pantalla y 100%"
+     ]
+    },
+    "fr": {
+     "title": "Fry Draw 18 : étapes de fondu, mesures en direct, vue en contour, boutons de zoom",
+     "items": [
+      "Étapes de fondu : sélectionne deux formes et choisis le nombre d'intermédiaires ; la position, la taille, l'angle, la couleur, l'épaisseur du trait et l'opacité passent progressivement de la forme du bas à celle du haut",
+      "Une étiquette près du curseur affiche largeur x hauteur pendant le dessin et le redimensionnement, la longueur et l'angle pour les lignes, la distance pendant le déplacement et les degrés pendant la rotation",
+      "Vue en contour : active-la dans l'onglet Canevas pour ne voir que les contours, sans effet sur l'export",
+      "L'onglet Canevas ajoute les boutons Zoom sur la sélection, Ajuster à l'écran et 100 %"
+     ]
+    },
+    "de": {
+     "title": "Fry Draw 18: Übergangsschritte, Live-Maße, Umrissansicht, Zoomschaltflächen",
+     "items": [
+      "Übergangsschritte: wähle zwei Formen und lege die Zahl der Zwischenschritte fest; Position, Größe, Winkel, Farbe, Strichstärke und Deckkraft ändern sich schrittweise von der unteren zur oberen Form",
+      "Eine Live-Anzeige neben dem Cursor zeigt beim Zeichnen und Skalieren Breite x Höhe, bei Linien Länge und Winkel, beim Verschieben die Strecke und beim Drehen die Grad",
+      "Umrissansicht: im Reiter Leinwand umschalten, um nur Umrisse zu sehen; der Export bleibt unverändert",
+      "Der Reiter Leinwand bekommt die Schaltflächen Auf Auswahl zoomen, An Bildschirm anpassen und 100 %"
+     ]
+    },
+    "ja": {
+     "title": "Fry Draw 18: 中間形状、リアルタイムの寸法、輪郭表示、ズームボタン",
+     "items": [
+      "中間形状: 2つの図形を選び、間に入れる数を決めます。位置・大きさ・角度・色・線の太さ・不透明度が、下の図形から上の図形へ少しずつ変わります",
+      "カーソルの横に、描くときや大きさを変えるときは幅×高さ、線は長さと角度、移動中は距離、回転中は角度が表示されます",
+      "輪郭表示: キャンバスタブでオンにすると輪郭だけを表示します。書き出しには影響しません",
+      "キャンバスタブに「選択範囲にズーム」「画面に合わせる」「100%」ボタンが加わりました"
+     ]
+    },
+    "zh": {
+     "title": "Fry Draw 18：过渡步骤、实时尺寸、轮廓视图、缩放按钮",
+     "items": [
+      "过渡步骤：选中两个图形并设定中间步数，位置、大小、角度、颜色、线宽和不透明度会从下方图形逐步过渡到上方图形",
+      "光标旁实时显示绘制或缩放时的宽 x 高，线条显示长度和角度，移动时显示距离，旋转时显示角度",
+      "轮廓视图：在画布标签中开启，只显示轮廓，不影响导出",
+      "画布标签新增“缩放到选区”“适应屏幕”和“100%”按钮"
+     ]
+    },
+    "pt": {
+     "title": "Fry Draw 18: passos de mesclagem, medidas ao vivo, modo contorno, botões de zoom",
+     "items": [
+      "Passos de mesclagem: selecione duas formas e defina o número de intermediários; posição, tamanho, ângulo, cor, espessura do traço e opacidade mudam passo a passo da forma de baixo para a de cima",
+      "Um rótulo ao lado do cursor mostra largura x altura ao desenhar e redimensionar, comprimento e ângulo nas linhas, distância ao mover e graus ao girar",
+      "Modo contorno: ative na aba Tela para ver só os contornos, sem afetar a exportação",
+      "A aba Tela ganha os botões Zoom na seleção, Ajustar à tela e 100%"
+     ]
+    },
+    "ru": {
+     "title": "Fry Draw 18: шаги перехода, живые размеры, вид контуров, кнопки масштаба",
+     "items": [
+      "Шаги перехода: выберите две фигуры и задайте число промежуточных шагов; положение, размер, угол, цвет, толщина обводки и прозрачность меняются постепенно от нижней фигуры к верхней",
+      "Подпись у курсора показывает ширину x высоту при рисовании и изменении размера, длину и угол для линий, расстояние при перемещении и градусы при повороте",
+      "Вид контуров: включите на вкладке «Холст», чтобы видеть только контуры; экспорт не меняется",
+      "На вкладке «Холст» появились кнопки «Масштаб по выделению», «Вписать в экран» и «100%»"
+     ]
+    },
+    "tr": {
+     "title": "Fry Draw 18: geçiş adımları, canlı ölçüler, anahat görünümü, yakınlaştırma düğmeleri",
+     "items": [
+      "Geçiş adımları: iki şekil seçin ve ara adım sayısını belirleyin; konum, boyut, açı, renk, çizgi kalınlığı ve saydamlık alttaki şekilden üstteki şekle adım adım değişir",
+      "İmlecin yanındaki canlı etiket çizim ve boyutlandırmada genişlik x yükseklik, çizgilerde uzunluk ve açı, taşırken mesafe ve döndürürken derece gösterir",
+      "Anahat görünümü: Tuval sekmesinde açıp yalnızca anahatları görebilirsiniz; dışa aktarmayı etkilemez",
+      "Tuval sekmesine Seçime yakınlaştır, Ekrana sığdır ve %100 düğmeleri eklendi"
+     ]
+    },
+    "it": {
+     "title": "Fry Draw 18: passaggi di fusione, misure in tempo reale, vista contorno, pulsanti zoom",
+     "items": [
+      "Passaggi di fusione: seleziona due forme e scegli quanti passaggi intermedi; posizione, dimensione, angolo, colore, spessore del tratto e opacità cambiano passo passo dalla forma inferiore a quella superiore",
+      "Un'etichetta accanto al cursore mostra larghezza x altezza mentre disegni o ridimensioni, lunghezza e angolo per le linee, distanza mentre sposti e gradi mentre ruoti",
+      "Vista contorno: attivala nella scheda Tela per vedere solo i contorni, senza influire sull'esportazione",
+      "La scheda Tela ha i pulsanti Zoom alla selezione, Adatta allo schermo e 100%"
+     ]
+    },
+    "pl": {
+     "title": "Fry Draw 18: kroki przejścia, pomiary na żywo, widok konturów, przyciski powiększenia",
+     "items": [
+      "Kroki przejścia: zaznacz dwa kształty i ustaw liczbę pośrednich; położenie, rozmiar, kąt, kolor, grubość obrysu i krycie zmieniają się stopniowo od dolnego kształtu do górnego",
+      "Etykieta przy kursorze pokazuje szerokość x wysokość podczas rysowania i zmiany rozmiaru, długość i kąt dla linii, odległość podczas przesuwania i stopnie podczas obracania",
+      "Widok konturów: włącz na karcie Płótno, by widzieć tylko kontury; eksport się nie zmienia",
+      "Karta Płótno dostała przyciski Przybliż do zaznaczenia, Dopasuj do ekranu i 100%"
+     ]
+    },
+    "ar": {
+     "title": "Fry Draw 18: خطوات تدرّج، وقياسات حية، وعرض الخطوط العامة، وأزرار التكبير",
+     "items": [
+      "خطوات التدرّج: اختر شكلين وحدد عدد الخطوات الوسيطة؛ تتغير المواضع والأحجام والزوايا والألوان وعرض الحد والشفافية تدريجيًا من الشكل السفلي إلى العلوي",
+      "تعرض ملصقة بجانب المؤشر العرض × الارتفاع أثناء الرسم وتغيير الحجم، والطول والزاوية للخطوط، والمسافة أثناء التحريك، والدرجات أثناء التدوير",
+      "عرض الخطوط العامة: فعّله في تبويب اللوحة لرؤية الخطوط فقط، دون التأثير في التصدير",
+      "أضاف تبويب اللوحة أزرار «تكبير إلى التحديد» و«ملاءمة الشاشة» و«100%»"
+     ]
     }
    }
   },
@@ -179,6 +883,94 @@
       "Strokes can now use linear or radial gradients with two colours and a direction; eyedropper and style copy carry them along",
       "Font list gains Malgun Gothic, Apple SD Gothic Neo, Nanum Gothic, Arial, Times New Roman and Verdana"
      ]
+    },
+    "es": {
+     "title": "Fry Draw 17: cuadros de texto con ajuste, trazos con degradado",
+     "items": [
+      "Cuadro de texto: define un ancho para el texto y se ajustará solo, por palabra en texto latino y por carácter en coreano, respetando la alineación izquierda, centrada y derecha",
+      "Los trazos pueden usar degradados lineales o radiales con dos colores y una dirección; el cuentagotas y la copia de estilo también los transfieren",
+      "La lista de fuentes añade Malgun Gothic, Apple SD Gothic Neo, Nanum Gothic, Arial, Times New Roman y Verdana"
+     ]
+    },
+    "fr": {
+     "title": "Fry Draw 17 : zones de texte avec retour, contours en dégradé",
+     "items": [
+      "Zone de texte : donne une largeur à un texte et il revient à la ligne automatiquement, par mot pour le latin et par caractère pour le coréen, en respectant l'alignement gauche, centré et droit",
+      "Les traits peuvent utiliser des dégradés linéaires ou radiaux à deux couleurs avec une direction ; la pipette et la copie de style les transmettent aussi",
+      "La liste des polices ajoute Malgun Gothic, Apple SD Gothic Neo, Nanum Gothic, Arial, Times New Roman et Verdana"
+     ]
+    },
+    "de": {
+     "title": "Fry Draw 17: Textfelder mit Umbruch, Farbverlauf-Striche",
+     "items": [
+      "Textfeld: Lege eine Breite für einen Text fest, dann bricht er automatisch um, bei lateinischer Schrift nach Wort und bei Koreanisch nach Zeichen, mit linksbündiger, zentrierter oder rechtsbündiger Ausrichtung",
+      "Striche können lineare oder radiale Verläufe mit zwei Farben und einer Richtung nutzen; Pipette und Stilkopie übernehmen sie ebenfalls",
+      "Die Schriftliste ergänzt Malgun Gothic, Apple SD Gothic Neo, Nanum Gothic, Arial, Times New Roman und Verdana"
+     ]
+    },
+    "ja": {
+     "title": "Fry Draw 17: 折り返すテキストボックス、グラデーションの線",
+     "items": [
+      "テキストボックス: テキストに幅を指定すると自動で折り返します。英文は単語単位、韓国語は文字単位で、左・中央・右の配置も保たれます",
+      "線に直線または放射状のグラデーションを使えます。2色と方向を指定でき、スポイトやスタイルのコピーでも引き継がれます",
+      "フォント一覧に Malgun Gothic、Apple SD Gothic Neo、Nanum Gothic、Arial、Times New Roman、Verdana が加わりました"
+     ]
+    },
+    "zh": {
+     "title": "Fry Draw 17：自动换行文本框、渐变描边",
+     "items": [
+      "文本框：为文字设置宽度后会自动换行，拉丁文按单词、韩文按字符断行，并保留左对齐、居中和右对齐",
+      "描边可以使用线性或径向渐变，设两种颜色和方向；吸管和样式复制也会带上渐变",
+      "字体列表新增 Malgun Gothic、Apple SD Gothic Neo、Nanum Gothic、Arial、Times New Roman 和 Verdana"
+     ]
+    },
+    "pt": {
+     "title": "Fry Draw 17: caixas de texto com quebra, traços com degradê",
+     "items": [
+      "Caixa de texto: defina uma largura para o texto e ele quebra sozinho, por palavra no texto latino e por caractere no coreano, respeitando alinhamento à esquerda, centro e direita",
+      "Os traços podem usar degradês linear ou radial com duas cores e uma direção; o conta-gotas e a cópia de estilo também levam o degradê",
+      "A lista de fontes ganha Malgun Gothic, Apple SD Gothic Neo, Nanum Gothic, Arial, Times New Roman e Verdana"
+     ]
+    },
+    "ru": {
+     "title": "Fry Draw 17: текстовые блоки с переносом, градиентная обводка",
+     "items": [
+      "Текстовый блок: задайте текст ширину, и он будет переноситься сам: по словам для латиницы и по символам для корейского, с выравниванием по левому краю, по центру и по правому",
+      "Обводка может быть линейным или радиальным градиентом из двух цветов с направлением; пипетка и копирование стиля тоже переносят градиент",
+      "В список шрифтов добавлены Malgun Gothic, Apple SD Gothic Neo, Nanum Gothic, Arial, Times New Roman и Verdana"
+     ]
+    },
+    "tr": {
+     "title": "Fry Draw 17: kaydırmalı metin kutuları, degradeli çizgiler",
+     "items": [
+      "Metin kutusu: bir metne genişlik verirseniz otomatik kaydırır; Latin metinde kelime, Korece metinde karakter bazında, sol, orta ve sağ hizalama korunur",
+      "Çizgiler iki renkli ve yönlü doğrusal veya radyal degrade kullanabilir; damlalık ve stil kopyalama da bunu taşır",
+      "Yazı tipi listesine Malgun Gothic, Apple SD Gothic Neo, Nanum Gothic, Arial, Times New Roman ve Verdana eklendi"
+     ]
+    },
+    "it": {
+     "title": "Fry Draw 17: caselle di testo con a capo, tratti sfumati",
+     "items": [
+      "Casella di testo: imposta una larghezza e il testo va a capo da solo, per parola nel latino e per carattere nel coreano, rispettando allineamento a sinistra, centrato e a destra",
+      "I tratti possono usare sfumature lineari o radiali con due colori e una direzione; contagocce e copia stile le portano con sé",
+      "L'elenco dei caratteri si arricchisce di Malgun Gothic, Apple SD Gothic Neo, Nanum Gothic, Arial, Times New Roman e Verdana"
+     ]
+    },
+    "pl": {
+     "title": "Fry Draw 17: pola tekstowe z zawijaniem, obrysy z gradientem",
+     "items": [
+      "Pole tekstowe: ustaw szerokość tekstu, a zawinie się automatycznie, po słowach dla łaciny i po znakach dla koreańskiego, z wyrównaniem do lewej, do środka i do prawej",
+      "Obrysy mogą używać gradientów liniowych lub promienistych w dwóch kolorach z kierunkiem; pipeta i kopiowanie stylu też je przenoszą",
+      "Lista czcionek zawiera teraz Malgun Gothic, Apple SD Gothic Neo, Nanum Gothic, Arial, Times New Roman i Verdana"
+     ]
+    },
+    "ar": {
+     "title": "Fry Draw 17: مربعات نص بالتفاف، وخطوط بتدرّج",
+     "items": [
+      "مربع النص: حدّد عرضًا للنص فيلتف تلقائيًا، بالكلمة للنص اللاتيني وبالحرف للنص الكوري، مع الحفاظ على المحاذاة يسارًا ووسطًا ويمينًا",
+      "يمكن للخطوط أن تستخدم تدرّجًا خطيًا أو شعاعيًا بلونين واتجاه؛ وتنقل القطارة ونسخ الأسلوب التدرّج أيضًا",
+      "تضيف قائمة الخطوط Malgun Gothic وApple SD Gothic Neo وNanum Gothic وArial وTimes New Roman وVerdana"
+     ]
     }
    }
   },
@@ -198,6 +990,94 @@
       "Warp effects: wave, zigzag, roughen, bulge or pinch and swirl the outline of any line, rectangle, ellipse or curve, with amount, period and seed controls",
       "Place along path: select a shape and a path (the topmost is the path) and line up copies at a set count, optionally rotated to the path and with random size variation",
       "Both are covered by undo and saving"
+     ]
+    },
+    "es": {
+     "title": "Fry Draw 16: efectos de deformación y colocar a lo largo de una ruta",
+     "items": [
+      "Efectos de deformación: ondas, zigzag, rugosidad, abultar o pellizcar y remolino en el contorno de cualquier línea, rectángulo, elipse o curva, con controles de intensidad, periodo y semilla",
+      "Colocar a lo largo de una ruta: selecciona una forma y una ruta (la superior es la ruta) y alinea copias con una cantidad definida, opcionalmente rotadas según la ruta y con variación aleatoria de tamaño",
+      "Ambas opciones se pueden deshacer y se guardan"
+     ]
+    },
+    "fr": {
+     "title": "Fry Draw 16 : effets de déformation et placement le long d'un tracé",
+     "items": [
+      "Effets de déformation : ondulation, zigzag, rugosité, bombement ou pincement et tourbillon sur le contour de n'importe quelle ligne, rectangle, ellipse ou courbe, avec réglages d'intensité, de période et de graine",
+      "Placer le long d'un tracé : sélectionne une forme et un tracé (le plus haut sert de tracé) et aligne des copies selon un nombre défini, éventuellement tournées selon le tracé et avec une taille variable au hasard",
+      "Les deux fonctions sont annulables et enregistrées"
+     ]
+    },
+    "de": {
+     "title": "Fry Draw 16: Verzerrungseffekte und Platzierung entlang eines Pfads",
+     "items": [
+      "Verzerrungseffekte: Welle, Zickzack, Rauheit, Wölbung oder Einziehen sowie Strudel auf dem Umriss jeder Linie, jedes Rechtecks, jeder Ellipse oder Kurve, mit Regler für Stärke, Periode und Seed",
+      "Entlang eines Pfads platzieren: wähle eine Form und einen Pfad (der oberste ist der Pfad) und richte Kopien in fester Anzahl aus, optional am Pfad gedreht und mit zufälliger Größenabweichung",
+      "Beides unterstützt Rückgängig und Speichern"
+     ]
+    },
+    "ja": {
+     "title": "Fry Draw 16: 歪み効果とパスに沿った配置",
+     "items": [
+      "歪み効果: 線・長方形・楕円・曲線の輪郭を、波・ジグザグ・ざらつき・膨らみ・つまみ・渦で変形します。強さ・周期・シードを調整できます",
+      "パスに沿って配置: 図形とパスを選ぶ（最前面がパス）と、指定した数だけコピーを並べます。パスに合わせて回転させたり、大きさをランダムに変えたりできます",
+      "どちらも元に戻せて、保存もされます"
+     ]
+    },
+    "zh": {
+     "title": "Fry Draw 16：扭曲效果与沿路径排列",
+     "items": [
+      "扭曲效果：可对任意线条、矩形、椭圆或曲线的轮廓做波浪、锯齿、粗糙、鼓起或收缩旋涡效果，并可调节幅度、周期和种子",
+      "沿路径排列：选中一个图形和一条路径（最上层的为路径），按设定数量排列副本，可选择沿路径旋转并随机变化大小",
+      "两者都支持撤销和保存"
+     ]
+    },
+    "pt": {
+     "title": "Fry Draw 16: efeitos de distorção e posicionar ao longo do caminho",
+     "items": [
+      "Efeitos de distorção: ondas, zigue-zague, aspereza, abaulamento ou aperto e redemoinho no contorno de qualquer linha, retângulo, elipse ou curva, com controles de intensidade, período e semente",
+      "Posicionar ao longo do caminho: selecione uma forma e um caminho (o de cima é o caminho) e alinhe cópias em uma quantidade definida, opcionalmente giradas conforme o caminho e com variação aleatória de tamanho",
+      "Ambos funcionam com desfazer e salvamento"
+     ]
+    },
+    "ru": {
+     "title": "Fry Draw 16: эффекты искажения и размещение вдоль пути",
+     "items": [
+      "Эффекты искажения: волна, зигзаг, шероховатость, выпуклость или вдавливание и завихрение для контура любой линии, прямоугольника, эллипса или кривой; есть настройки силы, периода и зерна",
+      "Размещение вдоль пути: выберите фигуру и путь (верхний объект считается путём) и расставьте копии заданным числом, при желании повёрнутыми по пути и с случайным изменением размера",
+      "Оба инструмента поддерживают отмену и сохранение"
+     ]
+    },
+    "tr": {
+     "title": "Fry Draw 16: bozma efektleri ve yol boyunca yerleştirme",
+     "items": [
+      "Bozma efektleri: herhangi bir çizgi, dikdörtgen, elips veya eğrinin anahattını dalga, zikzak, pürüzlülük, şişirme ya da çekme ve girdap ile bozar; miktar, periyot ve tohum ayarları vardır",
+      "Yol boyunca yerleştir: bir şekil ve bir yol seçin (en üstteki yol olur), belirlenen sayıda kopyayı yola göre döndürülmüş veya rastgele boyutta hizalayın",
+      "Her ikisi de geri alma ve kaydetmeyi destekler"
+     ]
+    },
+    "it": {
+     "title": "Fry Draw 16: effetti di deformazione e posiziona lungo un percorso",
+     "items": [
+      "Effetti di deformazione: onda, zigzag, ruvidità, rigonfiamento o pizzicotto e vortice sul contorno di qualsiasi linea, rettangolo, ellisse o curva, con controlli di intensità, periodo e seme",
+      "Posiziona lungo un percorso: seleziona una forma e un percorso (il più in alto è il percorso) e allinea copie in numero stabilito, facoltativamente ruotate secondo il percorso e con variazione casuale di dimensione",
+      "Entrambe supportano annulla e salvataggio"
+     ]
+    },
+    "pl": {
+     "title": "Fry Draw 16: efekty zniekształceń i ustawianie wzdłuż ścieżki",
+     "items": [
+      "Efekty zniekształceń: fala, zygzak, chropowatość, wybrzuszenie lub ściśnięcie i wir na konturze dowolnej linii, prostokąta, elipsy lub krzywej, z regulacją siły, okresu i ziarna",
+      "Ustaw wzdłuż ścieżki: zaznacz kształt i ścieżkę (najwyższy obiekt to ścieżka) i ustaw kopie w zadanej liczbie, opcjonalnie obrócone zgodnie ze ścieżką i z losową zmianą rozmiaru",
+      "Obie funkcje działają z cofaniem i zapisem"
+     ]
+    },
+    "ar": {
+     "title": "Fry Draw 16: تأثيرات التشويه والوضع على طول مسار",
+     "items": [
+      "تأثيرات التشويه: موجة، وزجزاج، وخشونة، وانتفاخ أو انكماش، ودوامة على محيط أي خط أو مستطيل أو بيضاوي أو منحنى، مع ضوابط للقوة والدورة والبذرة",
+      "الوضع على طول مسار: حدّد شكلًا ومسارًا (الأعلى هو المسار) ورتّب نسخًا بعدد محدد، مع خيار التدوير وفق المسار وتغيير عشوائي في الحجم",
+      "يعمل الأمران مع التراجع والحفظ"
      ]
     }
    }
@@ -223,6 +1103,116 @@
       "Ctrl+[ and ] to move one step back or forward (Shift for back or front), Ctrl+0 fit, Ctrl+1 100%, Ctrl +/- zoom, hold Space to pan, B for brush",
       "Shortcut list added to the Canvas tab"
      ]
+    },
+    "es": {
+     "title": "Fry Draw 15: pulido de booleanas, alinear, espaciado y tamaño, atajos",
+     "items": [
+      "Operaciones booleanas: nuevas opciones Dividir en piezas y Superior menos inferior, además de la opción Mantener originales",
+      "Alinear respecto al lienzo, a toda la selección o a un objeto clave (la forma superior no se mueve); define espaciado horizontal o vertical exacto; iguala ancho, alto o ambos con el objeto clave",
+      "Copiar y pegar: Ctrl+C / X / V (Mayús+V pega en el mismo sitio), también entre páginas y pestañas",
+      "Ctrl+[ y ] para mover una capa atrás o adelante (Mayús para al fondo o al frente), Ctrl+0 ajustar, Ctrl+1 al 100 %, Ctrl +/- zoom, mantén Espacio para desplazarte, B para pincel",
+      "Se añadió la lista de atajos a la pestaña Lienzo"
+     ]
+    },
+    "fr": {
+     "title": "Fry Draw 15 : finitions booléennes, alignement, espacement et taille, raccourcis",
+     "items": [
+      "Opérations booléennes : nouvelles options Diviser en morceaux et Haut moins bas, plus une option Garder les originaux",
+      "Aligner par rapport au canevas, à toute la sélection ou à un objet de référence (la forme du dessus reste en place) ; définir un espacement horizontal ou vertical exact ; égaliser la largeur, la hauteur ou les deux sur l'objet de référence",
+      "Copier et coller : Ctrl+C / X / V (Maj+V colle sur place), y compris entre pages et onglets",
+      "Ctrl+[ et ] pour reculer ou avancer d'un cran (Maj pour tout au fond ou au premier plan), Ctrl+0 ajuster, Ctrl+1 à 100 %, Ctrl +/- zoom, maintenir Espace pour déplacer la vue, B pour le pinceau",
+      "Liste des raccourcis ajoutée dans l'onglet Canevas"
+     ]
+    },
+    "de": {
+     "title": "Fry Draw 15: Boolesche Feinschliff, Ausrichten, Abstände und Größenanpassung, Tastenkürzel",
+     "items": [
+      "Boolesche Operationen: neu sind Aufteilen in Teile und Oben minus unten, außerdem die Option Originale behalten",
+      "Ausrichten relativ zur Leinwand, zur gesamten Auswahl oder zu einem Schlüsselobjekt (die oberste Form bleibt stehen); exakte horizontale oder vertikale Abstände festlegen; Breite, Höhe oder beides am Schlüsselobjekt angleichen",
+      "Kopieren und Einfügen: Strg+C / X / V (Umschalt+V fügt an Ort und Stelle ein), auch über Seiten und Tabs hinweg",
+      "Strg+[ und ] bewegen einen Schritt nach hinten oder vorn (Umschalt für ganz hinten oder ganz vorn), Strg+0 einpassen, Strg+1 auf 100 %, Strg +/- Zoom, Leertaste halten zum Verschieben, B für Pinsel",
+      "Im Reiter Leinwand ist jetzt eine Liste der Tastenkürzel"
+     ]
+    },
+    "ja": {
+     "title": "Fry Draw 15: ブール演算の仕上げ、整列・間隔・大きさの統一、ショートカット",
+     "items": [
+      "ブール演算: 「ピースに分割」と「上から下を引く」を追加。「元の図形を残す」オプションもあります",
+      "キャンバス・選択範囲全体・基準オブジェクトに対して整列できます（最前面の図形は動きません）。水平・垂直の間隔を正確に指定でき、幅・高さ・両方を基準オブジェクトに合わせられます",
+      "コピーと貼り付け: Ctrl+C・X・V（Shift+Vは同じ位置に貼り付け）。ページやタブをまたいでも使えます",
+      "Ctrl+[ と ] で一つ後ろ・前へ（Shiftで最背面・最前面へ）。Ctrl+0 で全体表示、Ctrl+1 で100%、Ctrl +/- で拡大縮小、Spaceを押しながらドラッグで移動、B でブラシ",
+      "キャンバスタブにショートカット一覧を追加しました"
+     ]
+    },
+    "zh": {
+     "title": "Fry Draw 15：布尔运算完善、对齐、间距与尺寸匹配、快捷键",
+     "items": [
+      "布尔运算：新增“分割成块”和“上减下”，并可选择“保留原图形”",
+      "可相对于画布、整个选区或关键对象对齐（最上层的图形保持不动）；可设置精确的水平或垂直间距；可将宽度、高度或两者与关键对象匹配",
+      "复制和粘贴：Ctrl+C / X / V（Shift+V 原位粘贴），也可跨页面和标签页使用",
+      "Ctrl+[ 和 ] 可后移或前移一层（配合 Shift 则移到最底或最顶），Ctrl+0 适应，Ctrl+1 为100%，Ctrl +/- 缩放，按住空格平移，B 切换画笔",
+      "画布标签新增快捷键列表"
+     ]
+    },
+    "pt": {
+     "title": "Fry Draw 15: refinos booleanos, alinhar, espaçamento e igualar tamanho, atalhos",
+     "items": [
+      "Operações booleanas: novas opções Dividir em partes e Topo menos base, além da opção Manter originais",
+      "Alinhar em relação à tela, à seleção inteira ou a um objeto-chave (a forma de cima fica parada); definir espaçamento horizontal ou vertical exato; igualar largura, altura ou ambas ao objeto-chave",
+      "Copiar e colar: Ctrl+C / X / V (Shift+V cola no mesmo lugar), também entre páginas e abas",
+      "Ctrl+[ e ] para recuar ou avançar uma camada (Shift para o fundo ou o topo), Ctrl+0 ajustar, Ctrl+1 para 100%, Ctrl +/- zoom, segure Espaço para mover, B para pincel",
+      "Lista de atalhos adicionada à aba Tela"
+     ]
+    },
+    "ru": {
+     "title": "Fry Draw 15: доработка булевых операций, выравнивание, интервалы и размеры, горячие клавиши",
+     "items": [
+      "Булевы операции: новые «Разделить на части» и «Верхняя минус нижняя», а также опция «Сохранить исходные»",
+      "Выравнивание относительно холста, всего выделения или ключевого объекта (верхняя фигура не двигается); точные горизонтальные и вертикальные интервалы; выравнивание ширины, высоты или обеих по ключевому объекту",
+      "Копирование и вставка: Ctrl+C / X / V (Shift+V — вставить на место), в том числе между страницами и вкладками",
+      "Ctrl+[ и ] — сдвинуть назад или вперёд на шаг (с Shift — в самый низ или наверх), Ctrl+0 — вписать, Ctrl+1 — 100 %, Ctrl +/- — масштаб, удержание пробела — перемещение, B — кисть",
+      "На вкладку «Холст» добавлен список горячих клавиш"
+     ]
+    },
+    "tr": {
+     "title": "Fry Draw 15: boolean ince ayar, hizalama, aralık ve boyut eşleme, kısayollar",
+     "items": [
+      "Boolean işlemler: Parçalara böl ve Üstten alttan çıkar yeni; ayrıca Orijinalleri koru seçeneği",
+      "Tuval, tüm seçim veya anahtar nesneye göre hizala (en üstteki şekil yerinde kalır); tam yatay veya dikey aralık ver; genişlik, yükseklik ya da ikisini anahtar nesneye eşitle",
+      "Kopyala ve yapıştır: Ctrl+C / X / V (Shift+V aynı yere yapıştırır); sayfalar ve sekmeler arasında da çalışır",
+      "Ctrl+[ ve ] ile bir adım geri veya ileri (Shift ile en arkaya veya en öne); Ctrl+0 sığdır, Ctrl+1 %100, Ctrl +/- yakınlaştır, Boşluk basılı tutarak kaydır, B fırça",
+      "Tuval sekmesine kısayol listesi eklendi"
+     ]
+    },
+    "it": {
+     "title": "Fry Draw 15: rifiniture booleane, allineamento, spaziatura e dimensioni, scorciatoie",
+     "items": [
+      "Operazioni booleane: nuove opzioni Dividi in pezzi e Superiore meno inferiore, più l'opzione Mantieni originali",
+      "Allinea rispetto alla tela, a tutta la selezione o a un oggetto chiave (la forma più in alto resta ferma); imposta spaziatura orizzontale o verticale esatta; uniforma larghezza, altezza o entrambe all'oggetto chiave",
+      "Copia e incolla: Ctrl+C / X / V (Maiusc+V incolla sul posto), anche tra pagine e schede",
+      "Ctrl+[ e ] per arretrare o avanzare di un livello (con Maiusc fino in fondo o in cima), Ctrl+0 adatta, Ctrl+1 al 100%, Ctrl +/- zoom, tieni premuto Spazio per spostare, B per il pennello",
+      "Aggiunto l'elenco delle scorciatoie nella scheda Tela"
+     ]
+    },
+    "pl": {
+     "title": "Fry Draw 15: dopracowanie operacji logicznych, wyrównanie, odstępy i rozmiary, skróty",
+     "items": [
+      "Operacje logiczne: nowe Podziel na części i Górna minus dolna oraz opcja Zachowaj oryginały",
+      "Wyrównanie względem płótna, całego zaznaczenia lub obiektu kluczowego (najwyższy kształt stoi w miejscu); dokładne odstępy poziome lub pionowe; wyrównanie szerokości, wysokości lub obu do obiektu kluczowego",
+      "Kopiuj i wklej: Ctrl+C / X / V (Shift+V wkleja w to samo miejsce), także między stronami i kartami",
+      "Ctrl+[ i ] przesuwa o jeden poziom wstecz lub do przodu (z Shift na sam spód lub wierzch), Ctrl+0 dopasuj, Ctrl+1 na 100%, Ctrl +/- powiększenie, przytrzymaj Spację, by przesuwać, B to pędzel",
+      "Lista skrótów dodana na karcie Płótno"
+     ]
+    },
+    "ar": {
+     "title": "Fry Draw 15: تحسينات العمليات المنطقية، والمحاذاة، والتباعد ومطابقة الحجم، والاختصارات",
+     "items": [
+      "العمليات المنطقية: خياران جديدان «تقسيم إلى قطع» و«الأعلى ناقص الأسفل»، وخيار «الاحتفاظ بالأصول»",
+      "المحاذاة نسبةً إلى اللوحة أو كامل التحديد أو عنصر مرجعي (يبقى الشكل الأعلى في مكانه)؛ وتعيين تباعد أفقي أو رأسي دقيق؛ ومطابقة العرض أو الارتفاع أو كليهما بالعنصر المرجعي",
+      "نسخ ولصق: Ctrl+C / X / V (وShift+V للصق في المكان نفسه)، بين الصفحات والألسنة أيضًا",
+      "‏Ctrl+[ وCtrl+] للتراجع أو التقدم طبقة واحدة (ومع Shift إلى الأسفل أو الأعلى)، وCtrl+0 للملاءمة، وCtrl+1 للحجم 100%، وCtrl مع +/- للتكبير، ومسطرة المسافة للتحريك، وB للفرشاة",
+      "أُضيفت قائمة الاختصارات إلى تبويب اللوحة"
+     ]
     }
    }
   },
@@ -246,6 +1236,116 @@
       "Imported gradients and clips survive export to SVG, PNG and PDF",
       "Brush presets: basic, fine pen, marker, highlighter, calligraphy, brush pen and big brush, with an adjustable nib angle for calligraphy",
       "Fixed duplicated transform attributes after moving imported shapes"
+     ]
+    },
+    "es": {
+     "title": "Fry Draw 14: importación SVG mucho mejor, preajustes de pincel",
+     "items": [
+      "Importación SVG: degradados, patrones, máscaras de recorte, máscaras, filtros, clases CSS y atributos de estilo, elementos reutilizados (use), imágenes incrustadas y formas agrupadas llegan como objetos editables por separado",
+      "Las formas giradas y escaladas tienen un centro de rotación correcto para girar de forma natural; se conservan las inclinaciones",
+      "Los degradados y recortes importados se conservan al exportar a SVG, PNG y PDF",
+      "Preajustes de pincel: básico, pluma fina, rotulador, resaltador, caligrafía, pincel pluma y pincel grande, con ángulo de plumilla ajustable para la caligrafía",
+      "Corregidos los atributos de transformación duplicados tras mover formas importadas"
+     ]
+    },
+    "fr": {
+     "title": "Fry Draw 14 : bien meilleur import SVG, préréglages de pinceau",
+     "items": [
+      "Import SVG : dégradés, motifs, masques d'écrêtage, masques, filtres, classes CSS et attributs de style, éléments réutilisés (use), images intégrées et formes groupées arrivent comme objets modifiables séparés",
+      "Les formes tournées et mises à l'échelle ont un centre de rotation correct pour tourner naturellement ; les inclinaisons sont conservées",
+      "Les dégradés et écrêtages importés survivent à l'export en SVG, PNG et PDF",
+      "Préréglages de pinceau : basique, stylo fin, marqueur, surligneur, calligraphie, pinceau stylo et gros pinceau, avec angle de plume réglable pour la calligraphie",
+      "Correction des attributs de transformation dupliqués après le déplacement de formes importées"
+     ]
+    },
+    "de": {
+     "title": "Fry Draw 14: deutlich besserer SVG-Import, Pinsel-Voreinstellungen",
+     "items": [
+      "SVG-Import: Verläufe, Muster, Clip-Pfade, Masken, Filter, CSS-Klassen und Stilattribute, wiederverwendete Elemente (use), eingebettete Bilder und gruppierte Formen kommen als einzelne bearbeitbare Objekte an",
+      "Gedrehte und skalierte Formen erhalten einen richtigen Drehmittelpunkt, damit sie natürlich drehen; Scherungen bleiben erhalten",
+      "Importierte Verläufe und Clips bleiben beim Export nach SVG, PNG und PDF erhalten",
+      "Pinsel-Voreinstellungen: Basis, feiner Stift, Marker, Textmarker, Kalligrafie, Pinselstift und großer Pinsel, mit einstellbarem Federwinkel für Kalligrafie",
+      "Doppelte Transformationsattribute nach dem Verschieben importierter Formen behoben"
+     ]
+    },
+    "ja": {
+     "title": "Fry Draw 14: SVG読み込みの大幅改善、ブラシのプリセット",
+     "items": [
+      "SVG読み込み: グラデーション、パターン、クリップパス、マスク、フィルター、CSSクラス、スタイル属性、再利用要素（use）、埋め込み画像、グループ化された図形が、それぞれ編集できる別々のオブジェクトになります",
+      "回転・拡大した図形に正しい回転の中心が付き、自然に回ります。傾斜も保たれます",
+      "読み込んだグラデーションとクリップは、SVG・PNG・PDFへの書き出しでも残ります",
+      "ブラシのプリセット: 基本・細ペン・マーカー・蛍光ペン・カリグラフィー・筆ペン・大筆。カリグラフィーではペン先の角度を調整できます",
+      "読み込んだ図形を動かした後に変換属性が重複する問題を修正しました"
+     ]
+    },
+    "zh": {
+     "title": "Fry Draw 14：SVG 导入大幅改进，画笔预设",
+     "items": [
+      "SVG 导入：渐变、图案、剪切路径、蒙版、滤镜、CSS 类和样式属性、复用元素（use）、嵌入图片和分组图形，都会作为各自可编辑的独立对象导入",
+      "旋转和缩放后的图形会有正确的旋转中心，转动更自然；倾斜也得以保留",
+      "导入的渐变和剪切在导出为 SVG、PNG 和 PDF 时依然保留",
+      "画笔预设：基础、细钢笔、马克笔、荧光笔、书法、毛笔和大毛笔，书法笔可调节笔尖角度",
+      "修复了移动导入图形后变换属性重复的问题"
+     ]
+    },
+    "pt": {
+     "title": "Fry Draw 14: importação de SVG bem melhor, predefinições de pincel",
+     "items": [
+      "Importação de SVG: degradês, padrões, recortes, máscaras, filtros, classes CSS e atributos de estilo, elementos reutilizados (use), imagens incorporadas e formas agrupadas chegam como objetos editáveis separados",
+      "Formas giradas e escalonadas ganham um centro de rotação correto para girar naturalmente; inclinações são preservadas",
+      "Degradês e recortes importados sobrevivem à exportação para SVG, PNG e PDF",
+      "Predefinições de pincel: básico, caneta fina, marcador, marca-texto, caligrafia, caneta pincel e pincel grosso, com ângulo de ponta ajustável para caligrafia",
+      "Corrigidos atributos de transformação duplicados após mover formas importadas"
+     ]
+    },
+    "ru": {
+     "title": "Fry Draw 14: заметно лучший импорт SVG, пресеты кисти",
+     "items": [
+      "Импорт SVG: градиенты, узоры, контуры обрезки, маски, фильтры, CSS-классы и атрибуты стиля, повторно используемые элементы (use), встроенные картинки и группы фигур приходят отдельными редактируемыми объектами",
+      "Повёрнутые и масштабированные фигуры получают правильный центр вращения и поворачиваются естественно; наклоны сохраняются",
+      "Импортированные градиенты и обрезки сохраняются при экспорте в SVG, PNG и PDF",
+      "Пресеты кисти: обычная, тонкая ручка, маркер, текстовыделитель, каллиграфия, кисть-ручка и большая кисть; для каллиграфии можно менять угол пера",
+      "Исправлено дублирование атрибутов трансформации после перемещения импортированных фигур"
+     ]
+    },
+    "tr": {
+     "title": "Fry Draw 14: çok daha iyi SVG içe aktarma, fırça ön ayarları",
+     "items": [
+      "SVG içe aktarma: degradeler, desenler, kırpma yolları, maskeler, filtreler, CSS sınıfları ve stil öznitelikleri, yeniden kullanılan öğeler (use), gömülü resimler ve gruplanmış şekiller artık ayrı düzenlenebilir nesneler olarak gelir",
+      "Döndürülmüş ve ölçeklenmiş şekiller doğal dönmesi için doğru bir dönme merkezi alır; eğimler korunur",
+      "İçe aktarılan degradeler ve kırpmalar SVG, PNG ve PDF dışa aktarımında kalır",
+      "Fırça ön ayarları: temel, ince kalem, işaretleyici, vurgulayıcı, hat sanatı, fırça kalem ve büyük fırça; hat sanatında uç açısı ayarlanabilir",
+      "İçe aktarılan şekiller taşındıktan sonra yinelenen dönüşüm öznitelikleri düzeltildi"
+     ]
+    },
+    "it": {
+     "title": "Fry Draw 14: importazione SVG molto migliore, preset di pennello",
+     "items": [
+      "Importazione SVG: sfumature, motivi, percorsi di ritaglio, maschere, filtri, classi CSS e attributi di stile, elementi riutilizzati (use), immagini incorporate e forme raggruppate arrivano come oggetti modificabili separati",
+      "Le forme ruotate e ridimensionate hanno un centro di rotazione corretto e ruotano in modo naturale; le inclinazioni sono conservate",
+      "Sfumature e ritagli importati restano all'esportazione in SVG, PNG e PDF",
+      "Preset di pennello: base, penna fine, pennarello, evidenziatore, calligrafia, pennello a penna e pennello grande, con angolo del pennino regolabile per la calligrafia",
+      "Corretti gli attributi di trasformazione duplicati dopo lo spostamento di forme importate"
+     ]
+    },
+    "pl": {
+     "title": "Fry Draw 14: znacznie lepszy import SVG, gotowe ustawienia pędzla",
+     "items": [
+      "Import SVG: gradienty, wzory, ścieżki przycinania, maski, filtry, klasy CSS i atrybuty stylu, ponownie używane elementy (use), wstawione obrazy i zgrupowane kształty trafiają jako osobne, edytowalne obiekty",
+      "Obrócone i skalowane kształty dostają poprawny środek obrotu, więc obracają się naturalnie; pochylenia są zachowane",
+      "Zaimportowane gradienty i przycinania przetrwają eksport do SVG, PNG i PDF",
+      "Ustawienia pędzla: podstawowy, cienkie pióro, marker, zakreślacz, kaligrafia, pędzel-pióro i duży pędzel; dla kaligrafii można zmienić kąt końcówki",
+      "Naprawiono zduplikowane atrybuty transformacji po przesunięciu zaimportowanych kształtów"
+     ]
+    },
+    "ar": {
+     "title": "Fry Draw 14: استيراد SVG أفضل بكثير، وإعدادات جاهزة للفرشاة",
+     "items": [
+      "استيراد SVG: التدرجات والأنماط ومسارات القص والأقنعة والمرشحات وفئات CSS وخصائص الأسلوب والعناصر المُعاد استخدامها (use) والصور المضمّنة والأشكال المجمّعة تصل كأجسام منفصلة قابلة للتحرير",
+      "تحصل الأشكال المُدارة والمُحجّمة على مركز دوران صحيح فتدور بشكل طبيعي، مع الحفاظ على الميلان",
+      "تبقى التدرجات والقصّات المستوردة عند التصدير إلى SVG وPNG وPDF",
+      "إعدادات الفرشاة: أساسي، وقلم دقيق، وماركر، وقلم تمييز، وخط عربي، وقلم فرشاة، وفرشاة كبيرة؛ مع زاوية رأس قابلة للضبط للخط",
+      "أُصلح تكرار خصائص التحويل بعد نقل الأشكال المستوردة"
      ]
     }
    }
