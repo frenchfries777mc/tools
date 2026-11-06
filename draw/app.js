@@ -19,7 +19,7 @@ function el(tag,attrs){ var e=document.createElementNS(NS,tag); for(var k in att
 var IMGS={}, warned=0;
 function oS(o){ return objStr(o); }
 function gradStops(g){ return (g.st&&g.st.length>1)?g.st:[{o:0,c:g.c1},{o:1,c:g.c2}]; }
-function gradDef(o){ var g=o.grad, id='g'+o.id, stp=gradStops(g).map(function(q){ return '<stop offset="'+f(q.o)+'" stop-color="'+esc(q.c)+'"'+(q.a!=null&&q.a<1?' stop-opacity="'+f(q.a)+'"':'')+'/>'; }).join('');
+function gradDef(o,key){ var g=o[key||'grad'], id=(key==='sgrad'?'sg':'g')+o.id, stp=gradStops(g).map(function(q){ return '<stop offset="'+f(q.o)+'" stop-color="'+esc(q.c)+'"'+(q.a!=null&&q.a<1?' stop-opacity="'+f(q.a)+'"':'')+'/>'; }).join('');
   if(g.t==='rad') return '<radialGradient id="'+id+'" cx="'+f(g.cx==null?50:g.cx)+'%" cy="'+f(g.cy==null?50:g.cy)+'%" r="'+f(g.r||70)+'%">'+stp+'</radialGradient>';
   var an=(g.ang||0)*Math.PI/180, c=Math.cos(an), sn=Math.sin(an);
   return '<linearGradient id="'+id+'" x1="'+f(.5-c/2)+'" y1="'+f(.5-sn/2)+'" x2="'+f(.5+c/2)+'" y2="'+f(.5+sn/2)+'">'+stp+'</linearGradient>'; }
@@ -43,6 +43,15 @@ function filtDef(o){ var b=+o.blur||0, inner='';
 var MK={arrow:['M0 0L10 5L0 10z',4,1],open:['M1 1L9 5L1 9',8,0],dot:['M5 .5a4.5 4.5 0 1 0 .01 0z',5,1],diamond:['M5 0L10 5L5 10L0 5z',5,1],bar:['M4 0h2v10h-2z',5,1]};
 function mkDef(o,pos,type,col){ var m=MK[type]; if(!m) return ''; var z=3*(o.mks||1);
   return '<marker id="m'+pos+o.id+'" viewBox="0 0 10 10" refX="'+m[1]+'" refY="5" markerUnits="strokeWidth" markerWidth="'+f(z)+'" markerHeight="'+f(z)+'" orient="'+(pos==='s'?'auto-start-reverse':'auto')+'" overflow="visible"><path d="'+m[0]+'" '+(m[2]?'fill="'+esc(col)+'" stroke="none"':'fill="none" stroke="'+esc(col)+'" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"')+'/></marker>'; }
+var WRAPC=null;
+function wrapLines(o){ var w=+o.tw||0, raw=String(o.txt||'').split('\n'); if(w<10) return raw; if(!WRAPC) WRAPC=document.createElement('canvas').getContext('2d');
+  var fs=+o.a['font-size']||48, ls=+o.a['letter-spacing']||0; WRAPC.font=(o.a['font-style']==='italic'?'italic ':'')+(o.a['font-weight']==='700'?'700 ':'400 ')+fs+'px '+(o.a['font-family']||'sans-serif'); var out=[];
+  var mw=function(t){ return WRAPC.measureText(t).width+ls*t.length; };
+  raw.forEach(function(par){ if(par===''){ out.push(''); return; } var line='', i, ch;
+    for(i=0;i<par.length;i++){ ch=par[i]; var test=line+ch; if(line&&mw(test)>w){ var sp=line.lastIndexOf(' ');
+        if(ch!==' '&&sp>0&&/[A-Za-z0-9]/.test(line.slice(sp+1)+ch)){ out.push(line.slice(0,sp)); line=line.slice(sp+1)+ch; } else { out.push(line.replace(/\s+$/,'')); line=ch===' '?'':ch; } } else line=test; }
+    out.push(line); });
+  return out; }
 function objStr(o,nested){
   if(o.hid) return '';
   var a='', defs='';
@@ -50,7 +59,7 @@ function objStr(o,nested){
   var fv=o.fill; if(o.grad){ defs+=gradDef(o); fv='url(#g'+o.id+')'; } else if(o.pat){ defs+=patDef(o); fv='url(#p'+o.id+')'; }
   if(o.clip&&o.tag==='grp'){ defs+='<clipPath id="cp'+o.id+'">'+objStr(o.clip,true)+'</clipPath>'; a+=' clip-path="url(#cp'+o.id+')"'; }
   if(fv!=null) a+=' fill="'+esc(fv)+'"';
-  if(o.stroke!=null) a+=' stroke="'+esc(o.stroke)+'"';
+  if(o.stroke!=null){ var sv=o.stroke; if(o.sgrad&&sv!=='none'){ defs+=gradDef(o,'sgrad'); sv='url(#sg'+o.id+')'; } a+=' stroke="'+esc(sv)+'"'; }
   if(o.sw!=null) a+=' stroke-width="'+f(o.sw)+'"';
   if(o.op!=null&&o.op<1) a+=' opacity="'+f(o.op)+'"';
   if(o.dash) a+=' stroke-dasharray="'+f(o.dash)+' '+f(o.gap>0?o.gap:o.dash*.8)+'"';
@@ -66,9 +75,9 @@ function objStr(o,nested){
   if(o.a.transform) tf+=(tf?' ':'')+o.a.transform;
   if(tf) a+=' transform="'+tf.trim()+'"';
   var tag=o.tag==='grp'?'g':o.tag, idA=nested?'':' data-id="'+o.id+'"';
-  if(tag==='text'){ var fs0=+o.a['font-size']||48, ln=String(o.txt||'').split('\n'), body;
+  if(tag==='text'){ var fs0=+o.a['font-size']||48, ln=o.tw>0&&!o.tp?wrapLines(o):String(o.txt||'').split('\n'), body;
     if(o.tp){ defs+='<path id="tp'+o.id+'" d="'+esc(o.tp)+'" fill="none" stroke="none"/>'; body='<textPath href="#tp'+o.id+'" startOffset="'+f(o.tpo||0)+'%">'+esc(ln.join(' '))+'</textPath>'; }
-    else if(ln.length>1) body=ln.map(function(l,i){ return '<tspan x="'+esc(o.a.x)+'" dy="'+(i?f((o.lh||1.2)*fs0):0)+'">'+esc(l)+'</tspan>'; }).join('');
+    else if(ln.length>1||o.tw>0){ var tax=(+o.a.x||0)+(o.tw>0?(o.a['text-anchor']==='middle'?o.tw/2:o.a['text-anchor']==='end'?o.tw:0):0); body=ln.map(function(l,i){ return '<tspan x="'+f(tax)+'" dy="'+(i?f((o.lh||1.2)*fs0):0)+'">'+esc(l)+'</tspan>'; }).join(''); }
     else body=esc(ln[0]);
     return defs+'<text'+a+idA+'>'+body+'</text>'; }
   if(tag==='g') return defs+'<g'+a+idA+'>'+(o.tag==='grp'?(o.kids||[]).map(function(q){ return objStr(q,true); }).join(''):(o.inner||''))+'</g>';
@@ -357,6 +366,9 @@ function finishBez(close){ if(bezPts.length<2){ bezPts=[]; drawOv(); return; }
   var o=newObj('path',{d:''},{fill:st.fillOn?st.fill:'none',pts:bezPts.map(function(q){ return JSON.parse(JSON.stringify(q)); }),cl:!!close,sh:false,bz:true}); setD(o); doc.objs.push(o); sel=[o.id]; bezPts=[]; commit(); }
 function finishCurve(){ if(curvePts.length<2){ curvePts=[]; drawOv(); return; }
   var cex={fill:st.fillOn?st.fill:'none'}; if(st.sym<=1&&!st.mirror){ cex.pts=curvePts.map(function(q){ return {x:q.x,y:q.y}; }); cex.cl=st.closed; cex.sh=false; } doc.objs.push(newObj('path',{d:symPath(curvePts,st.closed)},cex)); sel=[doc.objs[doc.objs.length-1].id]; curvePts=[]; commit(); }
+function sgUI(o){ var g=o.sgrad, h='<div class="row"><label>선 채우기</label><select data-sgt="1"><option value=""'+(g?'':' selected')+'>한 가지 색</option><option value="lin"'+(g&&g.t==='lin'?' selected':'')+'>그라데이션 (선형)</option><option value="rad"'+(g&&g.t==='rad'?' selected':'')+'>그라데이션 (원형)</option></select></div>';
+  if(g) h+='<div class="row"><label>선 색 둘</label><input type="color" data-sgc="c1" value="'+hex(g.c1)+'"><input type="color" data-sgc="c2" value="'+hex(g.c2)+'"></div>'+(g.t==='lin'?rowRange('선 방향','sgang',-180,180,g.ang||0,'°'):'');
+  return h; }
 function gradEnsure(g){ if(!g.st||g.st.length<2) g.st=[{o:0,c:g.c1},{o:1,c:g.c2}]; return g.st; }
 function gradSync(g){ var q=g.st.slice().sort(function(a,b){ return a.o-b.o; }); g.st=q; g.c1=q[0].c; g.c2=q[q.length-1].c; }
 function gradUI(g){ var stp=gradStops(g), h='<div class="note" style="margin:6px 0 2px">색 · 위치(%) · 투명도(%)</div>';
@@ -733,7 +745,7 @@ function snapTargets(){ var xs=[0,doc.w/2,doc.w], ys=[0,doc.h/2,doc.h], n=0;
   doc.objs.forEach(function(o){ if(o.hid||sel.indexOf(o.id)>=0||n>80) return; var b=bbox(o); if(!b) return; n++; xs.push(b.x,b.x+b.w/2,b.x+b.w); ys.push(b.y,b.y+b.h/2,b.y+b.h); });
   (doc.guides||[]).forEach(function(g){ if(g.v==='x') xs.push(g.p); else ys.push(g.p); });
   return {xs:xs,ys:ys}; }
-var STYK=['fill','stroke','sw','op','dash','gap','cap','join','miter','grad','pat','blur','fbr','fct','fsa','fhue','fgr','finv','shadow','sdx','sdy','sdb','sdc','sdo','blend'];
+var STYK=['sgrad','fill','stroke','sw','op','dash','gap','cap','join','miter','grad','pat','blur','fbr','fct','fsa','fhue','fgr','finv','shadow','sdx','sdy','sdb','sdc','sdo','blend'];
 function pickStyle(src,dst){ dst.forEach(function(o){ STYK.forEach(function(k){ if(src[k]==null||src[k]===false){ delete o[k]; } else o[k]=JSON.parse(JSON.stringify(src[k])); }); }); }
 function eyedrop(id){ var so=byId(id); if(!so) return; var tg=selObjs().filter(function(o){ return o.id!==id; });
   if(so.fill&&so.fill!=='none'){ st.fill=hex(so.fill); st.fillOn=true; } else st.fillOn=false;
@@ -987,6 +999,7 @@ function panel(){ symBar();
     if(o&&o.tag!=='image'){ var pt=o.pat; h+='<div class="row"><label>채우는 법</label><select data-gt="1"><option value=""'+(gr||pt?'':' selected')+'>한 가지 색</option><option value="lin"'+(gr&&gr.t==='lin'?' selected':'')+'>그라데이션 (직선)</option><option value="rad"'+(gr&&gr.t==='rad'?' selected':'')+'>그라데이션 (둥글게)</option><option value="pat"'+(pt?' selected':'')+'>무늬 (줄·점·격자)</option></select></div>';
       if(gr) h+=gradUI(gr); if(pt) h+=patFillUI(pt); }
     h+='<div class="row"><label>선 색</label><input type="color" data-c="stroke" value="'+hex(strokeC==='none'?st.stroke:strokeC)+'"></div>';
+    if(o&&['image','text','grp','g'].indexOf(o.tag)<0) h+=sgUI(o);
     h+=rowRange('선 굵기','sw',0,60,o&&o.sw!=null?o.sw:st.sw,'px');
     h+=rowRange('투명도','op',0.05,1,o&&o.op!=null?o.op:st.op,'',0.05);
     var dsh=o?(o.dash||0):st.dash, gpv=o?(o.gap>0?o.gap:dsh*.8):(st.gap>0?st.gap:dsh*.8), cp=o?(o.cap||'round'):st.cap, jn=o?(o.join||'round'):st.join, sw0=o&&o.sw!=null?o.sw:st.sw;
@@ -1016,11 +1029,11 @@ function panel(){ symBar();
       h+=symUI(so,o)+(so.length>1?scatterUI():'')+fxUI()+simUI(o)+(o.tag==='image'?traceUI():'')+adjUI(o)+arrUI()+offUI();
       var txo=so.length===1&&o.tag==='text'?o:null, hasShape=so.length>=2&&so.some(function(q){ return q.tag==='text'; })&&so.some(function(q){ return q.tag!=='text'; });
       if(hasShape) h+='<div class="sec"><h4>글자 + 선</h4><div class="btns"><button class="tbtn pri" data-a="top">글자를 선 따라 쓰기</button></div><div class="note">글자 하나와 선·도형 하나를 같이 골랐어요.</div></div>';
-      if(txo){ var FAM=[['\'Noto Sans KR\',sans-serif','고딕'],['serif','명조'],['Georgia,serif','Georgia (세리프)'],['\'Trebuchet MS\',sans-serif','Trebuchet'],['monospace','고정폭'],['\'Courier New\',monospace','Courier'],['cursive','필기체'],['\'Comic Sans MS\',cursive','Comic'],['Impact,sans-serif','굵은 제목']], an0=txo.a['text-anchor']||'start';
+      if(txo){ var FAM=[['\'Noto Sans KR\',sans-serif','고딕'],['serif','명조'],['Georgia,serif','Georgia (세리프)'],['\'Trebuchet MS\',sans-serif','Trebuchet'],['\'Malgun Gothic\',sans-serif','맑은 고딕'],['\'Apple SD Gothic Neo\',sans-serif','애플 고딕'],['\'Nanum Gothic\',sans-serif','나눔고딕'],['Arial,sans-serif','Arial'],['\'Times New Roman\',serif','Times New Roman'],['Verdana,sans-serif','Verdana'],['monospace','고정폭'],['\'Courier New\',monospace','Courier'],['cursive','필기체'],['\'Comic Sans MS\',cursive','Comic'],['Impact,sans-serif','굵은 제목']], an0=txo.a['text-anchor']||'start';
         h+='<div class="sec"><h4>글자</h4><textarea data-txt="1" rows="3" style="min-height:60px">'+esc(txo.txt||'')+'</textarea><div class="btns"><button class="tbtn" data-a="tedit">캔버스에서 고치기</button><button class="tbtn" data-a="tout">윤곽선 도형으로 바꾸기</button></div>'+rowRange('글자 크기','fs',8,300,+txo.a['font-size']||48,'px')+'<div class="row"><label>글꼴</label><select data-tf="family">'+FAM.map(function(x){ return '<option value="'+esc(x[0])+'"'+((txo.a['font-family']||'')===x[0]?' selected':'')+'>'+x[1]+'</option>'; }).join('')+'</select></div>'
           +'<div class="btns"><label class="chk" style="margin:0"><input type="checkbox" data-tf="bold"'+((txo.a['font-weight']||'')==='700'?' checked':'')+'> 굵게</label><label class="chk" style="margin:0"><input type="checkbox" data-tf="italic"'+(txo.a['font-style']==='italic'?' checked':'')+'> 기울임</label><label class="chk" style="margin:0"><input type="checkbox" data-tf="under"'+(txo.a['text-decoration']==='underline'?' checked':'')+'> 밑줄</label></div>'
           +(txo.tp?'':'<div class="row"><label>맞춤</label><select data-tf="anchor">'+[['start','왼쪽'],['middle','가운데'],['end','오른쪽']].map(function(x){ return '<option value="'+x[0]+'"'+(an0===x[0]?' selected':'')+'>'+x[1]+'</option>'; }).join('')+'</select></div>')
-          +rowRange('글자 간격','ls',-5,40,+txo.a['letter-spacing']||0,'px',.5)+(txo.tp?rowRange('시작 위치','tpo',0,100,txo.tpo||0,'%')+'<div class="btns"><button class="tbtn" data-a="topoff">선 따라 쓰기 풀기</button></div>':rowRange('줄 간격','lh',.8,3,txo.lh||1.2,'x',.05))+'</div>'; }
+          +rowRange('글자 간격','ls',-5,40,+txo.a['letter-spacing']||0,'px',.5)+(txo.tp?rowRange('시작 위치','tpo',0,100,txo.tpo||0,'%')+'<div class="btns"><button class="tbtn" data-a="topoff">선 따라 쓰기 풀기</button></div>':rowRange('줄 간격','lh',.8,3,txo.lh||1.2,'x',.05)+rowRange('글상자 너비 (0=끄기)','tw',0,1600,txo.tw||0,'px',10)+'<div class="note">너비를 정하면 그 너비에서 글이 알아서 줄바꿈돼요.</div>')+'</div>'; }
       h+='</div>';
     } else {
       if(tool==='poly') h+='<div class="sec"><h4>다각형</h4>'+rowRange('변 개수','sides',3,24,st.sides)+'</div>';
@@ -1057,6 +1070,8 @@ pb.addEventListener('input',function(e){
   var t=e.target;
   if(t.dataset.pv){ patVals[t.dataset.pv]=+t.value; t.nextElementSibling.textContent=t.value; return; }
   if(t.dataset.po){ patOpt[t.dataset.po]=+t.value; t.nextElementSibling.textContent=t.value+(t.dataset.po==='scale'?'%':'°'); return; }
+  if(t.dataset.sgc){ selObjs().forEach(function(o){ if(o.sgrad) o.sgrad[t.dataset.sgc]=t.value; }); softRender(); return; }
+  if(t.dataset.sgt!=null){ var sgv=t.value; selObjs().forEach(function(o){ if(!sgv) delete o.sgrad; else { var c0=hex(o.stroke&&o.stroke!=='none'?o.stroke:st.stroke); o.sgrad=o.sgrad?{t:sgv,c1:o.sgrad.c1,c2:o.sgrad.c2,ang:o.sgrad.ang||0,cx:50,cy:50,r:70}:{t:sgv,c1:c0,c2:'#ff5a8a',ang:0,cx:50,cy:50,r:70}; } }); commit(); return; }
   if(t.dataset.gc){ selObjs().forEach(function(o){ if(o.grad) o.grad[t.dataset.gc]=t.value; }); softRender(); return; }
   if(t.dataset.gs){ var gq=t.dataset.gs.split(':'), gi=+gq[0], gk=gq[1]; selObjs().forEach(function(o){ if(!o.grad) return; var stq=gradEnsure(o.grad); if(!stq[gi]) return; if(gk==='c') stq[gi].c=t.value; else if(gk==='o') stq[gi].o=Math.max(0,Math.min(1,(+t.value||0)/100)); else stq[gi].a=Math.max(0,Math.min(1,(+t.value||0)/100)); o.grad.c1=stq[0].c; o.grad.c2=stq[stq.length-1].c; }); softRender(); clearTimeout(saveT); saveT=setTimeout(commitQuiet,300); return; }
   if(t.dataset.ps&&t.type!=='checkbox'&&t.tagName!=='SELECT'){ selObjs().forEach(function(o){ if(o.pat){ o.pat[t.dataset.ps]=t.type==='color'?t.value:+t.value; } }); softRender(); clearTimeout(saveT); saveT=setTimeout(commitQuiet,300); return; }
@@ -1068,8 +1083,8 @@ pb.addEventListener('input',function(e){
     var so=selObjs();
     if(/^ps_/.test(id)){ so.forEach(function(o){ if(o.pat) o.pat[id.slice(3)]=v; }); softRender(); clearTimeout(saveT); saveT=setTimeout(commitQuiet,300); return; }
     if(id==='sdx'||id==='sdy'||id==='sdb'||id==='sdo'||id==='gcx'||id==='gcy'||id==='gr'){ so.forEach(function(o){ if(id[0]==='s'){ o[id]=v; } else if(o.grad){ o.grad[id==='gcx'?'cx':id==='gcy'?'cy':'r']=v; } }); softRender(); clearTimeout(saveT); saveT=setTimeout(commitQuiet,300); return; }
-    if(id==='ls'||id==='lh'||id==='tpo'){ so.forEach(function(o){ if(id==='ls') o.a['letter-spacing']=v; else if(id==='lh') o.lh=v; else o.tpo=v; }); softRender(); clearTimeout(saveT); saveT=setTimeout(commitQuiet,300); return; }
-    if(id==='rot'||id==='scl'||id==='fs'||id==='gang'){ so.forEach(function(o){ if(id==='rot') o.rot=v; else if(id==='scl'){ o.sx=(o.sx<0?-1:1)*v; o.sy=(o.sy<0?-1:1)*v; } else if(id==='gang'){ if(o.grad) o.grad.ang=v; } else o.a['font-size']=v; }); softRender(); clearTimeout(saveT); saveT=setTimeout(commitQuiet,300); return; }
+    if(id==='ls'||id==='lh'||id==='tpo'||id==='tw'){ so.forEach(function(o){ if(id==='ls') o.a['letter-spacing']=v; else if(id==='lh') o.lh=v; else if(id==='tw'){ if(v>=10) o.tw=v; else delete o.tw; } else o.tpo=v; }); softRender(); clearTimeout(saveT); saveT=setTimeout(commitQuiet,300); return; }
+    if(id==='rot'||id==='scl'||id==='fs'||id==='gang'||id==='sgang'){ so.forEach(function(o){ if(id==='rot') o.rot=v; else if(id==='scl'){ o.sx=(o.sx<0?-1:1)*v; o.sy=(o.sy<0?-1:1)*v; } else if(id==='gang'){ if(o.grad) o.grad.ang=v; } else if(id==='sgang'){ if(o.sgrad) o.sgrad.ang=v; } else o.a['font-size']=v; }); softRender(); clearTimeout(saveT); saveT=setTimeout(commitQuiet,300); return; }
     if(so.length&&(id==='sw'||id==='op'||id==='dash'||id==='blur'||id==='gap'||id==='miter'||id==='mks'||id==='fbr'||id==='fct'||id==='fsa'||id==='fhue'||id==='fgr'||id==='finv')){ setProp(id,v); }
     if(id==='trT'||id==='trN'||id==='trD'||id==='bsize'||id==='fxA'||id==='fxS'||id==='fxSeed'||id==='scN'||id==='scV'||id==='bnang'||id==='offr'||id==='sw'||id==='op'||id==='dash'||id==='gap'||id==='miter'||id==='mks'||id==='sides'||id==='star'||id==='inner'||id==='round'||id==='sym'||id==='font'||id==='gridSize') st[id]=v;
     if(id==='gridSize') drawGrid();
@@ -1080,7 +1095,7 @@ pb.addEventListener('change',function(e){
   if(t.dataset.gc){ commit(); return; }
   if(t.dataset.gt!=null){ var gv=t.value; selObjs().forEach(function(o){ if(!gv){ delete o.grad; delete o.pat; } else if(gv==='pat'){ delete o.grad; o.pat=o.pat||{t:'lines',c:hex(o.stroke&&o.stroke!=='none'?o.stroke:st.stroke),bg:'',s:12,w:4,a:45}; } else { delete o.pat; var c1=hex(o.fill&&o.fill!=='none'&&!/^url/.test(o.fill)?o.fill:st.fill); o.grad={t:gv,c1:o.grad?o.grad.c1:c1,c2:o.grad?o.grad.c2:'#ff5a8a',ang:o.grad?o.grad.ang:0}; if(o.grad.st) delete o.grad.st; if(o.fill==='none'||o.fill==null) o.fill=c1; } }); commit(); return; }
   if(t.dataset.ps){ selObjs().forEach(function(o){ if(!o.pat) return; var k=t.dataset.ps; if(k==='bgOn') o.pat.bg=t.checked?(o.pat.bgc||'#ffffff'):''; else if(k==='bg'){ o.pat.bg=t.value; o.pat.bgc=t.value; } else if(t.type==='color') o.pat[k]=t.value; else if(t.tagName==='SELECT') o.pat[k]=t.value; else o.pat[k]=+t.value; }); clearTimeout(saveT); commit(); return; }
-  if(t.dataset.gs||t.dataset.sdc){ clearTimeout(saveT); selObjs().forEach(function(o){ if(o.grad&&o.grad.st) gradSync(o.grad); }); commit(); return; }
+  if(t.dataset.gs||t.dataset.sdc||t.dataset.sgc){ clearTimeout(saveT); selObjs().forEach(function(o){ if(o.grad&&o.grad.st) gradSync(o.grad); }); commit(); return; }
   if(t.dataset.presel!=null){ if(t.value){ var pq2=t.value.split(','); $('cw').value=pq2[0]; $('ch').value=pq2[1]; } return; }
   if(t.dataset.symn){ var sd=symDefs()[t.dataset.symn]; if(sd){ sd.name=t.value.trim().slice(0,30)||sd.name; eachInst(t.dataset.symn,function(g){ g.name=sd.name; }); commit(); } return; }
   if(t.dataset.pgn){ doc.pn=t.value.trim()||('페이지 '+((doc.pi||0)+1)); commit(); return; }
@@ -1220,6 +1235,6 @@ desk.addEventListener('scroll',drawRulers); $('rh').addEventListener('pointerdow
   if(s){ try{ load(s); }catch(e){} }
   $('dname').value=doc.name; hist=[snap()]; hi=0;
   renderTools(); render(); fit(); panel();
-  window.FDRAW={fxApply:fxApply,scatterGo:scatterGo,boolOp:boolOp,copySel:copySel,pasteSel:pasteSel,align:align,spaceSel:spaceSel,matchSize:matchSize,importSvgRoot:importSvgRoot,parseXform:parseXform,symMake:symMake,symPut:symPut,symEdit:symEdit,symDone:symDone,gradPts:gradPts,textOutline:textOutline,traceImage:traceImage,SHAPES:SHAPES,flat:flat,rdp:rdp,strokePieces:strokePieces,pbUnionAll:pbUnionAll,getSel:function(){ return sel; },groupSel:groupSel,ungroupSel:ungroupSel,boolOp:boolOp,align:align,toPath:toPath,select:function(a){ sel=a; drawOv(); panel(); },addNode:addNode,mat:mat,doc:doc,importSvg:importSvg,drawPattern:drawPattern,setTool:setTool,st:st,PATS:PATS,svg:docSvg,buildSvg:buildSvg,openExport:openExport,exArea:exArea};
+  window.FDRAW={wrapLines:wrapLines,fxApply:fxApply,scatterGo:scatterGo,boolOp:boolOp,copySel:copySel,pasteSel:pasteSel,align:align,spaceSel:spaceSel,matchSize:matchSize,importSvgRoot:importSvgRoot,parseXform:parseXform,symMake:symMake,symPut:symPut,symEdit:symEdit,symDone:symDone,gradPts:gradPts,textOutline:textOutline,traceImage:traceImage,SHAPES:SHAPES,flat:flat,rdp:rdp,strokePieces:strokePieces,pbUnionAll:pbUnionAll,getSel:function(){ return sel; },groupSel:groupSel,ungroupSel:ungroupSel,boolOp:boolOp,align:align,toPath:toPath,select:function(a){ sel=a; drawOv(); panel(); },addNode:addNode,mat:mat,doc:doc,importSvg:importSvg,drawPattern:drawPattern,setTool:setTool,st:st,PATS:PATS,svg:docSvg,buildSvg:buildSvg,openExport:openExport,exArea:exArea};
 })();
 })();
