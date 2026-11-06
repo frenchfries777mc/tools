@@ -209,6 +209,7 @@
   }
   FS.tidy = tidy;
 
+  const idxOf = (S, pi, m, v, t) => { const E = S.parts[pi].m[m][v] || S.parts[pi].m[m][0]; return Math.max(0, FS.indexAt(E, t)); };
   /** place an event so that it starts at time t of measure m; crosses barlines with ties. */
   FS.place = function (S, pi, m, v, t, ev) {
     if (m >= S.meas.length) FS.growTo(S, m + 1);
@@ -217,9 +218,9 @@
     if (ev.d <= rem + EPS) {
       put(S, pi, m, v, t, ev);
       const nt = t + ev.d;
-      return { at: { m, i: FS.indexAt(S.parts[pi].m[m][v], t) }, next: nt >= len - EPS ? { m: m + 1, t: 0 } : { m, t: nt } };
+      return { at: { m, i: idxOf(S, pi, m, v, t) }, next: nt >= len - EPS ? { m: m + 1, t: 0 } : { m, t: nt } };
     }
-    if (ev.tp) { ev.d = rem; return FS.place(S, pi, m, v, t, ev); }
+    if (ev.tp) { delete ev.tp; ev = FS.normD(ev); return FS.place(S, pi, m, v, t, ev); }
     if (!ev.p.length) {
       let tt0 = t; FS.restsFor(t, rem, len).forEach((r) => { put(S, pi, m, v, tt0, r); tt0 += r.d; });
       return FS.place(S, pi, m + 1, v, 0, Object.assign({}, FS.rest(ev.d - rem)));
@@ -229,7 +230,7 @@
       const piece = k === 0 ? Object.assign({}, ev) : { p: FS.clone(ev.p) };
       piece.d = d; piece.tie = true;
       put(S, pi, m, v, tt, piece);
-      if (k === 0) first = { m, i: FS.indexAt(S.parts[pi].m[m][v], tt) };
+      if (k === 0) first = { m, i: idxOf(S, pi, m, v, tt) };
       tt += d;
     });
     const tail = { d: ev.d - rem, p: FS.clone(ev.p) };
@@ -259,7 +260,13 @@
     if (S.meas.length <= 1) return false;
     const mk = S.meas[at] || {}, next = S.meas[at + 1];
     if (next) ['ts', 'key', 'tempo'].forEach((k) => { if (mk[k] != null && next[k] == null && at > 0) next[k] = mk[k]; });
+    const T0 = FS.mtab(S);
     S.meas.splice(at, 1);
+    for (let j = at; j < S.meas.length; j++) { // keep the time signature and key of every following measure
+      const T1 = FS.mtab(S), wt = T0.ts[j + 1], wk = T0.key[j + 1];
+      if (T1.ts[j][0] !== wt[0] || T1.ts[j][1] !== wt[1]) { if (j === 0) S.ts = wt.slice(); else S.meas[j].ts = wt.slice(); }
+      if (T1.key[j] !== wk) { if (j === 0) S.key = wk; else S.meas[j].key = wk; }
+    }
     S.parts.forEach((P) => {
       P.m.splice(at, 1);
       if (at > 0) P.m[at - 1].forEach((E) => { if (E.length) delete E[E.length - 1].tie; });
