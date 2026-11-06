@@ -94,7 +94,7 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
 .clip.V1{background:#3b6fb6;} .clip.V2{background:#7a4ab8;} .clip.T{background:#c27a1c;} .clip.A{background:#2a8c6a;}
 .lane.off{background:repeating-linear-gradient(45deg,transparent 0 6px,rgba(255,255,255,.04) 6px 12px);} .clip.off{opacity:.35;} .clip.lock{cursor:not-allowed;} .clip.lock .hl,.clip.lock .hr{display:none;} .lane .lb{cursor:pointer;} .lane .lb small{font-size:9px;display:block;line-height:1;}
 .mk{position:absolute;top:10px;width:12px;height:14px;background:#4cc2ff;clip-path:polygon(0 0,100% 0,100% 60%,50% 100%,0 60%);cursor:pointer;z-index:6;}
-.clip.grp{box-shadow:inset 0 4px 0 hsl(var(--gh,0),80%,62%);} .clip.sel2{outline:2px dashed var(--fry);z-index:3;} .clip .kd{position:absolute;bottom:2px;width:8px;height:8px;margin-left:-4px;background:var(--fry);transform:rotate(45deg);pointer-events:none;z-index:2;}
+.clip.grp{box-shadow:inset 0 4px 0 hsl(var(--gh,0),80%,62%);} .clip.lab:after{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--lab);z-index:2;} .clip.sel2{outline:2px dashed var(--fry);z-index:3;} .clip .kd{position:absolute;bottom:2px;width:8px;height:8px;margin-left:-4px;background:var(--fry);transform:rotate(45deg);pointer-events:none;z-index:2;}
 .clip.sel{outline:2px solid var(--fry);z-index:3;}
 .clip .hl,.clip .hr{position:absolute;top:0;bottom:0;width:9px;cursor:ew-resize;background:rgba(255,255,255,.28);}
 .clip .wf{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;} .clip .nm{position:relative;pointer-events:none;}
@@ -129,7 +129,7 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
   <div class="vtop">
     <div class="bin" id="bin"></div>
     <div class="prev"><div class="pwrap"><canvas id="cv" width="1280" height="720" title="화면 속 클립을 끌면 옮겨지고, 노란 네모 모서리를 끌면 크기가 바뀌어요"></canvas></div>
-      <div class="tr"><button class="tbtn" id="bBack" title="맨 앞으로">⏮</button><button class="tbtn pri" id="bPlay">▶</button><button class="tbtn" id="bFrame" title="지금 장면을 PNG로">📷</button><span class="tc" id="tc">0:00.0 / 0:00.0</span></div>
+      <div class="tr"><button class="tbtn" id="bBack" title="맨 앞으로">⏮</button><button class="tbtn" id="bLoop" title="끝까지 가면 처음부터 다시 재생해요">🔁</button><button class="tbtn pri" id="bPlay">▶</button><button class="tbtn" id="bFrame" title="지금 장면을 PNG로">📷</button><span class="tc" id="tc">0:00.0 / 0:00.0</span></div>
     </div>
     <div class="panel"><div class="ptabs" id="ptabs"><button data-p="clip" class="on">클립</button><button data-p="ins">넣기</button><button data-p="proj">영상 설정</button></div><div class="pbody" id="pbody"></div></div>
   </div>
@@ -141,8 +141,8 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
 <input type="file" id="subIn" accept=".srt,.vtt,text/vtt,text/plain" hidden>
 <input type="file" id="fileIn" accept="video/*,image/*,audio/*" multiple hidden>
 <script src="../ai.js?v=ai36.l21"></script>
-<script src="strings.js?v=vs5"></script>
-<script src="app.js?v=vd20"></script>
+<script src="strings.js?v=vs6"></script>
+<script src="app.js?v=vd21"></script>
 <script src="../pwa.js" defer></script>
 <script src="../ping.js" defer></script>
 </body>
