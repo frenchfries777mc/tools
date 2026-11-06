@@ -4,6 +4,28 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v18",
+   "title": "미리보기에서 바로 옮기고 크기 바꾸기",
+   "items": [
+    "미리보기 화면에서 클립을 끌어 옮길 수 있어요 (영상·그림·글자·도형 모두). 고른 클립에는 노란 점선 상자가 보여요",
+    "노란 상자 오른쪽 아래 모서리를 끌면 크기가 바뀌어요 (손가락으로도 돼요)",
+    "다른 클립 위를 누르면 그 클립이 골라져요. 키프레임이 있는 클립은 경로 전체가 함께 움직여요. 잠긴 줄은 건드리지 않아요",
+    "'지금 장면을 PNG로'에는 점선 상자가 찍히지 않아요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Move and resize directly in the preview",
+     "items": [
+      "Drag clips in the preview to move them (video, pictures, text and shapes); the selected clip shows a dashed yellow box",
+      "Drag the bottom-right corner of the yellow box to resize (works with a finger too)",
+      "Tap another clip in the picture to select it; clips with keyframes move their whole path; locked tracks are left alone",
+      "The dashed box is not included in 'Save this frame as PNG'"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v17",
    "title": "전환 5개·빠르기 프리셋·글자 움직임 2개",
    "items": [

@@ -82,3 +82,4 @@ patchnotes/draw.json | Fry Draw v13 항목 (en만), draw/app.js 심볼·묶음 �
 patchnotes/score.json | Fry Score v14 항목 (en만) | score v14 | 2026-11-06
 score/app.js | Fry Score v14 한국어 메시지·버튼 | score v14 | 2026-11-06
 patchnotes/video.json | Fry Video v17 전환 5개·빠르기 프리셋·글자 움직임 2개 (en 번역 없음) | video v17 | 2026-11-06
+patchnotes/video.json | Fry Video v18 미리보기에서 바로 옮기고 크기 바꾸기 (en 번역 없음) | video v18 | 2026-11-06
