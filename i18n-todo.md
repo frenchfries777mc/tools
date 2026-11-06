@@ -103,3 +103,4 @@ patchnotes/draw.json | Fry Draw v17 항목 (en만), draw/app.js 글상자·선 �
 patchnotes/video.json | Fry Video v21 클립 이름·앞뒤 자르기·편집점 이동 (en 번역 없음) | video v21 | 2026-11-06
 patchnotes/video.json | Fry Video v22 흐린 배경 채우기·글자 맞춤·좌우 소리·파일 바꾸기 (en 번역 없음) | video v22 | 2026-11-06
 patchnotes/draw.json | Fry Draw v18 항목 (en만), draw/app.js 단계 만들기·크기 표시·윤곽선 보기 한국어 문구 | draw v18 | 2026-11-06
+patchnotes/draw.json | Fry Draw v19 항목 (en만), draw/app.js 모서리 둥글게·조각으로 떼어내기 한국어 문구 | draw v19 | 2026-11-06
