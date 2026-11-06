@@ -110,3 +110,4 @@ patchnotes/draw.json | Fry Draw v19 항목 (en만), draw/app.js 모서리 둥글
 patchnotes/draw.json | Fry Draw v20 항목 (en만), draw/app.js 하나씩 내보내기·ZIP 한국어 문구 | draw v20 | 2026-11-06
 patchnotes/score.json | Fry Score v21 항목 (en만) | score v21 | 2026-11-06
 score/app.js | Fry Score v21 한국어 메시지·버튼 | score v21 | 2026-11-06
+patchnotes/draw.json | Fry Draw v21 항목 (en만), draw/app.js 그림 다루기 한국어 문구 | draw v21 | 2026-11-06

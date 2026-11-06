@@ -4,6 +4,30 @@
  "notes": [
   {
    "date": "2026-11-06",
+   "build": "v21",
+   "title": "Fry Draw 21: 그림 다루기 (배경 지우기, 그림 바꾸기, 캔버스에 맞추기)",
+   "items": [
+    "배경 색 지우기: 그림의 왼쪽 위 모서리와 비슷한 색을 투명하게 지워요. 흰 바탕 로고나 서명을 따낼 때 좋고, 세기를 정할 수 있어요",
+    "그림 바꾸기: 크기·위치·색 보정을 그대로 두고 다른 그림 파일로 갈아 끼워요",
+    "원래 비율로, 캔버스에 맞추기, 캔버스 채우기 버튼을 더했어요",
+    "용량 줄이기: 그림 해상도를 절반으로 줄여 저장 파일 크기를 줄여요",
+    "모두 되돌리기·저장이 돼요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Fry Draw 21: picture tools (remove background, replace, fit to canvas)",
+     "items": [
+      "Remove background colour: makes colours similar to the top-left corner transparent, ideal for logos and signatures on white, with an adjustable strength",
+      "Replace picture: swap in another file while keeping size, position and colour adjustments",
+      "Restore aspect ratio, fit to canvas and fill canvas buttons",
+      "Shrink: halve the picture resolution to cut project file size",
+      "All covered by undo and saving"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-06",
    "build": "v20",
    "title": "Fry Draw 20: 도형 하나씩 내보내기, ZIP으로 묶기",
    "items": [
