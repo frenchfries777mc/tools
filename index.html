@@ -319,18 +319,18 @@ FFT.add({
   .fl .play{background:#a78bfa; color:#140a2b;}
   .tags span.ai{border-color:var(--fry); color:var(--fry); font-weight:600;}
   /* site design 2026-11-06: every tool card uses the same panel + gold accent (no per-tool colours) */
-  .game.py,.game.dc,.game.fs,.game.bh,.game.sl,.game.fl{--card:var(--panel); --gc:217,180,95; background:var(--panel); border-color:var(--line);}
-  .game.py:hover,.game.dc:hover,.game.fs:hover,.game.bh:hover,.game.sl:hover,.game.fl:hover{border-color:var(--fry); box-shadow:0 18px 50px rgba(217,180,95,.16);}
-  .game.py h2,.game.dc h2,.game.fs h2,.game.bh h2,.game.sl h2,.game.fl h2{color:var(--text);}
-  .game.py .badge,.game.dc .badge,.game.fs .badge,.game.bh .badge,.game.sl .badge,.game.fl .badge{background:var(--fry); color:#fff;}
-  .game.py h2 b,.game.dc h2 b,.game.fs h2 b,.game.bh h2 b,.game.sl h2 b,.game.fl h2 b{color:var(--fry);}
-  .game.py .motto,.game.dc .motto,.game.fs .motto,.game.bh .motto,.game.sl .motto,.game.fl .motto{color:var(--fry);} .game.py .motto i,.game.dc .motto i,.game.fs .motto i,.game.bh .motto i,.game.sl .motto i,.game.fl .motto i{background:var(--fry);}
-  .game.py .tags span,.game.dc .tags span,.game.fs .tags span,.game.bh .tags span,.game.sl .tags span,.game.fl .tags span{background:rgba(217,180,95,.1); color:var(--text); border:1px solid rgba(217,180,95,.35);}
-  .game.py .desc,.game.dc .desc,.game.fs .desc,.game.bh .desc,.game.sl .desc,.game.fl .desc{color:var(--dim);} .game.py .desc li::marker,.game.dc .desc li::marker,.game.fs .desc li::marker,.game.bh .desc li::marker,.game.sl .desc li::marker,.game.fl .desc li::marker{color:var(--fry);}
-  .game.py .play,.game.dc .play,.game.fs .play,.game.bh .play,.game.sl .play,.game.fl .play{background:linear-gradient(90deg,#d9b45f,#b8923a); color:#1c1405;}
-  html[data-ff-theme=light] .game.py .play,.game.dc .play,.game.fs .play,.game.bh .play,.game.sl .play,.game.fl .play{background:linear-gradient(90deg,#e0b93f,#d4a62a); color:#161616;}
-  html[data-ff-theme=dark] .game.py .badge,.game.dc .badge,.game.fs .badge,.game.bh .badge,.game.sl .badge,.game.fl .badge{color:#1a1503;}
-  html[data-ff-theme=light] .game.py .tags span,.game.dc .tags span,.game.fs .tags span,.game.bh .tags span,.game.sl .tags span,.game.fl .tags span{background:#fbf3d9;}
+  .game:is(.py,.dc,.fs,.bh,.sl,.fl,.dr,.sc,.vd){--card:var(--panel); --gc:217,180,95; background:var(--panel); border-color:var(--line);}
+  .game:is(.py,.dc,.fs,.bh,.sl,.fl,.dr,.sc,.vd):hover{border-color:var(--fry); box-shadow:0 18px 50px rgba(217,180,95,.16);}
+  .game:is(.py,.dc,.fs,.bh,.sl,.fl,.dr,.sc,.vd) h2{color:var(--text);}
+  .game:is(.py,.dc,.fs,.bh,.sl,.fl,.dr,.sc,.vd) .badge{background:var(--fry); color:#fff;}
+  .game:is(.py,.dc,.fs,.bh,.sl,.fl,.dr,.sc,.vd) h2 b{color:var(--fry);}
+  .game:is(.py,.dc,.fs,.bh,.sl,.fl,.dr,.sc,.vd) .motto{color:var(--fry);} .game:is(.py,.dc,.fs,.bh,.sl,.fl,.dr,.sc,.vd) .motto i{background:var(--fry);}
+  .game:is(.py,.dc,.fs,.bh,.sl,.fl,.dr,.sc,.vd) .tags span{background:rgba(217,180,95,.1); color:var(--text); border:1px solid rgba(217,180,95,.35);}
+  .game:is(.py,.dc,.fs,.bh,.sl,.fl,.dr,.sc,.vd) .desc{color:var(--dim);} .game:is(.py,.dc,.fs,.bh,.sl,.fl,.dr,.sc,.vd) .desc li::marker{color:var(--fry);}
+  .game:is(.py,.dc,.fs,.bh,.sl,.fl,.dr,.sc,.vd) .play{background:linear-gradient(90deg,#d9b45f,#b8923a); color:#1c1405;}
+  html[data-ff-theme=light] .game:is(.py,.dc,.fs,.bh,.sl,.fl,.dr,.sc,.vd) .play{background:linear-gradient(90deg,#e0b93f,#d4a62a); color:#161616;}
+  html[data-ff-theme=dark] .game:is(.py,.dc,.fs,.bh,.sl,.fl,.dr,.sc,.vd) .badge{color:#1a1503;}
+  html[data-ff-theme=light] .game:is(.py,.dc,.fs,.bh,.sl,.fl,.dr,.sc,.vd) .tags span{background:#fbf3d9;}
   html[data-ff-theme=light] .game{box-shadow:0 2px 14px rgba(0,0,0,.06);}
   .why{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin:40px 0 0;}
   .why > div{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px 18px 16px;}

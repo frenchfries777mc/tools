@@ -5,14 +5,18 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Claude와 연결하기</title>
+<script src="../i18n.js"></script>
 <style>
-body{font-family:system-ui,sans-serif;background:#111;color:#eee;display:flex;justify-content:center;padding:40px 16px;margin:0}
+:root{--bg:#0e0e0e;--panel:#171717;--panel2:#121212;--line:#2e2b25;--text:#ece6d8;--dim:#a39c8c;--fry:#d9b45f;--fry2:#b8923a}
+html[data-ff-theme=light]{--bg:#fff;--panel:#fff;--panel2:#f6f4ee;--line:#e4dfd2;--text:#111;--dim:#4b4b4b;--fry:#a67c00;--fry2:#d4a62a}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);display:flex;justify-content:center;padding:40px 16px;margin:0}
 main{width:100%;max-width:420px;display:flex;flex-direction:column;gap:10px}
-input,button{padding:10px;border-radius:8px;border:1px solid #444;background:#1c1c1c;color:#eee;font-size:16px}
-button,.btn{background:#e8b04a;color:#111;border:0;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;padding:10px;border-radius:8px;font-size:16px}
-label{font-size:14px;color:#aaa;margin-top:8px}
-footer{margin-top:24px;font-size:12px;color:#888;display:flex;flex-direction:column;gap:4px}
-footer a{color:#aaa}
+input,button{padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:16px}
+button,.btn{background:linear-gradient(90deg,#d9b45f,#b8923a);color:#1c1405;border:0;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;padding:10px;border-radius:10px;font-size:16px}
+html[data-ff-theme=light] button,html[data-ff-theme=light] .btn{background:linear-gradient(90deg,#e0b93f,#d4a62a);color:#161616}
+label{font-size:14px;color:var(--dim);margin-top:8px}
+footer{margin-top:24px;font-size:12px;color:var(--dim);display:flex;flex-direction:column;gap:4px}
+footer a{color:var(--text)}
 </style>
 </head>
 <body>
