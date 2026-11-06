@@ -3,19 +3,19 @@
    Address to add in Claude: https://<worker>/mcp */
 const STORE = 'https://140-238-55-153.sslip.io';
 const SB = 'https://kebsbuvuutilitwlvxzv.supabase.co', SB_KEY = 'sb_publishable_4Egu0zm3p6cxWGvP_-GlIw_mlCpO1Nf', ID_DOM = 'frenchfries777.com';
-const APPS = [['docs', /^ffdocs\./], ['sheet', /^ffsheet\./], ['slides', /^ffslides\./], ['blocks', /^ffblocks\./], ['python', /^ffpy\./]];
+const APPS = [['docs', /^ffdocs\./], ['sheet', /^ffsheet\./], ['slides', /^ffslides\./], ['blocks', /^ffblocks\./], ['python', /^ffpy\./], ['draw', /^ffdraw\./], ['score', /^ffscore\./], ['video', /^ffvideo\./]];
 const MAX_TEXT = 60000, MAX_SCAN = 40, MAX_DOC = 4e6, ACCESS_S = 3600, REFRESH_S = 30 * 86400, CODE_S = 300;
-const APP_ENUM = ['docs', 'sheet', 'slides', 'blocks', 'python'];
+const APP_ENUM = ['docs', 'sheet', 'slides', 'blocks', 'python', 'draw', 'score', 'video'];
 
 const TOOLS = [
-  { name: 'list_documents', description: 'List the documents saved on the Fry store (Fry Docs, Sheet, Slides, Block HTML, Python) with their size.',
+  { name: 'list_documents', description: 'List the documents saved on the Fry store (Fry Docs, Sheet, Slides, Blocks, Code, Draw, Score, Video) with their size.',
     inputSchema: { type: 'object', properties: { app: { type: 'string', enum: APP_ENUM, description: 'only this program' } } } },
   { name: 'read_document', description: 'Read one saved document by its key (from list_documents). Returns the stored text; long ones are cut, use offset to continue.',
     inputSchema: { type: 'object', properties: { key: { type: 'string' }, offset: { type: 'integer', minimum: 0 } }, required: ['key'] } },
   { name: 'search_documents', description: 'Find documents whose text contains a word (case-insensitive). Looks at up to 40 documents.',
     inputSchema: { type: 'object', properties: { query: { type: 'string' }, app: { type: 'string', enum: APP_ENUM } }, required: ['query'] } },
   { name: 'write_document', description: 'Replace the whole text of a saved document (or create it). Give the complete new text in the same format that read_document returned. The previous text is kept once as backup key "ffbak.<key>". Max 4 MB.',
-    inputSchema: { type: 'object', properties: { key: { type: 'string', description: 'existing key, or a new one starting with ffdocs. ffsheet. ffslides. ffblocks. ffpy.' }, content: { type: 'string' } }, required: ['key', 'content'] } },
+    inputSchema: { type: 'object', properties: { key: { type: 'string', description: 'existing key, or a new one starting with ffdocs. ffsheet. ffslides. ffblocks. ffpy. ffdraw. ffscore. ffvideo.' }, content: { type: 'string' } }, required: ['key', 'content'] } },
 ];
 
 function appOf(k) { for (const [a, re] of APPS) if (re.test(k)) return a; return 'other'; }
@@ -63,7 +63,7 @@ async function callTool(owner, name, a) {
     const k = a.key, c = a.content;
     if (typeof k !== 'string' || !/^[A-Za-z0-9._-]{1,120}$/.test(k) || typeof c !== 'string') return text('key and content are required', true);
     const l = await listKeys(owner), had = l.some(e => e.key === k);
-    if (!had && appOf(k) === 'other') return text('New keys must start with ffdocs. ffsheet. ffslides. ffblocks. or ffpy.', true);
+    if (!had && appOf(k) === 'other') return text('New keys must start with ffdocs. ffsheet. ffslides. ffblocks. ffpy. ffdraw. ffscore. or ffvideo.', true);
     if (enc.encode(c).length > MAX_DOC) return text('Too large (max 4 MB)', true);
     if (had) { const o = await store(owner, '/' + encodeURIComponent(k)); if (o.ok) await store(owner, '/' + encodeURIComponent('ffbak.' + k), { method: 'PUT', body: await o.text() }); }
     const r = await store(owner, '/' + encodeURIComponent(k), { method: 'PUT', body: c });
