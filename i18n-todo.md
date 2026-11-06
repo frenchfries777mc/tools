@@ -97,3 +97,4 @@ score/app.js | Fry Score v17 한국어 메시지·버튼 | score v17 | 2026-11-0
 patchnotes/draw.json | Fry Draw v16 항목 (en만), draw/app.js 모양 비틀기·선 따라 놓기 한국어 문구 | draw v16 | 2026-11-06
 patchnotes/score.json | Fry Score v18 항목 (en만) | score v18 | 2026-11-06
 score/app.js | Fry Score v18 한국어 메시지·버튼 | score v18 | 2026-11-06
+patchnotes/video.json | Fry Video v21 클립 이름·앞뒤 자르기·편집점 이동 (en 번역 없음) | video v21 | 2026-11-06
