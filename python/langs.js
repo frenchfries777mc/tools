@@ -88,8 +88,8 @@ function bsSug(before,pre,ctx){
   if(n===0) return W(BS_VERBS.split(' ').filter(function(x){ return x!=='else'||true; })).concat([{n:'use_mod_uuid:',i:'use_mod_uuid: ',d:'다른 모드 uuid (그 모드 공유 변수를 %이름%으로 읽기, 최대 5줄)'}]);
   if(v==='on'){
     if(n===1) return W(['world','game']).concat(W(['join','quit','mine','chop','kill','craft','fish','place','destroy','damage','death','respawn','roll','interaction','spawn','eat'],':'),W(['key']),[{n:'signal',i:'signal "$0":',d:'다른 모드가 보낸 신호를 받을 때'}]);
-    if(tk[1]==='world'&&n===2) return W(['generate','load'],':');
-    if(tk[1]==='game'&&n===2) return W(['load'],':');
+    if(tk[1]==='world'&&n===2) return [{n:'generate',i:'generate:',d:'새 월드를 만들 때 한 번'},{n:'load',i:'load:',d:'월드를 불러올 때마다'}];
+    if(tk[1]==='game'&&n===2) return [{n:'load',i:'load:',d:'게임을 시작할 때마다'}];
     if(tk[1]==='key'&&n===2) return [{n:'"G"',i:'"$0" press:',d:'누를 키 (글자 하나)'}];
     if(tk[1]==='key'&&n===3) return W(['press'],':');
     if((tk[1]==='place'||tk[1]==='eat'||tk[1]==='craft')&&n===2) return bsItemSug();
