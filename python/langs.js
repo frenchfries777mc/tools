@@ -368,7 +368,7 @@ function bsCheck(src,nested){ var lastK={}, onAt={}, V='(?:\\{:[a-z0-9_]{1,17}:\
       lastK[ind]=(em2&&em2[1])?'if':'else'; }
     else lastK[ind]=((verb==='if'||verb==='chance')&&/:\s*$/.test(t))?'if':'other';
     var first0=!seenCode&&!hdrSeen.name; if(verb==='mod'||verb==='resource'||verb==='pack') hdrSeen.name=1; else if(verb!=='api') seenCode=true;
-    if(verb==='api'){ errs.push({line:ln,msg:'api potato 는 더 이상 안 써요 — 다른 모드가 부르는 이름은 publish_aliases: 로 만들어요'}); return; }
+    if(verb==='api') return;
     if(verb==='mod'||verb==='resource'||verb==='pack'){ if(!(verb==='mod'&&/^mod\s+"[^"]+"\s*$/.test(t))&&!(verb==='resource'&&/^resource\s+pack\s+"[^"]+"\s*$/.test(t))&&!(verb==='pack'&&/^pack\s+"[^"]+"\s*$/.test(t))) errs.push({line:ln,msg:'이렇게 써요: mod "이름"  (리소스팩은 resource pack "이름" 또는 pack "이름")'}); else if(!first0) errs.push({line:ln,msg:verb+' 줄은 파일 맨 위에 한 번만 써요'}); if(ind!==0) errs.push({line:ln,msg:verb+' 은 맨 앞 줄에 써요'}); return; }
     if(!par&&!nested){ var topOk=/^(on|every|rename|remap|disable|enable|fill|load|publish_aliases)$/.test(verb)||(verb==='remove'&&/^remove\s+all\b/i.test(t))||(verb==='set'&&!/^set\s+(variable|time|weather)\b/i.test(t)&&/^set\s+\S.*\s(damage|speed|name)\b/i.test(t)); if(!topOk){ errs.push({line:ln,msg:verb+' 줄은 on·every 블록 안쪽(들여쓰기)에 써요'}); } }
     var opens=/:\s*$/.test(t);
@@ -448,7 +448,7 @@ function bsCheck(src,nested){ var lastK={}, onAt={}, V='(?:\\{:[a-z0-9_]{1,17}:\
     if(verb==='disable'||verb==='enable'){ var cm=/^(?:disable|enable)\s+collision\s+of\s+([A-Za-z_]+)\s*$/i.exec(t);
       if(!cm) errs.push({line:ln,msg:'이렇게 써요: disable collision of tree (또는 enable collision of water)'});
       else if(BS_COLL.indexOf(cm[1].toLowerCase())<0){ var g5=guess(cm[1].toLowerCase(),BS_COLL); errs.push({line:ln,msg:"모르는 대상 '"+cm[1]+"'"+(g5?" — 혹시 '"+g5+"'?":' (tree·rock·ore·water·block·아이템 이름)')}); } }
-    (t.replace(/%[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}_[^%\s"]+%/gi,'').replace(/%player's mod%/gi,'').replace(/%\{[^}\s]+\}%/g,'').match(/%[^%\s"]*%/g)||[]).forEach(function(ph){ if(!hasUse&&!aliasSet[ph.toLowerCase()]&&BS_PH.indexOf(ph.toLowerCase())<0&&!/^%var_[a-z0-9_]{1,20}%$/i.test(ph)&&!/^%player_[a-z0-9_]+_count%$/i.test(ph)){ var g6=guess(ph.toLowerCase(),BS_PH); errs.push({line:ln,msg:"모르는 자리표시 '"+ph+"'"+(g6?" — 혹시 '"+g6+"'?":'')}); } });
+    (t.replace(/%[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}_[^%\s"]+%/gi,'').replace(/%player's mod%/gi,'').replace(/%\{[^}\s]+\}%/g,'').match(/%[^%\s"]*%/g)||[]).forEach(function(ph){ /* %...% 는 전부 API 별칭으로 봐요 (오류 없음) */ });
     if(verb==='generate'){ var C4='(?:\\s+(~|~?-?\\d+)\\s+(~|~?-?\\d+)\\s+(~|~?-?\\d+)\\s+(~|~?-?\\d+))?', gm4=new RegExp('^generate\\s+(island|mountain|forest|'+BS_STRUCT.join('|')+')'+C4+'\\s*$').exec(t)||new RegExp('^generate\\s+('+BS_GENRES.join('|')+')(?:'+C4+')?(?:\\s+(\\d{1,4}))?\\s*$').exec(t), gm5=new RegExp('^generate\\s+"([^"]{1,40})"'+C4+'\\s*$').exec(t), gm3=/^generate\s+biome\s+"([^"]{1,40})"(?:\s+(\d{1,3})\s+times?)?\s*$/.exec(t);
       if(gm5&&gm5[1]==='biome') gm5=null;
       if(gm4){} else if(gm5){ if(!structSet[gm5[1]]) errs.push({line:ln,msg:"'"+gm5[1]+"' 구조물이 없어요 — 파일 안에 define structure \""+gm5[1]+"\": 를 먼저 써 주세요"}); }
@@ -478,7 +478,7 @@ function bsChip(w,first){ var c=document.createElement('span'); c.className='chi
   else if(/^%\{[^}\s]+\}%$/.test(w)){ b.textContent=w; mean='변수 값'; c.classList.add('n'); }
   else if(/^\{:[^:\s{}]+:\}$/.test(w)){ b.textContent=w; mean='공유 변수'; c.classList.add('n'); }
   else if(w.toLowerCase()==="%player's mod%"){ b.textContent=w; mean='플레이어 모드 (Potato API 없이 읽기)'; c.classList.add('n'); }
-  else if(/^%[A-Za-z0-9_']+%$/.test(w)){ b.textContent=w; mean='(Potato API 필요)'; c.classList.add('n'); }
+  else if(/^%[A-Za-z0-9_']+%$/.test(w)){ b.textContent=w; mean='API 별칭'; c.classList.add('n'); }
   else if(/^\d+%$/.test(w)){ b.textContent=w; mean='퍼센트'; c.classList.add('n'); }
   else if(/^#[0-9a-f]{6}$/i.test(w)){ b.textContent=w; mean='색'; c.classList.add('n'); }
   else if(/^~?-?\d+(?:\.\d+)?$/.test(w)||w==='~'){ b.textContent=w; mean=w[0]==='~'?'시작 위치 기준':'숫자'; c.classList.add('n'); }
