@@ -84,10 +84,10 @@ def build():
 MODELS = {            # True = 시험 봄, False = 건너뜀 (목표 점수가 Qwen3 4B 기준이라 4B는 켜 둬요. 1.7B는 1.3 때 쟀어요: 41.4점)
     "qwen3-1.7b": False,
     "qwen3-4b": False,   # 1.0~1.4 때 쟀어요: 63.6
-    "qwen3-8b": False,   # 67.9
+    "qwen3-8b": True,    # 67.9 (프레무스 2.1과 비교하려고 같이 시험 봐요)
     "tarius": False,     # 1.4: 55.0
-    "lectus": True,      # 1.5만 시험 봐요 (1.4: 76.4)
-    "premus": False,     # 1.4: 68.6
+    "lectus": False,     # 1.5: 시험 봤어요 (1.4: 76.4)
+    "premus": True,      # 2.1 시험 봐요 (1.4: 68.6)
 }
 REPOS = {
     "qwen3-1.7b": "Qwen/Qwen3-1.7B",
@@ -95,7 +95,7 @@ REPOS = {
     "qwen3-8b": "Qwen/Qwen3-8B",
     "tarius": "Frenchfries777/FF-Tools-1.7B-merged",   # 비공개: HF_TOKEN이 필요해요
     "lectus": "Frenchfries777/FF-Tools-4B-merged-1.5",   # 1.5 (CONTINUE=True 결과)
-    "premus": "Frenchfries777/FF-Tools-8B-merged",
+    "premus": "Frenchfries777/FF-Tools-8B-merged-2.1",   # 2.1
 }
 QUICK = False         # True면 과제마다 2문제만 (노트가 잘 도는지 볼 때)
 SEED = 7
