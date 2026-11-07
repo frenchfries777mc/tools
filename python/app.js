@@ -377,7 +377,7 @@ function runOther(live){ var L=LG(); if(!L.run) return; if(!live) saveNow(); err
   try{ L.run(ctx); }catch(e){ write(String((e&&e.message)||e)+'\n','err'); ctx.done(false); } }
 
 /* ---------- BeaconScript: 바로 적용 (Beaconfall world in an iframe) ---------- */
-var BS_GAME='/beaconfall/BEACONFALL.html?bstest=1', wdFrame=null, wdReady=false, wdRetry=0, wdLive=0, wdTab=null, wdBtn=null;
+var BS_GAME='/beaconfall/BEACONFALL-v0.6.html?bstest=1', wdFrame=null, wdReady=false, wdRetry=0, wdLive=0, wdTab=null, wdBtn=null;
 function wdButtons(tb){ wdTab=document.createElement('button'); wdTab.type='button'; wdTab.className='rt'; wdTab.dataset.t='wd'; wdTab.textContent=T('월드'); wdTab.hidden=true; wdTab.onclick=function(){ showTab('wd'); }; tb.appendChild(wdTab);
   wdBtn=document.createElement('button'); wdBtn.type='button'; wdBtn.className='rt lv'; wdBtn.textContent=T('바로 적용'); wdBtn.title=T('Beaconfall 월드를 이 안에서 바로 실행해요 (로그인·로비 없음). 껐다 켜면 새 월드로 초기화돼요'); wdBtn.setAttribute('aria-pressed','false'); wdBtn.onclick=function(){ if(wdFrame) wdOff(); else wdOn(); }; tb.appendChild(wdBtn); }
 function wdSend(reset){ if(!wdFrame||!wdFrame.contentWindow) return; try{ wdFrame.contentWindow.postMessage({type:'bs-apply',code:code.value,reset:!!reset},location.origin); }catch(e){} }
@@ -389,7 +389,7 @@ function wdOff(quiet){ clearInterval(wdRetry); clearTimeout(wdLive); if(wdFrame)
   if(!quiet&&curLang==='beaconscript') showTab('pv'); }
 function wdSoon(){ if(!wdFrame||!wdReady) return; clearTimeout(wdLive); wdLive=setTimeout(function(){ wdSend(false); },600); }
 window.addEventListener('message',function(e){ if(!wdFrame||e.source!==wdFrame.contentWindow||e.origin!==location.origin) return; var d=e.data||{};
-  if(d.type==='bs-ready'){ wdReady=true; clearInterval(wdRetry); }
+  if(d.type==='bs-boot'){ wdSend(true); } else if(d.type==='bs-ready'){ wdReady=true; clearInterval(wdRetry); }
   else if(d.type==='bs-error'){ write('월드: '+String(d.msg||'')+'\n','err'); } });
 function liveSoon(){ wdSoon(); clearTimeout(liveT); liveT=setTimeout(function(){ if(LG().live&&!running) runOther(true); },500); }
 function setLang(l,silent){ if(!FC.langs[l]) l='python'; var changed=l!==curLang; if(changed&&stopFn){ try{ stopFn(); }catch(e){} stopFn=null; } otherGen++; running=false; ui();
