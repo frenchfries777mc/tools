@@ -412,7 +412,7 @@ function bsCheck(src,nested){ var lastK={}, onAt={}, winDefs={}, V='(?:\\{:[a-z0
         if(fr[1]){ if(!isT&&!isV) errs.push({line:ln,msg:'바이옴은 땅 대상(land·beach·ocean·hills·mountain·paint) 뒤에만 써요'}); else if(fr[1][0]==='"'){ if(!biomeSet[fr[1].slice(1,-1)]) errs.push({line:ln,msg:"'"+fr[1].slice(1,-1)+"' 바이옴이 없어요 — define biome 으로 먼저 만들어 주세요"}); }
           else { var bb=fr[1].toLowerCase(); if(BS_BIOMES.indexOf(bb)<0){ var g4=guess(bb,BS_BIOMES); errs.push({line:ln,msg:"모르는 지역 '"+bb+"'"+(g4?" — 혹시 '"+g4+"'?":' ('+BS_BIOMES.join('·')+' 중에서)')}); } } }
         if(fr[2]!==undefined&&fr[2][0]!=='%'&&(parseInt(fr[2],10)<1||parseInt(fr[2],10)>100)) errs.push({line:ln,msg:'chance 는 1~100 사이예요 (예: chance 50%)'});
-        if(fr[3]&&isT&&fr[3][0]!=='%'&&fr[3][0]!=='"'&&!/^(ocean|water|land)$/i.test(fr[3])&&BS_FILLNAT.indexOf(fr[3].toLowerCase())<0&&!(window.BS_ITEMDB&&bsItem(fr[3]))) errs.push({line:ln,msg:'replace 뒤에는 ocean(=water)·land 같은 지형이나 블록 이름을 써요'}); } }
+        if(fr[3]&&isT&&fr[3][0]!=='%'&&fr[3][0]!=='"'&&!/^(ocean|water|land|beach|hills|mountain)$/i.test(fr[3])&&BS_FILLNAT.indexOf(fr[3].toLowerCase())<0&&!(window.BS_ITEMDB&&bsItem(fr[3]))) errs.push({line:ln,msg:'replace 뒤에는 ocean(=water)·land·beach·hills·mountain 같은 지형이나 블록 이름을 써요'}); } }
     if((verb==='give'||verb==='remove'||verb==='clear')&&/\binventory\b/i.test(t)){ var im2=/^(give|remove|clear)\s+(\d{1,4}|all)\s+("[^"]{1,40}"|[a-z0-9_:]{1,40})\s+(to|from)\s+player\s+inventory(?:\s+(\S+))?\s*$/i.exec(t);
       if(!im2) errs.push({line:ln,msg:verb==='give'?'이렇게 써요: give 1 iron to player inventory 5  (칸 번호 1~7은 생략해도 돼요, to 대신 from 도 돼요)':'이렇게 써요: '+verb+' 12 coin from player inventory  (개수 대신 all, 끝에 칸 번호 1~7 을 붙이면 그 칸에서만 빼요)'});
       else { var iv=im2[1].toLowerCase(), ik=im2[3];
