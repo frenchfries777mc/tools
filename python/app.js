@@ -366,20 +366,37 @@ function whyBox(er){ var box=document.createElement('div'); box.className='why';
 /* ---------- other languages (langs.js) ---------- */
 var stopFn=null, liveT=0, otherGen=0;
 function stopOther(){ if(stopFn){ try{ stopFn(); }catch(e){} stopFn=null; } otherGen++; running=false; ui(); state(''); sys(T('■ 멈췄어요'),'err'); }
-function showTab(id){ out.hidden=(id!=='out'); $('pv').hidden=(id!=='pv'); Array.prototype.forEach.call($('rtabs').children,function(b){ b.classList.toggle('on',b.dataset.t===id); }); }
+function showTab(id){ out.hidden=(id!=='out'); $('pv').hidden=(id!=='pv'); $('wd').hidden=(id!=='wd'); Array.prototype.forEach.call($('rtabs').children,function(b){ b.classList.toggle('on',b.dataset.t===id); }); }
 function runOther(live){ var L=LG(); if(!L.run) return; if(!live) saveNow(); errLine=0; paint(); out.innerHTML=''; $('pv').innerHTML=''; lastPre=null; outChars=0;
   if(stopFn){ try{ stopFn(); }catch(e){} stopFn=null; } var gen=++otherGen; running=!live; ui(); var t1=Date.now();
-  var ctx={code:code.value, out:out, pv:$('pv'), write:write, sys:sys, show:function(id){ if(!live||gen===otherGen) showTab(id); }, T:T,
+  var ctx={code:code.value, out:out, pv:$('pv'), write:write, sys:sys, show:function(id){ if(wdFrame) return; if(!live||gen===otherGen) showTab(id); }, T:T,
     errLine:function(n){ errLine=n; paint(); },
     setCode:function(t){ code.focus(); code.select(); ins(t); },
     onStop:function(fn){ var old=stopFn; stopFn=function(){ if(old) old(); fn(); }; },
     done:function(ok){ if(gen!==otherGen) return; running=false; ui(); if(!live&&ok&&curLang==='javascript') sys(F('✔ 끝났어요 ({0}초)',((Date.now()-t1)/1000).toFixed(1)),'ok'); }};
   try{ L.run(ctx); }catch(e){ write(String((e&&e.message)||e)+'\n','err'); ctx.done(false); } }
-function liveSoon(){ clearTimeout(liveT); liveT=setTimeout(function(){ if(LG().live&&!running) runOther(true); },500); }
+
+/* ---------- BeaconScript: 바로 적용 (Beaconfall world in an iframe) ---------- */
+var BS_GAME='/beaconfall/BEACONFALL.html?bstest=1', wdFrame=null, wdReady=false, wdRetry=0, wdLive=0, wdTab=null, wdBtn=null;
+function wdButtons(tb){ wdTab=document.createElement('button'); wdTab.type='button'; wdTab.className='rt'; wdTab.dataset.t='wd'; wdTab.textContent=T('월드'); wdTab.hidden=true; wdTab.onclick=function(){ showTab('wd'); }; tb.appendChild(wdTab);
+  wdBtn=document.createElement('button'); wdBtn.type='button'; wdBtn.className='rt lv'; wdBtn.textContent=T('바로 적용'); wdBtn.title=T('Beaconfall 월드를 이 안에서 바로 실행해요 (로그인·로비 없음). 껐다 켜면 새 월드로 초기화돼요'); wdBtn.setAttribute('aria-pressed','false'); wdBtn.onclick=function(){ if(wdFrame) wdOff(); else wdOn(); }; tb.appendChild(wdBtn); }
+function wdSend(reset){ if(!wdFrame||!wdFrame.contentWindow) return; try{ wdFrame.contentWindow.postMessage({type:'bs-apply',code:code.value,reset:!!reset},location.origin); }catch(e){} }
+function wdOn(){ if(wdFrame||curLang!=='beaconscript') return; var f=document.createElement('iframe'); f.setAttribute('title','Beaconfall'); f.setAttribute('allow','fullscreen'); wdFrame=f; wdReady=false; $('wd').innerHTML=''; $('wd').appendChild(f); f.src=BS_GAME;
+  if(wdTab) wdTab.hidden=false; if(wdBtn){ wdBtn.classList.add('lvon'); wdBtn.setAttribute('aria-pressed','true'); } showTab('wd');
+  var n=0; clearInterval(wdRetry); wdRetry=setInterval(function(){ if(wdReady||!wdFrame||++n>60){ clearInterval(wdRetry); if(!wdReady&&wdFrame) sys(T('월드가 아직 준비되지 않았어요'),'err'); return; } wdSend(true); },500); }
+function wdOff(quiet){ clearInterval(wdRetry); clearTimeout(wdLive); if(wdFrame){ try{ wdFrame.src='about:blank'; }catch(e){} wdFrame=null; } wdReady=false; var w=$('wd'); if(w){ w.innerHTML=''; }
+  if(wdTab) wdTab.hidden=true; if(wdBtn){ wdBtn.classList.remove('lvon'); wdBtn.setAttribute('aria-pressed','false'); }
+  if(!quiet&&curLang==='beaconscript') showTab('pv'); }
+function wdSoon(){ if(!wdFrame||!wdReady) return; clearTimeout(wdLive); wdLive=setTimeout(function(){ wdSend(false); },600); }
+window.addEventListener('message',function(e){ if(!wdFrame||e.source!==wdFrame.contentWindow||e.origin!==location.origin) return; var d=e.data||{};
+  if(d.type==='bs-ready'){ wdReady=true; clearInterval(wdRetry); }
+  else if(d.type==='bs-error'){ write('월드: '+String(d.msg||'')+'\n','err'); } });
+function liveSoon(){ wdSoon(); clearTimeout(liveT); liveT=setTimeout(function(){ if(LG().live&&!running) runOther(true); },500); }
 function setLang(l,silent){ if(!FC.langs[l]) l='python'; var changed=l!==curLang; if(changed&&stopFn){ try{ stopFn(); }catch(e){} stopFn=null; } otherGen++; running=false; ui();
   curLang=l; var L=LG(); IN=L.indent||'    '; $('langPick').value=l; langBtn(); var py=(l==='python');
   $('dictBtn').hidden=!py; $('stdinBox').hidden=!py; $('exBtn').hidden=false; code.setAttribute('aria-label',T(L.name+' 코드'));
   var tb=$('rtabs'); tb.innerHTML=''; (L.tabs||[]).forEach(function(t){ var b=document.createElement('button'); b.type='button'; b.className='rt'; b.dataset.t=t[0]; b.textContent=T(t[1]); b.onclick=function(){ showTab(t[0]); }; tb.appendChild(b); });
+  wdOff(true); if(l==='beaconscript') wdButtons(tb);
   tb.hidden=py; $('pv').hidden=true; out.hidden=false; $('resTitle').hidden=!py; if(!py) showTab(L.tabs[0][0]);
   $('runBtn').title=py||l==='javascript'?T('실행 (Ctrl+Enter)'):T('검사하고 미리보기 (Ctrl+Enter)'); acHide();
   if(changed){ out.innerHTML=''; $('pv').innerHTML=''; lastPre=null; outChars=0; tur=null; errLine=0; if(py&&!worker) setTimeout(function(){ if(!worker&&curLang==='python') mkWorker(); },300); }
