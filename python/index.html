@@ -7,17 +7,17 @@
 <style>html,body,*{touch-action:manipulation}</style>
 <title>Fry Code · Frenchfries777 Tools</title>
 <meta name="description" content="설치 없이 브라우저에서 파이썬·자바스크립트·자바·HTML·JSON·BeaconScript를 쓰고 바로 미리봐요. 파이썬은 거북이 그림과 그래프도 그려요.">
-<meta name="theme-color" content="#08090d">
+<meta name="theme-color" content="#0e0e0e">
 <link rel="icon" type="image/svg+xml" href="../icons/cards/fry-code.svg"><link rel="icon" type="image/png" sizes="512x512" href="../icons/cards/fry-code-512.png"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <script src="../i18n.js"></script>
 <style>
-:root{ --bg:#08090d; --panel:#10131b; --panel2:#151925; --line:#222837; --text:#eef0f5; --dim:#8a93a6; --fry:#ffc93c; --fry2:#ff8a3d; --code:#0c0e14; --py:#4b8bbe;
+:root{ --bg:#0e0e0e; --panel:#171717; --panel2:#121212; --line:#2e2b25; --text:#ece6d8; --dim:#a39c8c; --fry:#d9b45f; --fry2:#b8923a; --code:#0e0e0e; --py:#4b8bbe;
   --k:#ff7ab2; --s:#a5e075; --c:#6c7a92; --n:#ffb86b; --f:#6cc6ff; --b:#c99bff; }
-html[data-ff-theme=light]{ --bg:#f6f3ec; --panel:#ffffff; --panel2:#f1ede4; --line:#e2dccf; --text:#1f1b14; --dim:#6d6658; --code:#fffdf8;
-  --k:#c41a67; --s:#2d7d1a; --c:#8a8f99; --n:#b45309; --f:#0b6fb0; --b:#7c3aed; }
+html[data-ff-theme=light]{ --bg:#ffffff; --panel:#f7f5ef; --panel2:#fbfaf6; --line:#e4dfd2; --text:#111111; --dim:#4b4b4b; --fry:#a67c00; --fry2:#d4a62a; --code:#ffffff;
+  --k:#c41a67; --s:#2d7d1a; --c:#5f6672; --n:#b45309; --f:#0b6fb0; --b:#7c3aed; }
 *{box-sizing:border-box;}
 html,body{margin:0; height:100%; background:var(--bg); color:var(--text); overscroll-behavior:none;}
 body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif; font-size:14px; display:flex; flex-direction:column; height:100vh; height:100dvh; overflow:hidden;
@@ -144,6 +144,43 @@ button,input,select,textarea{font:inherit; color:inherit;}
 .drow pre{grid-column:1/-1; margin:2px 0 0; font:12px/1.5 'JetBrains Mono',monospace; color:var(--dim); white-space:pre-wrap;}
 .dlist .none{color:var(--dim); text-align:center; padding:20px;}
 @media(max-width:560px){ .drow{grid-template-columns:1fr;} }
+/* site design 2026-11-06: gold accents, white light theme */
+.tbtn.pri,.tbtn.run{background:linear-gradient(90deg,#d9b45f,#b8923a); color:#1c1405;}
+.tbtn.aib{border-color:var(--fry2);}
+.tbtn:hover:not(:disabled){border-color:var(--fry2);}
+.home{color:#1c1405; background:linear-gradient(135deg,#d9b45f,#b8923a);}
+.why{border-color:var(--fry2); background:rgba(217,180,95,.08);}
+#toast{background:#222; color:#ece6d8;}
+html[data-ff-theme=light] .brand b,html[data-ff-theme=light] .brand{color:#111;} html[data-ff-theme=light] .brand b{color:#8a6500;}
+html[data-ff-theme=light] .tbtn{background:#fff; color:#161616; border-radius:10px;}
+html[data-ff-theme=light] .tbtn.pri,html[data-ff-theme=light] .tbtn.run{background:linear-gradient(90deg,#e0b93f,#d4a62a); color:#161616;}
+html[data-ff-theme=light] .tbtn.stop{background:#d63b33; color:#fff;}
+html[data-ff-theme=light] .tbtn:disabled{opacity:1; color:#5a5a5a; background:#f3f1ea;}
+html[data-ff-theme=light] .tbtn.aib{color:#7a5a00;}
+html[data-ff-theme=light] .langSel,html[data-ff-theme=light] .saved{color:#333; background:#fff;}
+html[data-ff-theme=light] .top,html[data-ff-theme=light] .ph{background:#fff;}
+html[data-ff-theme=light] #fileName:hover,html[data-ff-theme=light] #fileName:focus{background:#faf8f3;}
+html[data-ff-theme=light] .ed,html[data-ff-theme=light] #out{background:#fff;}
+html[data-ff-theme=light] #out .err{color:#c42b22;} html[data-ff-theme=light] #out .ok{color:#177a46;}
+html[data-ff-theme=light] #code::selection{background:rgba(212,166,42,.35);}
+html[data-ff-theme=light] .menu,html[data-ff-theme=light] .dlg,html[data-ff-theme=light] #ac{background:#fff; box-shadow:0 16px 44px rgba(0,0,0,.16);}
+html[data-ff-theme=light] .ov{background:rgba(20,18,12,.4);}
+html[data-ff-theme=light] .menu button:hover,html[data-ff-theme=light] .ib:hover,html[data-ff-theme=light] .x:hover{background:#f3f0e7;}
+html[data-ff-theme=light] .x,html[data-ff-theme=light] .dim,html[data-ff-theme=light] #out .sys{color:#444;}
+html[data-ff-theme=light] .files input,html[data-ff-theme=light] .dsearch input,html[data-ff-theme=light] #stdin{background:#fff; color:#111;}
+html[data-ff-theme=light] .dcats button.on{color:#7a5a00; background:#fbf3d9;}
+html[data-ff-theme=light] .aci.on{background:#fbf3d9;}
+html[data-ff-theme=light] #toast{background:#222; color:#fff;}
+</style>
+<link rel="stylesheet" href="../ff-rich-app.css?v=1">
+<style id="richApp">
+/* rich look: Fry Code */
+html[data-ff-theme] .fbar{background:var(--bg)!important;border:1px solid var(--fry)!important;border-radius:16px!important}
+html[data-ff-theme] .fbar input{background:transparent!important;border:1px solid var(--fry)!important;border-radius:99px!important}
+html[data-ff-theme] .ed,html[data-ff-theme] #out,html[data-ff-theme] #pv{background:var(--code)}
+html[data-ff-theme] .gut{border-right:1px solid var(--fry)!important}
+html[data-ff-theme] .tbtn.langBtn{padding:0 12px}
+html[data-ff-theme] #langMenu button.on{background:var(--fry)!important;color:var(--bg)!important;box-shadow:none}
 </style>
 </head>
 <body>

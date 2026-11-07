@@ -1,0 +1,106 @@
+/* Frenchfries777 "rich" look for the tool programs (Fry Code, Blocks, Sheet, Docs, Slides, Lab, Draw, Score, Video, AI chat).
+   Same family as the front pages (games/ff-rich.css): flat --bg, 2px gold lines, Oswald titles with a gold bar, gold-bordered
+   pills, 1px gold panels with 16px radius. Colors come only from --bg --text --dim --fry --fry2 (set by i18n.js, dark / light).
+   Chrome only: canvases, document pages, slides and cell contents keep their own colors. */
+html[data-ff-theme] body{background:var(--bg);color:var(--text)}
+html[data-ff-theme] body::before,html[data-ff-theme] body::after{background:none!important;box-shadow:none!important}
+
+/* ---------- top bar ---------- */
+html[data-ff-theme] .top{background:var(--bg)!important;border-bottom:2px solid var(--fry)!important;box-shadow:none!important}
+html[data-ff-theme] .brand,html[data-ff-theme] .top .brand{font-family:'Oswald','Noto Sans KR',sans-serif;font-weight:600;color:var(--text)!important;letter-spacing:.06em;text-shadow:none}
+html[data-ff-theme] .brand b{color:var(--fry)!important}
+html[data-ff-theme] .home{background:var(--fry)!important;color:var(--bg)!important;border-radius:10px;box-shadow:none}
+html[data-ff-theme] .top input#fileName,html[data-ff-theme] #docName,html[data-ff-theme] #projName,html[data-ff-theme] #dname{color:var(--text);border-radius:99px}
+html[data-ff-theme] #fileName:hover,html[data-ff-theme] #fileName:focus,html[data-ff-theme] #docName:hover,html[data-ff-theme] #docName:focus,html[data-ff-theme] #projName:hover,html[data-ff-theme] #projName:focus,html[data-ff-theme] #dname:hover,html[data-ff-theme] #dname:focus{border-color:var(--fry)!important;background:transparent!important}
+html[data-ff-theme] .saved,html[data-ff-theme] #saved,html[data-ff-theme] .zoom,html[data-ff-theme] .stat{color:var(--dim)}
+
+/* ---------- buttons: gold-bordered pills, primary = gold fill ---------- */
+html[data-ff-theme] .tbtn{background:transparent!important;color:var(--text)!important;border:1px solid var(--fry)!important;border-radius:99px!important;box-shadow:none!important;text-shadow:none}
+html[data-ff-theme] .tbtn:hover:not(:disabled){background:color-mix(in srgb,var(--fry) 18%,transparent)!important;border-color:var(--fry)!important}
+html[data-ff-theme] .tbtn:disabled,html[data-ff-theme] .tbtn[disabled]{opacity:.45!important;background:transparent!important;color:var(--dim)!important}
+html[data-ff-theme] .tbtn.pri,html[data-ff-theme] .tbtn.run{background:var(--fry)!important;color:var(--bg)!important;border-color:var(--fry)!important;font-weight:700}
+html[data-ff-theme] .tbtn.pri:hover:not(:disabled),html[data-ff-theme] .tbtn.run:hover:not(:disabled){background:var(--fry2)!important}
+html[data-ff-theme] .tbtn.on,html[data-ff-theme] .tbtn.rb.on,html[data-ff-theme] .tbtn.tg.on{background:var(--fry)!important;color:var(--bg)!important;border-color:var(--fry)!important}
+html[data-ff-theme] .tbtn.aib{color:var(--fry)!important}
+html[data-ff-theme] .tbtn.stop,html[data-ff-theme] .tbtn.dang{background:transparent!important;border-color:#e5534b!important;color:#e5534b!important}
+html[data-ff-theme=light] .tbtn.stop,html[data-ff-theme=light] .tbtn.dang{color:#b3261e!important;border-color:#b3261e!important}
+html[data-ff-theme] .tbtn.stop:hover:not(:disabled){background:#e5534b!important;color:#fff!important}
+
+/* selects and text boxes in chrome */
+html[data-ff-theme] .langSel,html[data-ff-theme] .ribbon select,html[data-ff-theme] #bar select,html[data-ff-theme] .rbar select,html[data-ff-theme] .tools select,html[data-ff-theme] #speedSel,html[data-ff-theme] .gsel select{background:transparent!important;color:var(--text)!important;border:1px solid var(--fry)!important;border-radius:99px!important}
+html[data-ff-theme] select option{background:var(--bg);color:var(--text)}
+html[data-ff-theme] .row input[type=number],html[data-ff-theme] .row select,html[data-ff-theme] .row input[type=text],html[data-ff-theme] .row input.nv,html[data-ff-theme] .nb input,html[data-ff-theme] .panel textarea,html[data-ff-theme] .dlg input[type=text],html[data-ff-theme] .dlg input[type=number],html[data-ff-theme] .dlg input[type=search],html[data-ff-theme] .dlg input:not([type]),html[data-ff-theme] .dlg textarea,html[data-ff-theme] .dlg select,html[data-ff-theme] .dsearch input,html[data-ff-theme] .files input{background:transparent!important;border:1px solid var(--fry)!important;color:var(--text)!important}
+html[data-ff-theme] .row select,html[data-ff-theme] .dlg select{border-radius:99px!important}
+html[data-ff-theme] input[type=range]{accent-color:var(--fry)}
+
+/* ---------- menus, dialogs, popups: 1px gold border, 16px radius ---------- */
+html[data-ff-theme] .menu,html[data-ff-theme] .dlg,html[data-ff-theme] .shMenu,html[data-ff-theme] .cmdList,html[data-ff-theme] #acBox,html[data-ff-theme] #ac,html[data-ff-theme] #navPanel,html[data-ff-theme] #cmPanel,html[data-ff-theme] #trkPop,html[data-ff-theme] .expbox>div,html[data-ff-theme] .toast,html[data-ff-theme] #toast,html[data-ff-theme] #editBar,html[data-ff-theme] #prog{background:var(--bg)!important;color:var(--text)!important;border:1px solid var(--fry)!important;border-radius:16px!important;box-shadow:none!important}
+html[data-ff-theme=light] .menu,html[data-ff-theme=light] .dlg,html[data-ff-theme=light] .expbox>div,html[data-ff-theme=light] .shMenu{box-shadow:0 10px 30px rgba(0,0,0,.14)!important}
+html[data-ff-theme] .toast,html[data-ff-theme] #toast{border-radius:99px!important}
+html[data-ff-theme] .menu button,html[data-ff-theme] .shMenu button{color:var(--text)}
+html[data-ff-theme] .menu button:hover,html[data-ff-theme] .shMenu button:hover,html[data-ff-theme] #acBox button:hover,html[data-ff-theme] #acBox button.on,html[data-ff-theme] .aci.on,html[data-ff-theme] .ib:hover:not(:disabled),html[data-ff-theme] .x:hover{background:color-mix(in srgb,var(--fry) 18%,transparent)!important;color:var(--text)!important}
+html[data-ff-theme] .menu hr,html[data-ff-theme] .menu .sep{border-color:var(--fry)!important;opacity:.5}
+html[data-ff-theme] .menu .mh,html[data-ff-theme] .dim{color:var(--dim)}
+html[data-ff-theme] .ov,html[data-ff-theme] .dlgbg,html[data-ff-theme] .expbox{background:rgba(0,0,0,.62)}
+html[data-ff-theme=light] .ov,html[data-ff-theme=light] .dlgbg,html[data-ff-theme=light] .expbox{background:rgba(20,18,12,.45)}
+html[data-ff-theme] .dh{border-bottom:2px solid var(--fry)!important;background:transparent!important}
+html[data-ff-theme] .dh h3,html[data-ff-theme] .dlg>h3,html[data-ff-theme] .dlg>h2,html[data-ff-theme] .expbox h3{font-family:'Oswald','Noto Sans KR',sans-serif;font-weight:600;letter-spacing:.02em;border-left:8px solid var(--fry);padding-left:12px;line-height:1.25}
+html[data-ff-theme] .dfoot{border-top:2px solid var(--fry)!important;background:transparent!important}
+html[data-ff-theme] .x{color:var(--text)!important}
+html[data-ff-theme] .dbody,html[data-ff-theme] .dlg{color:var(--text)}
+
+/* ---------- tabs: gold-bordered pills, active = gold fill ---------- */
+html[data-ff-theme] .rtabs,html[data-ff-theme] .tabs,html[data-ff-theme] .ptabs,html[data-ff-theme] #ptabs,html[data-ff-theme] .stabs{background:var(--bg)!important;border-bottom:0!important;gap:6px;padding:7px 10px 6px!important;align-items:center;box-shadow:none}
+html[data-ff-theme] .ptabs,html[data-ff-theme] #ptabs,html[data-ff-theme] .stabs,html[data-ff-theme] #side>.tabs{border-bottom:2px solid var(--fry)!important}
+html[data-ff-theme] .rtab,html[data-ff-theme] .tabs button,html[data-ff-theme] .tabs .tab,html[data-ff-theme] .ptabs button,html[data-ff-theme] .rtabs .rt,html[data-ff-theme] .stab{background:transparent!important;color:var(--text)!important;border:1px solid var(--fry)!important;border-bottom-width:1px!important;border-radius:99px!important;box-shadow:none!important;height:auto!important;min-height:28px;padding:3px 14px!important;flex:0 1 auto!important}
+html[data-ff-theme] .ptabs button{flex:1 1 0!important;padding:3px 4px!important;font-size:12.5px;white-space:nowrap}
+html[data-ff-theme] .rtab.on,html[data-ff-theme] .rtab.aib.on,html[data-ff-theme] .tabs .on,html[data-ff-theme] .ptabs button.on,html[data-ff-theme] .rtabs .rt.on,html[data-ff-theme] .stab.on{background:var(--fry)!important;color:var(--bg)!important;border-color:var(--fry)!important;box-shadow:none!important;font-weight:700}
+html[data-ff-theme] .rtab.aib{color:var(--fry)!important}
+
+/* ---------- ribbons / toolbars: flat strips with a gold line ---------- */
+html[data-ff-theme] .ribbon,html[data-ff-theme] nav.bar#bar,html[data-ff-theme] .rbar,html[data-ff-theme] .tools,html[data-ff-theme] .tlbar,html[data-ff-theme] .foot,html[data-ff-theme] .status,html[data-ff-theme] .rcorner{background:var(--bg)!important}
+html[data-ff-theme] .ribbon,html[data-ff-theme] nav.bar#bar,html[data-ff-theme] .rbar{border-top:0!important;border-bottom:2px solid var(--fry)!important}
+html[data-ff-theme] .foot,html[data-ff-theme] .status,html[data-ff-theme] .tlbar{border-top:2px solid var(--fry)!important}
+html[data-ff-theme] .tools{border-right:2px solid var(--fry)!important}
+html[data-ff-theme] .rb,html[data-ff-theme] .ib,html[data-ff-theme] .tl{color:var(--text)!important}
+html[data-ff-theme] .rb:hover:not(:disabled),html[data-ff-theme] .tl:hover{background:color-mix(in srgb,var(--fry) 16%,transparent)!important}
+html[data-ff-theme] .rb:disabled,html[data-ff-theme] .rb.dis,html[data-ff-theme] .ib:disabled{opacity:.45!important;color:var(--dim)!important}
+html[data-ff-theme] .rb.on,html[data-ff-theme] .ib.on,html[data-ff-theme] .ib.tg.on,html[data-ff-theme] .tl.on,html[data-ff-theme] .lyr.on,html[data-ff-theme] .pgrid button.on,html[data-ff-theme] .lnk.on{background:var(--fry)!important;color:var(--bg)!important;border-color:var(--fry)!important}
+html[data-ff-theme] .rb.on svg,html[data-ff-theme] .tl.on svg{stroke:currentColor}
+html[data-ff-theme] .rb.aib,html[data-ff-theme] .cmdIt.aib{color:var(--fry)!important}
+
+/* ---------- side panels / docked panes: gold 2px divider, flat ---------- */
+html[data-ff-theme] .panel,html[data-ff-theme] .bin,html[data-ff-theme] #side,html[data-ff-theme] .tlw,html[data-ff-theme] .pane>.ph,html[data-ff-theme] .stdin,html[data-ff-theme] #logBar,html[data-ff-theme] #objBar,html[data-ff-theme] .pvTop,html[data-ff-theme] #dbgBar,html[data-ff-theme] #varBar{background:var(--bg)!important;color:var(--text)}
+html[data-ff-theme] .panel{border-left:2px solid var(--fry)!important}
+html[data-ff-theme] .bin{border-right:2px solid var(--fry)!important}
+html[data-ff-theme] .tlw{border-top:2px solid var(--fry)!important}
+html[data-ff-theme] .pane>.ph{border-bottom:2px solid var(--fry)!important;color:var(--text)}
+html[data-ff-theme] .pane>.ph b{font-family:'Oswald','Noto Sans KR',sans-serif;font-weight:600;font-size:15px;letter-spacing:.02em;border-left:8px solid var(--fry);padding-left:10px;line-height:1.3}
+html[data-ff-theme] .pane+.pane{border-left:2px solid var(--fry)!important}
+html[data-ff-theme] .stdin{border-top:2px solid var(--fry)!important}
+html[data-ff-theme] .sec h4{font-family:'Oswald','Noto Sans KR',sans-serif;font-weight:600;font-size:14px;letter-spacing:.04em;color:var(--fry);border-left:8px solid var(--fry);padding-left:8px;line-height:1.2}
+html[data-ff-theme] .row label,html[data-ff-theme] .note,html[data-ff-theme] .row .v,html[data-ff-theme] .bin .hint{color:var(--dim)}
+html[data-ff-theme] .files li,html[data-ff-theme] .drow,html[data-ff-theme] .bin .it,html[data-ff-theme] .pgrid button,html[data-ff-theme] .dcats button{background:transparent!important;border:1px solid var(--fry)!important;color:var(--text)}
+html[data-ff-theme] .files li{border-radius:16px}
+html[data-ff-theme] .drow,html[data-ff-theme] .bin .it{border-radius:16px}
+html[data-ff-theme] .dcats button{border-radius:99px}
+html[data-ff-theme] .dcats button.on,html[data-ff-theme] .files li.on{background:var(--fry)!important;color:var(--bg)!important}
+html[data-ff-theme] .files li.on small,html[data-ff-theme] .files li.on b{color:var(--bg)}
+html[data-ff-theme] .drow:hover,html[data-ff-theme] .bin .it:hover{background:color-mix(in srgb,var(--fry) 14%,transparent)!important}
+html[data-ff-theme] .why{background:transparent!important;border:1px solid var(--fry)!important;border-radius:16px!important}
+html[data-ff-theme=light] .x,html[data-ff-theme=light] .dim,html[data-ff-theme=light] .note,html[data-ff-theme=light] .row label{color:var(--dim)}
+
+/* version history dialog (versions.js) */
+html[data-ff-theme] .ffv{background:rgba(0,0,0,.62)}
+html[data-ff-theme=light] .ffv{background:rgba(20,18,12,.45)}
+html[data-ff-theme] .ffv>div{background:var(--bg);color:var(--text);border:1px solid var(--fry);border-radius:16px;box-shadow:none;font-family:'Noto Sans KR',system-ui,sans-serif}
+html[data-ff-theme=light] .ffv>div{box-shadow:0 10px 30px rgba(0,0,0,.14)}
+html[data-ff-theme] .ffv h3{font-family:'Oswald','Noto Sans KR',sans-serif;font-weight:600;border-left:8px solid var(--fry);margin:14px 0 6px 16px;padding:0 0 0 12px}
+html[data-ff-theme] .ffv .ffvs{opacity:1;color:var(--dim)}
+html[data-ff-theme] .ffv input{background:transparent;color:var(--text);border:1px solid var(--fry);border-radius:99px;padding:7px 14px}
+html[data-ff-theme] .ffv button{background:transparent;color:var(--text);border:1px solid var(--fry);border-radius:99px;padding:6px 14px}
+html[data-ff-theme] .ffv button:hover{background:color-mix(in srgb,var(--fry) 18%,transparent)}
+html[data-ff-theme] .ffv .ffvn button{background:var(--fry);color:var(--bg);font-weight:700}
+html[data-ff-theme] .ffv button.ffvd{border-color:#e5534b;color:#e5534b}
+html[data-ff-theme] .ffv li{border-top:1px solid var(--fry)}
+html[data-ff-theme] .ffv li small,html[data-ff-theme] .ffv .ffve{opacity:1;color:var(--dim)}

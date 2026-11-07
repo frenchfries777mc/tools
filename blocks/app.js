@@ -9,7 +9,7 @@ var EMB=(/^#embed=(.+)$/.exec(location.hash)||[])[1]; if(EMB) try{ EMB=decodeURI
 function lsSet(k,v){ if(EMB) return false; try{ localStorage.setItem(k,v); return true; }catch(e){ return false; } }
 
 var theme=Blockly.Theme.defineTheme('ffdark',{name:'ffdark',base:Blockly.Themes.Classic,
-  componentStyles:{workspaceBackgroundColour:'#0b0d13',toolboxBackgroundColour:'#10131b',toolboxForegroundColour:'#eef0f5',flyoutBackgroundColour:'#151925',flyoutForegroundColour:'#cfd5e1',flyoutOpacity:.97,scrollbarColour:'#3a4256',scrollbarOpacity:.7,insertionMarkerColour:'#ffffff',insertionMarkerOpacity:.3,cursorColour:'#ffc93c',selectedGlowColour:'#ffc93c'},
+  componentStyles:{workspaceBackgroundColour:'#0e0e0e',toolboxBackgroundColour:'#171717',toolboxForegroundColour:'#ece6d8',flyoutBackgroundColour:'#121212',flyoutForegroundColour:'#ece6d8',flyoutOpacity:.97,scrollbarColour:'#3a4256',scrollbarOpacity:.7,insertionMarkerColour:'#ffffff',insertionMarkerOpacity:.3,cursorColour:'#d9b45f',selectedGlowColour:'#d9b45f'},
   fontStyle:{family:'"Noto Sans KR", sans-serif',weight:'500',size:11}});
 /* keep Korean (and other) variable names readable in the generated code instead of %-encoding them */
 Blockly.Names.prototype.safeName=function(name){
@@ -23,6 +23,13 @@ var ws=Blockly.inject('ws',{toolbox:BH.toolbox(),theme:theme,renderer:'zelos',tr
   grid:{spacing:28,length:2,colour:'#1a1f2b',snap:false},
   zoom:{controls:true,wheel:false,pinch:true,startScale:('ontouchstart' in window)?0.72:0.68,maxScale:2,minScale:0.3,scaleSpeed:1.15},
   move:{scrollbars:true,drag:true,wheel:true}});
+/* site theme: the workspace and toolbox follow html[data-ff-theme] (block colours stay the same) */
+var themeLight=Blockly.Theme.defineTheme('fflight',{name:'fflight',base:Blockly.Themes.Classic,
+  componentStyles:{workspaceBackgroundColour:'#ffffff',toolboxBackgroundColour:'#ffffff',toolboxForegroundColour:'#161616',flyoutBackgroundColour:'#f7f5ef',flyoutForegroundColour:'#222222',flyoutOpacity:.97,scrollbarColour:'#b9b3a3',scrollbarOpacity:.7,insertionMarkerColour:'#000000',insertionMarkerOpacity:.25,cursorColour:'#a67c00',selectedGlowColour:'#d4a62a'},
+  fontStyle:{family:'"Noto Sans KR", sans-serif',weight:'500',size:11}});
+function ffSyncTheme(){ try{ var L=document.documentElement.getAttribute('data-ff-theme')==='light'; var want=L?themeLight:theme; if(ws.getTheme()!==want) ws.setTheme(want); }catch(e){} }
+ffSyncTheme(); window.addEventListener('fftheme',ffSyncTheme);
+try{ new MutationObserver(ffSyncTheme).observe(document.documentElement,{attributes:true,attributeFilter:['data-ff-theme']}); }catch(e){}
 ws.addChangeListener(Blockly.Events.disableOrphans);
 ws.registerToolboxCategoryCallback('FFVARS',BH.varsFlyout); // "변수·함수": variables, functions and JS in one category
 /* Korean particles on the labels follow the names and values in front of them (BH.fixJosa) */
@@ -102,7 +109,7 @@ window.addEventListener('message',function(e){ var d=e.data; if(!d||e.source!==$
   else if(d.ffbhStepEnd){ clearTimeout(dbgT); dbgUnlight(); dbgBtns(false); dbgSay(T('끝났어요 · 다음 이벤트(누르기·키·시간)를 기다려요')); } });
 function setRun(st){ runState=st; $('runBtn').classList.toggle('on',st==='run'); $('pauseBtn').classList.toggle('on',st==='pause'); $('stopBtn').classList.toggle('on',st==='stop');
   $('pauseBtn').querySelector('.lb').textContent=st==='pause'?T('이어하기'):T('멈추기'); $('pPrev').classList.toggle('paused',st==='pause'); }
-function stoppedPage(){ return '<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;height:100vh;display:grid;place-items:center;background:#0b0d13;color:#9aa3b5;font:15px sans-serif;text-align:center;padding:20px;box-sizing:border-box}b{color:#3fe08f}</style></head><body><div>⏹ '+T('정지했어요')+'<br><br><b>'+T('▶ 실행하기를 누르면 처음부터 다시 시작해요')+'</b></div></body></html>'; }
+function stoppedPage(){ return '<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;height:100vh;display:grid;place-items:center;background:#0e0e0e;color:#9aa3b5;font:15px sans-serif;text-align:center;padding:20px;box-sizing:border-box}b{color:#3fe08f}</style></head><body><div>⏹ '+T('정지했어요')+'<br><br><b>'+T('▶ 실행하기를 누르면 처음부터 다시 시작해요')+'</b></div></body></html>'; }
 function showPreview(){ if(window.matchMedia('(max-width:900px)').matches&&document.body.className==='v-blocks'){ var b=document.querySelector('#seg button[data-v="prev"]'); if(b) b.click(); } else setPane('prev'); }
 function refresh(force){
   if(runState==='stop'&&force!=='run'){ if($('pCode').classList.contains('on')) showCode(); return; }
