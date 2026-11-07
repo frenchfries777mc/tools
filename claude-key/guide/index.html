@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Claude connector guide - Frenchfries777 Tools</title>
+<style>
+:root{--bg:#0e0e0e;--text:#ece6d8;--dim:#a39c8c;--fry:#d9b45f;--line:#2e2b25}
+@media (prefers-color-scheme:light){:root{--bg:#fff;--text:#111;--dim:#4b4b4b;--fry:#a67c00;--line:#e4dfd2}}
+body{font-family:system-ui,'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);margin:0;padding:40px 16px;line-height:1.55}
+main{max-width:720px;margin:0 auto}
+h1{font-size:30px;border-left:8px solid var(--fry);padding-left:14px;margin:0 0 18px}
+h2{font-size:19px;margin:26px 0 6px;color:var(--fry)}
+p,li{font-size:16px}
+code{background:rgba(127,127,127,.18);padding:1px 6px;border-radius:6px;word-break:break-all}
+a{color:var(--fry)}
+.ko{color:var(--dim);font-size:14px}
+footer{margin-top:34px;border-top:2px solid var(--fry);padding-top:12px;font-size:12px;color:var(--dim);display:flex;flex-direction:column;gap:4px}
+footer a{color:var(--text)}
+</style>
+</head>
+<body>
+<main>
+<h1>Frenchfries777 Tools for Claude</h1>
+<p>Let Claude read, search and edit the documents you made in Frenchfries777 Tools.</p>
+<p class="ko">Claude가 Tools에서 만든 문서를 읽고 고쳐 줘요.</p>
+<h2>What it can do</h2>
+<ul>
+<li><code>list_documents</code> shows your saved documents (Docs, Sheet, Slides, Blocks, Code, Draw, Score, Video).</li>
+<li><code>read_document</code> reads one document. Long ones come in parts.</li>
+<li><code>search_documents</code> finds documents that contain a word.</li>
+<li><code>write_document</code> replaces a document or creates a new one. The old text is kept once as a backup.</li>
+</ul>
+<h2>Setup</h2>
+<ol>
+<li>In Claude, open Settings, then Connectors, and add Frenchfries777 Tools.</li>
+<li>Sign in with your Frenchfries777 account (id and password).</li>
+<li>The first time, paste your Tools key. Get it at <a href="https://frenchfries777.com/tools/claude-key/">frenchfries777.com/tools/claude-key/</a>.</li>
+</ol>
+<h2>Authentication</h2>
+<p>OAuth 2.1 with PKCE (S256) and dynamic client registration. Access tokens last 1 hour and refresh tokens 30 days.</p>
+<h2>Examples</h2>
+<ol>
+<li><b>"List my Fry Sheet documents."</b> Claude calls list_documents for Sheet and shows the names and sizes.</li>
+<li><b>"Find my slides that mention the school trip."</b> Claude calls search_documents, then read_document on the matches and summarizes them.</li>
+<li><b>"Fix the typos in my Fry Docs essay."</b> Claude reads the document, then calls write_document with the corrected text. The previous version is kept as a backup.</li>
+</ol>
+<h2>Limits</h2>
+<p>One document is up to 4 MB and your store is up to 16 MB. Reads come in parts of 60,000 characters. Searches look at up to 40 documents.</p>
+<h2>Privacy and support</h2>
+<p><a href="../privacy/">Privacy policy</a> · <a href="https://frenchfries777.com/">frenchfries777.com</a></p>
+<footer><span>Created by Frenchfries777</span><span class="ff-copy">© 2026 Frenchfries777 · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.ko" target="_blank" rel="noopener">CC BY-NC-ND 4.0</a></span></footer>
+</main>
+</body>
+</html>
