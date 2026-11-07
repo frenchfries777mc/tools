@@ -337,6 +337,29 @@ html[data-ff-theme=light] .blocklyFlyoutButton .blocklyText{fill:#161616!importa
 html[data-ff-theme=light] .blocklyGridPattern line{stroke:#ece8dd!important;}
 html[data-ff-theme=light] .blocklyMainBackground{fill:#ffffff;}
 </style>
+<link rel="stylesheet" href="../ff-rich-app.css?v=1">
+<style id="richApp">
+/* rich look: Fry Blocks (Blockly chrome) */
+html[data-ff-theme] .blocklyToolboxDiv{background:var(--bg)!important;border-right:2px solid var(--fry)!important;color:var(--text)!important}
+html[data-ff-theme] .blocklyTreeLabel{color:var(--text)!important}
+html[data-ff-theme] .blocklyTreeRow{border-radius:0 99px 99px 0}
+html[data-ff-theme] .blocklyTreeSelected.blocklyTreeRow{background-color:var(--fry)!important}
+html[data-ff-theme] .blocklyTreeSelected .blocklyTreeLabel{color:var(--bg)!important}
+html[data-ff-theme] .blocklyFlyoutLabelText{fill:var(--text)!important}
+html[data-ff-theme] .blocklyFlyoutButtonBackground{fill:transparent!important;stroke:var(--fry)!important}
+html[data-ff-theme] .blocklyFlyoutButton .blocklyText{fill:var(--text)!important}
+html[data-ff-theme] #side{border-left:2px solid var(--fry)!important}
+html[data-ff-theme] .pvTop{border-bottom:2px solid var(--fry)!important}
+html[data-ff-theme] .pvTop b{font-family:'Oswald','Noto Sans KR',sans-serif;font-weight:600;font-size:15px;border-left:8px solid var(--fry);padding-left:10px}
+html[data-ff-theme] #logBar,html[data-ff-theme] #objBar,html[data-ff-theme] #dbgBar,html[data-ff-theme] #varBar{border-top:2px solid var(--fry)!important}
+html[data-ff-theme] #logBar button,html[data-ff-theme] .seg button,html[data-ff-theme] .lnk,html[data-ff-theme] #objPrevBtn{color:var(--text)}
+html[data-ff-theme] .seg{background:transparent;border:1px solid var(--fry);border-radius:99px}
+html[data-ff-theme] .seg button.on,html[data-ff-theme] .lnk.on,html[data-ff-theme] #objPrevBtn{background:var(--fry)!important;color:var(--bg)!important}
+html[data-ff-theme] #objTabs button.on{background:var(--fry)!important;color:var(--bg)!important;border-color:var(--fry)!important}
+html[data-ff-theme] #logBox,html[data-ff-theme] #shareLink,html[data-ff-theme] #codeWrap,html[data-ff-theme] #codeEdit{background:transparent!important}
+html[data-ff-theme] .baiChips button{background:transparent!important;border:1px solid var(--fry)!important;border-radius:99px!important}
+html[data-ff-theme] .baiChips button:hover{background:color-mix(in srgb,var(--fry) 18%,transparent)!important;color:var(--text)!important}
+</style>
 </head>
 <body class="v-blocks">
 <header class="top">

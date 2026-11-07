@@ -105,6 +105,19 @@ html[data-ff-theme=light] .row input[type=number],html[data-ff-theme=light] .row
 html[data-ff-theme=light] #dname:hover,html[data-ff-theme=light] #dname:focus{background:#faf8f3;}
 html[data-ff-theme=light] #stage,html[data-ff-theme=light] .stagew svg{box-shadow:0 6px 24px rgba(0,0,0,.14);}
 </style>
+<link rel="stylesheet" href="../ff-rich-app.css?v=1">
+<style id="richApp">
+/* rich look: Fry Draw (canvas and ruler marks are untouched) */
+html[data-ff-theme] .rtop,html[data-ff-theme] .rcorner{border-bottom:1px solid var(--fry)!important}
+html[data-ff-theme] .tools{flex:0 0 54px}
+html[data-ff-theme] .tl{border-radius:99px}
+html[data-ff-theme] .swb{border-color:var(--fry)!important}
+html[data-ff-theme] .lyr{border-radius:16px}
+html[data-ff-theme] .lyr:not(.on){border-color:var(--fry)}
+html[data-ff-theme] .pgrid button{border-radius:99px}
+html[data-ff-theme] .row input[type=color]{border:1px solid var(--fry)}
+html[data-ff-theme] .dlg h3,html[data-ff-theme] .dlg h4{font-family:'Oswald','Noto Sans KR',sans-serif;font-weight:600;border-left:8px solid var(--fry);padding-left:10px}
+</style>
 </head>
 <body>
 <div class="top">

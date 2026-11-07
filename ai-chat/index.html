@@ -205,6 +205,42 @@ html[data-ff-theme=light] .brand{color:#111;} html[data-ff-theme=light] .brand b
 html[data-ff-theme=light] .hero-lg{filter:drop-shadow(0 14px 36px rgba(212,166,42,.25));}
 .hero-lg{filter:drop-shadow(0 14px 36px rgba(217,180,95,.28));}
 </style>
+<link rel="stylesheet" href="../ff-rich-app.css?v=1">
+<style id="richApp">
+/* rich look: AI chat (AI 체험) */
+html[data-ff-theme] main{background:transparent}
+html[data-ff-theme] .hero .eyebrow{color:var(--fry);letter-spacing:.2em;font-weight:600;font-family:'Oswald','Noto Sans KR',sans-serif}
+html[data-ff-theme] h1{font-weight:600;color:var(--text);border-left:8px solid var(--fry);padding-left:20px;text-shadow:none;line-height:1.02}
+html[data-ff-theme] h1 span{background:none!important;-webkit-text-fill-color:var(--text)!important;color:var(--text)!important}
+html[data-ff-theme] .hero h1::after{content:'';display:block;width:120px;height:5px;background:var(--fry);margin-top:10px}
+html[data-ff-theme] .lead{color:var(--text);font-weight:500}
+html[data-ff-theme] .hero-lg{filter:none!important}
+html[data-ff-theme] .len{background:transparent;border:1px solid var(--fry);border-radius:99px}
+html[data-ff-theme] .len button{color:var(--text)}
+html[data-ff-theme] .len button.on{background:var(--fry);color:var(--bg)}
+html[data-ff-theme] .mc,html[data-ff-theme=light] .mc{background:transparent!important;border:1px solid var(--fry)!important;border-left:8px solid var(--fry)!important;border-radius:16px!important;transform:none!important;position:relative}
+html[data-ff-theme] .mc::after{content:'';position:absolute;left:16px;bottom:0;width:56px;height:3px;background:var(--fry)}
+html[data-ff-theme] .mc:hover:not([disabled]){background:color-mix(in srgb,var(--fry) 10%,transparent)!important}
+html[data-ff-theme] .mc[disabled],html[data-ff-theme=light] .mc[disabled]{opacity:.85}
+html[data-ff-theme] .mc .n{color:var(--text)}
+html[data-ff-theme] .mc .d,html[data-ff-theme] .mc .n small,html[data-ff-theme=light] .mc[disabled] .d,html[data-ff-theme=light] .mc[disabled] .n small{color:var(--dim)}
+html[data-ff-theme] .mc .s{color:var(--fry)}
+html[data-ff-theme] .bar,html[data-ff-theme] form.in,html[data-ff-theme] .ac,html[data-ff-theme] .msug,html[data-ff-theme] .m.a,html[data-ff-theme] .rl .go,html[data-ff-theme] .rl .del,html[data-ff-theme] .rl .rn{background:transparent!important;border:1px solid var(--fry)!important;border-radius:16px!important;color:var(--text)}
+html[data-ff-theme] .m.u{background:color-mix(in srgb,var(--fry) 16%,transparent)!important;border:1px solid var(--fry)!important}
+html[data-ff-theme] .m.a.bad{border-color:var(--bad)!important}
+html[data-ff-theme] .ac.win{border-color:var(--good,#5fd38d)!important}
+html[data-ff-theme] .rl .del{border-radius:99px!important}.rl .rn{border-radius:99px!important}
+html[data-ff-theme] .btn{border-radius:99px!important}
+html[data-ff-theme] .btn:disabled{opacity:.5!important;background:transparent!important;color:var(--dim)!important}
+html[data-ff-theme] .ghost{border:1px solid var(--fry)!important;border-radius:99px!important;color:var(--text)!important;background:transparent!important}
+html[data-ff-theme] .ghost:hover{background:color-mix(in srgb,var(--fry) 18%,transparent)!important}
+html[data-ff-theme] .chips button{background:transparent!important;border:1px solid var(--fry)!important;color:var(--text)!important}
+html[data-ff-theme] .chips button:hover{background:color-mix(in srgb,var(--fry) 18%,transparent)!important}
+html[data-ff-theme] .arow select{background:transparent;border:1px solid var(--fry);border-radius:99px;color:var(--text)}
+html[data-ff-theme] .recent h2{font-family:'Oswald','Noto Sans KR',sans-serif;font-weight:600;font-size:20px;border-left:8px solid var(--fry);padding-left:12px}
+html[data-ff-theme] .hi,html[data-ff-theme] .hint,html[data-ff-theme] .cmeta,html[data-ff-theme] .ares,html[data-ff-theme] .arrank{color:var(--dim)}
+html[data-ff-theme] .dlg .acts .btn,html[data-ff-theme] .dlg .btn{border-radius:99px}
+</style>
 </head>
 <body>
 <header class="top">
