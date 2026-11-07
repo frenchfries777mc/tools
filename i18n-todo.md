@@ -143,3 +143,4 @@ patchnotes/score.json | Fry Score v36 항목 (en만) | score v36 | 2026-11-06
 score/app.js | Fry Score v36 한국어 메시지·버튼 | score v36 | 2026-11-06
 index.html | 푸터 'Claude와 연결하기' 링크 | site | 2026-11-06
 claude-key/index.html | Claude와 연결하기 페이지 한국어 글자 | site | 2026-11-06
+patchnotes/ai.json | tarius 2.1 항목 (en만) | ai v66 | 2026-11-07
