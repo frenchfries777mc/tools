@@ -8,13 +8,13 @@ const MAX_TEXT = 60000, MAX_SCAN = 40, MAX_DOC = 4e6, ACCESS_S = 3600, REFRESH_S
 const APP_ENUM = ['docs', 'sheet', 'slides', 'blocks', 'python', 'draw', 'score', 'video'];
 
 const TOOLS = [
-  { name: 'list_documents', title: 'List documents', annotations: { readOnlyHint: true }, description: 'List the documents saved on the Fry store (Fry Docs, Sheet, Slides, Blocks, Code, Draw, Score, Video) with their size.',
+  { name: 'list_documents', title: 'List documents', annotations: { title: 'List documents', readOnlyHint: true }, description: 'List the documents saved on the Fry store (Fry Docs, Sheet, Slides, Blocks, Code, Draw, Score, Video) with their size.',
     inputSchema: { type: 'object', properties: { app: { type: 'string', enum: APP_ENUM, description: 'only this program' } } } },
-  { name: 'read_document', title: 'Read a document', annotations: { readOnlyHint: true }, description: 'Read one saved document by its key (from list_documents). Returns the stored text; long ones are cut, use offset to continue.',
+  { name: 'read_document', title: 'Read a document', annotations: { title: 'Read a document', readOnlyHint: true }, description: 'Read one saved document by its key (from list_documents). Returns the stored text; long ones are cut, use offset to continue.',
     inputSchema: { type: 'object', properties: { key: { type: 'string' }, offset: { type: 'integer', minimum: 0 } }, required: ['key'] } },
-  { name: 'search_documents', title: 'Search documents', annotations: { readOnlyHint: true }, description: 'Find documents whose text contains a word (case-insensitive). Looks at up to 40 documents.',
+  { name: 'search_documents', title: 'Search documents', annotations: { title: 'Search documents', readOnlyHint: true }, description: 'Find documents whose text contains a word (case-insensitive). Looks at up to 40 documents.',
     inputSchema: { type: 'object', properties: { query: { type: 'string' }, app: { type: 'string', enum: APP_ENUM } }, required: ['query'] } },
-  { name: 'write_document', title: 'Write a document', annotations: { destructiveHint: true }, description: 'Replace the whole text of a saved document (or create it). Give the complete new text in the same format that read_document returned. The previous text is kept once as backup key "ffbak.<key>". Max 4 MB.',
+  { name: 'write_document', title: 'Write a document', annotations: { title: 'Write a document', readOnlyHint: false, destructiveHint: true }, description: 'Replace the whole text of a saved document (or create it). Give the complete new text in the same format that read_document returned. The previous text is kept once as backup key "ffbak.<key>". Max 4 MB.',
     inputSchema: { type: 'object', properties: { key: { type: 'string', description: 'existing key, or a new one starting with ffdocs. ffsheet. ffslides. ffblocks. ffpy. ffdraw. ffscore. ffvideo.' }, content: { type: 'string' } }, required: ['key', 'content'] } },
 ];
 
