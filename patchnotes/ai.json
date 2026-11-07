@@ -3,6 +3,22 @@
  "name": "자체 AI (FF777)",
  "notes": [
   {
+   "date": "2026-11-07",
+   "build": "v66",
+   "title": "tarius 2.1",
+   "items": [
+    "tarius를 FF777 2.1로 올림 (바탕 Qwen3에서 새로 학습, 아재개그를 빼고 코드·대화·글쓰기·수식 중심으로 학습)"
+   ],
+   "tr": {
+    "en": {
+     "title": "tarius 2.1",
+     "items": [
+      "tarius upgraded to FF777 2.1 (trained fresh from the original Qwen3, without dad jokes, focused on code, chat, writing and formulas)"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-04",
    "build": "v65",
    "title": "AI 체험에서 AI 설정 버튼 뺌",
