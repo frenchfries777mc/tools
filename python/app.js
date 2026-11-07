@@ -366,7 +366,7 @@ function whyBox(er){ var box=document.createElement('div'); box.className='why';
 /* ---------- other languages (langs.js) ---------- */
 var stopFn=null, liveT=0, otherGen=0;
 function stopOther(){ if(stopFn){ try{ stopFn(); }catch(e){} stopFn=null; } otherGen++; running=false; ui(); state(''); sys(T('■ 멈췄어요'),'err'); }
-function showTab(id){ out.hidden=(id!=='out'); $('pv').hidden=(id!=='pv'); $('wd').hidden=(id!=='wd'); Array.prototype.forEach.call($('rtabs').children,function(b){ b.classList.toggle('on',b.dataset.t===id); }); }
+function showTab(id){ if(id!=='wd'&&wdFrame) wdOff(true); out.hidden=(id!=='out'); $('pv').hidden=(id!=='pv'); $('wd').hidden=(id!=='wd'); Array.prototype.forEach.call($('rtabs').children,function(b){ b.classList.toggle('on',b.dataset.t===id); }); }
 function runOther(live){ var L=LG(); if(!L.run) return; if(!live) saveNow(); errLine=0; paint(); out.innerHTML=''; $('pv').innerHTML=''; lastPre=null; outChars=0;
   if(stopFn){ try{ stopFn(); }catch(e){} stopFn=null; } var gen=++otherGen; running=!live; ui(); var t1=Date.now();
   var ctx={code:code.value, out:out, pv:$('pv'), write:write, sys:sys, show:function(id){ if(wdFrame) return; if(!live||gen===otherGen) showTab(id); }, T:T,
@@ -377,15 +377,14 @@ function runOther(live){ var L=LG(); if(!L.run) return; if(!live) saveNow(); err
   try{ L.run(ctx); }catch(e){ write(String((e&&e.message)||e)+'\n','err'); ctx.done(false); } }
 
 /* ---------- BeaconScript: 바로 적용 (Beaconfall world in an iframe) ---------- */
-var BS_GAME='/beaconfall/BEACONFALL-v0.6.html?bstest=1', wdFrame=null, wdReady=false, wdRetry=0, wdLive=0, wdTab=null, wdBtn=null;
-function wdButtons(tb){ wdTab=document.createElement('button'); wdTab.type='button'; wdTab.className='rt'; wdTab.dataset.t='wd'; wdTab.textContent=T('월드'); wdTab.hidden=true; wdTab.onclick=function(){ showTab('wd'); }; tb.appendChild(wdTab);
-  wdBtn=document.createElement('button'); wdBtn.type='button'; wdBtn.className='rt lv'; wdBtn.textContent=T('바로 적용'); wdBtn.title=T('Beaconfall 월드를 이 안에서 바로 실행해요 (로그인·로비 없음). 껐다 켜면 새 월드로 초기화돼요'); wdBtn.setAttribute('aria-pressed','false'); wdBtn.onclick=function(){ if(wdFrame) wdOff(); else wdOn(); }; tb.appendChild(wdBtn); }
+var BS_GAME='/games/beaconfall/BEACONFALL-v0.6.html?bstest=1', wdFrame=null, wdReady=false, wdRetry=0, wdLive=0, wdTab=null, wdBtn=null;
+function wdButtons(tb){ wdBtn=document.createElement('button'); wdBtn.type='button'; wdBtn.className='rt lv'; wdBtn.textContent=T('바로 적용'); wdBtn.title=T('Beaconfall 월드를 이 안에서 바로 실행해요 (로그인·로비 없음). 껐다 켜면 새 월드로 초기화돼요'); wdBtn.setAttribute('aria-pressed','false'); wdBtn.onclick=function(){ if(wdFrame) wdOff(); else wdOn(); }; tb.appendChild(wdBtn); }
 function wdSend(reset){ if(!wdFrame||!wdFrame.contentWindow) return; try{ wdFrame.contentWindow.postMessage({type:'bs-apply',code:code.value,reset:!!reset},location.origin); }catch(e){} }
 function wdOn(){ if(wdFrame||curLang!=='beaconscript') return; var f=document.createElement('iframe'); f.setAttribute('title','Beaconfall'); f.setAttribute('allow','fullscreen'); wdFrame=f; wdReady=false; $('wd').innerHTML=''; $('wd').appendChild(f); f.src=BS_GAME;
-  if(wdTab) wdTab.hidden=false; if(wdBtn){ wdBtn.classList.add('lvon'); wdBtn.setAttribute('aria-pressed','true'); } showTab('wd');
+  if(wdBtn){ wdBtn.classList.add('lvon'); wdBtn.setAttribute('aria-pressed','true'); } showTab('wd');
   var n=0; clearInterval(wdRetry); wdRetry=setInterval(function(){ if(wdReady||!wdFrame||++n>60){ clearInterval(wdRetry); if(!wdReady&&wdFrame) sys(T('월드가 아직 준비되지 않았어요'),'err'); return; } wdSend(true); },500); }
 function wdOff(quiet){ clearInterval(wdRetry); clearTimeout(wdLive); if(wdFrame){ try{ wdFrame.src='about:blank'; }catch(e){} wdFrame=null; } wdReady=false; var w=$('wd'); if(w){ w.innerHTML=''; }
-  if(wdTab) wdTab.hidden=true; if(wdBtn){ wdBtn.classList.remove('lvon'); wdBtn.setAttribute('aria-pressed','false'); }
+  if(wdBtn){ wdBtn.classList.remove('lvon'); wdBtn.setAttribute('aria-pressed','false'); }
   if(!quiet&&curLang==='beaconscript') showTab('pv'); }
 function wdSoon(){ if(!wdFrame||!wdReady) return; clearTimeout(wdLive); wdLive=setTimeout(function(){ wdSend(false); },600); }
 window.addEventListener('message',function(e){ if(!wdFrame||e.source!==wdFrame.contentWindow||e.origin!==location.origin) return; var d=e.data||{};
