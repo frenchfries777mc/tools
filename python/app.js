@@ -400,10 +400,11 @@ function wdOn(){ if(wdFrame||curLang!=='beaconscript') return; var f=document.cr
 function wdOff(quiet){ clearInterval(wdRetry); clearTimeout(wdLive); if(wdFrame){ try{ wdFrame.src='about:blank'; }catch(e){} wdFrame=null; } wdReady=false; var w=$('wd'); if(w){ w.innerHTML=''; }
   if(wdBtn){ wdBtn.classList.remove('lvon'); wdBtn.setAttribute('aria-pressed','false'); }
   if(!quiet&&curLang==='beaconscript') showTab('pv'); }
+function wdErr(m){ var w=$('wd'); if(!w) return; var e=w.querySelector('.wderr'); if(!m){ if(e) e.remove(); return; } if(!e){ e=document.createElement('div'); e.className='wderr'; w.appendChild(e); } e.textContent=T('코드 오류')+' · '+m; }
 function wdSoon(){ if(!wdFrame||!wdReady) return; clearTimeout(wdLive); wdLive=setTimeout(function(){ wdSend(false); },600); }
 window.addEventListener('message',function(e){ if(!wdFrame||e.source!==wdFrame.contentWindow||e.origin!==location.origin) return; var d=e.data||{};
-  if(d.type==='bs-boot'){ wdSend(true); } else if(d.type==='bs-ready'){ wdReady=true; clearInterval(wdRetry); }
-  else if(d.type==='bs-error'){ write('월드: '+String(d.msg||'')+'\n','err'); } });
+  if(d.type==='bs-boot'){ wdSend(true); } else if(d.type==='bs-ready'){ wdReady=true; clearInterval(wdRetry); wdErr(''); }
+  else if(d.type==='bs-error'){ write('월드: '+String(d.msg||'')+'\n','err'); wdErr(String(d.msg||'')); } });
 function liveSoon(){ wdSoon(); clearTimeout(liveT); liveT=setTimeout(function(){ if(LG().live&&!running) runOther(true); },500); }
 function setLang(l,silent){ if(!FC.langs[l]) l='python'; var changed=l!==curLang; if(changed&&stopFn){ try{ stopFn(); }catch(e){} stopFn=null; } otherGen++; running=false; ui();
   curLang=l; var L=LG(); IN=L.indent||'    '; $('langPick').value=l; langBtn(); var py=(l==='python');
