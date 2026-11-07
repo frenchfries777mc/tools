@@ -367,7 +367,7 @@ function whyBox(er){ var box=document.createElement('div'); box.className='why';
 /* ---------- other languages (langs.js) ---------- */
 var stopFn=null, liveT=0, otherGen=0;
 function stopOther(){ if(stopFn){ try{ stopFn(); }catch(e){} stopFn=null; } otherGen++; running=false; ui(); state(''); sys(T('■ 멈췄어요'),'err'); }
-function showTab(id){ if(id!=='wd'&&wdFrame) wdOff(true); out.hidden=(id!=='out'); $('pv').hidden=(id!=='pv'); $('wd').hidden=(id!=='wd'); Array.prototype.forEach.call($('rtabs').children,function(b){ b.classList.toggle('on',b.dataset.t===id); }); }
+function showTab(id){ if(id!=='wd'&&id!=='st'&&wdFrame) wdOff(true); out.hidden=(id!=='out'); $('pv').hidden=(id!=='pv'); $('wd').hidden=(id!=='wd'); $('st').hidden=(id!=='st'); if(id==='st') stDraw(); if(wdBtn) wdBtn.classList.toggle('lvon',!!wdFrame&&id==='wd'); if(stBtn) stBtn.classList.toggle('on',id==='st'); Array.prototype.forEach.call($('rtabs').children,function(b){ b.classList.toggle('on',b.dataset.t===id); }); }
 function runOther(live){ var L=LG(); if(!L.run) return; if(!live) saveNow(); errLine=0; paint(); out.innerHTML=''; $('pv').innerHTML=''; lastPre=null; outChars=0;
   if(stopFn){ try{ stopFn(); }catch(e){} stopFn=null; } var gen=++otherGen; running=!live; ui(); var t1=Date.now();
   var ctx={code:code.value, out:out, pv:$('pv'), write:write, sys:sys, show:function(id){ if(wdFrame) return; if(!live||gen===otherGen) showTab(id); }, T:T,
@@ -379,8 +379,15 @@ function runOther(live){ var L=LG(); if(!L.run) return; if(!live) saveNow(); err
 
 /* ---------- BeaconScript: 바로 적용 (Beaconfall world in an iframe) ---------- */
 var BS_GAME='/games/beaconfall/BEACONFALL-v0.6.html?bstest=1', wdFrame=null, wdReady=false, wdRetry=0, wdLive=0, wdTab=null, wdBtn=null;
-function wdButtons(tb){ wdBtn=document.createElement('button'); wdBtn.type='button'; wdBtn.className='rt lv'; wdBtn.textContent=T('바로 적용'); wdBtn.title=T('Beaconfall 월드를 이 안에서 바로 실행해요 (로그인·로비 없음). 껐다 켜면 새 월드로 초기화돼요'); wdBtn.setAttribute('aria-pressed','false'); wdBtn.onclick=function(){ if(wdFrame) wdOff(); else wdOn(); }; tb.appendChild(wdBtn); }
-function wdSend(reset){ if(!wdFrame||!wdFrame.contentWindow) return; try{ wdFrame.contentWindow.postMessage({type:'bs-apply',code:code.value,reset:!!reset},location.origin); }catch(e){} }
+function wdButtons(tb){ wdBtn=document.createElement('button'); wdBtn.type='button'; wdBtn.className='rt lv'; wdBtn.textContent=T('바로 적용'); wdBtn.title=T('Beaconfall 월드를 이 안에서 바로 실행해요 (로그인·로비 없음). 껐다 켜면 새 월드로 초기화돼요'); wdBtn.setAttribute('aria-pressed','false'); wdBtn.onclick=function(){ if(wdFrame&&$('wd').hidden) showTab('wd'); else if(wdFrame) wdOff(); else wdOn(); }; tb.appendChild(wdBtn);
+  stBtn=document.createElement('button'); stBtn.type='button'; stBtn.className='rt st'; stBtn.textContent=T('설정'); stBtn.title=T('바로 적용에서 켜고 끌 API를 골라요'); stBtn.onclick=function(){ showTab('st'); }; tb.appendChild(stBtn); }
+var stBtn=null, BS_APIS=[['potato','Potato API','%player_name% · %player_hp% 같은 값을 쓸 수 있게 해요']];
+function stGet(){ var o={}; try{ o=JSON.parse(localStorage.getItem('fc.bs.api')||'{}')||{}; }catch(e){} return o; }
+function stOn(id){ var o=stGet(); return o[id]!==false; }
+function stList(){ return BS_APIS.filter(function(a){ return stOn(a[0]); }).map(function(a){ return a[0]; }); }
+function stDraw(){ var b=$('st'); b.innerHTML=''; var h=document.createElement('div'); h.className='sth'; h.textContent=T('API'); b.appendChild(h); var hint=document.createElement('div'); hint.className='sts'; hint.textContent=T('켜 둔 API가 바로 적용 월드에 적용돼요'); b.appendChild(hint);
+  BS_APIS.forEach(function(a){ var r=document.createElement('label'); r.className='strow'; var c=document.createElement('input'); c.type='checkbox'; c.checked=stOn(a[0]); c.onchange=function(){ var o=stGet(); o[a[0]]=c.checked; try{ localStorage.setItem('fc.bs.api',JSON.stringify(o)); }catch(e){} wdSend(false); }; var t=document.createElement('span'); t.className='stt'; var n=document.createElement('b'); n.textContent=a[1]; var d=document.createElement('small'); d.textContent=T(a[2]); t.appendChild(n); t.appendChild(d); r.appendChild(c); r.appendChild(t); b.appendChild(r); }); }
+function wdSend(reset){ if(!wdFrame||!wdFrame.contentWindow) return; try{ wdFrame.contentWindow.postMessage({type:'bs-apply',code:code.value,reset:!!reset,apis:stList()},location.origin); }catch(e){} }
 function wdOn(){ if(wdFrame||curLang!=='beaconscript') return; var f=document.createElement('iframe'); f.setAttribute('title','Beaconfall'); f.setAttribute('allow','fullscreen'); f.setAttribute('sandbox','allow-scripts allow-same-origin allow-pointer-lock allow-forms allow-downloads'); wdFrame=f; wdReady=false; $('wd').innerHTML=''; $('wd').appendChild(f); f.src=BS_GAME;
   if(wdBtn){ wdBtn.classList.add('lvon'); wdBtn.setAttribute('aria-pressed','true'); } showTab('wd');
   var n=0; clearInterval(wdRetry); wdRetry=setInterval(function(){ if(wdReady||!wdFrame||++n>60){ clearInterval(wdRetry); if(!wdReady&&wdFrame) sys(T('월드가 아직 준비되지 않았어요'),'err'); return; } wdSend(true); },500); }
