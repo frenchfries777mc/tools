@@ -15,6 +15,54 @@
      "items": [
       "lectus upgraded to FF777 2.1 (trained fresh from the original Qwen3, without dad jokes, focused on code, chat, writing and formulas)"
      ]
+    },
+    "es": {
+     "title": "lectus 2.1",
+     "items": [
+      "lectus se actualizó a FF777 2.1 (entrenado desde cero sobre el Qwen3 original, sin chistes de papá, centrado en código, chat, escritura y fórmulas)"
+     ]
+    },
+    "fr": {
+     "title": "lectus 2.1",
+     "items": [
+      "lectus est passé à FF777 2.1 (réentraîné depuis le Qwen3 d'origine, sans blagues de papa, centré sur le code, le chat, l'écriture et les formules)"
+     ]
+    },
+    "de": {
+     "title": "lectus 2.1",
+     "items": [
+      "lectus wurde auf FF777 2.1 aktualisiert (von Grund auf neu auf Basis des originalen Qwen3 trainiert, ohne Papa-Witze, mit Schwerpunkt auf Code, Chat, Schreiben und Formeln)"
+     ]
+    },
+    "ja": {
+     "title": "lectus 2.1",
+     "items": [
+      "lectus を FF777 2.1 に上げました（元の Qwen3 から新しく学習、アイジョークを除き、コード・会話・文章・数式中心）"
+     ]
+    },
+    "zh": {
+     "title": "lectus 2.1",
+     "items": [
+      "lectus 升级为 FF777 2.1（基于原始 Qwen3 重新训练，去掉了冷笑话，重点是代码、对话、写作和公式）"
+     ]
+    },
+    "pt": {
+     "title": "lectus 2.1",
+     "items": [
+      "lectus foi atualizado para FF777 2.1 (treinado do zero a partir do Qwen3 original, sem piadas de pai, focado em código, conversa, escrita e fórmulas)"
+     ]
+    },
+    "ru": {
+     "title": "lectus 2.1",
+     "items": [
+      "lectus обновлён до FF777 2.1 (обучен заново на исходном Qwen3, без папиных шуток, с упором на код, диалог, письмо и формулы)"
+     ]
+    },
+    "tr": {
+     "title": "lectus 2.1",
+     "items": [
+      "lectus, FF777 2.1 sürümüne yükseltildi (özgün Qwen3 üzerinden baştan eğitildi, baba şakaları çıkarıldı, kod, sohbet, yazı ve formüllere odaklı)"
+     ]
     }
    }
   },
@@ -30,6 +78,54 @@
      "title": "tarius 2.1",
      "items": [
       "tarius upgraded to FF777 2.1 (trained fresh from the original Qwen3, without dad jokes, focused on code, chat, writing and formulas)"
+     ]
+    },
+    "es": {
+     "title": "tarius 2.1",
+     "items": [
+      "tarius se actualizó a FF777 2.1 (entrenado desde cero sobre el Qwen3 original, sin chistes de papá, centrado en código, chat, escritura y fórmulas)"
+     ]
+    },
+    "fr": {
+     "title": "tarius 2.1",
+     "items": [
+      "tarius est passé à FF777 2.1 (réentraîné depuis le Qwen3 d'origine, sans blagues de papa, centré sur le code, le chat, l'écriture et les formules)"
+     ]
+    },
+    "de": {
+     "title": "tarius 2.1",
+     "items": [
+      "tarius wurde auf FF777 2.1 aktualisiert (von Grund auf neu auf Basis des originalen Qwen3 trainiert, ohne Papa-Witze, mit Schwerpunkt auf Code, Chat, Schreiben und Formeln)"
+     ]
+    },
+    "ja": {
+     "title": "tarius 2.1",
+     "items": [
+      "tarius を FF777 2.1 に上げました（元の Qwen3 から新しく学習、アイジョークを除き、コード・会話・文章・数式中心）"
+     ]
+    },
+    "zh": {
+     "title": "tarius 2.1",
+     "items": [
+      "tarius 升级为 FF777 2.1（基于原始 Qwen3 重新训练，去掉了冷笑话，重点是代码、对话、写作和公式）"
+     ]
+    },
+    "pt": {
+     "title": "tarius 2.1",
+     "items": [
+      "tarius foi atualizado para FF777 2.1 (treinado do zero a partir do Qwen3 original, sem piadas de pai, focado em código, conversa, escrita e fórmulas)"
+     ]
+    },
+    "ru": {
+     "title": "tarius 2.1",
+     "items": [
+      "tarius обновлён до FF777 2.1 (обучен заново на исходном Qwen3, без папиных шуток, с упором на код, диалог, письмо и формулы)"
+     ]
+    },
+    "tr": {
+     "title": "tarius 2.1",
+     "items": [
+      "tarius, FF777 2.1 sürümüne yükseltildi (özgün Qwen3 üzerinden baştan eğitildi, baba şakaları çıkarıldı, kod, sohbet, yazı ve formüllere odaklı)"
      ]
     }
    }
