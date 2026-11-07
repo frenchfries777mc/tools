@@ -156,7 +156,7 @@ function bsSug(before,pre,ctx){
   if(v==='fill'){ if(n===5) return W(['to']); if(n===6) return W(BS_TERRAIN).concat(W(BS_FILLNAT)).concat([{n:'%{변수}%',i:'%{$0}%',d:'변수에 저장된 대상 (land·tree·아이템 이름 등)'}]).concat(Object.keys(window.BS_ITEMDB||{}).map(function(k){ return {n:k,i:k+' ',d:window.BS_ITEMDB[k][0]+' (칸마다 세우기)'}; })); var tg=tk[6]||'', isT=BS_TERRAIN.indexOf(tg)>=0;
     if(tk[n-1]==='replace') return isT?W(['ocean','water','land'],''):[]; if(tk[n-1]==='chance') return [{n:'50%',i:'50% ',d:'확률 (1~100)'}]; if(tk.indexOf('replace')>0) return [];
     var oo=[]; if(isT&&n===7) oo=oo.concat(W(BS_BIOMES)); if(tk.indexOf('chance')<0) oo.push({n:'chance',i:'chance ',d:'확률 (지형은 픽셀마다, 나무·블록은 칸마다)'}); if(isT) oo.push({n:'replace',i:'replace ',d:'물이었던 곳·땅이었던 곳만 바꾸기'}); return oo; }
-  if(v==='disable'||v==='enable'){ if(n===1) return W(['collision']); if(n===2) return W(['of']); if(n===3) return W(BS_COLL,''); return []; }
+  if(v==='disable'||v==='enable'){ if(n===1) return W(['collision']); if(n===2) return W(['of']); if(n===3) return W(BS_COLL,'').map(function(o){ return o.n==='tree'?{n:o.n,i:o.i,d:'나무 (기본: 통과해요, 이동속도 20% 감소)'}:o; }); return []; }
   if(v==='teleport'){ if(n===1) return W(['player']); if(n===2) return W(['to']); if(n===3) return W(['spawn'],''); return []; }
   if(v==='spawn'){ if(n===1) return W(['wolf']); return []; }
   if(v==='place'){ if(n===1) return W(['bench']); if(n===2) return W(['near']); if(n===3) return W(['spawn'],''); return []; }
