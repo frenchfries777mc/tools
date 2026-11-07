@@ -19,6 +19,70 @@
       "Top bar buttons (undo, play, stop, zoom, open, save) now have icons with tooltips",
       "T key toggles a tie"
      ]
+    },
+    "es": {
+     "title": "Fry Score: barras de herramientas con iconos",
+     "items": [
+      "La barra de entrada de notas pasa a una fila superior al estilo MuseScore, con iconos dibujados para figuras, puntillo, silencio, alteraciones, ligadura, acorde, voces coloreadas 1-4, teclado en pantalla y borrar",
+      "Los botones de la barra superior (deshacer, reproducir, parar, zoom, abrir, guardar) tienen ahora iconos con información al pasar el ratón",
+      "La tecla T activa y desactiva la ligadura"
+     ]
+    },
+    "fr": {
+     "title": "Fry Score : barres d'outils avec icônes",
+     "items": [
+      "La barre de saisie des notes passe sur une rangée supérieure façon MuseScore, avec des icônes dessinées pour les valeurs, le point, le silence, les altérations, la liaison, l'accord, les voix colorées 1-4, le piano à l'écran et la suppression",
+      "Les boutons de la barre du haut (annuler, lecture, arrêt, zoom, ouvrir, enregistrer) ont des icônes avec info-bulles",
+      "La touche T active ou désactive la liaison"
+     ]
+    },
+    "de": {
+     "title": "Fry Score: Symbolleisten mit Bildern",
+     "items": [
+      "Die Eingabeleiste für Noten ist jetzt eine Zeile oben im MuseScore-Stil mit gezeichneten Symbolen für Notenwerte, Punkt, Pause, Vorzeichen, Bindung, Akkord, farbige Stimmen 1–4, Bildschirm-Klaviatur und Löschen",
+      "Die Schaltflächen der oberen Leiste (Rückgängig, Abspielen, Stopp, Zoom, Öffnen, Speichern) haben jetzt Symbole mit Kurzinfos",
+      "Die Taste T schaltet die Bindung ein und aus"
+     ]
+    },
+    "ja": {
+     "title": "Fry Score：絵の入ったアイコンのツールバー",
+     "items": [
+      "音符入力のツールバーを、MuseScore のような上段の行に移しました。音価、付点、休符、臨時記号、タイ、和音、色つき声部 1〜4、画面の鍵盤、削除に絵のアイコンを使います",
+      "上部のボタン（元に戻す、再生、停止、拡大、開く、保存）にアイコンとツールチップを付けました",
+      "T キーでタイのオンとオフを切り替えます"
+     ]
+    },
+    "zh": {
+     "title": "Fry Score：带图标的工具栏",
+     "items": [
+      "音符输入工具栏改为类似 MuseScore 的顶部一行，音符时值、附点、休止符、变音记号、连线、和弦、1–4 彩色声部、屏幕钢琴和删除均使用绘制的图标",
+      "顶部按钮（撤销、播放、停止、缩放、打开、保存）现在带有图标和提示文字",
+      "T 键可切换连线"
+     ]
+    },
+    "pt": {
+     "title": "Fry Score: barras de ferramentas com ícones",
+     "items": [
+      "A barra de entrada de notas passa para uma linha superior no estilo MuseScore, com ícones desenhados para figuras, ponto, pausa, acidentes, ligadura, acorde, vozes coloridas 1 a 4, piano na tela e excluir",
+      "Os botões da barra superior (desfazer, reproduzir, parar, zoom, abrir, salvar) agora têm ícones com dicas ao passar o mouse",
+      "A tecla T liga e desliga a ligadura"
+     ]
+    },
+    "ru": {
+     "title": "Fry Score: панели инструментов со значками",
+     "items": [
+      "Панель ввода нот перенесена в верхнюю строку в стиле MuseScore, со значками для длительностей, точки, пауз, альтераций, лиги, аккорда, цветных голосов 1–4, экранного фортепиано и удаления",
+      "Кнопки верхней панели (отменить, воспроизвести, стоп, масштаб, открыть, сохранить) получили значки с подсказками",
+      "Клавиша T переключает лигу"
+     ]
+    },
+    "tr": {
+     "title": "Fry Score: simgeli araç çubukları",
+     "items": [
+      "Nota giriş çubuğu MuseScore tarzında üst bir satıra taşındı; nota değerleri, nokta, sessizlik, işaretler, bağ, akor, renkli 1-4 sesler, ekran piyanosu ve silme için çizilmiş simgeler var",
+      "Üst çubuğun düğmeleri (geri al, oynat, durdur, yakınlaştır, aç, kaydet) simge ve ipucu metniyle geldi",
+      "T tuşu bağı açıp kapatır"
+     ]
     }
    }
   },
@@ -38,6 +102,70 @@
       "Narrow-screen layout reflows the score to fit phones",
       "Screen readers announce part, measure, pitch and duration when a note is selected",
       "Fixed errors in measure deletion, time changes and tuplets found by randomised edit tests"
+     ]
+    },
+    "es": {
+     "title": "Reconstrucción 6: diseño para móvil, robustez y accesibilidad",
+     "items": [
+      "Diseño para pantallas estrechas: la partitura se reajusta para caber en el móvil",
+      "Los lectores de pantalla anuncian la parte, el compás, la altura y la duración de la nota seleccionada",
+      "Corregidos errores al borrar compases, cambiar tiempos y tresillos, detectados con pruebas de edición aleatoria"
+     ]
+    },
+    "fr": {
+     "title": "Refonte 6 : mise en page téléphone, robustesse et accessibilité",
+     "items": [
+      "La mise en page des petits écrans reflue la partition pour tenir sur le téléphone",
+      "Les lecteurs d'écran annoncent la partie, la mesure, la hauteur et la durée de la note sélectionnée",
+      "Corrige des erreurs dans la suppression de mesures, les changements de temps et les tolets, trouvées par des tests de modification aléatoires"
+     ]
+    },
+    "de": {
+     "title": "Neuaufbau 6: Handy-Layout, Robustheit, Barrierefreiheit",
+     "items": [
+      "Layout für schmale Bildschirme: die Partitur bricht so um, dass sie aufs Handy passt",
+      "Screenreader sagen bei ausgewählter Note Stimme, Takt, Tonhöhe und Dauer an",
+      "Fehler beim Löschen von Takten, bei Taktwechseln und Tuolen behoben (gefunden mit zufälligen Bearbeitungstests)"
+     ]
+    },
+    "ja": {
+     "title": "作り直し 6：スマホの画面、安定性、アクセシビリティ",
+     "items": [
+      "狭い画面では、楽譜が収まるように折り返して表示します",
+      "スクリーンリーダーが、選んだ音符のパート・小節・音の高さ・長さを読み上げます",
+      "小節の削除、拍子の変更、連符の不具合を修正（ランダムな編集テストで見つけたもの）"
+     ]
+    },
+    "zh": {
+     "title": "重建 6：手机布局、稳定性与无障碍",
+     "items": [
+      "窄屏幕下乐谱会重新排版，以适应手机显示",
+      "选中音符时，屏幕阅读器会朗读所在声部、小节、音高和时值",
+      "修复删除小节、拍号变化和连音中的错误（通过随机编辑测试发现）"
+     ]
+    },
+    "pt": {
+     "title": "Refeito 6: layout para celular, robustez e acessibilidade",
+     "items": [
+      "Layout para telas estreitas: a partitura é reorganizada para caber no celular",
+      "Leitores de tela anunciam a parte, o compasso, a altura e a duração da nota selecionada",
+      "Corrigidos erros na exclusão de compassos, nas mudanças de tempo e nas quiálteras, encontrados por testes de edição aleatória"
+     ]
+    },
+    "ru": {
+     "title": "Переписано 6: мобильная раскладка, надёжность и доступность",
+     "items": [
+      "На узких экранах партитура перестраивается, чтобы помещаться на телефоне",
+      "Программы чтения с экрана озвучивают партию, такт, высоту и длительность выбранной ноты",
+      "Исправлены ошибки при удалении тактов, смене размера и в группах, найденные случайными тестами правок"
+     ]
+    },
+    "tr": {
+     "title": "Yeniden yazım 6: telefon düzeni, sağlamlık ve erişilebilirlik",
+     "items": [
+      "Dar ekranlarda nota telefona sığacak şekilde yeniden akar",
+      "Ekran okuyucular seçili notanın partisini, ölçüsünü, perdesini ve süresini okur",
+      "Ölçü silme, ölçü değiştirme ve üçlülerde hatalar düzeltildi (rastgele düzenleme testleriyle bulundu)"
      ]
     }
    }
@@ -60,6 +188,78 @@
       "Whole-score transposition with key signature, per-part sounding pitch (Bb instruments etc.) and solo",
       "Pickup measure, measure numbers, C time symbol, subtitle and header/footer text",
       "Lyrics and dynamics spaced below low ledger-line notes"
+     ]
+    },
+    "es": {
+     "title": "Pestaña de texto, ejemplos, transposición",
+     "items": [
+      "Sección de texto: escribe la notación como texto, añade, entrada paso a paso, letras en bloque, buscar y reemplazar, ejemplos, melodía con IA y estadísticas",
+      "Transporte de toda la partitura con armadura y tono sonoro por parte (instrumentos en Si bemol, etc.) y solo",
+      "Compás de anacrusa, numeración de compases, compás de C, subtítulo y texto de cabecera y pie",
+      "Letras y dinámicas separadas debajo de las notas con plica de línea adicional grave"
+     ]
+    },
+    "fr": {
+     "title": "Onglet texte, exemples, transposition",
+     "items": [
+      "Onglet texte : écrire la notation en texte, ajouter, saisie pas à pas, paroles en bloc, rechercher et remplacer, exemples, mélodie par IA et statistiques",
+      "Transposition de toute la partition avec armure et hauteur sonore par partie (instruments en si bémol, etc.) et solo",
+      "Mesure d'anacrouse, numéros de mesure, signe de mesure C, sous-titre et texte d'en-tête et de pied de page",
+      "Paroles et nuances placées plus bas sous les notes graves à lignes supplémentaires"
+     ]
+    },
+    "de": {
+     "title": "Textregister, Beispiele, Transposition",
+     "items": [
+      "Textregister: Notation als Text schreiben, anhängen, schrittweise Eingabe, Liedtext im Block, Suchen und Ersetzen, Beispiele, KI-Melodie und Statistik",
+      "Transponieren der ganzen Partitur mit Tonartvorzeichen und klingender Tonhöhe je Stimme (B-Instrumente usw.) sowie Solo",
+      "Auftakt, Taktnummern, C-Taktzeichen, Untertitel und Kopf-/Fußzeilentext",
+      "Liedtext und Dynamik unter tiefen Noten mit Hilfslinien weiter nach unten gesetzt"
+     ]
+    },
+    "ja": {
+     "title": "文字タブ、例の曲、移調",
+     "items": [
+      "文字タブ：記譜を文字で書く、追加、ステップ入力、歌詞の一括入力、検索と置換、例、AI のメロディー、統計",
+      "楽譜全体を調号つきで移調。パートごとの実音（B♭楽器など）とソロに対応",
+      "アウフタクト、小節番号、C 拍子記号、サブタイトルとヘッダー・フッターの文字",
+      "下の加線の低い音符で、歌詞と強弱を下にずらして表示"
+     ]
+    },
+    "zh": {
+     "title": "文字标签页、示例曲、移调",
+     "items": [
+      "文字标签页：以文字形式书写记谱，支持追加、逐步输入、批量歌词、查找替换、示例、AI 旋律和统计",
+      "整份乐谱按调号移调，并按声部显示实际发声音高（如降 B 调乐器等）和独奏",
+      "弱起小节、小节编号、C 拍号、副标题以及页眉页脚文字",
+      "低音加线音符下方的歌词和力度记号会自动下移，避免重叠"
+     ]
+    },
+    "pt": {
+     "title": "Aba de texto, partituras de exemplo, transposição",
+     "items": [
+      "Aba de texto: escreva a notação como texto, acrescente, entrada passo a passo, letras em massa, localizar e substituir, exemplos, melodia por IA e estatísticas",
+      "Transposição da partitura inteira com armadura e altura de som por parte (instrumentos em si bemol etc.) e solo",
+      "Compasso de anacruse, números de compasso, compasso C, subtítulo e texto de cabeçalho e rodapé",
+      "Letras e dinâmicas posicionadas mais abaixo sob notas graves com linhas suplementares"
+     ]
+    },
+    "ru": {
+     "title": "Вкладка текста, примеры, транспонирование",
+     "items": [
+      "Вкладка текста: записывайте нотацию текстом, дописывайте, вводите пошагово, вставляйте текст песни целиком, ищите и заменяйте, примеры, мелодия ИИ и статистика",
+      "Транспонирование всей партитуры с ключевыми знаками и звучащей высотой по партиям (инструменты in B и др.), а также соло",
+      "Затакт, номера тактов, метр C, подзаголовок и текст колонтитулов",
+      "Текст песни и динамика опущены ниже нот в нижнем регистре с добавочными линиями"
+     ]
+    },
+    "tr": {
+     "title": "Metin sekmesi, örnek parçalar, transpoze",
+     "items": [
+      "Metin sekmesi: notasyonu metin olarak yazın, ekleyin, adım adım girin, toplu sözler, bul ve değiştir, örnekler, yapay zekâ melodisi ve istatistikler",
+      "Tüm notanın dizili ve parti başına gerçek perdeyle transpoze edilmesi (si bemol çalgılar vb.) ve solo",
+      "Anakruz, ölçü numaraları, C ölçü işareti, alt başlık ve üst/alt bilgi metni",
+      "Alt ek çizgili notaların altında sözler ve dinamikler aşağı kaydırılır"
      ]
     }
    }
@@ -85,6 +285,86 @@
       "Print and PDF save with A4 pagination at system breaks",
       "Playback speed, metronome, count-in and loop"
      ]
+    },
+    "es": {
+     "title": "Reconstrucción 4 (4/4): importar y exportar archivos, impresión y ajustes de reproducción",
+     "items": [
+      "Exportación e importación MIDI con instrumentos, tempo, compás y tonalidad, siguiendo el orden de repeticiones",
+      "Exportación e importación de MusicXML: notas, silencios, grupos de tresillos, ligaduras, letras, acordes, dinámicas, articulaciones, repeticiones y casillas",
+      "Exportación a WAV y PNG",
+      "Impresión y guardado en PDF con paginación A4 en los saltos de sistema",
+      "Velocidad de reproducción, metrónomo, cuenta atrás y bucle"
+     ]
+    },
+    "fr": {
+     "title": "Refonte 4 (4/4) : import et export de fichiers, impression et réglages de lecture",
+     "items": [
+      "Export et import MIDI avec instruments, tempo, mesure et tonalité, en suivant l'ordre des reprises",
+      "Export et import MusicXML : notes, silences, groupes de triolets, liaisons, paroles, accords, nuances, articulations, reprises et volte-s",
+      "Export WAV et PNG",
+      "Impression et enregistrement en PDF avec pagination A4 aux sauts de système",
+      "Vitesse de lecture, métronome, compte d'entrée et boucle"
+     ]
+    },
+    "de": {
+     "title": "Neuaufbau 4 (4/4): Datei-Import/-Export, Druck und Wiedergabeeinstellungen",
+     "items": [
+      "MIDI-Export und -Import mit Instrumenten, Tempo, Taktart und Tonart, unter Beachtung der Wiederholungsfolge",
+      "MusicXML-Export und -Import: Noten, Pausen, Triolengruppen, Bögen, Liedtexte, Akkorde, Dynamik, Artikulation, Wiederholungen und Klammern",
+      "WAV- und PNG-Export",
+      "Druck und PDF-Speicherung mit A4-Seitenumbruch an den Systemgrenzen",
+      "Wiedergabegeschwindigkeit, Metronom, Vorzähler und Schleife"
+     ]
+    },
+    "ja": {
+     "title": "作り直し 4（4/4）：ファイルの読み込み・書き出し、印刷、再生の設定",
+     "items": [
+      "MIDI の書き出し・読み込み（楽器、テンポ、拍子、調号つき。反復の順序どおりに再生）",
+      "MusicXML の書き出し・読み込み：音符、休符、連符、スラー、歌詞、コード、強弱、アーティキュレーション、反復、括弧",
+      "WAV と PNG の書き出し",
+      "印刷と PDF 保存（段の区切りで A4 ページに分割）",
+      "再生速度、メトロノーム、カウントイン、繰り返し"
+     ]
+    },
+    "zh": {
+     "title": "重建 4（4/4）：文件导入导出、打印与播放设置",
+     "items": [
+      "MIDI 导出与导入（包含乐器、速度、拍号和调号，并按反复顺序播放）",
+      "MusicXML 导出与导入：音符、休止符、连音组、连线、歌词、和弦、力度、演奏记号、反复和跳房子",
+      "WAV 与 PNG 导出",
+      "打印和 PDF 保存，在段落分界处按 A4 分页",
+      "播放速度、节拍器、预备拍和循环"
+     ]
+    },
+    "pt": {
+     "title": "Refeito 4 (4/4): importar e exportar arquivos, impressão e configurações de reprodução",
+     "items": [
+      "Exportação e importação de MIDI com instrumentos, andamento, compasso e tom, seguindo a ordem das repetições",
+      "Exportação e importação de MusicXML: notas, pausas, grupos de quiálteras, ligaduras, letras, acordes, dinâmicas, articulações, repetições e casas",
+      "Exportação para WAV e PNG",
+      "Impressão e PDF com paginação A4 nas quebras de sistema",
+      "Velocidade de reprodução, metrônomo, contagem e loop"
+     ]
+    },
+    "ru": {
+     "title": "Переписано 4 (4/4): импорт и экспорт файлов, печать и настройки воспроизведения",
+     "items": [
+      "Экспорт и импорт MIDI с инструментами, темпом, размером и тональностью, с учётом порядка повторов",
+      "Экспорт и импорт MusicXML: ноты, паузы, группы триолей, лиги, текст песни, аккорды, динамика, артикуляция, повторы и вольты",
+      "Экспорт в WAV и PNG",
+      "Печать и PDF с постраничной разбивкой A4 по границам строк",
+      "Скорость воспроизведения, метроном, отсчёт и повтор"
+     ]
+    },
+    "tr": {
+     "title": "Yeniden yazım 4 (4/4): dosya içe/dışa aktarma, yazdırma ve oynatma ayarları",
+     "items": [
+      "Çalgılar, tempo, ölçü ve tonaliteyle MIDI dışa ve içe aktarma; tekrar sırasına uyar",
+      "Notalar, sessizlikler, üçlü grupları, bağlar, sözler, akorlar, dinamikler, artikülasyonlar, tekrarlar ve parantezlerle MusicXML dışa ve içe aktarma",
+      "WAV ve PNG dışa aktarma",
+      "Dizi geçişlerinde A4 sayfalara bölünmüş yazdırma ve PDF kaydetme",
+      "Oynatma hızı, metronom, giriş sayımı ve döngü"
+     ]
     }
    }
   },
@@ -108,6 +388,86 @@
       "Drum pad for drum parts (kick, snare, hi-hat, ...)",
       "Guitar, bass and ukulele TAB staff shown under the notation",
       "Pitch-coloured note heads"
+     ]
+    },
+    "es": {
+     "title": "Reconstrucción 3 (3/4): repeticiones, navegación, batería y tablatura",
+     "items": [
+      "Signos de repetición, 1.ª y 2.ª casillas, segno, coda, To Coda, D.S., D.C. y Fine se dibujan y se siguen en la reproducción",
+      "Doble barra y barra final, cifras de ensayo, texto en el compás, tempo por compás y accel./rit.",
+      "Pad de batería para las partes de percusión (bombo, caja, charles...)",
+      "Pentagrama de tablatura de guitarra, bajo y ukelele bajo la notación",
+      "Cabezas de nota coloreadas según la altura"
+     ]
+    },
+    "fr": {
+     "title": "Refonte 3 (3/4) : reprises, navigation, batterie et tablature",
+     "items": [
+      "Signes de reprise, 1re et 2e volte, segno, coda, To Coda, D.S., D.C. et Fine sont dessinés et suivis à la lecture",
+      "Double barre et barre finale, chiffres de répétition, texte de mesure, tempo par mesure et accel./rit.",
+      "Pad de batterie pour les parties de percussion (grosse caisse, caisse claire, charleston...)",
+      "Portée de tablature guitare, basse et ukulélé affichée sous la notation",
+      "Têtes de notes colorées selon la hauteur"
+     ]
+    },
+    "de": {
+     "title": "Neuaufbau 3 (3/4): Wiederholungen, Navigation, Schlagzeug und TAB",
+     "items": [
+      "Wiederholungszeichen, 1./2. Klammer, Segno, Coda, To Coda, D.S., D.C. und Fine werden gezeichnet und bei der Wiedergabe befolgt",
+      "Doppel- und Schlusstrich, Probenzeichen, Text pro Takt, Tempo pro Takt und accel./rit.",
+      "Schlagzeug-Pad für Schlagzeugstimmen (Bassdrum, Snare, Hi-Hat ...)",
+      "TAB-System für Gitarre, Bass und Ukulele unter der Notation",
+      "Notenköpfe nach Tonhöhe eingefärbt"
+     ]
+    },
+    "ja": {
+     "title": "作り直し 3（3/4）：反復、ジャンプ、ドラム、タブ譜",
+     "items": [
+      "反復記号、1番・2番括弧、セーニョ、コーダ、To Coda、D.S.、D.C.、フィーネを描き、再生でも従います",
+      "複縦線と終止線、練習記号、小節の中の文字、小節ごとのテンポと accel./rit.",
+      "打楽器パート用のドラムパッド（バスドラム、スネア、ハイハット など）",
+      "楽譜の下にギター・ベース・ウクレレのタブ譜を表示",
+      "音の高さに応じて音符の頭に色を付けます"
+     ]
+    },
+    "zh": {
+     "title": "重建 3（3/4）：反复、跳转、鼓谱与六线谱",
+     "items": [
+      "反复记号、一房与二房、Segno、Coda、To Coda、D.S.、D.C. 和 Fine 会被绘制，并在播放中生效",
+      "双纵线与终止线、排练记号、小节文字、逐小节速度以及 accel./rit.",
+      "为打击乐声部提供鼓垫（底鼓、军鼓、踩镲等）",
+      "乐谱下方显示吉他、贝斯和尤克里里的六线谱",
+      "符头按音高着色"
+     ]
+    },
+    "pt": {
+     "title": "Refeito 3 (3/4): repetições, navegação, bateria e tablatura",
+     "items": [
+      "Sinais de repetição, 1ª e 2ª casas, segno, coda, To Coda, D.S., D.C. e Fine são desenhados e seguidos na reprodução",
+      "Barra dupla e barra final, letras de ensaio, texto de compasso, andamento por compasso e accel./rit.",
+      "Pad de bateria para partes de percussão (bumbo, caixa, chimbal...)",
+      "Pauta de tablatura para violão, baixo e ukulele abaixo da notação",
+      "Cabeças de nota coloridas pela altura"
+     ]
+    },
+    "ru": {
+     "title": "Переписано 3 (3/4): повторы, навигация, ударные и табулатура",
+     "items": [
+      "Знаки повтора, первая и вторая вольты, segno, coda, To Coda, D.S., D.C. и Fine рисуются и учитываются при воспроизведении",
+      "Двойная и финальная тактовые черты, репетиционные знаки, текст в такте, темп по тактам и accel./rit.",
+      "Пэд ударной установки для ударных партий (бас-барабан, малый барабан, хай-хэт…)",
+      "Табулатура гитары, баса и укулеле под нотной записью",
+      "Головки нот окрашиваются по высоте"
+     ]
+    },
+    "tr": {
+     "title": "Yeniden yazım 3 (3/4): tekrarlar, gezinme, davul ve tab",
+     "items": [
+      "Tekrar işaretleri, 1. ve 2. parantez, segno, coda, To Coda, D.S., D.C. ve Fine çizilir ve oynatmada uygulanır",
+      "Çift çizgi ve son çizgi, prova işaretleri, ölçü üstü metin, ölçü başına tempo ve accel./rit.",
+      "Vurmalı partiler için davul pedi (bas davul, trampet, hi-hat...)",
+      "Notanın altında gitar, bas ve ukulele tab porsiyonu",
+      "Nota başları perdeye göre renklendirilir"
      ]
     }
    }
@@ -133,6 +493,86 @@
       "Two lyric lines, chord symbols, expression text, fingering, 8va lines, pedal and note head shapes",
       "Playback honours dynamics, slurs, grace notes and trills"
      ]
+    },
+    "es": {
+     "title": "Reconstrucción 2 (2/4): dinámicas y adornos",
+     "items": [
+      "Dinámicas ppp-fff y sfz, además de reguladores de crescendo y diminuendo",
+      "Articulaciones y adornos: staccato, acento, trino, mordente, grupeto, trémolo y arpegio",
+      "Ligaduras, notas de adorno y tresillos, cuatrillos, quintillos, sextillos, septillos y nonillos con corchetes",
+      "Dos líneas de letra, cifrado de acordes, texto de expresión, digitación, líneas de 8va, pedal y formas de cabezas de nota",
+      "La reproducción respeta las dinámicas, las ligaduras, las notas de adorno y los trinos"
+     ]
+    },
+    "fr": {
+     "title": "Refonte 2 (2/4) : nuances et ornements",
+     "items": [
+      "Nuances ppp à fff et sfz, plus les crescendos et diminuendos en forme de hauts-de-forme",
+      "Articulations et ornements : staccato, accent, trille, mordant, gruppetto, trémolo et arpège",
+      "Liaisons, appogiatures et triolets, quartolets, quintolets, sextolets, septolets et nonolets avec crochets",
+      "Deux lignes de paroles, chiffrages d'accords, texte d'expression, doigtés, lignes 8va, pédale et formes de têtes de notes",
+      "La lecture respecte les nuances, les liaisons, les appogiatures et les trilles"
+     ]
+    },
+    "de": {
+     "title": "Neuaufbau 2 (2/4): Dynamik und Verzierungen",
+     "items": [
+      "Dynamik ppp bis fff und sfz sowie Crescendo- und Decrescendo-Gabeln",
+      "Artikulation und Verzierungen: Staccato, Akzent, Triller, Mordent, Doppelschlag, Tremolo und Arpeggio",
+      "Bögen, Vorschläge und Triolen, Quartolen, Quintolen, Sextolen, Septolen und Nonolen mit Klammern",
+      "Zwei Liedtextzeilen, Akkordsymbole, Ausdruckstext, Fingersatz, 8va-Linien, Pedal und Notenkopfformen",
+      "Die Wiedergabe berücksichtigt Dynamik, Bögen, Vorschläge und Triller"
+     ]
+    },
+    "ja": {
+     "title": "作り直し 2（2/4）：強弱記号と装飾",
+     "items": [
+      "強弱 ppp〜fff と sfz、クレッシェンド・デクレッシェンドのくさび",
+      "アーティキュレーションと装飾：スタッカート、アクセント、トリル、モルデント、回転音、トレモロ、アルペジオ",
+      "スラー、装飾音符、括弧つきの3・5・6・7・9連符",
+      "歌詞2行、コード記号、表現の文字、運指、8va線、ペダル、音符の頭の形",
+      "再生は強弱、スラー、装飾音符、トリルを反映します"
+     ]
+    },
+    "zh": {
+     "title": "重建 2（2/4）：力度与装饰",
+     "items": [
+      "力度 ppp 到 fff 以及 sfz，并支持渐强、渐弱楔形线",
+      "演奏记号与装饰音：断音、重音、颤音、波音、回音、颤音（震音）、琶音",
+      "连线、装饰音，以及带括号的三、五、六、七、九连音",
+      "两行歌词、和弦标记、表情文字、指法、八度线、踏板和各种符头形状",
+      "播放会体现力度、连线、装饰音和颤音"
+     ]
+    },
+    "pt": {
+     "title": "Refeito 2 (2/4): dinâmicas e ornamentos",
+     "items": [
+      "Dinâmicas ppp a fff e sfz, além de reguladores de crescendo e diminuendo",
+      "Articulações e ornamentos: staccato, acento, trinado, mordente, grupeto, trêmolo e arpejo",
+      "Ligaduras, apogiaturas e quiálteras de 3, 5, 6, 7 e 9 com colchetes",
+      "Duas linhas de letra, cifras de acordes, texto de expressão, dedilhado, linhas de 8va, pedal e formatos de cabeça de nota",
+      "A reprodução respeita dinâmicas, ligaduras, apogiaturas e trinados"
+     ]
+    },
+    "ru": {
+     "title": "Переписано 2 (2/4): динамика и украшения",
+     "items": [
+      "Динамика ppp–fff и sfz, а также крещендо и диминуэндо клиньями",
+      "Артикуляция и украшения: стаккато, акцент, трель, мордент, группетто, тремоло и арпеджио",
+      "Лиги, форшлаги, а также триоли и квартоли, квинтоли, секстоли, септоли и ноноли со скобками",
+      "Два ряда текста песни, обозначения аккордов, текст выражения, аппликатура, линии 8va, педаль и формы головок нот",
+      "Воспроизведение учитывает динамику, лиги, форшлаги и трели"
+     ]
+    },
+    "tr": {
+     "title": "Yeniden yazım 2 (2/4): dinamikler ve süslemeler",
+     "items": [
+      "ppp'den fff'ye ve sfz dinamikleri; crescendo ve decrescendo çatalları",
+      "Artikülasyon ve süslemeler: staccato, aksan, tril, mordan, çift vuruş, tremolo ve arpej",
+      "Bağlar, süslemeler ve parantezli üçlü, dörtlü, beşli, altılı, yedili ve dokuzlu gruplar",
+      "İki sözcük satırı, akor işaretleri, ifade metni, parmak numarası, 8va çizgileri, pedal ve nota başı biçimleri",
+      "Oynatma dinamikleri, bağları, süslemeleri ve trilleri dikkate alır"
+     ]
     }
    }
   },
@@ -157,6 +597,86 @@
       "Input by mouse, keyboard (A-G, 1-7, arrows) and an on-screen piano for phones",
       "Scores and the library saved by the old version are migrated automatically"
      ]
+    },
+    "es": {
+     "title": "Reconstrucción desde cero (1/4): nuevo motor de notación",
+     "items": [
+      "Rehecho desde la base con un modelo de datos por compases, de modo que las ediciones nunca desajustan los compases",
+      "Claves de sol, de fa y de contralto redibujadas, con alteraciones, puntillos, ligaduras, líneas adicionales, segundas de acorde y barras",
+      "Cambios de armadura y de compás en mitad de la partitura (las notas siguientes se reajustan al nuevo compás) y hasta cuatro voces por pentagrama",
+      "Entrada con ratón, teclado (A-G, 1-7, flechas) y un piano en pantalla para el móvil",
+      "Las partituras y la biblioteca guardadas con la versión anterior se migran automáticamente"
+     ]
+    },
+    "fr": {
+     "title": "Refonte complète (1/4) : nouveau moteur de notation",
+     "items": [
+      "Reconstruit à partir d'un modèle de données par mesures, pour que les modifications ne désalignent jamais les mesures",
+      "Clés de sol, de fa et d'ut redessinées, avec altérations, points, liaisons, lignes supplémentaires, secondes d'accord et crochets",
+      "Changements de tonalité et de mesure en cours de partition (les notes suivantes sont recalées sur la nouvelle mesure) et jusqu'à quatre voix par portée",
+      "Saisie à la souris, au clavier (A-G, 1-7, flèches) et par un piano à l'écran pour téléphone",
+      "Les partitions et la bibliothèque enregistrées par l'ancienne version sont migrées automatiquement"
+     ]
+    },
+    "de": {
+     "title": "Komplett neu aufgebaut (1/4): neue Notationsengine",
+     "items": [
+      "Neu aufgebaut auf einem taktbasierten Datenmodell, damit Änderungen Takte nie aus dem Raster bringen",
+      "Violin-, Bass- und Altschlüssel neu gezeichnet, mit Vorzeichen, Punkten, Bindungen, Hilfslinien, Akkordsekunden und Balken",
+      "Tonart- und Taktartwechsel mitten im Stück (folgende Noten werden auf den neuen Takt umgebrochen) und bis zu vier Stimmen pro System",
+      "Eingabe mit Maus, Tastatur (A-G, 1-7, Pfeile) und einer Bildschirm-Klaviatur für Handys",
+      "Partituren und Bibliothek der alten Version werden automatisch übernommen"
+     ]
+    },
+    "ja": {
+     "title": "全面的に作り直し（1/4）：新しい楽譜の描画エンジン",
+     "items": [
+      "小節ごとのデータ構造で作り直したので、編集しても小節がずれません",
+      "ト音・ヘ音・アルト記号を描き直し、臨時記号・付点・タイ・補助線・和音の2度・符桁も対応",
+      "曲の途中の調と拍子の変更（後の音符は新しい拍子に合わせて並び直します）、1つの譜表で最大4声部",
+      "マウス、キーボード（A-G、1-7、矢印）、スマホ用の画面鍵盤で入力できます",
+      "古いバージョンで保存した楽譜とライブラリは自動的に引き継がれます"
+     ]
+    },
+    "zh": {
+     "title": "从头重建（1/4）：新的记谱引擎",
+     "items": [
+      "基于按小节组织的数据模型重新构建，编辑时不会再打乱小节对齐",
+      "重绘高音、低音和中音谱号，支持升降号、附点、连线、加线、和弦二度音程和符杠",
+      "乐曲中途可变更调号和拍号（之后的音符会重新排列到新拍号），每个谱表最多四个声部",
+      "可用鼠标、键盘（A-G、1-7、方向键）输入，手机上也可用屏幕钢琴键盘",
+      "旧版本保存的乐谱和乐谱库会自动迁移"
+     ]
+    },
+    "pt": {
+     "title": "Refeito do zero (1/4): novo motor de notação",
+     "items": [
+      "Refeito sobre um modelo de dados por compassos, para que as edições nunca tirem os compassos do alinhamento",
+      "Claves de sol, fá e dó redesenhadas, com acidentes, pontos, ligaduras, linhas suplementares, segundas de acorde e colchetes",
+      "Mudanças de tom e de fórmula de compasso no meio da partitura (as notas seguintes são reajustadas ao novo compasso) e até quatro vozes por pauta",
+      "Entrada pelo mouse, pelo teclado (A-G, 1-7, setas) e por um piano na tela para o celular",
+      "Partituras e biblioteca salvas pela versão anterior são migradas automaticamente"
+     ]
+    },
+    "ru": {
+     "title": "Переписано с нуля (1/4): новый движок нотной записи",
+     "items": [
+      "Построен на модели данных по тактам, поэтому правки никогда не сбивают такты",
+      "Скрипичный, басовый и альтовый ключи перерисованы, с знаками альтерации, точками, лигами, добавочными линиями, секундами аккордов и балками",
+      "Смена тональности и размера посреди партитуры (следующие ноты перестраиваются под новый размер) и до четырёх голосов на нотоносце",
+      "Ввод мышью, с клавиатуры (A-G, 1-7, стрелки) и экранным фортепиано для телефона",
+      "Партитуры и библиотека, сохранённые прежней версией, переносятся автоматически"
+     ]
+    },
+    "tr": {
+     "title": "Sıfırdan yeniden yazıldı (1/4): yeni nota yazım motoru",
+     "items": [
+      "Ölçü tabanlı bir veri modeliyle yeniden yapıldı; düzenlemeler ölçüleri asla hizadan çıkarmaz",
+      "Sol, fa ve alto anahtarları yeniden çizildi; diyez/bemol, nokta, bağ, ek çizgi, akor ikilileri ve kiriş desteklenir",
+      "Parça ortasında tonalite ve ölçü değişimi (sonraki notalar yeni ölçüye göre yeniden dizilir) ve porsiyon başına en fazla dört ses",
+      "Fare, klavye (A-G, 1-7, oklar) ve telefonlar için ekran piyanosuyla giriş",
+      "Eski sürümle kaydedilmiş nota ve kitaplık otomatik olarak aktarılır"
+     ]
     }
    }
   },
@@ -177,6 +697,70 @@
       "Gradual tempo change (rit./accel.): set measures and target BPM; applied to playback, MIDI and duration, and shown on the score",
       "Tempo ramps are saved with the score"
      ]
+    },
+    "es": {
+     "title": "Tablas de acordes de guitarra, cambio gradual de tempo (rit./accel.)",
+     "items": [
+      "Tabla de acordes de guitarra debajo de la partitura: las posiciones abiertas y de cejilla se generan a partir de los nombres de acorde",
+      "Cambio gradual de tempo (rit./accel.): elige los compases y el BPM final; se aplica a la reproducción, al MIDI y a la duración, y se muestra en la partitura",
+      "Las rampas de tempo se guardan con la partitura"
+     ]
+    },
+    "fr": {
+     "title": "Grille d'accords de guitare, changement de tempo progressif (rit./accel.)",
+     "items": [
+      "Grille d'accords de guitare sous la partition : les positions ouvertes et barrées sont générées à partir des noms d'accords",
+      "Changement de tempo progressif (rit./accel.) : choisissez les mesures et le BPM cible ; appliqué à la lecture, au MIDI et à la durée, et affiché sur la partition",
+      "Les rampes de tempo sont enregistrées avec la partition"
+     ]
+    },
+    "de": {
+     "title": "Gitarren-Akkordtabelle, allmähliche Tempoänderung (rit./accel.)",
+     "items": [
+      "Gitarren-Akkordtabelle unter der Partitur: offene und Barré-Griffe werden aus den Akkordnamen erzeugt",
+      "Allmähliche Tempoänderung (rit./accel.): Takte und Ziel-BPM wählen; wird bei Wiedergabe, MIDI und Dauer berücksichtigt und auf der Partitur angezeigt",
+      "Tempoverläufe werden mit der Partitur gespeichert"
+     ]
+    },
+    "ja": {
+     "title": "ギターのコード表、テンポの少しずつの変化（rit./accel.）",
+     "items": [
+      "楽譜の下にギターのコード表を表示。コード名から開放弦とバレーのフォームを自動で作ります",
+      "少しずつのテンポ変化（rit./accel.）：小節と目標の BPM を指定します。再生・MIDI・長さに反映され、楽譜にも表示されます",
+      "テンポの変化は楽譜と一緒に保存されます"
+     ]
+    },
+    "zh": {
+     "title": "吉他和弦图、渐快渐慢（rit./accel.）",
+     "items": [
+      "乐谱下方显示吉他和弦图：根据和弦名自动生成空弦和横按指法",
+      "渐慢/渐快速度变化（rit./accel.）：选择小节和目标 BPM；会作用于播放、MIDI 和时长，并显示在谱面上",
+      "速度渐变会随乐谱一起保存"
+     ]
+    },
+    "pt": {
+     "title": "Tabela de acordes de violão, mudança gradual de andamento (rit./accel.)",
+     "items": [
+      "Tabela de acordes de violão abaixo da partitura: posições abertas e com pestana são geradas a partir dos nomes dos acordes",
+      "Mudança gradual de andamento (rit./accel.): escolha os compassos e o BPM de destino; vale para a reprodução, o MIDI e a duração, e aparece na partitura",
+      "As rampas de andamento são salvas com a partitura"
+     ]
+    },
+    "ru": {
+     "title": "Таблица аккордов для гитары, плавное изменение темпа (rit./accel.)",
+     "items": [
+      "Под партитурой показывается таблица аккордов гитары: открытые и баровые аппликатуры создаются по названиям аккордов",
+      "Плавное изменение темпа (rit./accel.): выбираются такты и целевой BPM; учитывается при воспроизведении, в MIDI и длительности, показывается на партитуре",
+      "Темповые изменения сохраняются вместе с партитурой"
+     ]
+    },
+    "tr": {
+     "title": "Gitar akor çizelgesi, kademeli tempo değişimi (rit./accel.)",
+     "items": [
+      "Partinin altında gitar akor çizelgesi: açık ve barre pozisyonları akor adlarından üretilir",
+      "Kademeli tempo değişimi (rit./accel.): ölçüleri ve hedef BPM'i seçin; oynatmaya, MIDI'ye ve süreye uygulanır ve nota üzerinde gösterilir",
+      "Tempo geçişleri nota ile birlikte kaydedilir"
+     ]
     }
    }
   },
@@ -196,6 +780,70 @@
       "Measure editing: insert blank measure before/after, duplicate, copy and paste over, clear, delete (insert/delete apply to all parts and shift repeat marks)",
       "Work history: see the last 12 states with time and note count and jump back to any",
       "Song statistics: measures, duration, notes and rests and range per part"
+     ]
+    },
+    "es": {
+     "title": "Edición de compases, lista del historial, estadísticas de la obra",
+     "items": [
+      "Edición de compases: insertar un compás vacío antes o después, duplicar, copiar y pegar encima, borrar y eliminar (insertar y eliminar se aplican a todas las partes y desplazan las repeticiones)",
+      "Historial de trabajo: consulta los últimos 12 estados con la hora y el número de notas, y vuelve a cualquiera de ellos",
+      "Estadísticas de la obra: compases, duración, notas y silencios, y el ámbito de cada parte"
+     ]
+    },
+    "fr": {
+     "title": "Édition des mesures, historique des modifications, statistiques du morceau",
+     "items": [
+      "Édition des mesures : insérer une mesure vide avant ou après, dupliquer, copier-coller par-dessus, effacer, supprimer (insertion et suppression s'appliquent à toutes les parties et décalent les reprises)",
+      "Historique : voir les 12 derniers états avec l'heure et le nombre de notes, et revenir à n'importe lequel",
+      "Statistiques du morceau : mesures, durée, notes et silences, et étendue de chaque partie"
+     ]
+    },
+    "de": {
+     "title": "Taktbearbeitung, Verlaufsliste, Stückstatistik",
+     "items": [
+      "Taktbearbeitung: leeren Takt davor oder danach einfügen, duplizieren, kopieren und darüber einfügen, leeren, löschen (Einfügen und Löschen gelten für alle Stimmen und verschieben Wiederholungszeichen)",
+      "Arbeitsverlauf: die letzten 12 Zustände mit Uhrzeit und Notenzahl ansehen und zu jedem zurückspringen",
+      "Stückstatistik: Takte, Dauer, Noten und Pausen sowie der Tonumfang je Stimme"
+     ]
+    },
+    "ja": {
+     "title": "小節の編集、作業履歴、曲の統計",
+     "items": [
+      "小節の編集：前後に空の小節を挿入、複製、コピーして上に貼り付け、消去、削除（挿入と削除はすべてのパートに適用され、反復記号も移動します）",
+      "作業履歴：直近12回の状態を時刻と音符の数つきで表示し、どれにでも戻れます",
+      "曲の統計：小節数、長さ、音符と休符の数、パートごとの音域"
+     ]
+    },
+    "zh": {
+     "title": "小节编辑、操作历史列表、乐曲统计",
+     "items": [
+      "小节编辑：可在前后插入空白小节、复制、复制并覆盖粘贴、清空、删除（插入和删除会作用于所有声部，并移动反复记号）",
+      "工作历史：可查看最近 12 次状态（含时间和音符数），并跳回任意一次",
+      "乐曲统计：小节数、时长、音符与休止符数量，以及每个声部的音域"
+     ]
+    },
+    "pt": {
+     "title": "Edição de compassos, lista de histórico, estatísticas da obra",
+     "items": [
+      "Edição de compassos: inserir compasso vazio antes ou depois, duplicar, copiar e colar por cima, limpar e excluir (inserir e excluir valem para todas as partes e deslocam as repetições)",
+      "Histórico de trabalho: veja os últimos 12 estados com hora e quantidade de notas e volte a qualquer um",
+      "Estatísticas da obra: compassos, duração, notas e pausas, e a extensão de cada parte"
+     ]
+    },
+    "ru": {
+     "title": "Редактирование тактов, список истории, статистика пьесы",
+     "items": [
+      "Редактирование тактов: вставка пустого такта до или после, дублирование, копирование и вставка поверх, очистка и удаление (вставка и удаление действуют на все партии и сдвигают знаки повтора)",
+      "История работы: последние 12 состояний с временем и количеством нот, можно вернуться к любому",
+      "Статистика пьесы: такты, длительность, ноты и паузы, диапазон каждой партии"
+     ]
+    },
+    "tr": {
+     "title": "Ölçü düzenleme, çalışma geçmişi listesi, parça istatistikleri",
+     "items": [
+      "Ölçü düzenleme: önüne ya da arkasına boş ölçü ekleme, çoğaltma, kopyalayıp üstüne yapıştırma, temizleme, silme (ekleme ve silme tüm partilere uygulanır ve tekrar işaretlerini kaydırır)",
+      "Çalışma geçmişi: son 12 durumu saat ve nota sayısıyla görün ve istediğinize dönün",
+      "Parça istatistikleri: ölçü, süre, nota ve sessizlik sayıları ile her partinin açıklığı"
      ]
     }
    }
@@ -219,6 +867,78 @@
       "Tremolo, turn, down-bow and up-bow marks (playback and MusicXML import/export)",
       "Tempo word presets: Largo to Presto, rit., accel., a tempo in one pick"
      ]
+    },
+    "es": {
+     "title": "Líneas de octava, pedal y nuevos signos de interpretación",
+     "items": [
+      "Las líneas de 8va/8vb se dibujan como corchetes discontinuos y se aplican a la reproducción, MIDI y MusicXML",
+      "Marcas de pedal (Ped. / asterisco): las notas siguen sonando mientras el pedal está pisado",
+      "Signos de trémolo, grupeto, arco hacia abajo y arco hacia arriba (en reproducción e importación/exportación MusicXML)",
+      "Preajustes de palabras de tempo: de Largo a Presto, rit., accel. y un tempo de una sola vez"
+     ]
+    },
+    "fr": {
+     "title": "Lignes d'octave, pédale et nouveaux signes d'interprétation",
+     "items": [
+      "Les lignes 8va/8vb sont dessinées en crochets en pointillés et appliquées à la lecture, au MIDI et au MusicXML",
+      "Marques de pédale (Ped. / étoile) : les notes continuent de résonner tant que la pédale est enfoncée",
+      "Signes de trémolo, gruppetto, coup d'archet vers le bas et vers le haut (lecture et import/export MusicXML)",
+      "Préréglages de tempo en mots : de Largo à Presto, rit., accel. et un tempo d'un seul clic"
+     ]
+    },
+    "de": {
+     "title": "Oktavlinien, Pedalzeichen und neue Vortragszeichen",
+     "items": [
+      "8va-/8vb-Linien werden als gestrichelte Klammern gezeichnet und bei Wiedergabe, MIDI und MusicXML berücksichtigt",
+      "Pedalzeichen (Ped. / Stern): Noten klingen weiter, solange das Pedal gedrückt ist",
+      "Zeichen für Tremolo, Doppelschlag, Abstrich und Aufstrich (Wiedergabe und MusicXML-Import/-Export)",
+      "Tempo-Wortvorlagen: von Largo bis Presto, rit., accel. und ein Tempo mit einem Klick"
+     ]
+    },
+    "ja": {
+     "title": "オクターブ線、ペダル記号、新しい奏法記号",
+     "items": [
+      "8va/8vb のオクターブ線を破線の括弧で表示し、再生・MIDI・MusicXML に反映します",
+      "ペダル記号（Ped. / 星印）：ペダルを踏んでいる間、音符が鳴り続けます",
+      "トレモロ、回転音、ダウンボウ、アップボウの記号（再生と MusicXML の読み込み・書き出しに対応）",
+      "テンポの言葉のプリセット：Largo から Presto まで、rit.、accel.、テンポを一度に選べます"
+     ]
+    },
+    "zh": {
+     "title": "八度线、踏板记号与新演奏记号",
+     "items": [
+      "8va/8vb 八度线以虚线括号绘制，并体现在播放、MIDI 和 MusicXML 中",
+      "踏板记号（Ped. / 星号）：踏板按下期间音符持续发声",
+      "颤音、回音、下弓和上弓记号（支持播放及 MusicXML 导入导出）",
+      "速度术语预设：从 Largo 到 Presto、rit.、accel.，一次选择即可设定速度"
+     ]
+    },
+    "pt": {
+     "title": "Linhas de oitava, pedal e novos sinais de execução",
+     "items": [
+      "Linhas de 8va/8vb desenhadas como colchetes tracejados e aplicadas à reprodução, ao MIDI e ao MusicXML",
+      "Marcas de pedal (Ped. / asterisco): as notas continuam soando enquanto o pedal estiver apertado",
+      "Sinais de trêmolo, grupeto, arcada para baixo e arcada para cima (reprodução e importação/exportação de MusicXML)",
+      "Predefinições de termos de andamento: de Largo a Presto, rit., accel. e um andamento em uma escolha"
+     ]
+    },
+    "ru": {
+     "title": "Октавные линии, педаль и новые знаки исполнения",
+     "items": [
+      "Октавные линии 8va/8vb рисуются пунктирными скобками и учитываются при воспроизведении, в MIDI и MusicXML",
+      "Знаки педали (Ped. / звёздочка): ноты звучат, пока педаль нажата",
+      "Знаки тремоло, group, нижний и верхний смычок (воспроизведение и импорт/экспорт MusicXML)",
+      "Пресеты темповых обозначений: от Largo до Presto, rit., accel. и темп одним выбором"
+     ]
+    },
+    "tr": {
+     "title": "Oktav çizgileri, pedal ve yeni icra işaretleri",
+     "items": [
+      "8va/8vb oktav çizgileri kesikli parantez olarak çizilir ve oynatma, MIDI ve MusicXML'e uygulanır",
+      "Pedal işaretleri (Ped. / yıldız): pedal basılı olduğu sürece notalar çınlamaya devam eder",
+      "Tremolo, çift vuruş, aşağı ve yukarı yay işaretleri (oynatma ile MusicXML içe/dışa aktarma)",
+      "Tempo sözcüğü ön ayarları: Largo'dan Presto'ya, rit., accel. ve tek seçimle tempo"
+     ]
     }
    }
   },
@@ -240,6 +960,78 @@
       "Subtitle, lyricist and copyright text printed on the score",
       "Fixed measures per system and part names above the staff",
       "Share link: copy the whole score as a single link that opens it"
+     ]
+    },
+    "es": {
+     "title": "Instrumentos transpositores, datos de la obra, compartir enlace",
+     "items": [
+      "Instrumentos transpositores (si bemol, mi bemol, fa, octava) desplazan el tono de reproducción",
+      "Subtítulo, letrista y texto de copyright impresos en la partitura",
+      "Compases fijos por sistema y nombres de parte encima del pentagrama corregidos",
+      "Enlace para compartir: copia toda la partitura como un único enlace que la abre"
+     ]
+    },
+    "fr": {
+     "title": "Instruments transpositeurs, infos du morceau, lien de partage",
+     "items": [
+      "Les instruments transpositeurs (si bémol, mi bémol, fa, octave) décalent la hauteur de lecture",
+      "Sous-titre, parolier et texte de droits d'auteur imprimés sur la partition",
+      "Mesures fixes par système et noms des parties au-dessus de la portée corrigés",
+      "Lien de partage : copie toute la partition en un seul lien qui l'ouvre"
+     ]
+    },
+    "de": {
+     "title": "Transponierende Instrumente, Stückinfos, Teilen-Link",
+     "items": [
+      "Transponierende Instrumente (B, Es, F, Oktave) verschieben die Tonhöhe der Wiedergabe",
+      "Untertitel, Textdichter und Copyright-Hinweis werden auf der Partitur gedruckt",
+      "Feste Taktzahl pro System und Stimmnamen über dem System korrigiert",
+      "Teilen-Link: kopiert die ganze Partitur als einen einzigen Link, der sie öffnet"
+     ]
+    },
+    "ja": {
+     "title": "移調楽器、曲の情報、共有リンク",
+     "items": [
+      "移調楽器（変ロ、変ホ、ヘ、オクターブ）の再生の音の高さをずらします",
+      "サブタイトル、作詞者、著作権の表記を楽譜に印刷します",
+      "段あたりの小節数の固定と、譜表の上のパート名を修正しました",
+      "共有リンク：楽譜全体を1つのリンクにコピーでき、それを開くと楽譜が開きます"
+     ]
+    },
+    "zh": {
+     "title": "移调乐器、乐曲信息、分享链接",
+     "items": [
+      "移调乐器（降 B、降 E、F、八度）会改变播放音高",
+      "副标题、作词和版权信息会印在乐谱上",
+      "修正每段小节数的固定设置，以及谱表上方的声部名称",
+      "分享链接：可将整份乐谱复制为一个链接，打开即可查看"
+     ]
+    },
+    "pt": {
+     "title": "Instrumentos transpositores, informações da obra, link de compartilhamento",
+     "items": [
+      "Instrumentos transpositores (si bemol, mi bemol, fá, oitava) deslocam a altura da reprodução",
+      "Subtítulo, letrista e texto de direitos autorais impressos na partitura",
+      "Compassos fixos por sistema e nomes das partes acima da pauta corrigidos",
+      "Link de compartilhamento: copia a partitura inteira como um único link que a abre"
+     ]
+    },
+    "ru": {
+     "title": "Транспонирующие инструменты, сведения о пьесе, ссылка для обмена",
+     "items": [
+      "Транспонирующие инструменты (си-бемоль, ми-бемоль, фа, октава) сдвигают высоту при воспроизведении",
+      "Подзаголовок, автор текста и авторские права печатаются на партитуре",
+      "Исправлены фиксированное число тактов в строке и названия партий над нотоносцем",
+      "Ссылка для обмена: копирует всю партитуру в одну ссылку, по которой она открывается"
+     ]
+    },
+    "tr": {
+     "title": "Transpoze çalgılar, parça bilgileri, paylaşım bağlantısı",
+     "items": [
+      "Transpoze çalgılar (si bemol, mi bemol, fa, oktav) çalma perdesini kaydırır",
+      "Alt başlık, söz yazarı ve telif metni nota üzerine basılır",
+      "Dizi başına sabit ölçü sayısı ve nota çizgisinin üstündeki parti adları düzeltildi",
+      "Paylaşım bağlantısı: tüm notayı açan tek bir bağlantı olarak kopyalar"
      ]
     }
    }
@@ -263,6 +1055,78 @@
       "Color every pitch (C red ... B purple) for teaching and handbell charts",
       "Fingering numbers on any note"
      ]
+    },
+    "es": {
+     "title": "Teclado en pantalla, nombres de notas, notas de color y números de digitación",
+     "items": [
+      "Teclado de piano en pantalla (una octava, desplazable) para oír y escribir notas a la vez; las teclas negras se escriben con sostenidos o bemoles según la tonalidad; funciona con el modo de acordes y es cómodo en pantalla táctil",
+      "Nombres de nota dentro de las cabezas: C D E o do re mi",
+      "Color para cada altura (Do rojo ... Si morado) para enseñanza o partituras de campanas",
+      "Números de digitación en cualquier nota"
+     ]
+    },
+    "fr": {
+     "title": "Clavier à l'écran, noms des notes, notes en couleur et doigtés",
+     "items": [
+      "Clavier de piano à l'écran (une octave, décalable) pour entendre et saisir des notes en même temps ; les touches noires s'écrivent en dièses ou bémols selon la tonalité ; compatible avec le mode accord et le tactile",
+      "Noms des notes dans les têtes : C D E ou do ré mi",
+      "Couleur pour chaque hauteur (do rouge ... si violet) pour l'enseignement ou les partitions de carillon",
+      "Chiffres de doigté sur n'importe quelle note"
+     ]
+    },
+    "de": {
+     "title": "Bildschirmklavier, Notennamen, farbige Noten und Fingersatz",
+     "items": [
+      "Bildschirm-Klaviatur (eine Oktave, verschiebbar), um Noten gleichzeitig zu hören und einzugeben; schwarze Tasten werden je nach Tonart mit Kreuz oder b geschrieben; funktioniert im Akkordmodus und auf Touchgeräten",
+      "Notennamen in den Notenköpfen: C D E oder do re mi",
+      "Jede Tonhöhe kann eine Farbe bekommen (C rot ... H lila) für Unterricht oder Glockenspiel-Stimmen",
+      "Fingersatzziffern bei jeder Note"
+     ]
+    },
+    "ja": {
+     "title": "画面の鍵盤、音名表示、色付きの音符、運指番号",
+     "items": [
+      "画面のピアノ鍵盤（1オクターブ、位置を変えられます）で、音を聞きながら同時に入力できます。黒鍵は調に合わせて嬰記号か変記号で書かれます。和音モードにも対応し、タッチ操作でも使えます",
+      "音符の頭に音名を表示（C D E または ド レ ミ）",
+      "音の高さごとに色を付けられます（ド＝赤 … シ＝紫）。指導やハンドベル用の楽譜に便利です",
+      "どの音符にも運指番号を付けられます"
+     ]
+    },
+    "zh": {
+     "title": "屏幕键盘、音名显示、彩色音符与指法数字",
+     "items": [
+      "屏幕钢琴键盘（一个八度，可平移），可边听边输入音符；黑键会按调性以升号或降号拼写；支持和弦模式，并适合触屏使用",
+      "在符头内显示音名（C D E 或 do re mi）",
+      "可为每个音高着色（C 红 ... B 紫），便于教学或编钟谱",
+      "任意音符都可添加指法数字"
+     ]
+    },
+    "pt": {
+     "title": "Teclado na tela, nomes das notas, notas coloridas e números de dedilhado",
+     "items": [
+      "Teclado de piano na tela (uma oitava, deslocável) para ouvir e escrever notas ao mesmo tempo; as teclas pretas são escritas com sustenidos ou bemóis conforme o tom; funciona com o modo de acordes e no toque",
+      "Nomes das notas dentro das cabeças: C D E ou dó ré mi",
+      "Cor para cada altura (dó vermelho ... si roxo), para ensino ou partituras de sinos",
+      "Números de dedilhado em qualquer nota"
+     ]
+    },
+    "ru": {
+     "title": "Экранная клавиатура, названия нот, цветные ноты и номера пальцев",
+     "items": [
+      "Экранная фортепианная клавиатура (одна октава, сдвигается): слышно и вводится одновременно; чёрные клавиши записываются диезами или бемолями в зависимости от тональности; работает в режиме аккордов и на сенсорных экранах",
+      "Названия нот внутри головок: C D E или до ре ми",
+      "Цвет для каждой высоты (до — красный ... си — фиолетовый) для обучения или партитур для колокольчиков",
+      "Номера пальцев на любой ноте"
+     ]
+    },
+    "tr": {
+     "title": "Ekran klavyesi, nota adları, renkli notalar ve parmak numaraları",
+     "items": [
+      "Ekran piyano klavyesi (bir oktav, kaydırılabilir): notaları hem duyarak hem de yazarak girmeyi sağlar; siyah tuşlar tonaliteye göre diyez ya da bemol olarak yazılır; akor modunda çalışır ve dokunmatikte kullanılabilir",
+      "Nota başlarının içinde nota adları (C D E ya da do re mi)",
+      "Her perde için renk (Do kırmızı ... Si mor); öğretim ya da çan partisyonları için",
+      "Her notaya parmak numarası eklenebilir"
+     ]
     }
    }
   },
@@ -285,6 +1149,78 @@
       "Verse 2 lyrics: type per note or paste in bulk, shown on a second line and saved to MusicXML",
       "Measure numbers (system start or every measure) and swing playback (light / triplet feel)"
      ]
+    },
+    "es": {
+     "title": "Reproducción de acordes, selector de acordes, letra de la segunda estrofa, números de compás, swing",
+     "items": [
+      "Los nombres de acorde (C, Am7, G7/B, F#m7b5, Dsus4...) se leen y se tocan como acompañamiento en bloque o arpegiado, y también se incluyen en el WAV",
+      "Elige acordes por fundamental y tipo en el panel de notas; los nombres de acorde se transportan junto con las notas y los cambios de armadura",
+      "Letra de la segunda estrofa: escríbela nota a nota o pégala en bloque; aparece en una segunda línea y se guarda en MusicXML",
+      "Números de compás (al inicio de cada sistema o en cada compás) y reproducción con swing (suave o de tresillo)"
+     ]
+    },
+    "fr": {
+     "title": "Accompagnement d'accords, choix des accords, paroles du 2e couplet, numéros de mesure, swing",
+     "items": [
+      "Les noms d'accords (C, Am7, G7/B, F#m7b5, Dsus4...) sont lus et joués en accompagnement plaqué ou arpégé, et aussi rendus dans le WAV",
+      "Choisissez les accords par fondamentale et type dans le panneau des notes ; les noms d'accords se transposent avec les notes et les changements de tonalité",
+      "Paroles du 2e couplet : tapez-les note par note ou collez-les d'un coup ; elles s'affichent sur une deuxième ligne et sont enregistrées en MusicXML",
+      "Numéros de mesure (en début de système ou à chaque mesure) et lecture swing (léger ou de type triolet)"
+     ]
+    },
+    "de": {
+     "title": "Akkordbegleitung, Akkordauswahl, Liedtext Strophe 2, Taktnummern, Swing",
+     "items": [
+      "Akkordnamen (C, Am7, G7/B, F#m7b5, Dsus4 ...) werden gelesen und als Block- oder gebrochener Akkord begleitet; auch im WAV enthalten",
+      "Akkorde werden im Notenpanel nach Grundton und Art gewählt; Akkordnamen werden zusammen mit Noten und Tonartwechseln transponiert",
+      "Liedtext Strophe 2: pro Note eintippen oder im Block einfügen; er steht in einer zweiten Zeile und wird in MusicXML gespeichert",
+      "Taktnummern (am Systemanfang oder bei jedem Takt) und Swing-Wiedergabe (leicht oder Triolengefühl)"
+     ]
+    },
+    "ja": {
+     "title": "コード伴奏の再生、コードの選択、2番の歌詞、小節番号、スウィング",
+     "items": [
+      "コード名（C、Am7、G7/B、F#m7b5、Dsus4 など）を読み取り、ブロックまたはアルペジオの伴奏として再生します。WAV にも含まれます",
+      "音符パネルでルートと種類を選んでコードを入れられます。コード名は音符や調の変更と一緒に移調されます",
+      "2番の歌詞：音符ごとに入力するか、まとめて貼り付けできます。2段目に表示され、MusicXML にも保存されます",
+      "小節番号（段の先頭、または各小節）と、スウィング再生（軽いもの、三連符の感じのもの）"
+     ]
+    },
+    "zh": {
+     "title": "和弦伴奏播放、选和弦、第二段歌词、小节编号、摇摆节奏",
+     "items": [
+      "和弦名（C、Am7、G7/B、F#m7b5、Dsus4 等）会被识别，并以柱式或琶音伴奏播放，也会渲染进 WAV",
+      "在音符面板中按根音和类型选择和弦；和弦名会随音符和调号变化一起移调",
+      "第二段歌词：可逐个音符输入，也可整体粘贴；显示在第二行，并保存到 MusicXML",
+      "小节编号（每段开头或每小节显示），以及摇摆播放（轻摇摆或三连音感）"
+     ]
+    },
+    "pt": {
+     "title": "Acompanhamento de acordes, escolha de acordes, letra da 2ª estrofe, números de compasso, swing",
+     "items": [
+      "Os nomes de acorde (C, Am7, G7/B, F#m7b5, Dsus4...) são lidos e tocados como acompanhamento em bloco ou arpejado, também renderizados no WAV",
+      "Escolha acordes pela fundamental e pelo tipo no painel de notas; os nomes dos acordes são transpostos junto com as notas e as mudanças de tom",
+      "Letra da 2ª estrofe: digite nota a nota ou cole em bloco; ela aparece em uma segunda linha e é salva em MusicXML",
+      "Números de compasso (no início de cada sistema ou em cada compasso) e reprodução com swing (leve ou de tercina)"
+     ]
+    },
+    "ru": {
+     "title": "Аккомпанемент аккордами, выбор аккордов, текст второго куплета, номера тактов, свинг",
+     "items": [
+      "Названия аккордов (C, Am7, G7/B, F#m7b5, Dsus4 и др.) распознаются и звучат как блоковый или арпеджированный аккомпанемент, а также попадают в WAV",
+      "Аккорды выбираются в панели нот по основному тону и типу; названия аккордов транспонируются вместе с нотами и при смене тональности",
+      "Текст второго куплета: вводится по одной ноте или вставляется целиком; выводится во второй строке и сохраняется в MusicXML",
+      "Номера тактов (в начале строки или в каждом такте) и воспроизведение со свингом (лёгким или в ритме триолей)"
+     ]
+    },
+    "tr": {
+     "title": "Akor eşliği, akor seçici, 2. kıta sözleri, ölçü numaraları, swing",
+     "items": [
+      "Akor adları (C, Am7, G7/B, F#m7b5, Dsus4 ...) okunur ve blok ya da arpej eşlik olarak çalınır; WAV'a da yansır",
+      "Akorlar nota panelinde kök ve türe göre seçilir; akor adları notalarla ve tonalite değişimleriyle birlikte transpoze edilir",
+      "2. kıta sözleri: nota nota yazılabilir ya da toplu yapıştırılabilir; ikinci satırda görünür ve MusicXML'e kaydedilir",
+      "Ölçü numaraları (her dizinin başında ya da her ölçüde) ve swing oynatma (hafif ya da üçlü hissi)"
+     ]
     }
    }
   },
@@ -305,6 +1241,70 @@
       "Playback (including repeats and D.S.), WAV, MIDI (time-signature meta events) and MusicXML import/export honour the change",
       "Playback cursor and note highlight stay aligned with measures of different lengths"
      ]
+    },
+    "es": {
+     "title": "Cambio de compás a mitad de la partitura",
+     "items": [
+      "Cambia el compás (3/4, 6/8, 5/4, 7/8...) desde cualquier compás con 'cambiar compás' en los ajustes del compás: el nuevo compás se dibuja y las barras, ligaduras, agrupaciones de corcheas, el metrónomo y la cuenta atrás lo siguen",
+      "La reproducción (incluidas las repeticiones y D.S.), el WAV, el MIDI (eventos meta de compás) y la importación/exportación de MusicXML respetan el cambio",
+      "El cursor de reproducción y el resaltado de notas siguen alineados con compases de distinta duración"
+     ]
+    },
+    "fr": {
+     "title": "Changements de mesure en cours de partition",
+     "items": [
+      "Changez la mesure (3/4, 6/8, 5/4, 7/8...) à partir de n'importe quelle mesure via « changer la mesure » dans les réglages de mesure : la nouvelle métrique est dessinée et les barres, liaisons, groupements de croches, métronome et compte d'entrée la suivent",
+      "La lecture (y compris reprises et D.S.), le WAV, le MIDI (événements méta de mesure) et l'import/export MusicXML respectent le changement",
+      "Le curseur de lecture et la surbrillance des notes restent alignés avec des mesures de longueurs différentes"
+     ]
+    },
+    "de": {
+     "title": "Taktartwechsel mitten im Stück",
+     "items": [
+      "Ändere die Taktart (3/4, 6/8, 5/4, 7/8 ...) ab jedem Takt über „Taktart ändern“ in den Takteinstellungen: der neue Takt wird gezeichnet, und Taktstriche, Bindungen, Balken, Metronom und Vorzähler folgen ihm",
+      "Wiedergabe (einschließlich Wiederholungen und D.S.), WAV, MIDI (Taktart-Metaereignisse) und MusicXML-Import/-Export berücksichtigen die Änderung",
+      "Abspielposition und Notenmarkierung bleiben auch bei unterschiedlich langen Takten richtig ausgerichtet"
+     ]
+    },
+    "ja": {
+     "title": "曲の途中の拍子変更",
+     "items": [
+      "どの小節でも、小節の設定の「拍子を変更」から拍子（3/4、6/8、5/4、7/8 など）を変えられます。新しい拍子が表示され、小節線・タイ・符尾の連結・メトロノーム・カウントインがそれに従います",
+      "再生（反復と D.S. を含む）、WAV、MIDI（拍子のメタイベント）、MusicXML の読み込み・書き出しで変更が反映されます",
+      "再生カーソルと音符のハイライトは、長さの違う小節でも正しく合います"
+     ]
+    },
+    "zh": {
+     "title": "乐曲中途变更拍号",
+     "items": [
+      "可在任意小节通过小节设置中的“更改拍号”改为 3/4、6/8、5/4、7/8 等拍号：新拍号会显示在谱面上，小节线、连线、符杠、节拍器和预备拍都会随之变化",
+      "播放（包括反复和 D.S.）、WAV、MIDI（拍号元事件）以及 MusicXML 的导入导出都会体现这一变化",
+      "播放光标和音符高亮在长度不同的小节中仍保持对齐"
+     ]
+    },
+    "pt": {
+     "title": "Mudança de fórmula de compasso no meio da partitura",
+     "items": [
+      "Altere a fórmula de compasso (3/4, 6/8, 5/4, 7/8...) a partir de qualquer compasso por 'alterar fórmula de compasso' nas configurações do compasso: a nova fórmula é desenhada e as barras, ligaduras, agrupamentos, metrônomo e contagem a seguem",
+      "A reprodução (incluindo repetições e D.S.), o WAV, o MIDI (eventos meta de compasso) e a importação/exportação de MusicXML respeitam a mudança",
+      "O cursor de reprodução e o destaque das notas permanecem alinhados com compassos de tamanhos diferentes"
+     ]
+    },
+    "ru": {
+     "title": "Смена размера в середине партитуры",
+     "items": [
+      "Размер (3/4, 6/8, 5/4, 7/8 и т. д.) меняется с любого такта через «сменить размер» в настройках такта: новый размер рисуется, а тактовые черты, лиги, группировка восьмых, метроном и отсчёт следуют за ним",
+      "Воспроизведение (включая повторы и D.S.), WAV, MIDI (мета-события размера) и импорт/экспорт MusicXML учитывают смену",
+      "Курсор воспроизведения и подсветка нот остаются выровненными при тактах разной длины"
+     ]
+    },
+    "tr": {
+     "title": "Parça ortasında ölçü değişimi",
+     "items": [
+      "Herhangi bir ölçüden itibaren ölçü ayarlarındaki 'ölçü değiştir' ile ölçü (3/4, 6/8, 5/4, 7/8 ...) değiştirilir: yeni ölçü çizilir; ölçü çizgileri, kravatlar, nota gruplama, metronom ve giriş sayımı da buna uyar",
+      "Oynatma (tekrar ve D.S. dahil), WAV, MIDI (ölçü meta olayları) ve MusicXML içe/dışa aktarma bu değişikliği dikkate alır",
+      "Oynatma imleci ve nota vurgusu farklı uzunluktaki ölçülerde de hizalı kalır"
+     ]
     }
    }
   },
@@ -324,6 +1324,70 @@
       "Turn on \"write on the same staff as the part above\" in part settings to get a second voice: upper voice stems up, lower voice stems down, rests split",
       "Notes of both voices can be clicked and dragged on the score; a new \"current part\" list in the side panel switches voices while entering; playback, volume and TAB work per part as before",
       "MusicXML import reads multiple voices (voice/backup) as overlaid voices and pads missing beats with rests so measures stay aligned"
+     ]
+    },
+    "es": {
+     "title": "Escribir dos voces superpuestas en un mismo pentagrama",
+     "items": [
+      "Activa 'escribir en el mismo pentagrama que la parte de arriba' en los ajustes de la parte para tener una segunda voz: la voz superior tiene plicas hacia arriba, la inferior hacia abajo, y los silencios se separan",
+      "Las notas de ambas voces se pueden pinchar y arrastrar en la partitura; una nueva lista 'parte actual' del panel lateral cambia de voz al escribir; la reproducción, el volumen y la tablatura funcionan por parte como antes",
+      "La importación de MusicXML lee varias voces (voice/backup) como voces superpuestas y rellena los tiempos que faltan con silencios para que los compases sigan alineados"
+     ]
+    },
+    "fr": {
+     "title": "Deux voix superposées sur une même portée",
+     "items": [
+      "Activez « écrire sur la même portée que la partie au-dessus » dans les réglages de partie pour obtenir une deuxième voix : la voix supérieure a les hampes vers le haut, la voix inférieure vers le bas, et les silences se séparent",
+      "Les notes des deux voix peuvent être cliquées et glissées sur la partition ; une nouvelle liste « partie actuelle » du panneau latéral change de voix pendant la saisie ; la lecture, le volume et la tablature fonctionnent par partie comme avant",
+      "L'import MusicXML lit plusieurs voix (voice/backup) comme voix superposées et complète les temps manquants par des silences pour que les mesures restent alignées"
+     ]
+    },
+    "de": {
+     "title": "Zwei Stimmen übereinander auf einem System",
+     "items": [
+      "Aktiviere „auf demselben System wie die Stimme darüber schreiben“ in den Stimmeinstellungen, um eine zweite Stimme zu erhalten: die obere Stimme hat Hälse nach oben, die untere nach unten, und Pausen werden getrennt",
+      "Noten beider Stimmen lassen sich auf der Partitur anklicken und ziehen; eine neue Liste „aktuelle Stimme“ im Seitenpanel wechselt die Stimme bei der Eingabe; Wiedergabe, Lautstärke und TAB funktionieren wie bisher pro Stimme",
+      "Der MusicXML-Import liest mehrere Stimmen (voice/backup) als überlagerte Stimmen und füllt fehlende Zählzeiten mit Pausen, damit die Takte ausgerichtet bleiben"
+     ]
+    },
+    "ja": {
+     "title": "一つの譜表に二つの声部を重ねて書く",
+     "items": [
+      "パートの設定で「上のパートと同じ譜表に書く」をオンにすると2つ目の声部になります。上の声部は符幹が上向き、下の声部は下向きになり、休符は分かれて表示されます",
+      "両方の声部の音符を譜面でクリックしてドラッグできます。側面パネルの「現在のパート」一覧で入力中の声部を切り替えます。再生・音量・タブはこれまで通りパートごとに動きます",
+      "MusicXML の読み込みでは、複数の声部（voice/backup）を重なった声部として読み、足りない拍は休符で埋めて小節をそろえます"
+     ]
+    },
+    "zh": {
+     "title": "同一谱表上叠写两个声部",
+     "items": [
+      "在声部设置中开启“与上方声部写在同一谱表上”即可得到第二个声部：上声部符干朝上，下声部符干朝下，休止符会分开显示",
+      "两个声部的音符都可以在谱面上点击和拖动；侧边栏新增的“当前声部”列表可在输入时切换声部；播放、音量和六线谱仍按声部工作",
+      "导入 MusicXML 时，多个声部（voice/backup）会作为叠加声部读取，缺少的拍子会用休止符补齐，保证小节对齐"
+     ]
+    },
+    "pt": {
+     "title": "Duas vozes sobrepostas em uma mesma pauta",
+     "items": [
+      "Ative 'escrever na mesma pauta que a parte de cima' nas configurações da parte para obter uma segunda voz: a voz de cima tem hastes para cima, a de baixo para baixo, e as pausas se separam",
+      "As notas das duas vozes podem ser clicadas e arrastadas na partitura; uma nova lista 'parte atual' no painel lateral troca de voz durante a entrada; reprodução, volume e tablatura funcionam por parte, como antes",
+      "A importação de MusicXML lê várias vozes (voice/backup) como vozes sobrepostas e completa os tempos faltantes com pausas para que os compassos continuem alinhados"
+     ]
+    },
+    "ru": {
+     "title": "Два голоса на одном нотоносце",
+     "items": [
+      "Включите «писать на том же нотоносце, что и партия выше» в настройках партии, чтобы получить второй голос: верхний голос со штилями вверх, нижний — вниз, а паузы разделяются",
+      "Ноты обоих голосов можно нажимать и перетаскивать на партитуре; новый список «текущая партия» на боковой панели переключает голоса при вводе; воспроизведение, громкость и табулатура работают по партиям, как и раньше",
+      "Импорт MusicXML читает несколько голосов (voice/backup) как наложенные и дополняет недостающие доли паузами, чтобы такты оставались выровненными"
+     ]
+    },
+    "tr": {
+     "title": "Tek bir porsiyonda iki ses",
+     "items": [
+      "Partinin ikinci sesini almak için parti ayarlarında 'üstteki partiyle aynı porsiyona yaz' seçeneğini açın: üst ses kuyrukları yukarı, alt ses aşağı çizilir ve sessizlikler ayrılır",
+      "İki sesin notaları nota üzerinde tıklanıp sürüklenebilir; yan paneldeki yeni 'geçerli parti' listesi girişte sesleri değiştirir; oynatma, ses düzeyi ve tab parti bazında eskisi gibi çalışır",
+      "MusicXML içe aktarma, birden çok sesi (voice/backup) üst üste binen sesler olarak okur ve eksik zamanları sessizlikle doldurarak ölçüleri hizalı tutar"
      ]
     }
    }
@@ -347,6 +1411,78 @@
       "Ties now reach the next note exactly, cover every note of a chord and continue across barlines and systems",
       "New dynamics ppp, fff, sfz; mordent and arpeggio (played as a rolled chord, saved in MusicXML)"
      ]
+    },
+    "es": {
+     "title": "Pentagrama de tablatura, ligaduras largas, ligaduras de expresión mejoradas, más dinámicas y adornos",
+     "items": [
+      "Pentagrama de tablatura: muestra debajo de cualquier parte una tablatura de guitarra (6 cuerdas) o bajo (4 cuerdas); los trastes se asignan automáticamente (el traste más bajo, los acordes repartidos entre cuerdas)",
+      "Las ligaduras pueden abarcar de 1 a 4 notas (pulsa de nuevo para ampliar) y la reproducción las toca ligado",
+      "Las ligaduras de expresión llegan exactamente a la nota siguiente, cubren todas las notas de un acorde y continúan por encima de los compases y sistemas",
+      "Nuevas dinámicas ppp, fff y sfz; mordente y arpegio (se tocan como acorde rasgado y se guardan en MusicXML)"
+     ]
+    },
+    "fr": {
+     "title": "Portée de tablature, liaisons longues, liaisons de phrasé améliorées, nuances et ornements supplémentaires",
+     "items": [
+      "Portée de tablature : affiche sous n'importe quelle partie une tablature de guitare (6 cordes) ou de basse (4 cordes) ; les cases sont attribuées automatiquement (case la plus basse, accords répartis sur les cordes)",
+      "Les liaisons de phrasé peuvent couvrir de 1 à 4 notes (re-cliquer pour allonger), et la lecture les joue legato",
+      "Les liaisons de prolongation atteignent exactement la note suivante, couvrent chaque note d'un accord et continuent d'une mesure ou d'un système à l'autre",
+      "Nouvelles nuances ppp, fff, sfz ; mordant et arpège (joués comme un accord arpégé et enregistrés en MusicXML)"
+     ]
+    },
+    "de": {
+     "title": "TAB-System, längere Bögen, verbesserte Haltebögen, mehr Dynamik und Verzierungen",
+     "items": [
+      "TAB-System: zeigt unter jeder Stimme eine Gitarren- (6 Saiten) oder Bass-Tabulatur (4 Saiten); die Bünde werden automatisch zugewiesen (niedrigster Bund, Akkorde über die Saiten verteilt)",
+      "Bögen können 1 bis 4 Noten umfassen (erneut tippen, um zu verlängern); die Wiedergabe spielt sie gebunden",
+      "Haltebögen reichen genau bis zur nächsten Note, decken alle Noten eines Akkords ab und laufen über Takt- und Systemgrenzen weiter",
+      "Neue Dynamiken ppp, fff, sfz; Mordent und Arpeggio (als gebrochener Akkord gespielt und in MusicXML gespeichert)"
+     ]
+    },
+    "ja": {
+     "title": "タブ譜、長いスラー、タイの改善、強弱記号と装飾音の追加",
+     "items": [
+      "タブ譜：どのパートの下にも、ギター（6弦）またはベース（4弦）のタブ譜を表示します。フレットは自動で割り当てられます（低いフレット優先、和音は弦に振り分け）",
+      "スラーは1〜4音にかけられます（もう一度タップすると伸びます）。再生ではそのまま滑らかに演奏されます",
+      "タイは次の音符にぴったり届き、和音のすべての音をカバーし、小節線や段をまたいでつながります",
+      "新しい強弱記号 ppp・fff・sfz、モルデントとアルペジオ（アルペジオは和音をずらして演奏し、MusicXML にも保存されます）"
+     ]
+    },
+    "zh": {
+     "title": "吉他/贝斯六线谱、更长的连线、改进的延音线、更多力度与装饰音",
+     "items": [
+      "六线谱：可在任意声部下方显示吉他（6 弦）或贝斯（4 弦）的六线谱；品位自动分配（优先最低品位，和弦分散到各弦）",
+      "连线可跨 1 至 4 个音符（再次点击可延长），播放时按连奏演奏",
+      "延音线可准确连接到下一个音符，覆盖和弦的每个音，并能跨小节与乐段延续",
+      "新增力度 ppp、fff、sfz；波音和琶音（琶音以扫弦方式演奏，并保存到 MusicXML）"
+     ]
+    },
+    "pt": {
+     "title": "Pauta de tablatura, ligaduras longas, ligaduras de expressão melhoradas, mais dinâmicas e ornamentos",
+     "items": [
+      "Pauta de tablatura: mostra abaixo de qualquer parte uma tablatura de violão (6 cordas) ou baixo (4 cordas); as casas são atribuídas automaticamente (a casa mais baixa, acordes espalhados pelas cordas)",
+      "As ligaduras podem cobrir de 1 a 4 notas (toque de novo para estender) e a reprodução as toca ligadas",
+      "As ligaduras de expressão chegam exatamente à nota seguinte, cobrem todas as notas de um acorde e continuam além de compassos e sistemas",
+      "Novas dinâmicas ppp, fff e sfz; mordente e arpejo (tocados como acorde arpejado e salvos em MusicXML)"
+     ]
+    },
+    "ru": {
+     "title": "Табулатура, длинные лиги, улучшенные связи, больше динамики и украшений",
+     "items": [
+      "Табулатура: под любой партией показывается табулатура гитары (6 струн) или баса (4 струны); лады назначаются автоматически (самый низкий лад, аккорды распределяются по струнам)",
+      "Лиги могут охватывать от 1 до 4 нот (повторное нажатие увеличивает) и звучат legato",
+      "Связи доходят точно до следующей ноты, охватывают все ноты аккорда и продолжаются через границы тактов и строк",
+      "Новые динамики ppp, fff, sfz; мордент и арпеджио (арпеджио звучит как разложенный аккорд и сохраняется в MusicXML)"
+     ]
+    },
+    "tr": {
+     "title": "Tab notası, uzun bağlar, geliştirilmiş kravat ve daha fazla dinamik ile süsleme",
+     "items": [
+      "Tab notası: her partinin altında gitar (6 telli) ya da bas (4 telli) tab'ı gösterilir; perdeler otomatik atanır (en düşük perde, akorlar tellere dağıtılır)",
+      "Bağlar 1 ila 4 nota kapsayabilir (uzatmak için tekrar dokunun) ve oynatmada legato çalınır",
+      "Kravatlar bir sonraki notaya tam ulaşır, akorun her notasını kapsar ve ölçü ile dizi sınırlarını aşarak devam eder",
+      "Yeni dinamikler ppp, fff, sfz; mordan ve arpej (arpej yayılmış akor olarak çalınır ve MusicXML'e kaydedilir)"
+     ]
     }
    }
   },
@@ -369,6 +1505,78 @@
       "Score files are validated on open, library load and undo; bad values (time signature, pitch, duration) are replaced with safe ones",
       "Undo/redo buttons show how many steps are left"
      ]
+    },
+    "es": {
+     "title": "Cambios de tonalidad en mitad de la partitura, accesibilidad, carga segura de archivos",
+     "items": [
+      "Cambio de armadura en cualquier compás: se dibuja desde ese compás (y en la cabecera del sistema); la entrada, el movimiento y el arrastre siguen la nueva tonalidad; se guarda y se lee en MusicXML",
+      "Soporte para lectores de pantalla: anuncia la nota seleccionada, las etiquetas y el estado de los botones, los roles de las pestañas, un resumen de la partitura y el foco del teclado visible",
+      "Los archivos se validan al abrir, al cargar la biblioteca y al deshacer; los valores incorrectos (compás, altura, duración) se sustituyen por valores seguros",
+      "Los botones Deshacer/Rehacer muestran cuántos pasos quedan"
+     ]
+    },
+    "fr": {
+     "title": "Changements de tonalité en cours de partition, accessibilité, chargement sûr des fichiers",
+     "items": [
+      "Changement d'armure sur n'importe quelle mesure : affiché à partir de cette mesure (et dans l'en-tête du système) ; la saisie, le déplacement et le glissement suivent la nouvelle tonalité ; enregistré et lu en MusicXML",
+      "Prise en charge des lecteurs d'écran : annonce de la note sélectionnée, libellés et état des boutons, rôles des onglets, résumé de la partition et focus clavier visible",
+      "Les fichiers sont vérifiés à l'ouverture, au chargement de la bibliothèque et à l'annulation ; les valeurs incorrectes (mesure, hauteur, durée) sont remplacées par des valeurs sûres",
+      "Les boutons annuler/rétablir indiquent combien d'étapes restent"
+     ]
+    },
+    "de": {
+     "title": "Tonartwechsel mitten im Stück, Barrierefreiheit, sicheres Laden von Dateien",
+     "items": [
+      "Tonartwechsel auf jedem Takt: ab diesem Takt (und im Systemkopf) gezeichnet; Eingabe, Verschieben und Ziehen folgen der neuen Tonart; in MusicXML gespeichert und gelesen",
+      "Unterstützung für Screenreader: sagt die gewählte Note an, Schaltflächenbeschriftungen und Zustand, Registerrollen, Partiturzusammenfassung und sichtbarer Tastaturfokus",
+      "Dateien werden beim Öffnen, Laden der Bibliothek und Rückgängigmachen geprüft; ungültige Werte (Taktart, Tonhöhe, Dauer) werden durch sichere ersetzt",
+      "Die Schaltflächen Rückgängig/Wiederholen zeigen, wie viele Schritte noch möglich sind"
+     ]
+    },
+    "ja": {
+     "title": "曲の途中の調号変更、アクセシビリティ、安全なファイル読み込み",
+     "items": [
+      "どの小節でも調号を変更できます。その小節から（段の頭にも）表示され、入力・移動・ドラッグは新しい調に従います。MusicXML に保存・読み込みされます",
+      "スクリーンリーダー対応：選んだ音符、ボタンの名前と状態、タブの役割、楽譜の概要、見えるキーボードのフォーカスを読み上げます",
+      "ファイルは開くとき、ライブラリ読み込み時、元に戻すときに検査し、不正な値（拍子・音の高さ・長さ）は安全な値に置き換えます",
+      "元に戻す・やり直しボタンに、残りの手数を表示します"
+     ]
+    },
+    "zh": {
+     "title": "乐曲中途变调、无障碍支持、安全的文件加载",
+     "items": [
+      "可在任意小节变更调号：从该小节起（以及段首）显示，输入、移动和拖动都按新调进行；保存和读取 MusicXML",
+      "屏幕阅读器支持：朗读选中的音符、按钮名称和状态、标签页角色、乐谱概要以及可见的键盘焦点",
+      "打开文件、加载乐谱库和撤销时都会校验文件；错误的数值（拍号、音高、时值）会被替换为安全值",
+      "撤销/重做按钮会显示剩余可用步数"
+     ]
+    },
+    "pt": {
+     "title": "Mudanças de tom no meio da partitura, acessibilidade, carregamento seguro de arquivos",
+     "items": [
+      "Mudança de armadura em qualquer compasso: desenhada a partir desse compasso (e no cabeçalho do sistema); a entrada, o movimento e o arrasto seguem o novo tom; salva e lê em MusicXML",
+      "Suporte a leitores de tela: anuncia a nota selecionada, rótulos e estado dos botões, papéis das abas, resumo da partitura e foco do teclado visível",
+      "Os arquivos são validados ao abrir, ao carregar a biblioteca e ao desfazer; valores inválidos (compasso, altura, duração) são trocados por valores seguros",
+      "Os botões desfazer/refazer mostram quantos passos restam"
+     ]
+    },
+    "ru": {
+     "title": "Смена тональности в середине партитуры, доступность, безопасная загрузка файлов",
+     "items": [
+      "Смена тональности на любом такте: показывается с этого такта (и в начале строки); ввод, перемещение и перетаскивание следуют новой тональности; сохраняется и читается в MusicXML",
+      "Поддержка программ чтения с экрана: озвучиваются выбранная нота, подписи и состояние кнопок, роли вкладок, сводка партитуры и видимый фокус клавиатуры",
+      "Файлы проверяются при открытии, загрузке библиотеки и отмене; неверные значения (размер, высота, длительность) заменяются безопасными",
+      "Кнопки отмены и повтора показывают, сколько шагов осталось"
+     ]
+    },
+    "tr": {
+     "title": "Parça ortasında tonalite değişimi, erişilebilirlik, güvenli dosya yükleme",
+     "items": [
+      "Herhangi bir ölçüde dizi değişimi: o ölçüden itibaren (ve sistem başında) gösterilir; giriş, taşıma ve sürükleme yeni tonaliteye göre yapılır; MusicXML'e kaydedilir ve okunur",
+      "Ekran okuyucu desteği: seçili notayı, düğme adlarını ve durumlarını, sekme rollerini, nota özetini ve görünür klavye odağını okur",
+      "Dosyalar açılırken, kitaplık yüklenirken ve geri alırken denetlenir; hatalı değerler (ölçü, perde, süre) güvenli değerlerle değiştirilir",
+      "Geri al / yinele düğmeleri kalan adım sayısını gösterir"
+     ]
     }
    }
   },
@@ -389,6 +1597,70 @@
       "Four new instruments: brass, marimba, harp and choir",
       "Print / PDF: splits into A4 pages between systems so no line is cut, with page numbers"
      ]
+    },
+    "es": {
+     "title": "Pentagrama de percusión, cuatro instrumentos nuevos e impresión por páginas",
+     "items": [
+      "Clave de percusión: bombo, caja, toms, charles (cabezas x) y platillo se escriben según la posición en el pentagrama; suenan con un kit de batería sintetizado y se guardan y leen en MIDI canal 10 (batería GM) y MusicXML",
+      "Cuatro instrumentos nuevos: metal, marimba, arpa y coro",
+      "Imprimir / PDF: se divide en páginas A4 entre sistemas para que ninguna línea quede cortada, con números de página"
+     ]
+    },
+    "fr": {
+     "title": "Portée de batterie, quatre nouveaux instruments et impression par pages",
+     "items": [
+      "Clé de percussion : grosse caisse, caisse claire, toms, charleston (têtes en x) et cymbale sont placés selon leur position sur la portée ; joués avec une batterie synthétisée, enregistrés et lus en MIDI canal 10 (batterie GM) et MusicXML",
+      "Quatre nouveaux instruments : cuivres, marimba, harpe et chœur",
+      "Impression / PDF : découpe en pages A4 entre les systèmes pour qu'aucune ligne ne soit coupée, avec numéros de page"
+     ]
+    },
+    "de": {
+     "title": "Schlagzeug-System, vier neue Instrumente und seitenweiser Druck",
+     "items": [
+      "Schlagzeugschlüssel: Bassdrum, Snare, Toms, Hi-Hat (x-Köpfe) und Crash werden nach Position im System notiert; gespielt mit einem synthetisierten Schlagzeug, gespeichert und gelesen über MIDI-Kanal 10 (GM-Schlagzeug) und MusicXML",
+      "Vier neue Instrumente: Blech, Marimba, Harfe und Chor",
+      "Drucken / PDF: teilt zwischen den Systemen auf A4-Seiten, ohne dass eine Zeile abgeschnitten wird, mit Seitenzahlen"
+     ]
+    },
+    "ja": {
+     "title": "ドラム譜、新しい楽器4種、ページ分けした印刷",
+     "items": [
+      "打楽器記号：バスドラム、スネア、タム、ハイハット（×の音符頭）、クラッシュを譜面上の位置で書けます。合成のドラムキットで再生し、MIDI のチャンネル10（GM ドラム）と MusicXML に保存・読み込みします",
+      "新しい楽器4種：金管、マリンバ、ハープ、合唱",
+      "印刷・PDF：段の区切りで A4 のページに分け、行が途中で切れないようにページ番号を付けます"
+     ]
+    },
+    "zh": {
+     "title": "鼓谱、四种新乐器与分页打印",
+     "items": [
+      "打击乐谱号：底鼓、军鼓、通鼓、踩镲（×符头）和碎音镲按谱线位置书写；由合成鼓组演奏，并通过 MIDI 第 10 通道（GM 鼓）和 MusicXML 保存与读取",
+      "新增四种乐器：铜管、马林巴、竖琴和合唱",
+      "打印 / PDF：在乐句之间分为 A4 页，不会切断任何一行，并带页码"
+     ]
+    },
+    "pt": {
+     "title": "Pauta de bateria, quatro instrumentos novos e impressão em páginas",
+     "items": [
+      "Clave de percussão: bumbo, caixa, tons, chimbal (cabeças em x) e prato de ataque são escritos pela posição na pauta; tocados com um kit de bateria sintetizado e salvos e lidos em MIDI canal 10 (bateria GM) e MusicXML",
+      "Quatro instrumentos novos: metais, marimba, harpa e coral",
+      "Imprimir / PDF: divide em páginas A4 entre os sistemas, sem cortar nenhuma linha, com números de página"
+     ]
+    },
+    "ru": {
+     "title": "Ударная партия, четыре новых инструмента и постраничная печать",
+     "items": [
+      "Ударный ключ: бас-барабан, малый барабан, томы, хай-хэт (крестики) и крэш записываются по положению на нотоносце; звучат синтезированной ударной установкой, сохраняются и читаются через MIDI канал 10 (GM-ударные) и MusicXML",
+      "Четыре новых инструмента: медные, маримба, арфа и хор",
+      "Печать / PDF: разбивает на страницы A4 между системами, не разрезая строки, с номерами страниц"
+     ]
+    },
+    "tr": {
+     "title": "Davul notası, dört yeni çalgı ve sayfa sayfa yazdırma",
+     "items": [
+      "Vurmalı anahtar: bas davul, trampet, tomlar, hi-hat (x başlı) ve kraş nota çizgisindeki konumuna göre yazılır; sentezlenmiş bir davul takımıyla çalınır, MIDI kanal 10 (GM davul) ve MusicXML ile kaydedilip okunur",
+      "Dört yeni çalgı: bakır, marimba, arp ve koro",
+      "Yazdır / PDF: sistemler arasında A4 sayfalara böler, hiçbir satırı kesmez ve sayfa numaraları ekler"
+     ]
     }
    }
   },
@@ -408,6 +1680,70 @@
       "Triplets: toggle on any selection (groups of three), drawn with a 3 bracket and played, exported to MIDI/MusicXML with exact timing; in text notation add t after the length (E5/8t F5 G5)",
       "Grace notes: up to 4 small notes before any note (e.g. D5 E5); on playback they borrow time from the main note; saved to and read from MusicXML",
       "Measure timing math made tolerant of floating-point error"
+     ]
+    },
+    "es": {
+     "title": "Tresillos y notas de adorno",
+     "items": [
+      "Tresillos: se activan sobre cualquier selección (grupos de tres), se dibujan con un 3 y se reproducen; se exportan a MIDI/MusicXML con el tiempo exacto. En la notación de texto, añade t después de la duración (E5/8t F5 G5)",
+      "Notas de adorno: hasta 4 notas pequeñas antes de cualquier nota (p. ej. D5 E5); al reproducir toman tiempo de la nota principal; se guardan y leen en MusicXML",
+      "Los cálculos de duración se hicieron tolerantes al error de coma flotante"
+     ]
+    },
+    "fr": {
+     "title": "Triolets et appogiatures",
+     "items": [
+      "Triolets : à activer sur n'importe quelle sélection (groupes de trois), tracés avec un crochet 3 et joués, exportés en MIDI/MusicXML avec un tempo exact ; dans la saisie texte, ajoutez t après la durée (E5/8t F5 G5)",
+      "Appogiatures : jusqu'à 4 petites notes avant n'importe quelle note (par ex. D5 E5) ; à la lecture elles prennent du temps à la note principale ; enregistrées et lues en MusicXML",
+      "Calculs de durée rendus tolérants aux erreurs d'arrondi flottant"
+     ]
+    },
+    "de": {
+     "title": "Triolen und Vorschläge",
+     "items": [
+      "Triolen: auf jede Auswahl anwendbar (Dreiergruppen), mit einer 3-Klammer gezeichnet und gespielt, exakt getimt nach MIDI/MusicXML exportiert; in der Textnotation t nach der Länge schreiben (E5/8t F5 G5)",
+      "Vorschläge: bis zu 4 kleine Noten vor jeder Note (z. B. D5 E5); bei der Wiedergabe nehmen sie Zeit von der Hauptnote; in MusicXML gespeichert und gelesen",
+      "Takt-Zeitberechnungen sind jetzt toleranter gegenüber Rundungsfehlern"
+     ]
+    },
+    "ja": {
+     "title": "連符と装飾音符",
+     "items": [
+      "連符：どの範囲にも付けられます（3つ組）。3の括弧で表示され、正確なタイミングで再生・MIDI/MusicXML に書き出されます。テキストの記譜では長さの後に t を付けます（E5/8t F5 G5）",
+      "装飾音符：どの音符の前にも小さい音符を最大4つ（例：D5 E5）。再生では主音符の時間を少し借ります。MusicXML に保存・読み込みされます",
+      "小節の時間計算が、小数の誤差に強くなりました"
+     ]
+    },
+    "zh": {
+     "title": "三连音与装饰音",
+     "items": [
+      "三连音：可对任意选区切换（三个一组），以 3 字括号绘制并正常播放，导出到 MIDI/MusicXML 时时值精确。文字记谱中在时值后加 t（E5/8t F5 G5）",
+      "装饰音：任意音符前可加最多 4 个小音符（例如 D5 E5）；播放时从主音符处借用时值；保存和读取 MusicXML 时同样支持",
+      "小节时长计算已能容忍浮点误差"
+     ]
+    },
+    "pt": {
+     "title": "Quiálteras e apogiaturas",
+     "items": [
+      "Quiálteras: ativadas em qualquer seleção (grupos de três), desenhadas com um colchete 3 e tocadas, exportadas para MIDI/MusicXML com tempo exato; na notação de texto, acrescente t depois da duração (E5/8t F5 G5)",
+      "Apogiaturas: até 4 notas pequenas antes de qualquer nota (ex.: D5 E5); na reprodução tomam tempo da nota principal; salvas e lidas em MusicXML",
+      "Cálculos de duração do compasso tolerantes a erros de ponto flutuante"
+     ]
+    },
+    "ru": {
+     "title": "Триоли и форшлаги",
+     "items": [
+      "Триоли: включаются для любого выделения (группы по три), рисуются с цифрой 3 и звучат, экспортируются в MIDI/MusicXML с точным временем; в текстовой записи добавьте t после длительности (E5/8t F5 G5)",
+      "Форшлаги: до 4 маленьких нот перед любой нотой (например, D5 E5); при воспроизведении берут время у основной ноты; сохраняются и читаются в MusicXML",
+      "Расчёт времени тактов стал устойчив к погрешности вычислений с плавающей точкой"
+     ]
+    },
+    "tr": {
+     "title": "Üçlüler ve süslemeler",
+     "items": [
+      "Üçlüler: herhangi bir seçime uygulanır (üçerli gruplar), 3 parantezi ile çizilir ve çalınır; MIDI/MusicXML'e tam zamanlamayla aktarılır. Metin notasyonunda süreden sonra t ekleyin (E5/8t F5 G5)",
+      "Süslemeler: herhangi bir notanın önüne en fazla 4 küçük nota (ör. D5 E5); çalarken ana notanın süresinden alır; MusicXML'e kaydedilir ve okunur",
+      "Ölçü süresi hesapları kayan nokta yuvarlama hatalarına karşı daha toleranslı hale getirildi"
      ]
     }
    }
@@ -431,6 +1767,78 @@
       "Per-part stereo pan",
       "Find and replace notes: F to F#4, across all parts, or to a rest with R (undoable)"
      ]
+    },
+    "es": {
+     "title": "Saltos D.S./Coda, plantillas, paneo por parte, buscar y reemplazar",
+     "items": [
+      "Marcas de Segno, Coda, To Coda, D.S., D.C. y Fine en cualquier compás, escritas en la partitura y seguidas por la reproducción y la exportación WAV (funciona junto con las repeticiones)",
+      "Plantillas de partitura nueva: línea melódica, piano en gran pentagrama, cuarteto de cuerda (con clave de contralto), guitarra y banda",
+      "Paneo estéreo por parte",
+      "Buscar y reemplazar notas: de Fa a Fa#4, en todas las partes, o por un silencio con R (se puede deshacer)"
+     ]
+    },
+    "fr": {
+     "title": "Sauts D.S./Coda, modèles, panoramique par partie, rechercher et remplacer",
+     "items": [
+      "Signes Segno, Coda, To Coda, D.S., D.C. et Fine sur n'importe quelle mesure, affichés sur la partition et suivis par la lecture et l'export WAV (fonctionne avec les reprises)",
+      "Modèles de nouvelle partition : ligne mélodique, piano à grand système, quatuor à cordes (avec clé d'alto), guitare et orchestre d'harmonie",
+      "Panoramique stéréo par partie",
+      "Rechercher et remplacer des notes : de fa à fa#4, dans toutes les parties, ou vers un silence avec R (annulable)"
+     ]
+    },
+    "de": {
+     "title": "D.S.-/Coda-Sprünge, Vorlagen, Panorama pro Stimme, Suchen und Ersetzen",
+     "items": [
+      "Zeichen Segno, Coda, To Coda, D.S., D.C. und Fine auf jedem Takt; sie werden auf der Partitur gezeichnet und bei Wiedergabe und WAV-Export befolgt (zusammen mit Wiederholungen)",
+      "Vorlagen für neue Partituren: Melodiestimme, Klavier im Doppelsystem, Streichquartett (mit Altschlüssel), Gitarre und Band",
+      "Stereo-Panorama pro Stimme",
+      "Noten suchen und ersetzen: von F bis F#4, in allen Stimmen, oder durch eine Pause mit R (rückgängig machbar)"
+     ]
+    },
+    "ja": {
+     "title": "D.S.・コーダのジャンプ、テンプレート、パートごとの定位、検索と置換",
+     "items": [
+      "どの小節にもセーニョ、コーダ、To Coda、D.S.、D.C.、フィーネを付けられます。楽譜に表示され、再生と WAV 書き出しにも従います（反復と組み合わせて動きます）",
+      "新しい楽譜のテンプレート：メロディー譜、ピアノの大譜表、弦楽四重奏（アルト記号つき）、ギター、バンド",
+      "パートごとのステレオの定位（パン）",
+      "音符の検索と置換：ファからファ#4まで、すべてのパートで、または R で休符に置換（元に戻せます）"
+     ]
+    },
+    "zh": {
+     "title": "D.S./Coda 跳转、模板、按声部平移声像、查找替换",
+     "items": [
+      "可在任意小节添加 Segno、Coda、To Coda、D.S.、D.C. 和 Fine 记号；记号会显示在谱面上，并影响播放和 WAV 导出（可与反复配合使用）",
+      "新建乐谱模板：主旋律谱、钢琴大谱表、弦乐四重奏（含中音谱号）、吉他和乐队",
+      "按声部设置立体声声像",
+      "查找并替换音符：从 F 到 F#4，跨所有声部，或用 R 替换为休止符（可撤销）"
+     ]
+    },
+    "pt": {
+     "title": "Saltos D.S./Coda, modelos, panorama por parte, localizar e substituir",
+     "items": [
+      "Marcas Segno, Coda, To Coda, D.S., D.C. e Fine em qualquer compasso, escritas na partitura e seguidas pela reprodução e pela exportação WAV (funciona junto com as repetições)",
+      "Modelos de partitura nova: linha de melodia, piano em pauta dupla, quarteto de cordas (com clave de contralto), violão e banda",
+      "Panorama estéreo por parte",
+      "Localizar e substituir notas: de Fá a Fá#4, em todas as partes, ou por uma pausa com R (pode ser desfeito)"
+     ]
+    },
+    "ru": {
+     "title": "Переходы D.S./Coda, шаблоны, панорама по партиям, поиск и замена",
+     "items": [
+      "Знаки Segno, Coda, To Coda, D.S., D.C. и Fine на любом такте: они пишутся на партитуре и учитываются при воспроизведении и экспорте WAV (работают вместе с повторами)",
+      "Шаблоны новой партитуры: мелодия, фортепиано на большом нотоносце, струнный квартет (с альтовым ключом), гитара и группа",
+      "Стереопанорама для каждой партии",
+      "Поиск и замена нот: от фа до фа#4, во всех партиях, или на пауза с помощью R (можно отменить)"
+     ]
+    },
+    "tr": {
+     "title": "D.S./Coda atlamaları, şablonlar, parti başına pan, bul ve değiştir",
+     "items": [
+      "Herhangi bir ölçüye Segno, Coda, To Coda, D.S., D.C. ve Fine işaretleri; nota üzerinde görünür ve oynatma ile WAV dışa aktarmada uygulanır (tekrarlarla birlikte çalışır)",
+      "Yeni nota şablonları: melodi hattı, büyük porsiyonlu piyano, yaylı dörtlü (alto anahtarlı), gitar ve bant",
+      "Parti başına stereo pan",
+      "Notaları bul ve değiştir: F'den F#4'e kadar, tüm partilerde ya da R ile bir sessizliğe (geri alınabilir)"
+     ]
     }
    }
   },
@@ -453,6 +1861,78 @@
       "Option to transpose the notes along with a key change (e.g. C major to E-flat major moves every part)",
       "Library: keep several scores in this browser and open or delete them from a list"
      ]
+    },
+    "es": {
+     "title": "Uso cómodo en el móvil, cambio de tono con transposición, biblioteca de partituras",
+     "items": [
+      "Botones de letra de nota y silencio en el panel lateral para escribir sin teclado",
+      "Pellizcar para acercar, Ctrl+rueda para acercar, y un botón para ajustar al ancho (en pantallas estrechas se abre ya ajustado)",
+      "Opción de transportar las notas al cambiar la armadura (por ejemplo, de Do mayor a Mi bemol mayor mueve todas las partes)",
+      "Biblioteca: guarda varias partituras en este navegador y ábrelas o bórralas desde una lista"
+     ]
+    },
+    "fr": {
+     "title": "Saisie adaptée au téléphone, changement de tonalité avec transposition, bibliothèque de partitions",
+     "items": [
+      "Boutons de lettre de note et de silence dans le panneau latéral pour saisir sans clavier",
+      "Pincer pour zoomer, Ctrl+molette pour zoomer, et un bouton d'ajustement à la largeur (sur petit écran, elle s'ouvre déjà ajustée)",
+      "Option pour transposer les notes avec un changement de tonalité (par ex. do majeur vers mi bémol majeur déplace toutes les parties)",
+      "Bibliothèque : garde plusieurs partitions dans ce navigateur et permet d'en ouvrir ou supprimer depuis une liste"
+     ]
+    },
+    "de": {
+     "title": "Handyfreundliche Eingabe, Tonartwechsel mit Transposition, Partiturbibliothek",
+     "items": [
+      "Notenbuchstaben- und Pausen-Schaltflächen im Seitenpanel zum Eingeben ohne Tastatur",
+      "Zoomen per Zwei-Finger-Geste, Strg+Mausrad und eine Schaltfläche „An Breite anpassen“ (auf schmalen Bildschirmen öffnet sich die Partitur schon angepasst)",
+      "Option, die Noten beim Tonartwechsel mit zu transponieren (z. B. C-Dur nach Es-Dur verschiebt alle Stimmen)",
+      "Bibliothek: mehrere Partituren in diesem Browser behalten und über eine Liste öffnen oder löschen"
+     ]
+    },
+    "ja": {
+     "title": "スマホで書きやすく、調の変更で移調、楽譜の保存一覧",
+     "items": [
+      "側面パネルに音符の文字・休符のボタンを追加。キーボードなしで音符を入力できます",
+      "ピンチで拡大、Ctrl+ホイールで拡大、横幅に合わせるボタン（狭い画面では最初から合わせて開きます）",
+      "調の変更と一緒に音符も移調するオプション（例：ハ長調から変ホ長調にすると全パートが動きます）",
+      "ライブラリ：このブラウザに複数の楽譜を保存し、一覧から開いたり削除したりできます"
+     ]
+    },
+    "zh": {
+     "title": "手机友好输入、随调号变化移调、乐谱库",
+     "items": [
+      "侧边栏新增音名和休止符按钮，无需键盘即可输入音符",
+      "双指捏合缩放、Ctrl+滚轮缩放，以及适应宽度按钮（窄屏幕下打开时已自动适应）",
+      "可选择在改变调号时同时移调音符（例如从 C 大调改为降 E 大调，所有声部都会移动）",
+      "乐谱库：在此浏览器中保存多个乐谱，并可从列表中打开或删除"
+     ]
+    },
+    "pt": {
+     "title": "Entrada amigável no celular, mudança de tom com transposição, biblioteca de partituras",
+     "items": [
+      "Botões de letra de nota e de pausa no painel lateral para escrever sem teclado",
+      "Pinça para aproximar, Ctrl+roda para zoom e um botão de ajustar à largura (em telas estreitas já abre ajustado)",
+      "Opção de transpor as notas junto com a mudança de tom (por exemplo, de Dó maior para Mi bemol maior move todas as partes)",
+      "Biblioteca: guarda várias partituras neste navegador e permite abri-las ou excluí-las em uma lista"
+     ]
+    },
+    "ru": {
+     "title": "Удобный ввод на телефоне, смена тональности с транспонированием, библиотека партитур",
+     "items": [
+      "Кнопки букв нот и пауз на боковой панели, чтобы вводить ноты без клавиатуры",
+      "Масштаб щипком, Ctrl+колесо и кнопка «по ширине» (на узких экранах партитура сразу открывается подогнанной)",
+      "Опция транспонировать ноты вместе со сменой тональности (например, до мажор в ми-бемоль мажор сдвигает все партии)",
+      "Библиотека: несколько партитур в этом браузере, открывать и удалять их можно из списка"
+     ]
+    },
+    "tr": {
+     "title": "Telefonda kolay giriş, tonalite değişiminde transpoze, nota kitaplığı",
+     "items": [
+      "Klavye olmadan nota girmek için kenar panelinde nota harfi ve ara düğmeleri",
+      "İki parmakla yakınlaştırma, Ctrl+tekerlek ile yakınlaştırma ve genişliğe sığdırma düğmesi (dar ekranlarda açılışta zaten sığdırılmış olur)",
+      "Tonalite değişirken notaları da transpoze etme seçeneği (ör. Do majörden Mi bemol majöre geçince tüm partiler kayar)",
+      "Kitaplık: bu tarayıcıda birden çok nota dosyası tutun; listeden açın ya da silin"
+     ]
     }
    }
   },
@@ -472,6 +1952,70 @@
       "MusicXML export: notes, chords, ties, lyrics, dynamics, hairpins, articulations, repeats, endings, tempo, clefs, key and time signatures; opens in MuseScore and similar apps",
       "MusicXML import: multiple parts, two-staff piano parts, key, time, tempo, repeats and lyrics (grace notes are skipped and complex tuplets are rounded)",
       "WAV export: renders the audio with the current instruments, volumes and repeats"
+     ]
+    },
+    "es": {
+     "title": "Importar y exportar MusicXML y audio WAV",
+     "items": [
+      "Exportar MusicXML: notas, acordes, ligaduras, letras, dinámicas, reguladores, articulaciones, repeticiones, casillas, tempo, claves, armadura y compás; se abre en MuseScore y apps similares",
+      "Importar MusicXML: varias partes, partes de piano de dos pentagramas, armadura, compás, tempo, repeticiones y letras (las apoyaturas se omiten y los tresillos complejos se redondean)",
+      "Exportar WAV: genera el audio con los instrumentos, volúmenes y repeticiones actuales"
+     ]
+    },
+    "fr": {
+     "title": "Ouverture et export MusicXML, export audio WAV",
+     "items": [
+      "Export MusicXML : notes, accords, liaisons, paroles, nuances, crescendos, articulations, reprises, volte-s, tempo, clés, armure et mesure ; s'ouvre dans MuseScore et les applis similaires",
+      "Import MusicXML : plusieurs parties, parties de piano à deux portées, armure, mesure, tempo, reprises et paroles (les appogiatures sont ignorées et les triolets complexes arrondis)",
+      "Export WAV : rend l'audio avec les instruments, volumes et reprises actuels"
+     ]
+    },
+    "de": {
+     "title": "MusicXML öffnen und exportieren, WAV-Audiodatei",
+     "items": [
+      "MusicXML-Export: Noten, Akkorde, Bindungen, Liedtexte, Dynamik, Crescendi, Artikulation, Wiederholungen, Volta-Klammern, Tempo, Schlüssel, Vorzeichen und Taktart; öffnet sich in MuseScore und ähnlichen Programmen",
+      "MusicXML-Import: mehrere Stimmen, zweizeilige Klavierstimmen, Tonart, Takt, Tempo, Wiederholungen und Liedtexte (Vorschläge werden übersprungen, komplexe Triolen gerundet)",
+      "WAV-Export: rendert den Ton mit den aktuellen Instrumenten, Lautstärken und Wiederholungen"
+     ]
+    },
+    "ja": {
+     "title": "MusicXML の読み込み・書き出し、WAV 音声の書き出し",
+     "items": [
+      "MusicXML の書き出し：音符・和音・タイ・歌詞・強弱・クレッシェンド・アーティキュレーション・反復・括弧・テンポ・音部記号・調号・拍子に対応。MuseScore などで開けます",
+      "MusicXML の読み込み：複数パート、ピアノの2段譜、調号・拍子・テンポ・反復・歌詞に対応（装飾音符は省かれ、複雑な連符は丸められます）",
+      "WAV の書き出し：今の楽器・音量・反復で音声を作って保存します"
+     ]
+    },
+    "zh": {
+     "title": "MusicXML 导入导出与 WAV 音频导出",
+     "items": [
+      "MusicXML 导出：音符、和弦、连线、歌词、力度、渐强渐弱、演奏记号、反复、跳房子、速度、谱号、调号和拍号；可在 MuseScore 等软件中打开",
+      "MusicXML 导入：多声部、双谱表钢琴声部、调号、拍号、速度、反复和歌词（装饰音会被跳过，复杂连音会取整）",
+      "WAV 导出：使用当前乐器、音量和反复设置渲染音频"
+     ]
+    },
+    "pt": {
+     "title": "Abrir e exportar MusicXML, arquivo de áudio WAV",
+     "items": [
+      "Exportar MusicXML: notas, acordes, ligaduras, letras, dinâmicas, reguladores, articulações, repetições, casas, andamento, claves, armaduras e fórmulas de compasso; abre no MuseScore e apps semelhantes",
+      "Importar MusicXML: várias partes, partes de piano de duas pautas, armadura, compasso, andamento, repetições e letras (apogiaturas são ignoradas e quiálteras complexas arredondadas)",
+      "Exportar WAV: gera o áudio com os instrumentos, volumes e repetições atuais"
+     ]
+    },
+    "ru": {
+     "title": "Открытие и экспорт MusicXML, аудиофайл WAV",
+     "items": [
+      "Экспорт MusicXML: ноты, аккорды, лиги, текст песни, динамика, крещендо, артикуляция, повторы, вольты, темп, ключи, ключевые знаки и размер; открывается в MuseScore и похожих программах",
+      "Импорт MusicXML: несколько партий, фортепианные партии на два нотоносца, тональность, размер, темп, повторы и текст песни (форшлаги пропускаются, сложные триоли округляются)",
+      "Экспорт WAV: записывает звук с текущими инструментами, громкостями и повторами"
+     ]
+    },
+    "tr": {
+     "title": "MusicXML açma ve dışa aktarma, WAV ses dosyası",
+     "items": [
+      "MusicXML dışa aktarma: notalar, akorlar, bağlar, sözler, dinamikler, crescendo, artikülasyonlar, tekrarlar, bitiş parantezleri, tempo, anahtarlar, dizi ve ölçü; MuseScore ve benzeri uygulamalarda açılır",
+      "MusicXML içe aktarma: birden çok parti, iki porsiyonlu piyano partileri, dizi, ölçü, tempo, tekrarlar ve sözler (süslemeler atlanır, karmaşık üçlüler yuvarlanır)",
+      "WAV dışa aktarma: sesi geçerli çalgılar, ses düzeyleri ve tekrarlarla oluşturur"
      ]
     }
    }
@@ -497,6 +2041,86 @@
       "Marcato and trill marks (the trill alternates with the upper note on playback)",
       "Stem directions fixed: notes on or above the middle line now have stems down"
      ]
+    },
+    "es": {
+     "title": "Reguladores crescendo y diminuendo, clave de contralto y de guitarra, marcas de ensayo, trinos",
+     "items": [
+      "Reguladores de crescendo (<) y diminuendo (>) dibujados como cuñas; la reproducción y el volumen MIDI pasan suavemente a la siguiente dinámica",
+      "Clave de contralto (C) y clave de sol una octava abajo para guitarra, con las armaduras colocadas correctamente en cada clave; la parte de guitarra suena una octava más grave",
+      "Marcas de ensayo (A B C...) y texto como 'Allegro' sobre cualquier compás",
+      "Marcas de marcato y de trino (el trino alterna con la nota superior en la reproducción)",
+      "Corregida la dirección de las plicas: las notas en la línea central o por encima tienen plica hacia abajo"
+     ]
+    },
+    "fr": {
+     "title": "Crescendo et diminuendo, clés d'alto et de guitare, repères de répétition, trilles",
+     "items": [
+      "Crescendo (<) et diminuendo (>) dessinés en forme de coin ; la lecture et le volume MIDI glissent vers la nuance suivante",
+      "Clé d'ut (alto) et clé de sol une octave plus bas pour la guitare, avec les armures placées correctement pour chaque clé ; la partie de guitare sonne une octave plus bas",
+      "Repères de répétition (A B C...) et textes comme « Allegro » au-dessus de n'importe quelle mesure",
+      "Marques de marcato et de trille (le trille alterne avec la note supérieure à la lecture)",
+      "Sens des hampes corrigé : les notes sur la ligne médiane ou au-dessus ont la hampe vers le bas"
+     ]
+    },
+    "de": {
+     "title": "Crescendo und Decrescendo, Alt- und Gitarrenschlüssel, Probenzeichen, Triller",
+     "items": [
+      "Crescendo (<) und Decrescendo (>) als Keile gezeichnet; die Wiedergabe und die MIDI-Lautstärke gleiten zur nächsten Dynamik",
+      "Altschlüssel (C) und eine Oktave tiefer notierter Violinschlüssel für Gitarre; die Vorzeichen sitzen für jeden Schlüssel richtig; die Gitarrenstimme klingt eine Oktave tiefer",
+      "Probenzeichen (A B C ...) und Texte wie „Allegro“ über jedem Takt",
+      "Marcato- und Trillerzeichen (der Triller wechselt bei der Wiedergabe mit der oberen Note)",
+      "Hälsenrichtung korrigiert: Noten auf oder über der Mittellinie haben jetzt eine Hals nach unten"
+     ]
+    },
+    "ja": {
+     "title": "クレッシェンド・デクレッシェンド、アルト・ギターの音部記号、練習記号、トリル",
+     "items": [
+      "クレッシェンド（<）とデクレッシェンド（>）をくさび形で表示。再生と MIDI の音量は次の強弱へなめらかに変わります",
+      "アルト記号（C）と、ギター用の1オクターブ下のト音記号。どの記号でも調号が正しい位置に並び、ギターのパートは1オクターブ低く鳴ります",
+      "どの小節の上にも練習記号（A B C…）や「Allegro」などの文字を付けられます",
+      "マルカートとトリルの記号（再生では、トリルは上の音と交互に鳴ります）",
+      "符幹の向きを修正：中線以上の音符は符幹が下向きになります"
+     ]
+    },
+    "zh": {
+     "title": "渐强渐弱、中音与吉他谱号、排练记号、颤音",
+     "items": [
+      "渐强（<）和渐弱（>）以楔形线绘制；播放和 MIDI 音量会平滑过渡到下一个力度",
+      "中音谱号（C）和吉他用的八度下移高音谱号；调号在各谱号上位置正确，吉他声部低一个八度发声",
+      "可在任一小节上方添加排练记号（A B C…）和“Allegro”等文字",
+      "重音和颤音记号（播放时颤音会与上方音交替）",
+      "修正符干方向：位于中线或其上方的音符符干朝下"
+     ]
+    },
+    "pt": {
+     "title": "Reguladores crescendo e diminuendo, claves de contralto e de violão, marcas de ensaio, trinados",
+     "items": [
+      "Reguladores de crescendo (<) e diminuendo (>) desenhados como cunhas; a reprodução e o volume MIDI deslizam até a próxima dinâmica",
+      "Clave de contralto (C) e clave de sol uma oitava abaixo para violão, com as armaduras posicionadas corretamente em cada clave; a parte de violão soa uma oitava abaixo",
+      "Marcas de ensaio (A B C...) e textos como 'Allegro' acima de qualquer compasso",
+      "Marcas de marcato e trinado (o trinado alterna com a nota superior na reprodução)",
+      "Direções de haste corrigidas: notas na linha do meio ou acima têm a haste para baixo"
+     ]
+    },
+    "ru": {
+     "title": "Крещендо и диминуэндо, альтовый и гитарный ключи, репетиционные цифры, трели",
+     "items": [
+      "Крещендо (<) и диминуэндо (>) рисуются клиньями; воспроизведение и громкость MIDI плавно переходят к следующей динамике",
+      "Альтовый ключ (до) и скрипичный ключ с октавой вниз для гитары; ключевые знаки правильно стоят в каждом ключе, партия гитары звучит на октаву ниже",
+      "Репетиционные знаки (A B C…) и надписи вроде «Allegro» над любым тактом",
+      "Знаки марката и трели (при воспроизведении трель чередуется с верхней нотой)",
+      "Исправлено направление штилей: ноты на средней линии и выше теперь со штилем вниз"
+     ]
+    },
+    "tr": {
+     "title": "Crescendo ve decrescendo, alto ve gitar anahtarları, prova işaretleri, tril",
+     "items": [
+      "Crescendo (<) ve decrescendo (>) kama biçiminde çizilir; oynatma ve MIDI ses düzeyi bir sonraki dinamiğe yumuşakça geçer",
+      "Alto anahtarı (C) ve gitar için bir oktav aşağı sol anahtarı; her anahtarda dizi işaretleri doğru yere konur, gitar partisi bir oktav aşağıdan çalar",
+      "Her ölçünün üstüne prova işaretleri (A B C…) ve 'Allegro' gibi yazılar eklenebilir",
+      "Marcato ve tril işaretleri (oynatmada tril üst notayla dönüşümlü çalar)",
+      "Kuyruk yönleri düzeltildi: orta çizgi ya da üstündeki notaların kuyruğu artık aşağı bakar"
+     ]
     }
    }
   },
@@ -518,6 +2142,78 @@
       "Loop playback and play-selection-only (with the range tool, loops just that part)",
       "Playback speed 40-160% without changing the written tempo",
       "Solo per part, and the sounding notes are highlighted on the score while playing"
+     ]
+    },
+    "es": {
+     "title": "Reproducción: metrónomo, cuenta atrás, bucle, velocidad, solo y resaltado de notas",
+     "items": [
+      "Clic de metrónomo y cuenta atrás de un compás (sigue el compás, incluidos los compuestos como 6/8)",
+      "Reproducción en bucle y solo la selección (con la herramienta de rango, el bucle repite solo esa parte)",
+      "Velocidad de reproducción del 40 al 160 % sin cambiar el tempo escrito",
+      "Solo por parte; las notas que suenan se resaltan en la partitura durante la reproducción"
+     ]
+    },
+    "fr": {
+     "title": "Lecture : métronome, compte d'entrée, boucle, vitesse, solo et surbrillance des notes",
+     "items": [
+      "Clic de métronome et compte d'entrée d'une mesure (suit la mesure, y compris les mesures composées comme 6/8)",
+      "Lecture en boucle et lecture de la sélection seule (avec l'outil plage, la boucle ne joue que cette partie)",
+      "Vitesse de lecture de 40 à 160 % sans changer le tempo écrit",
+      "Solo par partie ; les notes qui sonnent sont surlignées sur la partition pendant la lecture"
+     ]
+    },
+    "de": {
+     "title": "Wiedergabe: Metronom, Vorzähler, Schleife, Tempo, Solo und Notenmarkierung",
+     "items": [
+      "Metronomklick und ein Takt Vorzähler (folgt der Taktart, auch bei zusammengesetzten Takten wie 6/8)",
+      "Schleifenwiedergabe und nur Auswahl abspielen (mit dem Bereichswerkzeug wird nur dieser Teil wiederholt)",
+      "Wiedergabegeschwindigkeit 40–160 %, ohne das notierte Tempo zu ändern",
+      "Solo pro Stimme; die klingenden Noten werden während der Wiedergabe auf der Partitur markiert"
+     ]
+    },
+    "ja": {
+     "title": "再生の改善：メトロノーム、カウントイン、繰り返し、速さ、ソロ、音符の表示",
+     "items": [
+      "メトロノームのクリックと1小節のカウントイン（拍子に従い、6/8 などの複合拍子にも対応）",
+      "繰り返し再生と選択範囲だけの再生（範囲ツールを使うと、その部分だけを繰り返します）",
+      "再生速度を 40〜160% に（楽譜上のテンポは変わりません）",
+      "パートごとのソロ。再生中は鳴っている音符が楽譜上でハイライトされます"
+     ]
+    },
+    "zh": {
+     "title": "播放改进：节拍器、预备拍、循环、速度、独奏与音符高亮",
+     "items": [
+      "节拍器咔哒声和一小节预备拍（跟随拍号，包括 6/8 等复合拍）",
+      "循环播放和仅播放选区（配合范围工具，循环只重复该段）",
+      "播放速度 40%–160%，不改变乐谱上标注的速度",
+      "可按声部独奏；播放时正在发声的音符会在谱面上高亮"
+     ]
+    },
+    "pt": {
+     "title": "Reprodução: metrônomo, contagem, loop, velocidade, solo e destaque das notas",
+     "items": [
+      "Clique de metrônomo e uma contagem de um compasso (segue a fórmula de compasso, incluindo compassos compostos como 6/8)",
+      "Reprodução em loop e tocar só a seleção (com a ferramenta de intervalo, o loop repete só essa parte)",
+      "Velocidade de reprodução de 40 a 160% sem mudar o andamento escrito",
+      "Solo por parte; as notas que soam ficam destacadas na partitura durante a reprodução"
+     ]
+    },
+    "ru": {
+     "title": "Воспроизведение: метроном, отсчёт, повтор, скорость, соло и подсветка нот",
+     "items": [
+      "Щелчок метронома и отсчёт одного такта (следует размеру, включая сложные, например 6/8)",
+      "Повтор воспроизведения и воспроизведение только выделенного (с инструментом диапазона повторяется только он)",
+      "Скорость воспроизведения 40–160 % без изменения записанного темпа",
+      "Соло по партиям; звучащие ноты подсвечиваются на партитуре во время воспроизведения"
+     ]
+    },
+    "tr": {
+     "title": "Oynatma: metronom, giriş sayımı, döngü, hız, solo ve nota vurgusu",
+     "items": [
+      "Metronom tıkı ve bir ölçülük giriş sayımı (ölçüye uyar; 6/8 gibi bileşik ölçüler dahil)",
+      "Döngü oynatma ve yalnızca seçimi çalma (aralık aracıyla döngü yalnızca o bölümü tekrarlar)",
+      "Yazılı tempoyu değiştirmeden %40 ile %160 arasında oynatma hızı",
+      "Partiye göre solo; çalan notalar oynatma sırasında nota üzerinde vurgulanır"
      ]
     }
    }
@@ -541,6 +2237,78 @@
       "Transpose by semitone, whole tone or octave (selection, or the whole part when nothing is selected)",
       "Drag a note up or down to change its pitch (on touch, select the note first); undo reverts the drag in one step"
      ]
+    },
+    "es": {
+     "title": "Selección de rango, copiar y pegar, transportar y arrastrar para cambiar la altura",
+     "items": [
+      "Herramienta de rango, Mayús+clic, Mayús+flechas, seleccionar todo y seleccionar compás; borra o mueve muchas notas a la vez",
+      "Copiar, cortar, pegar (Ctrl+C/X/V), duplicar e invertir; el portapapeles se conserva al abrir otra partitura",
+      "Transportar por semitono, tono o octava (la selección, o toda la parte si no hay selección)",
+      "Arrastra una nota hacia arriba o abajo para cambiar su altura (en pantalla táctil, selecciona antes la nota); deshacer revierte el arrastre de una vez"
+     ]
+    },
+    "fr": {
+     "title": "Sélection de plage, copier-coller, transposition et glisser pour changer la hauteur",
+     "items": [
+      "Outil plage, Maj+clic, Maj+flèches, tout sélectionner et sélectionner une mesure ; supprimer ou déplacer plusieurs notes d'un coup",
+      "Copier, couper, coller (Ctrl+C/X/V), dupliquer et inverser ; le presse-papiers survit à l'ouverture d'une autre partition",
+      "Transposer par demi-ton, ton ou octave (la sélection, ou toute la partie s'il n'y a rien de sélectionné)",
+      "Faire glisser une note vers le haut ou le bas pour changer sa hauteur (au tactile, sélectionner d'abord la note) ; annuler rétablit le glissement en une fois"
+     ]
+    },
+    "de": {
+     "title": "Bereich wählen, Kopieren/Einfügen, Transponieren und Tonhöhe per Ziehen ändern",
+     "items": [
+      "Bereichswerkzeug, Umschalt+Klick, Umschalt+Pfeile, Alles auswählen und Takt auswählen; viele Noten gleichzeitig löschen oder verschieben",
+      "Kopieren, Ausschneiden, Einfügen (Strg+C/X/V), Duplizieren und Umkehren; die Zwischenablage bleibt beim Öffnen einer anderen Partitur erhalten",
+      "Transponieren um Halbton, Ganzton oder Oktave (die Auswahl oder die ganze Stimme, wenn nichts ausgewählt ist)",
+      "Eine Note nach oben oder unten ziehen, um ihre Tonhöhe zu ändern (am Touchscreen zuerst die Note wählen); Rückgängig macht das Ziehen in einem Schritt rückgängig"
+     ]
+    },
+    "ja": {
+     "title": "範囲選択、コピー・貼り付け、移調、ドラッグで音の高さを変更",
+     "items": [
+      "範囲ツール、Shift+クリック、Shift+矢印、すべて選択、小節選択。多くの音を一度に消す・動かせます",
+      "コピー、切り取り、貼り付け（Ctrl+C/X/V）、複製、逆順。別の楽譜を開いてもクリップボードは残ります",
+      "半音・全音・オクターブ単位で移調（選択範囲、何も選んでいなければパート全体）",
+      "音符を上下にドラッグして音の高さを変更（タッチ操作では先に音符を選ぶ）。元に戻すと、ドラッグは一度で戻ります"
+     ]
+    },
+    "zh": {
+     "title": "范围选择、复制粘贴、移调与拖动改音高",
+     "items": [
+      "范围工具、Shift+点击、Shift+方向键、全选和选中小节；可一次删除或移动多个音符",
+      "复制、剪切、粘贴（Ctrl+C/X/V）、复制和倒序；打开其他乐谱后剪贴板内容仍然保留",
+      "按半音、全音或八度移调（有选中内容时移调选中部分，否则移调整个声部）",
+      "上下拖动音符即可改变音高（触屏需先选中音符）；撤销可一步还原拖动"
+     ]
+    },
+    "pt": {
+     "title": "Seleção de intervalo, copiar/colar, transpor e arrastar para mudar a altura",
+     "items": [
+      "Ferramenta de intervalo, Shift+clique, Shift+setas, selecionar tudo e selecionar compasso; apague ou mova muitas notas de uma vez",
+      "Copiar, recortar, colar (Ctrl+C/X/V), duplicar e inverter; a área de transferência continua disponível ao abrir outra partitura",
+      "Transpor por semitom, tom ou oitava (a seleção ou a parte inteira, se nada estiver selecionado)",
+      "Arraste uma nota para cima ou para baixo para mudar a altura (no toque, selecione a nota antes); desfazer reverte o arrasto de uma vez"
+     ]
+    },
+    "ru": {
+     "title": "Выделение диапазона, копирование и вставка, транспонирование, изменение высоты перетаскиванием",
+     "items": [
+      "Инструмент диапазона, Shift+щелчок, Shift+стрелки, выделить всё и выделить такт; можно сразу удалить или переместить много нот",
+      "Копирование, вырезание, вставка (Ctrl+C/X/V), дублирование и обращение; буфер сохраняется при открытии другой партитуры",
+      "Транспонирование на полутон, тон или октаву (выделение или вся партия, если ничего не выделено)",
+      "Перетащите ноту вверх или вниз, чтобы изменить высоту (на сенсорном экране сначала выделите ноту); отмена возвращает перетаскивание одним шагом"
+     ]
+    },
+    "tr": {
+     "title": "Aralık seçimi, kopyala-yapıştır, transpoze ve sürükleyerek perde değiştirme",
+     "items": [
+      "Aralık aracı, Shift+tıklama, Shift+oklar, tümünü seç ve ölçü seç; çok sayıda notayı tek seferde silin ya da taşıyın",
+      "Kopyala, kes, yapıştır (Ctrl+C/X/V), çoğalt ve ters çevir; pano başka bir nota dosyası açılsa da kalır",
+      "Yarım ses, tam ses ya da oktav olarak transpoze (seçime ya da hiçbir şey seçili değilse tüm partiye uygulanır)",
+      "Bir notayı yukarı ya da aşağı sürükleyerek perdesini değiştirin (dokunmatikte önce notayı seçin); geri al, sürüklemeyi tek adımda geri alır"
+     ]
     }
    }
   },
@@ -558,6 +2326,62 @@
      "items": [
       "The treble clef now curls around the G line and the bass clef dots sit either side of the F line, with the correct shape",
       "Clean at every zoom level and in PNG/SVG export"
+     ]
+    },
+    "es": {
+     "title": "Claves de sol y de fa redibujadas",
+     "items": [
+      "La clave de sol ahora se curva alrededor de la línea de sol y los puntos de la clave de fa quedan a ambos lados de la línea de fa, con la forma correcta",
+      "Se ve limpia en cualquier zoom y en la exportación PNG/SVG"
+     ]
+    },
+    "fr": {
+     "title": "Clés de sol et de fa redessinées",
+     "items": [
+      "La clé de sol s'enroule maintenant autour de la ligne de sol et les points de la clé de fa se placent de part et d'autre de la ligne de fa, avec la bonne forme",
+      "Net à tous les niveaux de zoom et dans l'export PNG/SVG"
+     ]
+    },
+    "de": {
+     "title": "Violin- und Bassschlüssel neu gezeichnet",
+     "items": [
+      "Der Violinschlüssel windet sich jetzt um die G-Linie und die Punkte des Bassschlüssels sitzen beidseits der F-Linie, mit der richtigen Form",
+      "Bei jeder Zoomstufe und im PNG/SVG-Export sauber"
+     ]
+    },
+    "ja": {
+     "title": "ト音記号・ヘ音記号を描き直し",
+     "items": [
+      "ト音記号が G の線に巻き付くように、ヘ音記号の点が F の線の両側に正しい形で並ぶようになりました",
+      "どの拡大率でも、PNG/SVG 書き出しでもきれいに表示されます"
+     ]
+    },
+    "zh": {
+     "title": "重绘高音与低音谱号",
+     "items": [
+      "高音谱号现在围绕 G 线卷曲，低音谱号的两个点位于 F 线两侧，形状正确",
+      "在任何缩放级别及 PNG/SVG 导出中都清晰"
+     ]
+    },
+    "pt": {
+     "title": "Claves de sol e de fá redesenhadas",
+     "items": [
+      "A clave de sol agora se enrola em volta da linha de sol e os pontos da clave de fá ficam dos dois lados da linha de fá, com a forma correta",
+      "Limpo em qualquer zoom e na exportação PNG/SVG"
+     ]
+    },
+    "ru": {
+     "title": "Скрипичный и басовый ключи перерисованы",
+     "items": [
+      "Скрипичный ключ теперь закручивается вокруг линии соль, а точки басового ключа расположены по обе стороны линии фа, с правильной формой",
+      "Чисто на любом масштабе и при экспорте в PNG/SVG"
+     ]
+    },
+    "tr": {
+     "title": "Sol ve fa anahtarları yeniden çizildi",
+     "items": [
+      "Sol anahtarı artık G çizgisinin etrafında kıvrılır; fa anahtarının noktaları F çizgisinin iki yanında doğru biçimde durur",
+      "Her yakınlaştırma düzeyinde ve PNG/SVG dışa aktarmada temiz görünür"
      ]
     }
    }

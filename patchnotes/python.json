@@ -17,6 +17,62 @@
       "define structure \"name\": checks block item x y lines (cell coordinates -20 to 20)",
       "build \"name\" near player is checked and an unknown structure name is reported (auto-complete and word meanings added)"
      ]
+    },
+    "es": {
+     "title": "BeaconScript estructuras (define structure, build)",
+     "items": [
+      "define structure \"nombre\": revisa las líneas de bloque item x y (coordenadas de celda de -20 a 20)",
+      "build \"nombre\" near player se revisa, y si el nombre de la estructura no existe se avisa (también hay autocompletado y explicaciones de palabras)"
+     ]
+    },
+    "fr": {
+     "title": "BeaconScript structures (define structure, build)",
+     "items": [
+      "define structure \"nom\" : vérifie les lignes block item x y (coordonnées de case de -20 à 20)",
+      "La ligne build \"nom\" near player est vérifiée, et un nom de structure inconnu est signalé (complétion automatique et explications des mots aussi)"
+     ]
+    },
+    "de": {
+     "title": "BeaconScript Bauwerke (define structure, build)",
+     "items": [
+      "define structure \"Name\": prüft die Zeilen block item x y (Feldkoordinaten -20 bis 20)",
+      "build \"Name\" near player wird geprüft, und ein unbekannter Bauwerksname wird gemeldet (auch automatische Vervollständigung und Worterklärungen)"
+     ]
+    },
+    "ja": {
+     "title": "BeaconScript 構造物（define structure、build）",
+     "items": [
+      "define structure \"名前\": の下の block アイテム x y（マス座標 -20〜20）の行を検査します",
+      "build \"名前\" near player の行を検査し、ない構造物の名前なら知らせます（自動補完と単語の説明もあります）"
+     ]
+    },
+    "zh": {
+     "title": "BeaconScript 建筑（define structure、build）",
+     "items": [
+      "检查 define structure \"名称\": 下方的 block 物品 x y（格子坐标 -20 到 20）行",
+      "检查 build \"名称\" near player 行；名称不存在时会提示（同时支持自动补全和单词说明）"
+     ]
+    },
+    "pt": {
+     "title": "BeaconScript estruturas (define structure, build)",
+     "items": [
+      "define structure \"nome\": verifica as linhas block item x y (coordenadas de célula de -20 a 20)",
+      "A linha build \"nome\" near player é verificada e um nome de estrutura desconhecido é informado (também há preenchimento automático e explicações de palavras)"
+     ]
+    },
+    "ru": {
+     "title": "BeaconScript постройки (define structure, build)",
+     "items": [
+      "define structure \"имя\": проверяет строки block item x y (координаты клеток от -20 до 20)",
+      "Строка build \"имя\" near player проверяется, а неизвестное имя постройки сообщается (есть также автодополнение и описания слов)"
+     ]
+    },
+    "tr": {
+     "title": "BeaconScript yapılar (define structure, build)",
+     "items": [
+      "define structure \"ad\": altındaki block item x y satırlarını denetler (kare koordinatları -20 ile 20 arası)",
+      "build \"ad\" near player satırı denetlenir ve bilinmeyen bir yapı adı bildirilir (otomatik tamamlama ve kelime açıklamaları da var)"
+     ]
     }
    }
   },
@@ -34,6 +90,62 @@
      "items": [
       "define ore \"name\": checks base (one of iron, gold, copper, zinc), color (\"#e0245e\"), drop (item, min, max), biome and chance (percent of rocks that become this ore)",
       "At most 4 define ore per mod; auto-complete and word meanings added"
+     ]
+    },
+    "es": {
+     "title": "BeaconScript define ore",
+     "items": [
+      "define ore \"nombre\": revisa base (uno de iron, gold, copper, zinc), color (\"#e0245e\"), drop (objeto, mínimo, máximo), biome y chance (porcentaje de rocas que se convierten en este mineral)",
+      "Como máximo 4 define ore por mod; autocompletado y explicaciones de palabras añadidos"
+     ]
+    },
+    "fr": {
+     "title": "BeaconScript define ore",
+     "items": [
+      "define ore \"nom\" : vérifie base (l'un de iron, gold, copper, zinc), color (\"#e0245e\"), drop (objet, min, max), biome et chance (pourcentage des roches qui deviennent ce minerai)",
+      "4 define ore au maximum par mod ; complétion automatique et explications des mots ajoutées"
+     ]
+    },
+    "de": {
+     "title": "BeaconScript define ore",
+     "items": [
+      "define ore \"Name\": prüft base (eines von iron, gold, copper, zinc), color (\"#e0245e\"), drop (Gegenstand, min, max), biome und chance (Prozentsatz der Steine, die zu diesem Erz werden)",
+      "Höchstens 4 define ore pro Mod; automatische Vervollständigung und Worterklärungen ergänzt"
+     ]
+    },
+    "ja": {
+     "title": "BeaconScript define ore",
+     "items": [
+      "define ore \"名前\": base（iron・gold・copper・zinc のどれか）、color（\"#e0245e\"）、drop（アイテム、最小、最大）、biome、chance（岩のうちこの鉱石になる割合 %）を検査します",
+      "define ore はモッドごとに4つまで。自動補完と単語の説明も追加しました"
+     ]
+    },
+    "zh": {
+     "title": "BeaconScript define ore",
+     "items": [
+      "define ore \"名称\"：检查 base（iron、gold、copper、zinc 之一）、color（\"#e0245e\"）、drop（物品、最小、最大）、biome 和 chance（变成此矿石的岩石百分比）",
+      "每个模组最多 4 个 define ore；已加入自动补全和单词说明"
+     ]
+    },
+    "pt": {
+     "title": "BeaconScript define ore",
+     "items": [
+      "define ore \"nome\": verifica base (um de iron, gold, copper, zinc), color (\"#e0245e\"), drop (item, mínimo, máximo), biome e chance (porcentagem das rochas que viram este minério)",
+      "No máximo 4 define ore por mod; preenchimento automático e explicações de palavras adicionados"
+     ]
+    },
+    "ru": {
+     "title": "BeaconScript define ore",
+     "items": [
+      "define ore \"имя\": проверяет base (одно из iron, gold, copper, zinc), color (\"#e0245e\"), drop (предмет, минимум, максимум), biome и chance (процент камней, которые становятся этой рудой)",
+      "Не более 4 define ore на мод; добавлены автодополнение и описания слов"
+     ]
+    },
+    "tr": {
+     "title": "BeaconScript define ore",
+     "items": [
+      "define ore \"ad\": base (iron, gold, copper, zinc'den biri), color (\"#e0245e\"), drop (eşya, en az, en çok), biome ve chance (bu cevhere dönüşen kaya yüzdesi) denetlenir",
+      "Mod başına en fazla 4 define ore; otomatik tamamlama ve kelime açıklamaları eklendi"
      ]
     }
    }
@@ -55,6 +167,70 @@
       "define mob \"name\": checks base (base mob), biome (start forest desert volcano jungle mesa rock mangrove ice), rate (spawn rate per minute) and max (most alive at once)",
       "Auto-complete for define lines (item/mob, inner line names, ingredient and biome lists) and word meanings added"
      ]
+    },
+    "es": {
+     "title": "BeaconScript define item y mob",
+     "items": [
+      "define item \"nombre\": revisa base (objeto base), recipe (ingredientes en el orden de las casillas de la mesa de trabajo, hasta 7) y makes (cantidad por fabricación)",
+      "define mob \"nombre\": revisa base (mob base), biome (start forest desert volcano jungle mesa rock mangrove ice), rate (aparición por minuto) y max (máximo vivos a la vez)",
+      "Se añadieron autocompletado para las líneas define (item/mob, nombres de las líneas internas, listas de ingredientes y biomas) y explicaciones de palabras"
+     ]
+    },
+    "fr": {
+     "title": "BeaconScript define item et mob",
+     "items": [
+      "define item \"nom\" : vérifie base (objet de base), recipe (ingrédients dans l'ordre des cases de l'établi, jusqu'à 7) et makes (quantité par fabrication)",
+      "define mob \"nom\" : vérifie base (mob de base), biome (start forest desert volcano jungle mesa rock mangrove ice), rate (apparitions par minute) et max (nombre maximum en même temps)",
+      "Complétion automatique des lignes define (item/mob, noms des lignes internes, listes d'ingrédients et de biomes) et explications des mots ajoutées"
+     ]
+    },
+    "de": {
+     "title": "BeaconScript define item und mob",
+     "items": [
+      "define item \"Name\": prüft base (Basisgegenstand), recipe (Zutaten in der Reihenfolge der Werkbankfelder, bis 7) und makes (Menge pro Herstellung)",
+      "define mob \"Name\": prüft base (Basis-Mob), biome (start forest desert volcano jungle mesa rock mangrove ice), rate (Spawnrate pro Minute) und max (höchstens gleichzeitig lebend)",
+      "Automatische Vervollständigung für define-Zeilen (item/mob, Namen der inneren Zeilen, Zutaten- und Biomlisten) und Worterklärungen ergänzt"
+     ]
+    },
+    "ja": {
+     "title": "BeaconScript define item と mob",
+     "items": [
+      "define item \"名前\": base（元になるアイテム）、recipe（作業台のマス順の材料、最大7マス）、makes（一度に作る数）を検査します",
+      "define mob \"名前\": base（元になるモブ）、biome（start forest desert volcano jungle mesa rock mangrove ice）、rate（1分に出る数）、max（同時に生きていられる最大数）を検査します",
+      "define の行の自動補完（item・mob、内側の行の名前、材料と地域の一覧）と単語の説明も追加しました"
+     ]
+    },
+    "zh": {
+     "title": "BeaconScript define item 与 mob",
+     "items": [
+      "define item \"名称\"：检查 base（基础物品）、recipe（按工作台格子顺序的材料，最多 7 格）和 makes（每次制作的数量）",
+      "define mob \"名称\"：检查 base（基础生物）、biome（start forest desert volcano jungle mesa rock mangrove ice）、rate（每分钟刷新的程度）和 max（同时存活的最大数量）",
+      "新增 define 行的自动补全（item/mob、内部行名、材料和生物群系列表）以及单词说明"
+     ]
+    },
+    "pt": {
+     "title": "BeaconScript define item e mob",
+     "items": [
+      "define item \"nome\": verifica base (item base), recipe (ingredientes na ordem dos espaços da bancada, até 7) e makes (quantidade por criação)",
+      "define mob \"nome\": verifica base (mob base), biome (start forest desert volcano jungle mesa rock mangrove ice), rate (surgimentos por minuto) e max (máximo vivos ao mesmo tempo)",
+      "Preenchimento automático para as linhas define (item/mob, nomes das linhas internas, listas de ingredientes e biomas) e explicações de palavras adicionados"
+     ]
+    },
+    "ru": {
+     "title": "BeaconScript define item и mob",
+     "items": [
+      "define item \"имя\": проверяет base (базовый предмет), recipe (ингредиенты по порядку ячеек верстака, до 7) и makes (количество за одно изготовление)",
+      "define mob \"имя\": проверяет base (базовый моб), biome (start forest desert volcano jungle mesa rock mangrove ice), rate (появление в минуту) и max (максимум живых одновременно)",
+      "Добавлены автодополнение строк define (item/mob, имена внутренних строк, списки ингредиентов и биомов) и описания слов"
+     ]
+    },
+    "tr": {
+     "title": "BeaconScript define item ve mob",
+     "items": [
+      "define item \"ad\": base (temel eşya), recipe (malzemeler iş masasındaki kare sırasıyla, en fazla 7 kare) ve makes (her üretimdeki adet) denetlenir",
+      "define mob \"ad\": base (temel mob), biome (start forest desert volcano jungle mesa rock mangrove ice), rate (dakikada çıkma oranı) ve max (aynı anda en fazla canlı sayısı) denetlenir",
+      "define satırları için otomatik tamamlama (item/mob, iç satır adları, malzeme ve biyom listeleri) ve kelime açıklamaları eklendi"
+     ]
     }
    }
   },
@@ -74,6 +250,70 @@
       "Variables must be written as {x}: {x} normal, {_x_} only inside this event, {:x:} shared (variable x without braces is an error)",
       "Shared variables {:x:} work in set, add, subtract, reset and if variable (names up to 17 characters)",
       "if variable {x} is 1: and is not work too, and the examples now use braces"
+     ]
+    },
+    "es": {
+     "title": "BeaconScript variables entre llaves",
+     "items": [
+      "Las variables deben escribirse como {x}: {x} normal, {_x_} solo dentro de este evento, {:x:} compartida (variable x sin llaves es un error)",
+      "Las variables compartidas {:x:} funcionan en set, add, subtract, reset e if variable (nombres de hasta 17 caracteres)",
+      "if variable {x} is 1: y is not también funcionan, y los ejemplos ya usan llaves"
+     ]
+    },
+    "fr": {
+     "title": "BeaconScript variables entre accolades",
+     "items": [
+      "Les variables s'écrivent {x} : {x} normal, {_x_} seulement dans cet événement, {:x:} partagée (variable x sans accolades = erreur)",
+      "Les variables partagées {:x:} marchent aussi dans set, add, subtract, reset et if variable (noms jusqu'à 17 caractères)",
+      "if variable {x} is 1: et is not fonctionnent aussi, et les exemples utilisent maintenant les accolades"
+     ]
+    },
+    "de": {
+     "title": "BeaconScript Variablen in geschweiften Klammern",
+     "items": [
+      "Variablen müssen als {x} geschrieben werden: {x} normal, {_x_} nur innerhalb dieses Ereignisses, {:x:} geteilt (variable x ohne Klammern ist ein Fehler)",
+      "Geteilte Variablen {:x:} funktionieren auch bei set, add, subtract, reset und if variable (Namen bis 17 Zeichen)",
+      "if variable {x} is 1: und is not funktionieren ebenfalls, die Beispiele nutzen jetzt geschweifte Klammern"
+     ]
+    },
+    "ja": {
+     "title": "BeaconScript 変数は中かっこで",
+     "items": [
+      "変数は必ず {x} と書きます。{x} は通常、{_x_} はこのイベント内だけ、{:x:} は共有変数です（中かっこのない variable x はエラー）",
+      "共有変数 {:x:} は set・add・subtract・reset・if variable でも使えます（名前は17文字まで）",
+      "if variable {x} is 1: と is not も使えます。例文も中かっこに変えました"
+     ]
+    },
+    "zh": {
+     "title": "BeaconScript 变量用花括号",
+     "items": [
+      "变量必须写成 {x}：{x} 为普通变量，{_x_} 仅在此事件中有效，{:x:} 为共享变量（没有花括号的 variable x 会报错）",
+      "共享变量 {:x:} 可用于 set、add、subtract、reset 和 if variable（名称最多 17 个字符）",
+      "if variable {x} is 1: 和 is not 也可以用，示例也已改为花括号"
+     ]
+    },
+    "pt": {
+     "title": "BeaconScript variáveis entre chaves",
+     "items": [
+      "As variáveis devem ser escritas como {x}: {x} normal, {_x_} apenas dentro deste evento, {:x:} compartilhada (variable x sem chaves é erro)",
+      "As variáveis compartilhadas {:x:} funcionam em set, add, subtract, reset e if variable (nomes de até 17 caracteres)",
+      "if variable {x} is 1: e is not também funcionam, e os exemplos agora usam chaves"
+     ]
+    },
+    "ru": {
+     "title": "BeaconScript переменные в фигурных скобках",
+     "items": [
+      "Переменные пишутся как {x}: {x} обычная, {_x_} только внутри этого события, {:x:} общая (переменная x без скобок — ошибка)",
+      "Общие переменные {:x:} работают в set, add, subtract, reset и if variable (имена до 17 символов)",
+      "if variable {x} is 1: и is not тоже работают, а примеры теперь используют скобки"
+     ]
+    },
+    "tr": {
+     "title": "BeaconScript değişkenler süslü parantezle",
+     "items": [
+      "Değişkenler {x} biçiminde yazılmalıdır: {x} normal, {_x_} yalnızca bu olay içinde, {:x:} ortak değişkendir (süslü parantezsiz variable x hatadır)",
+      "Ortak değişkenler {:x:}, set, add, subtract, reset ve if variable ile kullanılabilir (adlar 17 karaktere kadar)",
+      "if variable {x} is 1: ve is not da çalışır; örnekler artık süslü parantez kullanıyor"
      ]
     }
    }
@@ -95,6 +335,70 @@
       "Using else without an if, twice, or an else if after else is reported as an error",
       "else and else if are autocompleted"
      ]
+    },
+    "es": {
+     "title": "BeaconScript else y else if",
+     "items": [
+      "else: y else if condición: pueden ir detrás de un bloque if o chance",
+      "Usar else sin if, dos veces, o un else if después de else se marca como error",
+      "else y else if se autocompletan"
+     ]
+    },
+    "fr": {
+     "title": "BeaconScript else et else if",
+     "items": [
+      "else: et else if condition: peuvent suivre un bloc if ou chance",
+      "Utiliser else sans if, deux fois, ou un else if après else est signalé comme erreur",
+      "else et else if sont complétés automatiquement"
+     ]
+    },
+    "de": {
+     "title": "BeaconScript else und else if",
+     "items": [
+      "else: und else if Bedingung: können direkt unter einem if- oder chance-Block stehen",
+      "else ohne if, zweimal verwendet oder ein else if nach else wird als Fehler gemeldet",
+      "else und else if werden automatisch vervollständigt"
+     ]
+    },
+    "ja": {
+     "title": "BeaconScript else と else if",
+     "items": [
+      "if・chance ブロックの直後に else: と else if 条件: を書けます",
+      "if なしの else、else の二重使用、else の後の else if はエラーとして知らせます",
+      "else と else if は自動補完されます"
+     ]
+    },
+    "zh": {
+     "title": "BeaconScript else 与 else if",
+     "items": [
+      "else: 和 else if 条件: 可以写在 if 或 chance 块之后",
+      "没有 if 的 else、两次 else，或 else 之后的 else if 会被报告为错误",
+      "else 和 else if 支持自动补全"
+     ]
+    },
+    "pt": {
+     "title": "BeaconScript else e else if",
+     "items": [
+      "else: e else if condição: podem vir depois de um bloco if ou chance",
+      "Usar else sem if, duas vezes, ou um else if depois de else é relatado como erro",
+      "else e else if são preenchidos automaticamente"
+     ]
+    },
+    "ru": {
+     "title": "BeaconScript else и else if",
+     "items": [
+      "else: и else if условие: могут идти после блока if или chance",
+      "else без if, два else подряд или else if после else сообщаются как ошибка",
+      "else и else if дополняются автоматически"
+     ]
+    },
+    "tr": {
+     "title": "BeaconScript else ve else if",
+     "items": [
+      "else: ve else if koşul: bir if ya da chance bloğunun hemen ardına yazılabilir",
+      "if olmadan else, iki kez else veya else'ten sonra else if kullanımı hata olarak bildirilir",
+      "else ve else if otomatik tamamlanır"
+     ]
     }
    }
   },
@@ -112,6 +416,62 @@
      "items": [
       "Color and style codes inside text (\\a \\b \\e \\f \\0-\\8 \\d, \\u underline, \\l bold, \\r clear) are accepted",
       "The rule preview shows that text with its colors and effects"
+     ]
+    },
+    "es": {
+     "title": "BeaconScript códigos de color del texto",
+     "items": [
+      "Se aceptan los códigos de color y estilo dentro del texto (\\a \\b \\e \\f \\0-\\8 \\d, \\u subrayado, \\l negrita, \\r quitar)",
+      "La vista de reglas muestra ese texto con sus colores y efectos"
+     ]
+    },
+    "fr": {
+     "title": "BeaconScript codes de couleur du texte",
+     "items": [
+      "Les codes de couleur et de style dans le texte (\\a \\b \\e \\f \\0-\\8 \\d, \\u souligné, \\l gras, \\r effacer) sont acceptés",
+      "L'aperçu des règles affiche ce texte avec ses couleurs et effets"
+     ]
+    },
+    "de": {
+     "title": "BeaconScript Textfarbcodes",
+     "items": [
+      "Farb- und Stilcodes im Text (\\a \\b \\e \\f \\0-\\8 \\d, \\u unterstrichen, \\l fett, \\r zurücksetzen) werden akzeptiert",
+      "Die Regelansicht zeigt den Text mit seinen Farben und Effekten"
+     ]
+    },
+    "ja": {
+     "title": "BeaconScript 文字の色コード",
+     "items": [
+      "文字の中の色・装飾コード（\\a \\b \\e \\f \\0-\\8 \\d、\\u 下線、\\l 太字、\\r 解除）はエラーにしません",
+      "ルールのプレビューで、その文字が色と効果のまま表示されます"
+     ]
+    },
+    "zh": {
+     "title": "BeaconScript 文字颜色代码",
+     "items": [
+      "文字中的颜色和样式代码（\\a \\b \\e \\f \\0-\\8 \\d、\\u 下划线、\\l 粗体、\\r 清除）可以正常使用",
+      "规则预览中，该文字会以其颜色和效果显示"
+     ]
+    },
+    "pt": {
+     "title": "BeaconScript códigos de cor do texto",
+     "items": [
+      "Os códigos de cor e estilo dentro do texto (\\a \\b \\e \\f \\0-\\8 \\d, \\u sublinhado, \\l negrito, \\r limpar) são aceitos",
+      "A visualização de regras mostra esse texto com suas cores e efeitos"
+     ]
+    },
+    "ru": {
+     "title": "BeaconScript коды цвета текста",
+     "items": [
+      "Коды цвета и стиля внутри текста (\\a \\b \\e \\f \\0-\\8 \\d, \\u подчёркивание, \\l полужирный, \\r сброс) принимаются",
+      "В просмотре правил текст показан с его цветами и эффектами"
+     ]
+    },
+    "tr": {
+     "title": "BeaconScript metin renk kodları",
+     "items": [
+      "Metin içindeki renk ve stil kodları (\\a \\b \\e \\f \\0-\\8 \\d, \\u altı çizili, \\l kalın, \\r temizle) kabul edilir",
+      "Kural önizlemesi, o metni renkleri ve efektleriyle gösterir"
      ]
     }
    }
@@ -135,6 +495,78 @@
       "publish_aliases with aliases_name and use_command is checked; loop goes up to 10000, and on damage of A by B and on craft <item> are understood",
       "Removed the old publish_short, expose and provide"
      ]
+    },
+    "es": {
+     "title": "BeaconScript señales, cálculos, publish_aliases",
+     "items": [
+      "Revisa y autocompleta las líneas signal send, on signal y if signal receive",
+      "Entiende multiply/divide, add/subtract variable y set variable ... to variable, nombre de jugador, uuid de jugador o distance (variables como {x} o x)",
+      "Se revisa publish_aliases con aliases_name y use_command; loop llega hasta 10000, y se entienden on damage of A by B y on craft <objeto>",
+      "Se quitaron los antiguos publish_short, expose y provide"
+     ]
+    },
+    "fr": {
+     "title": "BeaconScript signaux, calculs, publish_aliases",
+     "items": [
+      "Vérifie et complète automatiquement les lignes signal send, on signal et if signal receive",
+      "Comprend multiply/divide, add/subtract variable et set variable ... to variable, nom du joueur, uuid du joueur ou distance (variables sous la forme {x} ou x)",
+      "publish_aliases avec aliases_name et use_command est vérifié ; loop va jusqu'à 10000, et on damage of A by B et on craft <objet> sont compris",
+      "Les anciens publish_short, expose et provide ont été supprimés"
+     ]
+    },
+    "de": {
+     "title": "BeaconScript Signale, Rechnen, publish_aliases",
+     "items": [
+      "Prüft und vervollständigt die Zeilen signal send, on signal und if signal receive",
+      "Versteht multiply/divide, add/subtract variable und set variable ... to variable, Spielername, Spieler-uuid oder distance (Variablen als {x} oder x)",
+      "publish_aliases mit aliases_name und use_command wird geprüft; loop geht bis 10000, und on damage of A by B sowie on craft <Gegenstand> werden verstanden",
+      "Die alten publish_short, expose und provide wurden entfernt"
+     ]
+    },
+    "ja": {
+     "title": "BeaconScript 信号・計算・publish_aliases",
+     "items": [
+      "signal send / on signal / if signal receive の行を検査し、自動補完します",
+      "multiply/divide、add/subtract variable、set variable ... to variable・プレイヤー名・プレイヤーuuid・distance を理解します（変数は {x} または x）",
+      "aliases_name と use_command を使う publish_aliases を検査します。loop は 10000 回まで、on damage of A by B と on craft <アイテム> も理解します",
+      "古い publish_short・expose・provide は削除しました"
+     ]
+    },
+    "zh": {
+     "title": "BeaconScript 信号、计算、publish_aliases",
+     "items": [
+      "检查并自动补全 signal send / on signal / if signal receive 行",
+      "能识别 multiply/divide、add/subtract variable，以及 set variable ... to variable、玩家名、玩家 uuid 或 distance（变量写作 {x} 或 x）",
+      "检查带 aliases_name 和 use_command 的 publish_aliases；loop 最多 10000 次，并能识别 on damage of A by B 和 on craft <物品>",
+      "已移除旧的 publish_short、expose 和 provide"
+     ]
+    },
+    "pt": {
+     "title": "BeaconScript sinais, cálculos, publish_aliases",
+     "items": [
+      "Verifica e completa automaticamente as linhas signal send, on signal e if signal receive",
+      "Entende multiply/divide, add/subtract variable e set variable ... to variable, nome do jogador, uuid do jogador ou distance (variáveis como {x} ou x)",
+      "publish_aliases com aliases_name e use_command é verificado; loop vai até 10000, e on damage of A by B e on craft <item> são entendidos",
+      "Os antigos publish_short, expose e provide foram removidos"
+     ]
+    },
+    "ru": {
+     "title": "BeaconScript сигналы, вычисления, publish_aliases",
+     "items": [
+      "Проверяет и дополняет строки signal send, on signal и if signal receive",
+      "Понимает multiply/divide, add/subtract variable и set variable ... to variable, имя игрока, uuid игрока или distance (переменные как {x} или x)",
+      "Проверяется publish_aliases с aliases_name и use_command; loop работает до 10000, понимаются on damage of A by B и on craft <предмет>",
+      "Старые publish_short, expose и provide удалены"
+     ]
+    },
+    "tr": {
+     "title": "BeaconScript sinyaller, hesaplar, publish_aliases",
+     "items": [
+      "signal send, on signal ve if signal receive satırlarını denetler ve otomatik tamamlar",
+      "multiply/divide, add/subtract variable ve set variable ... to variable; oyuncu adı, oyuncu uuid'si veya distance (değişkenler {x} ya da x biçiminde) anlaşılır",
+      "aliases_name ve use_command ile publish_aliases denetlenir; loop 10000'e kadar gider, on damage of A by B ve on craft <eşya> anlaşılır",
+      "Eski publish_short, expose ve provide kaldırıldı"
+     ]
     }
    }
   },
@@ -154,6 +586,70 @@
       "Checks and autocompletes the publish_short: block (var, aliases, from uuid, type, scope, sign, rule) and the expose \"var\" to \"%alias%\" line",
       "Also tells you when sign, bind and uuid do not match, or the expose line is missing",
       "Understands provide %value%, ... lines; listed values and aliases are no longer flagged as unknown placeholders"
+     ]
+    },
+    "es": {
+     "title": "BeaconScript publish_short, expose, provide",
+     "items": [
+      "Revisa y autocompleta el bloque publish_short: (var, aliases, from uuid, type, scope, sign, rule) y la línea expose \"var\" to \"%alias%\"",
+      "Avisa también si sign, bind y uuid no coinciden, o si falta la línea expose",
+      "Entiende las líneas provide %valor%, ...; los valores y alias indicados ya no se marcan como marcadores desconocidos"
+     ]
+    },
+    "fr": {
+     "title": "BeaconScript publish_short, expose, provide",
+     "items": [
+      "Vérifie et complète automatiquement le bloc publish_short: (var, aliases, from uuid, type, scope, sign, rule) et la ligne expose \"var\" to \"%alias%\"",
+      "Signale aussi quand sign, bind et uuid ne correspondent pas, ou quand la ligne expose manque",
+      "Reconnaît les lignes provide %valeur%, ... ; les valeurs et alias indiqués ne sont plus signalés comme des espaces réservés inconnus"
+     ]
+    },
+    "de": {
+     "title": "BeaconScript publish_short, expose, provide",
+     "items": [
+      "Prüft und vervollständigt den publish_short:-Block (var, aliases, from uuid, type, scope, sign, rule) und die Zeile expose \"var\" to \"%alias%\"",
+      "Zeigt auch an, wenn sign, bind und uuid nicht zusammenpassen oder die expose-Zeile fehlt",
+      "Versteht provide %Wert%, ...-Zeilen; aufgelistete Werte und Aliase werden nicht mehr als unbekannte Platzhalter markiert"
+     ]
+    },
+    "ja": {
+     "title": "BeaconScript publish_short・expose・provide",
+     "items": [
+      "publish_short: のブロック（var, aliases, from uuid, type, scope, sign, rule）と expose \"変数\" to \"%別名%\" の行を検査し、自動補完します",
+      "sign・bind・uuid が合っているか、expose の行があるかも知らせます",
+      "provide %値%, … の行を認識し、書いた値と aliases の別名は不明なプレースホルダーとして扱いません"
+     ]
+    },
+    "zh": {
+     "title": "BeaconScript publish_short、expose、provide",
+     "items": [
+      "检查并自动补全 publish_short: 块（var、aliases、from uuid、type、scope、sign、rule）和 expose \"变量\" to \"%别名%\" 行",
+      "还会提示 sign、bind、uuid 是否匹配，或缺少 expose 行",
+      "能识别 provide %值%, … 行；列出的值和 aliases 别名不再被当作未知占位符"
+     ]
+    },
+    "pt": {
+     "title": "BeaconScript publish_short, expose, provide",
+     "items": [
+      "Verifica e completa automaticamente o bloco publish_short: (var, aliases, from uuid, type, scope, sign, rule) e a linha expose \"var\" to \"%alias%\"",
+      "Também avisa quando sign, bind e uuid não batem, ou quando falta a linha expose",
+      "Entende as linhas provide %valor%, ...; os valores e aliases listados deixam de ser marcados como marcadores desconhecidos"
+     ]
+    },
+    "ru": {
+     "title": "BeaconScript publish_short, expose, provide",
+     "items": [
+      "Проверяет и дополняет блок publish_short: (var, aliases, from uuid, type, scope, sign, rule) и строку expose \"var\" to \"%alias%\"",
+      "Также сообщает, если sign, bind и uuid не совпадают или нет строки expose",
+      "Понимает строки provide %значение%, ...; перечисленные значения и aliases больше не помечаются как неизвестные заполнители"
+     ]
+    },
+    "tr": {
+     "title": "BeaconScript publish_short, expose, provide",
+     "items": [
+      "publish_short: bloğunu (var, aliases, from uuid, type, scope, sign, rule) ve expose \"değişken\" to \"%takma ad%\" satırını denetler ve otomatik tamamlar",
+      "sign, bind ve uuid değerlerinin uyuşmadığını ya da expose satırının eksik olduğunu da bildirir",
+      "provide %değer%, ... satırlarını anlar; listelenen değerler ve aliases takma adları artık bilinmeyen yer tutucu olarak işaretlenmez"
      ]
     }
    }

@@ -10,9 +10,6 @@ video/ + index.html 카드 + patchnotes/video.json + video/ 안 한국어 전부
 patchnotes/score.json | Fry Score v2 항목 (en 번역 없음), score/app.js 한국어 메시지 | score v2 | 2026-11-05
 patchnotes/video.json | Fry Video v2 항목 (en 번역 없음), video/ 안 한국어 | video v2 | 2026-11-05
 patchnotes/draw.json | Fry Draw v2 항목 (en 번역 없음), draw/app.js 한국어 메시지 | draw v2 | 2026-11-05
-patchnotes/video.json | Fry Video v3 슬라이더 숫자칸 (en 번역 없음) | video v3 | 2026-11-05
-patchnotes/video.json | Fry Video v4 슬라이더·글자 입력 고침 (en 번역 없음) | video v4 | 2026-11-05
-patchnotes/video.json | Fry Video v5 글자체·효과·방향 (en 번역 없음) | video v5 | 2026-11-05
 patchnotes/python.json | BeaconScript b192 항목 (en만) | python v7 | 2026-11-05
 patchnotes/python.json | BeaconScript b193 항목 (en만) | python v8 | 2026-11-05
 patchnotes/python.json | BeaconScript b194·아이템 미리보기 항목 (en만) | python v9 | 2026-11-05
@@ -29,42 +26,19 @@ patchnotes/python.json | BeaconScript eat·api potato 항목 (en만) | python v2
 patchnotes/python.json | BeaconScript use_mod_uuid 항목 (en만) | python v21 | 2026-11-05
 python/index.html·app.js | 찾기 창 글자(찾기, 없음, 툴팁) 번역 안 됨 | python v22 | 2026-11-05
 patchnotes/python.json | Ctrl+F 찾기 항목 (en만) | python v22 | 2026-11-05
-patchnotes/python.json | BeaconScript publish_short·provide 항목 (en만) | python v31 | 2026-11-05
-patchnotes/python.json | BeaconScript 신호·publish_aliases 항목 (en만) | python v32 | 2026-11-05
-patchnotes/python.json | BeaconScript 글자 색 코드 항목 (en만) | python v33 | 2026-11-05
-patchnotes/python.json | BeaconScript else·else if 항목 (en만) | python v34 | 2026-11-05
-patchnotes/python.json | BeaconScript 변수 중괄호 항목 (en만) | python v35 | 2026-11-06
 patchnotes/draw.json | Fry Draw v3 항목 (en만), draw/app.js 선 모양·화살표·섞기·위치와 크기 한국어 문구 | draw v3 | 2026-11-06
-patchnotes/video.json | Fry Video v6 타임라인: 표시·줄 잠금·당겨 지우기·멈춘 장면 (en 번역 없음) | video v6 | 2026-11-06
-patchnotes/score.json | Fry Score v3 항목 (en만) | score v3 | 2026-11-06
 score/app.js | Fry Score v3 한국어 메시지·버튼 | score v3 | 2026-11-06
-patchnotes/score.json | Fry Score v4 항목 (en만) | score v4 | 2026-11-06
 score/app.js | Fry Score v4 한국어 메시지·버튼 | score v4 | 2026-11-06
-patchnotes/video.json | Fry Video v7 화면: 자르기·모양·섞기·따뜻함·가장자리 어둡게 (en 번역 없음) | video v7 | 2026-11-06
-patchnotes/video.json | Fry Video v8 내보내기 선택지·자막 파일·소리 자동 맞춤 (en 번역 없음) | video v8 | 2026-11-06
-patchnotes/score.json | Fry Score v5 항목 (en만) | score v5 | 2026-11-06
 score/app.js | Fry Score v5 한국어 메시지·버튼 | score v5 | 2026-11-06
-patchnotes/score.json | Fry Score v6 항목 (en만) | score v6 | 2026-11-06
 score/app.js | Fry Score v6 한국어 메시지·버튼 | score v6 | 2026-11-06
 patchnotes/draw.json | Fry Draw v4 항목 (en만), draw/app.js 팔레트·스포이트·레이어·달라붙기 한국어 문구 | draw v4 | 2026-11-06
-patchnotes/video.json | Fry Video v9 소리 섞기·핀치 확대·휴대폰 화면 정리 (en 번역 없음) | video v9 | 2026-11-06
 patchnotes/draw.json | Fry Draw v5 항목 (en만), draw/app.js 펜·점 고치기 한국어 문구 | draw v5 | 2026-11-06
-patchnotes/video.json | Fry Video v10 GIF 만들기·글자 스타일과 움직임 (en 번역 없음) | video v10 | 2026-11-06
-patchnotes/video.json | Fry Video v11 거꾸로 재생·빠르기 변화·새 전환·틈 없애기 (en 번역 없음) | video v11 | 2026-11-06
-patchnotes/score.json | Fry Score v7 항목 (en만) | score v7 | 2026-11-06
 score/app.js | Fry Score v7 한국어 메시지·버튼 | score v7 | 2026-11-06
-patchnotes/video.json | Fry Video v12 넣기 탭: 템플릿·스티커·작은 화면, 프로젝트 파일, 챕터 (en 번역 없음) | video v12 | 2026-11-06
-patchnotes/score.json | Fry Score v8 항목 (en만) | score v8 | 2026-11-06
 score/app.js | Fry Score v8 한국어 메시지·버튼 | score v8 | 2026-11-06
 patchnotes/draw.json | Fry Draw v6 항목 (en만), draw/app.js 글자 편집·선 따라 쓰기 한국어 문구 | draw v6 | 2026-11-06
-patchnotes/video.json | Fry Video v13 키프레임·소리 곡선·잡음 끊기·무음 자르기·여러 개 고르기 (en 번역 없음) | video v13 | 2026-11-06
-patchnotes/score.json | Fry Score v9 항목 (en만) | score v9 | 2026-11-06
 score/app.js | Fry Score v9 한국어 메시지·버튼 | score v9 | 2026-11-06
-patchnotes/video.json | Fry Video v14 영어 화면·에코/리버브·화면 속 표시 그림·카운트다운 (en 번역 없음) | video v14 | 2026-11-06
 video/strings.js | Fry Video 화면 글자 전체 (en만, 나머지 13개 언어는 영어로 보임) | video v14 | 2026-11-06
-patchnotes/score.json | Fry Score v10 항목 (en만) | score v10 | 2026-11-06
 score/app.js | Fry Score v10 한국어 메시지·버튼 | score v10 | 2026-11-06
-patchnotes/score.json | Fry Score v11 항목 (en만) | score v11 | 2026-11-06
 score/app.js | Fry Score v11 한국어 메시지·버튼 | score v11 | 2026-11-06
 patchnotes/draw.json | Fry Draw v7 항목 (en만), draw/app.js 그라데이션·무늬·그림자·마스크 한국어 문구 | draw v7 | 2026-11-06
 patchnotes/draw.json | Fry Draw v8 항목 (en만), draw/app.js 내보내기 창 한국어 문구 | draw v8 | 2026-11-06
@@ -72,77 +46,37 @@ patchnotes/draw.json | Fry Draw v9 항목 (en만), draw/app.js 눈금자·가이
 patchnotes/draw.json | Fry Draw v10 항목 (en만), draw/app.js 페이지·색 보정·두 손가락 한국어 문구 | draw v10 | 2026-11-06
 patchnotes/draw.json | Fry Draw v11 항목 (en만), draw/app.js 붓·도형 모음·벡터 따기 한국어 문구 | draw v11 | 2026-11-06
 patchnotes/draw.json | Fry Draw v12 항목 (en만), draw/app.js 그라데이션 손잡이·글자 윤곽·크기 목록 한국어 문구 | draw v12 | 2026-11-06
-patchnotes/score.json | Fry Score v12 항목 (en만) | score v12 | 2026-11-06
 score/app.js | Fry Score v12 한국어 메시지·버튼 | score v12 | 2026-11-06
-patchnotes/video.json | Fry Video v15 색 보정·샤프닝·단축키·프로젝트 틀 (en 번역 없음) | video v15 | 2026-11-06
-patchnotes/video.json | Fry Video v16 흔들림 줄이기·클립 묶기 (en 번역 없음) | video v16 | 2026-11-06
-patchnotes/score.json | Fry Score v13 항목 (en만) | score v13 | 2026-11-06
 score/app.js | Fry Score v13 한국어 메시지·버튼 | score v13 | 2026-11-06
 patchnotes/draw.json | Fry Draw v13 항목 (en만), draw/app.js 심볼·묶음 안 고치기 한국어 문구 | draw v13 | 2026-11-06
-patchnotes/score.json | Fry Score v14 항목 (en만) | score v14 | 2026-11-06
 score/app.js | Fry Score v14 한국어 메시지·버튼 | score v14 | 2026-11-06
-patchnotes/video.json | Fry Video v17 전환 5개·빠르기 프리셋·글자 움직임 2개 (en 번역 없음) | video v17 | 2026-11-06
 draw/app.js | SVG 가져오기 안내·붓 종류 한국어 문구 | draw v14 | 2026-11-06
-patchnotes/score.json | Fry Score v15 항목 (en만) | score v15 | 2026-11-06
 score/app.js | Fry Score v15 한국어 메시지·버튼 | score v15 | 2026-11-06
-patchnotes/video.json | Fry Video v18 미리보기에서 바로 옮기고 크기 바꾸기 (en 번역 없음) | video v18 | 2026-11-06
-patchnotes/video.json | Fry Video v19 타임라인 미리보기 그림·색 표시·반복 재생 (en 번역 없음) | video v19 | 2026-11-06
-patchnotes/video.json | Fry Video v20 장면 자동 나누기·소리 크기 표시·내보낼 구간 고르기 (en 번역 없음) | video v20 | 2026-11-06
 video/strings.js | Fry Video 장면 나누기·내보낼 구간 UI 문구 (en 추가됨, 다른 언어 없음) | video v20 | 2026-11-06
-patchnotes/score.json | Fry Score v16 항목 (en만) | score v16 | 2026-11-06
 score/app.js | Fry Score v16 한국어 메시지·버튼 | score v16 | 2026-11-06
 draw/app.js | 합치기·정렬·단축키 한국어 문구 | draw v15 | 2026-11-06
-patchnotes/score.json | Fry Score v17 항목 (en만) | score v17 | 2026-11-06
 score/app.js | Fry Score v17 한국어 메시지·버튼 | score v17 | 2026-11-06
 draw/app.js | 모양 비틀기·선 따라 놓기 한국어 문구 | draw v16 | 2026-11-06
-patchnotes/score.json | Fry Score v18 항목 (en만) | score v18 | 2026-11-06
 score/app.js | Fry Score v18 한국어 메시지·버튼 | score v18 | 2026-11-06
-patchnotes/score.json | Fry Score v19 항목 (en만) | score v19 | 2026-11-06
 score/app.js | Fry Score v19 한국어 메시지·버튼 | score v19 | 2026-11-06
 draw/app.js | 글상자·선 그라데이션·글꼴 한국어 문구 | draw v17 | 2026-11-06
-patchnotes/video.json | Fry Video v21 클립 이름·앞뒤 자르기·편집점 이동 (en 번역 없음) | video v21 | 2026-11-06
-patchnotes/score.json | Fry Score v20 항목 (en만) | score v20 | 2026-11-06
 score/app.js | Fry Score v20 한국어 메시지·버튼 | score v20 | 2026-11-06
-patchnotes/video.json | Fry Video v22 흐린 배경 채우기·글자 맞춤·좌우 소리·파일 바꾸기 (en 번역 없음) | video v22 | 2026-11-06
 draw/app.js | 단계 만들기·크기 표시·윤곽선 보기 한국어 문구 | draw v18 | 2026-11-06
-patchnotes/video.json | Fry Video v23 모자이크·필름 입자·카메라 흔들림·영화 띠·음악 길이 맞추기 (en 번역 없음) | video v23 | 2026-11-06
 draw/app.js | 모서리 둥글게·조각으로 떼어내기 한국어 문구 | draw v19 | 2026-11-06
 draw/app.js | 하나씩 내보내기·ZIP 한국어 문구 | draw v20 | 2026-11-06
-patchnotes/score.json | Fry Score v21 항목 (en만) | score v21 | 2026-11-06
 score/app.js | Fry Score v21 한국어 메시지·버튼 | score v21 | 2026-11-06
 draw/app.js | 그림 다루기 한국어 문구 | draw v21 | 2026-11-06
 draw/app.js | 손떨림 보정 한국어 문구 | draw v22 | 2026-11-06
-patchnotes/video.json | Fry Video v24 박자 편집·이어 붙이기·처음 끝 페이드 (en 번역 없음) | video v24 | 2026-11-06
-patchnotes/video.json | Fry Video v25 시간으로 가기·자동 줄바꿈·크레딧·반복·자막 밀기 (en 번역 없음) | video v25 | 2026-11-06
-patchnotes/video.json | Fry Video v26 소리 톤·효과 복사 붙여넣기·자석 끄기 (en 번역 없음) | video v26 | 2026-11-06
-patchnotes/score.json | Fry Score v30 항목 (en만) | score v30 | 2026-11-06
 score/app.js | Fry Score v30 한국어 메시지·버튼 | score v30 | 2026-11-06
-patchnotes/video.json | Fry Video v27 자동 색 보정·그라데이션 도형·둥근 글자 상자·끝까지 늘리기 (en 번역 없음) | video v27 | 2026-11-06
-patchnotes/video.json | Fry Video v28 미리보기 속도·선택 확대·가운데 자르기·보조선 (en 번역 없음) | video v28 | 2026-11-06
-patchnotes/video.json | Fry Video v29 물들이기·거울 대칭·빠르기 버튼·버전 저장 (en 번역 없음) | video v29 | 2026-11-06
-patchnotes/score.json | Fry Score v31 항목 (en만) | score v31 | 2026-11-06
 score/app.js | Fry Score v31 한국어 메시지·버튼 | score v31 | 2026-11-06
-patchnotes/score.json | Fry Score v32 항목 (en만) | score v32 | 2026-11-06
 score/app.js | Fry Score v32 한국어 메시지·버튼 | score v32 | 2026-11-06
-patchnotes/score.json | Fry Score v33 항목 (en만) | score v33 | 2026-11-06
 score/app.js | Fry Score v33 한국어 메시지·버튼 | score v33 | 2026-11-06
-patchnotes/score.json | Fry Score v34 항목 (en만) | score v34 | 2026-11-06
 score/app.js | Fry Score v34 한국어 메시지·버튼 | score v34 | 2026-11-06
-patchnotes/score.json | Fry Score v35 항목 (en만) | score v35 | 2026-11-06
 score/app.js | Fry Score v35 한국어 메시지·버튼 | score v35 | 2026-11-06
-patchnotes/video.json | Fry Video v30 9칸 위치 맞추기·안 쓰는 파일 정리·프레임 이동 키 (en 번역 없음) | video v30 | 2026-11-06
 draw/app.js | 효과 모음·사라지기 한국어 문구 | draw v23 | 2026-11-06
-patchnotes/video.json | Fry Video v31 그라데이션 글자·그림자 색·잔상·소리 채우기·90도 돌리기 (en 번역 없음) | video v31 | 2026-11-06
 draw/app.js | 글자 휘기·어울리는 색·색 뽑기 한국어 문구 | draw v24 | 2026-11-06
-patchnotes/video.json | Fry Video v32 장면 전환 6가지 더·한꺼번에 넣기 (en 번역 없음) | video v32 | 2026-11-06
 draw/app.js | 버전 저장·시작 틀 한국어 문구 | draw v25 | 2026-11-06
-patchnotes/python.json | BeaconScript define item·mob 항목 (en만) | python v36 | 2026-11-06
-patchnotes/python.json | BeaconScript define ore 항목 (en만) | python v37 | 2026-11-06
-patchnotes/python.json | BeaconScript define structure·build 항목 (en만) | python v38 | 2026-11-06
-patchnotes/score.json | Fry Score v36 항목 (en만) | score v36 | 2026-11-06
 score/app.js | Fry Score v36 한국어 메시지·버튼 | score v36 | 2026-11-06
 index.html | 푸터 'Claude와 연결하기' 링크 | site | 2026-11-06
 claude-key/index.html | Claude와 연결하기 페이지 한국어 글자 | site | 2026-11-06
-patchnotes/ai.json | tarius 2.1 항목 (en만) | ai v66 | 2026-11-07
 index.html | 첫 화면 'Claude로 쉽고 빠르게' 카드 제목·설명·링크 | site | 2026-11-07
-patchnotes/ai.json | lectus 2.1 항목 (en만) | ai v67 | 2026-11-07

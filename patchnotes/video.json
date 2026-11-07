@@ -17,6 +17,62 @@
       "Six new transitions: Wipe from top, Split from centre, Blinds, Pixelate in, Bounce in and Whip pan",
       "Project tab 'Transition on every cut' applies one transition to every touching join on Video 1 at once"
      ]
+    },
+    "es": {
+     "title": "Seis transiciones más, aplicar a cada corte",
+     "items": [
+      "Seis nuevas transiciones: barrido desde arriba, división desde el centro, persianas, píxel de entrada, rebote de entrada y paneo rápido",
+      "La pestaña Proyecto 'Transición en cada corte' aplica una transición a todas las uniones contiguas de la pista 1 de una vez"
+     ]
+    },
+    "fr": {
+     "title": "Six transitions de plus, appliquer à chaque coupe",
+     "items": [
+      "Six nouvelles transitions : balayage depuis le haut, scission depuis le centre, stores, pixellisation d'entrée, rebond d'entrée et panoramique rapide",
+      "L'onglet Projet « Transition à chaque coupe » applique une transition à toutes les jonctions de la piste 1 d'un coup"
+     ]
+    },
+    "de": {
+     "title": "Sechs weitere Übergänge, auf jeden Schnitt anwenden",
+     "items": [
+      "Sechs neue Übergänge: Wischen von oben, Teilung von der Mitte, Jalousien, Pixelieren beim Einblenden, Hüpfen beim Einblenden und Schnellschwenk",
+      "Das Projekt-Register „Übergang bei jedem Schnitt“ wendet einen Übergang auf alle Anschlüsse auf Videospur 1 gleichzeitig an"
+     ]
+    },
+    "ja": {
+     "title": "切り替えをさらに6種、すべてのカットに適用",
+     "items": [
+      "切り替えを6種追加：上からのワイプ、中央からの分割、ブラインド、ピクセル化で登場、弾んで登場、高速パン",
+      "プロジェクトタブの「すべてのカットに切り替え」で、ビデオ1のつなぎ目すべてに一度に同じ切り替えを入れられます"
+     ]
+    },
+    "zh": {
+     "title": "再增六种转场，应用到每个切点",
+     "items": [
+      "新增六种转场：从顶部擦除、从中心分割、百叶窗、像素化入场、弹跳入场和快速摇移",
+      "项目页“每个切点应用转场”可一次性在视频 1 轨道的每个相邻片段之间应用同一转场"
+     ]
+    },
+    "pt": {
+     "title": "Mais seis transições, aplicar a cada corte",
+     "items": [
+      "Seis novas transições: deslizar de cima, dividir a partir do centro, persianas, pixelizar ao entrar, quicar ao entrar e panorâmica rápida",
+      "A aba Projeto 'Transição em cada corte' aplica uma transição em todas as junções da faixa de vídeo 1 de uma vez"
+     ]
+    },
+    "ru": {
+     "title": "Ещё шесть переходов, применить ко всем стыкам",
+     "items": [
+      "Шесть новых переходов: шторка сверху, разделение от центра, жалюзи, пикселизация при появлении, отскок при появлении и быстрая панорама",
+      "На вкладке «Проект» «Переход на каждом стыке» сразу ставит один переход на все стыки дорожки 1"
+     ]
+    },
+    "tr": {
+     "title": "Altı geçiş daha, her kesime uygula",
+     "items": [
+      "Altı yeni geçiş: üstten silme, ortadan bölme, panjur, girişte pikselleme, girişte zıplama ve hızlı kaydırma",
+      "Proje sekmesindeki 'Her kesimde geçiş' tek seferde Video 1 üzerindeki tüm bitişik yerlere aynı geçişi uygular"
+     ]
     }
    }
   },
@@ -41,6 +97,86 @@
       "Sound clips have 'Loop to fill the video', repeating a short music bed until the video ends",
       "Video and pictures have '↻ ↺ Rotate 90°' buttons"
      ]
+    },
+    "es": {
+     "title": "Texto con degradado, color de sombra, estelas de movimiento, rellenar con sonido en bucle, girar 90 grados",
+     "items": [
+      "El texto puede usar un 'Degradado de arriba abajo' con dos colores",
+      "La sombra del texto tiene color e intensidad de desenfoque",
+      "La pestaña Proyecto tiene 'Estelas de movimiento': las capas, textos y formas en movimiento dejan una estela (solo al reproducir y exportar)",
+      "Los clips de sonido tienen 'Repetir en bucle hasta llenar el vídeo', que repite una base musical corta hasta el final del vídeo",
+      "Vídeo e imágenes tienen los botones '↻ ↺ Girar 90°'"
+     ]
+    },
+    "fr": {
+     "title": "Texte en dégradé, couleur d'ombre, traînées de mouvement, boucler le son pour remplir, rotation de 90°",
+     "items": [
+      "Le texte peut utiliser un « Dégradé haut vers bas » à deux couleurs",
+      "L'ombre du texte a une couleur et une quantité de flou",
+      "L'onglet Projet a « Traînées de mouvement » : les incrustations, textes et formes en mouvement laissent une traînée (seulement pendant la lecture et l'export)",
+      "Les clips son ont « Boucler pour remplir la vidéo », qui répète un petit fond musical jusqu'à la fin de la vidéo",
+      "Vidéos et images ont les boutons « ↻ ↺ Rotation de 90° »"
+     ]
+    },
+    "de": {
+     "title": "Text mit Verlauf, Schattenfarbe, Bewegungsspuren, Ton zum Füllen wiederholen, 90° drehen",
+     "items": [
+      "Text kann einen „Verlauf von oben nach unten“ mit zwei Farben nutzen",
+      "Textschatten haben eine Farbe und eine Weichzeichnung",
+      "Das Projekt-Register hat „Bewegungsspuren“: bewegte Überlagerungen, Texte und Formen hinterlassen eine Spur (nur bei Wiedergabe und Export)",
+      "Tonclips haben „Bis zum Füllen des Videos wiederholen“, das eine kurze Musikunterlage bis zum Videoende wiederholt",
+      "Videos und Bilder haben die Schaltflächen „↻ ↺ 90° drehen“"
+     ]
+    },
+    "ja": {
+     "title": "グラデーションの文字、影の色、残像、音を繰り返して埋める、90度回転",
+     "items": [
+      "文字に「上から下へのグラデーション」（2色）を使えます",
+      "文字の影に色とぼかし量を付けられます",
+      "プロジェクトタブに「残像」を追加。動いている重ね素材・文字・図形が軌跡を残します（再生と書き出しの時だけ）",
+      "音声クリップに「動画の長さまで繰り返す」を追加。短い音楽を動画の最後まで繰り返します",
+      "動画と画像に「↻ ↺ 90° 回転」ボタンを追加"
+     ]
+    },
+    "zh": {
+     "title": "渐变文字、阴影颜色、运动拖尾、声音循环填满、旋转 90 度",
+     "items": [
+      "文字可使用两种颜色的“从上到下渐变”",
+      "文字阴影可设置颜色和模糊程度",
+      "项目页新增“运动拖尾”：移动中的叠加层、文字和形状会留下拖影（仅播放和导出时生效）",
+      "声音片段新增“循环填满视频”，将一段短音乐重复到视频结束",
+      "视频和图片新增“↻ ↺ 旋转 90°”按钮"
+     ]
+    },
+    "pt": {
+     "title": "Texto com gradiente, cor de sombra, rastros de movimento, preencher com som em loop, girar 90°",
+     "items": [
+      "O texto pode usar um 'Gradiente de cima para baixo' com duas cores",
+      "A sombra do texto tem cor e quantidade de desfoque",
+      "A aba Projeto tem 'Rastros de movimento': sobreposições, textos e formas em movimento deixam um rastro (só ao reproduzir e exportar)",
+      "Clipes de som têm 'Repetir em loop para preencher o vídeo', que repete uma base musical curta até o fim do vídeo",
+      "Vídeos e imagens têm os botões '↻ ↺ Girar 90°'"
+     ]
+    },
+    "ru": {
+     "title": "Текст с градиентом, цвет тени, шлейфы движения, заполнение звуком в цикле, поворот на 90°",
+     "items": [
+      "Текст может использовать «Градиент сверху вниз» из двух цветов",
+      "У тени текста есть цвет и размытие",
+      "На вкладке «Проект» есть «Шлейфы движения»: движущиеся наложения, текст и фигуры оставляют след (только при воспроизведении и экспорте)",
+      "У звуковых клипов есть «Повторять до заполнения видео», которое повторяет короткую музыкальную подложку до конца видео",
+      "У видео и картинок есть кнопки «↻ ↺ Поворот на 90°»"
+     ]
+    },
+    "tr": {
+     "title": "Degradeli yazı, gölge rengi, hareket izleri, sesi döngüyle doldurma, 90 derece döndürme",
+     "items": [
+      "Yazıda iki renkli 'Üstten alta degrade' kullanılabilir",
+      "Yazı gölgesinin rengi ve bulanıklık miktarı olabilir",
+      "Proje sekmesinde 'Hareket izleri' var: hareket eden katmanlar, yazılar ve şekiller iz bırakır (yalnızca oynatma ve dışa aktarmada)",
+      "Ses kliplerinde 'Videoyu doldurmak için döngüyle tekrarla' var; kısa bir müzik yatağını videonun sonuna kadar tekrarlar",
+      "Video ve resimlerde '↻ ↺ 90° döndür' düğmeleri var"
+     ]
     }
    }
   },
@@ -62,6 +198,78 @@
       "The file list shows how many times each file is used on the timeline (x1, x0)",
       "Project tab 'Remove unused files' clears files never used on the timeline",
       "Keys , and . step one frame back/forward (the shortcut list now also mentions Up/Down edit points)"
+     ]
+    },
+    "es": {
+     "title": "Alineación en 9 posiciones, quitar archivos sin usar, teclas para avanzar fotograma",
+     "items": [
+      "Los ajustes de texto y forma tienen una cuadrícula de 9 celdas 'Ajustar a posición' para llevarlos a las esquinas o al centro con un clic",
+      "La lista de archivos muestra cuántas veces se usa cada archivo en la línea de tiempo (x1, x0)",
+      "La pestaña Proyecto 'Quitar archivos sin usar' borra los archivos que nunca aparecen en la línea de tiempo",
+      "Las teclas , y . retroceden y avanzan un fotograma (la lista de atajos también menciona los puntos de edición con Arriba/Abajo)"
+     ]
+    },
+    "fr": {
+     "title": "Calage sur 9 positions, supprimer les fichiers inutilisés, touches d'image par image",
+     "items": [
+      "Les réglages texte et forme ont une grille à 9 cases « Caler sur la position » pour les envoyer dans les coins ou au centre en un clic",
+      "La liste des fichiers indique combien de fois chaque fichier est utilisé sur la chronologie (x1, x0)",
+      "L'onglet Projet « Supprimer les fichiers inutilisés » efface les fichiers jamais utilisés sur la chronologie",
+      "Les touches , et . reculent et avancent d'une image (la liste des raccourcis mentionne aussi les points de montage Haut/Bas)"
+     ]
+    },
+    "de": {
+     "title": "Ausrichten auf 9 Positionen, ungenutzte Dateien entfernen, Tasten für Einzelbilder",
+     "items": [
+      "Text- und Formeinstellungen haben ein 9-Felder-Raster „An Position ausrichten“, um sie mit einem Klick in Ecken oder Mitte zu setzen",
+      "Die Dateiliste zeigt, wie oft jede Datei auf der Zeitleiste verwendet wird (x1, x0)",
+      "Das Projekt-Register „Ungenutzte Dateien entfernen“ löscht Dateien, die auf der Zeitleiste nie vorkommen",
+      "Die Tasten , und . springen ein Bild zurück bzw. vor (die Tastenliste nennt jetzt auch Schnittpunkte mit Hoch/Runter)"
+     ]
+    },
+    "ja": {
+     "title": "9か所の位置合わせ、使っていないファイルの整理、1コマ移動キー",
+     "items": [
+      "文字と図形の設定に「9か所の位置に合わせる」マス目を追加。一度のクリックで四隅や中央に配置できます",
+      "ファイル一覧に、タイムラインで各ファイルが何回使われているか（x1、x0）を表示します",
+      "プロジェクトタブの「使っていないファイルを削除」で、タイムラインで一度も使われていないファイルを消せます",
+      ", と . キーで1コマ前後に移動します（ショートカット一覧には上下キーの編集点も載っています）"
+     ]
+    },
+    "zh": {
+     "title": "九宫格对齐、清理未使用文件、逐帧按键",
+     "items": [
+      "文字和形状设置新增九宫格“对齐到位置”，一键放到四角或中心",
+      "文件列表会显示每个文件在时间线上被使用的次数（x1、x0）",
+      "项目页新增“删除未使用的文件”，清除从未出现在时间线上的文件",
+      "“,”和“.”键可后退或前进一帧（快捷键列表中也加入了上/下方向键的编辑点）"
+     ]
+    },
+    "pt": {
+     "title": "Alinhar em 9 posições, remover arquivos não usados, teclas de quadro a quadro",
+     "items": [
+      "Os ajustes de texto e forma têm uma grade de 9 células 'Encaixar na posição' para levá-los aos cantos ou ao centro com um clique",
+      "A lista de arquivos mostra quantas vezes cada arquivo é usado na linha do tempo (x1, x0)",
+      "A aba Projeto 'Remover arquivos não usados' apaga os arquivos que nunca aparecem na linha do tempo",
+      "As teclas , e . voltam e avançam um quadro (a lista de atalhos também cita os pontos de edição com Cima/Baixo)"
+     ]
+    },
+    "ru": {
+     "title": "Привязка к 9 позициям, очистка неиспользуемых файлов, клавиши покадрового перехода",
+     "items": [
+      "В настройках текста и фигур есть сетка 9 ячеек «Привязать к позиции» — в один щелчок в углы или центр",
+      "В списке файлов видно, сколько раз каждый файл используется на таймлайне (x1, x0)",
+      "На вкладке «Проект» «Удалить неиспользуемые файлы» очищает файлы, которые никогда не стоят на таймлайне",
+      "Клавиши , и . сдвигают на кадр назад и вперёд (в списке горячих клавиш также упомянуты точки правки «Вверх»/«Вниз»)"
+     ]
+    },
+    "tr": {
+     "title": "9 konumda hizalama, kullanılmayan dosyaları temizleme, kare kare ilerleme tuşları",
+     "items": [
+      "Metin ve şekil ayarlarında köşelere ya da ortaya tek tıkla göndermek için 9 hücreli 'Konuma yapıştır' ızgarası var",
+      "Dosya listesi her dosyanın zaman çizelgesinde kaç kez kullanıldığını gösterir (x1, x0)",
+      "Proje sekmesindeki 'Kullanılmayan dosyaları kaldır' zaman çizelgesinde hiç kullanılmamış dosyaları siler",
+      ", ve . tuşları bir kare geri ya da ileri gider (kısayol listesinde Yukarı/Aşağı düzenleme noktaları da yer alır)"
      ]
     }
    }
@@ -85,6 +293,78 @@
       "Speed has quick buttons 0.5x, 1x, 1.5x, 2x, 3x",
       "The Project tab has 'Save versions': store the current edit under a name and reopen it later (media files are not copied, so it stays light)"
      ]
+    },
+    "es": {
+     "title": "Tintado, simetría espejo, botones de velocidad, versiones guardadas",
+     "items": [
+      "Los efectos de color tienen 'Tintar con un color' (color e intensidad)",
+      "El ajuste 'Imagen' del clip tiene 'Simetría espejo': de izquierda a derecha, de arriba abajo, o caleidoscopio de cuatro vías",
+      "La velocidad tiene botones rápidos 0.5x, 1x, 1.5x, 2x y 3x",
+      "La pestaña Proyecto tiene 'Guardar versiones': guarda la edición actual con un nombre y la reabre más tarde (los archivos multimedia no se copian, así que ocupa poco)"
+     ]
+    },
+    "fr": {
+     "title": "Teinte, symétrie miroir, boutons de vitesse, versions enregistrées",
+     "items": [
+      "Les effets de couleur ont « Teinter d'une couleur » (couleur et intensité)",
+      "Le réglage « Image » du clip a « Symétrie miroir » : gauche vers droite, haut vers bas, ou kaléidoscope à quatre voies",
+      "La vitesse a des boutons rapides 0,5x, 1x, 1,5x, 2x et 3x",
+      "L'onglet Projet a « Enregistrer des versions » : garde le montage actuel sous un nom et le rouvre plus tard (les fichiers médias ne sont pas copiés, donc c'est léger)"
+     ]
+    },
+    "de": {
+     "title": "Tönung, Spiegelsymmetrie, Geschwindigkeitstasten, gespeicherte Versionen",
+     "items": [
+      "Farbeffekte bieten „Mit einer Farbe tönen“ (Farbe und Stärke)",
+      "Das Bild-Register eines Clips hat „Spiegelsymmetrie“: links nach rechts, oben nach unten oder Vier-Wege-Kaleidoskop",
+      "Die Geschwindigkeit hat Schnelltasten 0,5x, 1x, 1,5x, 2x und 3x",
+      "Das Projekt-Register hat „Versionen speichern“: legt den aktuellen Schnitt unter einem Namen ab und öffnet ihn später wieder (Mediendateien werden nicht kopiert, daher bleibt es schlank)"
+     ]
+    },
+    "ja": {
+     "title": "色味づけ、鏡像対称、速さのボタン、保存したバージョン",
+     "items": [
+      "色の効果に「1色で色味をつける」を追加（色と強さ）",
+      "クリップの「映像」設定に「鏡像対称」を追加（左右、上下、4分割のカレイドスコープ）",
+      "速さに 0.5x・1x・1.5x・2x・3x のクイックボタンを追加",
+      "プロジェクトタブに「バージョンを保存」を追加。今の編集に名前を付けて保存し、後で開き直せます（素材はコピーしないので軽いまま）"
+     ]
+    },
+    "zh": {
+     "title": "单色着色、镜像对称、速度按钮、保存版本",
+     "items": [
+      "颜色效果新增“用单色着色”（颜色和强度）",
+      "片段的“画面”设置新增“镜像对称”：左到右、上到下，或四向万花筒",
+      "速度新增 0.5x、1x、1.5x、2x、3x 快捷按钮",
+      "项目页新增“保存版本”：以名称保存当前剪辑，之后可重新打开（不复制媒体文件，所以占用很小）"
+     ]
+    },
+    "pt": {
+     "title": "Tingimento, simetria espelhada, botões de velocidade, versões salvas",
+     "items": [
+      "Os efeitos de cor ganham 'Tingir com uma cor' (cor e intensidade)",
+      "O ajuste 'Imagem' do clipe tem 'Simetria espelhada': da esquerda para a direita, de cima para baixo ou caleidoscópio de quatro lados",
+      "A velocidade tem botões rápidos 0.5x, 1x, 1.5x, 2x e 3x",
+      "A aba Projeto tem 'Salvar versões': guarda a edição atual com um nome e a reabre depois (os arquivos de mídia não são copiados, então fica leve)"
+     ]
+    },
+    "ru": {
+     "title": "Тонирование, зеркальная симметрия, кнопки скорости, сохранённые версии",
+     "items": [
+      "В цветовых эффектах есть «Тонировать одним цветом» (цвет и сила)",
+      "В настройках «Картинка» у клипа есть «Зеркальная симметрия»: слева направо, сверху вниз или калейдоскоп в четыре стороны",
+      "У скорости есть быстрые кнопки 0,5x, 1x, 1,5x, 2x и 3x",
+      "На вкладке «Проект» есть «Сохранить версии»: текущий монтаж сохраняется под именем и открывается позже (медиафайлы не копируются, поэтому файл лёгкий)"
+     ]
+    },
+    "tr": {
+     "title": "Tek renkle boyama, ayna simetrisi, hız düğmeleri, kayıtlı sürümler",
+     "items": [
+      "Renk efektlerine 'Tek renkle boya' eklendi (renk ve güç)",
+      "Klibin 'Resim' ayarlarında 'Ayna simetrisi' var: soldan sağa, yukarıdan aşağıya ya da dört yönlü kaleydoskop",
+      "Hızda 0.5x, 1x, 1.5x, 2x ve 3x hızlı düğmeleri var",
+      "Proje sekmesinde 'Sürümleri kaydet' var: geçerli kurguyu bir adla saklar ve sonra yeniden açarsınız (medya dosyaları kopyalanmaz, bu yüzden hafif kalır)"
+     ]
     }
    }
   },
@@ -106,6 +386,78 @@
       "'🔍 Zoom to selection' zooms the timeline so the selected clip fills it",
       "Crop has 'Centre 1:1 / 9:16 / 4:5' buttons to cut the middle of a landscape clip in one click",
       "The Project tab has 'Preview guides' (thirds grid, safe area, centre cross); they are never exported"
+     ]
+    },
+    "es": {
+     "title": "Velocidad de vista previa, zoom a la selección, recorte central, guías",
+     "items": [
+      "El botón '1x' junto a reproducir cambia la velocidad de vista previa: 1x, 1.5x, 2x, 0.5x; las exportaciones siempre son 1x",
+      "'🔍 Ampliar selección' acerca la línea de tiempo para que el clip seleccionado la llene",
+      "El recorte tiene botones 'Centro 1:1 / 9:16 / 4:5' para cortar el centro de un clip horizontal de un clic",
+      "La pestaña Proyecto tiene 'Guías de vista previa' (cuadrícula de tercios, área segura, cruz central); nunca se exportan"
+     ]
+    },
+    "fr": {
+     "title": "Vitesse d'aperçu, zoom sur la sélection, recadrage central, repères visuels",
+     "items": [
+      "Le bouton « 1x » à côté de lecture fait défiler la vitesse d'aperçu : 1x, 1,5x, 2x, 0,5x ; les exports restent toujours en 1x",
+      "« 🔍 Zoomer sur la sélection » agrandit la chronologie pour que le clip sélectionné la remplisse",
+      "Le recadrage a des boutons « Centre 1:1 / 9:16 / 4:5 » pour couper le milieu d'un clip paysage en un clic",
+      "L'onglet Projet a des « Repères d'aperçu » (grille des tiers, zone de sécurité, croix centrale) ; ils ne sont jamais exportés"
+     ]
+    },
+    "de": {
+     "title": "Vorschaugeschwindigkeit, Auswahl vergrößern, Mitte zuschneiden, Hilfslinien",
+     "items": [
+      "Die Schaltfläche „1x“ neben Wiedergabe wechselt die Vorschaugeschwindigkeit: 1x, 1,5x, 2x, 0,5x; Exporte sind immer 1x",
+      "„🔍 Auswahl vergrößern“ zoomt die Zeitleiste so, dass der gewählte Clip sie ausfüllt",
+      "Der Zuschnitt hat Schaltflächen „Mitte 1:1 / 9:16 / 4:5“, um die Mitte eines Querformat-Clips mit einem Klick auszuschneiden",
+      "Das Projekt-Register hat „Vorschau-Hilfslinien“ (Drittel-Raster, Sicherheitsbereich, Mittenkreuz); sie werden nie exportiert"
+     ]
+    },
+    "ja": {
+     "title": "プレビューの速さ、選択範囲へズーム、中央の切り抜き、補助線",
+     "items": [
+      "再生ボタン横の「1x」で、プレビューの速さを 1x → 1.5x → 2x → 0.5x と切り替えられます（書き出しは常に 1x）",
+      "「🔍 選択範囲にズーム」で、選んだクリップがタイムラインいっぱいに表示されます",
+      "切り抜きに「中央 1:1 / 9:16 / 4:5」ボタンを追加。横長のクリップの中央をワンクリックで切り出せます",
+      "プロジェクトタブに「プレビューの補助線」（三分割線、安全領域、中心の十字）を追加。書き出されません"
+     ]
+    },
+    "zh": {
+     "title": "预览速度、缩放到选中片段、居中裁剪、辅助线",
+     "items": [
+      "播放按钮旁的“1x”可循环切换预览速度：1x、1.5x、2x、0.5x；导出始终为 1x",
+      "“🔍 缩放到选中”会放大时间线，使选中的片段占满视野",
+      "裁剪新增“居中 1:1 / 9:16 / 4:5”按钮，一键裁出横屏片段的中央部分",
+      "项目页新增“预览辅助线”（三分线网格、安全区、中心十字）；不会被导出"
+     ]
+    },
+    "pt": {
+     "title": "Velocidade da prévia, zoom na seleção, corte central, guias",
+     "items": [
+      "O botão '1x' ao lado de reproduzir alterna a velocidade da prévia: 1x, 1.5x, 2x, 0.5x; as exportações são sempre 1x",
+      "'🔍 Ampliar seleção' aproxima a linha do tempo para que o clipe selecionado ocupe tudo",
+      "O corte tem os botões 'Centro 1:1 / 9:16 / 4:5' para cortar o meio de um clipe paisagem com um clique",
+      "A aba Projeto tem 'Guias de prévia' (grade de terços, área segura, cruz central); elas nunca são exportadas"
+     ]
+    },
+    "ru": {
+     "title": "Скорость предпросмотра, масштаб по выделению, обрезка по центру, направляющие",
+     "items": [
+      "Кнопка «1x» рядом с воспроизведением переключает скорость предпросмотра: 1x, 1,5x, 2x, 0,5x; экспорт всегда в 1x",
+      "«🔍 Масштаб по выделению» приближает таймлайн так, что выбранный клип заполняет его",
+      "В обрезке есть кнопки «По центру 1:1 / 9:16 / 4:5», чтобы в одно нажатие вырезать середину горизонтального клипа",
+      "На вкладке «Проект» есть «Направляющие предпросмотра» (сетка третей, безопасная зона, центральный крест); в экспорт они не попадают"
+     ]
+    },
+    "tr": {
+     "title": "Önizleme hızı, seçime yakınlaştırma, ortadan kırpma, kılavuzlar",
+     "items": [
+      "Oynat'ın yanındaki '1x' düğmesi önizleme hızını döndürür: 1x, 1.5x, 2x, 0.5x; dışa aktarmalar her zaman 1x'tir",
+      "'🔍 Seçime yakınlaştır' zaman çizelgesini, seçili klip tüm alanı kaplayacak şekilde büyütür",
+      "Kırpmada 'Ortada 1:1 / 9:16 / 4:5' düğmeleri var; yatay bir klibin ortasını tek tıkla keser",
+      "Proje sekmesinde 'Önizleme kılavuzları' var (üçte bir ızgara, güvenli alan, orta çarpı); asla dışa aktarılmaz"
      ]
     }
    }
@@ -129,6 +481,78 @@
       "The text box can have rounded corners",
       "Text, shape and picture clips have 'Stretch to end of video'"
      ]
+    },
+    "es": {
+     "title": "Corrección automática de color, formas degradadas, cuadro de texto redondeado, estirar hasta el final",
+     "items": [
+      "Los efectos de color tienen '✨ Corrección automática de color' para aclarar imágenes oscuras y dar contraste a las planas, con un clic",
+      "Las formas pueden tener un 'Degradado' (dos colores y un ángulo)",
+      "El cuadro de texto puede tener esquinas redondeadas",
+      "Los clips de texto, forma e imagen tienen 'Estirar hasta el final del vídeo'"
+     ]
+    },
+    "fr": {
+     "title": "Correction automatique des couleurs, formes en dégradé, cadre de texte arrondi, étirer jusqu'à la fin",
+     "items": [
+      "Les effets de couleur ont « ✨ Correction automatique des couleurs » pour éclaircir les images sombres et donner du relief aux images plates, en un clic",
+      "Les formes peuvent avoir un « Dégradé » (deux couleurs et un angle)",
+      "Le cadre de texte peut avoir des coins arrondis",
+      "Les clips texte, forme et image ont « Étirer jusqu'à la fin de la vidéo »"
+     ]
+    },
+    "de": {
+     "title": "Automatische Farbkorrektur, Verlaufsformen, abgerundetes Textfeld, bis Videoende strecken",
+     "items": [
+      "Farbeffekte bieten „✨ Automatische Farbkorrektur“: hellt dunkles Material auf und verleiht flachem Material Kontrast, mit einem Klick",
+      "Formen können einen „Verlauf“ haben (zwei Farben und ein Winkel)",
+      "Das Textfeld kann abgerundete Ecken haben",
+      "Text-, Form- und Bildclips haben „Bis zum Ende des Videos strecken“"
+     ]
+    },
+    "ja": {
+     "title": "自動色補正、グラデーションの図形、角丸の文字枠、最後まで伸ばす",
+     "items": [
+      "色の効果に「✨ 自動色補正」を追加。暗い映像を明るくし、平坦な映像にメリハリを付けます（ワンクリック）",
+      "図形に「グラデーション」を付けられます（2色と角度）",
+      "文字枠の角を丸くできます",
+      "文字・図形・画像のクリップに「動画の最後まで伸ばす」を追加"
+     ]
+    },
+    "zh": {
+     "title": "自动调色、渐变形状、圆角文字框、延长到结尾",
+     "items": [
+      "颜色效果新增“✨ 自动调色”：一键提亮昏暗画面，并增强平淡画面的对比",
+      "形状可设置“渐变”（两种颜色和一个角度）",
+      "文字框可设置圆角",
+      "文字、形状和图片片段新增“延长到视频结尾”"
+     ]
+    },
+    "pt": {
+     "title": "Correção automática de cor, formas com gradiente, caixa de texto arredondada, esticar até o fim",
+     "items": [
+      "Os efeitos de cor têm '✨ Correção automática de cor' para clarear imagens escuras e dar punch a imagens chapadas, com um clique",
+      "As formas podem ter 'Gradiente' (duas cores e um ângulo)",
+      "A caixa de texto pode ter cantos arredondados",
+      "Clipes de texto, forma e imagem têm 'Esticar até o fim do vídeo'"
+     ]
+    },
+    "ru": {
+     "title": "Автокоррекция цвета, градиентные фигуры, текстовая плашка со скруглением, растянуть до конца",
+     "items": [
+      "В цветовых эффектах есть «✨ Автокоррекция цвета»: в одно нажатие осветляет тёмные кадры и добавляет сочности плоским",
+      "Фигуры могут иметь «Градиент» (два цвета и угол)",
+      "У текстовой плашки могут быть скруглённые углы",
+      "У текстовых, фигурных и картиночных клипов есть «Растянуть до конца видео»"
+     ]
+    },
+    "tr": {
+     "title": "Otomatik renk düzeltme, degradeli şekiller, yuvarlatılmış metin kutusu, sona kadar uzat",
+     "items": [
+      "Renk efektlerinde karanlık görüntüyü aydınlatan ve düz görüntüye canlılık katan '✨ Otomatik renk düzeltme' var; tek tıkla",
+      "Şekillere 'Degrade' (iki renk ve bir açı) verilebilir",
+      "Metin kutusunun köşeleri yuvarlatılabilir",
+      "Metin, şekil ve resim klipleri 'Videonun sonuna kadar uzat' seçeneğini alır"
+     ]
     }
    }
   },
@@ -148,6 +572,70 @@
       "Sound has a 'Sound tone' preset: clear voice, more bass, bright, telephone, muffled (behind a wall)",
       "Clip settings have 'Copy effects' / 'Paste effects' to move colour effects, masks and sound settings to other clips in one go",
       "A '🧲 Snap' button on the timeline; turn it off to place clips freely without sticking to other clips or markers"
+     ]
+    },
+    "es": {
+     "title": "Preajustes de tono de sonido, copiar y pegar efectos, interruptor de ajuste",
+     "items": [
+      "El sonido tiene un preajuste 'Tono de sonido': voz clara, más graves, brillante, teléfono, apagado (como detrás de una pared)",
+      "Los ajustes del clip tienen 'Copiar efectos' / 'Pegar efectos' para llevar efectos de color, máscaras y ajustes de sonido a otros clips de una vez",
+      "Un botón '🧲 Ajustar' en la línea de tiempo; desactívalo para colocar los clips libremente sin pegarse a otros clips o marcadores"
+     ]
+    },
+    "fr": {
+     "title": "Préréglages de timbre sonore, copier-coller des effets, interrupteur d'aimantation",
+     "items": [
+      "Le son a un préréglage « Timbre sonore » : voix claire, plus de basses, éclatant, téléphone, étouffé (comme derrière un mur)",
+      "Les réglages du clip ont « Copier les effets » / « Coller les effets » pour transférer effets de couleur, masques et réglages son vers d'autres clips d'un coup",
+      "Un bouton « 🧲 Aimantation » sur la chronologie ; désactivez-le pour placer les clips librement sans les coller aux autres clips ou repères"
+     ]
+    },
+    "de": {
+     "title": "Klangfarben-Voreinstellungen, Effekte kopieren und einfügen, Einrasten umschalten",
+     "items": [
+      "Ton hat eine Voreinstellung „Klangfarbe“: klare Stimme, mehr Bass, hell, Telefon, gedämpft (wie hinter einer Wand)",
+      "Clip-Einstellungen haben „Effekte kopieren“ / „Effekte einfügen“, um Farbeffekte, Masken und Toneinstellungen auf einmal auf andere Clips zu übertragen",
+      "Eine Schaltfläche „🧲 Einrasten“ auf der Zeitleiste; ausschalten, um Clips frei zu platzieren, ohne dass sie an anderen Clips oder Markern einrasten"
+     ]
+    },
+    "ja": {
+     "title": "音の音色プリセット、効果のコピー・貼り付け、磁石のオン・オフ",
+     "items": [
+      "音声に「音色」のプリセット：くっきりした声、低音強め、明るい、電話風、こもった音（壁の向こうの音）",
+      "クリップ設定の「効果をコピー」「効果を貼り付け」で、色の効果・マスク・音の設定を他のクリップへまとめて移せます",
+      "タイムラインの「🧲 磁石」ボタン。オフにすると、他のクリップやマーカーに吸着せず自由に配置できます"
+     ]
+    },
+    "zh": {
+     "title": "声音音色预设、复制粘贴效果、吸附开关",
+     "items": [
+      "声音新增“音色”预设：清晰人声、增强低音、明亮、电话、闷声（隔墙感）",
+      "片段设置新增“复制效果”/“粘贴效果”，可将颜色效果、蒙版和声音设置一次性应用到其他片段",
+      "时间线上新增“🧲 吸附”按钮；关闭后可自由放置片段，不会吸附到其他片段或标记"
+     ]
+    },
+    "pt": {
+     "title": "Predefinições de tom de som, copiar e colar efeitos, alternar encaixe",
+     "items": [
+      "O som tem uma predefinição 'Tom do som': voz limpa, mais grave, brilhante, telefone, abafado (como atrás de uma parede)",
+      "As configurações do clipe têm 'Copiar efeitos' / 'Colar efeitos' para levar efeitos de cor, máscaras e ajustes de som para outros clipes de uma vez",
+      "Um botão '🧲 Encaixar' na linha do tempo; desligue para posicionar clipes livremente sem grudar em outros clipes ou marcadores"
+     ]
+    },
+    "ru": {
+     "title": "Пресеты тона звука, копирование и вставка эффектов, переключатель привязки",
+     "items": [
+      "У звука есть пресет «Тон звука»: чистый голос, больше баса, яркий, телефон, приглушённый (как за стеной)",
+      "В настройках клипа есть «Копировать эффекты» / «Вставить эффекты», чтобы сразу перенести цветовые эффекты, маски и настройки звука на другие клипы",
+      "Кнопка «🧲 Привязка» на таймлайне: выключите её, чтобы свободно двигать клипы, не прилипая к другим клипам и меткам"
+     ]
+    },
+    "tr": {
+     "title": "Ses tonu ön ayarları, efektleri kopyala ve yapıştır, mıknatıs anahtarı",
+     "items": [
+      "Seste 'Ses tonu' ön ayarı var: net ses, daha fazla bas, parlak, telefon, boğuk (duvarın arkasından gibi)",
+      "Klip ayarlarında 'Efektleri kopyala' / 'Efektleri yapıştır' var; renk efektlerini, maskeleri ve ses ayarlarını tek seferde başka kliplere taşır",
+      "Zaman çizelgesinde '🧲 Mıknatıs' düğmesi; kapatırsanız klipler diğer klip ve işaretçilere yapışmadan serbestçe yerleştirilir"
      ]
     }
    }
@@ -173,6 +661,86 @@
       "Clip settings have 'Repeat N more times' to chain copies back to back",
       "'Shift subtitle timing' moves all text clips earlier or later at once to fix sync"
      ]
+    },
+    "es": {
+     "title": "Ir a un tiempo, ajuste automático de línea, créditos finales, repetir, desplazar subtítulos",
+     "items": [
+      "Haz clic en la hora y escribe '1:23' o '83' para ir directamente a ese punto",
+      "Los clips de texto tienen 'Ancho de texto' para que los textos largos se ajusten solos a la pantalla",
+      "La pestaña Insertar tiene 'Créditos finales' que suben (también disponible como efecto de texto 'Desplazar hacia arriba')",
+      "Los ajustes del clip tienen 'Repetir N veces más' para encadenar copias seguidas",
+      "'Desplazar tiempo de subtítulos' mueve de una vez todos los clips de texto antes o después para corregir la sincronía"
+     ]
+    },
+    "fr": {
+     "title": "Aller à une heure, retour à la ligne auto, générique de fin, répétition, décaler les sous-titres",
+     "items": [
+      "Cliquez sur l'affichage de l'heure et tapez « 1:23 » ou « 83 » pour y aller directement",
+      "Les clips texte ont « Largeur du texte » pour que les textes longs reviennent à la ligne automatiquement dans l'écran",
+      "L'onglet Insérer a « Générique de fin » qui défile vers le haut (aussi disponible comme effet de texte « Défilement vers le haut »)",
+      "Les réglages du clip ont « Répéter N fois de plus » pour enchaîner les copies",
+      "« Décaler le timing des sous-titres » déplace d'un coup tous les clips texte plus tôt ou plus tard pour corriger la synchro"
+     ]
+    },
+    "de": {
+     "title": "Zu Zeit springen, automatischer Zeilenumbruch, Abspann, Wiederholen, Untertitel verschieben",
+     "items": [
+      "Klicken Sie auf die Zeitanzeige und tippen Sie „1:23“ oder „83“, um direkt dorthin zu springen",
+      "Textclips haben „Textbreite“, damit lange Texte automatisch auf den Bildschirm umbrechen",
+      "Das Register Einfügen hat „Abspann“, der nach oben läuft (auch als Texteffekt „Nach oben scrollen“ verfügbar)",
+      "Clip-Einstellungen haben „N weitere Male wiederholen“, um Kopien direkt aneinanderzureihen",
+      "„Untertitel-Timing verschieben“ schiebt alle Textclips auf einmal früher oder später, um den Gleichlauf zu korrigieren"
+     ]
+    },
+    "ja": {
+     "title": "時刻へジャンプ、自動改行、エンドクレジット、繰り返し、字幕のずらし",
+     "items": [
+      "時間の表示をクリックして「1:23」や「83」と入力すると、その位置へ直接移動します",
+      "文字クリップに「折り返し幅」を追加。長い文字は画面の幅で自動的に改行されます",
+      "挿入タブに「エンドクレジット」を追加（下から上へ流れます。文字効果の「上にスクロール」としても使えます）",
+      "クリップの設定に「あと N 回繰り返す」を追加。同じクリップを続けて並べられます",
+      "「字幕のタイミングをずらす」で、すべての文字クリップを一度に前後へずらし、ズレを直せます"
+     ]
+    },
+    "zh": {
+     "title": "跳转到时间点、自动换行、片尾字幕、重复、字幕整体平移",
+     "items": [
+      "点击时间显示，输入“1:23”或“83”即可直接跳转",
+      "文字片段新增“换行宽度”，长文字会自动换行以适应屏幕",
+      "插入选项卡新增“片尾字幕”，向上滚动（也可作为文字效果“向上滚动”使用）",
+      "片段设置新增“再重复 N 次”，可把副本首尾相接",
+      "“平移字幕时间”可一次性将所有文字片段提前或推后，用于修正音画不同步"
+     ]
+    },
+    "pt": {
+     "title": "Ir para um tempo, quebra automática, créditos finais, repetir, deslocar legendas",
+     "items": [
+      "Clique no marcador de tempo e digite '1:23' ou '83' para ir direto a esse ponto",
+      "Clipes de texto têm 'Largura do texto' para que textos longos quebrem linha sozinhos na tela",
+      "A aba Inserir tem 'Créditos finais' que sobem (também disponível como efeito de texto 'Rolar para cima')",
+      "As configurações do clipe têm 'Repetir mais N vezes' para encadear cópias uma após a outra",
+      "'Deslocar tempo das legendas' move de uma vez todos os clipes de texto para antes ou depois, para corrigir a sincronia"
+     ]
+    },
+    "ru": {
+     "title": "Переход ко времени, автоперенос, финальные титры, повтор, сдвиг субтитров",
+     "items": [
+      "Щёлкните индикатор времени и введите «1:23» или «83», чтобы сразу перейти к нужному месту",
+      "У текстовых клипов есть «Ширина текста»: длинный текст сам переносится по ширине экрана",
+      "На вкладке «Вставка» есть «Финальные титры», которые ползут вверх (также доступны как текстовый эффект «Прокрутка вверх»)",
+      "В настройках клипа есть «Повторить ещё N раз», чтобы сразу поставить копии друг за другом",
+      "«Сдвинуть тайминг субтитров» одним действием сдвигает все текстовые клипы раньше или позже, чтобы исправить синхронизацию"
+     ]
+    },
+    "tr": {
+     "title": "Zamana atlama, otomatik satır sonu, son jeneriği, tekrar, altyazı kaydırma",
+     "items": [
+      "Zaman göstergesine tıklayın ve '1:23' ya da '83' yazarak doğrudan oraya gidin",
+      "Metin klipleri 'Metin genişliği' kazanır; uzun metinler ekrana göre otomatik alt satıra geçer",
+      "Ekle sekmesinde yukarı doğru akan 'Son jeneriği' var (metin efekti 'Yukarı kaydır' olarak da kullanılabilir)",
+      "Klip ayarlarında 'N kez daha tekrarla' var; kopyaları art arda zincirler",
+      "'Altyazı zamanlamasını kaydır' tüm metin kliplerini tek seferde önce ya da sonra kaydırır; senkronu düzeltmek için"
+     ]
     }
    }
   },
@@ -194,6 +762,78 @@
       "'Cut at every marker' splits a clip at all markers at once for beat-synced edits",
       "Project tab 'Join clips / slideshow' packs the selected clips (or all of Video 1) back to back, setting picture length and dissolves in one go",
       "Project tab 'Fade in / out' starts from black and ends to black (sound fades too)"
+     ]
+    },
+    "es": {
+     "title": "Edición por ritmo, unir clips / presentación, fundido de entrada y salida del proyecto",
+     "items": [
+      "Los clips de vídeo y sonido tienen 'Marcar cada pulso', que encuentra los pulsos de la música y coloca marcadores 🚩",
+      "'Cortar en cada marcador' divide un clip en todos los marcadores a la vez para ediciones sincronizadas con el ritmo",
+      "La pestaña Proyecto tiene 'Unir clips / presentación', que une los clips seleccionados (o todo el vídeo 1) uno tras otro, ajustando la duración de imágenes y los fundidos de una vez",
+      "La pestaña Proyecto tiene 'Fundido de entrada / salida', que empieza desde negro y termina en negro (el sonido también se desvanece)"
+     ]
+    },
+    "fr": {
+     "title": "Montage au rythme, coller les clips / diaporama, fondu d'entrée et de sortie du projet",
+     "items": [
+      "Les clips vidéo et son ont « Marquer chaque temps », qui repère les temps de la musique et pose des repères 🚩",
+      "« Couper à chaque repère » coupe un clip à tous les repères d'un coup pour des montages calés sur le rythme",
+      "L'onglet Projet a « Coller les clips / diaporama », qui enchaîne les clips sélectionnés (ou toute la piste 1) et règle la durée des images et les fondus d'un coup",
+      "L'onglet Projet a « Fondu d'entrée / sortie », qui part du noir et finit au noir (le son se fond aussi)"
+     ]
+    },
+    "de": {
+     "title": "Schnitt im Takt, Clips aneinanderreihen / Diashow, Projekt ein- und ausblenden",
+     "items": [
+      "Video- und Tonclips erhalten „Jeden Schlag markieren“, das die Schläge der Musik findet und 🚩-Marker setzt",
+      "„An jedem Marker schneiden“ teilt einen Clip an allen Markern auf einmal, für Schnitte im Takt",
+      "Das Projekt-Register hat „Clips aneinanderreihen / Diashow“: reiht die gewählten Clips (oder ganze Videospur 1) lückenlos aneinander und stellt Bilddauer und Überblendungen in einem Schritt ein",
+      "Das Projekt-Register hat „Einblenden / Ausblenden“: beginnt bei Schwarz und endet bei Schwarz (der Ton blendet ebenfalls)"
+     ]
+    },
+    "ja": {
+     "title": "拍に合わせて編集、クリップをつなげてスライドショー、プロジェクトのフェード",
+     "items": [
+      "動画と音声のクリップに「全拍にマーカー」を追加。音楽の拍を見つけて 🚩 マーカーを付けます",
+      "「マーカーで全部カット」で、すべてのマーカー位置でクリップを一度に分割できます（拍に合わせた編集）",
+      "プロジェクトタブに「クリップをつなげる / スライドショー」を追加。選んだクリップ（またはビデオ1全体）を続けて並べ、画像の長さと切り替えを一度に設定します",
+      "プロジェクトタブに「フェードイン / アウト」を追加。黒から始まり黒で終わります（音も一緒にフェード）"
+     ]
+    },
+    "zh": {
+     "title": "按节拍剪辑、首尾相连/幻灯片、项目淡入淡出",
+     "items": [
+      "视频和声音片段新增“每拍加标记”，可检测音乐节拍并放置 🚩 标记",
+      "“在每个标记处切割”可在所有标记处一次性分割片段，实现踩点剪辑",
+      "项目页新增“首尾相连 / 幻灯片”：将选中的片段（或整个视频 1 轨道）首尾相接，一次性设置图片时长和过渡",
+      "项目页新增“淡入 / 淡出”：从黑场开始，以黑场结束（声音也会淡入淡出）"
+     ]
+    },
+    "pt": {
+     "title": "Edição no ritmo, juntar clipes / apresentação, fade de entrada e saída do projeto",
+     "items": [
+      "Clipes de vídeo e som ganham 'Marcar cada batida', que encontra as batidas da música e coloca marcadores 🚩",
+      "'Cortar em cada marcador' divide um clipe em todos os marcadores de uma vez, para edições sincronizadas com o ritmo",
+      "A aba Projeto tem 'Juntar clipes / apresentação', que encadeia os clipes selecionados (ou toda a faixa de vídeo 1), definindo duração das imagens e transições de uma vez",
+      "A aba Projeto tem 'Fade de entrada / saída', que começa no preto e termina no preto (o som também faz fade)"
+     ]
+    },
+    "ru": {
+     "title": "Монтаж в такт, склейка клипов / слайд-шоу, затемнение проекта",
+     "items": [
+      "У видео- и звуковых клипов есть «Метка на каждый удар»: находит удары музыки и ставит метки 🚩",
+      "«Резать по каждой метке» делит клип сразу по всем меткам для монтажа в такт",
+      "На вкладке «Проект» есть «Склеить клипы / слайд-шоу»: ставит выбранные клипы (или всю дорожку 1) встык, сразу задавая длительность картинок и переходы",
+      "На вкладке «Проект» есть «Затемнение в начале / в конце»: начинается с чёрного и заканчивается чёрным (звук тоже затухает)"
+     ]
+    },
+    "tr": {
+     "title": "Ritme göre kesme, klipleri birleştirme / slayt gösterisi, proje giriş ve çıkış solması",
+     "items": [
+      "Video ve ses klipleri 'Her vuruşu işaretle' seçeneğini alır; müziğin vuruşlarını bulup 🚩 işaretçiler koyar",
+      "'Her işaretçide kes' bir klibi tüm işaretçilerden aynı anda böler; ritme uygun kurgu için",
+      "Proje sekmesinde 'Klipleri birleştir / slayt gösterisi' var: seçili klipleri (ya da tüm 1. parçayı) art arda dizer ve görüntü süresini ile geçişleri tek seferde ayarlar",
+      "Proje sekmesinde 'Giriş / çıkış solması' var: siyahtan başlar ve siyaha biter (ses de solar)"
      ]
     }
    }
@@ -217,6 +857,78 @@
       "Project tab has 'Cinema bars' (2.39:1, 2:1, 1.85:1), included in exports",
       "Sound clips have 'Fit to end of video': trims music to the end of the video and fades it out"
      ]
+    },
+    "es": {
+     "title": "Mosaico, grano de película, sacudida de cámara, bandas de cine, ajustar música al vídeo",
+     "items": [
+      "Los efectos de color tienen 'Mosaico' y 'Grano de película'",
+      "El ajuste 'Imagen' del clip tiene 'Sacudida de cámara' para un efecto de cámara en mano",
+      "El proyecto tiene 'Bandas de cine' (2.39:1, 2:1, 1.85:1), incluidas en las exportaciones",
+      "Los clips de sonido tienen 'Ajustar al final del vídeo': recorta la música al final del vídeo y la desvanece"
+     ]
+    },
+    "fr": {
+     "title": "Mosaïque, grain de film, tremblement caméra, bandes cinéma, caler la musique sur la vidéo",
+     "items": [
+      "Les effets de couleur ont « Mosaïque » et « Grain de film »",
+      "Le réglage « Image » du clip a « Tremblement caméra » pour un rendu caméra à l'épaule",
+      "L'onglet Projet a des « Bandes cinéma » (2,39:1, 2:1, 1,85:1), incluses dans les exports",
+      "Les clips son ont « Ajuster à la fin de la vidéo » : coupe la musique à la fin de la vidéo avec un fondu"
+     ]
+    },
+    "de": {
+     "title": "Mosaik, Filmkorn, Kamerawackeln, Kinobalken, Musik an Video anpassen",
+     "items": [
+      "Farbeffekte bieten „Mosaik“ und „Filmkorn“",
+      "Das Bild-Register eines Clips hat „Kameraverwacklung“ für einen Handkamera-Look",
+      "Das Projekt-Register hat „Kinobalken“ (2,39:1, 2:1, 1,85:1), die in Exporte übernommen werden",
+      "Tonclips haben „Auf Videoende anpassen“: kürzt die Musik auf das Videoende und blendet sie aus"
+     ]
+    },
+    "ja": {
+     "title": "モザイク、フィルムの粒子、カメラの揺れ、シネマバー、音楽を映像に合わせる",
+     "items": [
+      "色の効果に「モザイク」と「フィルムの粒子」を追加",
+      "クリップの「映像」設定に「カメラの揺れ」を追加（手持ち撮影風）",
+      "プロジェクトタブに「シネマバー」（2.39:1、2:1、1.85:1）を追加。書き出しにも含まれます",
+      "音声クリップに「映像の終わりに合わせる」を追加：音楽を動画の終わりで切り、フェードアウトします"
+     ]
+    },
+    "zh": {
+     "title": "马赛克、胶片颗粒、镜头抖动、电影黑边、音乐适配视频长度",
+     "items": [
+      "颜色效果新增“马赛克”和“胶片颗粒”",
+      "片段的“画面”设置新增“镜头抖动”，营造手持拍摄的感觉",
+      "项目页新增“电影黑边”（2.39:1、2:1、1.85:1），会包含在导出中",
+      "声音片段新增“适配到视频结尾”：将音乐裁到视频结束处并淡出"
+     ]
+    },
+    "pt": {
+     "title": "Mosaico, grão de filme, tremor de câmera, barras de cinema, ajustar música ao vídeo",
+     "items": [
+      "Os efeitos de cor ganham 'Mosaico' e 'Grão de filme'",
+      "O ajuste 'Imagem' do clipe tem 'Tremor de câmera' para um efeito de câmera na mão",
+      "A aba Projeto tem 'Barras de cinema' (2.39:1, 2:1, 1.85:1), incluídas nas exportações",
+      "Clipes de som têm 'Ajustar ao fim do vídeo': corta a música no fim do vídeo e aplica fade-out"
+     ]
+    },
+    "ru": {
+     "title": "Мозаика, зернистость плёнки, дрожание камеры, киношные полосы, подгонка музыки под видео",
+     "items": [
+      "В цветовых эффектах появились «Мозаика» и «Зернистость плёнки»",
+      "В настройках «Картинка» у клипа есть «Дрожание камеры» для эффекта съёмки с рук",
+      "На вкладке «Проект» есть «Киношные полосы» (2,39:1, 2:1, 1,85:1), они входят в экспорт",
+      "У звуковых клипов есть «Подогнать под конец видео»: обрезает музыку по концу видео и делает плавное затухание"
+     ]
+    },
+    "tr": {
+     "title": "Mozaik, film tanesi, kamera sarsıntısı, sinema çubukları, müziği videoya uydurma",
+     "items": [
+      "Renk efektlerine 'Mozaik' ve 'Film tanesi' eklendi",
+      "Klibin 'Resim' ayarlarında elde çekim görünümü için 'Kamera sarsıntısı' var",
+      "Proje sekmesinde dışa aktarmalara dahil edilen 'Sinema çubukları' (2.39:1, 2:1, 1.85:1) var",
+      "Ses klipleri 'Video sonuna sığdır' seçeneğini alır: müziği videonun sonunda keser ve yavaşça kısar"
+     ]
     }
    }
   },
@@ -238,6 +950,78 @@
       "Text clips gain 'Align' (centre/left/right) and 'Letter spacing'",
       "Sound has a 'Left <-> right' pan control (easy to hear with headphones)",
       "'Replace with another file' swaps the media while keeping the clip's trims, effects and position"
+     ]
+    },
+    "es": {
+     "title": "Relleno de fondo difuminado, alineación de texto, paneo estéreo, reemplazar archivo",
+     "items": [
+      "El ajuste 'Imagen' del clip tiene 'Rellenar el espacio vacío con un fondo difuminado': un clip horizontal en un marco vertical recibe una copia difuminada en lugar de barras negras",
+      "Los clips de texto ganan 'Alinear' (centro/izquierda/derecha) y 'Espaciado entre letras'",
+      "El sonido tiene un control de paneo 'Izquierda <-> derecha' (fácil de notar con auriculares)",
+      "'Reemplazar con otro archivo' cambia el medio conservando los recortes, efectos y posición del clip"
+     ]
+    },
+    "fr": {
+     "title": "Remplissage d'arrière-plan flou, alignement du texte, panoramique stéréo, remplacer le fichier",
+     "items": [
+      "Le réglage « Image » du clip a « Remplir l'espace vide par un arrière-plan flou » : un clip paysage dans un cadre portrait reçoit une copie floutée au lieu de bandes noires",
+      "Les clips texte gagnent « Alignement » (centre/gauche/droite) et « Espacement des lettres »",
+      "Le son a une commande de panoramique « Gauche <-> droite » (bien perceptible au casque)",
+      "« Remplacer par un autre fichier » change le média en gardant les découpes, effets et position du clip"
+     ]
+    },
+    "de": {
+     "title": "Unscharfer Hintergrund füllen, Textausrichtung, Stereo-Panorama, Datei ersetzen",
+     "items": [
+      "Das Bild-Register eines Clips hat „Leeren Raum mit unscharfem Hintergrund füllen“: ein Querformat-Clip in einem Hochformat bekommt eine unscharfe Kopie statt schwarzer Balken",
+      "Textclips erhalten „Ausrichtung“ (Mitte/links/rechts) und „Buchstabenabstand“",
+      "Ton hat einen Regler „Links <-> rechts“ fürs Panorama (mit Kopfhörern gut hörbar)",
+      "„Durch andere Datei ersetzen“ tauscht das Medium aus und behält Schnitte, Effekte und Position des Clips bei"
+     ]
+    },
+    "ja": {
+     "title": "ぼかし背景で埋める、文字の配置、ステレオのパン、ファイルの差し替え",
+     "items": [
+      "クリップの「映像」設定に「空いた部分をぼかした背景で埋める」を追加。縦の枠に横長のクリップを入れると、黒帯の代わりにぼかした映像が入ります",
+      "文字クリップに「配置」（中央・左・右）と「文字の間隔」を追加",
+      "音声に「左 <-> 右」のパン調整を追加（ヘッドホンでわかりやすい）",
+      "「別のファイルに差し替え」で、トリム・効果・位置を保ったまま素材だけ入れ替えられます"
+     ]
+    },
+    "zh": {
+     "title": "模糊背景填充、文字对齐、立体声声像、替换文件",
+     "items": [
+      "片段的“画面”设置新增“用模糊背景填充空白”：竖屏画幅中的横向片段会用模糊的副本填充，而不是黑边",
+      "文字片段新增“对齐”（居中/左/右）和“字间距”",
+      "声音新增“左 <-> 右”声像控制（戴耳机时效果明显）",
+      "“替换为其他文件”会更换素材，同时保留片段的修剪、效果和位置"
+     ]
+    },
+    "pt": {
+     "title": "Preenchimento com fundo desfocado, alinhamento de texto, panorama estéreo, substituir arquivo",
+     "items": [
+      "O ajuste 'Imagem' do clipe tem 'Preencher o espaço vazio com um fundo desfocado': um clipe horizontal num quadro vertical recebe uma cópia desfocada em vez de barras pretas",
+      "Clipes de texto ganham 'Alinhar' (centro/esquerda/direita) e 'Espaçamento entre letras'",
+      "O som tem um controle de panorama 'Esquerda <-> direita' (fácil de notar com fones)",
+      "'Substituir por outro arquivo' troca a mídia mantendo os cortes, efeitos e a posição do clipe"
+     ]
+    },
+    "ru": {
+     "title": "Заливка размытым фоном, выравнивание текста, стерео-панорама, замена файла",
+     "items": [
+      "В настройках «Картинка» у клипа есть «Заполнить пустое место размытым фоном»: горизонтальный клип в вертикальном кадре получает размытую копию вместо чёрных полос",
+      "Текстовые клипы получили «Выравнивание» (по центру, слева, справа) и «Межбуквенный интервал»",
+      "Для звука появилась панорама «Влево <-> вправо» (хорошо слышно в наушниках)",
+      "«Заменить другим файлом» меняет медиа, сохраняя обрезку, эффекты и положение клипа"
+     ]
+    },
+    "tr": {
+     "title": "Bulanık arka plan dolgusu, metin hizalama, stereo denge, dosya değiştirme",
+     "items": [
+      "Klibin 'Resim' ayarlarında 'Boş alanı bulanık bir arka planla doldur' var: dikey bir karede yatay klip siyah şerit yerine bulanık bir kopya alır",
+      "Metin klipleri 'Hizalama' (orta/sol/sağ) ve 'Harf aralığı' kazanır",
+      "Seste 'Sol <-> sağ' denge kontrolü var (kulaklıkla kolay fark edilir)",
+      "'Başka bir dosyayla değiştir' ortamı değiştirir; klibin kırpmalarını, efektlerini ve konumunu korur"
      ]
     }
    }
@@ -261,6 +1045,78 @@
       "The ⇤ ⇥ buttons (or Up/Down keys) jump to the previous/next edit point (clip starts, ends, markers)",
       "'Select all with this colour label' and 'Select all clips on this track' pick many clips at once"
      ]
+    },
+    "es": {
+     "title": "Nombres de clip, recortar hasta el cabezal, saltar entre cortes",
+     "items": [
+      "Pon un nombre a un clip en sus ajustes y aparecerá en la línea de tiempo",
+      "'Recortar inicio' / 'Recortar final' quitan todo lo anterior o posterior al cabezal en un paso",
+      "Los botones ⇤ ⇥ (o las teclas Arriba/Abajo) saltan al punto de edición anterior o siguiente (inicios, finales, marcadores)",
+      "'Seleccionar todos con esta etiqueta de color' y 'Seleccionar todos los clips de esta pista' eligen muchos clips a la vez"
+     ]
+    },
+    "fr": {
+     "title": "Noms de clips, couper jusqu'au curseur, aller d'un montage à l'autre",
+     "items": [
+      "Donnez un nom à un clip dans ses réglages : il s'affiche sur la chronologie",
+      "« Couper le début » / « Couper la fin » retirent tout ce qui précède ou suit le curseur en une étape",
+      "Les boutons ⇤ ⇥ (ou les touches Haut/Bas) passent au point de montage précédent ou suivant (débuts, fins, repères)",
+      "« Sélectionner tout avec cette couleur » et « Sélectionner tous les clips de cette piste » choisissent beaucoup de clips d'un coup"
+     ]
+    },
+    "de": {
+     "title": "Clip-Namen, Schneiden bis zur Abspielposition, Sprung zwischen Schnitten",
+     "items": [
+      "Geben Sie einem Clip in seinen Einstellungen einen Namen; er wird dann auf der Zeitleiste angezeigt",
+      "„Anfang kürzen“ / „Ende kürzen“ entfernen in einem Schritt alles vor bzw. nach der Abspielposition",
+      "Die Schaltflächen ⇤ ⇥ (oder die Pfeiltasten Hoch/Runter) springen zum vorherigen bzw. nächsten Schnittpunkt (Clipanfänge, -enden, Marker)",
+      "„Alle mit dieser Farbmarkierung wählen“ und „Alle Clips auf dieser Spur wählen“ wählen viele Clips auf einmal aus"
+     ]
+    },
+    "ja": {
+     "title": "クリップの名前、再生位置までトリム、編集点への移動",
+     "items": [
+      "クリップの設定で名前を付けると、タイムラインに表示されます",
+      "「頭を削除」「後ろを削除」で、再生位置より前または後ろをワンステップで消せます",
+      "⇤ ⇥ ボタン（または上下キー）で、前後の編集点（クリップの始まり・終わり、マーカー）へ移動します",
+      "「この色のラベルをすべて選択」と「このトラックのクリップをすべて選択」で、多くのクリップを一度に選べます"
+     ]
+    },
+    "zh": {
+     "title": "片段命名、修剪到播放头、跳转编辑点",
+     "items": [
+      "在片段设置中为其命名，名称会显示在时间线上",
+      "“修剪开头”/“修剪结尾”可一步删除播放头之前或之后的内容",
+      "⇤ ⇥ 按钮（或上/下方向键）可跳到上一个或下一个编辑点（片段起止点、标记）",
+      "“选中此颜色标签的全部”和“选中此轨道上的全部片段”可一次选中多个片段"
+     ]
+    },
+    "pt": {
+     "title": "Nomes de clipe, aparar até a cabeça de reprodução, pular entre cortes",
+     "items": [
+      "Dê um nome a um clipe nas configurações dele; o nome aparece na linha do tempo",
+      "'Aparar início' / 'Aparar fim' removem tudo antes ou depois da cabeça de reprodução em um passo",
+      "Os botões ⇤ ⇥ (ou as teclas Cima/Baixo) pulam para o ponto de edição anterior ou seguinte (inícios, fins e marcadores)",
+      "'Selecionar todos com esta cor' e 'Selecionar todos os clipes desta faixa' escolhem muitos clipes de uma vez"
+     ]
+    },
+    "ru": {
+     "title": "Имена клипов, обрезка до головки воспроизведения, переход между правками",
+     "items": [
+      "Дайте клипу имя в его настройках, и оно будет показано на таймлайне",
+      "«Обрезать начало» и «Обрезать конец» одним шагом убирают всё до или после головки воспроизведения",
+      "Кнопки ⇤ ⇥ (или клавиши «Вверх»/«Вниз») переходят к предыдущей или следующей точке правки (начала, концы, метки клипов)",
+      "«Выбрать все с этой цветовой меткой» и «Выбрать все клипы на этой дорожке» выделяют сразу много клипов"
+     ]
+    },
+    "tr": {
+     "title": "Klip adları, imlece kadar kırpma, kesimler arasında atlama",
+     "items": [
+      "Klibin ayarlarında ona bir ad verin; ad zaman çizelgesinde görünür",
+      "'Başlangıcı kırp' / 'Sonunu kırp' imlecin önündeki ya da arkasındaki her şeyi tek adımda kaldırır",
+      "⇤ ⇥ düğmeleri (ya da Yukarı/Aşağı tuşları) önceki ya da sonraki düzenleme noktasına (klip başları, sonları, işaretçiler) atlar",
+      "'Bu renk etiketinin tümünü seç' ve 'Bu parçadaki tüm klipleri seç' ile birçok klip aynı anda seçilir"
+     ]
     }
    }
   },
@@ -283,6 +1139,78 @@
       "Text clip settings have 'Apply this text style to all text clips' (the words and position stay as they are)",
       "When exporting you can pick the range: everything, from the playhead to the end, or the selected clip (GIF too)"
      ]
+    },
+    "es": {
+     "title": "División automática por escenas, medidor de nivel, rango de exportación",
+     "items": [
+      "Los ajustes del clip de vídeo tienen ahora 'Cortar automáticamente donde cambia la escena'; un número menor corta en más trozos",
+      "Un medidor de volumen junto al botón de reproducción se vuelve amarillo y luego rojo si el sonido está demasiado alto",
+      "Los ajustes de clips de texto tienen 'Aplicar este estilo de texto a todos los clips de texto' (las palabras y la posición se mantienen)",
+      "Al exportar puedes elegir el rango: todo, desde el cabezal hasta el final, o el clip seleccionado (también GIF)"
+     ]
+    },
+    "fr": {
+     "title": "Découpe automatique par scène, indicateur de niveau, plage d'export",
+     "items": [
+      "Les réglages d'un clip vidéo ont « Couper automatiquement au changement de scène » ; un chiffre plus bas coupe en plus de morceaux",
+      "Un indicateur de volume à côté du bouton de lecture passe au jaune puis au rouge quand le son est trop fort",
+      "Les réglages d'un clip texte ont « Appliquer ce style de texte à tous les clips texte » (les mots et la position restent)",
+      "À l'export, vous pouvez choisir la plage : tout, du curseur à la fin, ou le clip sélectionné (GIF aussi)"
+     ]
+    },
+    "de": {
+     "title": "Automatische Szenenteilung, Pegelanzeige, Exportbereich",
+     "items": [
+      "Die Einstellungen für Videoclips bieten jetzt „Automatisch an Szenenwechseln schneiden“; ein kleinerer Wert schneidet in mehr Stücke",
+      "Eine Lautstärkeanzeige neben der Wiedergabe-Schaltfläche wird gelb und dann rot, wenn der Ton zu laut ist",
+      "Die Einstellungen für Textclips haben „Diesen Textstil auf alle Textclips anwenden“ (Wörter und Position bleiben erhalten)",
+      "Beim Exportieren können Sie den Bereich wählen: alles, von der Abspielposition bis zum Ende oder den gewählten Clip (auch GIF)"
+     ]
+    },
+    "ja": {
+     "title": "シーンの自動分割、音量メーター、書き出し範囲",
+     "items": [
+      "動画クリップの設定に「シーンが変わるところで自動カット」が加わりました。数値を小さくするほど細かく切ります",
+      "再生ボタンの横の音量メーターは、音が大きすぎると黄色になり、さらに赤になります",
+      "文字クリップの設定に「この文字スタイルを全ての文字クリップに適用」を追加（文字の内容と位置はそのまま）",
+      "書き出すときに範囲を選べます：すべて、再生位置から最後まで、または選んだクリップ（GIFも可）"
+     ]
+    },
+    "zh": {
+     "title": "自动按场景分割、音量表与导出范围",
+     "items": [
+      "视频片段设置中新增“在场景变化处自动切割”；数值越小，切得越碎",
+      "播放按钮旁的音量表在声音过大时变黄，再变红",
+      "文字片段设置中新增“将此文字样式应用于所有文字片段”（文字内容和位置保持不变）",
+      "导出时可选择范围：全部、从播放头到结尾，或选中的片段（GIF 也支持）"
+     ]
+    },
+    "pt": {
+     "title": "Divisão automática por cena, medidor de nível, intervalo de exportação",
+     "items": [
+      "Os ajustes de clipe de vídeo agora têm 'Cortar automaticamente onde a cena muda'; um número menor corta em mais pedaços",
+      "Um medidor de volume ao lado do botão de reproduzir fica amarelo e depois vermelho quando o som está alto demais",
+      "Os ajustes de clipe de texto têm 'Aplicar este estilo de texto a todos os clipes de texto' (as palavras e a posição continuam as mesmas)",
+      "Ao exportar, você escolhe o intervalo: tudo, do cursor até o fim ou o clipe selecionado (GIF também)"
+     ]
+    },
+    "ru": {
+     "title": "Автоматическое разбиение по сценам, индикатор уровня, диапазон экспорта",
+     "items": [
+      "В настройках видеоклипа появилась опция «Автоматически резать по смене сцены»; чем меньше число, тем больше кусков",
+      "Индикатор громкости рядом с кнопкой воспроизведения становится жёлтым, а затем красным, если звук слишком громкий",
+      "В настройках текстовых клипов есть «Применить этот стиль текста ко всем текстовым клипам» (слова и положение не меняются)",
+      "При экспорте можно выбрать диапазон: всё, от головки воспроизведения до конца или выбранный клип (и GIF тоже)"
+     ]
+    },
+    "tr": {
+     "title": "Otomatik sahne bölme, ses seviyesi göstergesi, dışa aktarma aralığı",
+     "items": [
+      "Video klibi ayarlarında artık 'Sahne değiştiğinde otomatik kes' var; daha küçük bir sayı daha çok parçaya böler",
+      "Oynat düğmesinin yanındaki ses göstergesi, ses çok yüksek olduğunda önce sarıya, sonra kırmızıya döner",
+      "Metin klibi ayarlarında 'Bu metin stilini tüm metin kliplerine uygula' var (kelimeler ve konum korunur)",
+      "Dışa aktarırken aralık seçebilirsiniz: tümü, imleçten sona kadar ya da seçili klip (GIF dahil)"
+     ]
     }
    }
   },
@@ -302,6 +1230,70 @@
       "Video clips show a filmstrip of scenes; trimmed and split clips show the matching part",
       "Clip colour labels: mark clips with a red, orange, yellow, green, blue or purple strip",
       "🔁 Loop playback: starts again from the beginning at the end (not applied when exporting)"
+     ]
+    },
+    "es": {
+     "title": "Vistas previas de la línea de tiempo, colores de clip y reproducción en bucle",
+     "items": [
+      "Los clips de vídeo muestran una tira de escenas; los clips recortados o divididos muestran la parte correspondiente",
+      "Etiquetas de color de clip: márcalos con una franja roja, naranja, amarilla, verde, azul o morada",
+      "🔁 Reproducción en bucle: vuelve al inicio al llegar al final (no se aplica al exportar)"
+     ]
+    },
+    "fr": {
+     "title": "Miniatures de la chronologie, couleurs de clip, lecture en boucle",
+     "items": [
+      "Les clips vidéo affichent une bande de scènes ; les clips coupés ou découpés montrent la partie correspondante",
+      "Étiquettes de couleur de clip : marquez les clips avec une bande rouge, orange, jaune, verte, bleue ou violette",
+      "🔁 Lecture en boucle : repart du début à la fin (non appliquée à l'export)"
+     ]
+    },
+    "de": {
+     "title": "Zeitleisten-Vorschaubilder, Clip-Farbmarkierungen, Schleifenwiedergabe",
+     "items": [
+      "Videoclips zeigen einen Filmstreifen mit Szenen; gekürzte und geteilte Clips zeigen den passenden Ausschnitt",
+      "Clip-Farbmarkierungen: Clips mit rotem, orangefarbenem, gelbem, grünem, blauem oder violettem Streifen kennzeichnen",
+      "🔁 Schleifenwiedergabe: startet am Ende wieder von vorn (bei der Ausgabe nicht angewendet)"
+     ]
+    },
+    "ja": {
+     "title": "タイムラインの映像サムネイル、クリップの色分け、ループ再生",
+     "items": [
+      "動画クリップは場面のフィルムストリップを表示します。トリムや分割したクリップは、その部分を表示します",
+      "クリップの色ラベル：赤・オレンジ・黄・緑・青・紫の帯で印を付けられます",
+      "🔁 ループ再生：最後まで行くと最初から再生します（書き出しには適用されません）"
+     ]
+    },
+    "zh": {
+     "title": "时间线缩略图、片段颜色标记与循环播放",
+     "items": [
+      "视频片段会显示场景缩略图条；裁剪或分割后的片段显示对应部分",
+      "片段颜色标记：可用红、橙、黄、绿、蓝、紫色条标记片段",
+      "🔁 循环播放：播放到结尾后从头开始（导出时不生效）"
+     ]
+    },
+    "pt": {
+     "title": "Miniaturas na linha do tempo, cores de clipe e reprodução em loop",
+     "items": [
+      "Clipes de vídeo mostram uma tira de cenas; clipes aparados ou divididos mostram a parte correspondente",
+      "Marcadores de cor de clipe: marque clipes com uma faixa vermelha, laranja, amarela, verde, azul ou roxa",
+      "🔁 Reprodução em loop: recomeça do início ao chegar ao fim (não se aplica à exportação)"
+     ]
+    },
+    "ru": {
+     "title": "Миниатюры на таймлайне, цветовые метки и повтор воспроизведения",
+     "items": [
+      "Видеоклипы показывают полоску кадров сцен; обрезанные и разрезанные клипы показывают соответствующий фрагмент",
+      "Цветовые метки клипов: отмечайте клипы красной, оранжевой, жёлтой, зелёной, синей или фиолетовой полосой",
+      "🔁 Повтор воспроизведения: в конце снова начинает с начала (при экспорте не применяется)"
+     ]
+    },
+    "tr": {
+     "title": "Zaman çizelgesi küçük resimleri, klip renkleri ve döngü oynatma",
+     "items": [
+      "Video klipleri sahnelerin şeridini gösterir; kırpılmış ve bölünmüş klipler ilgili kısmı gösterir",
+      "Klip renk etiketleri: klipleri kırmızı, turuncu, sarı, yeşil, mavi ya da mor bir şeritle işaretleyin",
+      "🔁 Döngü oynatma: sonda baştan tekrar başlar (dışa aktarmada uygulanmaz)"
      ]
     }
    }
@@ -325,6 +1317,78 @@
       "Tap another clip in the picture to select it; clips with keyframes move their whole path; locked tracks are left alone",
       "The dashed box is not included in 'Save this frame as PNG'"
      ]
+    },
+    "es": {
+     "title": "Mover y cambiar tamaño directamente en la vista previa",
+     "items": [
+      "Arrastra los clips en la vista previa para moverlos (vídeo, imágenes, texto y formas); el clip seleccionado muestra un recuadro amarillo discontinuo",
+      "Arrastra la esquina inferior derecha del recuadro amarillo para cambiar el tamaño (también funciona con el dedo)",
+      "Toca otro clip en la imagen para seleccionarlo; los clips con fotogramas clave mueven toda su trayectoria; las pistas bloqueadas no se tocan",
+      "El recuadro discontinuo no se incluye en 'Guardar este fotograma como PNG'"
+     ]
+    },
+    "fr": {
+     "title": "Déplacer et redimensionner directement dans l'aperçu",
+     "items": [
+      "Faites glisser les clips dans l'aperçu pour les déplacer (vidéo, images, texte et formes) ; le clip sélectionné affiche un cadre jaune en pointillés",
+      "Faites glisser le coin inférieur droit du cadre jaune pour redimensionner (fonctionne aussi au doigt)",
+      "Touchez un autre clip dans l'image pour le sélectionner ; les clips avec images clés déplacent tout leur tracé ; les pistes verrouillées sont épargnées",
+      "Le cadre en pointillés n'est pas inclus dans « Enregistrer cette image en PNG »"
+     ]
+    },
+    "de": {
+     "title": "Direkt in der Vorschau verschieben und skalieren",
+     "items": [
+      "Ziehen Sie Clips in der Vorschau, um sie zu verschieben (Video, Bilder, Text und Formen); der gewählte Clip zeigt einen gestrichelten gelben Rahmen",
+      "Ziehen Sie die untere rechte Ecke des gelben Rahmens, um die Größe zu ändern (auch mit dem Finger)",
+      "Tippen Sie im Bild auf einen anderen Clip, um ihn zu wählen; Clips mit Keyframes verschieben ihren ganzen Pfad; gesperrte Spuren bleiben unberührt",
+      "Der gestrichelte Rahmen wird bei „Dieses Bild als PNG speichern“ nicht mitgespeichert"
+     ]
+    },
+    "ja": {
+     "title": "プレビューで直接動かしてサイズ変更",
+     "items": [
+      "プレビュー上でクリップをドラッグして移動できます（動画・画像・文字・図形）。選んだクリップには黄色の点線枠が出ます",
+      "黄色い枠の右下の角をドラッグするとサイズを変えられます（指でも可）",
+      "画面上の別のクリップをタップして選べます。キーフレームのあるクリップは経路ごと動きます。固定したトラックは動きません",
+      "点線の枠は「このコマをPNGで保存」には含まれません"
+     ]
+    },
+    "zh": {
+     "title": "在预览中直接移动和缩放",
+     "items": [
+      "在预览中拖动片段即可移动（视频、图片、文字和形状）；选中的片段会显示黄色虚线框",
+      "拖动黄色框的右下角即可缩放（触屏也支持）",
+      "点击画面中的另一个片段即可选中；带关键帧的片段会整体移动路径；锁定的轨道保持不动",
+      "虚线框不会包含在“将此帧保存为 PNG”中"
+     ]
+    },
+    "pt": {
+     "title": "Mover e redimensionar direto na prévia",
+     "items": [
+      "Arraste clipes na prévia para movê-los (vídeo, imagens, texto e formas); o clipe selecionado mostra uma caixa amarela tracejada",
+      "Arraste o canto inferior direito da caixa amarela para redimensionar (funciona com o dedo também)",
+      "Toque em outro clipe na imagem para selecioná-lo; clipes com quadros-chave movem todo o caminho; faixas bloqueadas ficam intactas",
+      "A caixa tracejada não é incluída em 'Salvar este quadro como PNG'"
+     ]
+    },
+    "ru": {
+     "title": "Перемещение и изменение размера прямо в предпросмотре",
+     "items": [
+      "Перетаскивайте клипы в предпросмотре, чтобы перемещать их (видео, картинки, текст и фигуры); выбранный клип показан жёлтой пунктирной рамкой",
+      "Потяните правый нижний угол жёлтой рамки, чтобы изменить размер (работает и пальцем)",
+      "Коснитесь другого клипа на изображении, чтобы выбрать его; клипы с ключевыми кадрами двигают весь путь; заблокированные дорожки не трогаются",
+      "Пунктирная рамка не попадает в «Сохранить этот кадр как PNG»"
+     ]
+    },
+    "tr": {
+     "title": "Önizlemede doğrudan taşıma ve boyutlandırma",
+     "items": [
+      "Klipleri önizlemede sürükleyerek taşıyın (video, resim, metin ve şekiller); seçili klip kesikli sarı bir kutu gösterir",
+      "Sarı kutunun sağ alt köşesini sürükleyerek boyutlandırın (parmakla da çalışır)",
+      "Görüntüdeki başka bir klibe dokunarak seçin; anahtar kareli klipler tüm yolunu birlikte taşır; kilitli parçalar değişmez",
+      "Kesikli kutu 'Bu kareyi PNG olarak kaydet' çıktısına dahil edilmez"
+     ]
     }
    }
   },
@@ -345,6 +1409,70 @@
       "Speed ramp presets: slow-mo to fast, fast to slow-mo, gradually faster, gradually slower",
       "Two new text motions: elastic pop and letters rising one by one"
      ]
+    },
+    "es": {
+     "title": "5 transiciones, preajustes de rampa de velocidad, 2 movimientos de texto",
+     "items": [
+      "Cinco nuevas transiciones: fundido a negro, destello a blanco, desenfoque de entrada, giro de entrada y glitch de entrada (la imagen se parte en tiras)",
+      "Preajustes de rampa de velocidad: de cámara lenta a rápido, de rápido a cámara lenta, cada vez más rápido, cada vez más lento",
+      "Dos nuevos movimientos de texto: aparición elástica y letras que suben una a una"
+     ]
+    },
+    "fr": {
+     "title": "5 transitions, préréglages de rampe de vitesse, 2 mouvements de texte",
+     "items": [
+      "Cinq nouvelles transitions : fondu au noir, flash blanc, flou d'entrée, rotation d'entrée et glitch d'entrée (l'image se déchire en tranches)",
+      "Préréglages de rampe de vitesse : du ralenti vers rapide, de rapide vers ralenti, de plus en plus rapide, de plus en plus lent",
+      "Deux nouveaux mouvements de texte : apparition élastique et lettres qui montent une à une"
+     ]
+    },
+    "de": {
+     "title": "5 Übergänge, Voreinstellungen für Geschwindigkeitsverläufe, 2 Textbewegungen",
+     "items": [
+      "Fünf neue Übergänge: Abblenden zu Schwarz, Aufblitzen zu Weiß, Einblenden mit Weichzeichner, Einflug mit Drehung und Glitch-Einflug (das Bild wird in Streifen zerrissen)",
+      "Voreinstellungen für Geschwindigkeitsverläufe: Zeitlupe zu schnell, schnell zu Zeitlupe, allmählich schneller, allmählich langsamer",
+      "Zwei neue Textbewegungen: elastisches Erscheinen und Buchstaben, die nacheinander aufsteigen"
+     ]
+    },
+    "ja": {
+     "title": "切り替え5種、速度変化のプリセット、文字の動き2種",
+     "items": [
+      "新しい切り替え5種：黒へフェード、白へフラッシュ、ぼかしから登場、回転して登場、グリッチで登場（映像が細切れにずれます）",
+      "速度変化のプリセット：スロー→速い、速い→スロー、だんだん速く、だんだん遅く",
+      "新しい文字の動き2種：弾むように登場、文字が一文字ずつ上がる"
+     ]
+    },
+    "zh": {
+     "title": "5 种转场、变速预设、2 种文字动态",
+     "items": [
+      "新增五种转场：淡入黑场、闪白、模糊入场、翻转入场、故障入场（画面被切成条状错位）",
+      "变速预设：慢动作转快速、快速转慢动作、逐渐加速、逐渐减速",
+      "新增两种文字动态：弹性出现，以及文字逐个升起"
+     ]
+    },
+    "pt": {
+     "title": "5 transições, predefinições de rampa de velocidade, 2 movimentos de texto",
+     "items": [
+      "Cinco novas transições: escurecer para preto, flash para branco, desfoque de entrada, giro de entrada e glitch de entrada (a imagem se rasga em faixas)",
+      "Predefinições de rampa de velocidade: de câmera lenta para rápido, de rápido para câmera lenta, cada vez mais rápido, cada vez mais lento",
+      "Dois novos movimentos de texto: surgir elástico e letras subindo uma a uma"
+     ]
+    },
+    "ru": {
+     "title": "5 переходов, пресеты плавного изменения скорости, 2 движения текста",
+     "items": [
+      "Пять новых переходов: затемнение до чёрного, вспышка до белого, появление из размытия, появление с поворотом и появление глитчем (изображение рвётся на полосы)",
+      "Пресеты изменения скорости: замедленная → быстрая, быстрая → замедленная, постепенно быстрее, постепенно медленнее",
+      "Два новых движения текста: упругое появление и буквы, поднимающиеся по одной"
+     ]
+    },
+    "tr": {
+     "title": "5 geçiş, hız rampası ön ayarları, 2 yazı hareketi",
+     "items": [
+      "Beş yeni geçiş: siyaha kararma, beyaza parlama, bulanıklıktan giriş, dönerek giriş ve glitch girişi (görüntü şeritlere ayrılarak kayar)",
+      "Hız rampası ön ayarları: ağır çekimden hızlıya, hızlıdan ağır çekime, giderek hızlanma, giderek yavaşlama",
+      "İki yeni yazı hareketi: esnek belirme ve harflerin tek tek yükselmesi"
+     ]
     }
    }
   },
@@ -362,6 +1490,62 @@
      "items": [
       "Stabilize: tracks motion at 10 frames/s and smooths out camera shake; choose how much to zoom to hide the edges (on a shaky test clip the vertical jitter dropped by 96%)",
       "Group / ungroup clips: grouped clips are selected, moved, duplicated and deleted as one; they show a coloured strip on top"
+     ]
+    },
+    "es": {
+     "title": "Reducir temblor y agrupar clips",
+     "items": [
+      "Estabilizar: sigue el movimiento a 10 fotogramas por segundo y suaviza el temblor de la cámara; elige cuánto ampliar para ocultar los bordes (en un clip de prueba con temblor, la vibración vertical bajó un 96 %)",
+      "Agrupar / desagrupar clips: los clips agrupados se seleccionan, mueven, duplican y borran como uno solo; muestran una franja de color arriba"
+     ]
+    },
+    "fr": {
+     "title": "Stabilisation et groupes de clips",
+     "items": [
+      "Stabiliser : suit le mouvement à 10 images/s et lisse les secousses de la caméra ; choisissez le zoom pour masquer les bords (sur un clip de test tremblant, la vibration verticale a baissé de 96 %)",
+      "Grouper / dégrouper les clips : les clips groupés sont sélectionnés, déplacés, dupliqués et supprimés d'un bloc ; ils affichent une bande de couleur en haut"
+     ]
+    },
+    "de": {
+     "title": "Stabilisieren und Clip-Gruppen",
+     "items": [
+      "Stabilisieren: verfolgt die Bewegung mit 10 Bildern pro Sekunde und glättet Kameraverwacklungen; wählbar, wie stark gezoomt wird, um die Ränder zu verbergen (bei einem wackeligen Testclip sank das vertikale Zittern um 96 %)",
+      "Clips gruppieren / Gruppierung aufheben: gruppierte Clips werden gemeinsam ausgewählt, verschoben, dupliziert und gelöscht; oben zeigen sie einen farbigen Streifen"
+     ]
+    },
+    "ja": {
+     "title": "手ぶれ補正とクリップのグループ化",
+     "items": [
+      "手ぶれ補正：1秒10コマで動きを追い、カメラのブレをなめらかにします。端を隠すためのズーム量を選べます（ブレる試し撮りで上下の揺れが96%減）",
+      "クリップのグループ化・解除：グループにしたクリップは一度に選択、移動、複製、削除できます。上端に色の帯が表示されます"
+     ]
+    },
+    "zh": {
+     "title": "防抖与片段编组",
+     "items": [
+      "防抖：以每秒 10 帧追踪运动并平滑镜头抖动；可选择放大程度以隐藏边缘（在一段抖动的测试片段中，垂直抖动降低了 96%）",
+      "编组 / 取消编组：编组后的片段可一起选择、移动、复制和删除；顶部会显示彩色条"
+     ]
+    },
+    "pt": {
+     "title": "Estabilizar e agrupar clipes",
+     "items": [
+      "Estabilizar: acompanha o movimento a 10 quadros por segundo e suaviza a trepidação da câmera; escolha o zoom para esconder as bordas (em um clipe de teste trêmulo, a vibração vertical caiu 96%)",
+      "Agrupar / desagrupar clipes: clipes agrupados são selecionados, movidos, duplicados e excluídos juntos; mostram uma faixa colorida no topo"
+     ]
+    },
+    "ru": {
+     "title": "Стабилизация и группы клипов",
+     "items": [
+      "Стабилизация: отслеживает движение с частотой 10 кадров/с и сглаживает дрожание камеры; можно выбрать, насколько приближать, чтобы скрыть края (на тестовом дрожащем клипе вертикальная тряска снизилась на 96%)",
+      "Группировка и разгруппировка клипов: сгруппированные клипы выделяются, перемещаются, дублируются и удаляются вместе; сверху у них цветная полоска"
+     ]
+    },
+    "tr": {
+     "title": "Sarsıntı azaltma ve klip gruplama",
+     "items": [
+      "Sabitleme: hareketi saniyede 10 kareyle izler ve kamera sarsıntısını yumuşatır; kenarları gizlemek için ne kadar yakınlaşılacağı seçilebilir (titrek bir deneme klibinde dikey titreme %96 azaldı)",
+      "Klipleri grupla / grubu çöz: gruplanan klipler birlikte seçilir, taşınır, çoğaltılır ve silinir; üstlerinde renkli bir şerit görünür"
      ]
     }
    }
@@ -382,6 +1566,70 @@
       "Colour grading: midtone gamma, shadow and highlight tints (colour + strength) and sharpen, with Teal & orange and Blue night presets",
       "Shortcuts: Ctrl+C/X/V copy, cut and paste (pastes at the playhead), Ctrl+D duplicate, Ctrl+A select all, Home/End, Esc; the Project tab lists them",
       "Project templates: pick YouTube landscape, Shorts portrait or Instagram feed in one click, and save your aspect ratio, background and text/shape clips as your own template (up to 8)"
+     ]
+    },
+    "es": {
+     "title": "Corrección de color, enfocar, atajos, plantillas de proyecto",
+     "items": [
+      "Corrección de color: gamma de medios tonos, tintes de sombras y luces (color + intensidad) y enfoque, con los ajustes preestablecidos Teal & orange y Noche azul",
+      "Atajos: Ctrl+C/X/V copiar, cortar y pegar (pega en el cabezal), Ctrl+D duplicar, Ctrl+A seleccionar todo, Inicio/Fin, Esc; la pestaña Proyecto los muestra",
+      "Plantillas de proyecto: elige YouTube horizontal, Shorts vertical o Instagram feed con un clic, y guarda tu relación de aspecto, fondo y clips de texto/forma como plantilla propia (hasta 8)"
+     ]
+    },
+    "fr": {
+     "title": "Étalonnage, netteté, raccourcis, modèles de projet",
+     "items": [
+      "Étalonnage : gamma des tons moyens, teintes des ombres et des hautes lumières (couleur + intensité) et netteté, avec les préréglages Teal & orange et Nuit bleue",
+      "Raccourcis : Ctrl+C/X/V copier, couper, coller (colle à la tête de lecture), Ctrl+D dupliquer, Ctrl+A tout sélectionner, Début/Fin, Échap ; l'onglet Projet les liste",
+      "Modèles de projet : choisissez YouTube paysage, Shorts portrait ou Instagram en un clic, et enregistrez votre format, votre fond et vos clips texte/forme comme modèle perso (jusqu'à 8)"
+     ]
+    },
+    "de": {
+     "title": "Farbkorrektur, Schärfen, Tastenkürzel, Projektvorlagen",
+     "items": [
+      "Farbkorrektur: Gamma der Mitteltöne, Farbtöne für Schatten und Lichter (Farbe + Stärke) und Schärfen, mit den Voreinstellungen Teal & Orange und Blaue Nacht",
+      "Tastenkürzel: Strg+C/X/V kopieren, ausschneiden, einfügen (fügt an der Abspielposition ein), Strg+D duplizieren, Strg+A alles auswählen, Pos1/Ende, Esc; das Register Projekt listet sie auf",
+      "Projektvorlagen: wählen Sie mit einem Klick YouTube quer, Shorts hochkant oder Instagram-Feed und speichern Sie Ihr Seitenverhältnis, Hintergrund und Text-/Formclips als eigene Vorlage (bis zu 8)"
+     ]
+    },
+    "ja": {
+     "title": "色補正、シャープ、ショートカット、プロジェクトのひな形",
+     "items": [
+      "色補正：中間調のガンマ、影とハイライトの色味（色と強さ）、シャープ化。「ティール＆オレンジ」「ブルーナイト」のプリセット付き",
+      "ショートカット：Ctrl+C/X/V でコピー・切り取り・貼り付け（再生位置に貼ります）、Ctrl+D で複製、Ctrl+A で全選択、Home/End、Esc。プロジェクトタブに一覧があります",
+      "プロジェクトのひな形：YouTube 横長、ショート縦長、Instagram フィードをワンクリックで選べ、自分の縦横比・背景・文字と図形のクリップを独自のひな形として保存できます（最大8件）"
+     ]
+    },
+    "zh": {
+     "title": "调色、锐化、快捷键、项目模板",
+     "items": [
+      "调色：中间调伽马、阴影与高光色调（颜色 + 强度）以及锐化，内置“青橙”和“蓝夜”预设",
+      "快捷键：Ctrl+C/X/V 复制、剪切、粘贴（粘贴到播放头处），Ctrl+D 复制，Ctrl+A 全选，Home/End，Esc；项目页列出了全部快捷键",
+      "项目模板：一键选择 YouTube 横屏、Shorts 竖屏或 Instagram 信息流，也可把你的画幅、背景以及文字和形状片段保存为自定义模板（最多 8 个）"
+     ]
+    },
+    "pt": {
+     "title": "Correção de cor, nitidez, atalhos, modelos de projeto",
+     "items": [
+      "Correção de cor: gama dos tons médios, tons de sombra e de realce (cor + intensidade) e nitidez, com as predefinições Teal & orange e Noite azul",
+      "Atalhos: Ctrl+C/X/V copiar, recortar e colar (cola na cabeça de reprodução), Ctrl+D duplicar, Ctrl+A selecionar tudo, Home/End, Esc; a aba Projeto lista todos",
+      "Modelos de projeto: escolha YouTube paisagem, Shorts retrato ou feed do Instagram com um clique, e salve sua proporção, fundo e clipes de texto/forma como modelo próprio (até 8)"
+     ]
+    },
+    "ru": {
+     "title": "Цветокоррекция, резкость, горячие клавиши, шаблоны проекта",
+     "items": [
+      "Цветокоррекция: гамма средних тонов, оттенки теней и светов (цвет + сила) и резкость, с пресетами «Бирюза и оранжевый» и «Синяя ночь»",
+      "Горячие клавиши: Ctrl+C/X/V копирование, вырезание и вставка (вставка на головку воспроизведения), Ctrl+D дублировать, Ctrl+A выделить всё, Home/End, Esc; все они перечислены на вкладке «Проект»",
+      "Шаблоны проекта: в одно нажатие выберите YouTube (горизонтально), Shorts (вертикально) или ленту Instagram, а свои пропорции, фон и текстовые/фигурные клипы сохраните как шаблон (до 8)"
+     ]
+    },
+    "tr": {
+     "title": "Renk düzeltme, keskinleştirme, kısayollar, proje şablonları",
+     "items": [
+      "Renk düzeltme: orta ton gaması, gölge ve vurgu tonları (renk + güç) ve keskinleştirme; Teal & orange ve Mavi gece ön ayarları var",
+      "Kısayollar: Ctrl+C/X/V kopyala, kes, yapıştır (imleçteki konuma yapıştırır), Ctrl+D çoğalt, Ctrl+A tümünü seç, Home/End, Esc; Proje sekmesinde listelenir",
+      "Proje şablonları: YouTube yatay, Shorts dikey ya da Instagram akışını tek tıkla seçin; kendi en-boy oranınızı, arka planınızı ve metin/şekil kliplerinizi şablon olarak kaydedin (en fazla 8)"
      ]
     }
    }
@@ -411,6 +1659,102 @@
       "Noise gate verified by measuring the output level (quiet parts go silent, loud parts are untouched)",
       "When keyframes exist the old start/end motion controls are hidden and the unused size/move/rotate values show a note"
      ]
+    },
+    "es": {
+     "title": "Pantalla en inglés, eco/reverberación, formas de anotación, cuenta atrás",
+     "items": [
+      "Toda la interfaz de Fry Video tiene ahora traducción al inglés (los demás idiomas se muestran en inglés)",
+      "Eco y reverberación por clip, incluidas en las exportaciones",
+      "La pestaña Insertar añade cuenta atrás (segundos restantes), barra de progreso, contornos de cuadro y círculo, flecha y línea de resaltado",
+      "Croma: suavizado de bordes y reducción del halo verde",
+      "Se añaden las proporciones 4:5, 3:4 y 3:2",
+      "El corte de ruido se comprueba midiendo el nivel real del sonido (las partes bajas se silencian y las altas no cambian)",
+      "Si hay fotogramas clave, se ocultan los antiguos controles de movimiento (inicio y fin) y los valores de tamaño y posición que no se usan muestran un aviso"
+     ]
+    },
+    "fr": {
+     "title": "Interface en anglais, écho/réverbération, formes d'annotation, compte à rebours",
+     "items": [
+      "Toute l'interface de Fry Video a maintenant une traduction anglaise (les autres langues affichent l'anglais)",
+      "Écho et réverbération par clip, inclus dans les exports",
+      "L'onglet Insérer ajoute un compte à rebours (secondes restantes), une barre de progression, des contours de carré et de cercle, une flèche et une ligne de surlignage",
+      "Incrustation chroma : douceur des bords et réduction du débordement vert",
+      "Ajout des formats 4:5, 3:4 et 3:2",
+      "La suppression du bruit est vérifiée en mesurant le niveau réel du son (les parties calmes deviennent muettes, les fortes restent intactes)",
+      "Quand il existe des images clés, les anciennes commandes de mouvement (début et fin) sont masquées et les valeurs de taille et de position inutilisées affichent une note"
+     ]
+    },
+    "de": {
+     "title": "Englische Oberfläche, Echo/Hall, Anmerkungsformen, Countdown",
+     "items": [
+      "Die gesamte Oberfläche von Fry Video ist jetzt ins Englische übersetzt (andere Sprachen zeigen Englisch)",
+      "Echo und Hall pro Clip, auch im Export enthalten",
+      "Das Register Einfügen bietet Countdown (verbleibende Sekunden), Fortschrittsbalken, Rahmen- und Kreisumrandungen, Pfeil und Hervorhebungslinie",
+      "Chroma-Key: weichere Kanten und weniger grüner Schimmer",
+      "Seitenverhältnisse 4:5, 3:4 und 3:2 hinzugefügt",
+      "Rauschgate wird durch Messen des tatsächlichen Tonpegels geprüft (leise Stellen werden stumm, laute bleiben unverändert)",
+      "Gibt es Keyframes, werden die alten Bewegungsfelder (Start/Ende) ausgeblendet und ungenutzte Größen- und Positionswerte zeigen einen Hinweis"
+     ]
+    },
+    "ja": {
+     "title": "英語画面、エコー・リバーブ、書き込み用の図形、カウントダウン",
+     "items": [
+      "Fry Video の画面の文字すべてに英語訳を追加しました（ほかの言語では英語で表示されます）",
+      "クリップごとにエコー（こだま）とリバーブ（残響）を付けられます。書き出しにも含まれます",
+      "挿入タブにカウントダウン（残りの秒数）、進行バー、四角と丸の枠線、矢印、強調線を追加",
+      "クロマキー：縁のぼかしと、緑の色にじみの軽減を追加",
+      "画面の比率に 4:5、3:4、3:2 を追加",
+      "ノイズ除去は実際の音の大きさを測って確認しました（静かな部分は消え、大きい音はそのまま）",
+      "キーフレームがあるときは、古い「動き（開始・終了）」の欄を隠し、使っていない大きさ・移動の値には案内を表示します"
+     ]
+    },
+    "zh": {
+     "title": "英文界面、回声/混响、标注形状、倒计时",
+     "items": [
+      "Fry Video 的全部界面文字已加入英文翻译（其他语言会显示英文）",
+      "每个片段可添加回声和混响，导出时也会包含",
+      "插入选项卡新增倒计时（剩余秒数）、进度条、方框和圆框、箭头和高亮线",
+      "色键抠图：支持边缘柔化和减少绿色溢色",
+      "新增 4:5、3:4 和 3:2 画面比例",
+      "噪声门已通过实际测量音量验证（安静部分静音，响亮部分不变）",
+      "有关键帧时，旧的开始/结束动作控件会隐藏，未使用的大小、移动和旋转值会显示提示"
+     ]
+    },
+    "pt": {
+     "title": "Tela em inglês, eco/reverb, formas de anotação, contagem regressiva",
+     "items": [
+      "Toda a interface do Fry Video agora tem tradução para inglês (os outros idiomas mostram inglês)",
+      "Eco e reverb por clipe, incluídos nas exportações",
+      "A aba Inserir ganha contagem regressiva (segundos restantes), barra de progresso, contornos de caixa e círculo, seta e linha de destaque",
+      "Chroma key: suavidade das bordas e redução do vazamento verde",
+      "Proporções 4:5, 3:4 e 3:2 adicionadas",
+      "O corte de ruído foi verificado medindo o nível real do som (partes baixas ficam mudas e as altas não mudam)",
+      "Com quadros-chave, os antigos controles de movimento (início e fim) ficam ocultos e os valores de tamanho e posição não usados mostram um aviso"
+     ]
+    },
+    "ru": {
+     "title": "Английский интерфейс, эхо/реверберация, фигуры для пояснений, обратный отсчёт",
+     "items": [
+      "Весь интерфейс Fry Video теперь переведён на английский (остальные языки показывают английский)",
+      "Эхо и реверберация для каждого клипа, входят в экспорт",
+      "На вкладке «Вставка» появились обратный отсчёт (оставшиеся секунды), полоса прогресса, контуры квадрата и круга, стрелка и линия выделения",
+      "Хромакей: мягкость краёв и уменьшение зелёного ореола",
+      "Добавлены соотношения сторон 4:5, 3:4 и 3:2",
+      "Шумовой гейт проверен измерением реальной громкости (тихие места становятся беззвучными, громкие не меняются)",
+      "Если есть ключевые кадры, старые поля движения (начало и конец) скрываются, а неиспользуемые значения размера и положения показывают пояснение"
+     ]
+    },
+    "tr": {
+     "title": "İngilizce arayüz, yankı/yankılanma, açıklama şekilleri, geri sayım",
+     "items": [
+      "Fry Video arayüzünün tamamına İngilizce çeviri eklendi (diğer diller İngilizce gösterilir)",
+      "Her klip için yankı ve yankılanma eklenebilir; dışa aktarmaya da dahil edilir",
+      "Ekle sekmesine geri sayım (kalan saniye), ilerleme çubuğu, kare ve daire çerçeveleri, ok ve vurgu çizgisi eklendi",
+      "Chroma key: kenar yumuşatma ve yeşil sızıntı azaltma eklendi",
+      "4:5, 3:4 ve 3:2 en-boy oranları eklendi",
+      "Gürültü kapısı gerçek ses düzeyi ölçülerek doğrulandı (sessiz kısımlar susar, yüksek sesler değişmez)",
+      "Anahtar kare varsa eski başlangıç/bitiş hareket denetimleri gizlenir ve kullanılmayan boyut/konum değerleri bir not gösterir"
+     ]
     }
    }
   },
@@ -437,6 +1781,94 @@
       "Multi-select: Shift/Ctrl+click on a computer, or the Select multiple button on touch; move, duplicate and delete together",
       "Copy to other track: copy a video or picture clip between the main (V1) and overlay (V2) tracks"
      ]
+    },
+    "es": {
+     "title": "Fotogramas clave, curva de volumen, puerta de ruido, eliminar silencios, selección múltiple",
+     "items": [
+      "Fotogramas clave: fija el tamaño, la posición y la rotación de un clip en varios puntos, con un tipo de transición para cada tramo (suave, lineal, entrada, salida, mantener); se ven como rombos en el clip",
+      "Curva de volumen: añade puntos en el cabezal para subir y bajar el volumen varias veces",
+      "Puerta de ruido: silencia automáticamente los sonidos bajos (respiración, siseo) durante la reproducción y la exportación",
+      "Eliminar silencios: lee la forma de onda, corta las partes bajas y cierra los huecos (umbral y longitud ajustables)",
+      "Selección múltiple: Mayús/Ctrl + clic en el ordenador, o el botón Seleccionar varios en pantalla táctil; mover, duplicar y borrar juntos",
+      "Copiar a otra pista: copia un clip de vídeo o imagen entre la pista principal (V1) y la de superposición (V2)"
+     ]
+    },
+    "fr": {
+     "title": "Images clés, courbe de volume, porte de bruit, suppression des silences, sélection multiple",
+     "items": [
+      "Images clés : réglez la taille, la position et la rotation d'un clip à plusieurs points, avec un choix d'accélération par segment (fluide, linéaire, entrée, sortie, maintien) ; affichées en losanges sur le clip",
+      "Courbe de volume : ajoutez des points à la tête de lecture pour monter et baisser le volume plusieurs fois",
+      "Porte de bruit : coupe automatiquement les sons faibles (respiration, souffle) pendant la lecture et l'export",
+      "Supprimer les silences : lit la forme d'onde, coupe les parties calmes et referme les trous (seuil et durée réglables)",
+      "Sélection multiple : Maj/Ctrl + clic sur ordinateur, ou le bouton Sélection multiple sur tactile ; déplacer, dupliquer et supprimer ensemble",
+      "Copier vers une autre piste : copie un clip vidéo ou image entre la piste principale (V1) et la piste de superposition (V2)"
+     ]
+    },
+    "de": {
+     "title": "Keyframes, Lautstärkekurve, Rauschgate, Stille entfernen, Mehrfachauswahl",
+     "items": [
+      "Keyframes: Größe, Position und Drehung eines Clips an mehreren Punkten festlegen, mit wählbarer Beschleunigung je Abschnitt (weich, linear, ein, aus, halten); als Rauten auf dem Clip sichtbar",
+      "Lautstärkekurve: Punkte an der Abspielposition setzen, um die Lautstärke mehrmals anzuheben und abzusenken",
+      "Rauschgate: schaltet leise Geräusche (Atmen, Zischen) bei Wiedergabe und Export automatisch stumm",
+      "Stille entfernen: liest die Wellenform, schneidet leise Stellen heraus und schließt die Lücken (Schwelle und Länge einstellbar)",
+      "Mehrfachauswahl: Umschalt-/Strg-Klick am Computer oder die Schaltfläche Mehrfachauswahl auf Touchgeräten; gemeinsam verschieben, duplizieren und löschen",
+      "Auf andere Spur kopieren: kopiert einen Video- oder Bildclip zwischen Hauptspur (V1) und Überlagerungsspur (V2)"
+     ]
+    },
+    "ja": {
+     "title": "キーフレーム、音量カーブ、ノイズゲート、無音カット、複数選択",
+     "items": [
+      "キーフレーム：クリップのサイズ・位置・回転を複数の点で指定できます。区間ごとに動きを選べ（なめらか、直線、加速、減速、保持）、クリップ上にひし形で表示されます",
+      "音量カーブ：再生位置に点を追加して、音量を何度でも上げ下げできます",
+      "ノイズゲート：再生と書き出しの間、小さな音（息づかい、シャーッという音）を自動で消します",
+      "無音を削除：波形を読み取り、静かな部分を切って間を詰めます（しきい値と長さを調整可能）",
+      "複数選択：パソコンは Shift/Ctrl+クリック、タッチ操作は「複数選択」ボタン。まとめて移動・複製・削除できます",
+      "別のトラックにコピー：映像や画像のクリップをメイン（V1）とオーバーレイ（V2）の間でコピーできます"
+     ]
+    },
+    "zh": {
+     "title": "关键帧、音量曲线、噪声门、删除静音、多选",
+     "items": [
+      "关键帧：可在多个时间点设定片段的大小、位置和旋转，每段可选缓动方式（平滑、线性、缓入、缓出、保持），并以菱形显示在片段上",
+      "音量曲线：在播放头处添加点，可多次提高或降低音量",
+      "噪声门：播放和导出时自动静音微弱的声音（呼吸声、嘶嘶声等）",
+      "删除静音：读取波形，剪掉安静部分并合拢间隙（阈值和长度可调）",
+      "多选：电脑上按 Shift/Ctrl + 点击，触屏上点“多选”按钮；可一起移动、复制和删除",
+      "复制到其他轨道：可在主轨道（V1）和叠加轨道（V2）之间复制视频或图片片段"
+     ]
+    },
+    "pt": {
+     "title": "Quadros-chave, curva de volume, portão de ruído, remover silêncio, seleção múltipla",
+     "items": [
+      "Quadros-chave: defina tamanho, posição e rotação de um clipe em vários pontos, com a suavização escolhida para cada trecho (suave, linear, entrar, sair, manter); aparecem como losangos no clipe",
+      "Curva de volume: adicione pontos na cabeça de reprodução para aumentar e diminuir o volume várias vezes",
+      "Portão de ruído: silencia automaticamente sons fracos (respiração, chiado) durante a reprodução e a exportação",
+      "Remover silêncio: lê a forma de onda, corta as partes baixas e fecha as lacunas (limite e duração ajustáveis)",
+      "Seleção múltipla: Shift/Ctrl + clique no computador, ou o botão Selecionar vários no toque; mover, duplicar e excluir juntos",
+      "Copiar para outra faixa: copia um clipe de vídeo ou imagem entre a faixa principal (V1) e a faixa de sobreposição (V2)"
+     ]
+    },
+    "ru": {
+     "title": "Ключевые кадры, кривая громкости, шумовой гейт, удаление тишины, множественный выбор",
+     "items": [
+      "Ключевые кадры: задайте размер, положение и поворот клипа в нескольких точках, для каждого участка можно выбрать плавность (плавно, линейно, вход, выход, удержание); на клипе они видны как ромбы",
+      "Кривая громкости: добавляйте точки на головке воспроизведения, чтобы несколько раз поднимать и опускать громкость",
+      "Шумовой гейт: автоматически глушит тихие звуки (дыхание, шипение) при воспроизведении и экспорте",
+      "Удалить тишину: читает звуковую волну, вырезает тихие участки и сдвигает клипы (порог и длительность настраиваются)",
+      "Множественный выбор: Shift/Ctrl + щелчок на компьютере или кнопка «Выбрать несколько» на сенсорном экране; перемещение, дублирование и удаление сразу для всех",
+      "Копирование на другую дорожку: видео- или фотоклип копируется между основной дорожкой (V1) и дорожкой наложения (V2)"
+     ]
+    },
+    "tr": {
+     "title": "Anahtar kareler, ses eğrisi, gürültü kapısı, sessizliği kaldırma, çoklu seçim",
+     "items": [
+      "Anahtar kareler: bir klibin boyutu, konumu ve döndürmesini birden çok noktada ayarlayın; her aralık için geçiş biçimi seçilebilir (yumuşak, doğrusal, giriş, çıkış, bekle); klipte elmas olarak görünür",
+      "Ses eğrisi: oynatma imlecine nokta ekleyerek sesi birçok kez yükseltip alçaltın",
+      "Gürültü kapısı: oynatma ve dışa aktarma sırasında nefes ya da ıslık gibi kısık sesleri otomatik susturur",
+      "Sessizliği kaldır: dalga biçimini okur, sessiz kısımları keser ve boşlukları kapatır (eşik ve uzunluk ayarlanabilir)",
+      "Çoklu seçim: bilgisayarda Shift/Ctrl + tıklama ya da dokunmatik ekranda Çoklu seç düğmesi; birlikte taşıma, çoğaltma ve silme",
+      "Diğer parçaya kopyala: video ya da resim kliplerini ana parça (V1) ile bindirme parçası (V2) arasında kopyalar"
+     ]
     }
    }
   },
@@ -461,6 +1893,86 @@
       "Save and open project files (.fryvideo) that include the media, so you can continue on another device",
       "Name your markers as chapters and copy a chapter list ready for a YouTube description"
      ]
+    },
+    "es": {
+     "title": "Pestaña Insertar: plantillas, pegatinas, imagen en imagen, archivos de proyecto, capítulos",
+     "items": [
+      "Nueva pestaña Insertar: plantillas de título, tercio inferior, subtítulo, introducción y cierre (creadas con clips de texto y forma que puedes editar uno a uno)",
+      "Pegatinas: toca una de 24 emojis para colocarla en el cabezal de reproducción",
+      "Imagen en imagen: pon el vídeo o la imagen seleccionados pequeños en una esquina o en el centro, o vuelve a pantalla completa",
+      "Guarda y abre archivos de proyecto (.fryvideo) que incluyen los medios, para seguir en otro dispositivo",
+      "Pon nombre a los marcadores como capítulos y copia una lista de capítulos lista para la descripción de YouTube"
+     ]
+    },
+    "fr": {
+     "title": "Onglet Insérer : modèles, autocollants, incrustation, fichiers de projet, chapitres",
+     "items": [
+      "Nouvel onglet Insérer : modèles de carte de titre, bandeau inférieur, légende, générique d'introduction et de fin (créés à partir de clips texte et forme modifiables un par un)",
+      "Autocollants : touchez l'un des 24 emojis pour l'insérer à la tête de lecture",
+      "Incrustation : placez la vidéo ou l'image sélectionnée petite dans un coin ou au centre, ou remettez-la en plein écran",
+      "Enregistrez et ouvrez des fichiers de projet (.fryvideo) qui incluent les médias, pour continuer sur un autre appareil",
+      "Nommez vos repères en chapitres et copiez une liste de chapitres prête pour une description YouTube"
+     ]
+    },
+    "de": {
+     "title": "Register Einfügen: Vorlagen, Sticker, Bild-in-Bild, Projektdateien, Kapitel",
+     "items": [
+      "Neues Register Einfügen: Vorlagen für Titelkarte, Untertitelband, Bildunterschrift, Intro und Outro (aus Text- und Formclips, die Sie einzeln bearbeiten können)",
+      "Sticker: tippen Sie eines von 24 Emojis an, um es an der Abspielposition einzufügen",
+      "Bild-in-Bild: das gewählte Video oder Bild klein in eine Ecke oder in die Mitte setzen oder wieder auf Vollbild stellen",
+      "Projektdateien (.fryvideo) mit den Medien speichern und öffnen, um auf einem anderen Gerät weiterzuarbeiten",
+      "Marker als Kapitel benennen und eine Kapitelliste kopieren, die direkt in eine YouTube-Beschreibung passt"
+     ]
+    },
+    "ja": {
+     "title": "挿入タブ：テンプレート、ステッカー、ピクチャーインピクチャー、プロジェクトファイル、チャプター",
+     "items": [
+      "新しい挿入タブ：タイトル、下の帯、字幕、イントロ、エンディングのテンプレート（編集できる文字と図形のクリップで構成）",
+      "ステッカー：24種の絵文字からタップすると、再生位置に入ります",
+      "ピクチャーインピクチャー：選んだ動画や画像を画面の隅か中央に小さく置く、または全画面に戻す",
+      "メディアを含むプロジェクトファイル（.fryvideo）を保存・開けるので、別の端末でも続きができます",
+      "マーカーをチャプターとして名付け、YouTube の説明文にそのまま貼れるチャプター一覧をコピーできます"
+     ]
+    },
+    "zh": {
+     "title": "插入选项卡：模板、贴纸、画中画、项目文件、章节",
+     "items": [
+      "新增“插入”选项卡：标题卡、下三分之一字幕、说明文字、片头和片尾模板（由可逐个编辑的文字和形状片段组成）",
+      "贴纸：点击 24 个表情之一，即可在播放头处插入",
+      "画中画：把选中的视频或图片缩小放到角落或中央，或恢复为全屏",
+      "保存和打开项目文件（.fryvideo），包含素材，方便在其他设备上继续编辑",
+      "将标记命名为章节，并复制可直接用于 YouTube 简介的章节列表"
+     ]
+    },
+    "pt": {
+     "title": "Aba Inserir: modelos, adesivos, imagem na imagem, arquivos de projeto, capítulos",
+     "items": [
+      "Nova aba Inserir: modelos de cartão de título, faixa inferior, legenda, abertura e encerramento (feitos com clipes de texto e forma que você pode editar um a um)",
+      "Adesivos: toque em um dos 24 emojis para inseri-lo na cabeça de reprodução",
+      "Imagem na imagem: coloque o vídeo ou a imagem selecionada pequeno em um canto ou no centro, ou volte para tela cheia",
+      "Salve e abra arquivos de projeto (.fryvideo) que incluem as mídias, para continuar em outro dispositivo",
+      "Nomeie seus marcadores como capítulos e copie uma lista de capítulos pronta para a descrição do YouTube"
+     ]
+    },
+    "ru": {
+     "title": "Вкладка «Вставка»: шаблоны, стикеры, картинка в картинке, файлы проекта, главы",
+     "items": [
+      "Новая вкладка «Вставка»: шаблоны заголовка, нижней плашки, подписи, вступления и концовки (из текстовых и фигурных клипов, которые можно править по одному)",
+      "Стикеры: нажмите один из 24 эмодзи, и он появится на головке воспроизведения",
+      "Картинка в картинке: уменьшить выбранное видео или картинку и поставить в угол или в центр, либо вернуть на весь экран",
+      "Сохранение и открытие файлов проекта (.fryvideo) вместе с медиа, чтобы продолжить на другом устройстве",
+      "Назовите метки как главы и скопируйте список глав, готовый для описания на YouTube"
+     ]
+    },
+    "tr": {
+     "title": "Ekle sekmesi: şablonlar, çıkartmalar, küçük pencere, proje dosyaları, bölümler",
+     "items": [
+      "Yeni Ekle sekmesi: başlık kartı, alt şerit, altyazı, giriş ve bitiş şablonları (tek tek düzenlenebilen metin ve şekil kliplerinden oluşur)",
+      "Çıkartmalar: 24 emojiden birine dokunduğunuzda oynatma imlecine eklenir",
+      "Küçük pencere: seçili video ya da resmi bir köşeye ya da ortaya küçültün, ya da tam ekrana geri alın",
+      "Medyayı da içeren proje dosyalarını (.fryvideo) kaydedip açın; başka bir cihazda devam edin",
+      "İşaretçilere bölüm adı verin ve YouTube açıklamasına hazır bölüm listesini kopyalayın"
+     ]
     }
    }
   },
@@ -483,6 +1995,78 @@
       "Three more transitions: wipe from right, iris open, push from top",
       "Project tab 'Tidy tracks': close gaps on the video or audio track in one click (locked tracks are left alone)"
      ]
+    },
+    "es": {
+     "title": "Reproducción inversa, cambio de velocidad, nuevas transiciones, cerrar huecos",
+     "items": [
+      "Reproducción inversa de clips de vídeo (sin sonido)",
+      "Cambio de velocidad: la velocidad cambia suavemente a lo largo del clip (de lento a rápido o al revés); al dividir, ambas mitades siguen continuas",
+      "Tres transiciones más: barrido desde la derecha, iris que se abre, empuje desde arriba",
+      "Ajustes del proyecto 'Ordenar pistas': cierra los huecos de la pista de vídeo o de audio con un clic (las pistas bloqueadas no se tocan)"
+     ]
+    },
+    "fr": {
+     "title": "Lecture inversée, rampe de vitesse, nouvelles transitions, combler les vides",
+     "items": [
+      "Lecture inversée des clips vidéo (sans son)",
+      "Rampe de vitesse : la vitesse change en douceur sur le clip (lent vers rapide ou l'inverse) ; la coupe garde les deux moitiés continues",
+      "Trois transitions de plus : balayage depuis la droite, iris d'ouverture, poussée depuis le haut",
+      "Onglet Projet « Ranger les pistes » : comble les vides de la piste vidéo ou audio en un clic (les pistes verrouillées sont épargnées)"
+     ]
+    },
+    "de": {
+     "title": "Rückwärtswiedergabe, Geschwindigkeitsverlauf, neue Übergänge, Lücken schließen",
+     "items": [
+      "Rückwärtswiedergabe für Videoclips (ohne Ton)",
+      "Geschwindigkeitsverlauf: die Geschwindigkeit ändert sich sanft über den Clip (langsam zu schnell oder umgekehrt); beim Teilen bleiben beide Hälften fließend",
+      "Drei weitere Übergänge: Wischen von rechts, Irisöffnung, Schieben von oben",
+      "Projekt-Register „Spuren aufräumen“: schließt Lücken auf der Video- oder Audiospur mit einem Klick (gesperrte Spuren bleiben unberührt)"
+     ]
+    },
+    "ja": {
+     "title": "逆再生、速度の変化、新しい切り替え、すき間を詰める",
+     "items": [
+      "動画クリップを逆再生できます（音なし）",
+      "速度の変化：クリップの中で速度がなめらかに変わります（遅い→速い、またはその逆）。分割しても前後がつながったままです",
+      "切り替えを3つ追加：右からのワイプ、アイリス（開く）、上からのプッシュ",
+      "プロジェクトタブの「トラックを整理」：ビデオかオーディオのすき間をワンクリックで詰めます（固定したトラックは対象外）"
+     ]
+    },
+    "zh": {
+     "title": "倒放、变速曲线、新转场与填补空隙",
+     "items": [
+      "视频片段可倒放（无声）",
+      "变速曲线：速度在片段内平滑变化（由慢到快或相反）；分割后两段仍保持连贯",
+      "新增三种转场：从右侧擦除、圆形展开（虹膜）、从顶部推入",
+      "项目页“整理轨道”：一键填补视频或音频轨道上的空隙（锁定的轨道不受影响）"
+     ]
+    },
+    "pt": {
+     "title": "Reproduzir ao contrário, rampa de velocidade, novas transições, fechar lacunas",
+     "items": [
+      "Reprodução ao contrário de clipes de vídeo (sem som)",
+      "Rampa de velocidade: a velocidade muda suavemente ao longo do clipe (lento para rápido ou o inverso); ao dividir, as duas partes continuam fluindo",
+      "Mais três transições: deslizar da direita, íris de abertura, empurrar de cima",
+      "Aba Projeto 'Organizar faixas': fecha as lacunas da faixa de vídeo ou de áudio com um clique (faixas bloqueadas não são alteradas)"
+     ]
+    },
+    "ru": {
+     "title": "Обратное воспроизведение, плавное изменение скорости, новые переходы, заполнение пустот",
+     "items": [
+      "Обратное воспроизведение видеоклипов (без звука)",
+      "Плавное изменение скорости: скорость меняется внутри клипа (от медленной к быстрой или наоборот); при разрезе обе части остаются непрерывными",
+      "Ещё три перехода: шторка справа, открытие диафрагмой, выталкивание сверху",
+      "Вкладка «Проект» → «Упорядочить дорожки»: заполняет пустоты на видео- или аудиодорожке одним нажатием (заблокированные дорожки не трогаются)"
+     ]
+    },
+    "tr": {
+     "title": "Ters oynatma, hız rampası, yeni geçişler, boşlukları kapatma",
+     "items": [
+      "Video klipleri ters oynatılabilir (sessiz)",
+      "Hız rampası: hız klip boyunca yumuşakça değişir (yavaştan hızlıya ya da tersi); bölünse de iki parça akışını korur",
+      "Üç geçiş daha: sağdan silme, iris açılma, üstten itme",
+      "Proje sekmesi 'Parçaları düzenle': video ya da ses parçasındaki boşlukları tek tıkla kapatır (kilitli parçalar değişmez)"
+     ]
     }
    }
   },
@@ -502,6 +2086,70 @@
       "Export as an animated GIF: frames are rendered one by one instead of real-time recording (width 320/480/640, 8/12/15 fps, up to 60 s)",
       "One-click text styles: Subtitle, Big title, Neon, Sticky note, Comic",
       "New text motions: bounce, pulse, shake and wave (letters ripple one by one)"
+     ]
+    },
+    "es": {
+     "title": "Exportación a GIF, estilos y movimiento de texto",
+     "items": [
+      "Exportar como GIF animado: los fotogramas se generan uno a uno en vez de grabarse en tiempo real (ancho 320/480/640, 8/12/15 fps, hasta 60 s)",
+      "Estilos de texto con un clic: Subtítulo, Título grande, Neón, Nota adhesiva, Cómic",
+      "Nuevos movimientos de texto: rebote, pulso, sacudida y ola (las letras ondulan una a una)"
+     ]
+    },
+    "fr": {
+     "title": "Export GIF, styles de texte et mouvement",
+     "items": [
+      "Export en GIF animé : les images sont générées une à une au lieu d'être enregistrées en temps réel (largeur 320/480/640, 8/12/15 ips, jusqu'à 60 s)",
+      "Styles de texte en un clic : Sous-titre, Grand titre, Néon, Post-it, BD",
+      "Nouveaux mouvements de texte : rebond, pulsation, tremblement et vague (les lettres ondulent une à une)"
+     ]
+    },
+    "de": {
+     "title": "GIF-Export, Textstile und Bewegung",
+     "items": [
+      "Export als animiertes GIF: Bilder werden einzeln berechnet statt in Echtzeit aufgenommen (Breite 320/480/640, 8/12/15 fps, bis 60 s)",
+      "Textstile mit einem Klick: Untertitel, Großer Titel, Neon, Haftnotiz, Comic",
+      "Neue Textbewegungen: Hüpfen, Pulsieren, Wackeln und Welle (Buchstaben wellen sich nacheinander)"
+     ]
+    },
+    "ja": {
+     "title": "GIF書き出し、文字のスタイルと動き",
+     "items": [
+      "アニメーションGIFで書き出せます。実時間で録画せず、1コマずつ描画します（幅 320/480/640、8/12/15 fps、最大60秒）",
+      "ワンクリックの文字スタイル：字幕、大見出し、ネオン、付箋、コミック",
+      "新しい文字の動き：バウンス、拍動、揺れ、波（文字が一文字ずつ波打つ）"
+     ]
+    },
+    "zh": {
+     "title": "GIF 导出、文字样式与动态",
+     "items": [
+      "可导出为动画 GIF：逐帧渲染，而不是实时录制（宽度 320/480/640，8/12/15 fps，最长 60 秒）",
+      "一键文字样式：字幕、大标题、霓虹、便签、漫画",
+      "新增文字动态：弹跳、脉动、抖动和波浪（文字逐个起伏）"
+     ]
+    },
+    "pt": {
+     "title": "Exportação em GIF, estilos e movimento de texto",
+     "items": [
+      "Exporta como GIF animado: os quadros são gerados um a um em vez de gravados em tempo real (largura 320/480/640, 8/12/15 fps, até 60 s)",
+      "Estilos de texto com um clique: Legenda, Título grande, Neon, Bilhete adesivo, Quadrinhos",
+      "Novos movimentos de texto: quicar, pulsar, tremer e onda (as letras ondulam uma a uma)"
+     ]
+    },
+    "ru": {
+     "title": "Экспорт в GIF, стили текста и движение",
+     "items": [
+      "Экспорт в анимированный GIF: кадры отрисовываются по одному, а не записываются в реальном времени (ширина 320/480/640, 8/12/15 кадр/с, до 60 с)",
+      "Стили текста в одно нажатие: Подпись, Крупный заголовок, Неон, Стикер, Комикс",
+      "Новые движения текста: прыжок, пульсация, дрожание и волна (буквы волнуются по очереди)"
+     ]
+    },
+    "tr": {
+     "title": "GIF dışa aktarma, yazı stilleri ve hareket",
+     "items": [
+      "Animasyonlu GIF olarak dışa aktarma: kareler gerçek zamanlı kaydedilmek yerine tek tek oluşturulur (genişlik 320/480/640, 8/12/15 kare/sn, 60 sn'ye kadar)",
+      "Tek tıkla yazı stilleri: Altyazı, Büyük başlık, Neon, Yapışkan not, Çizgi roman",
+      "Yeni yazı hareketleri: zıplama, nabız, sallanma ve dalga (harfler sırayla dalgalanır)"
      ]
     }
    }
@@ -529,6 +2177,94 @@
       "Phone layout: file list becomes a horizontal strip and the preview and settings panel share the space sensibly",
       "Five more colour presets (Warm film, Teal cinema, Vintage B&W, Vivid, Muted)"
      ]
+    },
+    "es": {
+     "title": "Mezclador, zoom con dos dedos, diseño para móvil",
+     "items": [
+      "Haz clic en el nombre de una pista para ajustar su volumen con un control deslizante (mezclador)",
+      "El volumen puede cambiar a lo largo del clip (de volumen inicial a final) para fundidos suaves",
+      "Reducción de retumbo: filtra el ruido de baja frecuencia como el viento o el aire acondicionado (ligera, media, fuerte)",
+      "Pellizca la línea de tiempo con dos dedos para acercar",
+      "Diseño para móvil: la lista de archivos pasa a ser una tira horizontal y la vista previa y el panel de ajustes comparten el espacio",
+      "Cinco ajustes de color más (Cine cálido, Cine verde azulado, Blanco y negro vintage, Vivo, Apagado)"
+     ]
+    },
+    "fr": {
+     "title": "Mixeur, zoom au pincement, disposition téléphone",
+     "items": [
+      "Cliquez sur le nom d'une piste pour régler son volume entier avec un curseur (mixeur)",
+      "Le volume peut varier sur le clip (du volume de début au volume de fin) pour des fondus progressifs",
+      "Réduction des grondements : filtre les bruits basses fréquences comme le vent ou la climatisation (léger, moyen, fort)",
+      "Pincez la chronologie avec deux doigts pour zoomer",
+      "Disposition téléphone : la liste des fichiers devient une bande horizontale et l'aperçu et le panneau de réglages partagent l'espace",
+      "Cinq préréglages de couleur de plus (Film chaud, Cinéma sarcelle, N&B vintage, Vif, Atténué)"
+     ]
+    },
+    "de": {
+     "title": "Mischpult, Zoom per Zwei-Finger-Geste, Handy-Layout",
+     "items": [
+      "Klicken Sie auf einen Spurnamen, um die Lautstärke der ganzen Spur mit einem Schieberegler einzustellen (Mischpult)",
+      "Die Lautstärke kann sich über den Clip ändern (Anfangs- bis Endlautstärke) für sanfte Überblendungen",
+      "Rumpelfilter: filtert tieffrequente Störgeräusche wie Wind oder Klimaanlage (leicht, mittel, stark)",
+      "Ziehen Sie die Zeitleiste mit zwei Fingern auseinander, um zu zoomen",
+      "Handy-Layout: Die Dateiliste wird zu einem horizontalen Streifen, Vorschau und Einstellungen teilen sich den Platz sinnvoll",
+      "Fünf weitere Farbvoreinstellungen (Warmer Film, Türkis-Kino, Vintage S/W, Lebhaft, Gedämpft)"
+     ]
+    },
+    "ja": {
+     "title": "ミキサー、ピンチでズーム、スマホの画面配置",
+     "items": [
+      "トラック名をクリックすると、スライダーでそのトラック全体の音量を調整できます（ミキサー）",
+      "クリップの中で音量を変えられます（開始の音量から終わりの音量へ）",
+      "ノイズ除去（低域）：風やエアコンなどの低い雑音を抑えます（弱・中・強）",
+      "2本の指で時間軸をつまむとズームできます",
+      "スマホの画面配置：ファイル一覧が横長になり、プレビューと設定パネルが画面を分け合います",
+      "カラープリセットを5つ追加（ウォームフィルム、ティール・シネマ、ビンテージ白黒、ビビッド、ミュート）"
+     ]
+    },
+    "zh": {
+     "title": "混音器、双指缩放、手机布局",
+     "items": [
+      "点击轨道名称，可用滑块调节整条轨道的音量（混音器）",
+      "音量可以在片段内变化（从起始音量到结束音量），实现渐变",
+      "降噪（低频）：滤除风声或空调等低频噪音（轻、中、强）",
+      "用两根手指捏合时间线即可缩放",
+      "手机布局：文件列表变为横向条，预览和设置面板合理分享空间",
+      "新增五种颜色预设（暖色胶片、青色电影、复古黑白、鲜艳、柔和）"
+     ]
+    },
+    "pt": {
+     "title": "Mixer, zoom com pinça, layout para celular",
+     "items": [
+      "Clique no nome de uma faixa para definir o volume de toda a faixa com um controle deslizante (mixer)",
+      "O volume pode mudar ao longo do clipe (do volume inicial ao final) para fades graduais",
+      "Redução de ruído grave: filtra ruídos de baixa frequência como vento ou ar-condicionado (leve, média, forte)",
+      "Belisque a linha do tempo com dois dedos para ampliar",
+      "Layout para celular: a lista de arquivos vira uma faixa horizontal e a prévia e o painel de configurações dividem o espaço",
+      "Mais cinco predefinições de cor (Filme quente, Cinema verde-azulado, P&B vintage, Vívido, Suave)"
+     ]
+    },
+    "ru": {
+     "title": "Микшер, масштабирование щипком, мобильная раскладка",
+     "items": [
+      "Щёлкните название дорожки, чтобы ползунком задать громкость всей дорожки (микшер)",
+      "Громкость может меняться внутри клипа (от начальной до конечной) для плавных переходов",
+      "Снижение гула: фильтрует низкочастотные шумы, например ветер или кондиционер (слабо, средне, сильно)",
+      "Сведите два пальца на таймлайне, чтобы увеличить масштаб",
+      "Мобильная раскладка: список файлов становится горизонтальной полосой, предпросмотр и панель настроек делят место",
+      "Ещё пять цветовых пресетов (Тёплая плёнка, Бирюзовое кино, Винтажное ч/б, Яркий, Приглушённый)"
+     ]
+    },
+    "tr": {
+     "title": "Ses karıştırıcı, iki parmakla yakınlaştırma, telefon düzeni",
+     "items": [
+      "Bir parça adına tıklayarak kaydırıcıyla tüm parçanın sesini ayarlayın (karıştırıcı)",
+      "Ses, klip boyunca değişebilir (başlangıç sesinden bitiş sesine) ve yavaş geçişler yapılabilir",
+      "Gürültü azaltma (düşük frekans): rüzgâr veya klima gibi alçak sesleri süzer (hafif, orta, güçlü)",
+      "Zaman çizelgesini iki parmakla sıkıştırarak yakınlaştırabilirsiniz",
+      "Telefon düzeni: dosya listesi yatay bir şeride döner; önizleme ve ayar paneli alanı dengeli paylaşır",
+      "Beş renk ön ayarı daha (Sıcak film, Camgöbeği sinema, Vintage siyah-beyaz, Canlı, Soluk)"
+     ]
     }
    }
   },
@@ -553,6 +2289,86 @@
       "Auto-set volume: picks a volume so the loudest part of the clip sounds right",
       "Music ducking: lowers this sound smoothly while other video or audio plays (adjustable amount)"
      ]
+    },
+    "es": {
+     "title": "Opciones de exportación, archivos de subtítulos, volumen automático",
+     "items": [
+      "Cuadro de exportación: elige velocidad de fotogramas (24/30/60), calidad (tasa de bits) y formato (mp4/webm)",
+      "Exportación solo de audio (m4a/webm), tiempo transcurrido y botón Detener mientras se exporta",
+      "Importa subtítulos de archivos SRT/VTT y exporta los textos como SRT/VTT",
+      "Volumen automático: elige un volumen para que la parte más fuerte del clip suene bien",
+      "Atenuación de música: baja suavemente este sonido mientras suena otro vídeo o audio (cantidad ajustable)"
+     ]
+    },
+    "fr": {
+     "title": "Options d'export, fichiers de sous-titres, volume automatique",
+     "items": [
+      "Fenêtre d'export : choisissez la fréquence d'images (24/30/60), la qualité (débit) et le format (mp4/webm)",
+      "Export audio seul (m4a/webm), durée écoulée et bouton Arrêter pendant l'export",
+      "Importez des sous-titres SRT/VTT et exportez les textes en SRT/VTT",
+      "Volume automatique : choisit un volume pour que la partie la plus forte du clip sonne bien",
+      "Atténuation de la musique : baisse doucement ce son quand d'autres vidéos ou audios jouent (quantité réglable)"
+     ]
+    },
+    "de": {
+     "title": "Exportoptionen, Untertiteldateien, automatische Lautstärke",
+     "items": [
+      "Exportdialog: Bildrate (24/30/60), Qualität (Bitrate) und Dateiformat (mp4/webm) wählbar",
+      "Nur-Audio-Export (m4a/webm), Verstrichene-Zeit-Anzeige und Stopp-Schaltfläche während des Exports",
+      "Untertitel aus SRT-/VTT-Dateien importieren und Textclips als SRT/VTT exportieren",
+      "Automatische Lautstärke: wählt eine Lautstärke, bei der die lauteste Stelle des Clips gut klingt",
+      "Musik-Absenkung: senkt diesen Ton sanft ab, während anderes Video oder Audio läuft (Stärke einstellbar)"
+     ]
+    },
+    "ja": {
+     "title": "書き出しの選択、字幕ファイル、音量の自動調整",
+     "items": [
+      "書き出しの設定で、フレームレート（24/30/60）、画質（ビットレート）、形式（mp4/webm）を選べます",
+      "音声だけの書き出し（m4a/webm）、経過時間の表示、書き出し中の停止ボタン",
+      "SRT/VTT の字幕を読み込み、文字クリップを SRT/VTT で書き出せます",
+      "音量の自動調整：クリップの一番大きい部分が聞きやすい音量になるよう設定します",
+      "音楽の自動ダッキング：他の動画や音声が流れている間、この音をなめらかに下げます（量を調整可能）"
+     ]
+    },
+    "zh": {
+     "title": "导出选项、字幕文件、自动音量",
+     "items": [
+      "导出对话框可选择帧率（24/30/60）、画质（码率）和文件格式（mp4/webm）",
+      "仅导出音频（m4a/webm），导出时显示已用时间并提供停止按钮",
+      "可导入 SRT/VTT 字幕文件，并将文字片段导出为 SRT/VTT",
+      "自动音量：自动选择音量，使片段最响的部分听起来刚好",
+      "音乐自动避让：其他视频或音频播放时，平滑降低此声音（幅度可调）"
+     ]
+    },
+    "pt": {
+     "title": "Opções de exportação, arquivos de legenda, volume automático",
+     "items": [
+      "Caixa de exportação: escolha a taxa de quadros (24/30/60), a qualidade (taxa de bits) e o formato (mp4/webm)",
+      "Exportação só de áudio (m4a/webm), tempo decorrido e botão Parar durante a exportação",
+      "Importa legendas de arquivos SRT/VTT e exporta clipes de texto como SRT/VTT",
+      "Volume automático: escolhe um volume para que a parte mais alta do clipe soe bem",
+      "Redução de música: abaixa suavemente este som enquanto outro vídeo ou áudio toca (quantidade ajustável)"
+     ]
+    },
+    "ru": {
+     "title": "Параметры экспорта, файлы субтитров, автоматическая громкость",
+     "items": [
+      "В окне экспорта можно выбрать частоту кадров (24/30/60), качество (битрейт) и формат файла (mp4/webm)",
+      "Экспорт только звука (m4a/webm), показ прошедшего времени и кнопка «Стоп» во время экспорта",
+      "Импорт субтитров из SRT/VTT и экспорт текстовых клипов в SRT/VTT",
+      "Автоматическая громкость: подбирает громкость так, чтобы самый громкий фрагмент клипа звучал хорошо",
+      "Приглушение музыки: плавно убавляет этот звук, пока играет другое видео или аудио (уровень настраивается)"
+     ]
+    },
+    "tr": {
+     "title": "Dışa aktarma seçenekleri, altyazı dosyaları, otomatik ses",
+     "items": [
+      "Dışa aktarma penceresinde kare hızı (24/30/60), kalite (bit hızı) ve dosya biçimi (mp4/webm) seçilebilir",
+      "Yalnızca ses dışa aktarma (m4a/webm), geçen süre gösterimi ve dışa aktarma sırasında Durdur düğmesi",
+      "SRT/VTT dosyalarından altyazı içe aktarılır; metin klipleri SRT/VTT olarak dışa aktarılır",
+      "Otomatik ses: klibin en yüksek kısmı iyi duyulacak şekilde ses seviyesini seçer",
+      "Müzik kısma: başka bir video ya da ses çalarken bu sesi yumuşakça alçaltır (miktarı ayarlanabilir)"
+     ]
     }
    }
   },
@@ -576,6 +2392,86 @@
       "Flip vertically and blend modes (multiply, screen, overlay, difference...)",
       "Colour effects gain warmth/coolness and vignette, plus Cinema, Sunset and Dawn presets",
       "Copy / paste effects to give another clip the same look in one step"
+     ]
+    },
+    "es": {
+     "title": "Imagen: recorte, máscara de forma, modos de fusión, calidez, viñeta",
+     "items": [
+      "Recorta por la izquierda, derecha, arriba y abajo en vídeos e imágenes",
+      "Máscara de forma: rectángulo redondeado o elipse",
+      "Volteo vertical y modos de fusión (multiplicar, pantalla, superposición, diferencia...)",
+      "Los efectos de color ganan calidez/frialdad y viñeta, además de los ajustes Cine, Atardecer y Amanecer",
+      "Copiar / pegar efectos para dar a otro clip el mismo aspecto en un paso"
+     ]
+    },
+    "fr": {
+     "title": "Image : recadrage, masque de forme, modes de fusion, chaleur, vignettage",
+     "items": [
+      "Recadrez la gauche, la droite, le haut et le bas des vidéos et des images",
+      "Masque de forme : rectangle arrondi ou ellipse",
+      "Retournement vertical et modes de fusion (produit, écran, incrustation, différence...)",
+      "Les effets de couleur gagnent chaleur/fraîcheur et vignettage, ainsi que les préréglages Cinéma, Coucher de soleil et Aube",
+      "Copier / coller des effets pour donner le même rendu à un autre clip en une étape"
+     ]
+    },
+    "de": {
+     "title": "Bild: Zuschneiden, Formmaske, Mischmodi, Wärme, Abdunkelung der Ränder",
+     "items": [
+      "Schneiden Sie links, rechts, oben und unten bei Videos und Bildern ab",
+      "Formmaske: abgerundetes Rechteck oder Ellipse",
+      "Vertikal spiegeln und Mischmodi (Multiplizieren, Negativ multiplizieren, Überlagern, Differenz ...)",
+      "Farbeffekte erhalten Wärme/Kühle und Randabdunklung sowie die Voreinstellungen Kino, Sonnenuntergang und Morgendämmerung",
+      "Effekte kopieren / einfügen, um einem anderen Clip in einem Schritt denselben Look zu geben"
+     ]
+    },
+    "ja": {
+     "title": "映像：切り抜き、形のマスク、合成モード、暖かさ、周辺減光",
+     "items": [
+      "動画と画像の左・右・上・下を切り抜けます",
+      "形のマスク：角丸の四角形または楕円",
+      "上下反転と合成モード（乗算、スクリーン、オーバーレイ、差の絶対値など）",
+      "色の効果に暖かさ・涼しさと周辺減光が加わり、シネマ・夕焼け・夜明けのプリセットも追加",
+      "効果のコピー・貼り付けで、別のクリップに同じ雰囲気を一度で付けられます"
+     ]
+    },
+    "zh": {
+     "title": "画面：裁剪、形状蒙版、混合模式、暖色、暗角",
+     "items": [
+      "可以裁剪视频和图片的左、右、上、下边缘",
+      "形状蒙版：圆角矩形或椭圆",
+      "上下翻转以及混合模式（正片叠底、滤色、叠加、差值等）",
+      "颜色效果新增冷暖调和暗角，并提供“电影”“日落”“破晓”预设",
+      "复制 / 粘贴效果，一步就能让另一个片段呈现相同风格"
+     ]
+    },
+    "pt": {
+     "title": "Imagem: recorte, máscara de forma, modos de mesclagem, calor, vinheta",
+     "items": [
+      "Recorte a esquerda, a direita, o topo e a base de vídeos e imagens",
+      "Máscara de forma: retângulo arredondado ou elipse",
+      "Inverter na vertical e modos de mesclagem (multiplicar, tela, sobrepor, diferença...)",
+      "Os efeitos de cor ganham calor/frio e vinheta, além dos predefinições Cinema, Pôr do sol e Amanhecer",
+      "Copiar / colar efeitos para dar a outro clipe o mesmo visual em um passo"
+     ]
+    },
+    "ru": {
+     "title": "Картинка: обрезка, маска-форма, режимы наложения, теплота, виньетка",
+     "items": [
+      "Обрезка видео и картинок слева, справа, сверху и снизу",
+      "Маска-форма: скруглённый прямоугольник или эллипс",
+      "Отражение по вертикали и режимы наложения (умножение, экран, перекрытие, разница...)",
+      "В цветовых эффектах появились теплота/холод и виньетка, а также пресеты «Кино», «Закат» и «Рассвет»",
+      "Копирование и вставка эффектов, чтобы одним действием дать другому клипу такой же вид"
+     ]
+    },
+    "tr": {
+     "title": "Resim: kırpma, şekil maskesi, karışım kipleri, sıcaklık, köşe karartma",
+     "items": [
+      "Videolarda ve resimlerde sol, sağ, üst ve alt kırpılabilir",
+      "Şekil maskesi: yuvarlatılmış dikdörtgen veya elips",
+      "Dikey çevirme ve karışım kipleri (çarpma, ekran, bindirme, fark...)",
+      "Renk efektlerine sıcaklık/soğukluk ve köşe karartma eklendi; Sinema, Gün batımı ve Şafak ön ayarları geldi",
+      "Efektleri kopyala / yapıştır: başka bir klibe aynı görünümü tek adımda verir"
      ]
     }
    }
@@ -603,6 +2499,94 @@
       "Fit button shows the whole project; zoom now keeps the playhead in place",
       "Markers and track settings are saved and covered by undo"
      ]
+    },
+    "es": {
+     "title": "Línea de tiempo: marcadores, bloqueo de pistas, borrado con desplazamiento, fotograma fijo",
+     "items": [
+      "Marcadores: pon uno en el cabezal de reproducción y haz clic en uno de la regla para ir a él (los clips se ajustan a los marcadores); pulsa el botón de nuevo sobre un marcador para quitarlo",
+      "Haz clic en el nombre de una pista para bloquearla u ocultarla (silenciar en la pista de audio)",
+      "Borrado con desplazamiento quita un clip y sube los siguientes (se puede deshacer)",
+      "Fotograma fijo mantiene la imagen en el cabezal durante 2 segundos (el vídeo se divide allí)",
+      "El botón Ajustar muestra todo el proyecto; el zoom ahora mantiene el cabezal en su sitio",
+      "Los marcadores y la configuración de pistas se guardan y se pueden deshacer"
+     ]
+    },
+    "fr": {
+     "title": "Chronologie : repères, verrouillage des pistes, suppression avec décalage, image figée",
+     "items": [
+      "Repères : posez un repère sur la tête de lecture et cliquez sur un repère de la règle pour y aller (les clips s'alignent sur les repères) ; appuyez à nouveau sur le bouton d'un repère pour le retirer",
+      "Cliquez sur le nom d'une piste pour la verrouiller ou la masquer (muet pour la piste audio)",
+      "La suppression avec décalage retire un clip et ramène les suivants (annulable)",
+      "L'image figée maintient l'image à la tête de lecture pendant 2 secondes (la vidéo est coupée à cet endroit)",
+      "Le bouton Ajuster affiche tout le projet ; le zoom garde maintenant la tête de lecture en place",
+      "Les repères et les réglages de pistes sont enregistrés et couverts par l'annulation"
+     ]
+    },
+    "de": {
+     "title": "Zeitleiste: Marker, Spursperre/-ausblendung, Lücke löschen, Standbild",
+     "items": [
+      "Marker: setzen Sie einen Marker an der Abspielposition und klicken Sie auf einen Marker auf dem Lineal, um dorthin zu springen (Clips rasten an Markern ein); Marker entfernen Sie mit erneutem Klick auf die Schaltfläche",
+      "Klicken Sie auf einen Spurnamen, um ihn zu sperren oder auszublenden (stummschalten bei der Audiospur)",
+      "Lücke löschen entfernt einen Clip und zieht die folgenden Clips nach (rückgängig machbar)",
+      "Standbild hält das Bild an der Abspielposition für 2 Sekunden (das Video wird dort geteilt)",
+      "Die Schaltfläche Anpassen zeigt das ganze Projekt; Zoomen behält nun die Abspielposition bei",
+      "Marker und Spureinstellungen werden gespeichert und sind rückgängig machbar"
+     ]
+    },
+    "ja": {
+     "title": "タイムライン：マーカー、トラックの固定・非表示、詰めて削除、静止画",
+     "items": [
+      "マーカー：再生位置にマーカーを置き、目盛り上のマーカーをクリックするとそこへ移動します（クリップはマーカーに吸着）。マーカー上でもう一度ボタンを押すと消えます",
+      "トラック名をクリックすると固定・非表示になります（音声トラックはミュート）",
+      "詰めて削除は、クリップを消して後ろのクリップを前に詰めます（元に戻せます）",
+      "静止画は、再生位置の映像を2秒間止めます（そこで動画が分割されます）",
+      "「全体表示」でプロジェクト全体が見え、拡大・縮小でも再生位置が保たれます",
+      "マーカーとトラックの設定も保存され、元に戻す対象になります"
+     ]
+    },
+    "zh": {
+     "title": "时间线：标记、轨道锁定与隐藏、波纹删除、定格",
+     "items": [
+      "标记：在播放头处添加标记，点击标尺上的标记即可跳转（片段会吸附到标记）；再次点击标记按钮即可删除",
+      "点击轨道名称可锁定或隐藏（音频轨道为静音）",
+      "波纹删除会移除片段并把后面的片段向前拉（可撤销）",
+      "定格会在播放头处将画面静止 2 秒（视频会在此处分割）",
+      "“适应”按钮显示整个项目；缩放时现在会保持播放头位置不变",
+      "标记和轨道设置会被保存，并可撤销"
+     ]
+    },
+    "pt": {
+     "title": "Linha do tempo: marcadores, bloqueio/ocultação de faixas, excluir fechando lacuna, quadro congelado",
+     "items": [
+      "Marcadores: coloque um marcador na cabeça de reprodução e clique em um marcador na régua para ir até ele (os clipes se encaixam nos marcadores); clique no botão de novo sobre um marcador para removê-lo",
+      "Clique no nome de uma faixa para bloqueá-la ou ocultá-la (silenciar, na faixa de áudio)",
+      "Excluir fechando lacuna remove um clipe e puxa os seguintes (pode ser desfeito)",
+      "Quadro congelado mantém a imagem na cabeça de reprodução por 2 segundos (o vídeo é dividido ali)",
+      "O botão Ajustar mostra o projeto inteiro; o zoom agora mantém a cabeça de reprodução no lugar",
+      "Marcadores e configurações de faixas são salvos e cobertos pelo desfazer"
+     ]
+    },
+    "ru": {
+     "title": "Таймлайн: метки, блокировка и скрытие дорожек, удаление с сдвигом, стоп-кадр",
+     "items": [
+      "Метки: поставьте метку на головке воспроизведения и щёлкните метку на линейке, чтобы перейти к ней (клипы притягиваются к меткам); чтобы убрать метку, нажмите кнопку ещё раз на метке",
+      "Щёлкните название дорожки, чтобы заблокировать или скрыть её (для аудиодорожки — выключить звук)",
+      "Удаление с сдвигом убирает клип и подтягивает следующие (можно отменить)",
+      "Стоп-кадр держит изображение на головке воспроизведения 2 секунды (видео делится в этом месте)",
+      "Кнопка «Вписать» показывает весь проект; масштабирование теперь сохраняет головку воспроизведения на месте",
+      "Метки и настройки дорожек сохраняются и отменяются через «Отменить»"
+     ]
+    },
+    "tr": {
+     "title": "Zaman çizelgesi: işaretçiler, parça kilidi/gizleme, boşluk bırakmadan silme, dondurulmuş kare",
+     "items": [
+      "İşaretçiler: oynatma imlecine bir işaretçi koyun, cetveldeki bir işaretçiye tıklayarak oraya gidin (klipler işaretçilere yapışır); işaretçiye tekrar basarak kaldırın",
+      "Bir parça adına tıklayarak kilitleyin ya da gizleyin (ses parçasında sessize alır)",
+      "Boşluk bırakmadan sil, bir klibi kaldırır ve sonrakileri öne çeker (geri alınabilir)",
+      "Dondurulmuş kare, imleçteki görüntüyü 2 saniye tutar (video orada bölünür)",
+      "Sığdır düğmesi tüm projeyi gösterir; yakınlaştırma artık oynatma imlecini yerinde tutar",
+      "İşaretçiler ve parça ayarları kaydedilir ve geri alma kapsamındadır"
+     ]
     }
    }
   },
@@ -623,6 +2607,70 @@
       "Text effects: outline colour and width, shadow, glow (pick the colour), moving rainbow, blinking",
       "When 'slide in' is chosen you can pick left, right, top or bottom (text, pictures, videos and shapes)"
      ]
+    },
+    "es": {
+     "title": "Tipos de letra, efectos de texto y dirección de entrada",
+     "items": [
+      "Elige una fuente (gótica, serif, manuscrita, monoespaciada, título en negrita, redondeada) y cursiva",
+      "Efectos de texto: color y grosor del contorno, sombra, resplandor (elige el color), arcoíris en movimiento, parpadeo",
+      "Al elegir 'deslizar hacia dentro' puedes elegir izquierda, derecha, arriba o abajo (texto, imágenes, vídeos y formas)"
+     ]
+    },
+    "fr": {
+     "title": "Polices, effets de texte et sens d'entrée",
+     "items": [
+      "Choisissez une police (gothique, serif, manuscrite, à chasse fixe, titre gras, arrondie) et l'italique",
+      "Effets de texte : couleur et épaisseur du contour, ombre, lueur (choisir la couleur), arc-en-ciel animé, clignotement",
+      "Avec « glisser à l'entrée », vous pouvez choisir gauche, droite, haut ou bas (texte, images, vidéos et formes)"
+     ]
+    },
+    "de": {
+     "title": "Schriftarten, Texteffekte und Einflugrichtung",
+     "items": [
+      "Wählen Sie eine Schrift (Gothic, Serif, Handschrift, Monospace, fetter Titel, abgerundet) und Kursivschrift",
+      "Texteffekte: Konturfarbe und -breite, Schatten, Leuchten (Farbe wählbar), wandernder Regenbogen, Blinken",
+      "Bei „Einschieben“ können Sie links, rechts, oben oder unten wählen (Text, Bilder, Videos und Formen)"
+     ]
+    },
+    "ja": {
+     "title": "フォント・文字効果・スライドの向き",
+     "items": [
+      "フォント（ゴシック、明朝、手書き、等幅、太字タイトル、丸ゴシック）と斜体を選べます",
+      "文字効果：縁の色と幅、影、光（色を選べます）、虹色の動き、点滅",
+      "「スライドで登場」を選ぶと、左・右・上・下から選べます（文字・画像・動画・図形）"
+     ]
+    },
+    "zh": {
+     "title": "字体、文字效果与滑入方向",
+     "items": [
+      "可以选择字体（黑体、宋体、手写体、等宽、粗体标题、圆体）以及斜体",
+      "文字效果：描边颜色和宽度、阴影、发光（可选颜色）、彩虹流动、闪烁",
+      "选择“滑入”时可以选择从左、右、上或下进入（文字、图片、视频和形状）"
+     ]
+    },
+    "pt": {
+     "title": "Fontes, efeitos de texto e direção de entrada",
+     "items": [
+      "Escolha uma fonte (gótica, serifada, manuscrita, monoespaçada, título em negrito, arredondada) e itálico",
+      "Efeitos de texto: cor e largura do contorno, sombra, brilho (escolha a cor), arco-íris em movimento, piscar",
+      "Ao escolher 'deslizar para dentro', você pode escolher esquerda, direita, cima ou baixo (texto, imagens, vídeos e formas)"
+     ]
+    },
+    "ru": {
+     "title": "Шрифты, эффекты текста и направление появления",
+     "items": [
+      "Выберите шрифт (готический, с засечками, рукописный, моноширинный, жирный заголовок, скруглённый) и курсив",
+      "Эффекты текста: цвет и ширина контура, тень, свечение (цвет на выбор), движущаяся радуга, мерцание",
+      "Для «въезда» можно выбрать слева, справа, сверху или снизу (текст, картинки, видео и фигуры)"
+     ]
+    },
+    "tr": {
+     "title": "Yazı tipleri, metin efektleri ve kayma yönü",
+     "items": [
+      "Bir yazı tipi (gotik, serif, el yazısı, eşit aralıklı, kalın başlık, yuvarlak) ve italik seçilebilir",
+      "Metin efektleri: kontur rengi ve kalınlığı, gölge, parlama (renk seçilebilir), hareketli gökkuşağı, yanıp sönme",
+      "'İçeri kaydır' seçildiğinde sol, sağ, üst ya da alt seçilebilir (metin, resim, video ve şekiller)"
+     ]
     }
    }
   },
@@ -641,6 +2689,62 @@
       "Dragging a slider, pausing and reversing direction no longer breaks the drag",
       "Backspace while typing a caption no longer deletes the clip (the side panel is not rebuilt while you type)"
      ]
+    },
+    "es": {
+     "title": "Correcciones de controles deslizantes y texto",
+     "items": [
+      "Arrastrar un control deslizante, pausar e invertir la dirección ya no rompe el arrastre",
+      "Pulsar Retroceso al escribir un subtítulo ya no borra el clip (el panel lateral no se reconstruye mientras escribes)"
+     ]
+    },
+    "fr": {
+     "title": "Corrections des curseurs et de la saisie",
+     "items": [
+      "Faire glisser un curseur, faire une pause et inverser le sens ne casse plus le glissement",
+      "Retour arrière pendant la saisie d'un sous-titre ne supprime plus le clip (le panneau latéral n'est plus reconstruit pendant la frappe)"
+     ]
+    },
+    "de": {
+     "title": "Fehlerbehebung Schieberegler und Texteingabe",
+     "items": [
+      "Das Ziehen eines Schiebereglers, Pausieren und Umkehren der Richtung bricht den Zug nicht mehr ab",
+      "Rücktaste beim Schreiben einer Untertitel löscht den Clip nicht mehr (das Seitenpanel wird während des Tippens nicht neu aufgebaut)"
+     ]
+    },
+    "ja": {
+     "title": "スライダーと文字入力の修正",
+     "items": [
+      "スライダーをドラッグ中に一時停止して向きを変えても、ドラッグが途切れなくなりました",
+      "字幕を入力中に Backspace を押してもクリップが消えなくなりました（入力中は横のパネルを作り直しません）"
+     ]
+    },
+    "zh": {
+     "title": "滑块与文字输入修复",
+     "items": [
+      "拖动滑块、暂停再反向拖动时，拖动不再中断",
+      "输入字幕时按退格键不会再删除片段（输入时不再重建侧边栏）"
+     ]
+    },
+    "pt": {
+     "title": "Correções de controles deslizantes e digitação",
+     "items": [
+      "Arrastar um controle deslizante, pausar e inverter a direção já não quebra o arraste",
+      "Backspace ao digitar uma legenda já não apaga o clipe (o painel lateral não é reconstruído enquanto você digita)"
+     ]
+    },
+    "ru": {
+     "title": "Исправления ползунков и ввода текста",
+     "items": [
+      "Перетаскивание ползунка, пауза и смена направления больше не прерывают перетаскивание",
+      "Backspace при вводе подписи больше не удаляет клип (боковая панель не перестраивается во время ввода)"
+     ]
+    },
+    "tr": {
+     "title": "Kaydırıcı ve yazı girişi düzeltmeleri",
+     "items": [
+      "Kaydırıcıyı sürüklerken duraklatıp yönü değiştirmek artık sürüklemeyi bozmuyor",
+      "Altyazı yazarken Backspace artık klibi silmiyor (yazarken yan panel yeniden oluşturulmuyor)"
+     ]
     }
    }
   },
@@ -658,6 +2762,62 @@
      "items": [
       "Every slider (brightness, size, position, volume...) has a number box so you can type the value",
       "Sliders are taller and easier to grab"
+     ]
+    },
+    "es": {
+     "title": "Cuadros de número junto a los controles deslizantes",
+     "items": [
+      "Cada control deslizante (brillo, tamaño, posición, volumen...) tiene un cuadro de número para escribir el valor",
+      "Los controles deslizantes son más altos y más fáciles de agarrar"
+     ]
+    },
+    "fr": {
+     "title": "Cases numériques à côté des curseurs",
+     "items": [
+      "Chaque curseur (luminosité, taille, position, volume...) a une case numérique pour taper la valeur",
+      "Les curseurs sont plus hauts et plus faciles à saisir"
+     ]
+    },
+    "de": {
+     "title": "Zahlenfelder neben den Schiebereglern",
+     "items": [
+      "Jeder Schieberegler (Helligkeit, Größe, Position, Lautstärke ...) hat ein Zahlenfeld, in dem Sie den Wert eintippen können",
+      "Die Schieberegler sind höher und leichter zu greifen"
+     ]
+    },
+    "ja": {
+     "title": "スライダーの横に数字入力欄",
+     "items": [
+      "すべてのスライダー（明るさ・大きさ・位置・音量など）に数字を入力できる欄があります",
+      "スライダーを高くして、つまみやすくしました"
+     ]
+    },
+    "zh": {
+     "title": "滑块旁的数字输入框",
+     "items": [
+      "每个滑块（亮度、大小、位置、音量……）都有数字框，可以直接输入数值",
+      "滑块更高，更容易拖动"
+     ]
+    },
+    "pt": {
+     "title": "Caixas de número ao lado dos controles deslizantes",
+     "items": [
+      "Cada controle deslizante (brilho, tamanho, posição, volume...) tem uma caixa de número para digitar o valor",
+      "Os controles deslizantes estão mais altos e mais fáceis de pegar"
+     ]
+    },
+    "ru": {
+     "title": "Поля с числами рядом с ползунками",
+     "items": [
+      "У каждого ползунка (яркость, размер, положение, громкость...) есть поле с числом, куда можно ввести значение",
+      "Ползунки стали выше и удобнее для захвата"
+     ]
+    },
+    "tr": {
+     "title": "Kaydırıcıların yanında sayı kutuları",
+     "items": [
+      "Her kaydırıcının (parlaklık, boyut, konum, ses...) değeri yazılabilen bir sayı kutusu var",
+      "Kaydırıcılar daha yüksek ve tutması daha kolay"
      ]
     }
    }
