@@ -1315,7 +1315,6 @@ $('bZp').onclick=function(){ zoomBy(1.25); }; $('bZm').onclick=function(){ zoomB
 desk.addEventListener('wheel',function(e){ if(e.ctrlKey||e.metaKey){ e.preventDefault(); zoomAt(e.deltaY<0?1.1:.9,e.clientX,e.clientY); } },{passive:false});
 $('bUndo').onclick=undo; $('bRedo').onclick=redo;
 $('dname').addEventListener('change',function(){ doc.name=this.value||'이름 없는 그림'; commit(); });
-$('bOpen').onclick=function(){ $('fileIn').click(); };
 $('bPg').onclick=function(){ ptab='ly'; panel(); };
 $('bImg').onclick=function(){ $('imgIn').click(); };
 $('imgIn').addEventListener('change',function(){ var fl=this.files[0]; this.value=''; if(fl) addImage(fl); });
@@ -1363,6 +1362,9 @@ desk.addEventListener('scroll',drawRulers); $('rh').addEventListener('pointerdow
   if(s){ try{ load(s); }catch(e){} }
   $('dname').value=doc.name; hist=[snap()]; hi=0;
   renderTools(); render(); fit(); panel();
+  var FS=FFFile.store({tool:'draw',def:'이름 없는 그림',read:function(){ try{ return localStorage.getItem(KEY); }catch(e){ return null; } },write:function(r){ try{ localStorage.setItem(KEY,r); }catch(e){} },clear:function(){ try{ localStorage.removeItem(KEY); }catch(e){} },getName:function(){ return doc.name; },setName:function(n){ doc.name=n; $('dname').value=n; commit(); },flush:function(){ persist(); }});
+  FS.applyName();
+  $('fileBtn').onclick=function(){ FFFile.open({items:FS.items,onOpen:FS.onOpen,onNew:FS.onNew,onRename:FS.onRename,onDup:FS.onDup,onDel:FS.onDel,actions:[{label:'열기',sub:'.fdraw · .svg',run:function(){ $('fileIn').click(); }}]}); };
   window.FDRAW={snapSave:snapSave,snapLoad:snapLoad,tplApply:tplApply,textArc:textArc,harmony:harmony,extractColors:extractColors,FXP:FXP,smoothPts:smoothPts,imgRemoveBg:imgRemoveBg,imgFit:imgFit,imgDown:imgDown,zipBlob:zipBlob,crc32:crc32,exportEach:exportEach,EX:EX,roundCorners:roundCorners,breakApartSel:breakApartSel,blendGo:blendGo,zoomSel:zoomSel,wrapLines:wrapLines,fxApply:fxApply,scatterGo:scatterGo,boolOp:boolOp,copySel:copySel,pasteSel:pasteSel,align:align,spaceSel:spaceSel,matchSize:matchSize,importSvgRoot:importSvgRoot,parseXform:parseXform,symMake:symMake,symPut:symPut,symEdit:symEdit,symDone:symDone,gradPts:gradPts,textOutline:textOutline,traceImage:traceImage,SHAPES:SHAPES,flat:flat,rdp:rdp,strokePieces:strokePieces,pbUnionAll:pbUnionAll,getSel:function(){ return sel; },groupSel:groupSel,ungroupSel:ungroupSel,boolOp:boolOp,align:align,toPath:toPath,select:function(a){ sel=a; drawOv(); panel(); },addNode:addNode,mat:mat,doc:doc,importSvg:importSvg,drawPattern:drawPattern,setTool:setTool,st:st,PATS:PATS,svg:docSvg,buildSvg:buildSvg,openExport:openExport,exArea:exArea};
 })();
 })();

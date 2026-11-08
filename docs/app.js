@@ -492,9 +492,16 @@ function drawMgr(){ var ul=$('docList'); ul.innerHTML='';
       if(d===doc){ doc=null; if(idx.docs.length) openDoc(idx.docs[0]); else newDoc(); } writeIdx(); drawMgr();
       if(window.FFUndo) FFUndo.show(F('"{0}" 문서를 지웠어요',d.name),function(){ try{ localStorage.setItem(DOC+d.id,html); }catch(e){} idx.docs.splice(Math.min(pos,idx.docs.length),0,d); writeIdx(); openDoc(d); drawMgr(); }); };
     li.appendChild(nm); li.appendChild(rn); li.appendChild(del); ul.appendChild(li); }); }
-$('mineBtn').onclick=function(){ saveNow(); drawMgr(); openDlg('mgrDlg'); };
-$('usageBtn').onclick=function(){ if(window.FFUsage) FFUsage.open(); };
-$('newBtn').onclick=function(){ newDoc(); closeDlg('mgrDlg'); page.focus(); };
+$('fileBtn').onclick=function(){ saveNow(); FFFile.open({
+  items:function(){ return idx.docs.slice().sort(function(a,b){ return (b.t||0)-(a.t||0); }).map(function(d){ return {id:d.id,name:d.name||T('제목 없는 문서'),sub:ago(d.t||Date.now()),current:d===doc}; }); },
+  onOpen:function(id,cur){ var d=idx.docs.filter(function(x){ return x.id===id; })[0]; if(d&&!cur) openDoc(d); },
+  onNew:function(){ newDoc(); page.focus(); },
+  onRename:function(id,v){ var d=idx.docs.filter(function(x){ return x.id===id; })[0]; if(!d) return; d.name=v; if(d===doc) $('docName').value=v; writeIdx(); },
+  onDel:function(id){ var d=idx.docs.filter(function(x){ return x.id===id; })[0]; if(!d) return; var html=readDoc(d.id), pos=idx.docs.indexOf(d); idx.docs.splice(pos,1); try{ localStorage.removeItem(DOC+d.id); }catch(e){}
+    if(d===doc){ doc=null; if(idx.docs.length) openDoc(idx.docs[0]); else newDoc(); } writeIdx();
+    if(window.FFUndo) FFUndo.show(F('"{0}" 문서를 지웠어요',d.name),function(){ try{ localStorage.setItem(DOC+d.id,html); }catch(e){} idx.docs.splice(Math.min(pos,idx.docs.length),0,d); writeIdx(); openDoc(d); }); },
+  actions:[{label:'파일 열기',sub:'.docx · .html · .txt · .md',run:function(){ $('openFile').value=''; $('openFile').click(); }}],
+  foot:[{label:'📊 현재 사용량 보기',run:function(){ if(window.FFUsage) FFUsage.open(); }}] }); };
 $('docName').addEventListener('input',saveSoon);
 $('docName').addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); page.focus(); } });
 $('verBtn').onclick=function(){ if(!window.FFVer||!doc) return; saveNow(); FFVer.open({key:'docs.'+doc.id,title:'버전 기록',get:snap,toast:toast,
@@ -573,7 +580,6 @@ function doExport(k){ closeMenus(); selImg(null); saveNow();
     download('<!DOCTYPE html>\n<html lang="ko"><head><meta charset="UTF-8"><title>'+esc($('docName').value)+'</title><style>'+css+'</style></head><body>\n'+revFree().innerHTML.replace(/ class="sel"/g,'').replace(/ data-b="[^"]*"/g,'')+'\n</body></html>','text/html',fname('html')); }
   else if(k==='txt') download(revText(),'text/plain;charset=utf-8',fname('txt')); }
 Array.prototype.forEach.call(document.querySelectorAll('[data-x]'),function(b){ b.onclick=function(){ doExport(b.dataset.x); }; });
-$('openBtn').onclick=function(){ $('openFile').value=''; $('openFile').click(); };
 function openFile(f){ var name=f.name.replace(/\.[^.]+$/,''), ext=(/\.([^.]+)$/.exec(f.name)||[])[1]||'';
   ext=ext.toLowerCase();
   if(ext==='docx'){ f.arrayBuffer().then(function(b){ return FFDocx.read(new Uint8Array(b)); }).then(shrinkAll).then(function(bs){ newDoc(name,clean(fromBlocks(bs))); toast('Word 문서를 열었어요'); },function(e){ console.error(e); toast('이 Word 문서는 열지 못했어요'); }); }

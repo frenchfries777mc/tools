@@ -10,7 +10,7 @@ if(location.hostname==='frenchfries777mc.github.io'&&!window.__ffRedir){var s=do
 'use strict';
 if(!root.document||!root.Storage||root.FFSrv) return;
 var BASE=root.FFSRV_URL||'https://ff-store.frenchfries777mc.workers.dev', MAXK=4e6, MAXO=16e6, DELAY=400;
-var ROUTE=/^(ffdocs\.v1|ffdocs\.doc\.[A-Za-z0-9_-]+|ffsheet\.docs|ffsheet\.doc\.[A-Za-z0-9_-]+|ffslides\.v1|ffblocks\.projects|ffblocks\.(p|store|ai)\.[A-Za-z0-9_-]+|ffpy\.v1|ffpy\.file\.[A-Za-z0-9_-]+|ffver\.v1\.[A-Za-z0-9._-]+|ffdraw\.v1|ffscore\.(v2|lib2)|ffvideo\.v1)$/;
+var ROUTE=/^(ffdocs\.v1|ffdocs\.doc\.[A-Za-z0-9_-]+|ffsheet\.docs|ffsheet\.doc\.[A-Za-z0-9_-]+|ffslides\.v1|ffblocks\.projects|ffblocks\.(p|store|ai)\.[A-Za-z0-9_-]+|ffpy\.v1|ffpy\.file\.[A-Za-z0-9_-]+|ffver\.v1\.[A-Za-z0-9._-]+|ffdraw\.v1|ffscore\.(v2|lib2)|ffvideo\.v1|ff\.(draw|score|video)\.(docs|d\.[A-Za-z0-9_-]+))$/;
 var P=Storage.prototype, oGet=P.getItem, oSet=P.setItem, oDel=P.removeItem, oKey=P.key, oLen=Object.getOwnPropertyDescriptor(P,'length').get;
 var real=root.localStorage;
 function isLS(s){ return s===real; }
@@ -24,6 +24,40 @@ function say(msg){
     if(!bar){ bar=document.createElement('div'); bar.style.cssText='position:fixed;left:0;right:0;top:0;z-index:2147483600;padding:8px 14px;text-align:center;font:600 14px/1.4 sans-serif;background:#c0392b;color:#fff'; (document.body||document.documentElement).appendChild(bar); }
     bar.textContent=msg; }catch(e){} }
 var T=function(s){ return root.FFT&&root.FFT.T?root.FFT.T(s):s; };
+/* 0) a logged-in account always uses its own store key (table tools_owner_link), so every device with that account sees the same files.
+   Logged out: this browser's own key. The first time an account is used, files this browser already had are copied into the account (lists are merged by id). */
+(function(){ try{
+  var SBU='https://kebsbuvuutilitwlvxzv.supabase.co', SBK='sb_publishable_4Egu0zm3p6cxWGvP_-GlIw_mlCpO1Nf', sess=null;
+  try{ sess=JSON.parse(oGet.call(real,'sb-kebsbuvuutilitwlvxzv-auth-token')||'null'); }catch(e){}
+  var uid=sess&&sess.user&&sess.user.id, tok=sess&&sess.access_token, anon=OWN;
+  if(!uid||!tok) return;
+  var c=null; try{ c=JSON.parse(oGet.call(real,'ffstore.acct')||'null'); }catch(e){}
+  if(c&&c.u===uid&&/^[0-9a-f]{32}$/.test(c.o)){ OWN=c.o; return; }
+  function sb(m,path,body,extra){ var x=new XMLHttpRequest(); x.open(m,SBU+'/rest/v1/'+path,false); x.setRequestHeader('apikey',SBK); x.setRequestHeader('authorization','Bearer '+tok); if(body!=null) x.setRequestHeader('content-type','application/json'); if(extra) x.setRequestHeader('prefer',extra);
+    try{ x.send(body==null?null:JSON.stringify(body)); }catch(e){ return {s:0,t:''}; } return {s:x.status,t:x.responseText||''}; }
+  var q=sb('GET','tools_owner_link?select=owner_id&user_id=eq.'+uid);
+  if(q.s!==200) return;
+  var rows=[]; try{ rows=JSON.parse(q.t); }catch(e){}
+  var acct=rows[0]&&rows[0].owner_id;
+  if(!acct||!/^[0-9a-f]{32}$/.test(acct)){
+    var w=sb('POST','tools_owner_link?on_conflict=user_id',{user_id:uid,owner_id:anon},'resolution=merge-duplicates,return=minimal');
+    if(w.s>=200&&w.s<300) try{ oSet.call(real,'ffstore.acct',JSON.stringify({u:uid,o:anon})); }catch(e){}
+    return; }
+  if(acct!==anon){
+    var la=xhr('GET',BASE+'/k/'+anon), lb=xhr('GET',BASE+'/k/'+acct), have={}, ok=true;
+    if(la.s===200&&lb.s===200){
+      try{ JSON.parse(lb.t).forEach(function(e){ have[e.k]=1; }); JSON.parse(la.t).forEach(function(e){
+        var k=e.k, a=xhr('GET',BASE+'/k/'+anon+'/'+encodeURIComponent(k)); if(a.s!==200) return;
+        if(!have[k]){ if(xhr('PUT',BASE+'/k/'+acct+'/'+encodeURIComponent(k),a.t).s!==200) ok=false; return; }
+        var b=xhr('GET',BASE+'/k/'+acct+'/'+encodeURIComponent(k)), ja, jb;   // same key on both: merge two lists by id, otherwise the account's copy stays
+        try{ ja=JSON.parse(a.t); jb=JSON.parse(b.t); }catch(x){ return; }
+        if(Array.isArray(ja)&&Array.isArray(jb)&&ja.every(function(o){ return o&&o.id!=null; })&&jb.every(function(o){ return o&&o.id!=null; })){
+          var ids={}; jb.forEach(function(o){ ids[o.id]=1; }); var add=ja.filter(function(o){ return !ids[o.id]; });
+          if(add.length&&xhr('PUT',BASE+'/k/'+acct+'/'+encodeURIComponent(k),JSON.stringify(jb.concat(add))).s!==200) ok=false; } }); }catch(e){ ok=false; } }
+    else ok=false;
+    if(!ok) return; }
+  OWN=acct; try{ oSet.call(real,'ffstore.acct',JSON.stringify({u:uid,o:acct})); }catch(e){}
+}catch(e){} })();
 /* 1) the list of keys on the server (blocking, once) */
 var r=xhr('GET',url());
 if(r.s===404){ root.FFSrv={up:false,legacy:true}; return; }   // the server is not updated yet: keep saving in this browser as before

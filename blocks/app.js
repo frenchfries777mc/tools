@@ -323,20 +323,19 @@ function renderProjs(){ var box=$('projList'); if(!$('projDlg').classList.contai
     d.querySelector('.pbt').onclick=function(ev){ var a=ev.target.dataset.a; if(a==='open'){ if(!cur) switchTo(e.id); $('projDlg').classList.remove('open'); } else if(a==='del') deleteProject(e.id); };
     box.appendChild(d); }); }
 function openProjs(){ $('projDlg').classList.add('open'); renderProjs(); }
-$('projBtn').onclick=openProjs;
-$('projNew').onclick=function(){ createProject(T('나의 웹페이지'),blank); $('projDlg').classList.remove('open'); toast(T('새 프로젝트를 만들었어요')); };
-$('fileMenu').addEventListener('click',function(e){
-  var b=e.target.closest('[data-f]'); if(!b) return; closeMenus(); var f=b.dataset.f;
-  if(f==='projects') openProjs();
-  else if(f==='new'){ createProject(T('나의 웹페이지'),blank); toast(T('새 프로젝트를 만들었어요')); }
-  else if(f==='save'){ download(new Blob([JSON.stringify({app:'block-html',v:1,name:$('projName').value,ws:Blockly.serialization.workspaces.save(ws),imgs:BH.IMGS,snds:BH.SNDS},null,1)],{type:'application/json'}),fname('.json')); }
-  else if(f==='usage'){ if(window.FFUsage) FFUsage.open(); }
-  else if(f==='importhtml') $('htmlIn').click();
-  else if(f==='open') $('fileIn').click();
-  else if(f==='html') downloadHTML();
-  else if(f==='app') openApp();
-  else if(f==='share') openShare();
-});
+$('fileBtn').onclick=function(){ saveNow(); FFFile.open({
+  items:function(){ return P.list.slice().sort(function(a,b){ return b.t-a.t; }).map(function(e){ return {id:e.id,name:e.name,sub:new Date(e.t).toLocaleString(FFT.lang||'ko',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}),current:e.id===P.cur}; }); },
+  onOpen:function(id,cur){ if(!cur) switchTo(id); },
+  onNew:function(){ createProject(T('나의 웹페이지'),blank); toast(T('새 프로젝트를 만들었어요')); },
+  onRename:function(id,n){ var e=P.list.filter(function(x){ return x.id===id; })[0]; if(!e) return; var v=n.slice(0,40); e.name=v; if(id===P.cur){ $('projName').value=v; saveNow(); } else { var dd=readProj(id); if(dd){ dd.name=v; lsSet(PK+id,JSON.stringify(dd)); } writeIdx(); } },
+  onDel:function(id){ deleteProject(id); },
+  actions:[{label:'프로젝트 파일로 저장',sub:'블록을 .json 파일로 받아요',run:function(){ download(new Blob([JSON.stringify({app:'block-html',v:1,name:$('projName').value,ws:Blockly.serialization.workspaces.save(ws),imgs:BH.IMGS,snds:BH.SNDS},null,1)],{type:'application/json'}),fname('.json')); }},
+    {label:'프로젝트 파일 열기',sub:'저장해 둔 .json 파일',run:function(){ $('fileIn').click(); }},
+    {label:'HTML 파일 가져오기',sub:'만들어 둔 .html 파일을 블록으로 바꿔요',run:function(){ $('htmlIn').click(); }},
+    {label:'HTML 파일로 받기',sub:'어디서든 열리는 웹페이지 파일',run:function(){ downloadHTML(); }},
+    {label:'앱으로 받기',sub:'이름과 아이콘을 정해서 받아요',run:function(){ openApp(); }},
+    {label:'링크로 공유하기',sub:'링크 하나에 블록(과 그림·소리)을 담아요',run:function(){ openShare(); }}],
+  foot:[{label:'📊 현재 사용량 보기',run:function(){ if(window.FFUsage) FFUsage.open(); }}] }); };
 $('htmlIn').addEventListener('change',function(){
   var file=this.files&&this.files[0]; this.value=''; if(!file) return;
   var r=new FileReader(); r.onload=function(){ var html=String(r.result||''); if(!html.trim()) return toast(T('이 파일은 열 수 없어요'));
@@ -367,7 +366,6 @@ function openMenu(m,anchor){ var was=m.classList.contains('open'); closeMenus();
   var r=anchor.getBoundingClientRect(), w=m.offsetWidth; m.style.left=Math.max(8,Math.min(r.right-w,innerWidth-w-8))+'px'; m.style.top=(r.bottom+6)+'px'; }
 function closeMenus(){ document.querySelectorAll('.menu.open').forEach(function(m){ m.classList.remove('open'); }); }
 $('exBtn').onclick=function(){ openMenu(exMenu,this); };
-$('fileBtn').onclick=function(){ openMenu($('fileMenu'),this); };
 document.addEventListener('pointerdown',function(e){ if(!e.target.closest('.menu,#exBtn,#fileBtn')) closeMenus(); },true);
 document.querySelectorAll('.ov [data-close]').forEach(function(b){ b.onclick=function(){ b.closest('.ov').classList.remove('open'); }; });
 var tt=null; function toast(s){ var t=$('toast'); t.textContent=s; t.classList.add('on'); clearTimeout(tt); tt=setTimeout(function(){ t.classList.remove('on'); },1800); }

@@ -190,7 +190,6 @@ function drawMgr(){ var ul=$('fileList'); ul.innerHTML='';
       if(f===file){ file=null; if(idx.files.length) openFile(idx.files[0]); else newFile(); } writeIdx(); drawMgr();
       if(window.FFUndo) FFUndo.show(F('"{0}" 파일을 지웠어요',f.name),function(){ try{ localStorage.setItem(FILE+f.id,src||''); }catch(e){} idx.files.splice(Math.min(pos,idx.files.length),0,f); writeIdx(); openFile(f); drawMgr(); }); };
     li.appendChild(nm); li.appendChild(rn); li.appendChild(del); ul.appendChild(li); }); }
-$('mineBtn').onclick=function(){ saveNow(); drawMgr(); $('mgrDlg').classList.add('open'); };
 $('newBtn').onclick=function(){ var L=LG(); newFile(T('새 파일'),curLang==='python'?'':(L.starter||''),'',curLang); closeDlg('mgrDlg'); code.focus(); };
 $('verBtn').onclick=function(){ if(!window.FFVer||!file) return; saveNow(); FFVer.open({key:'python.'+file.id,title:'버전 기록',get:snap,toast:toast,
   put:function(s){ var o=JSON.parse(s); if(o.l&&o.l!==curLang) setLang(o.l,true); code.value=o.c||''; $('fileName').value=o.n||''; $('stdin').value=o.i||''; errLine=0; paint(); saveNow(); },
@@ -208,7 +207,17 @@ function buildEx(){ var m=$('exMenu'); m.innerHTML=''; var h=document.createElem
       if(window.FFUndo) FFUndo.show(T('예제를 이 파일에 불러왔어요. ▶ 실행을 눌러 보세요'),function(){ code.value=prev.c; $('stdin').value=prev.i; errLine=0; paint(); saveNow(); }); else toast('예제를 이 파일에 불러왔어요'); };
     m.appendChild(b); }); }
 $('exBtn').onclick=function(){ popMenu($('exMenu'),this); };
-$('fileBtn').onclick=function(){ popMenu($('fileMenu'),this); };
+function fm(k){ document.querySelector('#fileMenu [data-f="'+k+'"]').click(); }
+$('fileBtn').onclick=function(){ saveNow(); FFFile.open({
+  items:function(){ return idx.files.slice().sort(function(a,b){ return (b.t||0)-(a.t||0); }).map(function(f){ return {id:f.id,name:f.name,sub:ago(f.t||Date.now()),current:f===file}; }); },
+  onOpen:function(id,cur){ var f=idx.files.filter(function(x){ return x.id===id; })[0]; if(f&&!cur) openFile(f); },
+  onNew:function(){ var L=LG(); newFile(T('새 파일'),curLang==='python'?'':(L.starter||''),'',curLang); code.focus(); },
+  onRename:function(id,v){ var f=idx.files.filter(function(x){ return x.id===id; })[0]; if(!f) return; f.name=v; if(f===file) $('fileName').value=v; writeIdx(); },
+  onDel:function(id){ var f=idx.files.filter(function(x){ return x.id===id; })[0]; if(!f) return; var src=readFile(f.id), pos=idx.files.indexOf(f); idx.files.splice(pos,1); try{ localStorage.removeItem(FILE+f.id); }catch(e){}
+    if(f===file){ file=null; if(idx.files.length) openFile(idx.files[0]); else newFile(); } writeIdx();
+    if(window.FFUndo) FFUndo.show(F('"{0}" 파일을 지웠어요',f.name),function(){ try{ localStorage.setItem(FILE+f.id,src||''); }catch(e){} idx.files.splice(Math.min(pos,idx.files.length),0,f); writeIdx(); openFile(f); }); },
+  actions:[{label:'파일 열기',sub:'내 컴퓨터의 코드 파일',run:function(){ fm('open'); }},{label:'파일로 받기',sub:'지금 코드를 파일로 저장해요',run:function(){ fm('save'); }},{label:'AI 설정',run:function(){ fm('ai'); }}],
+  foot:[{label:'📊 현재 사용량 보기',run:function(){ fm('usage'); }}] }); };
 Array.prototype.forEach.call(document.querySelectorAll('[data-f]'),function(b){ b.onclick=function(){ closeMenus(); var k=b.dataset.f;
   if(k==='usage'){ if(window.FFUsage) FFUsage.open(); }
   else if(k==='open'){ $('openFile').value=''; $('openFile').click(); }

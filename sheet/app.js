@@ -1318,16 +1318,19 @@ function fltFromXlsx(s,si){
 }
 $('fileIn').addEventListener('change',function(){ var f=this.files&&this.files[0]; if(f) importFile(f); this.value=''; });
 $('saveBtn').onclick=exportXLSX;
-$('fileBtn').onclick=function(){ commitEdit(); drawDocList(); openMenu($('fileMenu'),$('fileBtn')); };
-function drawDocList(){
-  var l=$('docList'); l.innerHTML=''; var idx=docIndex();
-  idx.forEach(function(x){ var b=document.createElement('button'); b.className='doc'; b.setAttribute('data-notr','');
-    var d=new Date(x.t), when=(d.getMonth()+1)+'/'+d.getDate()+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
-    b.innerHTML='<span></span><small></small>'; b.firstChild.textContent=(x.id===docId?'● ':'')+(x.name||T('이름 없음')); b.lastChild.textContent=when;
-    b.onclick=function(){ closeMenus(); if(x.id===docId) return; saveNow(); loadDoc(x.id); }; l.appendChild(b); });
+$('fileBtn').onclick=function(){ commitEdit(); saveNow(); FFFile.open({
+  items:function(){ return docIndex().map(function(x){ return {id:x.id,name:x.name,sub:fmtWhen(x.t),current:x.id===docId}; }); },
+  onOpen:function(id,cur){ if(!cur){ saveNow(); loadDoc(id); } },
+  onNew:function(){ fileCmd('new'); toast(T('새 문서를 만들었어요')); },
+  onRename:function(id,v){ renameDocTo(id,v.slice(0,80)); }, onDup:function(id){ dupDoc(id); }, onDel:function(id){ deleteDoc(id); },
+  actions:[{label:'템플릿으로 새 문서…',run:function(){ fileCmd('tpl'); }},{label:'파일 열기 (엑셀, CSV)',run:function(){ fileCmd('open'); }},{label:'주소에서 표 가져오기…',run:function(){ fileCmd('url'); }},
+    {label:'엑셀 파일로 저장 (.xlsx)',run:function(){ fileCmd('xlsx'); }},{label:'이 시트를 CSV로 저장',run:function(){ fileCmd('csv'); }},{label:'인쇄 (PDF 저장)',run:function(){ fileCmd('print'); }},{label:'같이 고치기…',run:function(){ fileCmd('co'); }}],
+  foot:[{label:'📊 현재 사용량 보기',run:function(){ fileCmd('usage'); }}] }); };
+function renameDocTo(id,v){
+  var idx=docIndex(), ent=idx.filter(function(x){ return x.id===id; })[0]; if(!ent||!v||v===ent.name) return;
+  if(id===docId){ doc.name=v; $('docName').value=v; saveNow(); }
+  else { var d=null; try{ d=JSON.parse(lsGet(LSD+id)||'null'); }catch(e){} if(d){ d.name=v; lsSet(LSD+id,JSON.stringify(d)); } ent.name=v; lsSet(LSI,JSON.stringify(idx)); }
 }
-$('fileMenu').addEventListener('click',function(e){
-  var b=e.target.closest('[data-f]'); if(!b) return; closeMenus(); fileCmd(b.dataset.f); });
 function fileCmd(f){
   if(f==='new'){ saveNow(); loadDoc(null); saveNow(); }
   else if(f==='open') $('fileIn').click();

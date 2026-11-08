@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head><script src="../serverstore.js?v=2"></script><style id="ffTap">html,body{touch-action:manipulation}#stage.ol #gobj *{fill:none!important;stroke:#2f8cff!important;stroke-width:1.2px!important;vector-effect:non-scaling-stroke;opacity:1!important;filter:none!important;mix-blend-mode:normal!important}#stage.ol #gobj image{opacity:.25!important}
+<head><script src="../serverstore.js?v=3"></script><style id="ffTap">html,body{touch-action:manipulation}#stage.ol #gobj *{fill:none!important;stroke:#2f8cff!important;stroke-width:1.2px!important;vector-effect:non-scaling-stroke;opacity:1!important;filter:none!important;mix-blend-mode:normal!important}#stage.ol #gobj image{opacity:.25!important}
 </style>
 <meta name="copyright" content="© 2026 Frenchfries777. CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)">
 <meta charset="UTF-8">
@@ -14,6 +14,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
 <script src="../i18n.js"></script>
+<script src="../ffile.js?v=2"></script>
 <style>
 :root{ --bg:#0e0e0e; --panel:#171717; --panel2:#121212; --line:#2e2b25; --text:#ece6d8; --dim:#a39c8c; --fry:#d9b45f; --fry2:#b8923a; --desk:#0a0a0a; }
 html[data-ff-theme=light]{ --bg:#ffffff; --panel:#ffffff; --panel2:#f6f4ee; --line:#e4dfd2; --text:#111111; --dim:#4b4b4b; --fry:#a67c00; --fry2:#d4a62a; --desk:#efeeea; }
@@ -128,7 +129,7 @@ html[data-ff-theme] .dlg h3,html[data-ff-theme] .dlg h4{font-family:'Oswald','No
   <button class="tbtn" id="bRedo" title="다시 (Ctrl+Y)">↷<span class="lb"> 다시</span></button>
   <span class="sp"></span>
   <button class="tbtn" id="bZm">−</button><span class="zoom" id="zl">100%</span><button class="tbtn" id="bZp">+</button><button class="tbtn" id="bFit">맞춤</button>
-  <button class="tbtn" id="bPg" title="페이지 (레이어 탭에서 관리)">📄 1/1</button><button class="tbtn" id="bImg">그림 넣기</button><button class="tbtn" id="bOpen">열기</button>
+  <button class="tbtn" id="bPg" title="페이지 (레이어 탭에서 관리)">📄 1/1</button><button class="tbtn" id="bImg">그림 넣기</button><button class="tbtn" id="fileBtn" title="파일"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg><span class="lb">파일</span></button>
   <button class="tbtn pri" id="bSave">받기 ▾</button>
 </div>
 <div class="main">
@@ -144,7 +145,7 @@ html[data-ff-theme] .dlg h3,html[data-ff-theme] .dlg h4{font-family:'Oswald','No
 <input type="file" id="fileIn" accept=".svg,.json,.fdraw,image/svg+xml,application/json" hidden>
 <script src="../ai.js?v=ai36.l23"></script>
 <script src="lib/polybool.js"></script>
-<script src="app.js?v=dr25"></script>
+<script src="app.js?v=dr25.f1"></script>
 <script src="../pwa.js" defer></script>
 <script src="../ping.js" defer></script>
 </body>
