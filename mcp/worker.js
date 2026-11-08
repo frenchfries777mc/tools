@@ -1,7 +1,7 @@
 /* Fry Tools MCP connector. A Cloudflare Worker: Claude connects with a Frenchfries777 account login (OAuth), then can list, read, search and write the Tools documents.
    Secret (never in code): SIGN_KEY = a long random text. Login check = the site's Supabase accounts; table public.tools_owner_link links an account to its store key.
    Address to add in Claude: https://<worker>/mcp */
-const STORE = 'https://140-238-55-153.sslip.io';
+const STORE = 'https://ff-store.frenchfries777mc.workers.dev';
 const SB = 'https://kebsbuvuutilitwlvxzv.supabase.co', SB_KEY = 'sb_publishable_4Egu0zm3p6cxWGvP_-GlIw_mlCpO1Nf', ID_DOM = 'frenchfries777.com';
 const APPS = [['docs', /^ffdocs\./], ['sheet', /^ffsheet\./], ['slides', /^ffslides\./], ['blocks', /^ffblocks\./], ['python', /^ffpy\./], ['draw', /^ffdraw\./], ['score', /^ffscore\./], ['video', /^ffvideo\./]];
 const MAX_TEXT = 60000, MAX_SCAN = 40, MAX_DOC = 4e6, ACCESS_S = 3600, REFRESH_S = 30 * 86400, CODE_S = 300;

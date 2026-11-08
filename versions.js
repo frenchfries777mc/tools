@@ -34,7 +34,7 @@ function tick(key,get,st,now){
 function ago(t,now){ var s=Math.max(0,((now||Date.now())-t)/1000);
   if(s<60) return '방금'; if(s<3600) return Math.floor(s/60)+'분 전'; if(s<86400) return Math.floor(s/3600)+'시간 전'; if(s<86400*30) return Math.floor(s/86400)+'일 전'; return Math.floor(s/86400/30)+'달 전'; }
 /* Oracle server store (server/fry-store): old versions move there when this browser is full. A moved version stays in the list as a small stub (remote:1, d:'') and is fetched back when restored. */
-var STORE='https://140-238-55-153.sslip.io';
+var STORE='https://ff-store.frenchfries777mc.workers.dev';
 function owner(st){ st=st||ls(); try{ var o=st.getItem('ffstore.owner'); if(!/^[0-9a-f]{32}$/.test(o||'')){ o=''; for(var i=0;i<32;i++) o+=Math.floor(Math.random()*16).toString(16); st.setItem('ffstore.owner',o); } return o; }catch(e){ return ''; } }
 function url(key,id,st){ return STORE+'/v/'+owner(st)+'/'+encodeURIComponent(key)+(id?'/'+id:''); }
 function net(m,u,body){ return fetch(u,{method:m,headers:body?{'content-type':'application/json'}:undefined,body:body}).then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }); }
