@@ -78,3 +78,7 @@ Fry Sheet AI 계산(`raw/calc-1`: 말로 쓴 계산 → 수식, 단위 문장 �
 - 만들기: `node train/gen22-code.js 4000` → `raw/gen22-code.jsonl`, 검사: `node train/gen22-code-check.js` → `data/v22-code.jsonl`(학습용 대화 모양).
 - 검사는 블록 HTML의 미리보기 틀에서 페이지를 열고 모든 버튼을 두 번씩 눌러 보고, 스크립트 오류가 하나라도 있거나 화면이 비면 떨어뜨려요. 일부러 `)`를 하나 더 붙인 페이지가 걸러지는 것도 확인했어요. 4,000개 모두 통과했어요.
 - 페이지가 맞는지(동작)는 이 검사로 오류 없음까지만 확인해요. 학습 묶음에는 아직 넣지 않았어요.
+
+## 2.2 타리우스 (Kaggle 한 세션)
+
+`node train/build22.js` → `data/v22-basic.jsonl` (28,117줄 = v21a-basic 전부 + 수식·그래프·표·단위·계산·수학 약 1.3만 줄 + 코드 페이지 4,000줄, 고정 시드). Kaggle 설정: MODEL="basic", VERSION="2.2" (EPOCHS는 자동 1바퀴). 업로드는 FF-Tools-1.7B-merged-2.2 로 가서 2.1은 덮어쓰지 않아요. TRAIN_FILE에 쉼표로 여러 파일을 적으면 함께 학습해요.
