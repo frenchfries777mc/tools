@@ -1,0 +1,14 @@
+{
+ "total": 28117,
+ "old": 11118,
+ "extra": 12999,
+ "code": 4000,
+ "extraByTask": {
+  "gen22-formula": 4159,
+  "gen22-graph": 2080,
+  "gen22-table": 2080,
+  "gen22-unit": 1820,
+  "gen22-calc": 1560,
+  "gen22-math": 1300
+ }
+}
