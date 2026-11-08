@@ -1,0 +1,11 @@
+{
+ "total": 49992,
+ "byTask": {
+  "formula": 15992,
+  "graph": 8000,
+  "table": 8000,
+  "unit": 7000,
+  "calc": 6000,
+  "math": 5000
+ }
+}
