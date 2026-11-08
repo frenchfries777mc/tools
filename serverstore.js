@@ -9,7 +9,7 @@ if(location.hostname==='frenchfries777mc.github.io'&&!window.__ffRedir){var s=do
 (function(root){
 'use strict';
 if(!root.document||!root.Storage||root.FFSrv) return;
-var BASE=root.FFSRV_URL||'https://140-238-55-153.sslip.io', MAXK=4e6, MAXO=16e6, DELAY=400;
+var BASE=root.FFSRV_URL||'https://ff-store.frenchfries777mc.workers.dev', MAXK=4e6, MAXO=16e6, DELAY=400;
 var ROUTE=/^(ffdocs\.v1|ffdocs\.doc\.[A-Za-z0-9_-]+|ffsheet\.docs|ffsheet\.doc\.[A-Za-z0-9_-]+|ffslides\.v1|ffblocks\.projects|ffblocks\.(p|store|ai)\.[A-Za-z0-9_-]+|ffpy\.v1|ffpy\.file\.[A-Za-z0-9_-]+|ffver\.v1\.[A-Za-z0-9._-]+|ffdraw\.v1|ffscore\.(v2|lib2)|ffvideo\.v1)$/;
 var P=Storage.prototype, oGet=P.getItem, oSet=P.setItem, oDel=P.removeItem, oKey=P.key, oLen=Object.getOwnPropertyDescriptor(P,'length').get;
 var real=root.localStorage;
