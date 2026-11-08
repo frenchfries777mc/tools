@@ -66,7 +66,7 @@ if(up&&OWN===owner()){ try{ var ks=[]; for(var i=0;i<oLen.call(real);i++){ var k
     if(sizes[k]!=null){ oDel.call(real,k); return; }   // the server already has it: the server's copy wins
     if(v.length>MAXK||total()+v.length>MAXO) return;     // too big for the server: stays here, still readable
     var q=xhr('PUT',url(k),v); if(q.s===200){ sizes[k]=v.length; cache[k]=v; oDel.call(real,k); } }); }catch(e){} }
-else say(T('서버에 연결할 수 없어요. 저장하려면 연결부터 확인해 주세요'));
+else say(T('서버에 연결할 수 없어요. 저장하려면 연결부터 확인해 주세요')+' ['+(r.s||'network')+' '+OWN.slice(0,6)+']');
 function routed(k){ return up&&ROUTE.test(String(k)); }
 function get(k){
   if(k in cache) return cache[k];
