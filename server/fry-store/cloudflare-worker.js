@@ -37,7 +37,7 @@ async function remove(env, path) {
   }
 }
 
-export default {
+const inner = {
   async fetch(req, env) {
     if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: H });
     const p = new URL(req.url).pathname.split('/').filter(Boolean);
@@ -98,5 +98,12 @@ export default {
       return send({ ok: 1 });
     }
     return send({ error: 'method' }, 405);
+  }
+};
+
+// 어떤 오류가 나도 브라우저가 읽을 수 있는 답을 돌려줘요 (그래야 "연결 끊김"으로 보이지 않아요)
+export default {
+  async fetch(req, env) {
+    try { return await inner.fetch(req, env); } catch (e) { return send({ error: 'server' }, 500); }
   }
 };

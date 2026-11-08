@@ -81,9 +81,9 @@ function flush(sync){
     busy=false;
     if(rs.ok||rs.status===404){ if(queue[k]===snapv) delete queue[k]; failed=0; say(''); }
     else if(rs.status===413||rs.status===507){ if(queue[k]===snapv) delete queue[k]; failed++; say(T(rs.status===507?'서버 저장 공간이 가득 차서 저장하지 못했어요':'문서가 너무 커서 저장하지 못했어요')); }
-    else { failed++; say(T('서버에 저장하지 못했어요. 다시 시도하고 있어요')); }
-    if(Object.keys(queue).length) schedule(rs.ok||rs.status<500?30:4000);
-  },function(){ busy=false; failed++; say(T('서버에 연결할 수 없어요. 다시 시도하고 있어요')); schedule(4000); });
+    else { failed++; if(failed>=3) say(T('서버에 저장하지 못했어요. 다시 시도하고 있어요')); }
+    if(Object.keys(queue).length) schedule(rs.ok||rs.status===404?30:(failed<3?700:4000));
+  },function(){ busy=false; failed++; if(failed>=3) say(T('서버에 연결할 수 없어요. 다시 시도하고 있어요')); schedule(failed<3?700:4000); });
 }
 function schedule(ms){ if(timer) clearTimeout(timer); timer=setTimeout(function(){ timer=0; flush(); },ms==null?DELAY:ms); }
 P.getItem=function(k){ if(isLS(this)&&routed(k)) return get(String(k)); return oGet.apply(this,arguments); };
