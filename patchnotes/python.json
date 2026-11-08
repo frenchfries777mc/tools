@@ -671,6 +671,70 @@
       "All matches are highlighted and the current position is shown",
       "Enter and Shift+Enter (or the arrows) jump to next and previous, Aa toggles case sensitivity, Esc closes"
      ]
+    },
+    "es": {
+     "title": "Buscar con Ctrl+F",
+     "items": [
+      "En el área de código se puede abrir la ventana de búsqueda con Ctrl+F (o con el botón de buscar de arriba)",
+      "Todas las coincidencias se marcan con color y se indica en qué número están",
+      "Enter y Shift+Enter (o ↑↓) pasan a la siguiente y a la anterior, Aa distingue mayúsculas y minúsculas, y Esc cierra"
+     ]
+    },
+    "fr": {
+     "title": "Recherche avec Ctrl+F",
+     "items": [
+      "Dans la zone de code, Ctrl+F (ou le bouton Rechercher ci-dessus) ouvre la fenêtre de recherche",
+      "Tous les résultats sont surlignés en couleur et l'outil indique leur numéro",
+      "Entrée et Maj+Entrée (ou ↑↓) vont au suivant et au précédent, Aa distingue les majuscules, et Échap ferme"
+     ]
+    },
+    "de": {
+     "title": "Suche mit Strg+F",
+     "items": [
+      "Im Codebereich öffnet Strg+F (oder die Suchschaltfläche oben) das Suchfenster",
+      "Alle Treffer werden farbig markiert und die Nummer des Treffers wird angezeigt",
+      "Enter und Umschalt+Enter (oder ↑↓) springen zum nächsten und vorherigen Treffer, Aa unterscheidet Groß- und Kleinschreibung, Esc schließt"
+     ]
+    },
+    "ja": {
+     "title": "Ctrl+F で検索",
+     "items": [
+      "コード欄で Ctrl+F（または上の検索ボタン）を押すと検索ウィンドウが開きます",
+      "見つかった文字はすべて色で表示され、何番目かも示されます",
+      "Enter・Shift+Enter（または ↑↓）で次・前へ移動、Aa で大文字と小文字を区別、Esc で閉じます"
+     ]
+    },
+    "zh": {
+     "title": "Ctrl+F 查找",
+     "items": [
+      "在代码区按 Ctrl+F（或上方的查找按钮）可打开查找窗口",
+      "所有找到的文字都会以颜色标出，并显示是第几个",
+      "Enter 和 Shift+Enter（或 ↑↓）可跳到下一个和上一个，Aa 区分大小写，Esc 关闭"
+     ]
+    },
+    "pt": {
+     "title": "Localizar com Ctrl+F",
+     "items": [
+      "Na área de código, Ctrl+F (ou o botão localizar acima) abre a janela de busca",
+      "Todos os trechos encontrados ficam coloridos e mostra-se em que posição estão",
+      "Enter e Shift+Enter (ou ↑↓) vão para o próximo e o anterior, Aa diferencia maiúsculas e minúsculas, e Esc fecha"
+     ]
+    },
+    "ru": {
+     "title": "Поиск по Ctrl+F",
+     "items": [
+      "В поле кода Ctrl+F (или кнопка поиска сверху) открывает окно поиска",
+      "Все найденные совпадения выделяются цветом, и показывается, какой это по счёту",
+      "Enter и Shift+Enter (или ↑↓) переходят к следующему и предыдущему, Aa учитывает регистр, Esc закрывает"
+     ]
+    },
+    "tr": {
+     "title": "Ctrl+F ile arama",
+     "items": [
+      "Kod alanında Ctrl+F (veya yukarıdaki arama düğmesi) arama penceresini açar",
+      "Bulunan tüm metinler renkle gösterilir ve kaçıncı olduğu belirtilir",
+      "Enter ve Shift+Enter (veya ↑↓) sonraki ve önceki sonuca geçer, Aa büyük/küçük harfi ayırır, Esc kapatır"
+     ]
     }
    }
   },
@@ -688,6 +752,62 @@
      "items": [
       "use_mod_uuid: uuid lines (up to 5) below the mod name line are checked; a malformed uuid is reported",
       "In files with use_mod_uuid, placeholders such as %hp% in text are no longer reported as unknown"
+     ]
+    },
+    "es": {
+     "title": "BeaconScript use_mod_uuid",
+     "items": [
+      "Se comprueban las líneas uuid (hasta 5) de use_mod_uuid: bajo la línea del nombre del mod, y se avisa si el formato es incorrecto",
+      "En archivos con use_mod_uuid, los marcadores como %hp% del texto no se tratan como marcadores desconocidos"
+     ]
+    },
+    "fr": {
+     "title": "BeaconScript use_mod_uuid",
+     "items": [
+      "Les lignes uuid (jusqu'à 5) de use_mod_uuid: sous la ligne du nom du mod sont vérifiées, et un mauvais format est signalé",
+      "Dans les fichiers avec use_mod_uuid, les espaces réservés comme %hp% dans le texte ne sont pas considérés comme inconnus"
+     ]
+    },
+    "de": {
+     "title": "BeaconScript use_mod_uuid",
+     "items": [
+      "Die uuid-Zeilen (bis zu 5) nach use_mod_uuid: unter der Zeile des Mod-Namens werden geprüft; ein falsches Format wird gemeldet",
+      "In Dateien mit use_mod_uuid werden Platzhalter wie %hp% im Text nicht als unbekannt behandelt"
+     ]
+    },
+    "ja": {
+     "title": "BeaconScript の use_mod_uuid",
+     "items": [
+      "mod 名の行の下にある use_mod_uuid: の uuid 行（最大 5 行）をチェックし、形が違えば知らせます",
+      "use_mod_uuid があるファイルでは、本文中の %hp% などのプレースホルダーを不明なものとして扱いません"
+     ]
+    },
+    "zh": {
+     "title": "BeaconScript 的 use_mod_uuid",
+     "items": [
+      "检查 mod 名称行下方 use_mod_uuid: 的 uuid 行（最多 5 行），格式错误会提示",
+      "有 use_mod_uuid 的文件中，正文里的 %hp% 等占位符不再被视为未知占位符"
+     ]
+    },
+    "pt": {
+     "title": "use_mod_uuid do BeaconScript",
+     "items": [
+      "As linhas uuid (até 5) de use_mod_uuid: abaixo da linha do nome do mod são verificadas, e um formato errado é avisado",
+      "Em arquivos com use_mod_uuid, marcadores como %hp% no texto não são tratados como marcadores desconhecidos"
+     ]
+    },
+    "ru": {
+     "title": "use_mod_uuid в BeaconScript",
+     "items": [
+      "Проверяются строки uuid (до 5) после use_mod_uuid: под строкой имени мода, неверный формат сообщается",
+      "В файлах с use_mod_uuid заполнители вида %hp% в тексте не считаются неизвестными"
+     ]
+    },
+    "tr": {
+     "title": "BeaconScript use_mod_uuid",
+     "items": [
+      "mod adı satırının altındaki use_mod_uuid: uuid satırları (en fazla 5) kontrol edilir; biçim yanlışsa bildirilir",
+      "use_mod_uuid bulunan dosyalarda metindeki %hp% gibi yer tutucular bilinmeyen sayılmaz"
      ]
     }
    }
@@ -709,6 +829,70 @@
       "A top-of-file api potato line is allowed (below the mod name line, once)",
       "Item list refreshed from the latest Beaconfall codex (499 items)"
      ]
+    },
+    "es": {
+     "title": "BeaconScript eat y api potato",
+     "items": [
+      "on eat con objeto: se comprueban el evento y el valor %eaten_item%, y tras el evento se pueden escribir varios objetos con or (on eat bread or wheat:, on place torch or lamp:)",
+      "Se admite la línea api potato al principio (bajo la línea del nombre del mod, solo una vez)",
+      "La lista de objetos se actualizó al catálogo más reciente de Beaconfall (499 objetos)"
+     ]
+    },
+    "fr": {
+     "title": "BeaconScript eat et api potato",
+     "items": [
+      "on eat objet : l'événement et la valeur %eaten_item% sont vérifiés, et plusieurs objets peuvent être écrits avec or après l'événement (on eat bread or wheat:, on place torch or lamp:)",
+      "La ligne api potato en haut est acceptée (sous la ligne du nom du mod, une seule fois)",
+      "La liste d'objets a été mise à jour avec le catalogue Beaconfall le plus récent (499 objets)"
+     ]
+    },
+    "de": {
+     "title": "BeaconScript eat und api potato",
+     "items": [
+      "on eat mit Gegenstand: Ereignis und Wert %eaten_item% werden geprüft; nach dem Ereignis können mit or mehrere Gegenstände stehen (on eat bread or wheat:, on place torch or lamp:)",
+      "Die api-potato-Zeile oben wird akzeptiert (unter der Zeile des Mod-Namens, nur einmal)",
+      "Die Gegenstandsliste wurde auf den neuesten Beaconfall-Katalog (499 Gegenstände) aktualisiert"
+     ]
+    },
+    "ja": {
+     "title": "BeaconScript の eat と api potato",
+     "items": [
+      "on eat アイテム: イベントと %eaten_item% の値をチェックし、イベントの後に or で複数のアイテムを書けます（on eat bread or wheat:、on place torch or lamp:）",
+      "先頭の api potato 行を許可します（mod 名の行の下に一度だけ）",
+      "アイテム一覧を最新の Beaconfall 図鑑（499 個）に更新しました"
+     ]
+    },
+    "zh": {
+     "title": "BeaconScript 的 eat 与 api potato",
+     "items": [
+      "on eat 物品：检查事件和 %eaten_item% 值，事件后可用 or 写多个物品（on eat bread or wheat:、on place torch or lamp:）",
+      "允许开头的 api potato 行（在 mod 名称行之下，只能一次）",
+      "物品列表已更新为最新的 Beaconfall 图鉴（499 个物品）"
+     ]
+    },
+    "pt": {
+     "title": "eat e api potato do BeaconScript",
+     "items": [
+      "on eat com item: o evento e o valor %eaten_item% são verificados, e depois do evento podem ser escritos vários itens com or (on eat bread or wheat:, on place torch or lamp:)",
+      "A linha api potato no topo é aceita (abaixo da linha do nome do mod, só uma vez)",
+      "A lista de itens foi atualizada para o catálogo mais recente do Beaconfall (499 itens)"
+     ]
+    },
+    "ru": {
+     "title": "eat и api potato в BeaconScript",
+     "items": [
+      "on eat с предметом: проверяются событие и значение %eaten_item%, после события можно перечислить несколько предметов через or (on eat bread or wheat:, on place torch or lamp:)",
+      "Строка api potato вверху разрешена (под строкой имени мода, только один раз)",
+      "Список предметов обновлён по новейшему каталогу Beaconfall (499 предметов)"
+     ]
+    },
+    "tr": {
+     "title": "BeaconScript eat ve api potato",
+     "items": [
+      "on eat eşyası: olay ve %eaten_item% değeri kontrol edilir; olaydan sonra or ile birden fazla eşya yazılabilir (on eat bread or wheat:, on place torch or lamp:)",
+      "En üstteki api potato satırına izin verilir (mod adı satırının altında, yalnızca bir kez)",
+      "Eşya listesi en güncel Beaconfall kataloğuna (499 eşya) göre güncellendi"
+     ]
     }
    }
   },
@@ -728,6 +912,70 @@
       "A top-of-file uuid line (e.g. 550e8400-e29b-41d4-a716-446655440000) passes, together with the mod name line; a malformed uuid is reported",
       "Mods with a uuid limit shared variable names {:name::value:} to 21 characters",
       "Another mod's shared variable %uuid_name% is no longer reported as an unknown placeholder"
+     ]
+    },
+    "es": {
+     "title": "BeaconScript uuid de mod",
+     "items": [
+      "Una línea uuid al principio del archivo (p. ej. 550e8400-e29b-41d4-a716-446655440000) pasa sin error. Puede escribirse arriba junto con la línea del nombre del mod, y se avisa si el formato es incorrecto",
+      "Los mods con uuid solo admiten nombres de variable compartida {:nombre::valor:} de hasta 21 caracteres",
+      "Las variables compartidas %uuid_nombre% de otros mods no se tratan como marcadores desconocidos"
+     ]
+    },
+    "fr": {
+     "title": "BeaconScript uuid de mod",
+     "items": [
+      "Une ligne uuid en haut du fichier (ex. 550e8400-e29b-41d4-a716-446655440000) passe sans erreur. Elle peut être écrite en haut avec la ligne du nom du mod, et un mauvais format est signalé",
+      "Les mods avec un uuid n'acceptent que 21 caractères au maximum pour le nom des variables partagées {:nom::valeur:}",
+      "Les variables partagées %uuid_nom% d'autres mods ne sont pas considérées comme des espaces réservés inconnus"
+     ]
+    },
+    "de": {
+     "title": "BeaconScript Mod-UUID",
+     "items": [
+      "Eine uuid-Zeile am Dateianfang (z. B. 550e8400-e29b-41d4-a716-446655440000) wird ohne Fehler akzeptiert. Sie kann zusammen mit der Zeile des Mod-Namens oben stehen; ein falsches Format wird gemeldet",
+      "Mods mit uuid erlauben gemeinsame Variablennamen {:name::wert:} nur bis 21 Zeichen",
+      "Gemeinsame Variablen %uuid_name% anderer Mods werden nicht als unbekannte Platzhalter behandelt"
+     ]
+    },
+    "ja": {
+     "title": "BeaconScript のモード uuid",
+     "items": [
+      "ファイル先頭の uuid 行（例: 550e8400-e29b-41d4-a716-446655440000）をエラーなしで通します。mod 名の行と一緒に先頭に書けて、形式が違えば知らせます",
+      "uuid があるモードは、共有変数 {:名前::値:} の名前を 21 文字までに制限します",
+      "他のモードの共有変数 %uuid_名前% を不明なプレースホルダーとして扱いません"
+     ]
+    },
+    "zh": {
+     "title": "BeaconScript 模组 uuid",
+     "items": [
+      "文件开头的 uuid 行（例如 550e8400-e29b-41d4-a716-446655440000）可无错通过。可与 mod 名称行一起写在最前面，格式错误会提示",
+      "带 uuid 的模组，共享变量 {:名称::值:} 的名称最多 21 个字符",
+      "其他模组的共享变量 %uuid_名称% 不会被当作未知占位符"
+     ]
+    },
+    "pt": {
+     "title": "uuid de mod do BeaconScript",
+     "items": [
+      "Uma linha uuid no topo do arquivo (ex.: 550e8400-e29b-41d4-a716-446655440000) passa sem erro. Pode ser escrita no topo junto com a linha do nome do mod, e um formato errado é avisado",
+      "Mods com uuid permitem nomes de variável compartilhada {:nome::valor:} de até 21 caracteres",
+      "Variáveis compartilhadas %uuid_nome% de outros mods não são tratadas como marcadores desconhecidos"
+     ]
+    },
+    "ru": {
+     "title": "uuid мода в BeaconScript",
+     "items": [
+      "Строка uuid в начале файла (например 550e8400-e29b-41d4-a716-446655440000) проходит без ошибок. Её можно писать вверху вместе со строкой имени мода, неверный формат сообщается",
+      "В модах с uuid имена общих переменных {:имя::значение:} ограничены 21 символом",
+      "Общие переменные %uuid_имя% других модов не считаются неизвестными заполнителями"
+     ]
+    },
+    "tr": {
+     "title": "BeaconScript mod uuid",
+     "items": [
+      "Dosyanın en üstündeki uuid satırı (ör. 550e8400-e29b-41d4-a716-446655440000) hatasız geçer. Mod adı satırıyla birlikte en üste yazılabilir; biçim yanlışsa bildirilir",
+      "uuid'li modlarda paylaşılan değişken adları {:ad::değer:} en fazla 21 karakter olabilir",
+      "Diğer modların paylaşılan %uuid_ad% değişkenleri bilinmeyen yer tutucu sayılmaz"
      ]
     }
    }
@@ -749,6 +997,70 @@
       "load ~x ~z ~x2 ~z2 (restore natural terrain) is checked; it only works inside on world generate: and is reported elsewhere",
       "Autocomplete lists mod, not and load"
      ]
+    },
+    "es": {
+     "title": "Condiciones mod y load de BeaconScript",
+     "items": [
+      "Se comprueban if mod \"nombre\": e if not mod \"nombre\": y se pueden unir con or",
+      "Se comprueba load ~x ~z ~x2 ~z2 (volver al terreno original). on world generate: solo puede usarse dentro, y se avisa si se usa fuera",
+      "En el autocompletado aparecen mod, not y load"
+     ]
+    },
+    "fr": {
+     "title": "Conditions mod et load de BeaconScript",
+     "items": [
+      "Les conditions if mod \"nom\": et if not mod \"nom\": sont vérifiées et peuvent être reliées par or",
+      "load ~x ~z ~x2 ~z2 (restaurer le terrain d'origine) est vérifié. on world generate: ne peut être utilisé qu'à l'intérieur, et l'outil le signale s'il est écrit à l'extérieur",
+      "mod, not et load apparaissent dans l'autocomplétion"
+     ]
+    },
+    "de": {
+     "title": "BeaconScript: mod-Bedingungen und load",
+     "items": [
+      "if mod \"Name\": und if not mod \"Name\": werden geprüft und können mit or verbunden werden",
+      "load ~x ~z ~x2 ~z2 (ursprüngliches Gelände wiederherstellen) wird geprüft. on world generate: darf nur innen verwendet werden, außen wird darauf hingewiesen",
+      "In der Autovervollständigung erscheinen mod, not und load"
+     ]
+    },
+    "ja": {
+     "title": "BeaconScript の mod 条件と load",
+     "items": [
+      "if mod \"名前\": ・ if not mod \"名前\": の条件をチェックし、or でまとめられます",
+      "load ~x ~z ~x2 ~z2（元の地形に戻す）をチェックします。on world generate: の中でだけ使え、外で書くと知らせます",
+      "自動補完に mod・not・load が出ます"
+     ]
+    },
+    "zh": {
+     "title": "BeaconScript 的 mod 条件与 load",
+     "items": [
+      "检查 if mod \"名称\": 和 if not mod \"名称\": 条件，并可用 or 连接",
+      "检查 load ~x ~z ~x2 ~z2（恢复原始地形）。on world generate: 只能在其内部使用，写在外面会提示",
+      "自动补全中会出现 mod、not 和 load"
+     ]
+    },
+    "pt": {
+     "title": "Condições mod e load do BeaconScript",
+     "items": [
+      "As condições if mod \"nome\": e if not mod \"nome\": são verificadas e podem ser unidas com or",
+      "load ~x ~z ~x2 ~z2 (voltar ao terreno original) é verificado. on world generate: só pode ser usado dentro, e o aviso aparece se for escrito fora",
+      "mod, not e load aparecem no autocompletar"
+     ]
+    },
+    "ru": {
+     "title": "Условия mod и load в BeaconScript",
+     "items": [
+      "Проверяются условия if mod \"имя\": и if not mod \"имя\": их можно объединять через or",
+      "Проверяется load ~x ~z ~x2 ~z2 (вернуть исходный рельеф). on world generate: может использоваться только внутри, а снаружи об этом сообщается",
+      "В автодополнении появляются mod, not и load"
+     ]
+    },
+    "tr": {
+     "title": "BeaconScript mod koşulları ve load",
+     "items": [
+      "if mod \"ad\": ve if not mod \"ad\": koşulları kontrol edilir ve or ile bağlanabilir",
+      "load ~x ~z ~x2 ~z2 (özgün araziyi geri yükle) kontrol edilir. on world generate: yalnızca içinde kullanılabilir; dışarıda yazılırsa bildirilir",
+      "Otomatik tamamlamada mod, not ve load çıkar"
+     ]
     }
    }
   },
@@ -765,6 +1077,54 @@
      "items": [
       "Reading variables as %name% in text was cancelled; use {name} for variables, %name% is reported as an unknown placeholder again"
      ]
+    },
+    "es": {
+     "title": "Cancelada la lectura de variables con %variable%",
+     "items": [
+      "Leer una variable con %nombre% dentro del texto queda cancelado. Las variables se escriben solo como {nombre}, y %nombre% vuelve a marcarse como marcador desconocido"
+     ]
+    },
+    "fr": {
+     "title": "Lecture des variables avec %nom% supprimée",
+     "items": [
+      "La lecture d'une variable avec %nom% dans le texte est annulée. Les variables s'écrivent uniquement {nom}, et %nom% est de nouveau signalé comme espace réservé inconnu"
+     ]
+    },
+    "de": {
+     "title": "Variablenlesen mit %Name% entfernt",
+     "items": [
+      "Das Lesen einer Variable über %name% im Text wurde zurückgenommen. Variablen werden nur als {name} geschrieben, und %name% wird wieder als unbekannter Platzhalter gemeldet"
+     ]
+    },
+    "ja": {
+     "title": "%変数% での読み取りを取り消し",
+     "items": [
+      "本文中の %名前% による変数の読み取りは取り消しました。変数は {名前} だけで書き、%名前% は再び不明なプレースホルダーとして知らせます"
+     ]
+    },
+    "zh": {
+     "title": "取消用 %变量% 读取变量",
+     "items": [
+      "文本中用 %名称% 读取变量的功能已取消。变量只能写成 {名称}，%名称% 会再次作为未知占位符提示"
+     ]
+    },
+    "pt": {
+     "title": "Leitura de variável com %nome% cancelada",
+     "items": [
+      "Ler uma variável com %nome% no texto foi cancelado. As variáveis são escritas só como {nome}, e %nome% volta a ser avisado como marcador desconhecido"
+     ]
+    },
+    "ru": {
+     "title": "Отменено чтение переменной через %имя%",
+     "items": [
+      "Чтение переменной через %имя% в тексте отменено. Переменные пишутся только как {имя}, а %имя% снова отмечается как неизвестный заполнитель"
+     ]
+    },
+    "tr": {
+     "title": "%değişken% ile okuma kaldırıldı",
+     "items": [
+      "Metinde %ad% ile değişken okuma kaldırıldı. Değişkenler yalnızca {ad} olarak yazılır ve %ad% yeniden bilinmeyen yer tutucu olarak bildirilir"
+     ]
     }
    }
   },
@@ -780,6 +1140,54 @@
      "title": "%interacted% value",
      "items": [
       "%interacted% is accepted as the same value as %interacted_item%"
+     ]
+    },
+    "es": {
+     "title": "Nuevo valor %interacted%",
+     "items": [
+      "%interacted% también se acepta sin error, con el mismo valor que %interacted_item%"
+     ]
+    },
+    "fr": {
+     "title": "Nouvelle valeur %interacted%",
+     "items": [
+      "%interacted% est aussi accepté sans erreur, avec la même valeur que %interacted_item%"
+     ]
+    },
+    "de": {
+     "title": "Neuer Wert %interacted%",
+     "items": [
+      "%interacted% wird wie %interacted_item% ohne Fehler akzeptiert"
+     ]
+    },
+    "ja": {
+     "title": "%interacted% の値を追加",
+     "items": [
+      "%interacted% も %interacted_item% と同じ値としてエラーなしで認めます"
+     ]
+    },
+    "zh": {
+     "title": "新增 %interacted% 值",
+     "items": [
+      "%interacted% 与 %interacted_item% 一样，可无错使用"
+     ]
+    },
+    "pt": {
+     "title": "Novo valor %interacted%",
+     "items": [
+      "%interacted% também é aceito sem erro, com o mesmo valor de %interacted_item%"
+     ]
+    },
+    "ru": {
+     "title": "Значение %interacted%",
+     "items": [
+      "%interacted% тоже принимается без ошибок, как и %interacted_item%"
+     ]
+    },
+    "tr": {
+     "title": "%interacted% değeri eklendi",
+     "items": [
+      "%interacted% de %interacted_item% ile aynı değer olarak hatasız kabul edilir"
      ]
     }
    }
@@ -800,6 +1208,70 @@
       "on roll, interaction, quit, spawn events and the %interacted_item% value are checked",
       "or works after of and to for several targets (on spawn of wolf or slime:, chat \"x\" to Bob or Alice)",
       "Autocomplete and examples show only destroy and death; break and die still work without errors"
+     ]
+    },
+    "es": {
+     "title": "Nuevos eventos de BeaconScript",
+     "items": [
+      "Se comprueban los eventos on roll·interaction·quit·spawn y el valor %interacted_item%",
+      "Tras of y to también se pueden poner varios destinos con or (on spawn of wolf or slime:, chat \"x\" to Bob or Alice)",
+      "El autocompletado y los ejemplos solo muestran destroy·death, pero break·die siguen aceptándose sin error"
+     ]
+    },
+    "fr": {
+     "title": "Nouveaux événements de BeaconScript",
+     "items": [
+      "Les événements on roll·interaction·quit·spawn et la valeur %interacted_item% sont vérifiés",
+      "Après of et to, on peut aussi indiquer plusieurs cibles avec or (on spawn of wolf or slime:, chat \"x\" to Bob or Alice)",
+      "L'autocomplétion et les exemples ne montrent que destroy·death, mais break·die restent acceptés sans erreur"
+     ]
+    },
+    "de": {
+     "title": "Neue BeaconScript-Ereignisse",
+     "items": [
+      "Ereignisse on roll·interaction·quit·spawn und der Wert %interacted_item% werden geprüft",
+      "Nach of und to können mit or auch mehrere Ziele stehen (on spawn of wolf or slime:, chat \"x\" to Bob or Alice)",
+      "Autovervollständigung und Beispiele zeigen nur destroy·death, break·die werden aber weiterhin ohne Fehler akzeptiert"
+     ]
+    },
+    "ja": {
+     "title": "BeaconScript の新しいイベントに対応",
+     "items": [
+      "on roll·interaction·quit·spawn のイベントと %interacted_item% の値をチェック",
+      "of・to の後にも or で複数の対象を書けます（on spawn of wolf or slime:、chat \"x\" to Bob or Alice）",
+      "自動補完と例では destroy·death だけが出ますが、break·die はこれまでどおりエラーなしで書けます"
+     ]
+    },
+    "zh": {
+     "title": "BeaconScript 新事件更新",
+     "items": [
+      "检查 on roll·interaction·quit·spawn 事件和 %interacted_item% 值",
+      "of 和 to 后面也可以用 or 写多个目标（on spawn of wolf or slime:、chat \"x\" to Bob or Alice）",
+      "自动补全和示例只显示 destroy·death，但 break·die 仍可无错书写"
+     ]
+    },
+    "pt": {
+     "title": "Novos eventos do BeaconScript",
+     "items": [
+      "Verificação dos eventos on roll·interaction·quit·spawn e do valor %interacted_item%",
+      "Depois de of e to também é possível usar vários alvos com or (on spawn of wolf or slime:, chat \"x\" to Bob or Alice)",
+      "O autocompletar e os exemplos mostram só destroy·death, mas break·die continuam aceitos sem erro"
+     ]
+    },
+    "ru": {
+     "title": "Новые события BeaconScript",
+     "items": [
+      "Проверяются события on roll·interaction·quit·spawn и значение %interacted_item%",
+      "После of и to можно указать несколько целей через or (on spawn of wolf or slime:, chat \"x\" to Bob or Alice)",
+      "Автодополнение и примеры показывают только destroy·death, но break·die по-прежнему принимаются без ошибок"
+     ]
+    },
+    "tr": {
+     "title": "Yeni BeaconScript olayları",
+     "items": [
+      "on roll·interaction·quit·spawn olayları ve %interacted_item% değeri kontrol edilir",
+      "of ve to sonrasında or ile birden fazla hedef yazılabilir (on spawn of wolf or slime:, chat \"x\" to Bob or Alice)",
+      "Otomatik tamamlama ve örneklerde yalnızca destroy·death görünür; break·die ise hatasız yazılmaya devam eder"
      ]
     }
    }
@@ -823,6 +1295,78 @@
       "if player hp|max hp|x|y|z, if world day|hour|players comparisons and if player biome|item|name is (not) ... are checked and can be joined with or",
       "New conditions and item cards show in the preview and autocomplete"
      ]
+    },
+    "es": {
+     "title": "Línea superior de BeaconScript y nuevas condiciones",
+     "items": [
+      "Las líneas mod \"nombre\" · resource pack \"nombre\" · pack \"nombre\" al principio del archivo se aceptan sin error (solo una vez y solo arriba)",
+      "En la primera línea solo pueden ir on·every·rename·remap·fill·disable/enable·remove all·set damage de objeto; los demás comandos deben ir dentro de on/every y se avisa",
+      "Se comprueban las comparaciones if player hp|max hp|x|y|z, if world day|hour|players y if player biome|item|name is (not) … y se pueden unir con or",
+      "Las condiciones nuevas y las tarjetas de objetos aparecen en la vista previa y en el autocompletado"
+     ]
+    },
+    "fr": {
+     "title": "Ligne du haut et nouvelles conditions de BeaconScript",
+     "items": [
+      "Les lignes mod \"nom\" · resource pack \"nom\" · pack \"nom\" en haut du fichier passent sans erreur (une seule fois, uniquement en haut)",
+      "Seuls on·every·rename·remap·fill·disable/enable·remove all·set damage d'objet peuvent figurer sur la première ligne ; les autres commandes doivent être dans on/every, et l'outil le signale",
+      "Les comparaisons if player hp|max hp|x|y|z, if world day|hour|players et if player biome|item|name is (not) … sont vérifiées et peuvent être reliées par or",
+      "Les nouvelles conditions et les cartes d'objets apparaissent dans l'aperçu et l'autocomplétion"
+     ]
+    },
+    "de": {
+     "title": "BeaconScript: erste Zeile und neue Bedingungen",
+     "items": [
+      "Die Zeilen mod \"Name\" · resource pack \"Name\" · pack \"Name\" am Dateianfang werden ohne Fehler akzeptiert (nur einmal, nur oben)",
+      "In der ersten Zeile dürfen nur on·every·rename·remap·fill·disable/enable·remove all·set Gegenstands-damage stehen; andere Befehle müssen innerhalb von on/every stehen, darauf weist die Prüfung hin",
+      "Vergleiche if player hp|max hp|x|y|z, if world day|hour|players und if player biome|item|name is (not) … werden geprüft und können mit or verbunden werden",
+      "Neue Bedingungen und Gegenstandskarten erscheinen in Vorschau und Autovervollständigung"
+     ]
+    },
+    "ja": {
+     "title": "BeaconScript 先頭行と新しい条件",
+     "items": [
+      "ファイルの先頭にある mod \"名前\" ・ resource pack \"名前\" ・ pack \"名前\" の行はエラーなしで通ります（1 回だけ、先頭のみ）",
+      "先頭行に書けるのは on·every·rename·remap·fill·disable/enable·remove all·set アイテム damage だけで、それ以外の命令は on/every の中に書くよう案内します",
+      "if player hp|max hp|x|y|z、if world day|hour|players の比較と if player biome|item|name is (not) … をチェックし、or でまとめられます",
+      "新しい条件とアイテムカードがプレビューと自動補完に表示されます"
+     ]
+    },
+    "zh": {
+     "title": "BeaconScript 首行与新条件",
+     "items": [
+      "文件开头的 mod \"名称\" · resource pack \"名称\" · pack \"名称\" 行可以无错通过（只能一次，且只能在最前面）",
+      "第一行只能写 on·every·rename·remap·fill·disable/enable·remove all·set 物品 damage，其他命令需写在 on/every 里面，并会提示",
+      "检查 if player hp|max hp|x|y|z、if world day|hour|players 比较以及 if player biome|item|name is (not) …，并可用 or 连接",
+      "新条件和物品卡片会出现在预览和自动补全中"
+     ]
+    },
+    "pt": {
+     "title": "BeaconScript: linha do topo e novas condições",
+     "items": [
+      "As linhas mod \"nome\" · resource pack \"nome\" · pack \"nome\" no topo do arquivo passam sem erro (só uma vez, só no topo)",
+      "Na primeira linha só podem vir on·every·rename·remap·fill·disable/enable·remove all·set damage de item; outros comandos devem ficar dentro de on/every, e o aviso aparece",
+      "São verificadas as comparações if player hp|max hp|x|y|z, if world day|hour|players e if player biome|item|name is (not) …, que também podem ser unidas com or",
+      "As novas condições e os cartões de itens aparecem na pré-visualização e no autocompletar"
+     ]
+    },
+    "ru": {
+     "title": "BeaconScript: первая строка и новые условия",
+     "items": [
+      "Строки mod \"имя\" · resource pack \"имя\" · pack \"имя\" в начале файла проходят без ошибок (только один раз и только вверху)",
+      "В первой строке могут стоять только on·every·rename·remap·fill·disable/enable·remove all·set урон предмета; остальные команды должны быть внутри on/every, и об этом сообщается",
+      "Проверяются сравнения if player hp|max hp|x|y|z, if world day|hour|players и if player biome|item|name is (not) …, их можно объединять через or",
+      "Новые условия и карточки предметов появляются в предпросмотре и автодополнении"
+     ]
+    },
+    "tr": {
+     "title": "BeaconScript üst satırı ve yeni koşullar",
+     "items": [
+      "Dosyanın en üstündeki mod \"ad\" · resource pack \"ad\" · pack \"ad\" satırları hatasız geçer (yalnızca bir kez, yalnızca en üstte)",
+      "İlk satıra yalnızca on·every·rename·remap·fill·disable/enable·remove all·set eşya damage yazılabilir; diğer komutlar on/every içinde olmalıdır ve bu bildirilir",
+      "if player hp|max hp|x|y|z, if world day|hour|players karşılaştırmaları ile if player biome|item|name is (not) … kontrol edilir ve or ile bağlanabilir",
+      "Yeni koşullar ve eşya kartları önizlemede ve otomatik tamamlamada görünür"
+     ]
     }
    }
   },
@@ -845,6 +1389,78 @@
       "if conditions can be joined with or (an or inside quotes is not a separator)",
       "Autocomplete lists events (on lines) or conditions (if lines) after or"
      ]
+    },
+    "es": {
+     "title": "BeaconScript b196 aplicado",
+     "items": [
+      "El valor de una variable se puede usar como segundos, como every %{variable}% seconds:",
+      "Se comprueban eventos unidos con or, como on mine or chop:, on damage or die of monster: y on key \"A\" or \"W\" press:",
+      "Las condiciones if también se pueden unir con or, como if has 3 iron or variable {n} >= 5 or %attacker% is player: (el or entre comillas no es separador)",
+      "Tras or, en el autocompletado aparecen también las listas de eventos (línea on) y de condiciones (línea if)"
+     ]
+    },
+    "fr": {
+     "title": "BeaconScript b196 pris en compte",
+     "items": [
+      "Une valeur de variable peut servir de secondes, comme every %{variable}% seconds :",
+      "Les événements reliés par or sont vérifiés, comme on mine or chop:, on damage or die of monster: et on key \"A\" or \"W\" press:",
+      "Les conditions if peuvent aussi être reliées par or, comme if has 3 iron or variable {n} >= 5 or %attacker% is player: (le or entre guillemets n'est pas un séparateur)",
+      "Après or, les listes d'événements (ligne on) et de conditions (ligne if) s'affichent aussi dans l'autocomplétion"
+     ]
+    },
+    "de": {
+     "title": "BeaconScript b196 umgesetzt",
+     "items": [
+      "Ein Variablenwert kann als Sekunden dienen, z. B. every %{variable}% seconds:",
+      "Ereignisse mit or werden geprüft, z. B. on mine or chop:, on damage or die of monster: und on key \"A\" or \"W\" press:",
+      "if-Bedingungen lassen sich ebenfalls mit or verbinden, z. B. if has 3 iron or variable {n} >= 5 or %attacker% is player: (ein or in Anführungszeichen ist kein Trennzeichen)",
+      "Nach or werden auch Listen mit Ereignissen (on-Zeile) und Bedingungen (if-Zeile) vorgeschlagen"
+     ]
+    },
+    "ja": {
+     "title": "BeaconScript b196 対応",
+     "items": [
+      "変数の値を秒数として使えます（every %{変数}% seconds: のように）",
+      "on mine or chop:、on damage or die of monster:、on key \"A\" or \"W\" press: のような or のイベントをチェック",
+      "if 条件も or でつなげられます（if has 3 iron or variable {n} >= 5 or %attacker% is player: のように。引用符の中の or は区切りではありません）",
+      "or の後にもイベント（on 行）と条件（if 行）の一覧が自動補完に出ます"
+     ]
+    },
+    "zh": {
+     "title": "BeaconScript b196 更新",
+     "items": [
+      "可以把变量的值用作秒数，例如 every %{变量}% seconds:",
+      "检查用 or 连接的事件，例如 on mine or chop:、on damage or die of monster:、on key \"A\" or \"W\" press:",
+      "if 条件也可以用 or 连接，例如 if has 3 iron or variable {n} >= 5 or %attacker% is player:（引号内的 or 不是分隔符）",
+      "or 之后的自动补全也会显示事件（on 行）和条件（if 行）列表"
+     ]
+    },
+    "pt": {
+     "title": "BeaconScript b196 aplicado",
+     "items": [
+      "Um valor de variável pode ser usado em segundos, como every %{variável}% seconds:",
+      "Eventos com or são verificados, como on mine or chop:, on damage or die of monster: e on key \"A\" or \"W\" press:",
+      "Condições if também podem ser unidas com or, como if has 3 iron or variable {n} >= 5 or %attacker% is player: (o or entre aspas não é separador)",
+      "Depois de or, as listas de eventos (linha on) e de condições (linha if) também aparecem no autocompletar"
+     ]
+    },
+    "ru": {
+     "title": "Учтено BeaconScript b196",
+     "items": [
+      "Значение переменной можно использовать как секунды, например every %{переменная}% seconds:",
+      "Проверяются события с or, например on mine or chop:, on damage or die of monster: и on key \"A\" or \"W\" press:",
+      "Условия if тоже можно объединять через or, например if has 3 iron or variable {n} >= 5 or %attacker% is player: (or в кавычках не является разделителем)",
+      "После or в автодополнении также появляются списки событий (строка on) и условий (строка if)"
+     ]
+    },
+    "tr": {
+     "title": "BeaconScript b196 uygulandı",
+     "items": [
+      "Bir değişkenin değeri saniye olarak kullanılabilir, örn. every %{değişken}% seconds:",
+      "on mine or chop:, on damage or die of monster: ve on key \"A\" or \"W\" press: gibi or ile yazılan olaylar kontrol edilir",
+      "if koşulları da or ile bağlanabilir, örn. if has 3 iron or variable {n} >= 5 or %attacker% is player: (tırnak içindeki or ayırıcı değildir)",
+      "or sonrasında otomatik tamamlamada olay (on satırı) ve koşul (if satırı) listeleri de çıkar"
+     ]
     }
    }
   },
@@ -865,6 +1481,70 @@
       "Items after destroy show as an icon card in the preview",
       "destroy added to the list after on"
      ]
+    },
+    "es": {
+     "title": "BeaconScript b195 aplicado",
+     "items": [
+      "Objetivo de on destroy: admitido (tree·rock·id de objeto/construcción o nombre en coreano); un nombre desconocido da el error de objeto desconocido",
+      "Los objetos tras destroy también se muestran en la vista previa como tarjetas con icono",
+      "destroy añadido a la lista tras on"
+     ]
+    },
+    "fr": {
+     "title": "BeaconScript b195 pris en compte",
+     "items": [
+      "Cible de on destroy : prise en charge (tree·rock·id d'objet/bâtiment ou nom coréen) ; un nom inconnu donne une erreur d'objet inconnu",
+      "Les objets après destroy s'affichent aussi dans l'aperçu sous forme de cartes avec icône",
+      "destroy ajouté à la liste après on"
+     ]
+    },
+    "de": {
+     "title": "BeaconScript b195 umgesetzt",
+     "items": [
+      "Ziel von on destroy: unterstützt (tree·rock·Gegenstands-/Gebäude-ID oder koreanischer Name); ein unbekannter Name ergibt den Fehler „unknown item“",
+      "Gegenstände nach destroy werden in der Vorschau ebenfalls als Symbolkarten angezeigt",
+      "destroy in die Liste nach on aufgenommen"
+     ]
+    },
+    "ja": {
+     "title": "BeaconScript b195 対応",
+     "items": [
+      "on destroy の対象：対応（tree·rock·アイテム/建物の id や韓国語名）。存在しない名前は unknown item エラー",
+      "destroy の後のアイテムもプレビューでアイコンカードとして表示",
+      "on の後の一覧に destroy を追加"
+     ]
+    },
+    "zh": {
+     "title": "BeaconScript b195 更新",
+     "items": [
+      "on destroy 的对象：支持（tree·rock·物品/建筑 id 或韩文名称），不存在的名称报 unknown item 错误",
+      "destroy 后的物品也在预览中以图标卡片显示",
+      "on 后的列表中加入了 destroy"
+     ]
+    },
+    "pt": {
+     "title": "BeaconScript b195 aplicado",
+     "items": [
+      "Alvo de on destroy: suportado (tree·rock·id de item/construção ou nome em coreano); um nome desconhecido dá erro de item desconhecido",
+      "Os itens depois de destroy também aparecem na pré-visualização como cartões com ícone",
+      "destroy adicionado à lista depois de on"
+     ]
+    },
+    "ru": {
+     "title": "Учтено BeaconScript b195",
+     "items": [
+      "Цель on destroy: поддерживается (tree·rock·id предмета/постройки или корейское название); неизвестное название даёт ошибку unknown item",
+      "Предметы после destroy в предпросмотре показываются карточками со значками",
+      "destroy добавлен в список после on"
+     ]
+    },
+    "tr": {
+     "title": "BeaconScript b195 uygulandı",
+     "items": [
+      "on destroy hedefi: destekleniyor (tree·rock·eşya/yapı id'si veya Korece ad); bilinmeyen ad unknown item hatası verir",
+      "destroy sonrası eşyalar da önizlemede simgeli kartlar olarak görünür",
+      "on sonrası listeye destroy eklendi"
+     ]
     }
    }
   },
@@ -882,6 +1562,62 @@
      "items": [
       "After on, every event is listed right away (including damage, break, death, respawn)",
       "Long lists scroll and follow the ↑↓ selection"
+     ]
+    },
+    "es": {
+     "title": "Lista de autocompletado completa",
+     "items": [
+      "Todos los eventos que se pueden escribir tras on se muestran desde el principio (incluidos damage·break·death·respawn)",
+      "Si la lista es larga, se desplaza y la fila elegida sigue a ↑↓"
+     ]
+    },
+    "fr": {
+     "title": "Liste d'autocomplétion entière visible",
+     "items": [
+      "Tous les événements possibles après on s'affichent dès le début (damage·break·death·respawn compris)",
+      "Quand la liste est longue, elle défile et la ligne choisie suit ↑↓"
+     ]
+    },
+    "de": {
+     "title": "Gesamte Autovervollständigungsliste sichtbar",
+     "items": [
+      "Alle Ereignisse, die nach on stehen können, werden von Anfang an angezeigt (einschließlich damage·break·death·respawn)",
+      "Ist die Liste lang, scrollt sie, und die markierte Zeile folgt mit ↑↓"
+     ]
+    },
+    "ja": {
+     "title": "自動補完の一覧をすべて表示",
+     "items": [
+      "on の後に書けるイベントを最初からすべて表示（damage·break·death·respawn を含む）",
+      "一覧が長いとスクロールし、↑↓ で選んだ行に合わせて動きます"
+     ]
+    },
+    "zh": {
+     "title": "自动补全列表全部显示",
+     "items": [
+      "on 后面可写的事件从一开始就全部显示（包括 damage·break·death·respawn）",
+      "列表较长时可滚动，用 ↑↓ 选择的行会跟着移动"
+     ]
+    },
+    "pt": {
+     "title": "Lista de autocompletar completa",
+     "items": [
+      "Todos os eventos que podem vir depois de on aparecem desde o início (incluindo damage·break·death·respawn)",
+      "Se a lista for longa, ela rola e a linha escolhida acompanha com ↑↓"
+     ]
+    },
+    "ru": {
+     "title": "Полный список автодополнения",
+     "items": [
+      "Все события, которые можно писать после on, показываются сразу (включая damage·break·death·respawn)",
+      "Длинный список прокручивается, а выбранная строка следует за ↑↓"
+     ]
+    },
+    "tr": {
+     "title": "Otomatik tamamlama listesi tamamen görünür",
+     "items": [
+      "on sonrasında yazılabilen tüm olaylar baştan görünür (damage·break·death·respawn dahil)",
+      "Liste uzunsa kayar ve ↑↓ ile seçilen satır onu takip eder"
      ]
     }
    }
@@ -903,6 +1639,70 @@
       "Items after give, on place and set show as an icon and name card in the preview (495 Beaconfall items)",
       "Autocomplete after on place lists item ids and Korean names"
      ]
+    },
+    "es": {
+     "title": "BeaconScript b194 · vista previa de objetos",
+     "items": [
+      "on place con objeto: (id o nombre en coreano) admitido; un objeto desconocido muestra un aviso con nombres parecidos",
+      "Los objetos tras give·on place·set aparecen en la vista previa como tarjetas con icono y nombre (495 objetos de Beaconfall)",
+      "El autocompletado tras on place muestra los id de objeto y sus nombres en coreano"
+     ]
+    },
+    "fr": {
+     "title": "BeaconScript b194 · aperçu des objets",
+     "items": [
+      "on place avec objet : (id ou nom coréen) pris en charge ; un objet inconnu affiche un message avec des noms proches",
+      "Les objets après give·on place·set s'affichent dans l'aperçu sous forme de cartes avec icône et nom (495 objets Beaconfall)",
+      "L'autocomplétion après on place propose les id d'objet et les noms coréens"
+     ]
+    },
+    "de": {
+     "title": "BeaconScript b194 · Gegenstandsvorschau",
+     "items": [
+      "on place mit Gegenstand: (ID oder koreanischer Name) unterstützt; ein unbekannter Gegenstand zeigt ähnliche Namen an",
+      "Gegenstände nach give·on place·set erscheinen in der Vorschau als Karten mit Symbol und Name (495 Beaconfall-Gegenstände)",
+      "Die Autovervollständigung nach on place zeigt Gegenstands-IDs und koreanische Namen"
+     ]
+    },
+    "ja": {
+     "title": "BeaconScript b194 · アイテムのプレビュー",
+     "items": [
+      "on place のアイテム：（id または韓国語名）に対応。存在しないアイテムは似た名前を案内",
+      "give·on place·set の後のアイテムは、プレビューでアイコンと名前のカードとして表示（Beaconfall のアイテム 495 個）",
+      "on place の後の自動補完に、アイテム id と韓国語名が出ます"
+     ]
+    },
+    "zh": {
+     "title": "BeaconScript b194 · 物品预览",
+     "items": [
+      "on place 物品：支持（id 或韩文名称），找不到的物品会提示相近名称",
+      "give·on place·set 后的物品在预览中显示为带图标和名称的卡片（Beaconfall 物品 495 个）",
+      "on place 后的自动补全会显示物品 id 和韩文名称"
+     ]
+    },
+    "pt": {
+     "title": "BeaconScript b194 · pré-visualização de itens",
+     "items": [
+      "on place com item: (id ou nome em coreano) suportado; um item desconhecido mostra um aviso com nomes parecidos",
+      "Os itens após give·on place·set aparecem na pré-visualização como cartões com ícone e nome (495 itens do Beaconfall)",
+      "O autocompletar após on place mostra os ids dos itens e os nomes em coreano"
+     ]
+    },
+    "ru": {
+     "title": "BeaconScript b194 · предпросмотр предметов",
+     "items": [
+      "on place с предметом: (id или корейское название) поддерживается; для неизвестного предмета выводится подсказка с похожими названиями",
+      "Предметы после give·on place·set показываются в предпросмотре карточками со значком и названием (495 предметов Beaconfall)",
+      "Автодополнение после on place показывает id предметов и корейские названия"
+     ]
+    },
+    "tr": {
+     "title": "BeaconScript b194 · eşya önizlemesi",
+     "items": [
+      "on place eşyası: (id veya Korece ad) destekleniyor; bilinmeyen eşya benzer adları önerir",
+      "give·on place·set sonrası eşyalar önizlemede simgeli ve adlı kartlar olarak görünür (Beaconfall'da 495 eşya)",
+      "on place sonrası otomatik tamamlamada eşya id'leri ve Korece adlar çıkar"
+     ]
     }
    }
   },
@@ -923,6 +1723,70 @@
       "of targets like on damage of monster:, to targets after chat/say/play sound/give effect, and the new stun effect",
       "Autocomplete shows of → player/monster/mob and to → target one word at a time"
      ]
+    },
+    "es": {
+     "title": "BeaconScript b193 aplicado",
+     "items": [
+      "Comprobación del evento on damage y de la repetición every N seconds: (1~3600 segundos)",
+      "on damage of monster: con destino of, destino to tras chat·say·play sound·give effect, y el nuevo efecto stun",
+      "El autocompletado muestra of → player·monster·mob y to → destinos, palabra por palabra"
+     ]
+    },
+    "fr": {
+     "title": "BeaconScript b193 pris en compte",
+     "items": [
+      "Vérification de l'événement on damage et de la répétition every N seconds: (1 à 3600 s)",
+      "on damage of monster : cible avec of, cible to après chat·say·play sound·give effect, nouvel effet stun pris en charge",
+      "L'autocomplétion propose of → player·monster·mob et to → cibles, mot par mot"
+     ]
+    },
+    "de": {
+     "title": "BeaconScript b193 umgesetzt",
+     "items": [
+      "on-damage-Ereignis und Wiederholung every N seconds: (1~3600 Sekunden) werden geprüft",
+      "on damage of monster: mit Ziel of, Ziel to nach chat·say·play sound·give effect, neuer Effekt stun unterstützt",
+      "Die Autovervollständigung zeigt of → player·monster·mob und to → Ziele Wort für Wort"
+     ]
+    },
+    "ja": {
+     "title": "BeaconScript b193 対応",
+     "items": [
+      "on damage イベントと every N seconds: の繰り返し（1~3600秒）をチェック",
+      "on damage of monster: のような of の対象、chat·say·play sound·give effect の後の to の対象、新しい効果 stun に対応",
+      "自動補完は of → player·monster·mob、to → 対象を一語ずつ表示"
+     ]
+    },
+    "zh": {
+     "title": "BeaconScript b193 更新",
+     "items": [
+      "检查 on damage 事件和 every N seconds: 重复（1~3600 秒）",
+      "支持 on damage of monster: 这样的 of 目标，以及 chat·say·play sound·give effect 之后的 to 目标，新效果 stun",
+      "自动补全逐词显示：of → player·monster·mob，to → 目标"
+     ]
+    },
+    "pt": {
+     "title": "BeaconScript b193 aplicado",
+     "items": [
+      "Verificação do evento on damage e da repetição every N seconds: (1~3600 segundos)",
+      "on damage of monster: com alvo of, alvo to depois de chat·say·play sound·give effect, e o novo efeito stun",
+      "O autocompletar mostra of → player·monster·mob e to → alvos, palavra a palavra"
+     ]
+    },
+    "ru": {
+     "title": "Учтено BeaconScript b193",
+     "items": [
+      "Проверка события on damage и повтора every N seconds: (от 1 до 3600 секунд)",
+      "Цель of, как в on damage of monster:, и цель to после chat·say·play sound·give effect, новый эффект stun поддерживается",
+      "Автодополнение по словам: of → player·monster·mob, to → цели"
+     ]
+    },
+    "tr": {
+     "title": "BeaconScript b193 uygulandı",
+     "items": [
+      "on damage olayı ve every N seconds: tekrarı (1~3600 saniye) kontrol edilir",
+      "on damage of monster: gibi of hedefi, chat·say·play sound·give effect sonrası to hedefi ve yeni stun efekti destekleniyor",
+      "Otomatik tamamlama of → player·monster·mob ve to → hedefleri kelime kelime gösterir"
+     ]
     }
    }
   },
@@ -940,6 +1804,62 @@
      "items": [
       "on break event, shared variables {:name::value:} write / {:name:} read, and if value contained \"text\": are checked without errors",
       "New values %player's mod% (readable without Potato API), %player_uuid%, %destroyed_block% and autocomplete for break and contained"
+     ]
+    },
+    "es": {
+     "title": "BeaconScript b192 aplicado",
+     "items": [
+      "Evento on break, escritura de la variable compartida {:nombre::valor:} y lectura de {:nombre:}, y comprobación de if valor contained \"texto\": sin errores",
+      "Añadidos los valores %player's mod% (se lee sin Potato API), %player_uuid% y %destroyed_block% y el autocompletado (break, contained)"
+     ]
+    },
+    "fr": {
+     "title": "BeaconScript b192 pris en compte",
+     "items": [
+      "Événement on break, écriture de la variable partagée {:nom::valeur:} et lecture de {:nom:}, et vérification de la condition if valeur contained \"texte\" sans erreur",
+      "Ajout des valeurs %player's mod% (lecture sans Potato API), %player_uuid% et %destroyed_block%, et de l'autocomplétion (break, contained)"
+     ]
+    },
+    "de": {
+     "title": "BeaconScript b192 umgesetzt",
+     "items": [
+      "on-break-Ereignis, Schreiben der gemeinsamen Variable {:name::wert:} und Lesen von {:name:} sowie Prüfen der Bedingung if wert contained \"text\" ohne Fehler",
+      "Werte %player's mod% (Lesen ohne Potato API), %player_uuid% und %destroyed_block% sowie Autovervollständigung (break, contained) hinzugefügt"
+     ]
+    },
+    "ja": {
+     "title": "BeaconScript b192 対応",
+     "items": [
+      "on break イベント、共有変数 {:名前::値:} の書き込みと {:名前:} の読み取り、if 値 contained \"文字\": 条件をエラーなしでチェック",
+      "%player's mod%（Potato API なしで読み取り）、%player_uuid%、%destroyed_block% の値と自動補完（break、contained）を追加"
+     ]
+    },
+    "zh": {
+     "title": "BeaconScript b192 更新",
+     "items": [
+      "on break 事件、共享变量 {:名称::值:} 的写入和 {:名称:} 的读取，以及 if 值 contained \"文字\": 条件的检查，均不报错",
+      "新增 %player's mod%（无需 Potato API 即可读取）、%player_uuid%、%destroyed_block% 值以及自动补全（break、contained）"
+     ]
+    },
+    "pt": {
+     "title": "BeaconScript b192 aplicado",
+     "items": [
+      "Evento on break, escrita da variável partilhada {:nome::valor:} e leitura de {:nome:}, e verificação de if valor contained \"texto\": sem erros",
+      "Adicionados os valores %player's mod% (lido sem Potato API), %player_uuid% e %destroyed_block%, e o autocompletar (break, contained)"
+     ]
+    },
+    "ru": {
+     "title": "Учтено BeaconScript b192",
+     "items": [
+      "Событие on break, запись общей переменной {:имя::значение:} и чтение {:имя:}, проверка условия if значение contained \"текст\" без ошибок",
+      "Добавлены значения %player's mod% (читается без Potato API), %player_uuid% и %destroyed_block%, а также автодополнение (break, contained)"
+     ]
+    },
+    "tr": {
+     "title": "BeaconScript b192 uygulandı",
+     "items": [
+      "on break olayı, paylaşılan {:ad::değer:} değişkenine yazma ve {:ad:} okuma, if değer contained \"metin\": koşulu hatasız kontrol edilir",
+      "%player's mod% (Potato API olmadan okunur), %player_uuid% ve %destroyed_block% değerleri ile otomatik tamamlama (break, contained) eklendi"
      ]
     }
    }
