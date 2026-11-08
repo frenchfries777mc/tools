@@ -28,7 +28,7 @@ async function remove(env, path) {
 
 export default {
   async fetch(req, env) {
-    if (req.method === 'OPTIONS') return send({}, 204);
+    if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: H });
     const p = new URL(req.url).pathname.split('/').filter(Boolean);
     const m = req.method;
 
