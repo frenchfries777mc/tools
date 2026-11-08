@@ -5,7 +5,7 @@ const H = { 'access-control-allow-origin': '*', 'access-control-allow-methods': 
 const send = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { ...H, 'content-type': 'application/json' } });
 
 // 분당 횟수 제한 (Worker 메모리에서 세는 대략적인 제한이라 D1을 쓰지 않아요)
-const MAX_IP = 300, MAX_OWNER = 120;
+const MAX_IP = 1200, MAX_OWNER = 600;
 let win = 0, seen = new Map();
 function limited(key, max) {
   const m = Math.floor(Date.now() / 60000);
