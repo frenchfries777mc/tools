@@ -23,6 +23,15 @@ function curClip(){ return sel!=null?clipById(sel):null; }
 function idb(){ return new Promise(function(res,rej){ try{ var r=indexedDB.open(DB,1); r.onupgradeneeded=function(){ r.result.createObjectStore('m'); }; r.onsuccess=function(){ res(r.result); }; r.onerror=function(){ rej(r.error); }; }catch(e){ rej(e); } }); }
 function idbPut(id,blob){ return idb().then(function(d){ return new Promise(function(res){ var tx=d.transaction('m','readwrite'); tx.objectStore('m').put(blob,id); tx.oncomplete=function(){ res(true); }; tx.onerror=function(){ res(false); }; }); }).catch(function(){ return false; }); }
 function idbGet(id){ return idb().then(function(d){ return new Promise(function(res){ var q=d.transaction('m').objectStore('m').get(id); q.onsuccess=function(){ res(q.result); }; q.onerror=function(){ res(null); }; }); }).catch(function(){ return null; }); }
+/* ---------- account copy of media (ff-files, login only) ---------- */
+var FFB='https://ff-files.frenchfries777mc.workers.dev';
+function ffTok(){ try{ var o=JSON.parse(localStorage.getItem('sb-kebsbuvuutilitwlvxzv-auth-token')||'null'); return o&&o.access_token||''; }catch(e){ return ''; } }
+function remoteUp(id,file){ var tk=ffTok(); if(!tk) return; if(file.size>50*1048576){ toast('파일이 50MB를 넘어서 계정에는 올리지 않았어요. 이 기기에만 남아요'); return; }
+  fetch(FFB+'/upload?name='+encodeURIComponent(file.name||id),{method:'POST',headers:{authorization:'Bearer '+tk,'content-type':file.type||'application/octet-stream'},body:file}).then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); }).then(function(x){
+    if(x.ok&&x.j.id){ var m=proj.media.filter(function(q){ return q.id===id; })[0]; if(m){ m.rid=x.j.id; commit(true); } }
+    else if(x.j&&/quota/.test(x.j.error||'')) toast('계정 저장 공간(500MB)이 가득 찼어요. 이 기기에만 남아요'); }).catch(function(){}); }
+function remoteGet(rid){ var tk=ffTok(); if(!tk||!rid) return Promise.resolve(null); return fetch(FFB+'/file/'+rid,{headers:{authorization:'Bearer '+tk}}).then(function(r){ return r.ok?r.blob():null; }).catch(function(){ return null; }); }
+function remoteDel(rid){ var tk=ffTok(); if(!tk||!rid) return; fetch(FFB+'/file/'+rid,{method:'DELETE',headers:{authorization:'Bearer '+tk}}).catch(function(){}); }
 function idbDel(id){ return idb().then(function(d){ d.transaction('m','readwrite').objectStore('m').delete(id); }).catch(function(){}); }
 
 /* ---------- history / save ---------- */
@@ -39,8 +48,8 @@ function sizeCanvas(){ var a=AR[proj.ar]||AR['16:9']; if(cv.width!==a[0]||cv.hei
 function addFiles(files,cb){
   Array.prototype.forEach.call(files,function(file){
     var type=/^video/.test(file.type)?'video':/^image/.test(file.type)?'image':/^audio/.test(file.type)?'audio':null; if(!type){ toast(file.name+' 은(는) 지원하지 않는 파일이에요'); return; }
-    var id='m'+(proj.uid++), url=URL.createObjectURL(file), m={id:id,name:file.name,type:type,dur:5,w:0,h:0,url:url,thumb:''};
-    function done(){ media[id]=m; proj.media.push({id:id,name:m.name,type:type,dur:m.dur,w:m.w,h:m.h,thumb:m.thumb}); idbPut(id,file); commit(); if(cb) cb(id); ensurePeaks(m); }
+    var id='m'+(proj.uid++)+'_'+Math.random().toString(36).slice(2,6), url=URL.createObjectURL(file), m={id:id,name:file.name,type:type,dur:5,w:0,h:0,url:url,thumb:''};
+    function done(){ media[id]=m; proj.media.push({id:id,name:m.name,type:type,dur:m.dur,w:m.w,h:m.h,thumb:m.thumb}); idbPut(id,file); commit(); remoteUp(id,file); if(cb) cb(id); ensurePeaks(m); }
     if(type==='image'){ var im=new Image(); im.onload=function(){ m.w=im.naturalWidth; m.h=im.naturalHeight; m.thumb=thumbOf(im,im.naturalWidth,im.naturalHeight); m.img=im; done(); }; im.onerror=function(){ toast('그림을 열지 못했어요'); }; im.src=url; }
     else { var v=document.createElement(type==='video'?'video':'audio'); v.preload='auto'; v.onloadedmetadata=function(){ m.dur=v.duration||5; m.w=v.videoWidth||0; m.h=v.videoHeight||0;
         if(type==='video'){ v.currentTime=Math.min(.2,m.dur/2); v.onseeked=function(){ v.onseeked=null; m.thumb=thumbOf(v,v.videoWidth,v.videoHeight); done(); }; } else done(); };
@@ -49,7 +58,7 @@ function addFiles(files,cb){
 }
 function thumbOf(src,w,h){ try{ var c=document.createElement('canvas'); c.width=108; c.height=72; var x=c.getContext('2d'); x.fillStyle='#000'; x.fillRect(0,0,108,72); var r=Math.min(108/w,72/h); x.drawImage(src,(108-w*r)/2,(72-h*r)/2,w*r,h*r); return c.toDataURL('image/jpeg',.6); }catch(e){ return ''; } }
 function restoreMedia(){
-  var all=proj.media.map(function(m){ return idbGet(m.id).then(function(b){ if(b){ var mm=Object.assign({},m,{url:URL.createObjectURL(b)}); if(m.type==='image'){ var im=new Image(); im.src=mm.url; mm.img=im; } media[m.id]=mm; } else media[m.id]={id:m.id,name:m.name,type:m.type,dur:m.dur,missing:true}; }); });
+  var all=proj.media.map(function(m){ return idbGet(m.id).then(function(b){ if(b||!m.rid) return b; return remoteGet(m.rid).then(function(rb){ if(rb) idbPut(m.id,rb); return rb; }); }).then(function(b){ if(b){ var mm=Object.assign({},m,{url:URL.createObjectURL(b)}); if(m.type==='image'){ var im=new Image(); im.src=mm.url; mm.img=im; } media[m.id]=mm; } else media[m.id]={id:m.id,name:m.name,type:m.type,dur:m.dur,missing:true}; }); });
   return Promise.all(all);
 }
 var replId=null;
@@ -565,12 +574,12 @@ pb.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b
   if(b.dataset.aloop){ var cl=curClip(); if(cl&&!lockedMsg(cl)){ var ve=0; proj.clips.forEach(function(o){ if(o.type==='video'||o.type==='image') ve=Math.max(ve,endOf(o)); }); var cur=endOf(cl), made=0; if(ve<=cur+.3){ toast('이 소리는 이미 영상 끝까지 이어져요'); return; } while(cur<ve-.05&&made<60){ var n4=JSON.parse(JSON.stringify(cl)); n4.id='c'+(proj.uid++); n4.start=cur; n4.dur=Math.min(cl.dur,ve-cur); delete n4.grp; n4.fadeIn=0; n4.fadeOut=0; proj.clips.push(n4); cur+=n4.dur; made++; } var last=proj.clips[proj.clips.length-1]; last.fadeOut=Math.min(last.dur/2,2); commit(); toast('소리를 '+made+'번 더 이어 붙여 영상 끝까지 채웠어요'); } return; }
   if(b.dataset.rot90){ var cr9=curClip(); if(cr9&&!lockedMsg(cr9)){ var r9=((cr9.rot||0)+(+b.dataset.rot90)+540)%360-180; cr9.rot=r9; commit(); } return; }
   if(b.dataset.anc){ var ca=curClip(); if(ca&&!lockedMsg(ca)){ var xy=b.dataset.anc.split(','); if(ca.type==='text'){ ca.txt.ox=+xy[0]; ca.txt.oy=+xy[1]; } else if(ca.type==='shape'){ ca.shp.ox=+xy[0]; ca.shp.oy=+xy[1]; } commit(); } return; }
-  if(b.id==='binClean'){ var used={}; proj.clips.forEach(function(o){ if(o.mid) used[o.mid]=true; }); var un=proj.media.filter(function(m){ return !used[m.id]; }); if(!un.length){ toast('안 쓰는 파일이 없어요'); return; } un.forEach(function(m){ idbDel(m.id); delete media[m.id]; }); proj.media=proj.media.filter(function(m){ return used[m.id]; }); commit(); toast('안 쓰는 파일 '+un.length+'개를 정리했어요'); return; }
+  if(b.id==='binClean'){ var used={}; proj.clips.forEach(function(o){ if(o.mid) used[o.mid]=true; }); var un=proj.media.filter(function(m){ return !used[m.id]; }); if(!un.length){ toast('안 쓰는 파일이 없어요'); return; } un.forEach(function(m){ idbDel(m.id); remoteDel(m.rid); delete media[m.id]; }); proj.media=proj.media.filter(function(m){ return used[m.id]; }); commit(); toast('안 쓰는 파일 '+un.length+'개를 정리했어요'); return; }
   if(b.dataset.spd){ var cs2=curClip(); if(cs2&&!lockedMsg(cs2)){ setProp(cs2,'speed',+b.dataset.spd); commit(); } return; }
   if(b.dataset.autocol){ var ca=curClip(); if(ca) autoColor(ca); return; }
   if(b.dataset.tend){ var ct2=curClip(); if(ct2&&!lockedMsg(ct2)){ var ve2=0; proj.clips.forEach(function(o){ if(o!==ct2&&(o.type==='video'||o.type==='image'||o.type==='audio')) ve2=Math.max(ve2,endOf(o)); }); if(ve2<=ct2.start+.2){ toast('영상이나 그림이 이 클립보다 먼저 끝나요'); return; } ct2.dur=+(ve2-ct2.start).toFixed(2); commit(); toast('영상 끝까지 늘렸어요'); } return; }
   if(b.dataset.pre){ var c=curClip(); if(c){ c.filt=Object.assign({},PRESETS[b.dataset.pre]); commit(); } return; }
-  if(b.id==='bClear'){ if(!confirmOnce(b)) return; proj.clips=[]; proj.media.forEach(function(m){ idbDel(m.id); }); proj.media=[]; media={}; elems={}; gains={}; sel=null; t=0; commit(); } });
+  if(b.id==='bClear'){ if(!confirmOnce(b)) return; proj.clips=[]; proj.media.forEach(function(m){ idbDel(m.id); remoteDel(m.rid); }); proj.media=[]; media={}; elems={}; gains={}; sel=null; t=0; commit(); } });
 var fxClip=null; var cfo=0; function confirmOnce(b){ if(cfo){ cfo=0; return true; } cfo=1; b.textContent='한 번 더 누르면 지워요'; setTimeout(function(){ cfo=0; if(b.isConnected) b.textContent='모두 지우고 새로 시작'; },3000); return false; }
 
 
