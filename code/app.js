@@ -424,7 +424,7 @@ $('langBtn').onclick=function(){ langMenu(); popMenu($('langMenu'),this); };
   sel.onchange=function(){ setLang(sel.value,false); toast(F('{0} 로 바꿨어요',FC.langs[sel.value].name)); }; })();
 
 /* ---------- start ---------- */
-(function(){ var op=/^#open=([a-z0-9]{4,40})$/.exec(location.hash||'');   // ../python/#open=<id>: the usage window opens a file in a new window
+(function(){ var op=/^#open=([a-z0-9]{4,40})$/.exec(location.hash||'');   // ../code/#open=<id>: the usage window opens a file in a new window
   if(op){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} if(idx.files.some(function(x){ return x.id===op[1]; })) idx.last=op[1]; }
   var f=idx.files.filter(function(x){ return x.id===idx.last; })[0]||idx.files[0];
   if(f) openFile(f); else { var ex=(window.FPY_EX||[])[0]; newFile(T('첫 파일'),ex?trCode(ex[1]):T('print("안녕하세요!")')+'\n'); } })();
