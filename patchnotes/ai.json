@@ -3,6 +3,22 @@
  "name": "자체 AI (FF777)",
  "notes": [
   {
+   "date": "2026-11-09",
+   "build": "v68",
+   "title": "tarius 2.2",
+   "items": [
+    "tarius를 FF777 2.2로 올림 (바탕 Qwen3에서 새로 학습, 수식·그래프·표·단위 변환·계산과 코드 페이지 자료를 크게 늘려 학습)"
+   ],
+   "tr": {
+    "en": {
+     "title": "tarius 2.2",
+     "items": [
+      "tarius upgraded to FF777 2.2 (trained fresh from the original Qwen3 with far more formula, chart, table, unit conversion, calculation and code page examples)"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-07",
    "build": "v67",
    "title": "lectus 2.1",
