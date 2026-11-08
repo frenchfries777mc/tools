@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head><script src="../serverstore.js?v=2"></script><style id="ffTap">html,body{touch-action:manipulation}</style>
+<head><script src="../serverstore.js?v=3"></script><style id="ffTap">html,body{touch-action:manipulation}</style>
 <meta name="copyright" content="© 2026 Frenchfries777. CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -12,6 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@500&family=Noto+Serif+KR:wght@400;700&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
 <script src="../i18n.js"></script>
+<script src="../ffile.js?v=2"></script>
 <script src="strings.js?v=33.2.l21"></script>
 <style>
 :root{ --bg:#0e0e0e; --panel:#171717; --panel2:#121212; --line:#2e2b25; --grid:#1c2130; --text:#ece6d8; --dim:#a39c8c; --fry:#d9b45f; --fry2:#b8923a; --sel:#d9b45f; --hd:#121212; }
@@ -425,25 +426,6 @@ html[data-ff-theme] .fx,html[data-ff-theme] .fxh,html[data-ff-theme] .top .saved
   <span class="zoom"><button id="zOut" aria-label="축소">−</button><span id="zLbl">100%</span><button id="zIn" aria-label="확대">+</button></span>
 </div>
 
-<div class="menu" id="fileMenu">
-  <button data-f="new">새 문서</button>
-  <button data-f="tpl">템플릿으로 새 문서…</button>
-  <button data-f="open">파일 열기 (엑셀, CSV)</button>
-  <button data-f="url">주소에서 표 가져오기…</button>
-  <hr>
-  <button data-f="xlsx">엑셀 파일로 저장 (.xlsx)</button>
-  <button data-f="csv">이 시트를 CSV로 저장</button>
-  <button data-f="print">인쇄 (PDF 저장)</button>
-  <hr>
-  <button data-f="docs">문서 관리…</button>
-  <button data-f="co">같이 고치기…</button>
-  <div class="mh">내 문서</div>
-  <div id="docList"></div>
-  <hr>
-  <button data-f="del" class="dang">이 문서 지우기</button>
-  <hr>
-  <button data-f="usage">📊 현재 사용량 보기</button>
-</div>
 <div class="menu" id="rowMenu">
   <button data-r="insRowA">위에 행 넣기</button>
   <button data-r="insRowB">아래에 행 넣기</button>
@@ -808,7 +790,7 @@ html[data-ff-theme] .fx,html[data-ff-theme] .fxh,html[data-ff-theme] .top .saved
 <script src="calc.js"></script>
 <script src="commands.js?v=41"></script>
 <script src="../undotoast.js"></script>
-<script src="app.js?v=40"></script>
+<script src="app.js?v=40.f1"></script>
 <script src="coedit.js?v=1"></script>
 <script src="viz.js"></script>
 <script src="../ai.js?v=ai36.l23"></script>

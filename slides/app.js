@@ -1301,6 +1301,17 @@ function drawMgr(){ var l=$('mgrList'); l.innerHTML=''; saveNow();
     r.querySelector('.mo').onclick=function(){ if(gen) return toast(T('AI가 다 만들 때까지 기다려 주세요')); closeDlg('mgrDlg',null); if(d!==deck){ saveNow(); openDeck(d); } };
     l.appendChild(r); }); }
 function openMgr(){ drawMgr(); openDlg('mgrDlg'); }
+function openFiles(){ if(gen) return toast(T('AI가 다 만들 때까지 기다려 주세요')); blurEdit(); saveNow(); FFFile.open({
+  items:function(){ return store.decks.slice().sort(function(a,b){ return (b===deck)-(a===deck)||b.t-a.t; }).map(function(d){ return {id:d.id,name:d.name,sub:F('{0}장',d.slides.length)+' · '+when(d.t),current:d===deck}; }); },
+  onOpen:function(id,cur){ var d=store.decks.filter(function(x){ return x.id===id; })[0]; if(d&&!cur){ saveNow(); openDeck(d); } },
+  onNew:function(){ newDeckAction(); },
+  onRename:function(id,v){ var d=store.decks.filter(function(x){ return x.id===id; })[0]; if(!d) return; d.name=v; if(d===deck) $('deckName').value=v; saveNow(); },
+  onDup:function(id){ var d=store.decks.filter(function(x){ return x.id===id; })[0]; if(d) copyDeck(d); },
+  onDel:function(id){ var d=store.decks.filter(function(x){ return x.id===id; })[0]; if(d) deleteDeck(d); },
+  actions:[{label:'PPTX 받기',sub:'파워포인트 파일',run:function(){ $('pptxBtn').click(); }},{label:'PDF·인쇄',sub:'PDF로 저장 · 인쇄',run:function(){ deckAct('print'); }},{label:'Markdown',sub:'글 파일로 저장',run:function(){ deckAct('md'); }},{label:'공유',sub:'링크나 QR로 (읽기 전용)',run:function(){ openShare(); }}],
+  foot:[{label:'📊 현재 사용량 보기',run:function(){ deckAct('usage'); }}] }); }
+window.FSLOpenFiles=openFiles;
+if($('fileBtn')) $('fileBtn').onclick=openFiles;
 $('newDeckBtn').onclick=function(){ if(gen) return toast(T('AI가 다 만들 때까지 기다려 주세요')); blurEdit(); newDeckAction(); };
 $('mgrBtn').onclick=function(){ if(gen) return toast(T('AI가 다 만들 때까지 기다려 주세요')); blurEdit(); openMgr(); };
 $('delDeckBtn').onclick=function(){ if(gen) return toast(T('AI가 다 만들 때까지 기다려 주세요')); blurEdit(); deleteDeck(deck); };

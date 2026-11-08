@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head><script src="../serverstore.js?v=2"></script><style id="ffTap">html,body{touch-action:manipulation}</style>
+<head><script src="../serverstore.js?v=3"></script><style id="ffTap">html,body{touch-action:manipulation}</style>
 <meta name="copyright" content="© 2026 Frenchfries777. CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -13,6 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
 <script src="../i18n.js"></script>
+<script src="../ffile.js?v=2"></script>
 <style>
 :root{ --bg:#0e0e0e; --panel:#171717; --panel2:#121212; --line:#2e2b25; --text:#ece6d8; --dim:#a39c8c; --fry:#d9b45f; --fry2:#b8923a; --desk:#0a0a0a; }
 html[data-ff-theme=light]{ --bg:#ffffff; --panel:#ffffff; --panel2:#f6f4ee; --line:#e4dfd2; --text:#111111; --dim:#4b4b4b; --fry:#a67c00; --fry2:#d4a62a; --desk:#efeeea; }
@@ -158,6 +159,7 @@ html[data-ff-theme] .row input[type=color]{border:1px solid var(--fry)}
   <button class="tbtn" id="bRedo" title="다시 (Ctrl+Y)">↷<span class="lb"> 다시</span></button>
   <span class="sp"></span>
   <button class="tbtn" id="bAdd">+ 파일 넣기</button>
+  <button class="tbtn" id="fileBtn" title="파일"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg><span class="lb">파일</span></button>
   <button class="tbtn pri" id="bExp">영상 만들기</button>
 </div>
 <div class="main vmain">
@@ -177,7 +179,7 @@ html[data-ff-theme] .row input[type=color]{border:1px solid var(--fry)}
 <input type="file" id="replIn" accept="video/*,image/*,audio/*" hidden><input type="file" id="fileIn" accept="video/*,image/*,audio/*" multiple hidden>
 <script src="../ai.js?v=ai36.l23"></script>
 <script src="strings.js?v=vs19"></script>
-<script src="app.js?v=vd34"></script>
+<script src="app.js?v=vd34.f1"></script>
 <script src="../pwa.js" defer></script>
 <script src="../ping.js" defer></script>
 </body>

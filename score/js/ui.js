@@ -591,7 +591,7 @@
 
   UI.init = function () {
     sheet = $('sheet'); desk = $('desk');
-    [['bUndo', 'undo', '되돌리기'], ['bRedo', 'redo', '다시'], ['bPlay', 'play', '재생'], ['bStop', 'stop', ''], ['bZm', 'zoomOut', ''], ['bZp', 'zoomIn', ''], ['bZf', 'fit', ''], ['bOpen', 'open', '열기'], ['bSave', 'save', '받기']].forEach((r) => { $(r[0]).innerHTML = FS.icons[r[1]] + (r[2] ? '<span class="lb">' + r[2] + '</span>' : ''); });
+    [['bUndo', 'undo', '되돌리기'], ['bRedo', 'redo', '다시'], ['bPlay', 'play', '재생'], ['bStop', 'stop', ''], ['bZm', 'zoomOut', ''], ['bZp', 'zoomIn', ''], ['bZf', 'fit', ''], ['bSave', 'save', '받기']].forEach((r) => { $(r[0]).innerHTML = FS.icons[r[1]] + (r[2] ? '<span class="lb">' + r[2] + '</span>' : ''); });
     bindPointer(); bindKeys();
     document.addEventListener('click', (e) => {
       const el = e.target.closest('[data-act]'); if (!el) return;
@@ -609,12 +609,15 @@
     $('bZm').onclick = () => UI.setZoom(A.zoom - 0.1); $('bZp').onclick = () => UI.setZoom(A.zoom + 0.1); $('bZf').onclick = UI.fit;
     $('dname').addEventListener('change', () => { A.score.name = $('dname').value.trim() || '이름 없는 악보'; UI.commit(); });
     $('bSave').onclick = (e) => popup(e.currentTarget, UI.exports);
-    $('bOpen').onclick = () => $('fileIn').click();
+    const FF = FFFile.store({ tool: 'score', def: '이름 없는 악보', read: () => FS.store.raw('ffscore.v2'), write: (r) => FS.store.setRaw('ffscore.v2', r), clear: () => { try { localStorage.removeItem('ffscore.v2'); } catch (e) { /* ignore */ } },
+      getName: () => (A.score && A.score.name) || '', setName: (n) => { A.score.name = n; $('dname').value = n; UI.commit(); }, flush: () => { if (A.score) FS.io.autosave(A.score); } });
+    UI.fileApply = () => FF.applyName();
+    $('fileBtn').onclick = () => FFFile.open({ items: FF.items, onOpen: FF.onOpen, onNew: FF.onNew, onRename: FF.onRename, onDup: FF.onDup, onDel: FF.onDel, actions: [{ label: '열기', sub: '.fscore · MIDI · MusicXML', run: () => $('fileIn').click() }] });
     $('fileIn').onchange = (e) => {
       const f = e.target.files[0]; e.target.value = ''; if (!f) return;
       try { FS.io.readFile(f, (S) => { UI.reset(S); FS.toast('열었어요: ' + S.name); }); } catch (er) { FS.toast('이 파일을 열 수 없어요'); }
     };
-    window.addEventListener('beforeunload', () => FS.io.autosave(A.score));
+    window.addEventListener('beforeunload', () => { if (!window.__ffSwitching) FS.io.autosave(A.score); });
     window.addEventListener('resize', () => { /* keep layout */ });
     renderTools();
   };

@@ -199,7 +199,7 @@ function setTab(t,focus){ if(!pans[t]) t='home'; curTab=t;
 function edge(p){ if(!p) return; var l=p.scrollLeft>2, r=p.scrollLeft+p.clientWidth<p.scrollWidth-2; p.classList.toggle('fl',l); p.classList.toggle('fr',r); }
 for(var pk in pans) pans[pk].addEventListener('scroll',function(){ edge(this); },{passive:true});
 addEventListener('resize',function(){ edge(pans[curTab]); });
-tabsEl.addEventListener('click',function(e){ var b=e.target.closest('.rtab'); if(b) setTab(b.dataset.tab); });
+tabsEl.addEventListener('click',function(e){ var b=e.target.closest('.rtab'); if(!b) return; if(b.dataset.tab==='file'&&window.FSLOpenFiles){ window.FSLOpenFiles(); return; } setTab(b.dataset.tab); });
 tabsEl.addEventListener('keydown',function(e){ var i=TABS.map(function(t){ return t[0]; }).indexOf(curTab), n=TABS.length;
   if(e.key==='ArrowRight'||e.key==='ArrowLeft'){ e.preventDefault(); e.stopPropagation(); setTab(TABS[(i+(e.key==='ArrowRight'?1:n-1))%n][0],true); } });
 var saved=null; try{ saved=localStorage.getItem(LSK); }catch(e){}

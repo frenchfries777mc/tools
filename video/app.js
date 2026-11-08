@@ -827,11 +827,14 @@ document.addEventListener('keydown',function(e){ var tg=e.target.tagName; if(tg=
   if(e.key===','&&!ctrl){ e.preventDefault(); seek(t-1/30); return; } if(e.key==='.'&&!ctrl){ e.preventDefault(); seek(t+1/30); return; }
   if(e.key==='ArrowUp'){ e.preventDefault(); jumpEdit(-1); return; } if(e.key==='ArrowDown'){ e.preventDefault(); jumpEdit(1); return; }
   if(e.key==='ArrowLeft'){ e.preventDefault(); seek(t-(e.shiftKey?1:.1)); return; } if(e.key==='ArrowRight'){ e.preventDefault(); seek(t+(e.shiftKey?1:.1)); return; } });
-window.addEventListener('beforeunload',function(){ persist(); });
+window.addEventListener('beforeunload',function(){ if(!window.__ffSwitching) persist(); });
 (function init(){
   var s=null; try{ s=localStorage.getItem(KEY); }catch(e){}
   if(s){ try{ loadSnap(s); }catch(e){} }
   sizeCanvas(); hist=[snap()]; hi=0; drawTl(); drawBin(); panel();
+  var FS=FFFile.store({tool:'video',def:'이름 없는 영상',read:function(){ try{ return localStorage.getItem(KEY); }catch(e){ return null; } },write:function(r){ try{ localStorage.setItem(KEY,r); }catch(e){} },clear:function(){ try{ localStorage.removeItem(KEY); }catch(e){} },getName:function(){ return proj.name; },setName:function(n){ proj.name=n; $('dname').value=n; commit(); },flush:function(){ persist(); }});
+  FS.applyName();
+  $('fileBtn').onclick=function(){ FFFile.open({items:FS.items,onOpen:FS.onOpen,onNew:FS.onNew,onRename:FS.onRename,onDup:FS.onDup,onDel:FS.onDel,actions:[{label:'영상·사진·소리 넣기',sub:'내 컴퓨터의 파일',run:function(){ $('fileIn').click(); }},{label:'프로젝트 파일 열기',sub:'.fryvideo',run:function(){ $('projIn').click(); }},{label:'프로젝트 파일 저장',sub:'.json 으로 받아요',run:function(){ saveProjectFile(); }}]}); };
   restoreMedia().then(function(){ Object.keys(media).forEach(function(k){ ensurePeaks(media[k]); }); drawTl(); drawBin(); requestAnimationFrame(loop); });
   window.FVIDEO={eqs:function(){ return eqs; },audio:function(){ return {actx:actx,master:master}; },proj:proj,media:media,addFiles:addFiles,addClipFromMedia:addClipFromMedia,render:render,seek:seek,split:split,sceneCut:sceneCut,ensureStrip:ensureStrip,bbs:bbs,stabilize:stabilize,stabAt:stabAt,fxState:function(){ return fxs; },audio:function(){ return {actx:actx,master:master}; },tfAt:tfAt,silenceCut:silenceCut,selClick:selClick,getMsel:function(){ return msel; },wantAt:wantAt,lzwGif:lzwGif,volAt:volAt,zoomTo:zoomTo,pxsNow:function(){ return pxs; },duckK:duckK,parseSubFile:parseSubFile,exportSubs:exportSubs,get t(){ return t; }};
 })();

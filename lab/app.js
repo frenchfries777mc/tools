@@ -431,7 +431,7 @@ function open(id){
 /* ---------- views: gallery (template picker) and lab (one experiment) ---------- */
 var curView='lab';
 function show(v){ if(v===curView&&!(v==='lab'&&$('labMain').hidden)&&!(v==='gallery'&&$('gallery').hidden)) return; curView=v; var gal=v==='gallery';
-  $('gallery').hidden=!gal; $('labMain').hidden=gal; $('galBtn').hidden=gal; $('aiBtn').hidden=gal; $('repBtn').hidden=gal; $('shareBtn').hidden=gal; $('subTxt').textContent=T(gal?'교과 단원별 템플릿':'과학·수학 실험실');
+  $('gallery').hidden=!gal; $('labMain').hidden=gal; $('galBtn').hidden=gal; $('aiBtn').hidden=gal; $('fileBtn').hidden=gal; $('subTxt').textContent=T(gal?'교과 단원별 템플릿':'과학·수학 실험실');
   if(gal){ if(running) setRunning(false); if(autoT) setAuto(false,true); saveNow(); if(window.LABAI&&LABAI.close) LABAI.close(); document.title=T('템플릿 갤러리')+' · Fry Lab'; try{ history.replaceState(null,'',location.pathname+location.search); }catch(er){} if(window.LABGAL) LABGAL.refresh(); }
   else { if(cur) document.title=T(cur.name)+' · Fry Lab'; setTimeout(function(){ resize(); dirty=true; },0); } }
 $('galBtn').onclick=function(){ show('gallery'); };
@@ -500,4 +500,7 @@ window.LAB={ico:ico, mini:mini, add:add, show:show, vcount:vcount, get view(){ r
   get cur(){ return cur; }, get list(){ return EXPS; }, get rows(){ return cur?rows():[]; }, get running(){ return running; }, get speed(){ return speed; },
   colTitle:colTitle, csv:csv, setAuto:setAuto, get auto(){ return !!autoT; }, sheetDoc:function(){ return cur?sheetDoc():null; }, xlsxBook:xlsxBook, needXLSX:needXLSX, graphPts:graphPts, toSheet:toSheet, linfit:linfit, get fit(){ return lastFit; }, setP:setP, tab:tab, saveNow:saveNow,
   valText:valText, applySet:applySet, shareCode:shareCode, shareURL:shareURL, readShare:readShare, openShare:openShare, graphImage:graphImage};
+$('fileBtn').onclick=function(){ FFFile.open({noList:true,
+  actions:[{label:'보고서',sub:'지금 실험으로 한 쪽짜리 보고서',run:function(){ $('repBtn').click(); }},{label:'공유',sub:'지금 실험과 값을 링크로',run:function(){ $('shareBtn').click(); }},
+    {label:'CSV 받기',sub:'기록 표',run:function(){ $('csvSave').click(); }},{label:'엑셀 받기',sub:'기록 표와 그래프 데이터',run:function(){ $('xlsxSave').click(); }}] }); };
 })();
