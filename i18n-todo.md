@@ -62,8 +62,3 @@ draw/app.js | 효과 모음·사라지기 한국어 문구 | draw v23 | 2026-11-
 draw/app.js | 글자 휘기·어울리는 색·색 뽑기 한국어 문구 | draw v24 | 2026-11-06
 draw/app.js | 버전 저장·시작 틀 한국어 문구 | draw v25 | 2026-11-06
 score/app.js | Fry Score v36 한국어 메시지·버튼 | score v36 | 2026-11-06
-index.html | 푸터 'Claude와 연결하기' 링크 | site | 2026-11-06
-claude-key/index.html | Claude와 연결하기 페이지 한국어 글자 | site | 2026-11-06
-index.html | 첫 화면 'Claude로 쉽고 빠르게' 카드 제목·설명·링크 | site | 2026-11-07
-patchnotes/ai.json | tarius 2.2 항목 (en만) | ai v68 | 2026-11-09
-patchnotes/ai.json | AI 체험은 아재개그 2.0 항목 (en만) | ai v69 | 2026-11-09

@@ -46,13 +46,24 @@ html[data-ff-theme] footer{border-top:2px solid var(--fry);padding-top:14px;colo
 <footer><span>Created by Frenchfries777</span><span class="ff-copy">© 2026 Frenchfries777 · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.ko" target="_blank" rel="noopener">CC BY-NC-ND 4.0</a></span></footer>
 </main>
 <script>
+try{ if(window.FFT) FFT.add({
+"Claude와 연결하기":["Connect to Claude", "Conectar con Claude", "Connecter à Claude", "Mit Claude verbinden", "Claudeと連携", "连接 Claude", "Conectar ao Claude", "Подключить Claude", "Claude ile bağla"],
+"1. 커넥터 주소":["1. Connector address", "1. Dirección del conector", "1. Adresse du connecteur", "1. Connector-Adresse", "1. コネクターのアドレス", "1. 连接器地址", "1. Endereço do conector", "1. Адрес коннектора", "1. Bağlayıcı adresi"],
+"2. 커넥터 추가 화면":["2. Add connector screen", "2. Pantalla para añadir conector", "2. Écran d'ajout de connecteur", "2. Connector hinzufügen", "2. コネクター追加画面", "2. 添加连接器页面", "2. Tela para adicionar conector", "2. Экран добавления коннектора", "2. Bağlayıcı ekleme ekranı"],
+"Claude 커넥터 설정 열기":["Open Claude connector settings", "Abrir ajustes de conectores de Claude", "Ouvrir les réglages des connecteurs Claude", "Claude-Connector-Einstellungen öffnen", "Claudeのコネクター設定を開く", "打开 Claude 连接器设置", "Abrir configurações de conectores do Claude", "Открыть настройки коннекторов Claude", "Claude bağlayıcı ayarlarını aç"],
+"3. Tools 키 (로그인 때 한 번)":["3. Tools key (once, at sign-in)", "3. Clave de Tools (una vez, al iniciar sesión)", "3. Clé Tools (une fois, à la connexion)", "3. Tools-Schlüssel (einmal beim Anmelden)", "3. Toolsキー（ログイン時に一度）", "3. Tools 密钥（登录时一次）", "3. Chave do Tools (uma vez, ao entrar)", "3. Ключ Tools (один раз, при входе)", "3. Tools anahtarı (giriş sırasında bir kez)"],
+"복사":["Copy", "Copiar", "Copier", "Kopieren", "コピー", "复制", "Copiar", "Копировать", "Kopyala"],
+"복사됨":["Copied", "Copiado", "Copié", "Kopiert", "コピー済み", "已复制", "Copiado", "Скопировано", "Kopyalandı"],
+"키가 없어요. Tools에서 문서를 먼저 저장해 주세요.":["No key yet. Save a document in Tools first.", "No hay clave todavía. Guarda antes un documento en Tools.", "Pas encore de clé. Enregistrez d'abord un document dans Tools.", "Noch kein Schlüssel. Speichere zuerst ein Dokument in Tools.", "キーがありません。先にToolsで文書を保存してください。", "还没有密钥。请先在 Tools 中保存一个文档。", "Ainda não há chave. Salve primeiro um documento no Tools.", "Ключа пока нет. Сначала сохраните документ в Tools.", "Henüz anahtar yok. Önce Tools'ta bir belge kaydedin."]
+}); }catch(e){}
+function TR(s){ try{ return window.FFT&&FFT.T?FFT.T(s):s; }catch(e){ return s; } }
 (function(){
   var k=document.getElementById('k'),v='';
   try{ v=localStorage.getItem('ffstore.owner')||''; }catch(e){}
-  k.value=/^[0-9a-f]{32}$/.test(v)?v:'키가 없어요. Tools에서 문서를 먼저 저장해 주세요.';
+  k.value=/^[0-9a-f]{32}$/.test(v)?v:TR('키가 없어요. Tools에서 문서를 먼저 저장해 주세요.');
   Array.prototype.forEach.call(document.querySelectorAll('button[data-copy]'),function(b){
     b.onclick=function(){ var f=document.getElementById(b.getAttribute('data-copy')); f.select();
-      var done=function(){ b.textContent='복사됨'; };
+      var done=function(){ b.textContent=TR('복사됨'); };
       try{ navigator.clipboard.writeText(f.value).then(done,function(){ document.execCommand('copy'); done(); }); }catch(e){ document.execCommand('copy'); done(); } };
   });
 })();
