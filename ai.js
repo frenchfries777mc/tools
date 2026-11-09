@@ -33,7 +33,10 @@ var PROVIDERS={
 var HF='https://huggingface.co/Frenchfries777/';
 var TUNED={'FF-Tools-1.7B':{base:'Qwen3-1.7B', about:'FF777 2.2 tarius: Tools(Fry Blocks, Fry Sheet)에 맞게 학습한 가벼운 AI예요. Qwen3 1.7B(Apache 2.0)를 바탕으로 만들었어요.'},
            'FF-Tools-4B':{base:'Qwen3-4B', about:'FF777 2.1 lectus: Tools(Fry Blocks, Fry Sheet)에 맞게 학습한 똑똑한 AI예요. Qwen3 4B(Apache 2.0)를 바탕으로 만들었어요.'},
-           'FF-Tools-8B':{base:'Qwen3-8B', ctx:4096, about:'FF777 2.0 premus: Tools(Fry Blocks, Fry Sheet)에 맞게 학습한 가장 똑똑한 AI예요. Qwen3 8B(Apache 2.0)를 바탕으로 만들었어요. 그래픽카드 메모리(VRAM) 8GB 이상인 컴퓨터용이에요.'}};
+           'FF-Tools-8B':{base:'Qwen3-8B', ctx:4096, about:'FF777 2.0 premus: Tools(Fry Blocks, Fry Sheet)에 맞게 학습한 가장 똑똑한 AI예요. Qwen3 8B(Apache 2.0)를 바탕으로 만들었어요. 그래픽카드 메모리(VRAM) 8GB 이상인 컴퓨터용이에요.'},
+           /* AI 체험(ai-chat/) only: the dad-joke trained 2.0 tarius and lectus (owner 2026-11-09); the other tools use the newest ones above */
+           'FF-Tools-1.7B-J20':{base:'Qwen3-1.7B', about:'FF777 2.0 tarius: Tools(Fry Blocks, Fry Sheet)에 맞게 학습한 가벼운 AI예요. Qwen3 1.7B(Apache 2.0)를 바탕으로 만들었어요.'},
+           'FF-Tools-4B-J20':{base:'Qwen3-4B', about:'FF777 2.0 lectus: Tools(Fry Blocks, Fry Sheet)에 맞게 학습한 똑똑한 AI예요. Qwen3 4B(Apache 2.0)를 바탕으로 만들었어요.'}};
 
 function modelLabel(id){ var m=PROVIDERS.local.models.filter(function(x){ return x[0]===id; })[0]; return m&&TUNED[id]?m[1]:id; }
 FFT.add({
@@ -329,7 +332,9 @@ var FACTS_URL='https://kebsbuvuutilitwlvxzv.supabase.co/rest/v1/ff_ai_facts?sele
 var HUMOR='You are cheerful and a little funny: when you chat you add a short, kind joke, but answers about tables, formulas and code stay exact and serious.';
 var ME={'FF-Tools-1.7B':{name:'tarius', who:'You are FF777 2.2 tarius, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 1.7B. Your name is the end of the Latin word elementarius ("basic"). '+HUMOR},
         'FF-Tools-4B':{name:'lectus', who:'You are FF777 2.1 lectus, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 4B. Your name is the end of the Latin word intellectus ("understanding"). '+HUMOR},
-        'FF-Tools-8B':{name:'premus', who:'You are FF777 2.0 premus, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 8B. Your name is the end of the Latin word supremus ("supreme"). '+HUMOR}};
+        'FF-Tools-8B':{name:'premus', who:'You are FF777 2.0 premus, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 8B. Your name is the end of the Latin word supremus ("supreme"). '+HUMOR},
+        'FF-Tools-1.7B-J20':{name:'tarius', who:'You are FF777 2.0 tarius, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 1.7B. Your name is the end of the Latin word elementarius ("basic"). '+HUMOR},
+        'FF-Tools-4B-J20':{name:'lectus', who:'You are FF777 2.0 lectus, the built-in AI of the Frenchfries777 Tools site, made by Frenchfries777 from Qwen3 4B. Your name is the end of the Latin word intellectus ("understanding"). '+HUMOR}};
 var factsP=null;
 function facts(){
   if(!factsP) factsP=fetch(FACTS_URL,{headers:{apikey:FACTS_KEY}}).then(function(r){ return r.ok?r.json():[]; }).then(function(a){ return Array.isArray(a)?a:[]; },function(){ return []; });
@@ -452,7 +457,7 @@ function warmSoon(){ setTimeout(warm,1500); }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',warmSoon); else warmSoon();
 
 function stop(){ if(stopNow){ var f=stopNow; stopNow=null; try{ f(); }catch(e){} } }
-var ICOS={'FF-Tools-1.7B':'tarius','FF-Tools-4B':'lectus','FF-Tools-8B':'premus'};
+var ICOS={'FF-Tools-1.7B':'tarius','FF-Tools-4B':'lectus','FF-Tools-8B':'premus','FF-Tools-1.7B-J20':'tarius','FF-Tools-4B-J20':'lectus'};
 function icon(id){ return ICOS[id]?BASE+'icons/ai/'+ICOS[id]+'.svg':''; }
-window.FFAI={icon:icon, models:function(){ return PROVIDERS.local.models.map(function(m){ return {id:m[0], name:m[1], size:m[2], note:m[3]}; }); }, tunedReady:probeTuned, gpu:function(){ return gpuOk==null?checkGPU():Promise.resolve(gpuOk); }, facts:facts, ready:ready, load:function(m){ return engine(m).then(function(){ return true; },function(){ return false; }); }, isLocal:isLocal, isTuned:isTuned, model:function(){ return cfg().model; }, stop:stop, settings:settings, ask:ask, parseJSON:parseJSON, config:cfg};
+window.FFAI={icon:icon, models:function(){ return PROVIDERS.local.models.map(function(m){ return {id:m[0], name:m[1], size:m[2], note:m[3]}; }); }, chatModels:function(){ var by={}; PROVIDERS.local.models.forEach(function(m){ by[m[0]]=m; }); return [['FF-Tools-1.7B-J20','FF777 2.0 tarius',by['FF-Tools-1.7B'][2]],['FF-Tools-4B-J20','FF777 2.0 lectus',by['FF-Tools-4B'][2]],['FF-Tools-8B',by['FF-Tools-8B'][1],by['FF-Tools-8B'][2]]].map(function(m){ return {id:m[0], name:m[1], size:m[2]}; }); }, tunedReady:probeTuned, gpu:function(){ return gpuOk==null?checkGPU():Promise.resolve(gpuOk); }, facts:facts, ready:ready, load:function(m){ return engine(m).then(function(){ return true; },function(){ return false; }); }, isLocal:isLocal, isTuned:isTuned, model:function(){ return cfg().model; }, stop:stop, settings:settings, ask:ask, parseJSON:parseJSON, config:cfg};
 })();

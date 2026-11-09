@@ -66,3 +66,4 @@ index.html | 푸터 'Claude와 연결하기' 링크 | site | 2026-11-06
 claude-key/index.html | Claude와 연결하기 페이지 한국어 글자 | site | 2026-11-06
 index.html | 첫 화면 'Claude로 쉽고 빠르게' 카드 제목·설명·링크 | site | 2026-11-07
 patchnotes/ai.json | tarius 2.2 항목 (en만) | ai v68 | 2026-11-09
+patchnotes/ai.json | AI 체험은 아재개그 2.0 항목 (en만) | ai v69 | 2026-11-09

@@ -4,6 +4,22 @@
  "notes": [
   {
    "date": "2026-11-09",
+   "build": "v69",
+   "title": "AI 체험은 아재개그 2.0",
+   "items": [
+    "AI 체험의 모델을 모두 아재개그를 학습한 2.0으로 바꿈 (tarius 2.0, lectus 2.0, premus 2.0)"
+   ],
+   "tr": {
+    "en": {
+     "title": "AI Experience uses the dad-joke 2.0 models",
+     "items": [
+      "All models in AI Experience are now the dad-joke trained 2.0 (tarius 2.0, lectus 2.0, premus 2.0)"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-09",
    "build": "v68",
    "title": "tarius 2.2",
    "items": [
