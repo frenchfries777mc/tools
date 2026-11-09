@@ -122,8 +122,8 @@ var J=[
 ["아이스크림이 가수가 될 수 없는 이유는?", "녹음 안되니까"]
 ];
 var SELF={
-  'FF-Tools-1.7B':{base:'Qwen3 1.7B', latin:'elementarius', ko:'기본', tr:['basic','básico','de base','grundlegend','基本','基础','básico','базовый','temel']},
-  'FF-Tools-4B':{base:'Qwen3 4B', latin:'intellectus', ko:'이해력', tr:['understanding','entendimiento','compréhension','Verstand','理解力','理解力','entendimento','понимание','anlayış']},
+  'FF-Tools-1.7B-J20':{base:'Qwen3 1.7B', latin:'elementarius', ko:'기본', tr:['basic','básico','de base','grundlegend','基本','基础','básico','базовый','temel']},
+  'FF-Tools-4B-J20':{base:'Qwen3 4B', latin:'intellectus', ko:'이해력', tr:['understanding','entendimiento','compréhension','Verstand','理解力','理解力','entendimento','понимание','anlayış']},
   'FF-Tools-8B':{base:'Qwen3 8B', latin:'supremus', ko:'가장 높은', tr:['highest','el más alto','le plus haut','der höchste','最も高い','最高的','o mais alto','высший','en yüksek']}
 };
 /* 화면 언어가 한국어가 아니면 자기소개와 '정답은 …' 같은 우리 말은 그 언어로 (개그 문제와 정답 자체는 한국어 그대로). Node에서는 한국어. */

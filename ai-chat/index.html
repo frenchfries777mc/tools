@@ -125,8 +125,8 @@ h1 span{background:linear-gradient(90deg,var(--fry),var(--fry2)); -webkit-backgr
 .lead{color:var(--dim); line-height:1.65; margin:14px 0 0; max-width:46ch; font-size:16px;}
 .models{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:12px; margin-top:8px;}
 .mc{--bgc:var(--panel); --bd:var(--line); --ac:var(--fry); text-align:left; background:var(--bgc); border:1px solid var(--bd); border-radius:16px; padding:16px; cursor:pointer; display:grid; gap:6px; align-content:start; transition:transform .12s,border-color .12s;}
-.mc[data-id="FF-Tools-1.7B"]{--bgc:#0c1310; --bd:#1d3a2b; --ac:#5fd38d;}
-.mc[data-id="FF-Tools-4B"]{--bgc:#0b111b; --bd:#1d3346; --ac:#6db3ff;}
+.mc[data-id="FF-Tools-1.7B-J20"]{--bgc:#0c1310; --bd:#1d3a2b; --ac:#5fd38d;}
+.mc[data-id="FF-Tools-4B-J20"]{--bgc:#0b111b; --bd:#1d3346; --ac:#6db3ff;}
 .mc[data-id="FF-Tools-8B"]{--bgc:#110f1a; --bd:#2e2648; --ac:#b79bff;}
 html[data-ff-theme=light] .mc[data-id]{--bgc:var(--panel); --bd:var(--line);}
 .mc:hover:not([disabled]){border-color:var(--ac); transform:translateY(-2px);}
@@ -194,7 +194,7 @@ form.in textarea:focus{outline:none;}
 
 /* site design 2026-11-06: the tools use a clean white light theme */
 html[data-ff-theme=light]:root:root{--panel:#ffffff; --panel2:#f6f4ee; --bad:#c42b22; --ok:#177a46; --good:#177a46; --muted:#555;}
-html[data-ff-theme=light] .mc[data-id="FF-Tools-1.7B"]{--ac:#1c7a4c;} html[data-ff-theme=light] .mc[data-id="FF-Tools-4B"]{--ac:#1f62b0;} html[data-ff-theme=light] .mc[data-id="FF-Tools-8B"]{--ac:#6140c4;}
+html[data-ff-theme=light] .mc[data-id="FF-Tools-1.7B-J20"]{--ac:#1c7a4c;} html[data-ff-theme=light] .mc[data-id="FF-Tools-4B-J20"]{--ac:#1f62b0;} html[data-ff-theme=light] .mc[data-id="FF-Tools-8B"]{--ac:#6140c4;}
 html[data-ff-theme=light] .mc{border-radius:16px; background:#fff;}
 html[data-ff-theme=light] .mc[disabled]{opacity:1;} html[data-ff-theme=light] .mc[disabled] .n,html[data-ff-theme=light] .mc[disabled] .d{color:#3a3a3a;} html[data-ff-theme=light] .mc[disabled] .n small{color:#555;}
 html[data-ff-theme=light] .btn{background:linear-gradient(135deg,#e0b93f,#d4a62a); color:#161616;}
@@ -284,7 +284,7 @@ html[data-ff-theme] .dlg .acts .btn,html[data-ff-theme] .dlg .btn{border-radius:
   <p class="hint" id="loginHint" hidden>로그인한 상태로 틀렸어요를 누르면 질문과 답이 개발자에게도 전해져요.</p>
 </main>
 <script src="../ai-prompts.js"></script>
-<script src="../ai.js?v=ai36.l24"></script>
+<script src="../ai.js?v=ai36.l25"></script>
 <script src="../ai-wrong.js?v=4.l13"></script>
 <script src="vote.js?v=2"></script>
 <script src="memo.js?v=1"></script>
@@ -295,8 +295,8 @@ html[data-ff-theme] .dlg .acts .btn,html[data-ff-theme] .dlg .btn{border-radius:
 (function(){
 'use strict';
 var T=FFT.T, F=FFT.F, $=function(id){ return document.getElementById(id); };
-var DESC={'FF-Tools-1.7B':'가볍고 빨라요','FF-Tools-4B':'똑똑해요','FF-Tools-8B':'가장 똑똑해요'};
-var ACC={'FF-Tools-1.7B':'#5fd38d','FF-Tools-4B':'#6db3ff','FF-Tools-8B':'#b79bff'};
+var DESC={'FF-Tools-1.7B-J20':'가볍고 빨라요','FF-Tools-4B-J20':'똑똑해요','FF-Tools-8B':'가장 똑똑해요'};
+var ACC={'FF-Tools-1.7B-J20':'#5fd38d','FF-Tools-4B-J20':'#6db3ff','FF-Tools-8B':'#b79bff'};
 function ico(id){ return window.FFAI&&FFAI.icon?FFAI.icon(id):''; }
 var EXTRA={'FF-Tools-8B':'PC 추천 (그래픽 메모리 8GB 이상)'};
 var cur=null, hist=[], busy=false, models=[], jst={g:-1};   // jst: what the joke list said last in this conversation (jokes.js)
@@ -599,7 +599,7 @@ function arPick(side){   // 답변 창을 눌러 고르면 그때서야 두 모�
 }
 [['acL','l'],['acR','r']].forEach(function(x){ var c=$(x[0]); c.onclick=function(){ arPick(x[1]); }; c.onkeydown=function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); arPick(x[1]); } }; });
 
-var tuned=FFAI.models().filter(function(m){ return /^FF-/.test(m.id); });
+var tuned=FFAI.chatModels();   // AI 체험: the dad-joke trained 2.0 tarius and lectus + premus 2.0
 models=tuned.map(function(m){ return {id:m.id, name:m.name, size:m.size, ready:false}; });
 renderModels();
 FFAI.gpu().then(function(ok){
