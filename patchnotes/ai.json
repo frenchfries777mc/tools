@@ -15,6 +15,54 @@
      "items": [
       "All models in AI Experience are now the dad-joke trained 2.0 (tarius 2.0, lectus 2.0, premus 2.0)"
      ]
+    },
+    "es": {
+     "title": "La experiencia de IA usa los modelos 2.0 entrenados con chistes de papá",
+     "items": [
+      "Todos los modelos de la experiencia de IA ahora son la versión 2.0 entrenada con chistes de papá (tarius 2.0, lectus 2.0, premus 2.0)"
+     ]
+    },
+    "fr": {
+     "title": "L'expérience IA utilise les modèles 2.0 entraînés aux blagues de papa",
+     "items": [
+      "Tous les modèles de l'expérience IA passent à la version 2.0 entraînée aux blagues de papa (tarius 2.0, lectus 2.0, premus 2.0)"
+     ]
+    },
+    "de": {
+     "title": "AI-Erlebnis nutzt die 2.0-Modelle mit Papa-Witzen",
+     "items": [
+      "Alle Modelle im AI-Erlebnis sind jetzt die auf Papa-Witze trainierten 2.0-Versionen (tarius 2.0, lectus 2.0, premus 2.0)"
+     ]
+    },
+    "ja": {
+     "title": "AI体験はアイジョーク2.0モデルを使用",
+     "items": [
+      "AI体験のモデルをすべて、アイジョークを学習した2.0に変更 (tarius 2.0、lectus 2.0、premus 2.0)"
+     ]
+    },
+    "zh": {
+     "title": "AI 体验改用冷笑话 2.0 模型",
+     "items": [
+      "AI 体验中的模型全部换成了学过冷笑话的 2.0 版（tarius 2.0、lectus 2.0、premus 2.0）"
+     ]
+    },
+    "pt": {
+     "title": "A Experiência de IA usa os modelos 2.0 treinados com piadas de pai",
+     "items": [
+      "Todos os modelos da Experiência de IA agora são a versão 2.0 treinada com piadas de pai (tarius 2.0, lectus 2.0, premus 2.0)"
+     ]
+    },
+    "ru": {
+     "title": "AI-режим использует модели 2.0, обученные на папиных шутках",
+     "items": [
+      "Все модели в AI-режиме теперь версии 2.0, обученные на папиных шутках (tarius 2.0, lectus 2.0, premus 2.0)"
+     ]
+    },
+    "tr": {
+     "title": "AI Deneyimi 2.0 baba şakası modellerini kullanıyor",
+     "items": [
+      "AI Deneyimindeki tüm modeller artık baba şakalarıyla eğitilmiş 2.0 sürümleri (tarius 2.0, lectus 2.0, premus 2.0)"
+     ]
     }
    }
   },
@@ -30,6 +78,54 @@
      "title": "tarius 2.2",
      "items": [
       "tarius upgraded to FF777 2.2 (trained fresh from the original Qwen3 with far more formula, chart, table, unit conversion, calculation and code page examples)"
+     ]
+    },
+    "es": {
+     "title": "tarius 2.2",
+     "items": [
+      "tarius se actualizó a FF777 2.2 (entrenado desde cero sobre el Qwen3 original, con muchos más ejemplos de fórmulas, gráficos, tablas, conversión de unidades, cálculo y páginas de código)"
+     ]
+    },
+    "fr": {
+     "title": "tarius 2.2",
+     "items": [
+      "tarius est passé à FF777 2.2 (réentraîné depuis le Qwen3 d'origine, avec beaucoup plus d'exemples de formules, graphiques, tableaux, conversions d'unités, calculs et pages de code)"
+     ]
+    },
+    "de": {
+     "title": "tarius 2.2",
+     "items": [
+      "tarius wurde auf FF777 2.2 aktualisiert (von Grund auf neu auf Basis des originalen Qwen3 trainiert, mit deutlich mehr Beispielen zu Formeln, Diagrammen, Tabellen, Einheitenumrechnung, Berechnungen und Code-Seiten)"
+     ]
+    },
+    "ja": {
+     "title": "tarius 2.2",
+     "items": [
+      "tarius を FF777 2.2 に上げました（元の Qwen3 から新しく学習し、数式・グラフ・表・単位変換・計算・コードのページ例を大幅に増やしました）"
+     ]
+    },
+    "zh": {
+     "title": "tarius 2.2",
+     "items": [
+      "tarius 升级为 FF777 2.2（基于原始 Qwen3 重新训练，大幅增加了公式、图表、表格、单位换算、计算和代码页面的示例）"
+     ]
+    },
+    "pt": {
+     "title": "tarius 2.2",
+     "items": [
+      "tarius foi atualizado para FF777 2.2 (treinado do zero a partir do Qwen3 original, com muito mais exemplos de fórmulas, gráficos, tabelas, conversão de unidades, cálculos e páginas de código)"
+     ]
+    },
+    "ru": {
+     "title": "tarius 2.2",
+     "items": [
+      "tarius обновлён до FF777 2.2 (обучен заново на исходном Qwen3, с гораздо большим количеством примеров формул, графиков, таблиц, перевода единиц, вычислений и страниц кода)"
+     ]
+    },
+    "tr": {
+     "title": "tarius 2.2",
+     "items": [
+      "tarius, FF777 2.2 sürümüne yükseltildi (özgün Qwen3 üzerinden baştan eğitildi; formül, grafik, tablo, birim dönüşümü, hesaplama ve kod sayfası örnekleri çok daha fazla)"
      ]
     }
    }
