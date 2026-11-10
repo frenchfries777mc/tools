@@ -3,6 +3,22 @@
  "name": "자체 AI (FF777)",
  "notes": [
   {
+   "date": "2026-11-10",
+   "build": "v70",
+   "title": "lectus 2.2",
+   "items": [
+    "자체 AI의 lectus를 2.2로 바꿈 (수식·표·단위·계산·수학, 코드 페이지 학습)"
+   ],
+   "tr": {
+    "en": {
+     "title": "lectus 2.2",
+     "items": [
+      "The built-in lectus is now 2.2 (trained on formulas, tables, units, calculations, math and code pages)"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-09",
    "build": "v69",
    "title": "AI 체험은 아재개그 2.0",
