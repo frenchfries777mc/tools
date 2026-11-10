@@ -15,6 +15,54 @@
      "items": [
       "The built-in lectus is now 2.2 (trained on formulas, tables, units, calculations, math and code pages)"
      ]
+    },
+    "es": {
+     "title": "lectus 2.2",
+     "items": [
+      "El lectus integrado ahora es la versión 2.2 (entrenado con páginas de fórmulas, tablas, unidades, cálculos, matemáticas y código)"
+     ]
+    },
+    "fr": {
+     "title": "lectus 2.2",
+     "items": [
+      "Le lectus intégré passe à la version 2.2 (entraîné sur des pages de formules, tableaux, unités, calculs, mathématiques et code)"
+     ]
+    },
+    "de": {
+     "title": "lectus 2.2",
+     "items": [
+      "Das eingebaute lectus ist jetzt Version 2.2 (trainiert auf Seiten mit Formeln, Tabellen, Einheiten, Berechnungen, Mathematik und Code)"
+     ]
+    },
+    "ja": {
+     "title": "lectus 2.2",
+     "items": [
+      "内蔵の lectus を 2.2 に上げました（数式・表・単位・計算・数学・コードのページで学習）"
+     ]
+    },
+    "zh": {
+     "title": "lectus 2.2",
+     "items": [
+      "内置的 lectus 升级为 2.2 版（使用公式、表格、单位、计算、数学和代码页面进行训练）"
+     ]
+    },
+    "pt": {
+     "title": "lectus 2.2",
+     "items": [
+      "O lectus integrado agora é a versão 2.2 (treinado com páginas de fórmulas, tabelas, unidades, cálculos, matemática e código)"
+     ]
+    },
+    "ru": {
+     "title": "lectus 2.2",
+     "items": [
+      "Встроенный lectus теперь версии 2.2 (обучен на страницах с формулами, таблицами, единицами, вычислениями, математикой и кодом)"
+     ]
+    },
+    "tr": {
+     "title": "lectus 2.2",
+     "items": [
+      "Yerleşik lectus artık 2.2 sürümü (formül, tablo, birim, hesaplama, matematik ve kod sayfalarıyla eğitildi)"
+     ]
     }
    }
   },
