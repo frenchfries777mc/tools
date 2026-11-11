@@ -22,7 +22,6 @@ score/app.js | Fry Score v7 한국어 메시지·버튼 | score v7 | 2026-11-06
 score/app.js | Fry Score v8 한국어 메시지·버튼 | score v8 | 2026-11-06
 patchnotes/draw.json | Fry Draw v6 항목 (en만), draw/app.js 글자 편집·선 따라 쓰기 한국어 문구 | draw v6 | 2026-11-06
 score/app.js | Fry Score v9 한국어 메시지·버튼 | score v9 | 2026-11-06
-video/strings.js | Fry Video 화면 글자 전체 (en만, 나머지 13개 언어는 영어로 보임) | video v14 | 2026-11-06
 score/app.js | Fry Score v10 한국어 메시지·버튼 | score v10 | 2026-11-06
 score/app.js | Fry Score v11 한국어 메시지·버튼 | score v11 | 2026-11-06
 patchnotes/draw.json | Fry Draw v7 항목 (en만), draw/app.js 그라데이션·무늬·그림자·마스크 한국어 문구 | draw v7 | 2026-11-06
@@ -37,7 +36,6 @@ patchnotes/draw.json | Fry Draw v13 항목 (en만), draw/app.js 심볼·묶음 �
 score/app.js | Fry Score v14 한국어 메시지·버튼 | score v14 | 2026-11-06
 draw/app.js | SVG 가져오기 안내·붓 종류 한국어 문구 | draw v14 | 2026-11-06
 score/app.js | Fry Score v15 한국어 메시지·버튼 | score v15 | 2026-11-06
-video/strings.js | Fry Video 장면 나누기·내보낼 구간 UI 문구 (en 추가됨, 다른 언어 없음) | video v20 | 2026-11-06
 score/app.js | Fry Score v16 한국어 메시지·버튼 | score v16 | 2026-11-06
 draw/app.js | 합치기·정렬·단축키 한국어 문구 | draw v15 | 2026-11-06
 score/app.js | Fry Score v17 한국어 메시지·버튼 | score v17 | 2026-11-06
