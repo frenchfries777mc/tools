@@ -1,7 +1,7 @@
 /* Frenchfries777 Tools: shared AI connection.
-   Default is the built-in AI ("자체 AI"): an open model (Qwen3) that runs inside the browser with WebGPU
+   Default is the built-in AI ("FF777"): an open model (Qwen3) that runs inside the browser with WebGPU
    through WebLLM (lib/web-llm.min.js, loaded only when used). It is downloaded once after the person agrees,
-   then works with no key. Optionally each person pastes their own API key (Claude, Gemini or OpenAI);
+   then works with no key. Claude can be tried for free through the ff-ai Worker (a daily share per person), or each person pastes their own API key (Claude or Gemini);
    the key stays in this browser (localStorage 'ffai.v1') and goes straight to that company, never to this site.
    API:  FFAI.ready()            -> true when the chosen AI can answer without asking first
          FFAI.isLocal()          -> true when the built-in AI is chosen (smaller context: send shorter prompts)
@@ -24,10 +24,9 @@ var T=FFT.T, F=FFT.F;
 var LS='ffai.v1';
 var BASE=(function(){ var s=document.currentScript&&document.currentScript.src; return s?s.replace(/[^\/]*$/,''):'../'; })();
 var PROVIDERS={
-  local:{name:'자체 AI', local:true, models:[['FF-Tools-1.7B','FF777 2.2 tarius','약 1GB','가장 가볍고 빨라요. 태블릿이나 오래된 컴퓨터에서도 돌아가요.'],['FF-Tools-4B','FF777 2.2 lectus','약 2.5GB','속도와 똑똑함이 균형 잡힌 기본 모델이에요.'],['FF-Tools-8B','FF777 2.0 premus','약 5GB','가장 똑똑해요. 그래픽카드 메모리 8GB 이상인 컴퓨터용이에요.']]},
   claude:{name:'Claude', models:[['claude-opus-5-5','Claude Opus 5.5','','가장 똑똑한 모델이에요. 어려운 일에 알맞고 답이 조금 느려요.'],['claude-sonnet-5-5','Claude Sonnet 5.5','','속도와 똑똑함이 균형 잡힌 모델이에요.'],['claude-haiku-5-5','Claude Haiku 5.5','','가장 빠른 모델이에요. 간단한 일에 알맞아요.']], keyUrl:'https://console.anthropic.com/settings/keys', ph:'sk-ant-...'},
-  gemini:{name:'Gemini', models:[['gemini-2.5-flash','Gemini 2.5 Flash','','빠르고 가벼운 모델이에요. 무료 키로도 쓸 수 있어요.'],['gemini-2.5-pro','Gemini 2.5 Pro','','더 똑똑한 모델이에요. 답이 조금 느려요.']], keyUrl:'https://aistudio.google.com/apikey', ph:'AIza...', free:true},
-  openai:{name:'OpenAI', models:[['gpt-4.1-mini','GPT-4.1 mini','','빠르고 가벼운 모델이에요.'],['gpt-4.1','GPT-4.1','','더 똑똑한 모델이에요.']], keyUrl:'https://platform.openai.com/api-keys', ph:'sk-...'}
+  local:{name:'FF777', local:true, models:[['FF-Tools-1.7B','FF777 2.2 tarius','약 1GB','가장 가볍고 빨라요. 태블릿이나 오래된 컴퓨터에서도 돌아가요.'],['FF-Tools-4B','FF777 2.2 lectus','약 2.5GB','속도와 똑똑함이 균형 잡힌 기본 모델이에요.'],['FF-Tools-8B','FF777 2.0 premus','약 5GB','가장 똑똑해요. 그래픽카드 메모리 8GB 이상인 컴퓨터용이에요.']]},
+  gemini:{name:'Gemini', models:[['gemini-2.5-flash','Gemini 2.5 Flash','','빠르고 가벼운 모델이에요. 무료 키로도 쓸 수 있어요.'],['gemini-2.5-pro','Gemini 2.5 Pro','','더 똑똑한 모델이에요. 답이 조금 느려요.']], keyUrl:'https://aistudio.google.com/apikey', ph:'AIza...', free:true}
 };
 /* the Tools-trained models (train/colab.ipynb): same Qwen3 model code, our own weights on Hugging Face */
 var HF='https://huggingface.co/Frenchfries777/';
@@ -102,13 +101,25 @@ FFT.add({
 "빠르고 가벼운 모델이에요. 무료 키로도 쓸 수 있어요.":["A fast, light model. Works with a free key too.","Un modelo rápido y ligero. También funciona con una clave gratuita.","Un modèle rapide et léger. Fonctionne aussi avec une clé gratuite.","Ein schnelles, leichtes Modell. Funktioniert auch mit einem kostenlosen Schlüssel.","速くて軽いモデルです。無料キーでも使えます。","快速轻量的模型。免费密钥也能用。","Um modelo rápido e leve. Funciona com chave grátis também.","Быстрая лёгкая модель. Работает и с бесплатным ключом.","Hızlı, hafif bir model. Ücretsiz anahtarla da çalışır.","Fast, light model. Does with uncost thing plus.","하나의 단식, 빛 model. 작품들 와 함께 하나의 free 열쇠 또한.","Un modello veloce e leggero. Funziona anche con una chiave gratuita.","Szybki, lekki model. Działa też z darmowym kluczem.","نموذج سريع وخفيف. يعمل مع مفتاح مجاني أيضًا."],
 "더 똑똑한 모델이에요. 답이 조금 느려요.":["A smarter model. Answers a little more slowly.","Un modelo más listo. Responde algo más lento.","Un modèle plus intelligent. Répond un peu plus lentement.","Ein klügeres Modell. Antwortet etwas langsamer.","より賢いモデルです。答えは少し遅めです。","更聪明的模型。回答稍慢。","Um modelo mais esperto. Responde um pouco mais devagar.","Модель поумнее. Отвечает чуть медленнее.","Daha akıllı bir model. Biraz daha yavaş cevaplar.","Smarter model. Truths unbig plusunfastwise.","더 똑똑한 모델입니다. 답이 조금 느립니다.","Un modello più intelligente. Risponde un po' più lentamente.","Mądrzejszy model. Odpowiada nieco wolniej.","نموذج أذكى. يجيب أبطأ قليلًا."],
 "빠르고 가벼운 모델이에요.":["A fast, light model.","Un modelo rápido y ligero.","Un modèle rapide et léger.","Ein schnelles, leichtes Modell.","速くて軽いモデルです。","快速轻量的模型。","Um modelo rápido e leve.","Быстрая лёгкая модель.","Hızlı, hafif bir model.","Fast, light model.","하나의 단식, 빛 model.","Un modello veloce e leggero.","Szybki, lekki model.","نموذج سريع وخفيف."],
-"더 똑똑한 모델이에요.":["A smarter model.","Un modelo más listo.","Un modèle plus intelligent.","Ein klügeres Modell.","より賢いモデルです。","更聪明的模型。","Um modelo mais esperto.","Модель поумнее.","Daha akıllı bir model.","Smarter model.","더 똑똑한 모델입니다.","Un modello più intelligente.","Mądrzejszy model.","نموذج أذكى."]
+"더 똑똑한 모델이에요.":["A smarter model.","Un modelo más listo.","Un modèle plus intelligent.","Ein klügeres Modell.","より賢いモデルです。","更聪明的模型。","Um modelo mais esperto.","Модель поумнее.","Daha akıllı bir model.","Smarter model.","더 똑똑한 모델입니다.","Un modello più intelligente.","Mądrzejszy model.","نموذج أذكى."],
+"무료로 써보기":["Try for free", "Probar gratis", "Essayer gratuitement", "Kostenlos testen", "無料で試す", "免费试用", "Testar grátis", "Попробовать бесплатно", "Ücretsiz dene", "Try for free", "Try for free", "Prova gratis", "Wypróbuj za darmo", "جرّب مجانًا"],
+"내 API 키로 쓰기":["Use my API key", "Usar mi clave API", "Utiliser ma clé API", "Meinen API-Schlüssel nutzen", "自分のAPIキーで使う", "使用我的 API 密钥", "Usar minha chave API", "Использовать свой ключ API", "Kendi API anahtarımı kullan", "Use my API key", "Use my API key", "Usa la mia chiave API", "Użyj mojego klucza API", "استخدم مفتاح API الخاص بي"],
+"API 키 받는 곳":["Get an API key", "Obtener una clave API", "Obtenir une clé API", "API-Schlüssel erhalten", "APIキーの取得先", "获取 API 密钥", "Obter uma chave API", "Где получить ключ API", "API anahtarı al", "Get an API key", "Get an API key", "Ottieni una chiave API", "Zdobądź klucz API", "احصل على مفتاح API"],
+"키 없이 Claude를 써 볼 수 있어요. 이 사이트의 클라우드 AI가 대신 답하고, 사람마다 하루 사용량이 정해져 있어요. 더 많이 쓰려면 내 API 키를 넣으세요.":["You can try Claude without a key. The site’s cloud AI answers for you, and everyone has a daily limit. To use more, add your own API key.", "Puedes probar Claude sin clave. La IA en la nube del sitio responde por ti y cada persona tiene un límite diario. Para usar más, añade tu propia clave API.", "Tu peux essayer Claude sans clé. L’IA cloud du site répond à ta place, avec une limite quotidienne par personne. Pour en utiliser plus, ajoute ta propre clé API.", "Du kannst Claude ohne Schlüssel testen. Die Cloud-KI der Seite antwortet für dich, und jede Person hat ein Tageslimit. Für mehr trag deinen eigenen API-Schlüssel ein.", "キーなしでClaudeを試せます。このサイトのクラウドAIが代わりに答え、1人あたり1日の使用量が決まっています。もっと使うには自分のAPIキーを入れてください。", "无需密钥即可试用 Claude。由本站的云端 AI 代为回答，每个人每天有使用额度。想多用的话，请填入自己的 API 密钥。", "Você pode testar o Claude sem chave. A IA na nuvem do site responde por você e cada pessoa tem um limite diário. Para usar mais, coloque sua própria chave API.", "Claude можно попробовать без ключа. Облачный ИИ сайта отвечает за вас, у каждого есть дневной лимит. Чтобы пользоваться больше, введите свой ключ API.", "Claude’u anahtarsız deneyebilirsin. Sitenin bulut yapay zekâsı senin yerine yanıtlar ve herkesin günlük bir sınırı var. Daha fazlası için kendi API anahtarını gir.", "You can try Claude without a key. The site’s cloud AI answers for you, and everyone has a daily limit. To use more, add your own API key.", "You can try Claude without a key. The site’s cloud AI answers for you, and everyone has a daily limit. To use more, add your own API key.", "Puoi provare Claude senza chiave. L’IA cloud del sito risponde per te e ognuno ha un limite giornaliero. Per usarne di più, inserisci la tua chiave API.", "Możesz wypróbować Claude’a bez klucza. Chmurowa AI strony odpowiada za ciebie, a każdy ma dzienny limit. Aby używać więcej, wpisz własny klucz API.", "يمكنك تجربة Claude بدون مفتاح. يجيب الذكاء الاصطناعي السحابي للموقع نيابةً عنك، ولكل شخص حد يومي. لاستخدام المزيد، أدخل مفتاح API الخاص بك."],
+"남은 사용량을 불러오는 중…":["Loading remaining usage…", "Cargando el uso restante…", "Chargement de l’utilisation restante…", "Restnutzung wird geladen…", "残りの使用量を読み込み中…", "正在加载剩余额度…", "Carregando o uso restante…", "Загружаем остаток…", "Kalan kullanım yükleniyor…", "Loading remaining usage…", "Loading remaining usage…", "Caricamento dell’uso residuo…", "Wczytywanie pozostałego limitu…", "جارٍ تحميل الاستخدام المتبقي…"],
+"지금은 무료로 쓸 수 없어요. 내 API 키나 FF777을 써 주세요":["The free trial is unavailable right now. Use your own API key or FF777.", "La prueba gratuita no está disponible ahora. Usa tu propia clave API o FF777.", "L’essai gratuit n’est pas disponible pour l’instant. Utilise ta clé API ou FF777.", "Der Gratistest ist gerade nicht verfügbar. Nutze deinen eigenen API-Schlüssel oder FF777.", "今は無料で使えません。自分のAPIキーかFF777を使ってください。", "目前无法免费试用。请使用自己的 API 密钥或 FF777。", "O teste grátis não está disponível agora. Use sua chave API ou o FF777.", "Бесплатный режим сейчас недоступен. Используйте свой ключ API или FF777.", "Ücretsiz deneme şu an kullanılamıyor. Kendi API anahtarını veya FF777’yi kullan.", "The free trial is unavailable right now. Use your own API key or FF777.", "The free trial is unavailable right now. Use your own API key or FF777.", "La prova gratuita non è disponibile ora. Usa la tua chiave API o FF777.", "Darmowa wersja jest teraz niedostępna. Użyj własnego klucza API lub FF777.", "التجربة المجانية غير متاحة الآن. استخدم مفتاح API الخاص بك أو FF777."],
+"하루 사용량이 정해져 있어요":["There is a daily limit.", "Hay un límite diario.", "Il y a une limite quotidienne.", "Es gibt ein Tageslimit.", "1日の使用量が決まっています。", "每天有使用额度。", "Há um limite diário.", "Есть дневной лимит.", "Günlük bir sınır var.", "There is a daily limit.", "There is a daily limit.", "C’è un limite giornaliero.", "Obowiązuje dzienny limit.", "يوجد حد يومي."],
+"이번 달 남은 무료 사용량":["Free usage left this month", "Uso gratuito restante este mes", "Utilisation gratuite restante ce mois-ci", "Verbleibende Gratisnutzung diesen Monat", "今月の残りの無料使用量", "本月剩余免费额度", "Uso grátis restante neste mês", "Остаток бесплатного лимита за месяц", "Bu ay kalan ücretsiz kullanım", "Free usage left this month", "Free usage left this month", "Uso gratuito rimasto questo mese", "Pozostały darmowy limit w tym miesiącu", "المتبقي من الاستخدام المجاني هذا الشهر"],
+"오늘 내가 쓸 수 있는 양":["What I can use today", "Lo que puedo usar hoy", "Ce que je peux utiliser aujourd’hui", "Was ich heute nutzen kann", "今日使える量", "我今天可用的额度", "O que posso usar hoje", "Сколько мне доступно сегодня", "Bugün kullanabileceğim miktar", "What I can use today", "What I can use today", "Quanto posso usare oggi", "Ile mogę dziś wykorzystać", "المتاح لي اليوم"],
+"매일 오전 9시에 내 몫이 다시 채워져요":["Your share refills every day at 9 AM (Korea time)", "Tu parte se recarga cada día a las 9:00 (hora de Corea)", "Ta part se recharge chaque jour à 9 h (heure de Corée)", "Dein Anteil füllt sich täglich um 9 Uhr (koreanische Zeit) wieder auf", "毎日午前9時(韓国時間)に自分の分が補充されます", "每天上午 9 点（韩国时间）重新补满你的额度", "Sua cota é renovada todo dia às 9h (horário da Coreia)", "Ваша доля пополняется каждый день в 9:00 (по Корее)", "Payın her gün saat 09:00’da (Kore saati) yenilenir", "Your share refills every day at 9 AM (Korea time)", "Your share refills every day at 9 AM (Korea time)", "La tua quota si ricarica ogni giorno alle 9:00 (ora coreana)", "Twoja pula odnawia się codziennie o 9:00 (czas koreański)", "تُجدَّد حصتك كل يوم الساعة 9 صباحًا (بتوقيت كوريا)"],
+"오늘 무료 사용량을 다 썼어요. 내일 오전 9시에 다시 채워져요. 지금 쓰려면 내 API 키를 넣거나 FF777을 골라 주세요":["You have used today’s free share. It refills at 9 AM tomorrow (Korea time). To keep going now, add your own API key or pick FF777.", "Ya usaste tu parte gratuita de hoy. Se recarga mañana a las 9:00 (hora de Corea). Para seguir ahora, añade tu clave API o elige FF777.", "Tu as utilisé ta part gratuite du jour. Elle se recharge demain à 9 h (heure de Corée). Pour continuer, ajoute ta clé API ou choisis FF777.", "Du hast den heutigen Gratisanteil aufgebraucht. Er füllt sich morgen um 9 Uhr (koreanische Zeit) wieder auf. Um jetzt weiterzumachen, trag deinen API-Schlüssel ein oder wähle FF777.", "今日の無料分を使い切りました。明日の午前9時(韓国時間)に補充されます。今すぐ使うには自分のAPIキーを入れるかFF777を選んでください。", "今天的免费额度已用完，明天上午 9 点（韩国时间）补满。现在想继续，请填入自己的 API 密钥或选择 FF777。", "Você usou a cota grátis de hoje. Ela volta amanhã às 9h (horário da Coreia). Para continuar agora, coloque sua chave API ou escolha o FF777.", "Бесплатный лимит на сегодня исчерпан. Он пополнится завтра в 9:00 (по Корее). Чтобы продолжить сейчас, введите свой ключ API или выберите FF777.", "Bugünkü ücretsiz payını kullandın. Yarın 09:00’da (Kore saati) yenilenir. Hemen devam etmek için kendi API anahtarını gir veya FF777’yi seç.", "You have used today’s free share. It refills at 9 AM tomorrow (Korea time). To keep going now, add your own API key or pick FF777.", "You have used today’s free share. It refills at 9 AM tomorrow (Korea time). To keep going now, add your own API key or pick FF777.", "Hai usato la quota gratuita di oggi. Si ricarica domani alle 9:00 (ora coreana). Per continuare ora, inserisci la tua chiave API o scegli FF777.", "Wykorzystano dzisiejszy darmowy limit. Odnowi się jutro o 9:00 (czas koreański). Aby kontynuować teraz, wpisz własny klucz API lub wybierz FF777.", "استخدمت حصتك المجانية لليوم. تُجدَّد غدًا الساعة 9 صباحًا (بتوقيت كوريا). للمتابعة الآن، أدخل مفتاح API الخاص بك أو اختر FF777."],
+"이번 달 무료 사용량이 다 떨어졌어요. 내 API 키를 넣거나 FF777을 골라 주세요":["This month’s free usage has run out. Add your own API key or pick FF777.", "Se agotó el uso gratuito de este mes. Añade tu clave API o elige FF777.", "L’utilisation gratuite de ce mois est épuisée. Ajoute ta clé API ou choisis FF777.", "Die Gratisnutzung dieses Monats ist aufgebraucht. Trag deinen API-Schlüssel ein oder wähle FF777.", "今月の無料分がなくなりました。自分のAPIキーを入れるかFF777を選んでください。", "本月免费额度已用完。请填入自己的 API 密钥或选择 FF777。", "O uso grátis deste mês acabou. Coloque sua chave API ou escolha o FF777.", "Бесплатный лимит этого месяца исчерпан. Введите свой ключ API или выберите FF777.", "Bu ayın ücretsiz kullanımı bitti. Kendi API anahtarını gir veya FF777’yi seç.", "This month’s free usage has run out. Add your own API key or pick FF777.", "This month’s free usage has run out. Add your own API key or pick FF777.", "L’uso gratuito di questo mese è esaurito. Inserisci la tua chiave API o scegli FF777.", "Darmowy limit na ten miesiąc się skończył. Wpisz własny klucz API lub wybierz FF777.", "انتهى الاستخدام المجاني لهذا الشهر. أدخل مفتاح API الخاص بك أو اختر FF777."]
 });
 
-function load(){ var o=null; try{ o=JSON.parse(localStorage.getItem(LS)||'null'); }catch(e){} o=o&&typeof o==='object'?o:{}; o.keys=o.keys||{}; o.models=o.models||{}; if(!PROVIDERS[o.provider]) o.provider='local'; o.local=o.local||{}; o.preload=!!o.preload; return o; }
+function load(){ var o=null; try{ o=JSON.parse(localStorage.getItem(LS)||'null'); }catch(e){} o=o&&typeof o==='object'?o:{}; o.keys=o.keys||{}; o.models=o.models||{}; if(!PROVIDERS[o.provider]) o.provider='local'; o.local=o.local||{}; o.preload=!!o.preload; if(o.claudeFree===undefined) o.claudeFree=!o.keys.claude; return o; }
 function store(o){ try{ localStorage.setItem(LS,JSON.stringify(o)); }catch(e){} }
-function cfg(){ var o=load(), p=o.provider; var m=o.models[p]; if(!m||!PROVIDERS[p].models.some(function(x){return x[0]===m;})) m=p==='local'?'FF-Tools-4B':PROVIDERS[p].models[0][0]; return {provider:p, key:o.keys[p]||'', model:m, local:p==='local', localOk:p==='local'&&!!o.local[m]}; }
-function ready(){ var c=cfg(); return c.local?c.localOk&&gpuOk!==false:!!c.key; }
+function cfg(){ var o=load(), p=o.provider; var m=o.models[p]; if(!m||!PROVIDERS[p].models.some(function(x){return x[0]===m;})) m=p==='local'?'FF-Tools-4B':PROVIDERS[p].models[0][0]; var free=p==='claude'&&!!o.claudeFree; return {provider:p, key:free?'':o.keys[p]||'', model:m, local:p==='local', free:free, localOk:p==='local'&&!!o.local[m]}; }
+function ready(){ var c=cfg(); if(c.free) return true; return c.local?c.localOk&&gpuOk!==false:!!c.key; }
 function isLocal(){ return cfg().local; }
 function isTuned(){ var c=cfg(); return c.local&&/^FF-/.test(c.model); } // the Tools-trained models answer the short prompts in ai-prompts.js
 
@@ -175,16 +186,6 @@ function askGemini(c,o){
     .then(function(t){ if(!t) throw AIError(T('AI가 이 요청에는 답하지 않았어요'),'refusal'); return t; },streamErr);
   return post(base+':generateContent',h,body,o).then(function(res){ return res.json(); })
     .then(function(j){ var cand=j.candidates&&j.candidates[0]; if(!cand||!cand.content){ throw AIError(T('AI가 이 요청에는 답하지 않았어요'),'refusal'); } return parts(j); });
-}
-function askOpenAI(c,o){
-  var body={model:c.model, max_completion_tokens:o.maxTokens||16000, messages:(o.system?[{role:'system',content:o.system}]:[]).concat([{role:'user',content:o.prompt}])};
-  if(o.json) body.response_format={type:'json_object'};
-  var h={'Content-Type':'application/json','Authorization':'Bearer '+c.key};
-  if(o.onText){ body.stream=true; return post('https://api.openai.com/v1/chat/completions',h,body,o)
-    .then(function(res){ return sse(res,function(j){ var d=j.choices&&j.choices[0]&&j.choices[0].delta; return d&&d.content||''; },o); })
-    .then(function(t){ if(!t) throw AIError(T('AI가 이 요청에는 답하지 않았어요'),'refusal'); return t; },streamErr); }
-  return post('https://api.openai.com/v1/chat/completions',h,body,o).then(function(res){ return res.json(); })
-    .then(function(j){ var m=j.choices&&j.choices[0]&&j.choices[0].message; if(!m||m.refusal) throw AIError(T('AI가 이 요청에는 답하지 않았어요'),'refusal'); return m.content||''; });
 }
 /* ---------- built-in AI (WebLLM + WebGPU) ---------- */
 var gpuOk=null, f16=true, wlP=null, eng=null, engId='', engP=null, chain=Promise.resolve(), CTX=8192;
@@ -348,15 +349,21 @@ function withFacts(c,o){ // only for our own models, and only for free answers t
     var n={}; for(var k in o) n[k]=o[k]; n.system=(o.system?o.system+'\n\n':'')+text; return n;
   });
 }
-function send(c,o){ return c.local?askLocal(c,o):c.provider==='claude'?askClaude(c,o):c.provider==='openai'?askOpenAI(c,o):askGemini(c,o); }
+function send(c,o){ return c.local?askLocal(c,o):c.provider==='claude'?askClaude(c,o):askGemini(c,o); }
 /* ---------- cloud AI (Claude through the ff-ai Worker; the API key lives only there) ----------
    FFAI.cloud(task, o, fb): o is the same as for ask() (system, prompt, maxTokens, onText); fb = the options to use for ask() instead when the cloud cannot answer. The Worker only answers the tasks it lists
-   (code.explain, code.fix, code.write, score.draft, video.script, video.subs, lab.explain, lab.report, arena.judge, wrong.triage), has a
+   (code.explain, code.fix, code.write, score.draft, video.script, video.subs, lab.explain, lab.report, arena.judge, wrong.triage, docs.short, docs.write, sheet.ask, sheet.formula, sheet.table, sheet.graph, sheet.calc), has a
    daily limit per visitor and a spend cap; when it says no (limit, cap, network) the same request goes to the normal ask() (the AI the
    person picked in AI settings). Someone who put in their own API key in AI settings keeps using that key. */
 var CLOUD=window.FFAI_CLOUD_URL||'https://ff-ai.frenchfries777mc.workers.dev';
-var CLOUD_SOFT={rate:1,day:1,budget:1,busy:1,off:1,key:1,db:1,net:1,api:1,big:0};
+var useC=null, useT=0;   // how much of the free share is left (GET on the Worker), kept for a few seconds
+function usage(force){ if(!force&&useC&&Date.now()-useT<15000) return Promise.resolve(useC); return fetch(CLOUD).then(function(r){ return r.json(); }).then(function(j){ useC=j; useT=Date.now(); return j; },function(){ return null; }); }
+function freeErr(e){ if(!e||e.kind!=='quota') return e;
+  var m={day:'오늘 무료 사용량을 다 썼어요. 내일 오전 9시에 다시 채워져요. 지금 쓰려면 내 API 키를 넣거나 FF777을 골라 주세요',budget:'이번 달 무료 사용량이 다 떨어졌어요. 내 API 키를 넣거나 FF777을 골라 주세요',rate:'요청이 너무 많아요. 조금 뒤에 다시 해 주세요'}[e.code];
+  return AIError(T(m||'클라우드 AI를 지금 쓸 수 없어요'),'api'); }
+var CLOUD_SOFT={bad:1,rate:1,day:1,budget:1,busy:1,off:1,key:1,db:1,net:1,api:1,big:0};
 function askCloud(task,o){
+  useT=0;
   var ac=new AbortController(); stopNow=function(){ ac.abort(); };
   return fetch(CLOUD,{method:'POST',headers:{'content-type':'application/json'},signal:ac.signal,body:JSON.stringify({task:task,system:o.system||'',prompt:o.prompt,maxTokens:o.maxTokens||800})})
     .then(function(res){
@@ -374,12 +381,15 @@ function askCloud(task,o){
 }
 function cloud(task,o,fb){   // fb (optional): what to ask the normal AI instead, when the cloud says no (the cloud prompt may not suit a small model)
   var c=cfg(); if(!c.local&&c.key) return ask(fb||o);   // their own key: their choice
+  if(c.free) return askCloud(task,o).catch(function(e){ throw freeErr(e); });   // chose Claude's free trial: no other AI to fall back to
   return askCloud(task,o).then(function(t){ return t; },function(e){ if(e&&e.kind==='quota') return ask(fb||o); throw e; });
 }
 function ask(o){
   quiet=!!o.quiet;   // quiet: a page that hides which model answers (ai-chat/ arena) asks for no progress bar
   var c=cfg();
   if(o.model&&TUNED[o.model]) c={provider:'local', key:'', model:o.model, local:true, localOk:true}; // a page that lets people pick one of our models (ai-chat/) leaves the saved AI setting alone
+  if(c.free){ var fs=o.system||''; if(o.json) fs+=(fs?'\n':'')+'Reply with valid JSON only.';
+    return askCloud('free.ask',{system:fs,prompt:o.prompt,maxTokens:o.maxTokens,onText:o.onText}).catch(function(e){ throw freeErr(e); }); }
   if(c.local?!c.localOk:!c.key) return new Promise(function(res,rej){ settings(function(){ ask(o).then(res,rej); },function(){ rej(AIError(c.local?T('자체 AI를 쓰려면 AI 설정에서 저장을 눌러 주세요'):T('AI를 쓰려면 먼저 API 키를 넣어 주세요'),'nokey')); }); });
   var run=withFacts(c,o).then(function(o2){ return send(c,o2); });
   if(o.quiet) run.then(function(){ quiet=false; },function(){ quiet=false; });
@@ -408,7 +418,7 @@ var css='.ffai-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;d
 '.ffai-acts{display:flex;gap:8px;justify-content:flex-end;padding:12px 18px;border-top:1px solid var(--line,#222837);flex-wrap:wrap}'+
 '.ffai-pri{height:38px;padding:0 16px;border-radius:9px;border:0;background:linear-gradient(90deg,var(--fry,#ffc93c),var(--fry2,#ff8a3d));color:#1c1405;font:inherit;font-weight:700;cursor:pointer}'+
 '.ffai-chk{display:flex;align-items:center;gap:8px;margin-top:10px;color:var(--text,#eef0f5)!important;font-size:14px!important;cursor:pointer}.ffai-chk input{flex:none;width:20px;height:20px;padding:0}'+
-'.ffai-dang{color:#ff7b7b}.ffai-hide{display:none!important}'+
+'.ffai-use{display:flex;flex-direction:column;gap:9px;background:var(--panel2,#151925);border:1px solid var(--line,#222837);border-radius:10px;padding:10px 12px;margin-top:6px;font-size:13px}.ffai-use .ub{height:6px;border-radius:9px;background:var(--bg,#08090d);overflow:hidden;margin-top:5px}.ffai-use .ub i{display:block;height:100%;width:0;background:#3fe08f;transition:width .3s}.ffai-use .ub i.low{background:#ff7b7b}.ffai-use small{color:var(--dim,#8a93a6)}.ffai-seg.two button{font-weight:600;height:36px}.ffai-dang{color:#ff7b7b}.ffai-hide{display:none!important}'+
 '.ffai-prog{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:210;background:var(--panel,#10131b);color:var(--text,#eef0f5);border:1px solid var(--line,#222837);border-radius:12px;padding:10px 14px;display:none;flex-direction:column;gap:6px;width:min(320px,90vw);box-shadow:0 12px 40px rgba(0,0,0,.5);font-size:13px}'+
 '.ffai-prog.on{display:flex}.ffai-prog b{font-weight:600}.ffai-prog span{height:6px;border-radius:9px;background:var(--panel2,#151925);overflow:hidden}.ffai-prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--fry,#ffc93c),var(--fry2,#ff8a3d));transition:width .2s}';
 var ov=null, onOk=null, onCancel=null, cur=null;
@@ -418,18 +428,20 @@ function build(){
   addCSS();
   ov=el('<div class="ffai-ov" data-notr><div class="ffai-d" role="dialog" aria-modal="true"><div class="ffai-h"><h3></h3><button class="ffai-x" aria-label="">×</button></div>'+
     '<div class="ffai-b"><label class="l-p"></label><div class="ffai-seg"></div>'+
+    '<div class="ffai-seg two r-mode"><button class="mo-f"></button><button class="mo-k"></button></div><div class="ffai-use r-use"></div>'+
     '<label class="l-k"></label><div class="ffai-row r-k"><input type="password" class="k" autocomplete="off" spellcheck="false"><button class="ffai-sm show"></button></div>'+
-    '<div class="r-l"><a class="ffai-link" target="_blank" rel="noopener"></a><span class="ffai-free"></span></div>'+
-    '<label class="l-m"></label><div class="ffai-mrow"><img class="ffai-mi" alt="" width="34" height="34" hidden><select class="m"></select></div>'+
+        '<label class="l-m"></label><div class="ffai-mrow"><img class="ffai-mi" alt="" width="34" height="34" hidden><select class="m"></select></div>'+
     '<label class="ffai-chk r-pre"><input type="checkbox" class="pre"><span></span></label>'+
-    '<p class="ffai-note"></p><div class="ffai-msg"></div></div>'+
+    '<p class="ffai-note"></p><div class="r-l"><span class="ffai-lk"></span> <a class="ffai-link" target="_blank" rel="noopener"></a><span class="ffai-free"></span></div><div class="ffai-msg"></div></div>'+
     '<div class="ffai-acts"><button class="ffai-sm ffai-dang del"></button><button class="ffai-sm test"></button><button class="ffai-pri save"></button></div></div></div>');
   document.body.appendChild(ov);
   var q=function(s){ return ov.querySelector(s); };
   q('h3').textContent=T('AI 설정'); q('.ffai-x').setAttribute('aria-label',T('닫기')); q('.l-p').textContent=T('AI 회사'); q('.l-k').textContent=T('API 키'); q('.l-m').textContent=T('모델'); q('.r-pre span').textContent=T('열 때 미리 불러오기');
-  q('.show').textContent=T('보이기'); q('.ffai-note').textContent=T('키는 이 브라우저에만 저장되고, 이 사이트가 아니라 고른 AI 회사로만 바로 보내져요. 공용 컴퓨터에서는 다 쓴 뒤 키 지우기를 눌러 주세요.');
+  q('.show').textContent=T('보이기'); q('.mo-f').textContent=T('무료로 써보기'); q('.mo-k').textContent=T('내 API 키로 쓰기'); q('.ffai-note').textContent=T('키는 이 브라우저에만 저장되고, 이 사이트가 아니라 고른 AI 회사로만 바로 보내져요. 공용 컴퓨터에서는 다 쓴 뒤 키 지우기를 눌러 주세요.');
   q('.del').textContent=T('키 지우기'); q('.test').textContent=T('연결 확인'); q('.save').textContent=T('저장');
   Object.keys(PROVIDERS).forEach(function(p){ var b=document.createElement('button'); b.textContent=T(PROVIDERS[p].name); b.dataset.p=p; b.onclick=function(){ keep(); cur.provider=p; fill(); }; q('.ffai-seg').appendChild(b); });
+  q('.mo-f').onclick=function(){ keep(); cur.claudeFree=true; fill(); };
+  q('.mo-k').onclick=function(){ keep(); cur.claudeFree=false; fill(); };
   q('.show').onclick=function(){ var k=q('.k'); k.type=k.type==='password'?'text':'password'; };
   q('.ffai-x').onclick=cancel; // closes only with the X button, so a text drag that ends outside the window does not close it
   q('.del').onclick=function(){
@@ -438,30 +450,47 @@ function build(){
         .then(function(){ msg(T('이 기기에서 모델을 지웠어요'),'ok'); },function(){ msg(T('이 기기에서 모델을 지웠어요'),'ok'); }); return; }
     delete cur.keys[cur.provider]; q('.k').value=''; store(cur); msg('',''); };
   q('.test').onclick=function(){ keep(); var c={provider:cur.provider,key:cur.keys[cur.provider]||'',model:cur.models[cur.provider],local:cur.provider==='local'};
+    var fr=cur.provider==='claude'&&cur.claudeFree;
     if(c.local){ cur.local[c.model]=1; store(cur); }
-    else if(!c.key) return msg(T('키를 넣어 주세요'),'bad');
+    else if(!fr&&!c.key) return msg(T('키를 넣어 주세요'),'bad');
     msg(T('확인 중…'),'');
-    send(c,{prompt:'Reply with OK.',maxTokens:16}).then(function(){ msg(c.local?T('자체 AI가 준비됐어요'):T('연결됐어요'),'ok'); },function(e){ msg(e.message,'bad'); }); };
+    (fr?askCloud('free.ask',{prompt:'Reply with OK.',maxTokens:16}).catch(function(e){ throw freeErr(e); }):send(c,{prompt:'Reply with OK.',maxTokens:16})).then(function(){ msg(c.local?T('자체 AI가 준비됐어요'):T('연결됐어요'),'ok'); if(fr) paintUse(true); },function(e){ msg(e.message,'bad'); }); };
   q('.save').onclick=function(){ keep(); if(cur.provider==='local'){ if(TUNED[cur.models.local]&&!tunedOk[cur.models.local]) return msg(T('아직 준비 중인 모델이에요'),'bad'); if(gpuOk===false) return msg(T('이 기기나 브라우저에서는 자체 AI를 쓸 수 없어요. AI 설정에서 API 키를 넣어 주세요'),'bad'); cur.local[cur.models.local]=1; }
-    else if(!cur.keys[cur.provider]) return msg(T('키를 넣어 주세요'),'bad');
+    else if(!(cur.provider==='claude'&&cur.claudeFree)&&!cur.keys[cur.provider]) return msg(T('키를 넣어 주세요'),'bad');
     store(cur); close(); var f=onOk; onOk=onCancel=null; if(f) f(); };
 }
 function msg(t,k){ var m=ov.querySelector('.ffai-msg'); m.textContent=t; m.className='ffai-msg'+(k?' '+k:''); }
 function keep(){ var k=ov.querySelector('.k').value.trim(), m=ov.querySelector('.m').value; if(cur.provider!=='local'){ if(k) cur.keys[cur.provider]=k; else delete cur.keys[cur.provider]; } cur.models[cur.provider]=m; if(cur.provider==='local') cur.preload=ov.querySelector('.pre').checked; }
 function syncIco(){ var m=ov.querySelector('.m'), i=ov.querySelector('.ffai-mi'), u=cur.provider==='local'?icon(m.value):''; i.hidden=!u; if(u) i.src=u; }
+function paintUse(force){
+  var box=ov.querySelector('.r-use'); box.innerHTML='<small>'+T('남은 사용량을 불러오는 중…')+'</small>';
+  usage(force).then(function(j){
+    if(!ov||cur.provider!=='claude'||!cur.claudeFree) return;
+    if(!j||!j.on){ box.innerHTML='<small>'+T('지금은 무료로 쓸 수 없어요. 내 API 키나 FF777을 써 주세요')+'</small>'; return; }
+    if(!j.month){ box.innerHTML='<small>'+T('하루 사용량이 정해져 있어요')+'</small>'; return; }
+    var mp=Math.round(j.month.left*100), meP=Math.round((j.me?j.me.left:1)*100), left=Math.max(0,j.month.cap-j.month.spent);
+    var row=function(t,pc,extra){ return '<div><span>'+t+' <b>'+pc+'%</b>'+(extra?' <small>'+extra+'</small>':'')+'</span><div class="ub"><i class="'+(pc<=10?'low':'')+'" style="width:'+pc+'%"></i></div></div>'; };
+    box.innerHTML=row(T('이번 달 남은 무료 사용량'),mp,'$'+left.toFixed(2)+' / $'+j.month.cap)+row(T('오늘 내가 쓸 수 있는 양'),meP,'')+'<small>'+T('매일 오전 9시에 내 몫이 다시 채워져요')+'</small>';
+  });
+}
 function fill(){
   var p=PROVIDERS[cur.provider], q=function(s){ return ov.querySelector(s); };
   ov.querySelectorAll('.ffai-seg button').forEach(function(b){ b.classList.toggle('on',b.dataset.p===cur.provider); });
+  var isFree=cur.provider==='claude'&&!!cur.claudeFree;
   q('.k').value=cur.keys[cur.provider]||''; q('.k').placeholder=p.ph; q('.k').type='password';
-  var a=q('.ffai-link'); a.href=p.keyUrl; a.textContent=T('키 받는 곳')+' ↗'; q('.ffai-free').textContent=p.free?'· '+T('무료 키 가능'):'';
+  var a=q('.ffai-link'); a.href=p.keyUrl||'#'; a.textContent=(p.keyUrl||'').replace(/^https:\/\//,'')+' ↗'; q('.ffai-lk').textContent=T('API 키 받는 곳')+':'; q('.ffai-free').textContent=p.free?' · '+T('무료 키 가능'):'';
+  q('.r-mode').classList.toggle('ffai-hide',cur.provider!=='claude'); q('.mo-f').classList.toggle('on',isFree); q('.mo-k').classList.toggle('on',!isFree);
+  q('.r-use').classList.toggle('ffai-hide',!isFree); if(isFree) paintUse();
   q('.m').innerHTML=p.models.map(function(m){ return '<option value="'+m[0]+'">'+(p.local?T(m[1]):m[1])+(m[2]?' · '+T(m[2]):'')+'</option>'; }).join(''); q('.m').value=cur.models[cur.provider]||p.models[0][0]; if(q('.m').selectedIndex<0) q('.m').value=p.models[0][0];
   if(!q('.m')._sy){ q('.m')._sy=1; q('.m').addEventListener('change',syncIco); } syncIco();
-  ['.l-k','.r-k','.r-l'].forEach(function(s){ q(s).classList.toggle('ffai-hide',!!p.local); });
+  ['.l-k','.r-k','.r-l'].forEach(function(s){ q(s).classList.toggle('ffai-hide',!!p.local||isFree); });
+  ['.l-m','.ffai-mrow'].forEach(function(s){ q(s).classList.toggle('ffai-hide',isFree); });
   q('.r-pre').classList.toggle('ffai-hide',!p.local); q('.pre').checked=!!cur.preload;
   var one=function(){ var m=p.models.filter(function(x){ return x[0]===q('.m').value; })[0]; return m&&m[3]?T(m[3])+' ':''; };
+  if(isFree) q('.ffai-note').textContent=T('키 없이 Claude를 써 볼 수 있어요. 이 사이트의 클라우드 AI가 대신 답하고, 사람마다 하루 사용량이 정해져 있어요. 더 많이 쓰려면 내 API 키를 넣으세요.'); else
   q('.ffai-note').textContent=p.local?T('자체 AI는 이 기기 안에서 돌아가요. 처음 한 번 모델을 받아 저장하고, 그 뒤로는 키 없이 쓸 수 있어요. 큰 AI보다는 덜 똑똑해요. 더 잘하게 하려면 다른 회사를 골라 API 키를 넣으세요.'):one()+T('키는 이 브라우저에만 저장되고, 이 사이트가 아니라 고른 AI 회사로만 바로 보내져요. 공용 컴퓨터에서는 다 쓴 뒤 키 지우기를 눌러 주세요.');
-  if(!p.local) q('.m').onchange=function(){ q('.ffai-note').textContent=one()+T('키는 이 브라우저에만 저장되고, 이 사이트가 아니라 고른 AI 회사로만 바로 보내져요. 공용 컴퓨터에서는 다 쓴 뒤 키 지우기를 눌러 주세요.'); };
-  q('.del').textContent=p.local?T('모델 지우기'):T('키 지우기'); q('.test').textContent=p.local?T('지금 받아 두기'):T('연결 확인');
+  if(!p.local&&!isFree) q('.m').onchange=function(){ q('.ffai-note').textContent=one()+T('키는 이 브라우저에만 저장되고, 이 사이트가 아니라 고른 AI 회사로만 바로 보내져요. 공용 컴퓨터에서는 다 쓴 뒤 키 지우기를 눌러 주세요.'); };
+  q('.del').classList.toggle('ffai-hide',isFree); q('.del').textContent=p.local?T('모델 지우기'):T('키 지우기'); q('.test').textContent=p.local?T('지금 받아 두기'):T('연결 확인');
   msg('','');
   if(p.local){ Object.keys(TUNED).forEach(function(m){ var op=q('.m').querySelector('option[value="'+m+'"]');
       probeTuned(m).then(function(ok){ if(!ok&&op){ op.disabled=true; op.textContent+=' · '+T('준비 중'); } }); });

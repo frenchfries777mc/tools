@@ -3,6 +3,22 @@
  "name": "Fry Docs",
  "notes": [
   {
+   "date": "2026-11-12",
+   "build": "v22",
+   "title": "AI 글쓰기가 클라우드 AI로",
+   "items": [
+    "요약·이어 쓰기·고쳐 쓰기 같은 AI 기능이 클라우드 AI(Claude)로 더 정확해졌어요. 한도가 차면 고른 AI로 이어 가요"
+   ],
+   "tr": {
+    "en": {
+     "title": "AI writing uses the cloud AI",
+     "items": [
+      "AI features such as summarize, continue and rewrite are more accurate with the cloud AI (Claude); they continue with the chosen AI when the daily limit is used up"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-04",
    "build": "v21",
    "title": "쪽 경계 확실하게 보이기",

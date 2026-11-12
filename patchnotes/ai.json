@@ -4,6 +4,44 @@
  "notes": [
   {
    "date": "2026-11-12",
+   "build": "v73",
+   "title": "AI 설정을 Claude / FF777 / Gemini로 정리",
+   "items": [
+    "AI 설정 창이 Claude, FF777(tarius·lectus·premus), Gemini 세 가지로 바뀌었어요 (OpenAI는 뺐어요)",
+    "Claude는 키 없이 '무료로 써보기'로 쓸 수 있어요. 이번 달 남은 무료 사용량과 오늘 내가 쓸 수 있는 양이 보여요",
+    "사람마다 하루 사용량이 정해졌어요 (횟수와 비용 둘 다, 매일 오전 9시에 다시 채워져요)",
+    "API 키 받는 곳 링크를 창 아래쪽에 적었어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "AI settings are now Claude / FF777 / Gemini",
+     "items": [
+      "The AI settings window now has Claude, FF777 (tarius, lectus, premus) and Gemini (OpenAI was removed)",
+      "Claude can be tried for free without a key, and the window shows the free usage left this month and what you can still use today",
+      "Each person now has a daily limit (both number of requests and cost), refilled every day at 9 AM Korea time",
+      "The link to get an API key is now written at the bottom of the window"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-12",
+   "build": "v72",
+   "title": "클라우드 AI를 Docs·Sheet에도",
+   "items": [
+    "Fry Docs와 Fry Sheet의 AI 창도 클라우드 AI(Claude)를 먼저 써요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Cloud AI in Docs and Sheet too",
+     "items": [
+      "The AI features of Fry Docs and Fry Sheet also use the cloud AI (Claude) first"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-12",
    "build": "v71",
    "title": "클라우드 AI (Claude) 추가",
    "items": [
