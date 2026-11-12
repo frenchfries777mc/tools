@@ -111,11 +111,12 @@
     if (busy || !window.FFAI) { if (!window.FFAI) FS.toast('AI를 쓸 수 없어요'); return; }
     const q = (document.getElementById('aiQ').value || '').trim(), out = document.getElementById('aiOut'); if (!q) { FS.toast('어떤 멜로디인지 써 주세요'); return; }
     const S = A.score, pi = curPi(), P = S.parts[pi]; busy = true; out.textContent = '만드는 중이에요…';
-    const sys = 'You write short melodies in a compact text notation. Reply with ONLY the notation, no explanation, no markdown. Tokens are separated by spaces. A token is a note name A-G, optional # or b, octave digit, then /duration where 1=whole 2=half 4=quarter 8=eighth 16=sixteenth, optional . for dotted. Example: C4/4 E4 G4/2 R/4 D4/8 E4/8 F4/4. R is a rest. Omitted octave or duration repeats the previous one. Use ' + (P.clef === 'bass' ? 'octaves 2 to 3' : 'octaves 4 to 5') + '. Time signature is ' + S.ts[0] + '/' + S.ts[1] + '; each bar must total exactly ' + S.ts[0] + ' beats of 1/' + S.ts[1] + ' notes. Write 8 bars. Start and end on the tonic.';
-    window.FFAI.ask({ system: sys, prompt: q, maxTokens: 600 }).then((t) => {
-      const evs = FS.parseText(String(t || '').replace(/```[a-z]*/gi, '').replace(/\n/g, ' '), P.clef);
+    const sys = window.FFC ? window.FFC.scoreSys(P.clef, S.ts, 8) : 'You write short melodies in a compact text notation. Reply with ONLY the notation, no explanation, no markdown. Tokens are separated by spaces. A token is a note name A-G, optional # or b, octave digit, then /duration where 1=whole 2=half 4=quarter 8=eighth 16=sixteenth, optional . for dotted. Example: C4/4 E4 G4/2 R/4 D4/8 E4/8 F4/4. R is a rest. Omitted octave or duration repeats the previous one. Use ' + (P.clef === 'bass' ? 'octaves 2 to 3' : 'octaves 4 to 5') + '. Time signature is ' + S.ts[0] + '/' + S.ts[1] + '; each bar must total exactly ' + S.ts[0] + ' beats of 1/' + S.ts[1] + ' notes. Write 8 bars. Start and end on the tonic.';
+    (window.FFC ? window.FFAI.cloud('score.draft', { system: sys, prompt: q, maxTokens: 900 }) : window.FFAI.ask({ system: sys, prompt: q, maxTokens: 600 })).then((t) => {
+      const sp = window.FFC ? window.FFC.splitScore(t) : { notes: String(t || '').replace(/```[a-z]*/gi, '').replace(/\n/g, ' '), chords: '' };
+      const evs = FS.parseText(sp.notes, P.clef);
       if (!evs.length) { out.textContent = 'AI 답을 악보로 바꾸지 못했어요. 다른 말로 다시 시켜 보세요.'; return; }
-      writeEvents(A.score, pi, evs, true); UI.commit(evs.length + '개 음표를 이어 붙였어요'); FS.toast(evs.length + '개 음표를 이어 붙였어요');
+      writeEvents(A.score, pi, evs, true); UI.commit(evs.length + '개 음표를 이어 붙였어요'); FS.toast(evs.length + '개 음표를 이어 붙였어요'); if (sp.chords) { const o2 = document.getElementById('aiOut'); if (o2) o2.textContent = '코드 진행 추천: ' + sp.chords; }
     }).catch((e) => { out.textContent = (e && e.message) || 'AI를 쓸 수 없어요. 설정에서 AI를 골라 주세요.'; }).then(() => { busy = false; });
   }
 

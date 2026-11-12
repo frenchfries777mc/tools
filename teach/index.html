@@ -145,6 +145,7 @@ li .who{display:inline-block; font-size:11px; border:1px solid var(--line); bord
     <div id="scores"></div>
     <h2>틀렸다고 눌린 답</h2>
     <p class="hint" style="margin:-4px 0 10px">이 기기에서 누른 것과, 로그인한 사람이 누른 것(서버)이 같이 보여요. 서버에 있는 것은 자동으로 모여서 학습 자료를 만들 때 제가 읽고, 진짜 틀린 것은 학습에 넣고 처리한 것은 서버에서 지워요.</p>
+    <div class="row" style="margin-bottom:10px"><button class="btn ghost" id="triBtn" type="button">✨ AI로 분류하기</button><span class="msg" id="triMsg"></span></div>
     <ul id="wrongList"></ul>
     <p class="msg" id="wrongEmpty" hidden>아직 없어요.</p>
     <h2>가르친 내용</h2>
@@ -152,6 +153,8 @@ li .who{display:inline-block; font-size:11px; border:1px solid var(--line); bord
     <p class="msg" id="empty" hidden>아직 없어요.</p>
   </div>
 </main>
+<script src="../ai.js?v=ai37.l26"></script>
+<script src="../ai-cloud.js"></script>
 <script src="scores.js?v=1"></script>
 <script src="https://frenchfries777.com/games/ff-auth.js?v=20261107h"></script>
 <script>
@@ -177,6 +180,21 @@ function wrongServer(){
 function wrongDrop(k){
   if(k.charAt(0)==='s'&&/^s\d+$/.test(k)){ var id=k.slice(1); serverWrong=serverWrong.filter(function(e){ return String(e.sid)!==id; }); if(pendingWrong===k) pendingWrong=null; renderWrong(); sb.from('ff_ai_wrong').delete().eq('id',id).then(function(){},function(){}); return; }
   var a=wrongRead().filter(function(e){ return wkey(e)!==k; }); try{ localStorage.setItem(WLS,JSON.stringify(a)); }catch(e){} if(pendingWrong===k) pendingWrong=null; renderWrong(); }
+/* AI 분류: 새로 쌓인 틀렸어요를 클라우드 Claude가 갈래(사실·말투·딴소리·반복…)와 처방(학습 자료·프롬프트·더 큰 모델)으로 나눠 한 줄로 적어요. 결과는 이 브라우저에만 남아요 */
+var TLS='ffai.triage.v1', TRI_CAT={fact:'사실이 틀려요',tone:'말투나 형식이 이상해요',offtopic:'질문과 상관없는 답이에요',repeat:'같은 말을 반복해요',format:'형식 문제',unclear:'알 수 없음'}, TRI_FIX={data:'학습 자료로',prompt:'프롬프트 고치기',model:'더 큰 모델 필요',none:'조치 없음'};
+function triRead(){ var o={}; try{ o=JSON.parse(localStorage.getItem(TLS)||'{}')||{}; }catch(e){} return o; }
+function wrongAll(){ var loc=wrongRead(), seenK={}; loc.forEach(function(e){ seenK[e.q+'|'+e.a+'|'+e.fix]=1; }); return loc.concat(serverWrong.filter(function(e){ return !seenK[e.q+'|'+e.a+'|'+e.fix]; })).sort(function(x,y){ return String(y.t).localeCompare(String(x.t)); }); }
+function triRun(){
+  var m=$('triMsg'), tri=triRead(), todo=wrongAll().filter(function(e){ return !tri[wkey(e)]; }).slice(0,30);
+  if(!todo.length){ m.textContent=T('새로 분류할 게 없어요'); return; }
+  if(!window.FFAI||!FFAI.cloudAsk||!window.FFC){ m.textContent=T('AI를 쓸 수 없어요'); return; }
+  $('triBtn').disabled=true; m.textContent=T('AI가 읽는 중…');
+  FFAI.cloudAsk('wrong.triage',{system:FFC.triageSys, prompt:FFC.triagePrompt(todo), maxTokens:2400}).then(function(t){
+    var j=FFAI.parseJSON(t), n=0; (j.items||[]).forEach(function(x){ var e=todo[(+x.n)-1]; if(!e) return; tri[wkey(e)]={cat:String(x.cat||'').slice(0,12),fix:String(x.fix||'').slice(0,8),sum:String(x.sum||'').slice(0,120)}; n++; });
+    try{ localStorage.setItem(TLS,JSON.stringify(tri)); }catch(e){} m.textContent=F('{0}개를 분류했어요',n); renderWrong(); },
+    function(e){ m.textContent=(e&&e.message)||T('AI가 답하지 못했어요'); }).then(function(){ $('triBtn').disabled=false; });
+}
+$('triBtn').onclick=triRun;
 function renderWrong(){
   var ul=$('wrongList'), loc=wrongRead(), seenK={}; ul.innerHTML='';
   loc.forEach(function(e){ seenK[e.q+'|'+e.a+'|'+e.fix]=1; });
@@ -189,6 +207,7 @@ function renderWrong(){
     if(e.a) line('wa',T('AI 답')+': '+String(e.a).slice(0,400));
     if(e.why) line('meta',T('이유')+': '+T(({fact:'사실이 틀려요',tone:'말투나 형식이 이상해요',offtopic:'질문과 상관없는 답이에요',repeat:'같은 말을 반복해요'})[e.why]||e.why));
     if(e.fix) line('fx',T('맞는 답')+': '+e.fix);
+    var tr=triRead()[k]; if(tr) line('meta','🤖 '+[T(TRI_CAT[tr.cat]||tr.cat),T(TRI_FIX[tr.fix]||tr.fix),tr.sum].filter(Boolean).join(' · '));
     line('meta',[e.tool,e.model,String(e.t||'').slice(0,16).replace('T',' ')].filter(Boolean).join(' · '));
     var add=document.createElement('button'); add.className='btn ghost'; add.type='button'; add.textContent=T('가르치기에 추가');
     add.onclick=function(){ $('q').value=e.q||''; $('a').value=e.fix||''; pendingWrong=k; say(''); $('form').scrollIntoView({behavior:'smooth',block:'center'}); $('a').focus(); };

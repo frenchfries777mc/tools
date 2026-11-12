@@ -3,6 +3,22 @@
  "name": "Fry Score",
  "notes": [
   {
+   "date": "2026-11-12",
+   "build": "v37",
+   "title": "AI 멜로디 부탁하기: 코드 진행 추천",
+   "items": [
+    "AI 멜로디가 더 음악적으로 나오고, 어울리는 코드 진행도 알려 줘요"
+   ],
+   "tr": {
+    "en": {
+     "title": "AI melody: chord progression",
+     "items": [
+      "AI melodies sound more musical and come with a suggested chord progression"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-06",
    "build": "v36",
    "title": "Fry Score: 그림 아이콘 도구 모음",

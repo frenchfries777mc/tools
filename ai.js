@@ -349,6 +349,33 @@ function withFacts(c,o){ // only for our own models, and only for free answers t
   });
 }
 function send(c,o){ return c.local?askLocal(c,o):c.provider==='claude'?askClaude(c,o):c.provider==='openai'?askOpenAI(c,o):askGemini(c,o); }
+/* ---------- cloud AI (Claude through the ff-ai Worker; the API key lives only there) ----------
+   FFAI.cloud(task, o, fb): o is the same as for ask() (system, prompt, maxTokens, onText); fb = the options to use for ask() instead when the cloud cannot answer. The Worker only answers the tasks it lists
+   (code.explain, code.fix, code.write, score.draft, video.script, video.subs, lab.explain, lab.report, arena.judge, wrong.triage), has a
+   daily limit per visitor and a spend cap; when it says no (limit, cap, network) the same request goes to the normal ask() (the AI the
+   person picked in AI settings). Someone who put in their own API key in AI settings keeps using that key. */
+var CLOUD=window.FFAI_CLOUD_URL||'https://ff-ai.frenchfries777mc.workers.dev';
+var CLOUD_SOFT={rate:1,day:1,budget:1,busy:1,off:1,key:1,db:1,net:1,api:1,big:0};
+function askCloud(task,o){
+  var ac=new AbortController(); stopNow=function(){ ac.abort(); };
+  return fetch(CLOUD,{method:'POST',headers:{'content-type':'application/json'},signal:ac.signal,body:JSON.stringify({task:task,system:o.system||'',prompt:o.prompt,maxTokens:o.maxTokens||800})})
+    .then(function(res){
+      if(!res.ok) return res.json().catch(function(){ return {}; }).then(function(j){ var e=AIError(T('클라우드 AI를 지금 쓸 수 없어요'),CLOUD_SOFT[j.error]?'quota':'api'); e.code=j.error; throw e; });
+      var out='', rd=res.body.getReader(), dec=new TextDecoder(), buf='';
+      function step(){ return rd.read().then(function(r){
+        if(r.done) return out;
+        buf+=dec.decode(r.value,{stream:true}); var lines=buf.split('\n'); buf=lines.pop();
+        lines.forEach(function(l){ if(l.indexOf('data:')!==0) return; var j; try{ j=JSON.parse(l.slice(5).trim()); }catch(e){ return; }
+          if(j.t){ out+=j.t; if(o.onText) o.onText(out); }
+          else if(j.err){ if(j.err==='refusal') throw AIError(T('AI가 이 요청에는 답하지 않았어요'),'refusal'); var e=AIError(T('클라우드 AI를 지금 쓸 수 없어요'),out?'api':'quota'); e.code=j.err; throw e; } });
+        return step(); }); }
+      return step();
+    },function(e){ if(e&&e.name==='AbortError') throw AIError(T('멈췄어요'),'stop'); if(e&&e.kind) throw e; throw AIError(T('AI에 연결하지 못했어요'),'quota'); });
+}
+function cloud(task,o,fb){   // fb (optional): what to ask the normal AI instead, when the cloud says no (the cloud prompt may not suit a small model)
+  var c=cfg(); if(!c.local&&c.key) return ask(fb||o);   // their own key: their choice
+  return askCloud(task,o).then(function(t){ return t; },function(e){ if(e&&e.kind==='quota') return ask(fb||o); throw e; });
+}
 function ask(o){
   quiet=!!o.quiet;   // quiet: a page that hides which model answers (ai-chat/ arena) asks for no progress bar
   var c=cfg();
@@ -459,5 +486,5 @@ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded'
 function stop(){ if(stopNow){ var f=stopNow; stopNow=null; try{ f(); }catch(e){} } }
 var ICOS={'FF-Tools-1.7B':'tarius','FF-Tools-4B':'lectus','FF-Tools-8B':'premus','FF-Tools-1.7B-J20':'tarius','FF-Tools-4B-J20':'lectus'};
 function icon(id){ return ICOS[id]?BASE+'icons/ai/'+ICOS[id]+'.svg':''; }
-window.FFAI={icon:icon, models:function(){ return PROVIDERS.local.models.map(function(m){ return {id:m[0], name:m[1], size:m[2], note:m[3]}; }); }, chatModels:function(){ var by={}; PROVIDERS.local.models.forEach(function(m){ by[m[0]]=m; }); return [['FF-Tools-1.7B-J20','FF777 2.0 tarius',by['FF-Tools-1.7B'][2]],['FF-Tools-4B-J20','FF777 2.0 lectus',by['FF-Tools-4B'][2]],['FF-Tools-8B',by['FF-Tools-8B'][1],by['FF-Tools-8B'][2]]].map(function(m){ return {id:m[0], name:m[1], size:m[2]}; }); }, tunedReady:probeTuned, gpu:function(){ return gpuOk==null?checkGPU():Promise.resolve(gpuOk); }, facts:facts, ready:ready, load:function(m){ return engine(m).then(function(){ return true; },function(){ return false; }); }, isLocal:isLocal, isTuned:isTuned, model:function(){ return cfg().model; }, stop:stop, settings:settings, ask:ask, parseJSON:parseJSON, config:cfg};
+window.FFAI={icon:icon, models:function(){ return PROVIDERS.local.models.map(function(m){ return {id:m[0], name:m[1], size:m[2], note:m[3]}; }); }, chatModels:function(){ var by={}; PROVIDERS.local.models.forEach(function(m){ by[m[0]]=m; }); return [['FF-Tools-1.7B-J20','FF777 2.0 tarius',by['FF-Tools-1.7B'][2]],['FF-Tools-4B-J20','FF777 2.0 lectus',by['FF-Tools-4B'][2]],['FF-Tools-8B',by['FF-Tools-8B'][1],by['FF-Tools-8B'][2]]].map(function(m){ return {id:m[0], name:m[1], size:m[2]}; }); }, tunedReady:probeTuned, gpu:function(){ return gpuOk==null?checkGPU():Promise.resolve(gpuOk); }, facts:facts, ready:ready, load:function(m){ return engine(m).then(function(){ return true; },function(){ return false; }); }, isLocal:isLocal, isTuned:isTuned, model:function(){ return cfg().model; }, stop:stop, settings:settings, ask:ask, cloud:cloud, cloudAsk:askCloud, parseJSON:parseJSON, config:cfg};
 })();
