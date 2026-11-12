@@ -3,6 +3,26 @@
  "name": "자체 AI (FF777)",
  "notes": [
   {
+   "date": "2026-11-12",
+   "build": "v71",
+   "title": "클라우드 AI (Claude) 추가",
+   "items": [
+    "Fry Code·Score·Video·Lab에서 클라우드 AI(Claude)를 먼저 쓰고, 하루 한도가 차거나 연결이 안 되면 고른 AI로 이어 가요",
+    "AI 대결장에서 투표가 끝나면 Claude 심판 의견이 붙어요",
+    "개발자 페이지(teach)에서 틀렸어요를 AI로 분류해요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Cloud AI (Claude) added",
+     "items": [
+      "Fry Code, Score, Video and Lab use the cloud AI (Claude) first, and continue with the chosen AI when the daily limit is used up or there is no connection",
+      "In the AI arena, a Claude judge opinion appears after you vote",
+      "The developer page (teach) sorts \"wrong\" reports with AI"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-10",
    "build": "v70",
    "title": "lectus 2.2",

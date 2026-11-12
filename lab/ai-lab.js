@@ -27,6 +27,7 @@ function data(max){ var e=LAB.cur, R=LAB.rows; if(!R.length) return ''; var rows
   return '\nRecorded data'+(R.length>rows.length?' (last '+rows.length+' of '+R.length+' rows)':'')+', columns: '+head+'\n'+rows.map(function(r){ return r.map(function(v,i){ return v==null?'-':LAB.H.fmt(v,e.cols[i].d); }).join(', '); }).join('\n')
     +(LAB.fit?'\nLeast-squares line on the graph: slope '+(+LAB.fit.m.toPrecision(4))+', intercept '+(+LAB.fit.b.toPrecision(4))+', R^2 '+LAB.fit.r2.toFixed(4):''); }
 function system(){ return FFP.labSys(LANG[FFT.lang]||'English',local()); }
+function cloudPrompt(q){ var info=''; try{ info=LAB.cur.ai(); }catch(er){} return FFP.labPrompt(info,data(40),q); }
 function prompt(q){ var e=LAB.cur, sm=local(), info='';
   try{ info=e.ai(); }catch(er){}
   var p=FFP.labPrompt(info,sm?data(6):data(40),q);
@@ -49,7 +50,8 @@ function ask(q){
   q=String(q||'').trim(); if(!q){ $('aiQ').focus(); return; } if(busy||!window.FFAI||!LAB.cur) return;
   if(mode==='set') return runSet(q); if(mode==='find') return runFind(q);
   stopped=false; setBusy(true); var out=$('aiOut'); out.hidden=false; out.innerHTML='<span class="wait"><span class="spin"></span></span>'; out.querySelector('.wait').appendChild(document.createTextNode(T('AI가 생각하는 중…')));
-  FFAI.ask({system:system(), prompt:prompt(q), facts:true, prose:true, question:q, maxTokens:local()?600:1400, onText:function(t){ if(!stopped) render(t); }})
+  var base={system:system(), prompt:prompt(q), facts:true, prose:true, question:q, maxTokens:local()?600:1400, onText:function(t){ if(!stopped) render(t); }};
+  (window.FFC&&FFAI.cloud?FFAI.cloud('lab.explain',{system:FFC.labExplainSys(LANG[FFT.lang]||'English'), prompt:cloudPrompt(q), maxTokens:900, onText:base.onText},base):FFAI.ask(base))
     .then(function(t){ if(!stopped) render(t||''); if(!String(t||'').trim()) out.textContent=T('AI가 답하지 않았어요'); else if(!stopped&&window.FFWrong) FFWrong.attach(out,{tool:'Fry Lab',question:q,answer:t}); },
       function(e){ if(e&&e.kind==='stop'||stopped){ if(!out.textContent.trim()||out.querySelector('.wait')) out.textContent=T('멈췄어요'); return; }
         if(e&&e.kind==='nokey'){ out.hidden=true; return; } out.textContent=(e&&e.message)||T('AI에 연결하지 못했어요'); })

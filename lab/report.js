@@ -79,7 +79,20 @@ function openReport(opener){
           fill(o); st.textContent=T('AI가 쓴 초안을 넣었어요. 숫자와 내용을 꼭 확인하고 고쳐 쓰세요'); },
         function(e){ fill(bak); st.textContent=e&&e.kind==='stop'?T('멈췄어요. 쓰던 글은 원래대로 돌려놨어요'):e&&e.kind==='nokey'?T('AI 설정이 없어요. 기본 양식은 그대로 쓸 수 있어요'):(e&&e.message)||T('AI에 연결하지 못했어요'); })
       .then(function(){ busyAI=false; ai.disabled=tpl.disabled=false; stop.hidden=true; }); };
-  row.appendChild(tpl); row.appendChild(ai); row.appendChild(stop);
+  var fb=btn('✨ AI 첨삭','aib',null), fbOut=el('div','aiNote'); fbOut.style.whiteSpace='pre-wrap'; fbOut.hidden=true; fbOut.setAttribute('data-notr','');
+  fb.onclick=function(){
+    if(!window.FFAI||!FFAI.cloud||!window.FFC||!LAB.cur){ st.textContent=T('AI를 쓸 수 없어요'); return; }
+    var tx=texts(), all=['purpose','method','result','conclusion'].map(function(k){ return tx[k].trim(); }).join('');
+    if(all.length<20){ st.textContent=T('보고서 글을 조금 쓴 다음에 눌러 주세요'); return; }
+    var info=''; try{ info=LAB.cur.ai(); }catch(e){}
+    var pr='Experiment: '+info+'\n\nTitle: '+ti.value.trim()+'\n\n'+KEYS.map(function(k){ return k[0]+':\n'+tx[k[0]].slice(0,1500); }).join('\n\n');
+    var o={system:FFC.labReportSys(FFC.langName((window.FFT&&FFT.lang)||'ko')), prompt:pr, maxTokens:700, onText:function(t){ fbOut.hidden=false; fbOut.textContent=t; }};
+    busyAI=true; fb.disabled=ai.disabled=tpl.disabled=true; stop.hidden=false; st.textContent=T('AI가 보고서를 읽는 중…');
+    FFAI.cloud('lab.report',o).then(function(t){ fbOut.hidden=false; fbOut.textContent=String(t||'').trim(); st.textContent=T('첨삭은 참고만 하고, 고치는 건 내가 정해요'); },
+      function(e){ st.textContent=e&&e.kind==='stop'?T('멈췄어요'):(e&&e.message)||T('AI에 연결하지 못했어요'); })
+      .then(function(){ busyAI=false; fb.disabled=ai.disabled=tpl.disabled=false; stop.hidden=true; }); };
+  stop.onclick=function(){ try{ FFAI.stop(); }catch(e){} };
+  row.appendChild(tpl); row.appendChild(ai); row.appendChild(fb); row.appendChild(stop); body.appendChild(fbOut);
   body.appendChild(el('p','aiNote',T('AI 초안은 틀릴 수 있어요. 기록한 숫자와 맞는지 확인한 뒤 내 말로 고쳐 쓰세요.')));
   box.appendChild(body);
   var foot=el('div','repFoot'); function doc(){ return reportHTML(ti.value.trim()||T('실험 보고서'),texts()); }
