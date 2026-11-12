@@ -3,6 +3,24 @@
  "name": "Fry Code",
  "notes": [
   {
+   "date": "2026-11-12",
+   "build": "v39",
+   "title": "AI 도우미: 설명·고쳐 줘·만들어 줘",
+   "items": [
+    "결과 칸 아래 '✨ AI 도우미'에서 코드 설명, 오류 고치기, 말로 코드 만들기를 할 수 있어요",
+    "고친 코드와 만든 코드는 '적용'을 눌러야 들어가요"
+   ],
+   "tr": {
+    "en": {
+     "title": "AI helper: explain, fix, write",
+     "items": [
+      "Under the result pane, \"✨ AI 도우미\" can explain code, fix errors and write code from a description",
+      "Fixed or new code goes into the file only after you press apply"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-06",
    "build": "v38",
    "title": "BeaconScript 구조물 (define structure, build)",

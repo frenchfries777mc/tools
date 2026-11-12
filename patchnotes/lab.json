@@ -3,6 +3,22 @@
  "name": "Fry Lab",
  "notes": [
   {
+   "date": "2026-11-12",
+   "build": "v28",
+   "title": "AI 해설과 보고서 첨삭",
+   "items": [
+    "AI 도우미 해설이 더 정확해지고, 보고서 창에 '✨ AI 첨삭'이 생겼어요 (잘한 점, 고칠 점, 다음에 해 볼 질문)"
+   ],
+   "tr": {
+    "en": {
+     "title": "Better AI explanations and report feedback",
+     "items": [
+      "AI helper explanations are better, and the report window has \"✨ AI 첨삭\" (what went well, what to improve, a next question)"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-10-25",
    "build": "v27",
    "title": "학년 로고",

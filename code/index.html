@@ -174,6 +174,13 @@ html[data-ff-theme=light] .files input,html[data-ff-theme=light] .dsearch input,
 html[data-ff-theme=light] .dcats button.on{color:#7a5a00; background:#fbf3d9;}
 html[data-ff-theme=light] .aci.on{background:#fbf3d9;}
 html[data-ff-theme=light] #toast{background:#222; color:#fff;}
+
+.aibody{padding:0 10px 10px; display:flex; flex-direction:column; gap:8px;}
+#aiAsk{display:block; width:100%; min-height:46px; max-height:110px; resize:vertical; background:var(--code); border:1px solid var(--line); border-radius:8px; padding:8px 10px; font:13px/1.5 inherit; color:var(--text);}
+#aiAsk:focus{outline:none; border-color:var(--fry);}
+.aibtns{display:flex; flex-wrap:wrap; gap:6px; align-items:center;} .aibtns small{color:var(--dim); font-size:12px;}
+#aiOut{max-height:200px; overflow:auto; white-space:pre-wrap; word-break:break-word; font-size:13px; line-height:1.55; background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:8px 10px;}
+html[data-ff-theme=light] #aiAsk{background:#fff; color:#111;}
 </style>
 <link rel="stylesheet" href="../ff-rich-app.css?v=2">
 <style id="richApp">
@@ -215,6 +222,11 @@ html[data-ff-theme] #langMenu button.on{background:var(--fry)!important;color:va
     <div id="wd" hidden></div>
     <div id="st" hidden></div>
     <details class="stdin" id="stdinBox"><summary><b>입력값</b> · input()에 한 줄씩 차례로 들어가요</summary><textarea id="stdin" spellcheck="false" data-notr placeholder="예: 철수&#10;12"></textarea></details>
+    <details class="stdin" id="aiBox"><summary><b>✨ AI 도우미</b> · 코드 설명, 고치기, 만들어 주기</summary>
+      <div class="aibody"><textarea id="aiAsk" spellcheck="false" data-notr placeholder="무엇을 만들거나 고칠지 적어요 (설명만 들을 땐 비워 둬요)"></textarea>
+        <div class="aibtns"><button class="tbtn" id="aiExplain" type="button">코드 설명</button><button class="tbtn" id="aiFix" type="button">고쳐 줘</button><button class="tbtn" id="aiWrite" type="button">만들어 줘</button><button class="tbtn stop" id="aiStop" type="button" hidden>멈추기</button></div>
+        <div id="aiOut" data-notr hidden></div>
+        <div class="aibtns" id="aiApplyRow" hidden><button class="tbtn pri" id="aiApply" type="button"></button><small>AI는 틀릴 수 있어요. 적용한 다음 실행해서 확인하세요.</small></div></div></details>
   </section>
 </div>
 <div class="menu" id="exMenu"></div>
@@ -241,8 +253,9 @@ html[data-ff-theme] #langMenu button.on{background:var(--fry)!important;color:va
 </div></div>
 <input type="file" id="openFile" accept=".py,.js,.mjs,.java,.html,.htm,.json,.bs,.txt" hidden>
 <div id="toast" role="status"></div>
-<script src="../ai.js?v=ai36.l26"></script>
+<script src="../ai.js?v=ai37.l26"></script>
 <script src="../ai-prompts.js"></script>
+<script src="../ai-cloud.js"></script>
 <script src="../versions.js?v=1"></script>
 <script src="../usage.js?v=4"></script>
 <script src="../undotoast.js"></script>

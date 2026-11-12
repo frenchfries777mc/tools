@@ -3,6 +3,22 @@
  "name": "Fry Video",
  "notes": [
   {
+   "date": "2026-11-12",
+   "build": "v33",
+   "title": "AI 대본 만들기·자막 번역",
+   "items": [
+    "프로젝트 탭 '✨ AI 대본·자막 번역': 주제를 쓰면 장면별 대본을, 지금 자막은 고른 언어로 번역해서 '자막 한꺼번에 넣기' 칸에 시간과 함께 넣어 줘요"
+   ],
+   "tr": {
+    "en": {
+     "title": "AI script and subtitle translation",
+     "items": [
+      "Project tab \"✨ AI 대본·자막 번역\": write a topic to get a scene-by-scene script, or translate the current subtitles; the result goes into the bulk subtitle box with times"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-06",
    "build": "v32",
    "title": "장면 전환 6가지 더·한꺼번에 넣기",

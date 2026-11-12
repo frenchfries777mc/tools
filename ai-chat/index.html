@@ -267,6 +267,7 @@ html[data-ff-theme] .dlg .acts .btn,html[data-ff-theme] .dlg .btn{border-radius:
     <form class="in" id="arForm"><textarea id="arQ" rows="1" maxlength="300" placeholder="두 모델에게 물어볼 질문"></textarea><button class="btn" id="arGo" type="submit">대결!</button></form>
     <div class="acards" id="acards" hidden><div class="ac" id="acL" role="button" tabindex="-1"><h3></h3><div class="atx" data-notr></div></div><div class="ac" id="acR" role="button" tabindex="-1"><h3></h3><div class="atx" data-notr></div></div></div>
     <div class="ares" id="ares" data-notr></div>
+    <div class="ares" id="arJudge" data-notr hidden></div>
     <div class="arrank" id="arRank" data-notr hidden></div>
     <p class="hint">모델을 번갈아 불러와서 처음에는 시간이 걸려요. 결과는 이 기기에 남고, 로그인했다면 개발자에게도 전해져요.</p>
   </section>
@@ -284,7 +285,8 @@ html[data-ff-theme] .dlg .acts .btn,html[data-ff-theme] .dlg .btn{border-radius:
   <p class="hint" id="loginHint" hidden>로그인한 상태로 틀렸어요를 누르면 질문과 답이 개발자에게도 전해져요.</p>
 </main>
 <script src="../ai-prompts.js"></script>
-<script src="../ai.js?v=ai36.l26"></script>
+<script src="../ai-cloud.js"></script>
+<script src="../ai.js?v=ai37.l26"></script>
 <script src="../ai-wrong.js?v=4.l13"></script>
 <script src="vote.js?v=2"></script>
 <script src="memo.js?v=1"></script>
@@ -596,6 +598,15 @@ function arPick(side){   // 답변 창을 눌러 고르면 그때서야 두 모�
   $(side==='l'?'acL':'acR').classList.add('win');
   var tl=FFArena.tally(), line=[arSide.l,arSide.r].map(function(id){ var x=tl[id]||{win:0,lose:0,tie:0,none:0,games:0}; return mName(id)+' '+F('{0}승 {1}무 {2}패',x.win,x.tie,x.lose)+' ('+F('{0}판',x.games)+')'; }).join(' · ');
   $('ares').textContent=T('투표 고마워요! 이 기기에서의 전적')+': '+line; setTimeout(arRankFill,1500);
+  arJudge({l:arSide.l, r:arSide.r, q:arSide.q, lt:arSide.lt, rt:arSide.rt});
+}
+/* 투표가 끝난 다음에만 Claude 심판 의견을 붙여요 (모델을 숨기는 투표에는 영향이 없어요). 한도가 차면 조용히 건너뛰어요 */
+function arJudge(s){
+  var d=$('arJudge'); if(!d) return; d.hidden=true; d.textContent='';
+  if(!window.FFAI||!FFAI.cloudAsk||!window.FFC||!s.lt||!s.rt) return;
+  FFAI.cloudAsk('arena.judge',{system:FFC.judgeSys, prompt:FFC.judgePrompt(s.q,[s.lt,s.rt]), maxTokens:300}).then(function(t){
+    var j=FFAI.parseJSON(t), sc=j&&j.scores||{}, a=+sc.A, b=+sc.B; if(!(a>=0)||!(b>=0)) return;
+    d.textContent='Claude 심판: '+mName(s.l)+' '+a+'점 · '+mName(s.r)+' '+b+'점'+(j.note?' — '+String(j.note).slice(0,120):''); d.hidden=false; },function(){});
 }
 [['acL','l'],['acR','r']].forEach(function(x){ var c=$(x[0]); c.onclick=function(){ arPick(x[1]); }; c.onkeydown=function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); arPick(x[1]); } }; });
 

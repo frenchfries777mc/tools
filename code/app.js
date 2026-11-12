@@ -461,6 +461,37 @@ if(curLang==='python'){ sys(T('▶ 실행(Ctrl+Enter)을 누르면 여기에 결
   $('findBtn').onclick=function(){ if(fb.hidden) open(); else close(); };
   document.addEventListener('keydown',function(e){ if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&!e.altKey&&e.key.toLowerCase()==='f'){ e.preventDefault(); open(); } else if(e.key==='F3'&&!fb.hidden){ e.preventDefault(); go(e.shiftKey?-1:1); } },true);
 })();
+/* ---------- AI 도우미: 코드 설명 · 고쳐 줘 · 만들어 줘 (클라우드 Claude, 안 되면 고른 AI로) ---------- */
+(function(){
+  if(!window.FFAI||!window.FFC||!FFAI.cloud) { var bx=$('aiBox'); if(bx) bx.hidden=true; return; }
+  var box=$('aiBox'), aout=$('aiOut'), row=$('aiApplyRow'), apply=$('aiApply'), ask=$('aiAsk'), stopB=$('aiStop'), busy=false, got=null;
+  function lang(){ var l=(window.FFT&&FFT.lang)||'ko'; return FFC.langName(l); }
+  function show(t){ aout.hidden=false; aout.textContent=t; aout.scrollTop=aout.scrollHeight; }
+  function setBusy(b){ busy=b; ['aiExplain','aiFix','aiWrite'].forEach(function(id){ $(id).disabled=b; }); stopB.hidden=!b; }
+  function visibleOutput(){ if(lastErr&&lastErr.error&&curLang==='python') return String(lastErr.error).slice(-1500); return (out.textContent||'').slice(-1500); }
+  function run(task,sys,prompt,mode){
+    if(busy) return; if(curLang==='beaconscript'){ toast('BeaconScript는 AI가 아직 잘 몰라요'); return; }
+    got=null; row.hidden=true; setBusy(true); show(T('AI가 읽는 중…'));
+    FFAI.cloud(task,{system:sys,prompt:prompt,maxTokens:task==='code.explain'?700:3000,onText:function(t){ show(mode==='explain'?t:FFC.splitCode(t).rest||t.slice(0,400)); }})
+      .then(function(t){
+        if(mode==='explain'){ show(String(t||'').trim()); return; }
+        var r=FFC.splitCode(t);
+        if(!r.code||r.open){ show(r.open?T('코드가 너무 길어서 끝까지 만들지 못했어요. 더 짧게 부탁해 보세요.'):(String(t||'').trim()||T('AI가 답하지 못했어요'))); return; }
+        got={code:r.code,mode:mode}; show(r.rest||T('만들었어요'));
+        apply.textContent=mode==='fix'?T('고친 코드로 바꾸기'):T('코드에 넣기'); row.hidden=false; },
+        function(e){ if(e&&e.kind==='stop') show(T('■ 멈췄어요')); else show((e&&e.message)||T('AI가 답하지 못했어요')); })
+      .then(function(){ setBusy(false); }); }
+  $('aiExplain').onclick=function(){ var c=code.value; if(!c.trim()){ toast('설명할 코드가 없어요'); return; } var L=LG().name;
+    run('code.explain',FFC.codeExplainSys(lang(),L),FFC.codePrompt(L,c.slice(0,20000),'',ask.value.trim()),'explain'); };
+  $('aiFix').onclick=function(){ var c=code.value; if(!c.trim()){ toast('고칠 코드가 없어요'); return; } var L=LG().name;
+    run('code.fix',FFC.codeFixSys(lang(),L),FFC.codePrompt(L,c.slice(0,20000),visibleOutput(),ask.value.trim()),'fix'); };
+  $('aiWrite').onclick=function(){ var q=ask.value.trim(); if(!q){ toast('만들 내용을 적어 주세요'); ask.focus(); return; } var L=LG().name;
+    run('code.write',FFC.codeWriteSys(lang(),L),FFC.codeWritePrompt(L,q,code.value.length<6000?code.value:''),'write'); };
+  stopB.onclick=function(){ FFAI.stop(); };
+  apply.onclick=function(){ if(!got) return; var c=got.code; code.focus();
+    if(got.mode==='fix'){ code.select(); ins(c); } else if(!code.value.trim()){ ins(c); } else { ins('\n'+c+'\n'); }
+    errLine=0; paint(); saveNow(); row.hidden=true; got=null; toast('적용했어요. ▶ 실행을 눌러 확인하세요'); };
+})();
 window.addEventListener('pagehide',saveNow);
 document.addEventListener('visibilitychange',function(){ if(document.hidden) saveNow(); });
 })();
