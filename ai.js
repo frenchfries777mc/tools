@@ -351,11 +351,11 @@ function withFacts(c,o){ // only for our own models, and only for free answers t
 function send(c,o){ return c.local?askLocal(c,o):c.provider==='claude'?askClaude(c,o):c.provider==='openai'?askOpenAI(c,o):askGemini(c,o); }
 /* ---------- cloud AI (Claude through the ff-ai Worker; the API key lives only there) ----------
    FFAI.cloud(task, o, fb): o is the same as for ask() (system, prompt, maxTokens, onText); fb = the options to use for ask() instead when the cloud cannot answer. The Worker only answers the tasks it lists
-   (code.explain, code.fix, code.write, score.draft, video.script, video.subs, lab.explain, lab.report, arena.judge, wrong.triage), has a
+   (code.explain, code.fix, code.write, score.draft, video.script, video.subs, lab.explain, lab.report, arena.judge, wrong.triage, docs.short, docs.write, sheet.ask, sheet.formula, sheet.table, sheet.graph, sheet.calc), has a
    daily limit per visitor and a spend cap; when it says no (limit, cap, network) the same request goes to the normal ask() (the AI the
    person picked in AI settings). Someone who put in their own API key in AI settings keeps using that key. */
 var CLOUD=window.FFAI_CLOUD_URL||'https://ff-ai.frenchfries777mc.workers.dev';
-var CLOUD_SOFT={rate:1,day:1,budget:1,busy:1,off:1,key:1,db:1,net:1,api:1,big:0};
+var CLOUD_SOFT={bad:1,rate:1,day:1,budget:1,busy:1,off:1,key:1,db:1,net:1,api:1,big:0};
 function askCloud(task,o){
   var ac=new AbortController(); stopNow=function(){ ac.abort(); };
   return fetch(CLOUD,{method:'POST',headers:{'content-type':'application/json'},signal:ac.signal,body:JSON.stringify({task:task,system:o.system||'',prompt:o.prompt,maxTokens:o.maxTokens||800})})

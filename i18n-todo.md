@@ -61,3 +61,4 @@ draw/app.js | 글자 휘기·어울리는 색·색 뽑기 한국어 문구 | dra
 draw/app.js | 버전 저장·시작 틀 한국어 문구 | draw v25 | 2026-11-06
 score/app.js | Fry Score v36 한국어 메시지·버튼 | score v36 | 2026-11-06
 code/index.html·app.js, score/js/text.js, video/app.js, lab/report.js, ai-chat/index.html, teach/index.html, ai.js | 클라우드 AI 문구 (AI 도우미·고쳐 줘·만들어 줘·대본 만들기·자막 번역·AI 첨삭·Claude 심판·AI로 분류하기·클라우드 AI를 지금 쓸 수 없어요 등) | python v39, score v37, video v33, lab v28, ai v71 | 2026-11-12
+docs/app.js, sheet/ai-sheet.js | 클라우드 AI 연결 문구는 새로 없음 (패치노트 항목만 en) | docs v22, sheet v47, ai v72 | 2026-11-12

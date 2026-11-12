@@ -629,7 +629,8 @@ function runAI(task){ closeMenus(); if(!window.FFAI){ toast('AI를 불러오지 
 function goAI(task,src,prompt){ var t=TASKS[task], job=++aiJob; aiRange=src.range; aiSt=aiStyle(aiRange); aiTask=task; aiText='';
   $('aiTitle').textContent=T(t.title); $('aiOut').textContent=T('AI가 쓰는 중…'); $('aiRep').disabled=true; $('aiBelow').disabled=true; $('aiStop').hidden=false;
   $('aiRep').hidden=!!t.norep||task==='cont'; openDlg('aiDlg');
-  FFAI.ask({system:t.sys, prompt:prompt, prose:true, maxTokens:/^(sum|title|ask)$/.test(task)?300:900, onText:function(s){ if(job===aiJob){ aiText=s; $('aiOut').textContent=s; } }})
+  var ao={system:t.sys, prompt:prompt, prose:true, maxTokens:/^(sum|title|ask)$/.test(task)?300:900, onText:function(s){ if(job===aiJob){ aiText=s; $('aiOut').textContent=s; } }};
+  (FFAI.cloud?FFAI.cloud(/^(sum|title|ask)$/.test(task)?'docs.short':'docs.write',ao):FFAI.ask(ao))
     .then(function(s){ if(job!==aiJob) return; aiJob=0; aiText=String(s||aiText).replace(/^\s*["“]|["”]\s*$/g,'').trim(); $('aiOut').textContent=aiText||T('AI가 아무것도 쓰지 않았어요'); $('aiStop').hidden=true; $('aiRep').disabled=$('aiBelow').disabled=!aiText; },
       function(e){ if(job!==aiJob) return; aiJob=0; $('aiStop').hidden=true; $('aiOut').textContent=(e&&e.message)||T('AI가 답하지 못했어요'); if(aiText){ $('aiRep').disabled=$('aiBelow').disabled=false; } }); }
 $('aiQOk').onclick=function(){ var q=$('aiQ').value.trim(); if(!q){ $('aiQ').focus(); return; } closeDlg('aiQDlg'); var t=TASKS[aiQTask], src=aiSource();
