@@ -123,6 +123,8 @@ function translateFormula(q,a){ // a request to translate a cell is =AI("<langua
   var josa=/[가-힣]/.test(lang.slice(-1))&&((lang.charCodeAt(lang.length-1)-0xAC00)%28===0)?'로':'으로';
   return {f:'=AI("'+lang+josa+' 번역", '+ref+')'};
 }
+/* cloud AI first (Claude through the ff-ai Worker), the AI chosen in AI settings when the cloud cannot answer; cloud: options for the cloud (optional), o: for the normal AI */
+function askC(task,o,cloud){ return FFAI.cloud?FFAI.cloud(task,cloud||o,o):FFAI.ask(o); }
 function fnList(){ return (window.FNDOC||[]).map(function(f){ return f[1]; }).filter(function(n){ return n!=='AI'; }).join(', '); }
 function go(){
   var q=$('aiQ').value.trim(); if(!q) return $('aiQ').focus();
@@ -130,7 +132,7 @@ function go(){
   if(mode==='calc') return calcGo(q,A.act());
   busy(true); out(''); $('aiActs').innerHTML=''; wrongFor(); rec=null;
   var t=mode==='table'?null:tableText(), a=A.act(), lang=FFT.lang||'ko', p;
-  if(mode==='ask') p=FFAI.ask({onText:liveOut, facts:true, prose:true, question:q, system:FFP.askSys, prompt:FFP.askPrompt(t&&t.text,q)})
+  if(mode==='ask') p=askC('sheet.ask',{onText:liveOut, facts:true, prose:true, question:q, system:FFP.askSys, prompt:FFP.askPrompt(t&&t.text,q)},{onText:liveOut, prose:true, maxTokens:900, system:FFP.askSys, prompt:FFP.askPrompt(t&&t.text,q)})
     .then(function(r){ lastAnswer=r.trim(); out('<div class="aiAns">'+esc(lastAnswer).replace(/\n/g,'<br>')+'</div>');
       $('aiActs').innerHTML='<button class="tbtn" id="aiPut">'+T('답을 칸에 넣기')+'</button>';
       $('aiPut').onclick=function(){ var g=t?t.g:null, r0=g?g.r2+2:a.r, c0=g?g.c1:a.c; A.pushUndo(); lastAnswer.split('\n').forEach(function(l,i){ A.setRaw(r0+i,c0,l); }); A.markAI(r0,c0,r0+lastAnswer.split('\n').length-1,c0); A.changed(); A.select(r0,c0); close(); }; });
@@ -139,8 +141,9 @@ function go(){
     if(tr){ busy(false); lastFormula=tr.f; out('<code class="aiF">'+esc(tr.f)+'</code><div class="aiEx">'+esc(T('번역은 수식 함수가 없어서 AI() 함수로 해요. 칸마다 AI가 번역해서 채워요.'))+'</div>');
       $('aiActs').innerHTML='<button class="tbtn pri" id="aiPut">'+F('{0}에 넣기',E.addr(a.r,a.c))+'</button>';
       $('aiPut').onclick=function(){ A.pushUndo(); A.setRaw(a.r,a.c,lastFormula); A.markAI(a.r,a.c,a.r,a.c); A.changed(); close(); }; wrongFor('sheet-formula',q,lastFormula); return; }
-    p=FFAI.ask({onText:liveOut, json:true, system:FFAI.isTuned()?FFP.formulaSys:FFP.formulaSys+' Use only these functions: '+fnList()+'. For translating, summarizing or classifying text use =AI("instruction", cell). If no formula can do the request, reply {"formula":"","explain":"why not, in one short sentence"}.',
-      prompt:FFP.formulaPrompt(t&&t.text,E.addr(a.r,a.c),q)})
+    var fo={onText:liveOut, json:true, system:FFAI.isTuned()?FFP.formulaSys:FFP.formulaSys+' Use only these functions: '+fnList()+'. For translating, summarizing or classifying text use =AI("instruction", cell). If no formula can do the request, reply {"formula":"","explain":"why not, in one short sentence"}.',
+      prompt:FFP.formulaPrompt(t&&t.text,E.addr(a.r,a.c),q)};
+    p=askC('sheet.formula',fo,{onText:liveOut, json:true, maxTokens:500, system:FFP.formulaSys+' Use only these functions: '+fnList()+'. For translating, summarizing or classifying text use =AI("instruction", cell). If no formula can do the request, reply {"formula":"","explain":"why not, in one short sentence"}.', prompt:fo.prompt})
     .then(function(r){ var j=FFAI.parseJSON(r), f=String(j.formula||'').trim(); if(f&&f[0]!=='=') f='='+f;
       if(!f){ if(j.explain){ lastFormula=''; out('<div class="aiEx">'+esc(T('수식으로는 만들 수 없는 요청이에요.')+' '+j.explain)+'</div>'); $('aiActs').innerHTML=''; return; } throw new Error(T('AI 답을 읽지 못했어요')); }
       try{ E.parse(f.slice(1)); }catch(e){ throw new Error(T('AI가 만든 수식에 오류가 있어요')+': '+f); }
@@ -153,13 +156,13 @@ function go(){
   }
   else if(mode==='graph'){
     if(!t){ busy(false); out('<div class="aiErr">'+esc(T('그래프로 만들 표를 먼저 고르세요'))+'</div>'); return; }
-    p=FFAI.ask({onText:liveOut, json:true, system:FFP.graphSys, prompt:FFP.graphPrompt(t.text,q)})
+    p=askC('sheet.graph',{onText:liveOut, json:true, system:FFP.graphSys, prompt:FFP.graphPrompt(t.text,q)},{onText:liveOut, json:true, maxTokens:500, system:FFP.graphSys, prompt:FFP.graphPrompt(t.text,q)})
     .then(function(r){ var ch=chartFrom(FFAI.parseJSON(r),t.g); lastChart=ch;
       out('<div class="aiChart"><canvas></canvas></div><div class="aiEx">'+esc(chartLabel(ch))+'</div>'); A.drawChart($('aiOut').querySelector('canvas'),ch);
       $('aiActs').innerHTML='<button class="tbtn pri" id="aiPut">'+T('차트 넣기')+'</button>';
       $('aiPut').onclick=function(){ A.pushUndo(); A.sheet.charts.push(lastChart); A.saveSoon(); close(); A.openDrawer(); }; });
   }
-  else p=FFAI.ask({onText:liveOut, json:true, system:FFP.tableSys, prompt:FFP.tablePrompt(q)})
+  else p=askC('sheet.table',{onText:liveOut, json:true, system:FFP.tableSys, prompt:FFP.tablePrompt(q)},{onText:liveOut, json:true, maxTokens:2400, system:FFP.tableSys, prompt:FFP.tablePrompt(q)})
     .then(function(r){ var j=FFAI.parseJSON(r), rows=Array.isArray(j)?j:j.rows; if(!Array.isArray(rows)||!rows.length) throw new Error(T('AI 답을 읽지 못했어요'));
       rows=rows.slice(0,60).map(function(row){ return (Array.isArray(row)?row:[row]).slice(0,12).map(function(v){ return v==null?'':String(v).replace(/[\t\n]/g,' '); }); });
       lastTable=rows; var w=Math.max.apply(null,rows.map(function(x){ return x.length; }));
@@ -203,7 +206,7 @@ function calcGo(q,a){
   }
   var unit=FSCalc.hasUnit(q);
   function once(retry){
-    return FFAI.ask(unit?{json:true, maxTokens:200, system:FFP.unitSys, prompt:FFP.unitPrompt(q)+(retry?FFP.calcRetry:'')}
+    return askC('sheet.calc',unit?{json:true, maxTokens:200, system:FFP.unitSys, prompt:FFP.unitPrompt(q)+(retry?FFP.calcRetry:'')}
                        :{json:true, maxTokens:300, system:FFP.calcSys, prompt:FFP.calcPrompt(colsText(),q)+(retry?FFP.calcRetry:'')})
       .then(function(r){ var f=calcRead(r,unit); return f||retry?f:once(true); });
   }
