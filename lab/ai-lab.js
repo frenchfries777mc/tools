@@ -120,7 +120,7 @@ function draft(onPart){ if(busy||!window.FFAI||!LAB.cur) return Promise.reject({
   busy=true; stopped=false; return FFAI.ask({system:draftSystem(), prompt:draftPrompt(), prose:true, question:T('실험 보고서 초안을 써 줘'), maxTokens:local()?600:1400, onText:function(t){ if(onPart&&!stopped) onPart(parseDraft(t)); }})
     .then(function(t){ busy=false; var o=parseDraft(String(t||'')); o.raw=String(t||''); return o; }, function(e){ busy=false; throw e; }); }
 MODES.forEach(function(m){ var b=document.createElement('button'); b.type='button'; b.textContent=T(m[1]); b.dataset.m=m[0]; b.setAttribute('aria-pressed',String(m[0]==='ask')); b.classList.toggle('on',m[0]==='ask'); b.onclick=function(){ setMode(m[0]); }; $('aiMode').appendChild(b); });
-function note(){ $('aiNote').textContent=local()?T('기기 안에서 도는 자체 AI는 작아서 짧게 답해요. 더 자세한 설명이 필요하면 AI 설정에서 Claude, Gemini, OpenAI 키를 넣어 보세요.'):''; }
+function note(){ $('aiNote').textContent=local()?T('기기 안에서 도는 자체 AI는 작아서 짧게 답해요. 더 자세한 설명이 필요하면 AI 설정에서 Claude, Gemini 키를 넣어 보세요.'):''; }
 function open(){ var p=$('aiPanel'); p.classList.add('open'); p.setAttribute('data-open','1'); $('aiBtn').classList.add('on'); drawCtx(); note(); setTimeout(function(){ if(window.innerWidth>600) $('aiQ').focus(); },230); }
 function close(){ var p=$('aiPanel'); p.classList.remove('open'); p.setAttribute('data-open','0'); $('aiBtn').classList.remove('on'); }
 CHIPS.forEach(function(c){ var b=document.createElement('button'), full=T(c[1]); b.textContent=T(c[0]); b.title=full; b.onclick=function(){ $('aiQ').value=full; ask(full); }; $('aiChips').appendChild(b); });
