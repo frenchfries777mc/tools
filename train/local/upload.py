@@ -18,7 +18,7 @@ token = os.environ.get("HF_TOKEN") or input("Hugging Face Write 토큰(hf_로 �
 api = HfApi(token=token)
 user = api.whoami()["name"]
 repo = "%s/FF-Tools-%s-merged%s" % (user, SIZE[model], "-" + version if version in ("1.5", "1.6", "1.7") else "")
-api.create_repo(repo, private=True, exist_ok=True)
+api.create_repo(repo, private=False, exist_ok=True)
 print("올리는 곳:", repo, "(비공개)")
 api.upload_folder(folder_path=folder, repo_id=repo, repo_type="model", commit_message="FF777 %s %s" % (version, model))
 print("올림 끝:", repo)

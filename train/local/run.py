@@ -339,7 +339,7 @@ class HFSync(TrainerCallback):   # every 200 steps (about 35 minutes)
     def on_save(self, args, state, control, **kw):
         if state.global_step % 200: return control
         try:
-            _api.create_repo(CKPT_REPO, private=True, exist_ok=True)
+            _api.create_repo(CKPT_REPO, private=False, exist_ok=True)
             _api.upload_folder(folder_path=os.path.join(args.output_dir, f"checkpoint-{state.global_step}"), repo_id=CKPT_REPO, path_in_repo="last", delete_patterns="*", commit_message=f"step {state.global_step}")
             print("중간 진행을 Hugging Face에 올렸어요: 걸음", state.global_step)
         except Exception as e:
@@ -363,7 +363,7 @@ model.save_pretrained_merged("merged", tokenizer, save_method="merged_16bit")
 from huggingface_hub import HfApi
 api = HfApi(token=HF_TOKEN); user = api.whoami()["name"]
 rid = f"{user}/FF-Tools-{CFG['size']}-merged" + ("-" + VERSION if VERSION in ("1.5", "1.6", "1.7", "1.8", "1.9", "2.0") else "") + OUT_TAG   # 1.5 and 1.6 go to their own repos, so 1.4 stays as a fallback
-api.create_repo(rid, private=True, exist_ok=True)
+api.create_repo(rid, private=False, exist_ok=True)
 api.upload_folder(folder_path="merged", repo_id=rid, commit_message="Tools fine-tune")
 print("올렸어요:", rid)
 try: api.delete_repo(CKPT_REPO)   # the temporary checkpoint copy is not needed any more
