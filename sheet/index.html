@@ -23,7 +23,7 @@ html,body{margin:0; height:100%; background:var(--bg); color:var(--text); oversc
 body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif; font-size:14px; display:flex; flex-direction:column; height:100vh; height:100dvh; overflow:hidden;
   padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0); -webkit-tap-highlight-color:transparent;}
 button,input,select{font:inherit; color:inherit;}
-.top{display:flex; align-items:center; gap:10px; padding:8px 12px; border-bottom:1px solid var(--line); background:var(--panel);}
+.top{display:flex; align-items:center; flex-wrap:wrap; gap:10px; row-gap:6px; padding:8px 12px; border-bottom:1px solid var(--line); background:var(--panel);}
 .home{display:grid; place-items:center; width:34px; height:34px; border-radius:9px; background:linear-gradient(135deg,var(--fry),var(--fry2)); text-decoration:none; font-size:18px; flex:0 0 auto;}
 .brand{font-family:'Oswald',sans-serif; font-weight:700; font-size:18px; letter-spacing:.04em; white-space:nowrap;}
 .brand b{color:var(--fry);}
