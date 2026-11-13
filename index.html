@@ -135,14 +135,14 @@ FFT.add({
   html{background-image:radial-gradient(ellipse 900px 520px at 10% -10%, rgba(217,180,95,.10), transparent 60%), radial-gradient(ellipse 800px 600px at 110% 30%, rgba(63,224,143,.07), transparent 60%), radial-gradient(ellipse 800px 600px at -10% 90%, rgba(61,127,224,.12), transparent 60%);
   background-attachment:fixed;}
   .wrap{max-width:1120px; margin:0 auto; padding:0 22px;}
-  header{display:flex; align-items:center; justify-content:space-between; padding:26px 0 0;}
+  header{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; row-gap:10px; padding:26px 0 0;}
   .logo{display:flex; align-items:center; gap:10px; font-family:'Oswald',sans-serif; font-weight:600; font-size:20px; letter-spacing:.04em; color:var(--text); text-decoration:none;}
   .logo .fry{width:34px; height:34px; border-radius:9px; display:grid; place-items:center; font-size:20px; background:linear-gradient(135deg,var(--fry),var(--fry2)); box-shadow:0 6px 18px rgba(255,160,60,.25);}
   .logo img.lg{width:36px; height:36px; display:block; flex:0 0 auto; border-radius:10px; filter:drop-shadow(0 6px 14px rgba(255,160,60,.25));}
   .logo b{color:var(--fry); font-weight:700;}
   header nav a{color:var(--dim); text-decoration:none; font-size:15px; margin-left:18px;}
   header nav a:hover{color:var(--text);}
-  header .right{display:flex; align-items:center;}
+  header .right{display:flex; align-items:center; margin-left:auto;}
   .tb{display:inline-flex; align-items:center; gap:2px; margin-left:16px; padding:3px; background:var(--panel); border:1px solid var(--line); border-radius:12px; vertical-align:middle;}
   .tb [data-ff-account] .ffa-wrap{margin-left:0; display:inline-flex; align-items:center; gap:2px;}
   .tb .ffa-set,.tb .ffa-bell,.tb .ffa-vote,.tb .ffa-chip{background:transparent!important; border:0!important; margin:0!important; border-radius:9px!important; padding:6px 10px!important;}
@@ -173,6 +173,7 @@ FFT.add({
   .sw a:hover{color:var(--text);}
   .sw a.on{background:linear-gradient(90deg,var(--fry),var(--fry2)); color:#1c1405;}
   @media(max-width:520px){ header{flex-wrap:wrap;} .swr{order:3; flex:1 0 100%; margin:14px 0 0;} }
+  @media(max-width:440px){ .sw a{padding:4px 8px; font-size:12.5px; letter-spacing:.03em;} }
   .hero{padding:58px 0 34px;}
   .hero .eyebrow{display:inline-block; font-size:13px; font-weight:700; letter-spacing:.14em; color:var(--fry); text-transform:uppercase;}
   .hero h1{font-family:'Oswald','Noto Sans KR',sans-serif; font-weight:700; font-size:clamp(40px,7vw,76px); line-height:1.02; margin:10px 0 0; text-transform:uppercase; letter-spacing:.01em;}
@@ -223,6 +224,7 @@ FFT.add({
   @media(prefers-reduced-motion:reduce){ .game.rv{opacity:1; transform:none;} .game.in.tilt:hover{transform:translateY(-4px);} }
   .hero-lg{order:2; flex:0 0 auto; width:clamp(150px,21vw,230px); height:auto; filter:drop-shadow(0 18px 50px rgba(255,150,40,.28)); transform:rotate(4deg);}
   @media(max-width:640px){ .hero{flex-direction:column; align-items:flex-start; gap:12px;} .hero-lg{order:0; width:92px; transform:none;} }
+  @media(max-width:400px){ .hero .hero-t{max-width:100%;} .hero h1{font-size:9.6vw;} }
   .hero p{color:var(--dim); font-size:18px; margin:16px 0 0; max-width:46ch;}
   .games{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; padding-bottom:20px;}   /* 한 줄에 3개 */
   @media(max-width:980px){ .games{grid-template-columns:repeat(2,minmax(0,1fr));} }
