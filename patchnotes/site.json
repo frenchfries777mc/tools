@@ -4,6 +4,32 @@
  "notes": [
   {
    "date": "2026-11-13",
+   "build": "v65",
+   "title": "모든 프로그램에서 같이 고치기",
+   "items": [
+    "Fry Code, Block HTML, Fry Draw, Fry Score, Fry Lab에도 같이 고치기를 넣었어요. 위쪽 「같이 고치기」 버튼으로 방을 만들고, 6자리 코드나 링크로 들어가요 (한 방에 8명까지)",
+    "Fry Code는 글자 단위로 합쳐요. 한 파일을 두 사람이 동시에 다른 곳에 써도 둘 다 남아요. Block HTML은 스크립트 단위, Fry Draw는 도형 단위, Fry Score는 마디 단위로 합쳐요",
+    "Fry Lab은 지금 열린 실험의 값과 기록 표를 같이 써요 (실험 화면의 움직임은 각자 따로 돌아요)",
+    "같이 고치는 동안에는 방의 파일·프로젝트·그림만 열려 있어요. 다른 사람이 고치면 되돌리기 기록은 새로 시작돼요",
+    "방장은 몇 초마다 문서의 지문을 보내고, 어긋난 손님은 그 부분을 다시 받아서 고쳐 줘요",
+    "Fry Video는 영상 파일을 주고받아야 해서 아직 넣지 않았어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Edit together in every program",
+     "items": [
+      "Fry Code, Block HTML, Fry Draw, Fry Score and Fry Lab now have Edit together. Make a room with the top 'Edit together' button and join with a 6-letter code or a link (up to 8 people per room)",
+      "Fry Code merges by letter: two people typing in different places of one file both keep their changes. Block HTML merges by script, Fry Draw by shape, Fry Score by measure",
+      "Fry Lab shares the open experiment's settings and records table (the motion on the experiment screen runs separately for each person)",
+      "While editing together only the room's file, project or drawing stays open. When someone else edits, your undo history starts fresh",
+      "The host sends a short fingerprint of the document every few seconds, and a guest whose copy differs gets that part again and is corrected",
+      "Fry Video is not included yet because video files would have to be sent between people"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-13",
    "build": "v64",
    "title": "서버 연결 안내가 버튼을 가리지 않고, 문구도 바로잡음",
    "items": [

@@ -156,7 +156,7 @@ function rulerDrag(e,v){ e.preventDefault(); var elx=e.currentTarget; elx.setPoi
 function snap(full){ syncPage(); var o={xdefs:doc.xdefs||'',syms:doc.syms||{},edit:doc.edit||null,pn:doc.pn,pi:doc.pi,pages:doc.pages?doc.pages.map(function(p,i){ return i===doc.pi?{n:p.n}:p; }):undefined,w:doc.w,h:doc.h,bg:doc.bg,bgOn:doc.bgOn,name:doc.name,objs:doc.objs,guides:doc.guides||[],uid:uid};
   if(full){ var im={}; var use=function(os){ os.forEach(function(x){ if(x.imgId!=null&&IMGS[x.imgId]) im[x.imgId]=IMGS[x.imgId]; if(x.kids) use(x.kids); }); }; use(doc.objs); Object.keys(doc.syms||{}).forEach(function(k){ use(doc.syms[k].kids||[]); }); if(doc.edit&&doc.edit.stash) use(doc.edit.stash); if(doc.pages) doc.pages.forEach(function(p,i){ if(i!==doc.pi&&p&&p.objs) use(p.objs); }); o.imgs=im; }
   return JSON.stringify(o); }
-function load(s){ var o=JSON.parse(s); if(o.imgs) for(var ik in o.imgs) IMGS[ik]=o.imgs[ik]; doc.w=o.w; doc.h=o.h; doc.bg=o.bg; doc.bgOn=o.bgOn!==false; doc.name=o.name||'이름 없는 그림'; doc.objs=o.objs||[]; doc.guides=o.guides||[]; uid=Math.max(uid,o.uid||1); doc.objs.forEach(function(x){ if(x.id>=uid) uid=x.id+1; }); doc.xdefs=o.xdefs||''; doc.syms=o.syms||{}; doc.edit=o.edit||null; doc.pages=o.pages||null; doc.pi=o.pi||0; doc.pn=o.pn||''; if(doc.pages){ if(doc.pi>=doc.pages.length) doc.pi=0; doc.pages.forEach(function(p,i){ if(i!==doc.pi&&p&&p.objs) p.objs.forEach(function(x){ if(x.id>=uid) uid=x.id+1; }); }); syncPage(); } }
+function load(s){ var u0=uid, o=JSON.parse(s); if(o.imgs) for(var ik in o.imgs) IMGS[ik]=o.imgs[ik]; doc.w=o.w; doc.h=o.h; doc.bg=o.bg; doc.bgOn=o.bgOn!==false; doc.name=o.name||'이름 없는 그림'; doc.objs=o.objs||[]; doc.guides=o.guides||[]; uid=Math.max(uid,o.uid||1); doc.objs.forEach(function(x){ if(x.id>=uid) uid=x.id+1; }); doc.xdefs=o.xdefs||''; doc.syms=o.syms||{}; doc.edit=o.edit||null; doc.pages=o.pages||null; doc.pi=o.pi||0; doc.pn=o.pn||''; if(doc.pages){ if(doc.pi>=doc.pages.length) doc.pi=0; doc.pages.forEach(function(p,i){ if(i!==doc.pi&&p&&p.objs) p.objs.forEach(function(x){ if(x.id>=uid) uid=x.id+1; }); }); syncPage(); }  if(window.FFCo&&FFCo.active()) uid=u0; }
 var saveT;
 function commit(){
   hist=hist.slice(0,hi+1); hist.push(snap()); if(hist.length>80) hist.shift(); hi=hist.length-1;
@@ -165,7 +165,7 @@ function commit(){
 }
 function undo(){ if(hi>0){ hi--; load(hist[hi]); sel=sel.filter(function(i){ return byId(i); }); persist(); render(); panel(); $('dname').value=doc.name; } }
 function redo(){ if(hi<hist.length-1){ hi++; load(hist[hi]); persist(); render(); panel(); $('dname').value=doc.name; } }
-function persist(){ try{ localStorage.setItem(KEY,snap(true)); }catch(e){ if(!warned){ warned=1; toast('저장 공간이 부족해요. 그림을 .fdraw 파일로 받아 두세요'); } } }
+function persist(){ try{ localStorage.setItem(KEY,snap(true)); }catch(e){ if(!warned){ warned=1; toast('저장 공간이 부족해요. 그림을 .fdraw 파일로 받아 두세요'); } } if(window.FFCo) FFCo.touch(); }
 
 /* ---------- geometry helpers ---------- */
 function P(e){ var r=stage.getBoundingClientRect(); var p={x:(e.clientX-r.left)*doc.w/r.width,y:(e.clientY-r.top)*doc.h/r.height}; if(st.snap){ var sz=st.gridSize;
@@ -1364,6 +1364,56 @@ desk.addEventListener('scroll',drawRulers); $('rh').addEventListener('pointerdow
   renderTools(); render(); fit(); panel();
   var FS=FFFile.store({tool:'draw',def:'이름 없는 그림',read:function(){ try{ return localStorage.getItem(KEY); }catch(e){ return null; } },write:function(r){ try{ localStorage.setItem(KEY,r); }catch(e){} },clear:function(){ try{ localStorage.removeItem(KEY); }catch(e){} },getName:function(){ return doc.name; },setName:function(n){ doc.name=n; $('dname').value=n; commit(); },flush:function(){ persist(); }});
   FS.applyName();
+  /* 같이 고치기: every object is an item ('p<page>:<id>'), pictures are items, page settings, symbols and defs are meta; over ../ffco.js */
+  if(window.FFCo){ var coLoad=false, coDown=false;
+    ['onOpen','onNew','onDel'].forEach(function(k){ var fn=FS[k]; FS[k]=function(){ if(!coLoad&&FFCo.active()){ toast('같이 고치는 동안에는 다른 그림으로 바꿀 수 없어요'); return; } return fn.apply(this,arguments); }; });
+    document.addEventListener('pointerdown',function(){ coDown=true; },true);
+    ['pointerup','pointercancel','dragend'].forEach(function(e){ document.addEventListener(e,function(){ setTimeout(function(){ coDown=false; },60); },true); });
+    var pgList=function(){ syncPage(); return doc.pages||[{n:doc.pn||'',w:doc.w,h:doc.h,bg:doc.bg,bgOn:doc.bgOn,objs:doc.objs,guides:doc.guides||[]}]; };
+    var pgOf=function(i){ return (!doc.pages||i===doc.pi)?doc:doc.pages[i]; };
+    var usedImgs=function(pg){ var im={}, use=function(os){ (os||[]).forEach(function(x){ if(x.imgId!=null&&IMGS[x.imgId]) im[x.imgId]=IMGS[x.imgId]; if(x.kids) use(x.kids); }); };
+      pg.forEach(function(p){ use(p.objs); }); Object.keys(doc.syms||{}).forEach(function(k){ use((doc.syms[k]||{}).kids); }); return im; };
+    var setPg=function(i,v){ var t=pgOf(i); if(!t||!v||typeof v!=='object') return; var d=t===doc; if(v.n!=null) t[d?'pn':'n']=String(v.n).slice(0,60);
+      ['w','h'].forEach(function(k){ if(typeof v[k]==='number'&&v[k]>0&&v[k]<1e5) t[k]=v[k]; }); if(typeof v.bg==='string') t.bg=v.bg.slice(0,40); if(typeof v.bgOn==='boolean') t.bgOn=v.bgOn; if(Array.isArray(v.guides)) t.guides=v.guides; };
+    FFCo.init({app:'draw',noun:'그림',note:'다른 사람이 고치면 되돌리기 기록이 새로 시작돼요',btnClass:'tbtn',
+      busy:function(){ return !!doc.edit||coDown; },
+      read:function(){ if(doc.edit) return null; var pg=pgList(), items={}, meta={}, order=[];
+        pg.forEach(function(p,i){ (p.objs||[]).forEach(function(o){ var k='p'+i+':'+o.id; items[k]=o; order.push(k); }); meta['pg'+i]={n:p.n||'',w:p.w,h:p.h,bg:p.bg,bgOn:p.bgOn!==false,guides:p.guides||[]}; });
+        meta.np=pg.length; meta.xdefs=doc.xdefs||''; meta.syms=doc.syms||{};
+        var im=usedImgs(pg); Object.keys(im).forEach(function(k){ items['img:'+k]=im[k]; });
+        return {meta:meta,items:items,order:order}; },
+      name:function(){ return doc.name; },
+      write:function(c){ syncPage(); var m=c.meta||{};
+        Object.keys(c.set).forEach(function(k){ if(k.slice(0,4)==='img:'&&typeof c.set[k]==='string'&&/^data:image\//.test(c.set[k])) IMGS[k.slice(4)]=c.set[k]; });
+        var np=m.np;
+        if(typeof np==='number'&&np>=1&&np<=300){
+          if(np>1&&!doc.pages){ doc.pages=[]; doc.pi=0; doc.pn=doc.pn||'페이지 1'; syncPage(); }
+          if(doc.pages){ while(doc.pages.length<np) doc.pages.push({n:'페이지 '+(doc.pages.length+1),w:doc.w,h:doc.h,bg:doc.bg,bgOn:doc.bgOn,objs:[],guides:[]});
+            while(doc.pages.length>np) doc.pages.pop();
+            if(doc.pi>=doc.pages.length) doc.pi=doc.pages.length-1;
+            var cur=doc.pages[doc.pi]; doc.pn=cur.n; doc.w=cur.w; doc.h=cur.h; doc.bg=cur.bg; doc.bgOn=cur.bgOn; doc.objs=cur.objs; doc.guides=cur.guides||[];
+            if(np===1){ doc.pages=null; doc.pi=0; } } }
+        Object.keys(m).forEach(function(k){ var q=/^pg(\d+)$/.exec(k); if(q) setPg(+q[1],m[k]); });
+        if('xdefs' in m) doc.xdefs=String(m.xdefs||''); if('syms' in m&&m.syms&&typeof m.syms==='object') doc.syms=m.syms;
+        var at=function(L,id){ for(var j=0;j<L.length;j++) if(String(L[j].id)===id) return j; return -1; };
+        Object.keys(c.set).forEach(function(k){ var q=/^p(\d+):(.+)$/.exec(k); if(!q) return; var t=pgOf(+q[1]), v=c.set[k]; if(!t||!v||typeof v!=='object') return; var j=at(t.objs,q[2]); if(j>=0) t.objs[j]=v; else t.objs.push(v); });
+        c.del.forEach(function(k){ var q=/^p(\d+):(.+)$/.exec(k); if(!q) return; var t=pgOf(+q[1]); if(!t) return; var j=at(t.objs,q[2]); if(j>=0) t.objs.splice(j,1); });
+        if(c.order){ var pos={}; c.order.forEach(function(k,j){ pos[k]=j; });
+          (doc.pages||[doc]).forEach(function(p,i){ var t=pgOf(i); if(!t||!t.objs) return; t.objs.sort(function(a,b){ var x=pos['p'+i+':'+a.id], y=pos['p'+i+':'+b.id]; return (x==null?1e9:x)-(y==null?1e9:y); }); }); }
+        if(doc.pages) doc.objs=doc.pages[doc.pi].objs;
+        sel=sel.filter(function(i){ return byId(i); }); syncPage(); hist=[snap()]; hi=0; $('bUndo').disabled=true; $('bRedo').disabled=true;
+        render(); panel(); persist(); },
+      copy:function(st,nm){ var m=st.meta||{}, np=Math.max(1,Math.min(300,m.np|0||1)), pages=[], im={}, i, k;
+        for(i=0;i<np;i++){ var g=m['pg'+i]||{}; pages.push({n:g.n||'페이지 '+(i+1),w:g.w||1200,h:g.h||800,bg:g.bg||'#ffffff',bgOn:g.bgOn!==false,objs:[],guides:g.guides||[]}); }
+        (st.order||Object.keys(st.items)).forEach(function(key){ var q=/^p(\d+):(.+)$/.exec(key); if(q&&pages[+q[1]]&&st.items[key]&&typeof st.items[key]==='object') pages[+q[1]].objs.push(st.items[key]); });
+        Object.keys(st.items).forEach(function(key){ if(key.slice(0,4)==='img:'&&typeof st.items[key]==='string'&&/^data:image\//.test(st.items[key])) im[key.slice(4)]=st.items[key]; });
+        coLoad=true; try{ FS.adopt(nm); var p0=pages[0];
+          load(JSON.stringify({xdefs:m.xdefs||'',syms:m.syms||{},edit:null,pn:np>1?p0.n:'',pi:0,pages:np>1?pages:undefined,w:p0.w,h:p0.h,bg:p0.bg,bgOn:p0.bgOn,name:nm,objs:p0.objs,guides:p0.guides,uid:uid,imgs:im}));
+          sel=[]; $('dname').value=doc.name; hist=[snap()]; hi=0; persist(); render(); panel(); fit(); }finally{ coLoad=false; } return true; },
+      joined:function(){ uid=Math.max(uid,1e9+Math.floor(Math.random()*9e14)); },
+      before:function(){ persist(); },
+      mount:function(b){ var f=$('fileBtn'); f.parentNode.insertBefore(b,f); } });
+  }
   $('fileBtn').onclick=function(){ FFFile.open({items:FS.items,onOpen:FS.onOpen,onNew:FS.onNew,onRename:FS.onRename,onDup:FS.onDup,onDel:FS.onDel,actions:[{label:'열기',sub:'.fdraw · .svg',run:function(){ $('fileIn').click(); }}]}); };
   window.FDRAW={snapSave:snapSave,snapLoad:snapLoad,tplApply:tplApply,textArc:textArc,harmony:harmony,extractColors:extractColors,FXP:FXP,smoothPts:smoothPts,imgRemoveBg:imgRemoveBg,imgFit:imgFit,imgDown:imgDown,zipBlob:zipBlob,crc32:crc32,exportEach:exportEach,EX:EX,roundCorners:roundCorners,breakApartSel:breakApartSel,blendGo:blendGo,zoomSel:zoomSel,wrapLines:wrapLines,fxApply:fxApply,scatterGo:scatterGo,boolOp:boolOp,copySel:copySel,pasteSel:pasteSel,align:align,spaceSel:spaceSel,matchSize:matchSize,importSvgRoot:importSvgRoot,parseXform:parseXform,symMake:symMake,symPut:symPut,symEdit:symEdit,symDone:symDone,gradPts:gradPts,textOutline:textOutline,traceImage:traceImage,SHAPES:SHAPES,flat:flat,rdp:rdp,strokePieces:strokePieces,pbUnionAll:pbUnionAll,getSel:function(){ return sel; },groupSel:groupSel,ungroupSel:ungroupSel,boolOp:boolOp,align:align,toPath:toPath,select:function(a){ sel=a; drawOv(); panel(); },addNode:addNode,mat:mat,doc:doc,importSvg:importSvg,drawPattern:drawPattern,setTool:setTool,st:st,PATS:PATS,svg:docSvg,buildSvg:buildSvg,openExport:openExport,exArea:exArea};
 })();

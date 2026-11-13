@@ -21,9 +21,9 @@ var COL={fry:'#ffc93c', or:'#ff8a3d', grn:'#3fe08f', blu:'#4f9dff', red:'#ff6b6b
 var st=(function(){ var o=null; try{ o=JSON.parse(localStorage.getItem(LS)||'null'); }catch(e){} if(!o||typeof o!=='object'||Array.isArray(o)) o={};
   ['p','rec','g','x','tries','v','ttl','gf'].forEach(function(k){ if(!o[k]||typeof o[k]!=='object'||Array.isArray(o[k])) o[k]={}; }); return o; })();
 var saveT=null;
-function saveSoon(){ clearTimeout(saveT); saveT=setTimeout(saveNow,500); }
+function saveSoon(){ clearTimeout(saveT); saveT=setTimeout(saveNow,500); if(window.FFCo) FFCo.touch(); }
 function saveNow(){ clearTimeout(saveT); if(cur){ st.last=cur.id; st.p[cur.id]=cur.p; if(cur.save){ try{ st.x[cur.id]=cur.save(); }catch(e){} } } st.speed=speed;
-  try{ localStorage.setItem(LS,JSON.stringify(st)); }catch(e){} }
+  try{ localStorage.setItem(LS,JSON.stringify(st)); }catch(e){} if(window.FFCo) FFCo.touch(); }
 
 /* ---------- drawing helpers (used by experiments.js) ---------- */
 var TH={};
@@ -408,7 +408,11 @@ cv.addEventListener('pointerup',up); cv.addEventListener('pointercancel',up);
 cv.addEventListener('wheel',function(e){ if(cur&&cur.wheel){ var p=pos(e); if(cur.wheel(p[0],p[1],e)){ e.preventDefault(); dirty=true; } } },{passive:false});
 
 /* ---------- open an experiment ---------- */
+/* while 같이 고치기 is on, only the experiment of the room stays open */
+var coExp=null, coLoad=false;
+function coBlock(id){ if(coLoad||!window.FFCo||!FFCo.active()){ coExp=null; return false; } if(!coExp&&cur) coExp=cur.id; if(!coExp||id===coExp) return false; toast(T('같이 하는 동안에는 다른 실험으로 바꿀 수 없어요')); return true; }
 function open(id){
+  if(coBlock((byId[id]||EXPS[0]||{}).id)) return;
   var e=byId[id]||EXPS[0]; show('lab'); if(cur===e){ resize(); if(e.autoRun&&!running) setRunning(true); return; }
   if(cur){ saveNow(); if(cur.leave) cur.leave(); } if(autoT) setAuto(false,true);
   cur=e; cur.p=cleanP(e); if(e.restore){ try{ e.restore(st.x[e.id]||null); }catch(er){ console.error(er); } }
@@ -503,4 +507,25 @@ window.LAB={ico:ico, mini:mini, add:add, show:show, vcount:vcount, get view(){ r
 $('fileBtn').onclick=function(){ FFFile.open({noList:true,
   actions:[{label:'보고서',sub:'지금 실험으로 한 쪽짜리 보고서',run:function(){ $('repBtn').click(); }},{label:'공유',sub:'지금 실험과 값을 링크로',run:function(){ $('shareBtn').click(); }},
     {label:'CSV 받기',sub:'기록 표',run:function(){ $('csvSave').click(); }},{label:'엑셀 받기',sub:'기록 표와 그래프 데이터',run:function(){ $('xlsxSave').click(); }}] }); };
+/* 같이 하기: the experiment that is open (its settings, title and the rows of the records table) over ../ffco.js. Each row is an item ('r<n>'). */
+if(window.FFCo){ var coDown=false;
+  document.addEventListener('pointerdown',function(){ coDown=true; },true);
+  ['pointerup','pointercancel'].forEach(function(ev){ document.addEventListener(ev,function(){ setTimeout(function(){ coDown=false; },60); },true); });
+  var rowsOf=function(){ var items={}; (rows()||[]).forEach(function(r,i){ items['r'+i]=r; }); return items; };
+  var setRows=function(items){ var ks=Object.keys(items).filter(function(k){ return /^r\d+$/.test(k); }).sort(function(a,b){ return +a.slice(1)-+b.slice(1); });
+    st.rec[cur.id]=ks.map(function(k){ return Array.isArray(items[k])?items[k].slice(0,40).map(function(v){ return typeof v==='number'&&isFinite(v)?v:null; }):[]; }).slice(-500); };
+  FFCo.init({app:"lab",noun:'실험',btnClass:'tbtn',note:'들어가면 이 실험의 값과 기록 표가 방장 것으로 바뀌어요. 실험 화면의 움직임은 각자 따로 돌아가요',
+    busy:function(){ var a=document.activeElement; return coDown||!!(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)&&a.type!=='button'); },
+    read:function(){ if(!cur) return null; return {meta:{exp:cur.id,p:clone(cur.p)||{},ttl:st.ttl[cur.id]||''},items:rowsOf(),order:null}; },
+    name:function(){ return st.ttl[cur.id]||T(cur.name); },
+    write:function(c){ if(!cur) return; var m=c.meta||{}, items=rowsOf(), changed=false;
+      Object.keys(c.set).forEach(function(k){ items[k]=c.set[k]; changed=true; }); c.del.forEach(function(k){ delete items[k]; changed=true; });
+      if(changed) setRows(items);
+      if('p' in m||'ttl' in m){ applyState('p' in m?m.p:cur.p,null,'ttl' in m?String(m.ttl||'').slice(0,40):null); }
+      drawData(); saveNow(); },
+    copy:function(s,nm){ var m=s.meta||{}, e=byId[m.exp]; if(!e) return false; coLoad=true;
+      try{ open(e.id); setRows(s.items); applyState(m.p||{},null,String(m.ttl||'').slice(0,40)); drawData(); }finally{ coLoad=false; } coExp=e.id; return true; },
+    before:function(){ saveNow(); },
+    mount:function(b){ var f=$('fileBtn'); f.parentNode.insertBefore(b,f); } });
+}
 })();
