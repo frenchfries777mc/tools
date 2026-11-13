@@ -612,7 +612,10 @@
     const FF = FFFile.store({ tool: 'score', def: '이름 없는 악보', read: () => FS.store.raw('ffscore.v2'), write: (r) => FS.store.setRaw('ffscore.v2', r), clear: () => { try { localStorage.removeItem('ffscore.v2'); } catch (e) { /* ignore */ } },
       getName: () => (A.score && A.score.name) || '', setName: (n) => { A.score.name = n; $('dname').value = n; UI.commit(); }, flush: () => { if (A.score) FS.io.autosave(A.score); } });
     UI.fileApply = () => FF.applyName();
-    $('fileBtn').onclick = () => FFFile.open({ items: FF.items, onOpen: FF.onOpen, onNew: FF.onNew, onRename: FF.onRename, onDup: FF.onDup, onDel: FF.onDel, actions: [{ label: '열기', sub: '.fscore · MIDI · MusicXML', run: () => $('fileIn').click() }] });
+    UI.ff = FF;
+    /* while 같이 고치기 is on, only the score of the room stays open */
+    const G = (fn) => (...a) => { if (window.FFCo && FFCo.active() && !A.coLoad) { FS.toast('같이 고치는 동안에는 다른 악보로 바꿀 수 없어요'); return; } return fn(...a); };
+    $('fileBtn').onclick = () => FFFile.open({ items: FF.items, onOpen: G(FF.onOpen), onNew: G(FF.onNew), onRename: FF.onRename, onDup: FF.onDup, onDel: G(FF.onDel), actions: [{ label: '열기', sub: '.fscore · MIDI · MusicXML', run: () => $('fileIn').click() }] });
     $('fileIn').onchange = (e) => {
       const f = e.target.files[0]; e.target.value = ''; if (!f) return;
       try { FS.io.readFile(f, (S) => { UI.reset(S); FS.toast('열었어요: ' + S.name); }); } catch (er) { FS.toast('이 파일을 열 수 없어요'); }
