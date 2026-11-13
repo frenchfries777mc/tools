@@ -87,4 +87,4 @@ Fry Sheet AI 계산(`raw/calc-1`: 말로 쓴 계산 → 수식, 단위 문장 �
 
 ## 2.2 프레무스 (Kaggle 한 세션)
 
-`node train/build22.js premus` → `data/v22-premus.jsonl` (4,000줄 = v21a-smart 1,800 + 수식·그래프·표·단위·계산·수학 1,650 + 코드 페이지 550). 렉투스 2.2(`v22-smart.jsonl`)와 같은 비율을 같은 시드로 줄인 것이라 줄 전부가 `v22-smart.jsonl`에도 들어 있어요. 프레무스(Qwen3 8B)는 렉투스보다 약 2배 느려서 한 세션(약 7시간)에 끝나는 양으로 줄였어요. Kaggle 설정: MODEL="premus", VERSION="2.2" (노트가 이 파일을 알아서 골라요, EPOCHS는 1바퀴, 바탕은 원래 Qwen3 8B에서 처음부터). 업로드는 FF-Tools-8B-merged-2.2 로 가서 2.0은 덮어쓰지 않아요.
+`node train/build22.js premus` → `data/v22-premus.jsonl` (약 14,000줄 = v21a-smart 5,000 + 수식·그래프·표·단위·계산·수학 7,500 + 코드 페이지 1,500). 프레무스(Qwen3 8B)는 T4에서 1분에 약 37줄(실측)이라 약 6.5시간 걸리는 양이에요. 시간 제한(7.5시간)에 걸려도 학습한 만큼 합쳐서 올라가요. Kaggle 설정: MODEL="premus", VERSION="2.2" (노트가 이 파일을 알아서 골라요, EPOCHS는 1바퀴, 바탕은 원래 Qwen3 8B에서 처음부터). 업로드는 FF-Tools-8B-merged-2.2 로 가서 2.0은 덮어쓰지 않아요.
