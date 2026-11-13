@@ -19,10 +19,15 @@ var OWN=owner(), cache={}, sizes={}, queue={}, timer=0, up=false, dirty=true, sn
 function url(k){ return BASE+'/k/'+OWN+(k?'/'+encodeURIComponent(k):''); }
 function xhr(m,u,body,type){ var x=new XMLHttpRequest(); x.open(m,u,false); if(body!=null) x.setRequestHeader('content-type',type||'text/plain; charset=utf-8'); try{ x.send(body==null?null:body); }catch(e){ return {s:0,t:''}; } return {s:x.status,t:x.responseText}; }
 function total(){ var n=0; for(var k in sizes) n+=sizes[k]; return n; }
+var fitCss=null;
+function fit(){ try{ var d=document.documentElement; if(!fitCss){ fitCss=document.createElement('style'); (document.head||d).appendChild(fitCss); }
+    if(bar){ var h=bar.offsetHeight; d.style.marginTop=h+'px'; d.style.height='calc(100% - '+h+'px)'; fitCss.textContent='body{max-height:calc(100vh - '+h+'px);max-height:calc(100dvh - '+h+'px)}'; }
+    else { d.style.marginTop=''; d.style.height=''; fitCss.textContent=''; } }catch(e){} }   // the bar sits in space reserved above the page, so it never covers the buttons
 function say(msg){
-  try{ if(!msg){ if(bar){ bar.remove(); bar=null; } return; }
+  try{ if(!msg){ if(bar){ bar.remove(); bar=null; } fit(); return; }
     if(!bar){ bar=document.createElement('div'); bar.style.cssText='position:fixed;left:0;right:0;top:0;z-index:2147483600;padding:8px 14px;text-align:center;font:600 14px/1.4 sans-serif;background:#c0392b;color:#fff'; (document.body||document.documentElement).appendChild(bar); }
-    bar.textContent=msg; }catch(e){} }
+    bar.textContent=msg; fit(); }catch(e){} }
+root.addEventListener('resize',function(){ if(bar) fit(); }); document.addEventListener('DOMContentLoaded',function(){ if(bar) fit(); });
 var T=function(s){ return root.FFT&&root.FFT.T?root.FFT.T(s):s; };
 /* 0) files belong to ONE account, never to a browser. A logged-in account uses its own store key (table tools_owner_link), so every device with that account sees
    the same files and nobody else on this browser does. A new account gets a fresh empty store; only the very first account ever used on this browser takes over
@@ -105,5 +110,5 @@ var oClear=P.clear; P.clear=function(){ if(isLS(this)){ Object.keys(sizes).forEa
 root.addEventListener('beforeunload',function(){ if(Object.keys(queue).length) flush(true); });
 root.addEventListener('pagehide',function(){ if(Object.keys(queue).length) flush(true); });
 document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='hidden'&&Object.keys(queue).length){ if(timer){ clearTimeout(timer); timer=0; } flush(); } });
-root.FFSrv={up:up,size:function(k){ return sizes[k]||0; },keys:function(){ return Object.keys(sizes); },total:total,max:MAXO,pending:function(){ return Object.keys(queue).length; },flush:function(){ return flush(true); },route:ROUTE};
+root.FFSrv={up:up,down:!up,size:function(k){ return sizes[k]||0; },keys:function(){ return Object.keys(sizes); },total:total,max:MAXO,pending:function(){ return Object.keys(queue).length; },flush:function(){ return flush(true); },route:ROUTE};
 })(window);

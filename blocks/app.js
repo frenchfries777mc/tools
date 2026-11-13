@@ -232,7 +232,7 @@ function readProj(id){ try{ return JSON.parse(lsGet(PK+id)||'null'); }catch(e){ 
 function wsJSON(){ return JSON.stringify(Blockly.serialization.workspaces.save(ws)); }
 function snapshot(){ return {name:$('projName').value,ws:Blockly.serialization.workspaces.save(ws),imgs:BH.IMGS,snds:BH.SNDS}; }
 function saveNow(){ clearTimeout(saveT); if(!P.cur) return; var d=snapshot(), ok=lsSet(PK+P.cur,JSON.stringify(d)), e=entry(P.cur); if(e){ e.name=d.name; e.t=Date.now(); } writeIdx();
-  if(!ok&&!fullWarned){ fullWarned=true; toast(T('저장 공간이 꽉 찼어요. 프로젝트 파일로 저장해 두세요')); } if(ok) fullWarned=false; if(ok&&window.FFVer) FFVer.tick('blocks.'+P.cur,wsJSON); return ok; }
+  if(!ok&&!fullWarned){ fullWarned=true; toast(T(window.FFSrv&&FFSrv.down?'서버에 연결할 수 없어요. 저장하려면 연결부터 확인해 주세요':'저장 공간이 꽉 찼어요. 프로젝트 파일로 저장해 두세요')); } if(ok) fullWarned=false; if(ok&&window.FFVer) FFVer.tick('blocks.'+P.cur,wsJSON); return ok; }
 function save(){ clearTimeout(saveT); saveT=setTimeout(saveNow,300); }
 $('verBtn').onclick=function(){ if(!P.cur||!window.FFVer) return; saveNow(); FFVer.open({key:'blocks.'+P.cur,title:'버전 기록',get:wsJSON,toast:toast,
   put:function(d){ loadJSON(JSON.parse(d)); save(); },
