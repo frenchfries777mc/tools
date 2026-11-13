@@ -4,7 +4,7 @@
                           actions:[{label,sub,run,danger}], foot:[{label,run}], title, newLabel, empty}
    FFFile.store(o)   saves several projects for a tool that keeps one working project in a single storage key:
                           o = {key, read(), write(raw), clear(), getName(), setName(n), flush(), def, tool}
-                     returns {items, onOpen, onNew, onRename, onDup, onDel, applyName}  (pass them to open()) */
+                     returns {items, onOpen, onNew, onRename, onDup, onDel, applyName, adopt(name)}  (pass them to open()); adopt makes a new file current without a reload */
 (function(){
   if(window.FFFile) return;
   var T=function(s){ return window.FFT&&FFT.T?FFT.T(s):s; };
@@ -106,6 +106,7 @@
         if(a.length){ jset(IX,a); var n=a.slice().sort(function(p,q){ return q.t-p.t; })[0], raw=null; try{ raw=localStorage.getItem(DP+n.id); }catch(e){} if(raw==null) o.clear(); else o.write(raw); go(n.id); }
         else{ var nid=uid(); jset(IX,[{id:nid,name:o.def,t:Date.now()}]); o.clear(); go(nid); } },
       applyName:function(){ var a=jget(IX), c=curId(); if(!a) return; a.forEach(function(x){ if(x.id===c&&x.name&&x.name!==o.getName()) o.setName(x.name); }); },
+      adopt:function(name){ sync(); var a=jget(IX), id=uid(); a.push({id:id,name:name||o.def,t:Date.now()}); jset(IX,a); try{ localStorage.setItem(CU,id); }catch(e){} return id; },   // a new file that is open right now, without reloading (the caller puts the document in)
       sync:sync
     };
     index(); try{ window.addEventListener('pagehide',function(){ if(window.__ffSwitching) return; try{ sync(); }catch(e){} }); }catch(e){}
