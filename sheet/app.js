@@ -41,7 +41,7 @@ function saveNow(){
   clearTimeout(saveT);
   var ok=lsSet(LSD+docId,JSON.stringify(doc)); var idx=docIndex().filter(function(x){ return x.id!==docId; });
   idx.unshift({id:docId,name:doc.name,t:Date.now()}); lsSet(LSI,JSON.stringify(idx.slice(0,50))); lsSet(LSL,docId);
-  $('saved').textContent=ok?T('저장됨'):T('저장 공간이 가득 찼어요');
+  $('saved').textContent=ok?T('저장됨'):T(window.FFSrv&&FFSrv.down?'서버에 연결되지 않았어요':'저장 공간이 가득 찼어요');
   if(ok&&window.FFVer) FFVer.tick('sheet.'+docId,snap);
 }
 
@@ -1179,7 +1179,7 @@ function sendSlide(go){
   if(!d){ d={id:uid(),name:doc.name||T('새 발표 자료'),theme:'light',slides:[],t:Date.now(),topic:'',aud:'',n:8,nums:false,footer:'',font:'',trans:'fade'}; st.decks.unshift(d); }
   var s={id:uid(),layout:'chart',title:p.title,data:p.data,ctype:p.ctype}; if($('slLink').checked) s.link={doc:docId,sh:sh.name,rg:p.rg,dn:doc.name||''};
   d.slides.push(s); d.t=Date.now(); st.last=d.id;
-  if(!lsSet(LSS,JSON.stringify(st))) return toast(T('저장 공간이 부족해서 슬라이드에 넣지 못했어요'));
+  if(!lsSet(LSS,JSON.stringify(st))) return toast(T(window.FFSrv&&FFSrv.down?'서버에 연결할 수 없어요. 저장하려면 연결부터 확인해 주세요':'저장 공간이 부족해서 슬라이드에 넣지 못했어요'));
   closeDlgs(); if(go) location.href='../slides/index.html'; else toast(F('"{0}"에 슬라이드를 넣었어요',d.name));
 }
 $('slOk').onclick=function(){ sendSlide(false); }; $('slOpen').onclick=function(){ sendSlide(true); };
@@ -1496,7 +1496,7 @@ function renameDoc(id){
 }
 function dupDoc(id){
   saveNow(); var raw=lsGet(LSD+id); if(!raw) return; var d; try{ d=JSON.parse(raw); }catch(e){ return; }
-  var nid=uid(); d.name=(d.name||T('새 시트'))+' '+T('(복사본)'); if(!lsSet(LSD+nid,JSON.stringify(d))) return toast(T('저장 공간이 가득 찼어요'));
+  var nid=uid(); d.name=(d.name||T('새 시트'))+' '+T('(복사본)'); if(!lsSet(LSD+nid,JSON.stringify(d))) return toast(T(window.FFSrv&&FFSrv.down?'서버에 연결할 수 없어요. 저장하려면 연결부터 확인해 주세요':'저장 공간이 가득 찼어요'));
   var idx=docIndex(); idx.unshift({id:nid,name:d.name,t:Date.now()}); lsSet(LSI,JSON.stringify(idx.slice(0,50))); drawDocMgr(); toast(T('복제했어요'));
 }
 function deleteDoc(id){
@@ -1509,7 +1509,7 @@ function deleteDoc(id){
 }
 function restoreDoc(id){
   var tr=trashGet(), x=tr.filter(function(y){ return y.id===id; })[0]; if(!x) return;
-  if(!lsSet(LSD+id,x.data)) return toast(T('저장 공간이 가득 찼어요'));
+  if(!lsSet(LSD+id,x.data)) return toast(T(window.FFSrv&&FFSrv.down?'서버에 연결할 수 없어요. 저장하려면 연결부터 확인해 주세요':'저장 공간이 가득 찼어요'));
   var idx=docIndex().filter(function(y){ return y.id!==id; }); idx.unshift({id:id,name:x.name,t:Date.now()}); lsSet(LSI,JSON.stringify(idx.slice(0,50)));
   lsSet(LST,JSON.stringify(tr.filter(function(y){ return y.id!==id; }))); drawDocMgr(); toast(T('되살렸어요'));
 }
@@ -1702,7 +1702,7 @@ var TPLS=[
 function openTpl(){
   var g=$('tplGrid'); g.innerHTML='';
   TPLS.forEach(function(t){ var b=document.createElement('button'); b.className='tplCard'; b.innerHTML='<b></b><span></span>'; b.firstChild.textContent=t.ico+' '+T(t.name); b.lastChild.textContent=T(t.desc);
-    b.onclick=function(){ var d=t.build(); saveNow(); var id=uid(); if(!lsSet(LSD+id,JSON.stringify(d))) return toast(T('저장 공간이 가득 찼어요')); loadDoc(id); saveNow(); closeDlgs(); toast(F('"{0}" 템플릿으로 새 문서를 만들었어요',T(t.name))); };
+    b.onclick=function(){ var d=t.build(); saveNow(); var id=uid(); if(!lsSet(LSD+id,JSON.stringify(d))) return toast(T(window.FFSrv&&FFSrv.down?'서버에 연결할 수 없어요. 저장하려면 연결부터 확인해 주세요':'저장 공간이 가득 찼어요')); loadDoc(id); saveNow(); closeDlgs(); toast(F('"{0}" 템플릿으로 새 문서를 만들었어요',T(t.name))); };
     g.appendChild(b); });
   openDlg('tplDlg');
 }
