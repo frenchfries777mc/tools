@@ -232,8 +232,11 @@ function readProj(id){ try{ return JSON.parse(lsGet(PK+id)||'null'); }catch(e){ 
 function wsJSON(){ return JSON.stringify(Blockly.serialization.workspaces.save(ws)); }
 function snapshot(){ return {name:$('projName').value,ws:Blockly.serialization.workspaces.save(ws),imgs:BH.IMGS,snds:BH.SNDS}; }
 function saveNow(){ clearTimeout(saveT); if(!P.cur) return; var d=snapshot(), ok=lsSet(PK+P.cur,JSON.stringify(d)), e=entry(P.cur); if(e){ e.name=d.name; e.t=Date.now(); } writeIdx();
-  if(!ok&&!fullWarned){ fullWarned=true; toast(T(window.FFSrv&&FFSrv.down?'서버에 연결할 수 없어요. 저장하려면 연결부터 확인해 주세요':'저장 공간이 꽉 찼어요. 프로젝트 파일로 저장해 두세요')); } if(ok) fullWarned=false; if(ok&&window.FFVer) FFVer.tick('blocks.'+P.cur,wsJSON); return ok; }
-function save(){ clearTimeout(saveT); saveT=setTimeout(saveNow,300); }
+  if(!ok&&!fullWarned){ fullWarned=true; toast(T(window.FFSrv&&FFSrv.down?'서버에 연결할 수 없어요. 저장하려면 연결부터 확인해 주세요':'저장 공간이 꽉 찼어요. 프로젝트 파일로 저장해 두세요')); } if(ok) fullWarned=false; if(ok&&window.FFVer) FFVer.tick('blocks.'+P.cur,wsJSON); if(window.FFCo) FFCo.touch(); return ok; }
+function save(){ clearTimeout(saveT); saveT=setTimeout(saveNow,300); if(window.FFCo) FFCo.touch(); }
+/* while 같이 고치기 is on, only the project of the room stays open */
+var coLoad=false;
+function coBlock(){ if(coLoad||!window.FFCo||!FFCo.active()) return false; toast(T('같이 고치는 동안에는 다른 프로젝트로 바꿀 수 없어요')); return true; }
 $('verBtn').onclick=function(){ if(!P.cur||!window.FFVer) return; saveNow(); FFVer.open({key:'blocks.'+P.cur,title:'버전 기록',get:wsJSON,toast:toast,
   put:function(d){ loadJSON(JSON.parse(d)); save(); },
   describe:function(d){ return F('블록 {0}개',(d.match(/"type":/g)||[]).length); }}); };
@@ -288,11 +291,11 @@ $('projName').addEventListener('input',save);
 $('projName').addEventListener('keydown',function(e){ if(e.key==='Enter') this.blur(); });
 function blank(){ loadJSON({blocks:{languageVersion:0,blocks:[{type:'page_root',x:30,y:30,fields:{TITLE:T('나의 웹페이지'),BG:'#ffffff',CENTER:true},inputs:{BODY:{block:{type:'el_heading',fields:{SIZE:'h1',TEXT:T('안녕하세요'),NAME:T('제목')+'1'}}}}}]}}); }
 function uniqProj(base){ base=(base||T('나의 웹페이지')).trim().slice(0,40)||T('나의 웹페이지'); var names=P.list.map(function(x){ return x.name; }); if(names.indexOf(base)<0) return base; var b=base.replace(/\s*\d+$/,''), k=2; while(names.indexOf(b+' '+k)>=0) k++; return b+' '+k; }
-function createProject(name,loader){ saveNow(); var id=pid(), nm=uniqProj(name); P.cur=id; P.list.unshift({id:id,name:nm,t:Date.now()}); $('projName').value=nm; setImgs(null); setSnds(null); loader(); ws.clearUndo(); saveNow(); syncBar(); renderProjs(); }
-function switchTo(id){ if(id===P.cur) return; saveNow(); var d=readProj(id), e=entry(id);
+function createProject(name,loader){ if(coBlock()) return; saveNow(); var id=pid(), nm=uniqProj(name); P.cur=id; P.list.unshift({id:id,name:nm,t:Date.now()}); $('projName').value=nm; setImgs(null); setSnds(null); loader(); ws.clearUndo(); saveNow(); syncBar(); renderProjs(); }
+function switchTo(id){ if(id===P.cur||coBlock()) return; saveNow(); var d=readProj(id), e=entry(id);
   if(!d||!d.ws){ P.list=P.list.filter(function(x){ return x.id!==id; }); writeIdx(); renderProjs(); toast(T('이 프로젝트는 열 수 없어요')); return; }
   P.cur=id; $('projName').value=d.name||(e&&e.name)||T('나의 웹페이지'); setImgs(d.imgs); setSnds(d.snds); try{ loadJSON(d.ws); }catch(err){ console.error(err); blank(); } ws.clearUndo(); writeIdx(); syncBar(); renderProjs(); }
-function deleteProject(id){ var e=entry(id); if(!e) return; saveNow();   // 확인 창 없이 바로 지우고, 되돌리기 안내를 보여 줘요
+function deleteProject(id){ var e=entry(id); if(!e) return; if(id===P.cur&&window.FFCo&&FFCo.active()){ toast(T('같이 고치는 동안에는 이 프로젝트를 지울 수 없어요')); return; } saveNow();   // 확인 창 없이 바로 지우고, 되돌리기 안내를 보여 줘요
   { var keys=[PK+id,STK+id,'ffblocks.ai.'+id], kept={}, at=P.list.indexOf(e);
     try{ keys.forEach(function(k){ kept[k]=localStorage.getItem(k); }); }catch(err){}
     try{ keys.forEach(function(k){ localStorage.removeItem(k); }); }catch(err){} P.list=P.list.filter(function(x){ return x.id!==id; });
@@ -735,4 +738,35 @@ setLink(linkOn);
 $('objPrevBtn').onclick=openObjects;
 
 window.__bh={loadExample:loadExample,makeShare:makeShare,openShared:openShared,showPreview:showPreview,showHTML:function(h){ custom=String(h); $('codeEdit').readOnly=false; if(custom.length>BIGCODE) bigView(custom); else $('codeEdit').value=custom; setCust(true); clearTimeout(customT); if(runState==='stop') setRun('run'); clearLog(); dbgReset(); $('frame').srcdoc=custom; setPane('code'); },clearHTML:function(){ dropCustom(false); },ws:ws,copy:copyBlock,paste:pasteBlock,deleteAll:deleteAll,arrange:arrange,build:function(){ return finalHTML(); },loadXML:loadXML,loadJSON:loadJSON,save:saveNow,toast:toast,projects:function(){ return P; },examples:BH_EXAMPLES};
+/* 같이 고치기: every top block is one item (its whole script), pictures and sounds are items, variables are meta; over ../ffco.js */
+if(window.FFCo){
+  var sn=function(){ var m=null; try{ m=Blockly.serialization.workspaces.save(ws); }catch(e){} return m; };
+  var busyB=function(){ try{ if(ws.isDragging&&ws.isDragging()) return true; var W=Blockly.WidgetDiv, D=Blockly.DropDownDiv; return !!((W&&W.isVisible&&W.isVisible())||(D&&D.isVisible&&D.isVisible())); }catch(e){ return false; } };
+  var isIm=function(m){ return m&&typeof m==='object'&&typeof m.data==='string'&&/^data:image\//.test(m.data); }, isSn=function(m){ return m&&typeof m==='object'&&typeof m.data==='string'&&/^data:(audio|video)\//.test(m.data); };
+  FFCo.init({app:'blocks',noun:'프로젝트',note:'다른 사람이 고치면 되돌리기 기록이 새로 시작돼요. 같은 스크립트를 동시에 고치면 나중에 도착한 쪽이 남아요',busy:busyB,
+    read:function(){ if(!P.cur) return null; var m=sn(); if(!m) return null; var items={};
+      ((m.blocks&&m.blocks.blocks)||[]).forEach(function(b){ if(b&&b.id) items['b:'+b.id]=b; });
+      Object.keys(BH.IMGS).forEach(function(k){ items['img:'+k]=BH.IMGS[k]; }); Object.keys(BH.SNDS).forEach(function(k){ items['snd:'+k]=BH.SNDS[k]; });
+      return {meta:{vars:m.variables||[]},items:items,order:null}; },
+    name:function(){ return $('projName').value; },
+    write:function(c){ var IM=BH.IMGS, SN=BH.SNDS, ev=false;
+      loading=true; try{ Blockly.Events.disable(); ev=true; }catch(e){}
+      try{ var tops=[], gone=[];
+        if(Array.isArray(c.meta.vars)) c.meta.vars.forEach(function(v){ try{ if(v&&v.id&&v.name&&!ws.getVariableById(v.id)) ws.createVariable(String(v.name),v.type||'',v.id); }catch(e){} });
+        Object.keys(c.set).forEach(function(k){ var v=c.set[k];
+          if(k.slice(0,2)==='b:'){ if(v&&typeof v==='object'&&v.type){ tops.push(v); gone.push(k.slice(2)); } }
+          else if(k.slice(0,4)==='img:'){ if(isIm(v)) IM[k.slice(4)]=v; }
+          else if(k.slice(0,4)==='snd:'){ if(isSn(v)) SN[k.slice(4)]=v; } });
+        c.del.forEach(function(k){ if(k.slice(0,2)==='b:') gone.push(k.slice(2)); else if(k.slice(0,4)==='img:') delete IM[k.slice(4)]; else if(k.slice(0,4)==='snd:') delete SN[k.slice(4)]; });
+        gone.forEach(function(id){ var b=ws.getBlockById(id); if(b) b.dispose(false); });
+        prescan(JSON.stringify(tops));
+        tops.forEach(function(v){ try{ Blockly.serialization.blocks.append(v,ws,{recordUndo:false}); }catch(e){ console.error(e); } });
+      } finally{ BH.KNOWN.clear(); if(ev){ try{ Blockly.Events.enable(); }catch(e){} } loading=false; }
+      try{ ws.clearUndo(); }catch(e){} refresh(false); saveNow(); },
+    copy:function(st,nm){ var tops=[], im={}, sn2={};
+      Object.keys(st.items).forEach(function(k){ var v=st.items[k]; if(k.slice(0,2)==='b:'&&v&&typeof v==='object') tops.push(v); else if(k.slice(0,4)==='img:'&&isIm(v)) im[k.slice(4)]=v; else if(k.slice(0,4)==='snd:'&&isSn(v)) sn2[k.slice(4)]=v; });
+      coLoad=true; try{ createProject(nm,function(){ setImgs(im); setSnds(sn2); loadJSON({blocks:{languageVersion:0,blocks:tops},variables:Array.isArray(st.meta.vars)?st.meta.vars:[]}); }); }finally{ coLoad=false; } return true; },
+    before:function(){ saveNow(); },
+    mount:function(b){ var f=$('verBtn'); f.parentNode.insertBefore(b,f); } });
+}
 })();

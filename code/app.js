@@ -164,11 +164,14 @@ function snap(){ return JSON.stringify({n:file.name, c:code.value, i:$('stdin').
 function saveNow(){ clearTimeout(saveT); saveT=null; if(!file) return; file.t=Date.now(); file.name=$('fileName').value.trim()||T('새 파일'); file.stdin=$('stdin').value; file.lang=curLang; idx.last=file.id;
   if(idx.files.indexOf(file)<0) idx.files.unshift(file);
   try{ localStorage.setItem(FILE+file.id,code.value); localStorage.setItem(LS,JSON.stringify(idx)); $('saved').textContent=T('저장됨'); }catch(e){ toast('저장 공간이 부족해서 저장하지 못했어요'); }
-  if(window.FFVer) FFVer.tick('python.'+file.id,snap); }
-function saveSoon(){ $('saved').textContent=''; clearTimeout(saveT); saveT=setTimeout(saveNow,600); }
-function openFile(f){ if(file&&file!==f) saveNow(); file=f; if(idx.files.indexOf(f)<0) idx.files.unshift(f);
+  if(window.FFVer) FFVer.tick('python.'+file.id,snap); if(window.FFCo) FFCo.touch(); }
+/* while 같이 고치기 is on, only the file of the room stays open */
+var coFile=null, coLoad=false;
+function coBlock(f){ if(coLoad||!window.FFCo||!FFCo.active()){ coFile=null; return false; } if(!coFile) coFile=file; if(f===coFile) return false; toast('같이 고치는 동안에는 다른 파일로 바꿀 수 없어요'); return true; }
+function saveSoon(){ $('saved').textContent=''; clearTimeout(saveT); saveT=setTimeout(saveNow,600); if(window.FFCo) FFCo.touch(); }
+function openFile(f){ if(coBlock(f)) return; if(file&&file!==f) saveNow(); file=f; if(idx.files.indexOf(f)<0) idx.files.unshift(f);
   $('fileName').value=f.name||''; code.value=readFile(f.id)||''; $('stdin').value=f.stdin||''; $('stdinBox').open=!!f.stdin; setLang(f.lang||'python',true); errLine=0; paint(); caretPos(); code.scrollTop=0; saveNow(); }
-function newFile(name,src,stdin,lang){ var f={id:uid(), name:name||T('새 파일'), t:Date.now(), stdin:stdin||'', lang:lang||'python'}; try{ localStorage.setItem(FILE+f.id,src||''); }catch(e){} idx.files.unshift(f); openFile(f); return f; }
+function newFile(name,src,stdin,lang){ if(coBlock(null)) return null; var f={id:uid(), name:name||T('새 파일'), t:Date.now(), stdin:stdin||'', lang:lang||'python'}; try{ localStorage.setItem(FILE+f.id,src||''); }catch(e){} idx.files.unshift(f); openFile(f); return f; }
 $('fileName').addEventListener('input',saveSoon);
 $('fileName').addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); code.focus(); } });
 $('stdin').addEventListener('input',saveSoon);
@@ -186,7 +189,7 @@ function drawMgr(){ var ul=$('fileList'); ul.innerHTML='';
       function done(){ var v=inp.value.trim(); if(v){ f.name=v; if(f===file) $('fileName').value=v; writeIdx(); } drawMgr(); }
       inp.onkeydown=function(e){ if(e.key==='Enter') done(); if(e.key==='Escape'){ e.stopPropagation(); drawMgr(); } }; inp.onblur=done; };
     var del=document.createElement('button'); del.className='ib'; del.title=T('지우기'); del.setAttribute('aria-label',T('지우기')); del.textContent='🗑️';
-    del.onclick=function(){ var src=readFile(f.id), pos=idx.files.indexOf(f); idx.files.splice(pos,1); try{ localStorage.removeItem(FILE+f.id); }catch(e){}
+    del.onclick=function(){ if(f===file&&window.FFCo&&FFCo.active()){ toast('같이 고치는 동안에는 이 파일을 지울 수 없어요'); return; } var src=readFile(f.id), pos=idx.files.indexOf(f); idx.files.splice(pos,1); try{ localStorage.removeItem(FILE+f.id); }catch(e){}
       if(f===file){ file=null; if(idx.files.length) openFile(idx.files[0]); else newFile(); } writeIdx(); drawMgr();
       if(window.FFUndo) FFUndo.show(F('"{0}" 파일을 지웠어요',f.name),function(){ try{ localStorage.setItem(FILE+f.id,src||''); }catch(e){} idx.files.splice(Math.min(pos,idx.files.length),0,f); writeIdx(); openFile(f); drawMgr(); }); };
     li.appendChild(nm); li.appendChild(rn); li.appendChild(del); ul.appendChild(li); }); }
@@ -213,7 +216,7 @@ $('fileBtn').onclick=function(){ saveNow(); FFFile.open({
   onOpen:function(id,cur){ var f=idx.files.filter(function(x){ return x.id===id; })[0]; if(f&&!cur) openFile(f); },
   onNew:function(){ var L=LG(); newFile(T('새 파일'),curLang==='python'?'':(L.starter||''),'',curLang); code.focus(); },
   onRename:function(id,v){ var f=idx.files.filter(function(x){ return x.id===id; })[0]; if(!f) return; f.name=v; if(f===file) $('fileName').value=v; writeIdx(); },
-  onDel:function(id){ var f=idx.files.filter(function(x){ return x.id===id; })[0]; if(!f) return; var src=readFile(f.id), pos=idx.files.indexOf(f); idx.files.splice(pos,1); try{ localStorage.removeItem(FILE+f.id); }catch(e){}
+  onDel:function(id){ var f=idx.files.filter(function(x){ return x.id===id; })[0]; if(!f) return; if(f===file&&window.FFCo&&FFCo.active()){ toast('같이 고치는 동안에는 이 파일을 지울 수 없어요'); return; } var src=readFile(f.id), pos=idx.files.indexOf(f); idx.files.splice(pos,1); try{ localStorage.removeItem(FILE+f.id); }catch(e){}
     if(f===file){ file=null; if(idx.files.length) openFile(idx.files[0]); else newFile(); } writeIdx();
     if(window.FFUndo) FFUndo.show(F('"{0}" 파일을 지웠어요',f.name),function(){ try{ localStorage.setItem(FILE+f.id,src||''); }catch(e){} idx.files.splice(Math.min(pos,idx.files.length),0,f); writeIdx(); openFile(f); }); },
   actions:[{label:'파일 열기',sub:'내 컴퓨터의 코드 파일',run:function(){ fm('open'); }},{label:'파일로 받기',sub:'지금 코드를 파일로 저장해요',run:function(){ fm('save'); }},{label:'AI 설정',run:function(){ fm('ai'); }}],
@@ -494,4 +497,21 @@ if(curLang==='python'){ sys(T('▶ 실행(Ctrl+Enter)을 누르면 여기에 결
 })();
 window.addEventListener('pagehide',saveNow);
 document.addEventListener('visibilitychange',function(){ if(document.hidden) saveNow(); });
+/* 같이 고치기: the open file (code, input, language) over ../ffco.js */
+if(window.FFCo){ var coComp=false;
+  ['code','stdin','fileName'].forEach(function(i){ $(i).addEventListener('compositionstart',function(){ coComp=true; }); $(i).addEventListener('compositionend',function(){ coComp=false; }); });
+  var moveTo=function(v,a,p){ if(!a) return Math.min(p,v.length); if(p<=a.at) return p; if(p>=a.at+a.del) return p+a.ins-a.del; return a.at+a.ins; };
+  var setTx=function(el,v,a){ if(el.value===v) return false; var f=document.activeElement===el, s=el.selectionStart, e=el.selectionEnd, y=el.scrollTop; el.value=v; if(f) el.setSelectionRange(moveTo(v,a,s),moveTo(v,a,e)); el.scrollTop=y; return true; };
+  FFCo.init({app:'code',noun:'파일',note:'다른 사람이 고치면 되돌리기(Ctrl+Z) 기록이 새로 시작돼요',busy:function(){ return coComp; },
+    read:function(){ if(!file) return null; return {meta:{lang:curLang},items:{code:code.value,stdin:$('stdin').value},order:null}; },
+    name:function(){ return $('fileName').value.trim()||T('새 파일'); },
+    write:function(c){ if(c.meta&&c.meta.lang&&c.meta.lang!==curLang&&FC.langs[c.meta.lang]) setLang(c.meta.lang,true);
+      if('code' in c.set&&setTx(code,String(c.set.code),c.at.code)){ errLine=0; paint(); caretPos(); }
+      if('stdin' in c.set&&setTx($('stdin'),String(c.set.stdin),c.at.stdin)&&c.set.stdin) $('stdinBox').open=true;
+      saveNow(); if(LG().live) liveSoon(); },
+    copy:function(st,nm){ coLoad=true; try{ coFile=newFile(nm,String(st.items.code||''),String(st.items.stdin||''),st.meta.lang||'python'); }finally{ coLoad=false; } return !!coFile; },
+    before:function(){ saveNow(); },
+    left:function(){ coFile=null; },
+    mount:function(b){ var f=$('fileBtn'); f.parentNode.insertBefore(b,f); } });
+}
 })();

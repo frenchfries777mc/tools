@@ -50,7 +50,7 @@
   IO.parseScore = function (o) { return o && o.v === 2 ? FS.fix(o) : IO.migrateV1(o); };
 
   /* ---------- autosave & library ---------- */
-  IO.autosave = (S) => FS.store.set(KEY, S);
+  IO.autosave = (S) => { const ok = FS.store.set(KEY, S); if (window.FFCo) FFCo.touch(); return ok; };
   IO.loadAutosave = function () {
     try {
       const raw = FS.store.get(KEY, null);
