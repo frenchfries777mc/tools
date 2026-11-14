@@ -242,10 +242,75 @@ html[data-ff-theme] .recent h2{font-family:'Oswald','Noto Sans KR',sans-serif;fo
 html[data-ff-theme] .hi,html[data-ff-theme] .hint,html[data-ff-theme] .cmeta,html[data-ff-theme] .ares,html[data-ff-theme] .arrank{color:var(--dim)}
 html[data-ff-theme] .dlg .acts .btn,html[data-ff-theme] .dlg .btn{border-radius:99px}
 </style>
-<link rel="stylesheet" href="/ff-shell.css?v=6">
-<script src="/ff-shell.js?v=6" defer></script>
+<style id="ffx">
+:root{--bg:#0e0e0e;--panel:#171717;--line:#2e2b25;--text:#ece6d8;--dim:#a39c8c;--fry:#d9b45f;--fry2:#b8923a;--hb-panel:rgba(14,14,14,.6);--hb-line:#3a3530}
+*{box-sizing:border-box}
+html,body{margin:0;background:#0e0e0e;color:#ece6d8}
+body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif}
+a{color:inherit;text-decoration:none}
+button{font:inherit}
+[hidden]{display:none!important}
+img{max-width:100%}
+#ffTop{display:flex;flex-wrap:nowrap;align-items:center;justify-content:flex-end;gap:14px;padding:20px 0;height:84px;box-sizing:border-box}
+#onlineBar{display:flex;align-items:center;flex-wrap:nowrap;white-space:nowrap;overflow:hidden;max-width:62vw;gap:8px 12px;height:44px;box-sizing:border-box;padding:0 16px;border-radius:10px;background:rgba(14,14,14,.6);border:1px solid #3a3530;font-size:14px;color:#ece6d8}
+#onlineBar:empty{display:none}
+#ffTop .tb{margin:0}
+.ffx-nav a:hover{background:#1c1a16}
+@media(max-width:860px){
+  .ffx-root{flex-direction:column!important;flex-wrap:nowrap!important}
+  .ffx-root>aside{flex:0 0 auto!important;width:100%!important;flex-direction:row!important;align-items:center;overflow-x:auto;padding:8px 10px!important;border-right:0!important;border-bottom:1px solid #2e2b25}
+  .ffx-root>aside>a:first-child{padding:0 10px 0 4px!important;font-size:18px!important}
+  .ffx-root>aside>a{white-space:nowrap;padding:8px 11px!important}
+  .ffx-root>aside>div{display:none!important}
+  .ffx-root>main>div{padding-left:18px!important;padding-right:18px!important}
+}
+</style><style id="ffx2">
+html,body{background:#0e0e0e!important}
+body{margin:0!important;padding:0!important;min-height:0!important;overflow-x:hidden;max-width:none!important;display:block!important}
+.ffx-root{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif!important;line-height:normal}
+.ffx-c{max-width:none!important;width:100%;margin:0!important;padding:0 0 72px!important;color:#ece6d8;line-height:1.6}
+.ffx-c .wrap{max-width:none!important;padding:0!important}
+.ffx-c header,.ffx-c>footer{display:none!important}
+.ffx-c .st-c,.ffx-c .cm-p,.ffx-c .pf-box,.ffx-c .pf-me,.ffx-c .lz-c,.ffx-c .rk-c,.ffx-c .card,.ffx-c .tr,.ffx-c .pn,.ffx-c .page{background:rgba(23,23,23,.92)!important;border:1px solid #2e2b25!important;border-left:1px solid #2e2b25!important;border-radius:16px!important;box-shadow:none!important}
+.ffx-c .cm-post{border-left:1px solid #2e2b25!important}
+.ffx-c h1,.ffx-c .rh-h1{border-left:0!important;padding-left:0!important}
+</style>
 </head>
 <body>
+<div class="ffx-root" style="background:#0e0e0e;color:#ece6d8;min-height:1700px;display:flex;flex-wrap:wrap;align-items:stretch">
+<aside style="flex:0 0 232px;box-sizing:border-box;background:#141414;border-right:1px solid #2e2b25;padding:24px 16px;display:flex;flex-direction:column;gap:6px;min-width:0">
+<a href="/" style="display:block;padding:4px 10px 22px;font-family:'Oswald',sans-serif;font-size:21px;line-height:1;letter-spacing:.03em;white-space:nowrap"><span style="font-weight:500">FRENCH</span><span style="font-weight:700">FRIES</span><span style="font-weight:700;color:#d9b45f">777</span></a>
+
+<a href="/" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:15px;font-weight:500;background:transparent;color:#c9c2b0"><span style="width:8px;height:8px;border-radius:2px;background:#4a463d"></span>Hub</a>
+
+<a href="/games/" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:15px;font-weight:500;background:transparent;color:#c9c2b0"><span style="width:8px;height:8px;border-radius:2px;background:#4a463d"></span>Games</a>
+
+<a href="/educations/" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:15px;font-weight:500;background:transparent;color:#c9c2b0"><span style="width:8px;height:8px;border-radius:2px;background:#4a463d"></span>Educations</a>
+
+<a href="/tools/" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:15px;font-weight:500;background:transparent;color:#c9c2b0"><span style="width:8px;height:8px;border-radius:2px;background:#4a463d"></span>Tools</a>
+
+<a href="/wiki/" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:15px;font-weight:500;background:transparent;color:#c9c2b0"><span style="width:8px;height:8px;border-radius:2px;background:#4a463d"></span>위키</a>
+
+<a href="/community/" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:15px;font-weight:500;background:transparent;color:#c9c2b0"><span style="width:8px;height:8px;border-radius:2px;background:#4a463d"></span>커뮤니티</a>
+
+<a href="/lounge/" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:15px;font-weight:500;background:#26221a;color:#f0cf7e"><span style="width:8px;height:8px;border-radius:2px;background:#d9b45f"></span>라운지</a>
+
+<a href="/settings/" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:15px;font-weight:500;background:transparent;color:#c9c2b0"><span style="width:8px;height:8px;border-radius:2px;background:#4a463d"></span>설정</a>
+
+<div style="margin-top:auto;padding:14px 12px;border-top:1px solid #2e2b25;display:flex;flex-direction:column;gap:3px;font-size:12px;color:#8d877a"><span>Made by Frenchfries777 with Claude AI</span><span>© 2026 Frenchfries777 · CC BY-NC-ND 4.0</span></div>
+</aside>
+<main style="position:relative;overflow:hidden;flex:1 1 640px;min-width:0;box-sizing:border-box;display:flex;flex-direction:column;background:#0e0e0e">
+<img src="/img/pixel-bg.png" alt="도트 풍경" style="position:absolute;left:0;top:0;width:100%;height:auto;display:block;image-rendering:pixelated">
+<div style="position:absolute;left:0;top:0;width:100%;height:100%;background:linear-gradient(180deg,rgba(14,14,14,.1) 0,rgba(14,14,14,.1) 120px,rgba(14,14,14,.8) 430px,rgba(14,14,14,.78) 100%)"></div>
+<div style="position:relative;padding:0 40px;display:flex;flex-direction:column">
+<div id="ffTop"><div id="onlineBar"></div><div class="tb"><span data-ff-account data-ff-nohub></span></div></div>
+<div style="padding:70px 0 34px;display:flex;flex-direction:column;gap:16px">
+<span style="font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;letter-spacing:.2em;color:#f0cf7e">AI CHAT</span>
+<h1 style="margin:0;font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(48px,7vw,96px);line-height:.95;letter-spacing:.01em">AI 체험</h1>
+<p style="margin:0;max-width:640px;min-height:61px;font-size:18px;line-height:1.7;color:#ece4d0">사이트의 자체 AI와 이야기해 봐요. 내 기기 안에서 돌아가서 대화가 밖으로 나가지 않아요.</p>
+</div>
+<div class="ffx-c">
+<div hidden>
 <header class="top">
   <a class="home" data-noemoji href="../" aria-label="도구 목록">🍟</a>
   <span class="brand" data-notr>AI <b>CHAT</b></span>
@@ -258,7 +323,7 @@ html[data-ff-theme] .dlg .acts .btn,html[data-ff-theme] .dlg .btn{border-radius:
     <p class="lead">사이트의 자체 AI와 이야기해 봐요. 내 기기 안에서 돌아가서 대화가 밖으로 나가지 않아요. 틀린 답에는 👎 틀렸어요를 눌러 알려 주세요.</p></div>
     <img class="hero-lg" src="../icons/ai-chat.svg" alt="" width="150" height="150">
   </section>
-  <section id="pick">
+  </div><section id="pick">
     <div class="models" id="models"></div>
     <div class="arenaGo"><button class="ghost" id="arenaBtn" type="button" disabled>⚔ AI 대결장</button><small>두 모델이 같은 질문에 답하면, 더 나은 쪽을 골라요</small></div>
     <section class="recent" id="recent" hidden><h2>지난 대화</h2><p class="sub">이 기기에만 저장돼요</p><p class="sub">이름을 붙인 대화는 오래돼도 지워지지 않아요</p><ul class="rl" id="rl"></ul></section>
@@ -285,7 +350,9 @@ html[data-ff-theme] .dlg .acts .btn,html[data-ff-theme] .dlg .btn{border-radius:
   </section>
   <p class="hint">작은 AI라서 틀릴 수 있어요. 중요한 일은 꼭 다시 확인해 주세요.</p>
   <p class="hint" id="loginHint" hidden>로그인한 상태로 틀렸어요를 누르면 질문과 답이 개발자에게도 전해져요.</p>
-</main>
+
+</div>
+</div></main></div>
 <script src="../ai-prompts.js"></script>
 <script src="../ai-cloud.js?v=1"></script>
 <script src="../ai.js?v=ai39.l27"></script>
