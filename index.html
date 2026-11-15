@@ -236,8 +236,14 @@ img{max-width:100%}
     el.style.display='flex'; var i=el.querySelector('input'); i.focus(); i.select(); load().then(function(){ if(i.value) run(i.value); });
   }
   function close(){ var el=document.getElementById('srxBox'); if(el&&el.style.display!=='none'){ el.style.display='none'; var i=el.querySelector('input'); if(i) i.blur(); } }
+
+  var SXA=null;
+  function sxaLoad(done){ if(SXA){ return; } SXA=[]; try{ fetch('https://apps.frenchfries777.com/apps.json').then(function(r){ return r.ok?r.json():{apps:[]}; }).then(function(a){ SXA=((a&&a.apps)||[]).map(function(x){ return {name:String(x.name||''),url:String(x.url||''),tag:String(x.tagline||''),txt:(x.name+' '+(x.tagline||'')+' '+(x.tags||[]).join(' ')).toLowerCase()}; }); done(); }).catch(function(){}); }catch(e){} }
+  function sxaHtml(ql,q,have){ var m=(SXA||[]).filter(function(x){ return x.url&&x.txt.indexOf(ql)>=0&&x.url.indexOf('/tools/')<0&&have.indexOf(x.url)<0; }).slice(0,8); if(!m.length) return '';
+  return '<div class="sg"><h4>사이트 전체 · 프로그램과 앱</h4>'+m.map(function(x){ return '<a class="sr" href="'+esc(x.url)+'"><b>'+smark(x.name,q)+'</b><small>'+smark(x.tag,q)+'</small></a>'; }).join('')+'</div>'; }
   function run(v){
     var el=document.getElementById('srxBox'), R=el&&el.querySelector('.srs'); if(!R) return; var q=String(v||'').trim(); SX.sel=-1;
+    sxaLoad(function(){ var i=document.querySelector('#srxBox input'); if(i&&i.value) run(i.value); });
     if(!q){ R.innerHTML=''; return; } var ql=q.toLowerCase(), h='';
     var ts=tools().filter(function(t){ return (t.name+' '+t.text).toLowerCase().indexOf(ql)>=0; });
     if(ts.length) h+='<div class="sg"><h4>도구</h4>'+ts.map(function(t){ return '<a class="sr" href="'+esc(t.href)+'"><b>'+smark(t.name,q)+'</b><small>'+ssnip(t.text,q)+'</small></a>'; }).join('')+'</div>';
@@ -245,6 +251,7 @@ img{max-width:100%}
     if(fs.length) h+='<div class="sg"><h4>기능</h4>'+fs.map(function(f){ return '<a class="sr" href="#tools"><b>'+smark(f.name,q)+'</b><small>'+ssnip(f.text,q)+'</small></a>'; }).join('')+'</div>';
     var ps=(SX.pn||[]).map(function(p){ var sc=0; if(p.title.toLowerCase().indexOf(ql)>=0) sc+=10; if(p.text.toLowerCase().indexOf(ql)>=0) sc+=2; return {p:p,sc:sc}; }).filter(function(x){ return x.sc; }).sort(function(a,b){ return b.sc-a.sc||(a.p.date<b.p.date?1:-1); }).slice(0,8);
     if(ps.length) h+='<div class="sg"><h4>패치노트</h4>'+ps.map(function(x){ var p=x.p; return '<a class="sr" href="patchnotes/#'+esc(p.key)+'"><span class="gt">'+esc(p.prog)+' '+esc(p.build)+'</span><b>'+smark(p.title,q)+'</b><small>'+ssnip(p.text,q)+'</small></a>'; }).join('')+'</div>';
+    h+=sxaHtml(ql,q,h);
     R.innerHTML=h||'<div class="se">검색 결과가 없어요.</div>';
   }
   var b=document.getElementById('srxBtn'); if(b) b.onclick=open;
