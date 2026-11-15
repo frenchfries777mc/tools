@@ -3,6 +3,32 @@
  "name": "Tools 사이트",
  "notes": [
   {
+   "date": "2026-11-15",
+   "build": "v66",
+   "title": "Fry Blocks에서 JavaScript·Python·BeaconScript 블록",
+   "items": [
+    "Fry Blocks 위쪽 언어 버튼으로 HTML · JavaScript · Python · BeaconScript 중에서 고를 수 있어요. 언어마다 프로젝트가 따로 저장되고, 파일 목록에서 그대로 열려요",
+    "JavaScript 블록 약 330개, Python 블록 약 330개, BeaconScript 블록 175개를 넣었어요. 출력·입력, 변수, 계산, 글자, 목록, 딕셔너리, 되풀이, 함수, 시간, 랜덤, 그림판, 거북이, 이벤트, 새 아이템·몬스터·광석·건물·창 만들기까지 있어요",
+    "▶ 실행하기를 누르면 오른쪽에 결과가 나와요. 파이썬은 처음 한 번 파이썬(약 10MB)을 받아요. 입력값 칸과 거북이 그림도 지원해요",
+    "코드가 틀리면 그 줄을 만든 블록에 ⚠ 표시와 설명이 떠요. BeaconScript는 블록을 바꾸면 바로 문법을 검사하고, 「바로 적용」으로 Beaconfall 월드에 넣어 볼 수도 있어요",
+    "코드 탭의 「Fry Code에서 열기」로 코드를 Fry Code로 보내 이어서 고칠 수 있어요. 언어마다 예제도 넣었어요 (JavaScript 6, Python 7, BeaconScript 7)",
+    "같이 고치기도 언어를 따라가요. 손님은 방장이 쓰는 언어로 열려요"
+   ],
+   "tr": {
+    "en": {
+     "title": "JavaScript, Python and BeaconScript blocks in Fry Blocks",
+     "items": [
+      "The language button at the top of Fry Blocks lets you choose HTML, JavaScript, Python or BeaconScript. Each language keeps its own projects, and they all open from the file list",
+      "About 330 JavaScript blocks, about 330 Python blocks and 175 BeaconScript blocks were added: output and input, variables, math, text, lists, dictionaries, loops, functions, time, random, canvas, turtle, events, and making new items, monsters, ores, buildings and windows",
+      "Press ▶ Run to see the result on the right. Python downloads itself (about 10MB) the first time. There is an input box and turtle drawing too",
+      "When the code is wrong, the block that made that line shows a ⚠ with an explanation. BeaconScript is checked as soon as you change a block, and 'Apply now' puts it into a Beaconfall world to try",
+      "'Open in Fry Code' on the code tab sends the code to Fry Code so you can keep editing it there. Each language also has examples (JavaScript 6, Python 7, BeaconScript 7)",
+      "Edit together follows the language too. A guest opens in the language the host is using"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-13",
    "build": "v65",
    "title": "모든 프로그램에서 같이 고치기",
