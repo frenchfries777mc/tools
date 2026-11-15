@@ -18,6 +18,7 @@
 <script src="lib/blockly_compressed.js"></script>
 <script src="lib/blocks_compressed.js"></script>
 <script src="lib/javascript_compressed.js"></script>
+<script src="lib/python_compressed.js"></script>
 <script>document.write('<script src="lib/msg/'+({nw:'en',gk:'ko'}[FFT.lang]||FFT.lang)+'.js"><\/script>');</script>
 <style>
 :root{ --bg:#0e0e0e; --panel:#171717; --panel2:#121212; --line:#2e2b25; --text:#ece6d8; --dim:#a39c8c; --fry:#d9b45f; --fry2:#b8923a; }
@@ -67,6 +68,24 @@ button,input,select{font:inherit; color:inherit;}
 #codeWrap{flex:1; min-height:0; position:relative; background:#0e0e0e;}
 #codeEdit{position:absolute; inset:0; width:100%; height:100%; margin:0; border:0; outline:0; resize:none; padding:14px; box-sizing:border-box; font-family:'JetBrains Mono',monospace; font-size:12.5px; line-height:1.6; white-space:pre; overflow:auto; tab-size:2; background:#0e0e0e; color:#d6dbe6; caret-color:#d9b45f;}
 #prog{position:fixed; left:50%; bottom:24px; transform:translateX(-50%); z-index:60; min-width:240px; max-width:86vw; padding:12px 16px; border-radius:12px; background:rgba(20,22,30,.94); color:#fff; font-size:13px; box-shadow:0 6px 24px rgba(0,0,0,.4);} #prog[hidden]{display:none;} #progTrack{height:6px; margin-top:8px; background:rgba(255,255,255,.18); border-radius:3px; overflow:hidden;} #progBar{height:100%; width:0; background:#d9b45f; transition:width .25s;}
+/* other languages (JavaScript, Python, BeaconScript) */
+#outPane{flex:1; min-height:0; display:flex; flex-direction:column;} #outPane[hidden]{display:none;}
+#outTabs{display:flex; align-items:center; gap:4px; padding:6px 8px; border-bottom:1px solid var(--line); background:var(--panel); flex:0 0 auto;}
+#outTabs button{border:1px solid var(--line); background:var(--panel2); color:var(--dim); border-radius:8px; padding:5px 10px; cursor:pointer; font-size:12.5px;} #outTabs button[hidden]{display:none;}
+#outTabs button.on{background:var(--panel2); color:var(--text); border-color:var(--fry);}
+#outTabs .sp{flex:1;}
+#outOut{flex:1; min-height:0; display:flex;} #outOut[hidden],#outPv[hidden],#outWd[hidden]{display:none;}
+#outBox{flex:1; margin:0; padding:10px 12px; overflow:auto; background:#05060a; color:#d6dbe6; font:12.5px/1.6 'JetBrains Mono',monospace; white-space:pre-wrap; word-break:break-word; user-select:text; -webkit-user-select:text;}
+#outBox .err{color:#ff7a7a;} #outBox .warn{color:#ffb86b;} #outBox .ok{color:#3fe08f;} #outBox .sys{color:#9aa3b5;}
+#outPv,#outWd{flex:1; min-height:0; overflow:auto; background:#fff; position:relative;} #outPv .tl{color:#222;}
+#outStat{padding:4px 10px; font-size:12px; color:var(--fry); border-top:1px solid var(--line); flex:0 0 auto;}
+#outStdin{flex:0 0 auto; border-top:1px solid var(--line); padding:6px 8px; background:var(--panel);} #outStdin label{display:block; font-size:11.5px; color:var(--dim); margin-bottom:3px;}
+#outIn{width:100%; box-sizing:border-box; resize:vertical; background:var(--panel2); color:var(--text); border:1px solid var(--line); border-radius:6px; padding:6px 8px; font:12.5px/1.5 'JetBrains Mono',monospace;}
+#langBtn #langIco{font-size:15px;}
+body:not([data-lang="html"]) #frame,body:not([data-lang="html"]) #objBar,body:not([data-lang="html"]) #varBar,body:not([data-lang="html"]) #dbgBar,body:not([data-lang="html"]) #logBar,body:not([data-lang="html"]) #logBox,body:not([data-lang="html"]) #veil,
+body:not([data-lang="html"]) #pauseBtn,body:not([data-lang="html"]) #stepBtn,body:not([data-lang="html"]) #varBtn,body:not([data-lang="html"]) #aiBtn,body:not([data-lang="html"]) #linkBtn,body:not([data-lang="html"]) #openTab,body:not([data-lang="html"]) #rerun{display:none!important;}
+body[data-lang="html"] #outPane{display:none!important;}
+html[data-ff-theme=light] #outTabs,html[data-ff-theme=light] #outStdin,html[data-ff-theme=light] #outStat{background:#fff;} html[data-ff-theme=light] #outBox{background:#faf9f5; color:#222;} html[data-ff-theme=light] #outBox .err{color:#c42b22;} html[data-ff-theme=light] #outBox .sys{color:#555;} html[data-ff-theme=light] #outBox .ok{color:#17803f;} html[data-ff-theme=light] #outBox .warn{color:#8a5a00;}
 #codeBar{display:flex; align-items:center; gap:8px; padding:6px 8px; border-bottom:1px solid var(--line); flex-wrap:wrap;} #codeBar .tbtn{height:32px;} #codeBar [hidden]{display:none;} #codeNote{font-size:12px; color:#ffb86b;}
 
 .hint{font-size:12px; color:var(--dim); padding:6px 12px; border-top:1px solid var(--line);}
@@ -364,12 +383,13 @@ html[data-ff-theme] .baiChips button{background:transparent!important;border:1px
 html[data-ff-theme] .baiChips button:hover{background:color-mix(in srgb,var(--fry) 18%,transparent)!important;color:var(--text)!important}
 </style>
 </head>
-<body class="v-blocks">
+<body class="v-blocks" data-lang="html">
 <header class="top">
   <a class="home" data-noemoji href="../" aria-label="도구 목록">🍟</a>
   <span class="brand" data-notr>FRY <b>BLOCKS</b></span>
   
   <input id="projName" value="나의 웹페이지" aria-label="프로젝트 이름" spellcheck="false">
+  <button class="tbtn" id="langBtn" type="button" title="블록으로 만들 언어를 골라요 (HTML · JavaScript · Python · BeaconScript)"><span id="langIco">🌐</span><span class="lb" id="langName" data-notr>HTML</span><span aria-hidden="true">▾</span></button>
   <button class="tbtn" id="verBtn" type="button" title="저장해 둔 예전 버전으로 되돌려요"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 8v4l3 2"/></svg><span class="lb">버전</span></button>
   <span class="sp"></span>
   <span class="runGrp" id="runGrp">
@@ -410,7 +430,13 @@ html[data-ff-theme] .baiChips button:hover{background:color-mix(in srgb,var(--fr
       <button class="ib" id="openTab" title="새 탭에서 열기"><svg viewBox="0 0 24 24"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></button>
       <button class="ib" id="copyCode" title="코드 복사"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
     </div>
-    <div class="pane on" id="pPrev"><div id="veil"><span>⏸ 멈춤 · 이어하려면 멈추기를 다시 눌러요</span></div><iframe id="frame" title="미리보기" allow="autoplay" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe>
+    <div class="pane on" id="pPrev"><div id="veil"><span>⏸ 멈춤 · 이어하려면 멈추기를 다시 눌러요</span></div><div id="outPane" hidden>
+        <div id="outTabs"><button data-t="out" class="on">결과</button><button data-t="pv">화면</button><button data-t="wd" hidden>월드</button><span class="sp"></span><button id="outWorld" type="button" aria-pressed="false" hidden title="Beaconfall 월드를 이 안에서 바로 실행해요. 블록을 바꾸면 월드에도 바로 적용돼요">바로 적용</button><button id="outClear" type="button">지우기</button></div>
+        <div id="outOut"><pre id="outBox" data-notr></pre></div><div id="outPv" hidden data-notr></div><div id="outWd" hidden data-notr></div>
+        <div id="outStat" hidden></div>
+        <div id="outStdin" hidden><label for="outIn">입력값 (input() 이 읽을 값, 한 줄에 하나)</label><textarea id="outIn" rows="2" spellcheck="false" data-notr></textarea></div>
+      </div>
+      <iframe id="frame" title="미리보기" allow="autoplay" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe>
       <div id="objBar"><button class="tbtn" id="objPrevBtn" title="그림 모음에서 골라 페이지에 넣어요">🍎 <span>오브젝트 넣기</span></button></div>
       <div id="varBar" hidden><b>변수</b><div id="varList" data-notr></div></div>
       <div id="dbgBar" hidden>
@@ -419,11 +445,12 @@ html[data-ff-theme] .baiChips button:hover{background:color-mix(in srgb,var(--fr
         <div id="dbgVars" data-notr></div>
       </div>
       <div id="logBar"><button id="logToggle">📋 <span>로그</span> <b id="logN">0</b></button><span class="sp"></span><button id="logClear">로그 비우기</button></div><div id="logBox" data-notr></div></div>
-    <div class="pane" id="pCode"><div id="codeBar"><button class="tbtn" id="codeBlocks" hidden>블록으로 바꾸기</button><button class="tbtn" id="codeUndo" hidden>바꾸기 취소</button><button class="tbtn" id="codeReset" hidden>블록 코드로 되돌리기</button><span id="codeNote">여기서 바로 고칠 수 있어요 · 블록을 바꾸면 블록 코드로 돌아와요</span></div><div id="codeWrap"><textarea id="codeEdit" data-notr spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="HTML 코드"></textarea></div></div>
+    <div class="pane" id="pCode"><div id="codeBar"><button class="tbtn" id="codeOpen" hidden>Fry Code에서 열기</button><button class="tbtn" id="codeBlocks" hidden>블록으로 바꾸기</button><button class="tbtn" id="codeUndo" hidden>바꾸기 취소</button><button class="tbtn" id="codeReset" hidden>블록 코드로 되돌리기</button><span id="codeNote">여기서 바로 고칠 수 있어요 · 블록을 바꾸면 블록 코드로 돌아와요</span></div><div id="codeWrap"><textarea id="codeEdit" data-notr spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="HTML 코드"></textarea></div></div>
     <div class="hint" id="hint">블록을 바꾸면 미리보기가 바로 바뀌어요.</div>
   </aside>
 </div>
 <div class="menu" id="exMenu"></div>
+<div class="menu" id="langMenu"></div>
 
 <div class="ov" id="padDlg"><div class="dlg">
   <div class="dh"><h3>그림 그리기</h3><button class="x" data-close aria-label="닫기">×</button></div>
@@ -539,7 +566,12 @@ html[data-ff-theme] .baiChips button:hover{background:color-mix(in srgb,var(--fr
 <script src="../peer-room.js?v=1"></script>
 <script src="../ffco-strings.js?v=1"></script>
 <script src="../ffco.js?v=1"></script>
-<script src="app.js?v=57.f3"></script>
+<script src="langs.js?v=1"></script>
+<script src="lang-js.js?v=1"></script>
+<script src="lang-py.js?v=1"></script>
+<script src="lang-bs.js?v=1"></script>
+<script src="multi.js?v=1"></script>
+<script src="app.js?v=57.f4"></script>
 <script src="../ai.js?v=ai39.l27"></script>
 <script src="../ai-wrong.js?v=4.l13"></script>
 <script src="../ai-prompts.js?v=41.l13"></script>
