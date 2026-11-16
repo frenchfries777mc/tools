@@ -24,7 +24,7 @@ body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,
 button,input,select,textarea{font:inherit;color:inherit;}
 [hidden]{display:none!important;}
 .top{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--panel);flex:0 0 auto;overflow-x:auto;scrollbar-width:none;}
-.top::-webkit-scrollbar{display:none;} .top>*{flex-shrink:0;}
+.top::-webkit-scrollbar{display:none;} .top>*{flex-shrink:0;} .top{flex-wrap:wrap;overflow:visible;row-gap:6px;}
 .home{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--fry),var(--fry2));text-decoration:none;font-size:18px;}
 .brand{font-family:'Oswald',sans-serif;font-weight:700;font-size:18px;letter-spacing:.04em;white-space:nowrap;} .brand b{color:var(--fry);}
 #dname{flex:1 1 100px;min-width:70px;max-width:260px;background:transparent;border:1px solid transparent;border-radius:8px;padding:6px 8px;font-size:15px;font-weight:500;}
@@ -83,7 +83,7 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
 .prev{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;background:var(--desk);align-items:center;padding:10px;gap:8px;}
 .pwrap{flex:1 1 0;min-height:0;width:100%;position:relative;}
 #cv{touch-action:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:transparent;}
-.tr{display:flex;align-items:center;gap:8px;} .tc{font-variant-numeric:tabular-nums;color:var(--dim);font-size:13px;}
+.tr{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;} .tc{font-variant-numeric:tabular-nums;color:var(--dim);font-size:13px;}
 .tlbar{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:6px 10px;overflow-x:auto;scrollbar-width:none;} .tlbar>*{flex-shrink:0;} .tlbar{background:var(--panel);border-top:1px solid var(--line);}
 .tlw{touch-action:pan-x pan-y;flex:0 0 232px;background:var(--panel);overflow:auto;position:relative;border-top:1px solid var(--line);}
 .tlin{position:relative;min-height:100%;}

@@ -41,7 +41,7 @@ button,input,select,textarea{font:inherit; color:inherit;}
 .langSel{background:var(--panel2); color:var(--dim); border:1px solid var(--line); border-radius:8px; padding:6px 8px; font-size:13px;}
 @media(max-width:1100px){ .saved{display:none;} }
 @media(max-width:960px){ .brand{display:none;} .top{gap:6px;} #docName{flex-basis:70px;} .langSel{max-width:96px;} }
-.top{overflow-x:auto; scrollbar-width:none;} .top::-webkit-scrollbar{display:none;} .top>*{flex-shrink:0;} .top #docName{flex-shrink:1;}
+.top{overflow-x:auto; scrollbar-width:none;} .top::-webkit-scrollbar{display:none;} .top>*{flex-shrink:0;} .top #docName{flex-shrink:1;} .top{flex-wrap:wrap;overflow:visible;row-gap:6px;}
 @media(max-width:700px){ .tbtn .lb{display:none;} #docName{max-width:none;} .langSel{max-width:84px;} .top{padding:6px 8px;} }
 /* ribbon tabs */
 .tabs{flex:0 0 auto; display:flex; gap:2px; padding:4px 8px 0; background:var(--panel); border-bottom:1px solid var(--line); overflow-x:auto; scrollbar-width:none;} .tabs::-webkit-scrollbar{display:none;}
