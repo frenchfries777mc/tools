@@ -1644,6 +1644,7 @@
    "date": "2026-11-05",
    "build": "v1",
    "title": "Fry Draw 첫 공개",
+   "tr": {"en": {"title": "Fry Draw first release", "items": ["Drawing tools: freehand, straight line, smooth curve, square, circle, polygon, star, text, colour fill, eraser", "Selecting: move, rotate, resize, flip, duplicate, change order, select several at once", "Symmetry drawing: one stroke repeats 2 to 24 times around the centre, mirror flip also possible", "15 patterns: spirograph, rose curve, Lissajous, spiral, golden spiral, sunflower dots, flower pattern, star shape, string art, concentric shapes, waves, dot grid, arc tiles, Koch snowflake, Sierpinski triangle, heart", "Set the canvas size yourself, background colour or transparent background, grid and snap to grid", "Ask the AI (test feature) in words to draw shapes", "Export as PNG (1x and 2x), SVG or project file; open SVG or project files; auto save"]}},
    "items": [
     "그리기 도구: 자유 선, 직선, 부드러운 곡선, 네모, 원, 다각형, 별, 글자, 색 채우기, 지우개",
     "고르기: 옮기기, 돌리기, 크기 바꾸기, 뒤집기, 복제, 순서 바꾸기, 여러 개 고르기",
