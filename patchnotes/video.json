@@ -2842,6 +2842,7 @@
    "date": "2026-11-05",
    "build": "v2",
    "title": "Fry Video 2: 더 많은 편집 기능",
+   "tr": {"en": {"title": "Fry Video 2: more editing features", "items": ["7 transition effects between clips: fade, push, wipe, grow, spin and others", "Motion (keyframes): set the start and end position, size and rotation to animate", "Chroma key (removes a green background), shape clips (heart, star, circle, square and more) and emoji", "Sound waveform shown inside the clip; record directly with the microphone", "Paste several lines of subtitles at once and place them with timing"]}},
    "items": [
     "클립 사이 이어지는 효과 7가지(서서히·밀기·닦기·커지며·돌며)",
     "움직임(키프레임): 시작과 끝의 위치·크기·회전을 정해 움직이게",
@@ -2854,6 +2855,7 @@
    "date": "2026-11-05",
    "build": "v1",
    "title": "Fry Video 첫 공개",
+   "tr": {"en": {"title": "Fry Video first release", "items": ["Add video, picture and sound files and drag them on the timeline; drag the ends to shorten, cut at the playhead, duplicate and delete", "Two video lines (video and overlay), a text line and a sound line. Layer video over video and change size, position and opacity", "Text (subtitles): size, colour, outline, text box, position, and fade, slide up, from side, grow, pop and one-letter-at-a-time effects", "Volume, fade in and out, speed from 0.25 to 4 times, 7 colour effects (black and white, old photo, sharpen and more), plus brightness, contrast, saturation and blur", "Aspect ratio 16:9, 9:16, 1:1, 4:3 or 21:9; save the current frame as PNG", "Export the finished video as mp4 or webm (recorded by playing from start to end); files and edits saved automatically on this device"]}},
    "items": [
     "영상·그림·소리 파일을 넣고 타임라인에서 끌어 옮기기, 양 끝을 끌어 줄이기, 재생 막대 위치에서 자르기, 복제·지우기",
     "영상 두 줄(영상·겹침), 글자 줄, 소리 줄. 영상 위에 영상을 겹치고 크기·위치·투명도 바꾸기",

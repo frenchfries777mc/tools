@@ -3,36 +3,36 @@
 
 
 patchnotes/python.json | python/index.html 카드 문구 3개(en만), python/langs.js 안의 한글 메시지(검사·미리보기 글자)는 아직 번역 안 됨 | python v3 | 2026-11-04
-draw/ + index.html 카드 + patchnotes/draw.json + draw/ 안 한국어 전부 | Fry Draw 첫 공개 (en 번역 없음) | draw v1 | 2026-11-05
+draw/ + index.html 카드 + draw/ 안 한국어 전부 | Fry Draw 첫 공개 (en 번역 없음) | draw v1 | 2026-11-05
 patchnotes/python.json | BeaconScript 단어별 미리보기 항목 (en만), python/langs.js 단어 뜻(한글)은 아직 번역 안 됨 | python v6 | 2026-11-05
-score/ + index.html 카드 + patchnotes/score.json + score/ 안 한국어 전부 | Fry Score 첫 공개 (en 번역 없음) | score v1 | 2026-11-05
-video/ + index.html 카드 + patchnotes/video.json + video/ 안 한국어 전부 | Fry Video 첫 공개 (en 번역 없음) | video v1 | 2026-11-05
-patchnotes/score.json | Fry Score v2 항목 (en 번역 없음), score/app.js 한국어 메시지 | score v2 | 2026-11-05
-patchnotes/video.json | Fry Video v2 항목 (en 번역 없음), video/ 안 한국어 | video v2 | 2026-11-05
-patchnotes/draw.json | Fry Draw v2 항목 (en 번역 없음), draw/app.js 한국어 메시지 | draw v2 | 2026-11-05
+score/ + index.html 카드 + score/ 안 한국어 전부 | Fry Score 첫 공개 (en 번역 없음) | score v1 | 2026-11-05
+video/ + index.html 카드 + video/ 안 한국어 전부 | Fry Video 첫 공개 (en 번역 없음) | video v1 | 2026-11-05
+score/app.js 한국어 메시지 | score v2 | 2026-11-05
+video/ 안 한국어 | video v2 | 2026-11-05
+draw/app.js 한국어 메시지 | draw v2 | 2026-11-05
 python/index.html·app.js | 찾기 창 글자(찾기, 없음, 툴팁) 번역 안 됨 | python v22 | 2026-11-05
-patchnotes/draw.json | Fry Draw v3 항목 (en만), draw/app.js 선 모양·화살표·섞기·위치와 크기 한국어 문구 | draw v3 | 2026-11-06
+draw/app.js 선 모양·화살표·섞기·위치와 크기 한국어 문구 | draw v3 | 2026-11-06
 score/app.js | Fry Score v3 한국어 메시지·버튼 | score v3 | 2026-11-06
 score/app.js | Fry Score v4 한국어 메시지·버튼 | score v4 | 2026-11-06
 score/app.js | Fry Score v5 한국어 메시지·버튼 | score v5 | 2026-11-06
 score/app.js | Fry Score v6 한국어 메시지·버튼 | score v6 | 2026-11-06
-patchnotes/draw.json | Fry Draw v4 항목 (en만), draw/app.js 팔레트·스포이트·레이어·달라붙기 한국어 문구 | draw v4 | 2026-11-06
-patchnotes/draw.json | Fry Draw v5 항목 (en만), draw/app.js 펜·점 고치기 한국어 문구 | draw v5 | 2026-11-06
+draw/app.js 팔레트·스포이트·레이어·달라붙기 한국어 문구 | draw v4 | 2026-11-06
+draw/app.js 펜·점 고치기 한국어 문구 | draw v5 | 2026-11-06
 score/app.js | Fry Score v7 한국어 메시지·버튼 | score v7 | 2026-11-06
 score/app.js | Fry Score v8 한국어 메시지·버튼 | score v8 | 2026-11-06
-patchnotes/draw.json | Fry Draw v6 항목 (en만), draw/app.js 글자 편집·선 따라 쓰기 한국어 문구 | draw v6 | 2026-11-06
+draw/app.js 글자 편집·선 따라 쓰기 한국어 문구 | draw v6 | 2026-11-06
 score/app.js | Fry Score v9 한국어 메시지·버튼 | score v9 | 2026-11-06
 score/app.js | Fry Score v10 한국어 메시지·버튼 | score v10 | 2026-11-06
 score/app.js | Fry Score v11 한국어 메시지·버튼 | score v11 | 2026-11-06
-patchnotes/draw.json | Fry Draw v7 항목 (en만), draw/app.js 그라데이션·무늬·그림자·마스크 한국어 문구 | draw v7 | 2026-11-06
-patchnotes/draw.json | Fry Draw v8 항목 (en만), draw/app.js 내보내기 창 한국어 문구 | draw v8 | 2026-11-06
-patchnotes/draw.json | Fry Draw v9 항목 (en만), draw/app.js 눈금자·가이드·반복 복제·윤곽 한국어 문구 | draw v9 | 2026-11-06
-patchnotes/draw.json | Fry Draw v10 항목 (en만), draw/app.js 페이지·색 보정·두 손가락 한국어 문구 | draw v10 | 2026-11-06
-patchnotes/draw.json | Fry Draw v11 항목 (en만), draw/app.js 붓·도형 모음·벡터 따기 한국어 문구 | draw v11 | 2026-11-06
-patchnotes/draw.json | Fry Draw v12 항목 (en만), draw/app.js 그라데이션 손잡이·글자 윤곽·크기 목록 한국어 문구 | draw v12 | 2026-11-06
+draw/app.js 그라데이션·무늬·그림자·마스크 한국어 문구 | draw v7 | 2026-11-06
+draw/app.js 내보내기 창 한국어 문구 | draw v8 | 2026-11-06
+draw/app.js 눈금자·가이드·반복 복제·윤곽 한국어 문구 | draw v9 | 2026-11-06
+draw/app.js 페이지·색 보정·두 손가락 한국어 문구 | draw v10 | 2026-11-06
+draw/app.js 붓·도형 모음·벡터 따기 한국어 문구 | draw v11 | 2026-11-06
+draw/app.js 그라데이션 손잡이·글자 윤곽·크기 목록 한국어 문구 | draw v12 | 2026-11-06
 score/app.js | Fry Score v12 한국어 메시지·버튼 | score v12 | 2026-11-06
 score/app.js | Fry Score v13 한국어 메시지·버튼 | score v13 | 2026-11-06
-patchnotes/draw.json | Fry Draw v13 항목 (en만), draw/app.js 심볼·묶음 안 고치기 한국어 문구 | draw v13 | 2026-11-06
+draw/app.js 심볼·묶음 안 고치기 한국어 문구 | draw v13 | 2026-11-06
 score/app.js | Fry Score v14 한국어 메시지·버튼 | score v14 | 2026-11-06
 draw/app.js | SVG 가져오기 안내·붓 종류 한국어 문구 | draw v14 | 2026-11-06
 score/app.js | Fry Score v15 한국어 메시지·버튼 | score v15 | 2026-11-06

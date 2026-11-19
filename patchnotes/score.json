@@ -2406,6 +2406,7 @@
    "date": "2026-11-05",
    "build": "v2",
    "title": "MuseScore처럼: 셈여림·기호·슬러·가사·도돌이표",
+   "tr": {"en": {"title": "MuseScore-style: dynamics, markings, slurs, lyrics, repeats", "items": ["Add dynamics (pp to ff) and they show on the score and change playback loudness", "Staccato, accent, tenuto, fermata, slurs (up to the next note) and chord name display. Staccato plays short, fermata long, slurs play connected", "Lyrics per note, and paste lyrics all at once", "Repeat start and end per bar, 1st and 2nd endings, tempo change mid-piece. Applied to playback and MIDI (repeats apply to playback only)", "Up to 8 parts, wider spacing between lines, lyrics added to the sample piece 'Twinkle Twinkle Little Star'"]}},
    "items": [
     "셈여림(pp~ff)을 붙이면 악보에 표시되고 재생 소리 크기도 바뀜",
     "스타카토·악센트·테누토·늘임표, 슬러(다음 음까지), 코드 이름 표시. 스타카토는 짧게, 늘임표는 길게, 슬러는 이어서 재생",
@@ -2418,6 +2419,7 @@
    "date": "2026-11-05",
    "build": "v1",
    "title": "Fry Score 첫 공개",
+   "tr": {"en": {"title": "Fry Score first release", "items": ["Click on the staff to place notes and rests; chords, dotted notes, ties, sharps, flats and naturals", "Type A to G on the keyboard to write in sequence, 1 to 5 for note length, up and down arrows to change pitch", "Up to 4 staves (treble or bass), choose time signature and key (up to 6 sharps or flats); bars and beams for eighth and sixteenth notes are automatic", "Play with piano, flute, strings, organ, guitar, music box, 8-bit or bass, with playback position shown; per-part volume and mute", "Write music as text (C4/4 E4 G4/2); AI (test feature) drafts a melody", "Open and export MIDI, save PNG, SVG or print (PDF), project files, auto save, 3 sample pieces"]}},
    "items": [
     "오선을 눌러 음표·쉼표를 찍고, 화음과 점음표, 붙임줄, 올림·내림·제자리표",
     "키보드로 A~G를 눌러 이어 쓰기, 1~5로 길이, 위아래 화살표로 음 높이 바꾸기",
