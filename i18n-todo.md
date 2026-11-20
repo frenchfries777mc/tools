@@ -2,9 +2,9 @@
 형식: 파일 | 키(한국어 문구) | 바뀐 버전 | 날짜
 
 
-patchnotes/python.json | python/index.html 카드 문구 3개(en만), python/langs.js 안의 한글 메시지(검사·미리보기 글자)는 아직 번역 안 됨 | python v3 | 2026-11-04
+python/langs.js(파일 없음, code/langs.js로 옮겨진 듯 — 위치 확인 필요) 안의 한글 메시지(검사·미리보기 글자)는 아직 번역 안 됨 | python v3 | 2026-11-04
 draw/ + index.html 카드 + draw/ 안 한국어 전부 | Fry Draw 첫 공개 (en 번역 없음) | draw v1 | 2026-11-05
-patchnotes/python.json | BeaconScript 단어별 미리보기 항목 (en만), python/langs.js 단어 뜻(한글)은 아직 번역 안 됨 | python v6 | 2026-11-05
+python/langs.js(위치 확인 필요, code/langs.js 추정) 단어 뜻(한글)은 아직 번역 안 됨 | python v6 | 2026-11-05
 score/ + index.html 카드 + score/ 안 한국어 전부 | Fry Score 첫 공개 (en 번역 없음) | score v1 | 2026-11-05
 video/ + index.html 카드 + video/ 안 한국어 전부 | Fry Video 첫 공개 (en 번역 없음) | video v1 | 2026-11-05
 score/app.js 한국어 메시지 | score v2 | 2026-11-05

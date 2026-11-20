@@ -2045,6 +2045,83 @@
       "In the BeaconScript rules view every word (on, world, generate...) is its own card with its meaning underneath",
       "Texts, numbers and percents have their own colours, and an unknown name shows as (name)"
      ]
+    },
+    "es": {
+     "title": "Vista previa de BeaconScript palabra por palabra",
+     "items": [
+      "En la vista de reglas de BeaconScript, cada palabra (on, world, generate...) es una tarjeta propia con su significado debajo",
+      "Los textos, números y porcentajes tienen sus propios colores, y un nombre desconocido aparece como (nombre)"
+     ]
+    },
+    "fr": {
+     "title": "Aperçu de BeaconScript mot par mot",
+     "items": [
+      "Dans la vue des règles de BeaconScript, chaque mot (on, world, generate...) a sa propre carte, avec son sens dessous",
+      "Les textes, les nombres et les pourcentages ont leurs propres couleurs, et un nom inconnu s'affiche sous la forme (nom)"
+     ]
+    },
+    "de": {
+     "title": "BeaconScript-Vorschau Wort für Wort",
+     "items": [
+      "In der Regelansicht von BeaconScript steht jedes Wort (on, world, generate ...) auf einer eigenen Karte, darunter die Bedeutung",
+      "Texte, Zahlen und Prozentwerte haben eigene Farben, und ein unbekannter Name wird als (Name) angezeigt"
+     ]
+    },
+    "ja": {
+     "title": "BeaconScriptの単語ごとのプレビュー",
+     "items": [
+      "BeaconScriptのルール表示では、on、world、generateなどの単語ごとに別のカードになり、その下に意味が出ます",
+      "文字、数字、パーセントはそれぞれ別の色で表示され、知らない名前は(名前)と表示されます"
+     ]
+    },
+    "zh": {
+     "title": "BeaconScript 逐词预览",
+     "items": [
+      "在 BeaconScript 规则视图中，每个单词（on、world、generate……）都是单独的卡片，下方显示其含义",
+      "文字、数字和百分比各有不同颜色，未知的名称显示为（名称）"
+     ]
+    },
+    "pt": {
+     "title": "Visualização de BeaconScript palavra por palavra",
+     "items": [
+      "Na visualização de regras do BeaconScript, cada palavra (on, world, generate...) fica em um cartão próprio, com o significado embaixo",
+      "Textos, números e porcentagens têm cores próprias, e um nome desconhecido aparece como (nome)"
+     ]
+    },
+    "ru": {
+     "title": "Предпросмотр BeaconScript по словам",
+     "items": [
+      "В просмотре правил BeaconScript каждое слово (on, world, generate...) — отдельная карточка, а ниже её значение",
+      "Текст, числа и проценты окрашены по-своему, а неизвестное имя показывается как (имя)"
+     ]
+    },
+    "tr": {
+     "title": "BeaconScript kelime kelime önizleme",
+     "items": [
+      "BeaconScript kural görünümünde her kelime (on, world, generate...) kendi kartında gösterilir ve altında anlamı çıkar",
+      "Metinler, sayılar ve yüzdeler kendi renklerinde görünür; bilinmeyen bir ad (ad) olarak gösterilir"
+     ]
+    },
+    "it": {
+     "title": "Anteprima di BeaconScript parola per parola",
+     "items": [
+      "Nella vista delle regole di BeaconScript ogni parola (on, world, generate...) è una scheda a sé, con il significato sotto",
+      "Testi, numeri e percentuali hanno colori propri, e un nome sconosciuto appare come (nome)"
+     ]
+    },
+    "pl": {
+     "title": "Podgląd BeaconScript słowo po słowie",
+     "items": [
+      "W widoku zasad BeaconScript każde słowo (on, world, generate...) ma osobną kartę, a pod nią jego znaczenie",
+      "Teksty, liczby i procenty mają własne kolory, a nieznana nazwa pokazuje się jako (nazwa)"
+     ]
+    },
+    "ar": {
+     "title": "معاينة BeaconScript كلمة كلمة",
+     "items": [
+      "في عرض قواعد BeaconScript، تظهر كل كلمة (on, world, generate...) في بطاقة مستقلة وتحتها معناها",
+      "للنصوص والأرقام والنسب ألوان خاصة بها، والاسم غير المعروف يظهر على شكل (الاسم)"
+     ]
     }
    }
   },
