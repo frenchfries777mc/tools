@@ -1094,7 +1094,9 @@ function openFile(file){
 
 /* ---------- ui ---------- */
 var TOOLS=[['sel','↖','고르기 (V)'],['hand','✋','화면 옮기기 (H)'],['pen','✏️','자유 선 (P)'],['line','╱','직선 (L)'],['brush','🖌️','붓: 속도·필압에 따라 굵기가 변하는 선'],['bez','✒️','펜: 눌러 점을 찍고 끌면 곡선 손잡이가 생겨요'],['shape','🔷','도형 모음: 하트·말풍선·구름 등'],['curve','〰️','곡선: 눌러 점 찍기, 두 번 누르면 끝'],['rect','▭','네모 (R)'],['ellipse','◯','원 (O)'],['poly','⬡','다각형 (G)'],['star','☆','별 (S)'],['node','◇','점 고치기 (N): 흰 점을 끌어 옮겨요'],['text','T','글자 (T)'],['eye','💧','스포이트: 도형을 누르면 색·선 모양을 가져와요. 다른 도형을 먼저 골라 두면 그 도형에 입혀요'],['bucket','🪣','색 채우기'],['erase','🧽','지우개 (E)']];
-function renderTools(){ $('tools').innerHTML=TOOLS.map(function(t){ return '<button class="tl'+(t[0]===tool?' on':'')+'" data-t="'+t[0]+'" title="'+t[2]+'">'+t[1]+'</button>'; }).join(''); }
+var TKEY={brush:'B',bez:'',node:'N',rect:'R',ellipse:'O',poly:'G',star:'S',text:'T',erase:'E'};
+function toolTip(t){ var k=TKEY[t[0]]; return (k&&t[2].indexOf('(')<0)?t[2]+' ('+k+')':t[2]; }
+function renderTools(){ $('tools').innerHTML=TOOLS.map(function(t){ return '<button class="tl'+(t[0]===tool?' on':'')+'" data-t="'+t[0]+'" title="'+toolTip(t)+'">'+t[1]+'</button>'; }).join(''); }
 var ptab='prop';
 function rowRange(lbl,id,min,max,val,unit,step){ return '<div class="row"><label>'+lbl+'</label><input type="range" data-s="'+id+'" min="'+min+'" max="'+max+'" step="'+(step||1)+'" value="'+val+'"><span class="v">'+f(val)+(unit||'')+'</span></div>'; }
 function panel(){ symBar(); stage.classList.toggle('ol',!!st.outline);
