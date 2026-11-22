@@ -3,6 +3,26 @@
  "name": "Fry Blocks",
  "notes": [
   {
+   "date": "2026-11-22",
+   "build": "v69",
+   "title": "처음 시작 블록과 새 블록",
+   "items": [
+    "Python·JavaScript 블록 맨 위에 「처음 시작」 묶음 추가: 글자 보여 주기, 물어보기, 계산, 만약, 되풀이, 리스트처럼 처음 쓰는 블록만 모았어요",
+    "Python 새 블록 11개: 제곱근 정수 부분, 세제곱근, 방향 각도, 종 모양 랜덤 수, 순열, 조합, 모든 짝짓기, 들어갈 자리 찾기, 값 하나씩 내보내기, 2진수 글자를 숫자로, n진수로 읽기",
+    "JavaScript 새 블록 5개: n진수 글자로, n진수로 읽기, 방향 각도, 맨 마지막 값, 뒤에서 n번째 값"
+   ],
+   "tr": {
+    "en": {
+     "title": "Getting-started blocks and new blocks",
+     "items": [
+      "A new \"Getting started\" group at the top of the Python and JavaScript blocks, with only the blocks beginners use first: show text, ask, calculate, if, repeat, lists",
+      "11 new Python blocks: integer square root, cube root, direction angle, bell-curve random number, permutations, combinations, all pairings, find the position, yield values one by one, binary text to number, read in any base",
+      "5 new JavaScript blocks: number to base-n text, read base-n text, direction angle, last value, nth value from the end"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-10-29",
    "build": "v68",
    "title": "일러스트 100개 추가",

@@ -97,6 +97,9 @@ var cats=[
   ['jx_round','vn','$A:n=3.5 반올림','Math.round(@@A)'],
   ['jx_trunc','vn','$A:n=-3.7 소수 부분 버리기','Math.trunc(@@A)'],
   ['jx_roundto','vn','$A:n=3.14159 를 소수 $B:n=2 자리까지 반올림','Number(@A.toFixed(@@B))'],
+  ['jx_tobin','vs','$A:n=10 을 $B:n=2 진수 글자로','Number(@@A).toString(@@B)','2 를 넣으면 2진수, 16 을 넣으면 16진수 글자가 돼요'],
+  ['jx_frombase','vn','글자 $A:s=1010 을 $B:n=2 진수로 읽은 숫자','parseInt(@@A, @@B)'],
+  ['jx_atan2deg','vn','가로 $X:n=1 세로 $Y:n=1 쪽의 방향 각도 (도)','(Math.atan2(@@Y, @@X) * 180 / Math.PI)','가로·세로로 간 거리를 넣으면 몇 도 방향인지 알려 줘요','x'],
   ['jx_fixed','vs','$A:n=3.14159 를 소수 $B:n=2 자리 글자로','@A.toFixed(@@B)'],
   ['jx_sign','vn','$A:n=-3 의 부호 (-1, 0, 1)','Math.sign(@@A)'],
   ['jx_max2','vn','$A:n=3 와 $B:n=8 중 큰 수','Math.max(@@A, @@B)'],
@@ -194,6 +197,8 @@ var cats=[
   ['jx_firstl','va','$L:l 의 첫 값','@L[0]'],
   ['jx_lastl','va','$L:l 의 마지막 값','@L[@L.length - 1]'],
   ['jx_len_l','vn','$L:l 의 길이','@L.length'],
+  ['jx_lastitem','va','$L:l 의 맨 마지막 값','@L.at(-1)'],
+  ['jx_nthlast','va','$L:l 의 뒤에서 $N:n=2 번째 값','@L.at(-@@N)'],
   ['jx_includes_l','vb','$L:l 안에 $V:a 가 있나','@L.includes(@@V)'],
   ['jx_indexof_l','vn','$L:l 에서 $V:a 의 위치 (없으면 -1)','@L.indexOf(@@V)'],
   ['jx_count_v','vn','$L:l 에서 $V:a 가 나오는 횟수','@L.filter((x) => x === @@V).length'],
@@ -463,7 +468,16 @@ var cats=[
 ];
 
 var byId={}; cats.forEach(function(c){ byId[c.id]=c; });
-var ORDER=['out','vars2','vars','logic','loop','math','text','list','obj','time','colour','func','dom','cv','snd','net'];
+byId.easy={id:'easy',name:'처음 시작',colour:'#d97706',rows:[],items:[
+  '-글자 보여 주기','jx_log','jx_tpl',
+  '-물어보기','jx_prompt','jx_promptn','jx_alert',
+  '-계산하기',sb('math_arithmetic',{A:1,B:1}),sb('math_random_int',{FROM:1,TO:6}),'jx_round',
+  '-만약 …이면',sb('controls_if',null,{extraState:{hasElse:true}}),sb('logic_compare'),
+  '-되풀이하기',sb('controls_repeat_ext',{TIMES:10}),sb('controls_for',{FROM:1,TO:10,BY:1}),sb('controls_whileUntil'),
+  '-목록 (여러 값 담기)','jx_push','jx_len_l','jx_pick',
+  '-기다리기','jx_sleep'
+]};
+var ORDER=['easy','out','vars2','vars','logic','loop','math','text','list','obj','time','colour','func','dom','cv','snd','net'];
 byId.colour={id:'colour',name:'색',colour:K.color,rows:[
   ['jx_colour','vs','색 코드 [C=#ff8800]','##C','"#ff8800" 처럼 #과 6자리 숫자·영어로 써요'],
   ['jx_colname','vs','색 이름 [N|red:빨강,orange:주황,gold:금색,yellow:노랑,limegreen:연두,green:초록,teal:청록,skyblue:하늘,blue:파랑,navy:남색,purple:보라,hotpink:분홍,brown:갈색,black:검정,gray:회색,white:흰색]','"#N"'],

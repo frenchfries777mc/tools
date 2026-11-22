@@ -57,6 +57,8 @@ var cats=[
   ['px_list','vl','$A:a=abc 를 리스트로 (list)','list(@@A)'],
   ['px_tuple','va','$A:a 를 튜플로 (tuple)','tuple(@@A)'],
   ['px_set','va','$A:a 를 집합으로 (set)','set(@@A)'],
+  ['px_frombin','vn','2진수 글자 $A:s=1010 을 숫자로','int(@@A, 2)'],
+  ['px_frombase','vn','글자 $A:s=ff 를 $B:n=16 진수로 읽은 숫자','int(@@A, @@B)'],
   ['px_none','va','없음 (None)','None'],
   ['px_isnone','vb','$A:a 가 없음(None) 인가','(@@A is None)'],
   ['px_notnone','vb','$A:a 가 없음(None) 이 아닌가','(@@A is not None)'],
@@ -109,6 +111,9 @@ var cats=[
 {id:'math',name:'수학',colour:K.math,rows:[].concat(S.math(),[
   '-수학 도구 (math)',
   ['px_sqrt','vn','$A:n=16 의 제곱근','math.sqrt(@@A)','','','math'],
+  ['px_isqrt','vn','$A:n=17 의 제곱근의 정수 부분 (isqrt)','math.isqrt(@@A)','','','math'],
+  ['px_cbrt','vn','$A:n=27 의 세제곱근','round(@@A ** (1 / 3), 10)'],
+  ['px_atan2','vn','가로 $X:n=1 세로 $Y:n=1 쪽의 방향 각도 (도)','math.degrees(math.atan2(@@Y, @@X))','가로·세로로 간 거리를 넣으면 몇 도 방향인지 알려 줘요','','math'],
   ['px_mpow','vn','$A:n=2 의 $B:n=10 제곱','(@@A ** @@B)','','x'],
   ['px_floor','vn','$A:n=3.7 버림','math.floor(@@A)','','','math'],
   ['px_ceil','vn','$A:n=3.2 올림','math.ceil(@@A)','','','math'],
@@ -257,6 +262,10 @@ var cats=[
   ['px_flatten','vl','표 $L:l 를 한 줄로 펼친 리스트','[x for row in @@L for x in row]'],
   ['px_lzip','vl','$A:l 와 $B:l 를 짝지은 리스트','list(zip(@@A, @@B))'],
   ['px_lenum','vl','$L:l 에 번호를 붙인 리스트','list(enumerate(@@L))'],
+  ['px_perm','vl','$L:l 에서 $K:n=2 개를 순서 있게 뽑는 모든 방법 (순열)','list(itertools.permutations(@@L, @@K))','','','itertools'],
+  ['px_combi','vl','$L:l 에서 $K:n=2 개를 순서 없이 뽑는 모든 방법 (조합)','list(itertools.combinations(@@L, @@K))','','','itertools'],
+  ['px_product','vl','$A:l 과 $B:l 에서 하나씩 짝짓는 모든 방법','list(itertools.product(@@A, @@B))','','','itertools'],
+  ['px_bisect','vn','작은 것부터 정렬된 $L:l 에서 $V:n 이 들어갈 자리','bisect.bisect_left(@@L, @@V)','','','bisect'],
   ['px_chunk','vl','$L:l 를 $N:n=2 개씩 묶은 리스트','[@L[i:i + @@N] for i in range(0, len(@@L), @@N)]'],
   ['px_counter','va','$L:l 에서 값별 개수 세기','collections.Counter(@@L)','','','collections'],
   ['px_mostcommon','vl','$L:l 에서 가장 많이 나온 $N:n=3 개 (값, 횟수)','collections.Counter(@@L).most_common(@@N)','','','collections'],
@@ -323,6 +332,7 @@ var cats=[
   ['px_randint','vn','$A:n=1 부터 $B:n=6 까지 랜덤 정수','random.randint(@@A, @@B)','','','random'],
   ['px_randrange','vn','$A:n=0 부터 $B:n=10 미만까지 $C:n=2 칸 간격 랜덤 정수','random.randrange(@@A, @@B, @@C)','','','random'],
   ['px_uniform','vn','$A:n=1 부터 $B:n=10 사이 랜덤 소수','random.uniform(@@A, @@B)','','','random'],
+  ['px_gauss','vn','평균 $A:n=0 표준편차 $B:n=1 인 종 모양 랜덤 수','random.gauss(@@A, @@B)','평균 근처가 많이 나오고 멀수록 적게 나와요','','random'],
   ['px_choice','va','$L:l 중 아무거나 하나 뽑기','random.choice(@@L)','','','random'],
   ['px_choices','vl','$L:l 중 $K:n=3 개 뽑기 (같은 것이 또 나올 수 있어요)','random.choices(@@L, k=@@K)','','','random'],
   ['px_sample','vl','$L:l 중 $K:n=3 개 뽑기 (겹치지 않게)','random.sample(@@L, @@K)','','','random'],
@@ -369,6 +379,7 @@ var cats=[
   ['px_lambda','va','함수 ( [V&x] ) → $E:a','(lambda #V: @@E)','값을 받아서 계산한 결과를 돌려주는 짧은 함수'],
   ['px_lambda2','va','함수 ( [A&a] , [B&b] ) → $E:a','(lambda #A, #B: @@E)'],
   ['px_callv','va','함수 $F:a 에 $A:a 를 넣어 부르기','@F(@@A)'],
+  ['px_yield','s','값 $A:a 를 하나씩 내보내기 (yield)','yield @@A','함수 안에서 값을 하나씩 만들어 내는 함수 (제너레이터) 를 만들어요'],
   ['px_callv2','va','함수 $F:a 에 $A:a 와 $B:a 를 넣어 부르기','@F(@@A, @@B)'],
   ['px_calls','s','함수 $F:a 에 $A:a 를 넣어 부르기','@F(@@A)'],
   ['px_return','t','돌려주기 $A:a','return @@A'],
@@ -476,7 +487,16 @@ var cats=[
 
 var byId={}; cats.forEach(function(c){ byId[c.id]=c; });
 byId.vars2={id:'vars2',name:'변수·함수',colour:K.vars,custom:'LVARS',rows:[]};
-var ORDER=['out','vars2','vars','logic','loop','math','text','list','dict','rand','time','colour','func','err','turtle'];
+byId.easy={id:'easy',name:'처음 시작',colour:'#d97706',rows:[],items:[
+  '-글자 보여 주기','px_print','px_fstr',
+  '-물어보기','px_input','px_inputi',
+  '-계산하기',sb('math_arithmetic',{A:1,B:1}),sb('math_random_int',{FROM:1,TO:6}),'px_round',
+  '-만약 …이면',sb('controls_if',null,{extraState:{hasElse:true}}),sb('logic_compare'),
+  '-되풀이하기',sb('controls_repeat_ext',{TIMES:10}),sb('controls_for',{FROM:1,TO:10,BY:1}),sb('controls_whileUntil'),
+  '-리스트 (여러 값 담기)','px_append','px_len','px_choice','px_sum',
+  '-기다리기','px_sleep'
+]};
+var ORDER=['easy','out','vars2','vars','logic','loop','math','text','list','dict','rand','time','colour','func','err','turtle'];
 BL.add('py',{cats:ORDER.map(function(id){ return byId[id]; }),
   starter:function(X){ X.top([X.b('px_print',null,{A:X.t('안녕하세요!')}),X.b('px_print',null,{A:X.t('블록으로 파이썬을 써요')})]); },
   examples:[
