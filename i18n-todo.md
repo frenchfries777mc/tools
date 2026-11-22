@@ -69,3 +69,4 @@ ffptr.js, docs/room.js | 위쪽 접속자 칩 「접속자 N명」 (한국어만
 ffptr.js, sheet/coedit.js | 위쪽 접속자 칩 「접속자 N명」 (한국어만, 「명」 붙임) | sheet v48 | 2026-11-22
 ffptr.js, slides/coedit.js | 위쪽 접속자 칩 「접속자 N명」 (한국어만, 「명」 붙임) | slides v38 | 2026-11-22
 ffptr.js, ffco.js, draw/app.js | 위쪽 접속자 칩 「접속자 N명」 (한국어만, 「명」 붙임) | draw v26 | 2026-11-22
+lab/tpl-s3.js | 중3 교과서 실험 7개: 영어만 번역 (다른 언어는 영어로 보임) | lab v29 | 2026-11-22

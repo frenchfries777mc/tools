@@ -3,6 +3,24 @@
  "name": "Fry Lab",
  "notes": [
   {
+   "date": "2026-11-22",
+   "build": "v29",
+   "title": "중3 교과서 실험 7개 추가",
+   "items": [
+    "천재교육 「중학교 과학 3」 (2022 개정) 차례를 보고 빠져 있던 실험을 추가했어요: 기체 반응에서 기체의 부피비, 열에너지가 출입하는 반응(발열·흡열), 위도와 깊이에 따른 해수의 수온과 염분, 대기 대순환, 자극에서 반응까지 걸리는 시간, 맹점 찾기, 일과 일의 원리",
+    "단원 목록에 「수권과 해수의 순환」, 「자극과 반응」 추가"
+   ],
+   "tr": {
+    "en": {
+     "title": "7 new experiments from a Grade 9 textbook",
+     "items": [
+      "Added experiments missing from the table of contents of the Vivasam (Chunjae Education) Middle School Science 3 textbook (2022 curriculum): gas volume ratios in reactions, exothermic and endothermic reactions, seawater temperature and salinity by latitude and depth, global atmospheric circulation, reaction time, finding the blind spot, work and the work principle",
+      "Added the units 'The hydrosphere and ocean circulation' and 'Stimulus and response'"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-12",
    "build": "v28",
    "title": "AI 해설과 보고서 첨삭",
