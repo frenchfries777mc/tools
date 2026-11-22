@@ -1378,6 +1378,7 @@ desk.addEventListener('scroll',drawRulers); $('rh').addEventListener('pointerdow
     var setPg=function(i,v){ var t=pgOf(i); if(!t||!v||typeof v!=='object') return; var d=t===doc; if(v.n!=null) t[d?'pn':'n']=String(v.n).slice(0,60);
       ['w','h'].forEach(function(k){ if(typeof v[k]==='number'&&v[k]>0&&v[k]<1e5) t[k]=v[k]; }); if(typeof v.bg==='string') t.bg=v.bg.slice(0,40); if(typeof v.bgOn==='boolean') t.bgOn=v.bgOn; if(Array.isArray(v.guides)) t.guides=v.guides; };
     FFCo.init({app:'draw',noun:'그림',note:'다른 사람이 고치면 되돌리기 기록이 새로 시작돼요',btnClass:'tbtn',
+      ptr:function(){ var top=document.querySelector('.top'); return top&&$('stage')&&$('desk')?{ref:$('stage'),layer:$('desk'),top:top,before:top.querySelector('.sp'),key:function(){ return doc.pi||0; }}:null; },
       busy:function(){ return !!doc.edit||coDown; },
       read:function(){ if(doc.edit) return null; var pg=pgList(), items={}, meta={}, order=[];
         pg.forEach(function(p,i){ (p.objs||[]).forEach(function(o){ var k='p'+i+':'+o.id; items[k]=o; order.push(k); }); meta['pg'+i]={n:p.n||'',w:p.w,h:p.h,bg:p.bg,bgOn:p.bgOn!==false,guides:p.guides||[]}; });
