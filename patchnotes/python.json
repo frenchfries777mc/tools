@@ -3,6 +3,28 @@
  "name": "Fry Code",
  "notes": [
   {
+   "date": "2026-11-22",
+   "build": "v40",
+   "title": "언어 PHP, SQL 추가",
+   "items": [
+    "언어 목록에 PHP와 SQL이 생겼고, BeaconScript보다 위에 있어요",
+    "SQL은 브라우저에서 바로 실행돼요. 처음 한 번 SQL 엔진(약 0.7MB)을 불러오고, 결과는 표로 나와요. 틀린 문장은 몇 번째 줄인지 알려 줘요. 실행할 때마다 빈 데이터베이스에서 시작해요",
+    "PHP는 색칠, 괄호·따옴표 검사, 구조 보기만 도와줘요. 브라우저에서 바로 실행하지는 못해요",
+    "두 언어 모두 자동완성 단어와 예제(PHP 3, SQL 4)가 들어 있어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Languages PHP and SQL added",
+     "items": [
+      "PHP and SQL are in the language list, above BeaconScript",
+      "SQL runs right in the browser. The SQL engine (about 0.7MB) loads the first time, and results appear as tables. A wrong statement tells you which line it is on. Every run starts from an empty database",
+      "PHP gets colouring, bracket and quote checks and a structure view only. It cannot run in the browser",
+      "Both languages have auto-complete words and examples (PHP 3, SQL 4)"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-12",
    "build": "v39",
    "title": "AI 도우미: 설명·고쳐 줘·만들어 줘",
