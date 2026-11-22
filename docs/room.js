@@ -97,6 +97,7 @@ function applyMeta(m){ if(!m||typeof m!=='object') return; var d=D.getDoc(), g=m
 function hostMsg(from,d){ if(!R||!d) return;
   if(d.k==='ops') hostOps(from,d.ops);
   else if(d.k==='cur'){ if(okId(d.b)&&d.o>=0){ R.cur[from]={b:d.b,o:Math.min(1e6,+d.o|0)}; R.h.relay(from,{k:'cur',b:d.b,o:R.cur[from].o}); drawCursors(); } }
+  else if(d.k==='ptr'){ if(R.ptr) R.ptr.got(from,d); R.h.relay(from,{k:'ptr',x:d.x,y:d.y}); }
   else if(d.k==='meta'){ applyMeta(d.m); R.h.relay(from,{k:'meta',m:d.m}); } }
 function guestMsg(d,from){ if(!R||!d) return;
   if(d.k==='snap') return gotSnap(d);
@@ -104,6 +105,7 @@ function guestMsg(d,from){ if(!R||!d) return;
   if(d.k==='ops') applyRemote(d.ops,d.ord,d.by);
   else if(d.k==='ack'){ Object.keys(d.vs||{}).forEach(function(id){ if(R.S.map[id]) R.S.map[id].v=+d.vs[id]||0; }); if((d.redo&&d.redo.length)||d.ord) applyRemote(d.redo||[],d.ord,'host'); }
   else if(d.k==='cur'){ if(okId(d.b)&&d.o>=0&&from){ R.cur[from]={b:d.b,o:Math.min(1e6,+d.o|0)}; drawCursors(); } }
+  else if(d.k==='ptr'){ if(R.ptr) R.ptr.got(from,d); }
   else if(d.k==='meta') applyMeta(d.m); }
 function gotSnap(d){ if(R.ready||!Array.isArray(d.blocks)) return; var meta=d.meta||{}; R.joining=true; var nd=D.newDoc(String(meta.name||T('제목 없는 문서')).slice(0,80),''); R.joining=false; R.doc=nd;
   page.innerHTML=''; R.S={map:{},pred:{}};
@@ -127,10 +129,16 @@ window.addEventListener('resize',function(){ drawCursors(); });
 page.addEventListener('compositionstart',function(){ if(R) R.comp=true; });
 page.addEventListener('compositionend',function(){ if(!R) return; R.comp=false; var q=R.queue; R.queue=[]; q.forEach(function(f){ f(); }); });
 
+/* ---------- who is in, and where their mouse pointers are (ffptr.js) ---------- */
+function mountPtr(){ if(!R||R.ptr||!window.FFPtr) return; var top=document.querySelector('header.top'); if(!top) return;
+  R.ptr=FFPtr.mount({ref:page,layer:$('desk'),area:$('desk'),top:top,before:top.querySelector('.sp'),yPx:true,
+    send:function(o){ if(R&&R.ready&&(R.role==='host'?R.h:R.g)) out(o); },
+    me:function(){ return R?(R.role==='host'?'host':R.me):''; }, peers:function(){ return R?R.peers:[]; }}); }
+
 /* ---------- the dialog, the button and the room itself ---------- */
 var ERR={net:'연결할 수 없어요. 인터넷을 확인해 주세요',lib:'같이 고치기 도구를 불러오지 못했어요',nohost:'그 코드의 방이 없어요. 방장이 방을 열어 두었는지 확인해 주세요',full:'방이 가득 찼어요',taken:'방을 만들지 못했어요. 다시 해 보세요',app:'문서 방이 아니에요'};
 function say(t,bad){ var e=$('rmMsg'); e.textContent=t?T(t):''; e.style.color=bad?'#ff7b7b':''; }
-function stopRoom(){ if(!R) return; clearTimeout(R.tt); clearTimeout(R.ct); clearInterval(R.mi); try{ if(R.obs) R.obs.disconnect(); }catch(e){} R=null; var l=$('rmLayer'); if(l) l.innerHTML=''; paintRm(); }
+function stopRoom(){ if(!R) return; clearTimeout(R.tt); clearTimeout(R.ct); clearInterval(R.mi); try{ if(R.obs) R.obs.disconnect(); }catch(e){} if(R.ptr) R.ptr.stop(); R=null; var l=$('rmLayer'); if(l) l.innerHTML=''; paintRm(); }
 function failRm(k){ stopRoom(); say(ERR[k]||ERR.net,true); D.openDlg('rmDlg'); }
 function paintRm(){ var on=!!R, host=on&&R.role==='host'; $('rmOff').hidden=on; $('rmOn').hidden=!on; $('rmHostBox').hidden=!host; $('rmEnd').hidden=!on; $('rmEnd').textContent=T(host?'방 닫기':'방에서 나가기'); $('rmEnd').dataset.sure='';
   $('rmBadge').hidden=!on; $('rmBadge').textContent='👥 '+F('같이 고치는 중 ({0}명)',on?Math.max(1,R.peers.length):1); var b=$('rmBtn'); if(b) b.classList.toggle('on',on);
@@ -140,7 +148,7 @@ function paintRm(){ var on=!!R, host=on&&R.role==='host'; $('rmOff').hidden=on; 
 function nameOk(){ var n=$('rmName').value.replace(/\s+/g,' ').trim().slice(0,20); if(!n){ say('내 이름을 써 주세요',true); $('rmName').focus(); } return n; }
 function startHost(name){ if(R) return; R={role:'host',name:name,peers:[],S:{map:{},pred:{}},hist:{},cur:{},queue:[],doc:D.getDoc(),ready:true,me:'host',mineId:'host'}; ensureIds();
   Array.prototype.forEach.call(page.children,function(el){ var id=el.getAttribute('data-b'); var h0=ser(el); R.S.map[id]={h:h0,v:1,by:'host'}; keep(id,1,h0); }); setPreds(); R.meta=metaOf(); startObs(); R.mi=setInterval(metaTick,1500);
-  say('방을 만드는 중…'); paintRm();
+  say('방을 만드는 중…'); paintRm(); mountPtr();
   R.h=FFRoom.host({app:'docs',name:name,
     open:function(code){ R.code=code; R.peers=R.h.peers(); say(''); paintRm(); },
     error:function(k){ failRm(k); },
@@ -148,13 +156,13 @@ function startHost(name){ if(R) return; R={role:'host',name:name,peers:[],S:{map
       R.h.send(p.id,{k:'snap',blocks:blocks,meta:{name:d.name,pg:d.pg||null,font:d.font||'sans',sty:d.sty||null}}); D.toast(F('{0}님이 들어왔어요',p.name)); },
     leave:function(p){ if(!R) return; delete R.cur[p.id]; drawCursors(); D.toast(F('{0}님이 나갔어요',p.name)); },
     msg:hostMsg,
-    peers:function(l){ if(!R) return; R.peers=l; paintRm(); drawCursors(); } }); }
-function startGuest(code,name){ if(R) return; R={role:'guest',name:name,peers:[],S:{map:{},pred:{}},cur:{},queue:[],ready:false}; say('들어가는 중…'); paintRm();
+    peers:function(l){ if(!R) return; R.peers=l; paintRm(); drawCursors(); if(R.ptr) R.ptr.update(); } }); }
+function startGuest(code,name){ if(R) return; R={role:'guest',name:name,peers:[],S:{map:{},pred:{}},cur:{},queue:[],ready:false}; say('들어가는 중…'); paintRm(); mountPtr();
   R.mi=setInterval(metaTick,1500);
   R.g=FFRoom.join(code,{app:'docs',name:name,
     open:function(i){ if(!R) return; R.me=i.id; say(''); paintRm(); },
     msg:guestMsg,
-    peers:function(l){ if(!R) return; R.peers=l; paintRm(); drawCursors(); },
+    peers:function(l){ if(!R) return; R.peers=l; paintRm(); drawCursors(); if(R.ptr) R.ptr.update(); },
     end:function(why){ if(!R) return; D.saveNow(); stopRoom(); say(why==='closed'?'방장이 방을 닫았어요. 지금 문서는 이 기기에 남아 있어요. 파일로 받거나 내 문서에서 다시 열 수 있어요.':'연결이 끊어졌어요. 지금 문서는 이 기기에 남아 있어요. 파일로 받거나 내 문서에서 다시 열 수 있어요.',true); D.openDlg('rmDlg'); },
     error:function(k){ failRm(k); } }); }
 function openRm(){ paintRm(); if(!R) say(''); D.openDlg('rmDlg'); if(!$('rmName').value){ $('rmName').value=T('손님')+' '+(1+Math.floor(Math.random()*99)); } FFRoom.account().then(function(n){ if(n&&!R&&/^손님 \d+$|^Guest \d+$/.test($('rmName').value+'')) $('rmName').value=n; else if(n&&!$('rmName').value) $('rmName').value=n; }); }
