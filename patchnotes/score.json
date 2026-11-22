@@ -3,6 +3,24 @@
  "name": "Fry Score",
  "notes": [
   {
+   "date": "2026-11-22",
+   "build": "v38",
+   "title": "글자 더 읽기 쉽게, 좁은 화면에서 줄이 꺾이던 곳 고침",
+   "items": [
+    "오른쪽 칸의 설명 글, 항목 이름, 숫자, 체크 상자 글자를 더 크고 또렷하게 했어요",
+    "좁은 화면에서 '맨 뒤에 마디 더하기', '밴드 (멜로디·베이스·드럼)', '지금 악보 보관하기' 같은 단추 글자가 두 줄로 꺾이던 것과, '이 파트만 듣기'가 두 줄로 꺾이던 것을 한 줄로 고쳤어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Easier-to-read text, fixed lines that broke on narrow screens",
+     "items": [
+      "The help text, item names, numbers and check-box labels in the right panel are bigger and clearer",
+      "On narrow screens, button labels such as 'Add a bar at the end', 'Band (melody, bass, drums)' and 'Keep this score now' that broke into two lines, and the 'Listen to this part only' label, now stay on one line"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-12",
    "build": "v37",
    "title": "AI 멜로디 부탁하기: 코드 진행 추천",
