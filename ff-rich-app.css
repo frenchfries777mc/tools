@@ -52,7 +52,8 @@ html[data-ff-theme] .dbody,html[data-ff-theme] .dlg{color:var(--text)}
 /* ---------- tabs: gold-bordered pills, active = gold fill ---------- */
 html[data-ff-theme] .rtabs,html[data-ff-theme] .tabs,html[data-ff-theme] .ptabs,html[data-ff-theme] #ptabs,html[data-ff-theme] .stabs{background:var(--bg)!important;border-bottom:0!important;gap:6px;padding:7px 10px 6px!important;align-items:center;box-shadow:none}
 html[data-ff-theme] .ptabs,html[data-ff-theme] #ptabs,html[data-ff-theme] .stabs,html[data-ff-theme] #side>.tabs{border-bottom:2px solid var(--fry)!important}
-html[data-ff-theme] .rtab,html[data-ff-theme] .tabs button,html[data-ff-theme] .tabs .tab,html[data-ff-theme] .ptabs button,html[data-ff-theme] .rtabs .rt,html[data-ff-theme] .stab{background:transparent!important;color:var(--text)!important;border:1px solid var(--fry)!important;border-bottom-width:1px!important;border-radius:99px!important;box-shadow:none!important;height:auto!important;min-height:28px;padding:3px 14px!important;flex:0 1 auto!important}
+html[data-ff-theme] .rtab,html[data-ff-theme] .tabs button,html[data-ff-theme] .tabs .tab,html[data-ff-theme] .ptabs button,html[data-ff-theme] .rtabs .rt,html[data-ff-theme] .stab{background:transparent!important;color:var(--text)!important;border:1px solid var(--fry)!important;border-bottom-width:1px!important;border-radius:99px!important;box-shadow:none!important;height:auto!important;min-height:28px;padding:3px 14px!important;flex:0 1 auto!important;white-space:nowrap}
+@media(max-width:420px){ html[data-ff-theme] .rtab,html[data-ff-theme] .tabs button,html[data-ff-theme] .tabs .tab,html[data-ff-theme] .ptabs button,html[data-ff-theme] .rtabs .rt,html[data-ff-theme] .stab{padding:3px 10px!important} }
 html[data-ff-theme] .ptabs button{flex:1 1 0!important;padding:3px 4px!important;font-size:12.5px;white-space:nowrap}
 html[data-ff-theme] .rtab.on,html[data-ff-theme] .rtab.aib.on,html[data-ff-theme] .tabs .on,html[data-ff-theme] .ptabs button.on,html[data-ff-theme] .rtabs .rt.on,html[data-ff-theme] .stab.on{background:var(--fry)!important;color:var(--bg)!important;border-color:var(--fry)!important;box-shadow:none!important;font-weight:700}
 html[data-ff-theme] .rtab.aib{color:var(--fry)!important}
@@ -104,3 +105,5 @@ html[data-ff-theme] .ffv .ffvn button{background:var(--fry);color:var(--bg);font
 html[data-ff-theme] .ffv button.ffvd{border-color:#e5534b;color:#e5534b}
 html[data-ff-theme] .ffv li{border-top:1px solid var(--fry)}
 html[data-ff-theme] .ffv li small,html[data-ff-theme] .ffv .ffve{opacity:1;color:var(--dim)}
+/* short screens (phones held sideways): slimmer top bar so the work area keeps its height */
+@media(max-height:500px){ html[data-ff-theme] .top{padding:4px 8px!important;gap:4px 6px!important} html[data-ff-theme] .top .tbtn,html[data-ff-theme] .top select{min-height:30px;height:30px;padding-top:0;padding-bottom:0} }

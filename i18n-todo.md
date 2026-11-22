@@ -71,3 +71,12 @@ ffptr.js, slides/coedit.js | 위쪽 접속자 칩 「접속자 N명」 (한국�
 ffptr.js, ffco.js, draw/app.js | 위쪽 접속자 칩 「접속자 N명」 (한국어만, 「명」 붙임) | draw v26 | 2026-11-22
 lab/tpl-s3.js | 중3 교과서 실험 7개: 영어만 번역 (다른 언어는 영어로 보임) | lab v29 | 2026-11-22
 blocks/strings.js, lang-py.js, lang-js.js | 처음 시작 묶음과 새 블록 16개: 영어만 번역 (다른 언어는 영어로 보임) | blocks v69 | 2026-11-22
+ff-rich-app.css/blocks | 화면 크기 점검 패치노트: 영어만 | blocks v70 | 2026-11-22
+ff-rich-app.css/code | 화면 크기 점검 패치노트: 영어만 | code v41 | 2026-11-22
+ff-rich-app.css/docs | 화면 크기 점검 패치노트: 영어만 | docs v24 | 2026-11-22
+ff-rich-app.css/draw | 화면 크기 점검 패치노트: 영어만 | draw v27 | 2026-11-22
+ff-rich-app.css/lab | 화면 크기 점검 패치노트: 영어만 | lab v30 | 2026-11-22
+ff-rich-app.css/score | 화면 크기 점검 패치노트: 영어만 | score v39 | 2026-11-22
+ff-rich-app.css/sheet | 화면 크기 점검 패치노트: 영어만 | sheet v49 | 2026-11-22
+ff-rich-app.css/slides | 화면 크기 점검 패치노트: 영어만 | slides v39 | 2026-11-22
+ff-rich-app.css/video | 화면 크기 점검 패치노트: 영어만 | video v35 | 2026-11-22

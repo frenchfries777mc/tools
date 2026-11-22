@@ -4,6 +4,22 @@
  "notes": [
   {
    "date": "2026-11-22",
+   "build": "v49",
+   "title": "화면 크기 점검",
+   "items": [
+    "좁은 화면 탭 글자 줄바꿈과 가로 화면 위쪽 바를 고쳤어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Screen size check",
+     "items": [
+      "Fixed tab label wrapping on narrow screens and a slimmer top bar on short screens"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-22",
    "build": "v48",
    "title": "같이 고칠 때 접속자와 마우스 포인터 보이기",
    "items": [

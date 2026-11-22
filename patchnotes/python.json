@@ -4,6 +4,22 @@
  "notes": [
   {
    "date": "2026-11-22",
+   "build": "v41",
+   "title": "가로 화면 배치",
+   "items": [
+    "휴대폰을 가로로 눕히면 코드와 결과가 위아래 대신 나란히 보이게 했어요. 가로 화면에서 위쪽 바가 더 얇아요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Sideways phone layout",
+     "items": [
+      "On a phone held sideways, code and result sit side by side instead of stacked, and the top bar is slimmer"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-22",
    "build": "v40",
    "title": "언어 PHP, SQL 추가",
    "items": [

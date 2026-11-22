@@ -104,6 +104,7 @@ textarea{width:100%;min-height:88px;background:var(--panel2);border:1px solid va
 .expbox{position:fixed;inset:0;background:rgba(0,0,0,.6);display:grid;place-items:center;z-index:80;} .expbox>div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;width:min(420px,92vw);}
 .bar{height:10px;border-radius:6px;background:var(--panel2);overflow:hidden;margin:10px 0;} .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--fry),var(--fry2));}
 @media(max-width:900px){ .vtop{flex-wrap:wrap;overflow-y:auto;} .bin{flex:1 1 100%;max-height:92px;border-right:0;border-bottom:1px solid var(--line);} .prev{flex:1 1 100%;} .panel{flex:1 1 100%;border-left:0;max-height:220px;} .tlw{flex-basis:190px;} }
+@media(max-height:500px) and (max-width:900px){ .bin{max-height:44px;overflow-y:auto;} .panel{max-height:150px;} }
 
 @media(max-width:700px){
   .vtop{flex-direction:column;flex-wrap:nowrap;overflow:hidden;}
@@ -136,7 +137,7 @@ html[data-ff-theme=light] .row input[type=number],html[data-ff-theme=light] .row
 html[data-ff-theme=light] #dname:hover,html[data-ff-theme=light] #dname:focus{background:#faf8f3;}
 html[data-ff-theme=light] #stage,html[data-ff-theme=light] .stagew svg{box-shadow:0 6px 24px rgba(0,0,0,.14);}
 </style>
-<link rel="stylesheet" href="../ff-rich-app.css?v=2">
+<link rel="stylesheet" href="../ff-rich-app.css?v=4">
 <style id="richApp">
 /* rich look: Fry Video (clips, preview and waveform colors are untouched) */
 html[data-ff-theme] .tlbar{background:var(--bg)!important}
