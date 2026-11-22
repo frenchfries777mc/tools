@@ -50,7 +50,7 @@ function addFiles(files,cb){
     var type=/^video/.test(file.type)?'video':/^image/.test(file.type)?'image':/^audio/.test(file.type)?'audio':null; if(!type){ toast(file.name+' 은(는) 지원하지 않는 파일이에요'); return; }
     var id='m'+(proj.uid++)+'_'+Math.random().toString(36).slice(2,6), url=URL.createObjectURL(file), m={id:id,name:file.name,type:type,dur:5,w:0,h:0,url:url,thumb:''};
     function done(){ media[id]=m; proj.media.push({id:id,name:m.name,type:type,dur:m.dur,w:m.w,h:m.h,thumb:m.thumb}); idbPut(id,file); commit(); remoteUp(id,file); if(cb) cb(id); ensurePeaks(m); }
-    if(type==='image'){ var im=new Image(); im.onload=function(){ m.w=im.naturalWidth; m.h=im.naturalHeight; m.thumb=thumbOf(im,im.naturalWidth,im.naturalHeight); m.img=im; done(); }; im.onerror=function(){ toast('그림을 열지 못했어요'); }; im.src=url; }
+    if(type==='image'){ var im=new Image(); im.onload=function(){ m.w=im.naturalWidth||512; m.h=im.naturalHeight||512; m.thumb=thumbOf(im,m.w,m.h); m.img=im; done(); }; im.onerror=function(){ toast('그림을 열지 못했어요'); }; im.src=url; }
     else { var v=document.createElement(type==='video'?'video':'audio'); v.preload='auto'; v.onloadedmetadata=function(){ m.dur=v.duration||5; m.w=v.videoWidth||0; m.h=v.videoHeight||0;
         if(type==='video'){ v.currentTime=Math.min(.2,m.dur/2); v.onseeked=function(){ v.onseeked=null; m.thumb=thumbOf(v,v.videoWidth,v.videoHeight); done(); }; } else done(); };
       v.onerror=function(){ toast(file.name+' 을(를) 열지 못했어요. 브라우저가 못 읽는 형식일 수 있어요'); }; v.src=url; }
@@ -530,7 +530,7 @@ pb.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b
   if(b.dataset.kfp){ var ck=curClip(); if(ck){ var o=b.dataset.kfp; ck.kf={on:true,s:ck.scale,x:ck.x,y:ck.y,r:ck.rot}; if(o==='in') ck.kf.s=Math.round(ck.scale*1.25); else if(o==='out'){ ck.kf.s=Math.round(ck.scale*.8); } else if(o==='left') ck.kf.x=ck.x-12; else ck.kf.x=ck.x+12; if(o==='in'||o==='out') ck.kf.on=true; commit(); } return; }
   if(b.id==='bChap'){ var ch=proj.markers.slice(), lines=[]; if(!ch.length||ch[0]>.5) ch.unshift(0); ch.forEach(function(m,i){ var nm=proj.mkNames[m.toFixed(2)]||(i?'챕터 '+i:'시작'), x=Math.floor(m), hh=Math.floor(x/3600), mm=Math.floor(x%3600/60), ss=x%60; lines.push((hh?hh+':'+('0'+mm).slice(-2):mm)+':'+('0'+ss).slice(-2)+' '+nm); }); var txt=lines.join('\n'); try{ navigator.clipboard.writeText(txt).then(function(){ toast('챕터 '+lines.length+'개를 복사했어요'); },function(){ dl((proj.name||'chapters')+'-chapters.txt',new Blob([txt],{type:'text/plain;charset=utf-8'})); }); }catch(e){ dl((proj.name||'chapters')+'-chapters.txt',new Blob([txt],{type:'text/plain;charset=utf-8'})); } return; }
   if(b.id==='bSaveP'){ saveProjectFile(); return; } if(b.id==='bLoadP'){ $('projIn').click(); return; }
-  if(b.dataset.tpl){ addTemplate(b.dataset.tpl); return; } if(b.dataset.stk){ addSticker(b.dataset.stk); return; } if(b.dataset.xtra){ addExtra(b.dataset.xtra); return; } if(b.dataset.pip){ applyPip(b.dataset.pip); return; }
+  if(b.dataset.tpl){ addTemplate(b.dataset.tpl); return; } if(b.dataset.stk){ addSticker(b.dataset.stk); return; } if(b.dataset.ill){ if(b.dataset.ill==='file') $('fileIn').click(); else addIllust(+b.dataset.ill); return; } if(b.dataset.xtra){ addExtra(b.dataset.xtra); return; } if(b.dataset.pip){ applyPip(b.dataset.pip); return; }
   if(b.id==='subImp'){ $('subIn').click(); return; } if(b.id==='subSrt'){ exportSubs('srt'); return; } if(b.id==='subVtt'){ exportSubs('vtt'); return; }
   if(b.id==='aiVScript'){ aiScript(); return; } if(b.id==='aiVTr'){ aiTranslate(); return; }
   if(b.id==='subGo'){ var n=addSubs($('subTxt').value); toast(n+'개 자막을 넣었어요'); return; }
@@ -675,6 +675,19 @@ function addExtra(k){
   else if(k==='arrow'){ made=[newClip('shape','T',{anim:'slide',sdir:'left',shp:mkShp({k:'arrow',size:12,asp:200,fill:true,sw:.4,stroke:'#ffffff',color:'#ff3b30'})})]; }
   else if(k==='line'){ made=[newClip('shape','T',{anim:'fade',shp:mkShp({k:'line',size:2,asp:3000,sw:.9,stroke:'#ffc93c',color:'#ffc93c',fill:false,oy:62})})]; }
   if(!made.length) return; made.forEach(function(c){ proj.clips.push(c); }); sel=made[made.length-1].id; ptab='clip'; commit(); }
+var ILL=[['해','<circle cx="100" cy="100" r="42" fill="#ffc83d" stroke="#14100f" stroke-width="6"/><g stroke="#ffc83d" stroke-width="10" stroke-linecap="round"><path d="M100 18v22M100 160v22M18 100h22M160 100h22M42 42l15 15M143 143l15 15M158 42l-15 15M57 143l-15 15"/></g>'],
+['구름','<path d="M52 140a32 32 0 0 1 4-63 44 44 0 0 1 84 8 28 28 0 0 1-4 55z" fill="#fff" stroke="#14100f" stroke-width="6" stroke-linejoin="round"/>'],
+['하트','<path d="M100 170C30 120 22 70 55 50c22-12 39 0 45 18 6-18 23-30 45-18 33 20 25 70-45 120z" fill="#ff4a5a" stroke="#14100f" stroke-width="6" stroke-linejoin="round"/>'],
+['별','<path d="M100 20l24 54 58 6-43 39 12 57-51-30-51 30 12-57-43-39 58-6z" fill="#ffd23c" stroke="#14100f" stroke-width="6" stroke-linejoin="round"/>'],
+['말풍선','<path d="M30 40h140a14 14 0 0 1 14 14v70a14 14 0 0 1-14 14H88l-36 30v-30H30a14 14 0 0 1-14-14V54a14 14 0 0 1 14-14z" fill="#fff" stroke="#14100f" stroke-width="6" stroke-linejoin="round"/>'],
+['번개','<path d="M116 14L40 116h50l-12 70 82-110h-52z" fill="#ffd23c" stroke="#14100f" stroke-width="6" stroke-linejoin="round"/>'],
+['왕관','<path d="M26 150l-6-80 46 36 34-56 34 56 46-36-6 80z" fill="#ffc83d" stroke="#14100f" stroke-width="6" stroke-linejoin="round"/><circle cx="100" cy="124" r="9" fill="#ff4a5a"/>'],
+['체크','<circle cx="100" cy="100" r="80" fill="#3fbf6a" stroke="#14100f" stroke-width="6"/><path d="M58 102l30 30 56-66" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>'],
+['화살표','<path d="M20 78h96V40l64 60-64 60v-38H20z" fill="#4cc2ff" stroke="#14100f" stroke-width="6" stroke-linejoin="round"/>'],
+['깃발','<path d="M44 20v165" stroke="#14100f" stroke-width="10" stroke-linecap="round"/><path d="M50 28h110l-24 36 24 36H50z" fill="#e8453c" stroke="#14100f" stroke-width="6" stroke-linejoin="round"/>']];
+function addIllust(i){ var d=ILL[i]; if(!d) return; var svg='<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 200 200">'+d[1]+'</svg>';
+  var f; try{ f=new File([svg],'일러스트 '+d[0]+'.svg',{type:'image/svg+xml'}); }catch(e){ toast('이 브라우저에서는 일러스트를 넣을 수 없어요'); return; }
+  addFiles([f],function(mid){ addClipFromMedia(mid); }); }
 function addSticker(em){ var n=proj.clips.filter(function(o){ return o.type==='text'&&o.txt.sticker&&active(o,t); }).length;
   var c=newClip('text','T',{anim:'pop',txt:mkTxt(em,{size:16,w:'400',ox:30+((n*17)%45),oy:35+((n*13)%30),stroke:false,sticker:true})}); proj.clips.push(c); sel=c.id; ptab='clip'; commit(); }
 function applyPip(k){ var c=curClip(); if(!c||(c.type!=='video'&&c.type!=='image')){ toast('겹쳐 놓을 영상이나 그림 클립을 먼저 고르세요'); return; } if(lockedMsg(c)) return; if(laneLock('V2')){ toast('겹침 줄이 잠겨 있어요'); return; }
@@ -685,6 +698,7 @@ function insPanel(){
   var h='<div class="sec"><h4>템플릿 (재생 막대 위치에 들어가요)</h4><div class="pgrid"><button data-tpl="title">제목 카드</button><button data-tpl="lower">이름 띠</button><button data-tpl="caption">자막</button><button data-tpl="intro">인트로</button><button data-tpl="outro">아웃트로</button><button data-tpl="credits">엔딩 크레딧</button></div><div class="note">글자와 도형 클립으로 만들어져서 하나하나 고칠 수 있어요.</div></div>';
   h+='<div class="sec"><h4>숫자 · 막대 · 표시 그림</h4><div class="pgrid"><button data-xtra="count">카운트다운</button><button data-xtra="prog">진행 막대</button><button data-xtra="box">네모 테두리</button><button data-xtra="ring">동그라미</button><button data-xtra="arrow">화살표</button><button data-xtra="line">강조 선</button></div><div class="note">카운트다운은 클립 길이만큼 남은 초를 세요. 진행 막대는 화면 아래에서 영상이 흐르는 만큼 차올라요.</div></div>';
   h+='<div class="sec"><h4>스티커</h4><div class="btns">'+['😀','😂','😍','😎','😭','😡','👍','👏','🙏','💪','❤️','💔','⭐','🔥','✨','🎉','🎵','💯','👀','💡','❓','❗','➡️','🍟'].map(function(em){ return '<button class="tbtn" data-stk="'+em+'" style="padding:0 8px;font-size:18px">'+em+'</button>'; }).join('')+'</div></div>';
+  h+='<div class="sec"><h4>일러스트</h4><div class="btns">'+ILL.map(function(x,i){ return '<button class="tbtn" data-ill="'+i+'">'+x[0]+'</button>'; }).join('')+'<button class="tbtn" data-ill="file">내 일러스트 넣기</button></div><div class="note">내 일러스트는 SVG·PNG·WebP 그림 파일을 골라요. 눌러서 재생 막대 위치에 넣어요.</div></div>';
   h+='<div class="sec"><h4>작은 화면 (겹쳐 놓기)</h4><div class="pgrid"><button data-pip="tl">왼쪽 위</button><button data-pip="c">가운데</button><button data-pip="tr">오른쪽 위</button><button data-pip="bl">왼쪽 아래</button><button data-pip="full">꽉 채움</button><button data-pip="br">오른쪽 아래</button></div><div class="note">타임라인에서 영상이나 그림 클립을 고른 뒤 누르세요. 겹침 줄로 옮겨져서 아래 영상 위에 작게 떠요.</div></div>';
   return h; }
 var stabBusy=false;
@@ -850,7 +864,7 @@ document.addEventListener('keydown',function(e){ var tg=e.target.tagName; if(tg=
   if(e.key==='Home'){ e.preventDefault(); seek(0); return; } if(e.key==='End'){ e.preventDefault(); seek(total()); return; }
   if(e.key==='Escape'){ sel=null; msel={}; drawTl(); panel(); return; }
   if(k===' '){ e.preventDefault(); $('bPlay').click(); return; } if(k==='s'&&!ctrl){ split(); return; }
-  if(e.key==='Delete'||e.key==='Backspace'){ e.preventDefault(); del(e.shiftKey); return; }
+  if(e.key==='Delete'){ e.preventDefault(); del(e.shiftKey); return; }
   if(e.key===','&&!ctrl){ e.preventDefault(); seek(t-1/30); return; } if(e.key==='.'&&!ctrl){ e.preventDefault(); seek(t+1/30); return; }
   if(e.key==='ArrowUp'){ e.preventDefault(); jumpEdit(-1); return; } if(e.key==='ArrowDown'){ e.preventDefault(); jumpEdit(1); return; }
   if(e.key==='ArrowLeft'){ e.preventDefault(); seek(t-(e.shiftKey?1:.1)); return; } if(e.key==='ArrowRight'){ e.preventDefault(); seek(t+(e.shiftKey?1:.1)); return; } });
