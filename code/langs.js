@@ -4,6 +4,7 @@
    ctx = {code, out, pv, write(text,cls), sys(text,cls), show(tab), done(ok), errLine(n), setCode(text), T, onStop(fn), tree(el)} */
 (function(){
 'use strict';
+var BASE=(document.currentScript&&document.currentScript.src||'').replace(/[^\/]*$/,'');
 var T=function(s){ return window.FFT&&FFT.T?FFT.T(s):s; };
 function esc(s){ return String(s).replace(/[&<>]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]; }); }
 function setOf(s){ var o={}; s.split(' ').forEach(function(w){ o[w]=1; }); return o; }
@@ -262,6 +263,70 @@ function javaRun(ctx){ var src=ctx.code, bal=balance(src,false); ctx.pv.innerHTM
   if(bal){ ctx.write('✖ '+bal.msg+' ('+bal.line+'줄)\n','err'); ctx.errLine(bal.line); ctx.show('out'); ctx.done(false); return; }
   ctx.write('✔ 괄호와 따옴표가 모두 맞아요\n','ok'); ctx.sys('ℹ️ 자바는 브라우저에서 바로 실행할 수 없어요. 색칠, 괄호 검사, 구조 보기만 도와줘요. (실행은 내 컴퓨터의 자바나 온라인 자바 도구에서 해 보세요)');
   ctx.show('pv'); ctx.done(true); }
+
+/* ---------- PHP: no real run in the browser; colouring, bracket check and a structure view (like Java) ---------- */
+var PHP_KW='abstract and array as break callable case catch class clone const continue declare default do echo else elseif empty enddeclare endfor endforeach endif endswitch endwhile enum extends final finally fn for foreach function global goto if implements include include_once instanceof insteadof interface isset list match namespace new or print private protected public readonly require require_once return static switch throw trait try unset use var while xor yield true false null TRUE FALSE NULL';
+var PHP_BI='strlen count str_replace substr strpos strtolower strtoupper trim explode implode array_map array_filter array_merge array_keys array_values in_array sort rsort usort ksort json_encode json_decode date time rand mt_rand round floor ceil abs max min intval floatval is_array is_numeric isset var_dump print_r printf sprintf number_format file_get_contents htmlspecialchars str_repeat ucfirst array_push array_pop range';
+var phpHl=mkHl({com:'\\/\\/[^\\n]*|#(?!\\[)[^\\n]*|\\/\\*[\\s\\S]*?(?:\\*\\/|$)', str:'"(?:\\\\.|[^"\\\\])*"?|\'(?:\\\\.|[^\'\\\\])*\'?', kw:setOf(PHP_KW), bi:setOf(PHP_BI), def:setOf('function class interface trait enum')});
+var PHP_WORDS=[['echo','echo $0;','화면에 출력'],['<?php','<?php\n$0\n','PHP 시작'],['$변수','$$0 = ;','변수 만들기'],['function','function $0() {\n    \n}','함수 만들기'],['if','if ($0) {\n    \n}','만약'],['else','else {\n    $0\n}','아니면'],['foreach','foreach ($0 as $item) {\n    \n}','목록 하나씩'],['for','for ($i = 0; $i < $0; $i++) {\n    \n}','반복'],['while','while ($0) {\n    \n}','조건 반복'],['class','class $0 {\n    \n}','클래스'],['array','[$0]','배열'],['count()','count($0)','개수'],['strlen()','strlen($0)','글자 수'],['implode()','implode(", ", $0)','목록을 글자로'],['explode()','explode(",", $0)','글자를 목록으로'],['date()','date("Y-m-d")','오늘 날짜'],['print_r()','print_r($0);','안을 보여주기'],['var_dump()','var_dump($0);','값과 종류 보기'],['json_encode()','json_encode($0)','JSON으로'],['$_GET','$_GET["$0"]','주소로 온 값'],['$_POST','$_POST["$0"]','폼으로 온 값']];
+function phpRun(ctx){ var src=ctx.code.replace(/^[ \t]*#.*$/gm,''), bal=balance(src,false); ctx.pv.innerHTML='';
+  var lines=ctx.code.split('\n'), root=mk('div','tl'), items=[], cur=null;
+  var reC=/^\s*(?:(?:abstract|final|readonly)\s+)*(class|interface|trait|enum)\s+([A-Za-z_]\w*)/, reF=/^\s*(?:(?:public|private|protected|static|final|abstract)\s+)*function\s+&?([A-Za-z_]\w*)\s*\(([^)]*)\)/, reV=/^\s*\$([A-Za-z_]\w*)\s*=[^=]/;
+  var top={k:'',n:'(바깥)',line:1,kids:[]}; items.push(top);
+  lines.forEach(function(l,i){ var m;
+    if((m=reC.exec(l))){ cur={k:m[1],n:m[2],line:i+1,kids:[]}; items.push(cur); }
+    else if((m=reF.exec(l))){ (cur&&/^\s+/.test(l)?cur:top).kids.push({t:'ƒ',s:m[1]+'('+m[2].trim()+')',line:i+1}); }
+    else if((m=reV.exec(l))&&!/^\s/.test(l)){ top.kids.push({t:'▫',s:'$'+m[1],line:i+1}); } });
+  items=items.filter(function(c){ return c.k||c.kids.length; });
+  if(!items.length) ctx.pv.appendChild(mk('p','tl','구조가 아직 없어요. function 이나 class 로 써 보세요'));
+  items.forEach(function(c){ var d=document.createElement('details'); d.open=true; var s=mk('summary','',''); s.innerHTML='<b class="tk">'+esc((c.k?c.k+' ':'')+c.n)+'</b> <span class="tt">'+c.line+'줄</span>'; d.appendChild(s);
+    var b=mk('div','tb'); c.kids.forEach(function(k){ b.appendChild(mk('div','tl',k.t+' '+k.s+'  ('+k.line+'줄)')); }); if(!c.kids.length) b.appendChild(mk('div','tl','(비어 있어요)')); d.appendChild(b); ctx.pv.appendChild(d); });
+  if(bal){ ctx.write('✖ '+bal.msg+' ('+bal.line+'줄)\n','err'); ctx.errLine(bal.line); ctx.show('out'); ctx.done(false); return; }
+  if(src.trim()&&!/<\?(php|=)/.test(src)) ctx.sys('💡 맨 위에 <?php 를 써야 PHP 코드로 읽어요');
+  ctx.write('✔ 괄호와 따옴표가 모두 맞아요\n','ok'); ctx.sys('ℹ️ PHP는 서버에서 돌아가서 브라우저에서 바로 실행할 수 없어요. 색칠, 괄호 검사, 구조 보기만 도와줘요. (실행은 내 컴퓨터의 PHP나 온라인 PHP 도구에서 해 보세요)');
+  ctx.show('pv'); ctx.done(true); }
+
+/* ---------- SQL: runs for real on SQLite (sql.js, loaded the first time) ---------- */
+var SQL_KW_L='select from where insert into values update set delete create table drop alter add column index view trigger primary key foreign references not null unique default check autoincrement and or in is like between exists case when then else end as distinct group by order having limit offset join inner left right outer cross on union all asc desc with pragma begin commit rollback transaction replace if integer int text real blob numeric varchar char date datetime boolean true false cast';
+var SQL_KW=(function(){ var o={}; SQL_KW_L.split(' ').forEach(function(w){ o[w]=1; o[w.toUpperCase()]=1; }); return o; })();
+var SQL_BI=(function(){ var o={}; 'count sum avg min max round abs length lower upper substr trim replace coalesce ifnull nullif random date time datetime strftime julianday typeof group_concat printf instr'.split(' ').forEach(function(w){ o[w]=1; o[w.toUpperCase()]=1; }); return o; })();
+var sqlHl=mkHl({com:'--[^\\n]*|\\/\\*[\\s\\S]*?(?:\\*\\/|$)', str:'\'(?:\'\'|[^\'])*\'?|"(?:""|[^"])*"?|`[^`\\n]*`?', kw:SQL_KW, bi:SQL_BI, def:{}});
+var SQL_WORDS=[['SELECT','SELECT $0\nFROM ','가져오기'],['SELECT *','SELECT * FROM $0;','전부 가져오기'],['WHERE','WHERE $0','조건'],['ORDER BY','ORDER BY $0','순서대로'],['GROUP BY','GROUP BY $0','묶어서'],['LIMIT','LIMIT $0','몇 개만'],['INSERT INTO','INSERT INTO $0 (이름, 나이) VALUES (\'\', 0);','넣기'],['UPDATE','UPDATE $0\nSET  = \nWHERE ;','고치기'],['DELETE FROM','DELETE FROM $0\nWHERE ;','지우기'],['CREATE TABLE','CREATE TABLE $0 (\n  id INTEGER PRIMARY KEY,\n  이름 TEXT,\n  나이 INTEGER\n);','표 만들기'],['DROP TABLE','DROP TABLE IF EXISTS $0;','표 지우기'],['JOIN','JOIN $0 ON ','두 표 잇기'],['LEFT JOIN','LEFT JOIN $0 ON ','왼쪽 기준으로 잇기'],['COUNT(*)','COUNT(*)','개수'],['SUM()','SUM($0)','합계'],['AVG()','AVG($0)','평균'],['MAX()','MAX($0)','가장 큰 값'],['MIN()','MIN($0)','가장 작은 값'],['DISTINCT','DISTINCT $0','겹치지 않게'],['LIKE','LIKE \'%$0%\'','글자 찾기'],['BETWEEN','BETWEEN $0 AND ','사이'],['CASE WHEN','CASE WHEN $0 THEN  ELSE  END','경우 나누기']];
+var sqlLib=null;
+function sqlLoad(){ if(sqlLib) return sqlLib; var base=BASE;
+  sqlLib=new Promise(function(res,rej){ function go(){ window.initSqlJs({locateFile:function(f){ return base+'lib/sql/'+f; }}).then(res,rej); }
+    if(window.initSqlJs) return go(); var s=document.createElement('script'); s.src=base+'lib/sql/sql-wasm.js'; s.onload=go; s.onerror=function(){ rej(new Error('SQL 엔진을 불러오지 못했어요')); }; document.head.appendChild(s); });
+  sqlLib.catch(function(){ sqlLib=null; }); return sqlLib; }
+/* split into statements, keeping the line each one starts on (quotes and comments respected) */
+function sqlSplit(src){ var out=[], i=0, n=src.length, line=1, st=null, buf='', ch;
+  function push(){ if(buf.replace(/\s+/g,'')) out.push({sql:buf,line:st||1}); buf=''; st=null; }
+  while(i<n){ ch=src[i];
+    if(ch==='-'&&src[i+1]==='-'){ while(i<n&&src[i]!=='\n'){ buf+=src[i]; i++; } continue; }
+    if(ch==='/'&&src[i+1]==='*'){ var j=src.indexOf('*/',i+2); j=j<0?n:j+2; var seg=src.slice(i,j); buf+=seg; line+=seg.split('\n').length-1; i=j; continue; }
+    if(ch==="'"||ch==='"'||ch==='`'){ var q=ch, k=i+1; if(st==null) st=line; while(k<n){ if(src[k]===q){ if(src[k+1]===q){ k+=2; continue; } break; } k++; } var sg=src.slice(i,Math.min(k+1,n)); buf+=sg; line+=sg.split('\n').length-1; i=k+1; continue; }
+    if(ch===';'){ buf+=ch; push(); i++; continue; }
+    if(ch==='\n') line++; else if(st==null&&!/\s/.test(ch)) st=line;
+    buf+=ch; i++; }
+  push(); return out; }
+function sqlRun(ctx){ var src=ctx.code, stm=sqlSplit(src); ctx.pv.innerHTML='';
+  if(!stm.length){ ctx.sys('SQL을 써 보세요. 예: SELECT 1 + 1;'); ctx.show('out'); ctx.done(true); return; }
+  ctx.sys('SQL 엔진을 준비하고 있어요…');
+  sqlLoad().then(function(SQL){ var db=new SQL.Database(), shown=0, fail=null, nres=0, nok=0;
+    for(var i=0;i<stm.length;i++){ var s=stm[i];
+      try{ var r=db.exec(s.sql); nok++; r.forEach(function(t){ nres++; var box=mk('div','tl'), h=mk('div','tt',t.values.length+'줄 · '+(s.line)+'줄의 결과'), tb=document.createElement('table'); tb.className='sqlt';
+          var hd=document.createElement('tr'); t.columns.forEach(function(c){ hd.appendChild(mk('th','',c)); }); tb.appendChild(hd);
+          t.values.slice(0,500).forEach(function(row){ var tr=document.createElement('tr'); row.forEach(function(v){ var td=mk('td','',v==null?'NULL':String(v)); if(v==null) td.style.opacity='.5'; if(typeof v==='number') td.style.textAlign='right'; tr.appendChild(td); }); tb.appendChild(tr); });
+          box.appendChild(h); box.appendChild(tb); if(t.values.length>500) box.appendChild(mk('div','tt','처음 500줄만 보여줘요')); ctx.pv.appendChild(box); }); }
+      catch(e){ fail={msg:String(e.message||e).replace(/^Error:\s*/,''),line:s.line}; break; } }
+    var ch=db.getRowsModified(); db.close();
+    if(fail){ ctx.write('✖ '+fail.msg+' ('+fail.line+'줄)\n','err'); ctx.errLine(fail.line);
+      if(/no such table/i.test(fail.msg)) ctx.sys('💡 표가 아직 없어요. CREATE TABLE 로 먼저 만들었는지 보세요 (실행할 때마다 처음부터 시작해요)');
+      else if(/syntax error/i.test(fail.msg)) ctx.sys('💡 철자, 쉼표(,), 따옴표(\'), 괄호를 확인해 보세요. 문장 끝에는 세미콜론(;)을 써요');
+      ctx.show('out'); ctx.done(false); return; }
+    ctx.write('✔ 문장 '+nok+'개를 실행했어요'+(nres?' (결과 표 '+nres+'개)':'')+'\n','ok');
+    if(!nres) ctx.sys('💡 SELECT 로 가져와야 결과 표가 나와요');
+    ctx.show(nres?'pv':'out'); ctx.done(true);
+  },function(e){ ctx.write('✖ '+(e&&e.message||'SQL 엔진을 불러오지 못했어요')+'\n','err'); ctx.show('out'); ctx.done(false); }); }
 
 /* ---------- BeaconScript ---------- */
 function bsCheck(src,nested){ var lastK={}, onAt={}, winDefs={}, V='(?:\\{:[a-z0-9_]{1,17}:\\}|\\{[a-z0-9_가-힣]{1,22}\\})', NUM='-?\\d{1,9}(?:\\.\\d{1,3})?', aliasSet={}, hasUse=/^\s*use_mod_uuid\s*:/im.test(src), useCount=0, hasUuid=/^\s*[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\s*$/im.test(src), hdrSeen={}, seenCode=false, errs=[], stack=[], lines=src.split('\n'), VERB=BS_VERBS.split(' ');
@@ -541,18 +606,27 @@ var EXHT=[['👋 첫 웹페이지','<!DOCTYPE html>\n<html lang="ko">\n<head>\n 
 var EXJN=[['👤 사람 정보','{\n  "이름": "철수",\n  "나이": 12,\n  "취미": ["축구", "게임"],\n  "학교": { "이름": "행복초", "학년": 6 },\n  "안경": false\n}\n'],
 ['📋 목록','[\n  { "id": 1, "할일": "숙제하기", "끝": true },\n  { "id": 2, "할일": "운동하기", "끝": false }\n]\n'],
 ['🐞 틀린 JSON','{\n  "이름": "철수",\n  나이: 12,\n  "취미": ["축구", "게임",],\n}\n']];
+var EXPH=[['👋 안녕하세요','<?php\n$name = "PHP";\necho "안녕하세요, " . $name . "!\\n";\n$nums = [3, 1, 2];\nsort($nums);\necho implode(", ", $nums);\n'],
+['✖️ 구구단','<?php\nfor ($dan = 2; $dan <= 9; $dan++) {\n    echo "--- $dan단 ---\\n";\n    for ($i = 1; $i <= 9; $i++) {\n        echo "$dan x $i = " . ($dan * $i) . "\\n";\n    }\n}\n'],
+['🐶 클래스 만들기','<?php\nclass Dog {\n    private string $name;\n\n    public function __construct(string $name) {\n        $this->name = $name;\n    }\n\n    public function bark(): string {\n        return $this->name . ": 멍멍!";\n    }\n}\n\n$dog = new Dog("보리");\necho $dog->bark();\n']];
+var EXSQ=[['👋 첫 표 만들기','CREATE TABLE 친구 (\n  id INTEGER PRIMARY KEY,\n  이름 TEXT,\n  나이 INTEGER\n);\n\nINSERT INTO 친구 (이름, 나이) VALUES (\'철수\', 12), (\'영희\', 11), (\'민수\', 13);\n\nSELECT * FROM 친구;\n'],
+['🔎 골라서 보기','CREATE TABLE 과일 (이름 TEXT, 값 INTEGER, 색 TEXT);\nINSERT INTO 과일 VALUES (\'사과\', 1500, \'빨강\'), (\'바나나\', 2000, \'노랑\'), (\'딸기\', 4000, \'빨강\'), (\'포도\', 3500, \'보라\');\n\nSELECT 이름, 값 FROM 과일\nWHERE 값 >= 2000\nORDER BY 값 DESC;\n'],
+['📊 묶어서 세기','CREATE TABLE 과일 (이름 TEXT, 값 INTEGER, 색 TEXT);\nINSERT INTO 과일 VALUES (\'사과\', 1500, \'빨강\'), (\'딸기\', 4000, \'빨강\'), (\'바나나\', 2000, \'노랑\'), (\'포도\', 3500, \'보라\');\n\nSELECT 색, COUNT(*) AS 개수, AVG(값) AS 평균값\nFROM 과일\nGROUP BY 색;\n'],
+['🔗 두 표 잇기','CREATE TABLE 반 (id INTEGER PRIMARY KEY, 이름 TEXT);\nCREATE TABLE 학생 (이름 TEXT, 반id INTEGER);\nINSERT INTO 반 VALUES (1, \'해바라기반\'), (2, \'튤립반\');\nINSERT INTO 학생 VALUES (\'철수\', 1), (\'영희\', 2), (\'민수\', 1);\n\nSELECT 학생.이름, 반.이름 AS 반\nFROM 학생\nJOIN 반 ON 학생.반id = 반.id;\n']];
 var EXBS=[['⚔️ 소리와 반복','on kill:\n    play sound hit\n    loop 3 times:\n        give 1 iron\n    heal player 5\n    give effect speed 5 seconds\n    broadcast "%player%가 해냈어요"\n'],['🔢 돌 세기 (변수)','on mine:\n    add 1 to variable {stones}\n    if variable {stones} >= 10:\n        say "돌을 %var_stones%개 캤어요"\n        reset variable {stones}\n'],['🏝️ 빈 시작 섬','# 새 월드의 땅을 바꿔요 (좌표는 픽셀, ~ 는 시작 위치 기준)\non world generate:\n    remove all trees\n    remove all rocks\n    fill ~-600 ~-600 ~600 ~600 to ocean\n    fill ~-150 ~-150 ~150 ~150 to land start\n    fill ~200 ~-100 ~320 ~20 to mountain volcano\n'],['🎁 기본 모드','# Beaconfall 모드 (BeaconScript)\non join:\n    chat "어서 와요!"\n    give 2 iron\n\non key "G" press:\n    teleport player to spawn\n    title "Welcome!" for 3 seconds\n'],
 ['🌍 월드 만들기','on world generate:\n    remove tree in 20 blocks of spawn\n    spawn wolf 5 times\n    place bench near spawn\n'],
 ['🗡️ 아이템 바꾸기','set iron_sword damage 12\nset iron_sword speed 0.4\nset iron_sword name "Big Sword"\n'],
 ['🔘 버튼과 확률','on join:\n    button "Shop" at top right:\n        give 1 iron\n    chance 30%:\n        chat "행운이에요!"\n'],
 ['🐞 오류 내 보기','# 일부러 틀린 코드예요\non join:\n    gve 2 iron\n    chat "안녕\n']];
 
-window.FCODE={ logos:{"python": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 2C8 2 7 3.5 7 5.5V8h5v1H5.5C3.5 9 2 10.5 2 13.5S3.2 18 5 18H7v-2.5C7 13.5 8.5 12 10.5 12H15c1.7 0 3-1.300 3-3V5.5C18 3.5 16 2 12 2z\" fill=\"#3b78b0\"/><path d=\"M12 22c4 0 5-1.5 5-3.5V16h-5v-1h6.5c2 0 3.5-1.5 3.5-4.5S20.8 6 19 6h-2v2.5C17 10.5 15.5 12 13.5 12H9c-1.7 0-3 1.300-3 3v3.5C6 20.5 8 22 12 22z\" fill=\"#ffd43b\"/><circle cx=\"9.5\" cy=\"5\" r=\".9\" fill=\"#fff\"/><circle cx=\"14.5\" cy=\"19\" r=\".9\" fill=\"#fff\"/></svg>", "javascript": "<svg viewBox=\"0 0 24 24\"><rect width=\"24\" height=\"24\" rx=\"4\" fill=\"#f7df1e\"/><text x=\"21.5\" y=\"21\" text-anchor=\"end\" font-size=\"11\" font-weight=\"800\" font-family=\"Arial,sans-serif\" fill=\"#222\">JS</text></svg>", "java": "<svg viewBox=\"0 0 24 24\"><path d=\"M5 10h11v4a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5z\" fill=\"#e76f00\"/><path d=\"M16 11h2a2.5 2.5 0 0 1 0 5h-2\" stroke=\"#e76f00\" stroke-width=\"1.6\" fill=\"none\"/><path d=\"M8 3c2 2-1.5 3 .5 5M12 3c2 2-1.5 3 .5 5\" stroke=\"#5382a1\" stroke-width=\"1.4\" fill=\"none\" stroke-linecap=\"round\"/><rect x=\"4\" y=\"20\" width=\"13\" height=\"1.8\" rx=\".9\" fill=\"#5382a1\"/></svg>", "html": "<svg viewBox=\"0 0 24 24\"><path d=\"M3 2h18l-1.6 17.5L12 22l-7.4-2.5z\" fill=\"#e44d26\"/><path d=\"M12 4v16.2l5.7-1.900L19 4z\" fill=\"#f16529\"/><text x=\"12\" y=\"15\" text-anchor=\"middle\" font-size=\"8.5\" font-weight=\"800\" font-family=\"Arial,sans-serif\" fill=\"#fff\">&lt;/&gt;</text></svg>", "json": "<svg viewBox=\"0 0 24 24\"><rect width=\"24\" height=\"24\" rx=\"5\" fill=\"#2b2f3a\"/><text x=\"12\" y=\"16.5\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"800\" font-family=\"monospace\" fill=\"#8ad4ff\">{ }</text></svg>", "beaconscript": "<svg viewBox=\"0 0 24 24\"><rect width=\"24\" height=\"24\" rx=\"5\" fill=\"#2a1a12\"/><path d=\"M12 3c1 3.5 5 5 5 9.5a5 5 0 0 1-10 0c0-2 1-3.2 2-4.2.2 1.5 1 2.2 1.8 2.2C11 8.5 10.5 5.5 12 3z\" fill=\"#ff8a3d\"/><path d=\"M12 12c.7 1.5 2 2.2 2 3.8a2 2 0 0 1-4 0c0-1.2.8-1.8 2-3.8z\" fill=\"#ffd43b\"/></svg>"}, order:['python','javascript','java','html','json','beaconscript'], langs:{
+window.FCODE={ logos:{"python": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 2C8 2 7 3.5 7 5.5V8h5v1H5.5C3.5 9 2 10.5 2 13.5S3.2 18 5 18H7v-2.5C7 13.5 8.5 12 10.5 12H15c1.7 0 3-1.300 3-3V5.5C18 3.5 16 2 12 2z\" fill=\"#3b78b0\"/><path d=\"M12 22c4 0 5-1.5 5-3.5V16h-5v-1h6.5c2 0 3.5-1.5 3.5-4.5S20.8 6 19 6h-2v2.5C17 10.5 15.5 12 13.5 12H9c-1.7 0-3 1.300-3 3v3.5C6 20.5 8 22 12 22z\" fill=\"#ffd43b\"/><circle cx=\"9.5\" cy=\"5\" r=\".9\" fill=\"#fff\"/><circle cx=\"14.5\" cy=\"19\" r=\".9\" fill=\"#fff\"/></svg>", "javascript": "<svg viewBox=\"0 0 24 24\"><rect width=\"24\" height=\"24\" rx=\"4\" fill=\"#f7df1e\"/><text x=\"21.5\" y=\"21\" text-anchor=\"end\" font-size=\"11\" font-weight=\"800\" font-family=\"Arial,sans-serif\" fill=\"#222\">JS</text></svg>", "java": "<svg viewBox=\"0 0 24 24\"><path d=\"M5 10h11v4a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5z\" fill=\"#e76f00\"/><path d=\"M16 11h2a2.5 2.5 0 0 1 0 5h-2\" stroke=\"#e76f00\" stroke-width=\"1.6\" fill=\"none\"/><path d=\"M8 3c2 2-1.5 3 .5 5M12 3c2 2-1.5 3 .5 5\" stroke=\"#5382a1\" stroke-width=\"1.4\" fill=\"none\" stroke-linecap=\"round\"/><rect x=\"4\" y=\"20\" width=\"13\" height=\"1.8\" rx=\".9\" fill=\"#5382a1\"/></svg>", "html": "<svg viewBox=\"0 0 24 24\"><path d=\"M3 2h18l-1.6 17.5L12 22l-7.4-2.5z\" fill=\"#e44d26\"/><path d=\"M12 4v16.2l5.7-1.900L19 4z\" fill=\"#f16529\"/><text x=\"12\" y=\"15\" text-anchor=\"middle\" font-size=\"8.5\" font-weight=\"800\" font-family=\"Arial,sans-serif\" fill=\"#fff\">&lt;/&gt;</text></svg>", "json": "<svg viewBox=\"0 0 24 24\"><rect width=\"24\" height=\"24\" rx=\"5\" fill=\"#2b2f3a\"/><text x=\"12\" y=\"16.5\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"800\" font-family=\"monospace\" fill=\"#8ad4ff\">{ }</text></svg>", "php": "<svg viewBox=\"0 0 24 24\"><ellipse cx=\"12\" cy=\"12\" rx=\"11\" ry=\"7\" fill=\"#777bb4\"/><text x=\"12\" y=\"15.2\" text-anchor=\"middle\" font-size=\"8.5\" font-weight=\"800\" font-family=\"Arial,sans-serif\" fill=\"#fff\">php</text></svg>", "sql": "<svg viewBox=\"0 0 24 24\"><ellipse cx=\"12\" cy=\"5.5\" rx=\"7\" ry=\"2.8\" fill=\"#4aa3df\"/><path d=\"M5 5.5v13c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8v-13c0 1.6-3.1 2.8-7 2.8s-7-1.2-7-2.8z\" fill=\"#2f7fb8\"/><path d=\"M5 12c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8\" fill=\"none\" stroke=\"#d9eefb\" stroke-width=\"1\"/></svg>", "beaconscript": "<svg viewBox=\"0 0 24 24\"><rect width=\"24\" height=\"24\" rx=\"5\" fill=\"#2a1a12\"/><path d=\"M12 3c1 3.5 5 5 5 9.5a5 5 0 0 1-10 0c0-2 1-3.2 2-4.2.2 1.5 1 2.2 1.8 2.2C11 8.5 10.5 5.5 12 3z\" fill=\"#ff8a3d\"/><path d=\"M12 12c.7 1.5 2 2.2 2 3.8a2 2 0 0 1-4 0c0-1.2.8-1.8 2-3.8z\" fill=\"#ffd43b\"/></svg>"}, order:['python','javascript','java','html','json','php','sql','beaconscript'], langs:{
   python:{id:'python',name:'Python',icon:'🐍',ext:'py',mime:'text/x-python',indent:'    ',tabs:[['out','결과']]},
   javascript:{id:'javascript',name:'JavaScript',icon:'🟨',ext:'js',mime:'text/javascript',indent:'  ',hl:jsHl,words:JS_WORDS,ex:EXJS,tabs:[['out','결과'],['pv','화면']],run:jsRun,open:/[{(\[]\s*$/,starter:'console.log("안녕하세요!");\n'},
   java:{id:'java',name:'Java',icon:'☕',ext:'java',mime:'text/x-java-source',indent:'    ',hl:jvHl,words:JV_WORDS,ex:EXJV,tabs:[['out','검사'],['pv','구조']],run:javaRun,open:/[{(\[]\s*$/,live:true,starter:'public class Main {\n    public static void main(String[] args) {\n        System.out.println("안녕하세요!");\n    }\n}\n'},
   html:{id:'html',name:'HTML',icon:'🌐',ext:'html',mime:'text/html',indent:'  ',hl:htmlHl,words:HTML_WORDS,ex:EXHT,tabs:[['pv','미리보기'],['out','콘솔']],run:htmlRun,live:true,open:/<(?!\/|!|meta|link|br|hr|img|input)[A-Za-z][^>]*[^\/]>\s*$/,starter:'<!DOCTYPE html>\n<html lang="ko">\n<head>\n  <meta charset="UTF-8">\n  <title>내 페이지</title>\n</head>\n<body>\n  <h1>안녕하세요!</h1>\n</body>\n</html>\n'},
   json:{id:'json',name:'JSON',icon:'🧾',ext:'json',mime:'application/json',indent:'  ',hl:jsonHl,words:[],ex:EXJN,tabs:[['pv','트리'],['out','검사']],run:jsonRun,live:true,open:/[{\[]\s*$/,starter:'{\n  "이름": "철수",\n  "나이": 12\n}\n'},
+  php:{id:'php',name:'PHP',icon:'🐘',ext:'php',mime:'application/x-httpd-php',indent:'    ',hl:phpHl,words:PHP_WORDS,ex:EXPH,tabs:[['out','검사'],['pv','구조']],run:phpRun,open:/[{(\[]\s*$/,live:true,starter:'<?php\necho "안녕하세요!";\n'},
+  sql:{id:'sql',name:'SQL',icon:'🗃️',ext:'sql',mime:'application/sql',indent:'  ',hl:sqlHl,words:SQL_WORDS,ex:EXSQ,tabs:[['out','결과'],['pv','표']],run:sqlRun,open:/\(\s*$/,starter:"CREATE TABLE 친구 (이름 TEXT, 나이 INTEGER);\nINSERT INTO 친구 VALUES ('철수', 12), ('영희', 11);\nSELECT * FROM 친구;\n"},
   beaconscript:{id:'beaconscript',name:'BeaconScript',icon:'🔥',ext:'bs',mime:'text/plain',indent:'    ',hl:bsHl,words:BS_WORDS,ex:EXBS,tabs:[['pv','규칙 보기'],['out','검사']],run:bsRun,sug:bsSug,live:true,open:/:\s*$/,starter:'on join:\n    chat "어서 와요!"\n'}
 }};
 })();
