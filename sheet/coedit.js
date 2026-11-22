@@ -100,6 +100,12 @@ function drawPres(){
     var g=H.rect(p.r1,p.c1,p.r2,p.c2); if(!g) return; var el=document.createElement('div'), nm=document.createElement('i');
     el.className='rsel'+(p.r1===0?' lo':''); el.style.borderColor=pe.color; nm.style.background=pe.color; nm.textContent=pe.name; el.appendChild(nm); H.box(el,g); H.gin.appendChild(el); });
 }
+/* who is in at the top, and the other people's mouse pointers (ffptr.js) */
+var ptr=null;
+function mountPtr(){ if(ptr||!window.FFPtr) return; var top=document.querySelector('header.top'); if(!top) return;
+  ptr=FFPtr.mount({ref:H.gin,layer:H.gin,area:$('gridWrap'),top:top,before:top.querySelector('.sp'),yPx:true,
+    send:function(o){ if(!role||!ready) return; var m={t:'ptr',x:o.x,y:o.y}; if(role==='host') room.all(Object.assign({by:'host'},m)); else guest.send(m); },
+    me:function(){ return myId; }, peers:function(){ return role?peers:[]; }}); }
 function mySel(){ var s=H.sheet, g=H.sel(); return {t:'sel',s:s.sid,r1:g.r1,c1:g.c1,r2:g.r2,c2:g.c2}; }
 function sel(){ if(!role) return; drawPres(); if(!ready) return; var m=mySel(), j=JSON.stringify(m); if(j===lastSel) return; lastSel=j;
   clearTimeout(selT); selT=setTimeout(function(){ if(!role) return; if(role==='host') room.all(Object.assign({by:'host'},m)); else guest.send(m); },60); }
@@ -109,6 +115,7 @@ function okSel(d){ return d&&typeof d.s==='string'&&['r1','c1','r2','c2'].every(
 function onHost(from,d){
   if(!d||typeof d!=='object') return;
   if(d.t==='ops') hostTake(from,d);
+  else if(d.t==='ptr'){ if(ptr) ptr.got(from,d); room.all({t:'ptr',by:from,x:d.x,y:d.y},from); }
   else if(d.t==='sel'&&okSel(d)){ pres[from]={s:d.s,r1:d.r1,c1:d.c1,r2:d.r2,c2:d.c2}; room.all({t:'sel',by:from,s:d.s,r1:d.r1,c1:d.c1,r2:d.r2,c2:d.c2},from); drawPres(); }
 }
 function onGuest(d){
@@ -117,6 +124,7 @@ function onGuest(d){
   else if(!ready) return;
   else if(d.t==='ops'){ apply(d.ops,false); }
   else if(d.t==='ack'){ (sent[d.bid]||[]).forEach(function(k){ if(--pend[k]<=0) delete pend[k]; }); delete sent[d.bid]; if(d.fix&&d.fix.length) apply(d.fix,true); }
+  else if(d.t==='ptr'&&typeof d.by==='string'){ if(ptr) ptr.got(d.by,d); }
   else if(d.t==='sel'&&okSel(d)&&typeof d.by==='string'){ pres[d.by]={s:d.s,r1:d.r1,c1:d.c1,r2:d.r2,c2:d.c2}; drawPres(); }
 }
 function takeSnap(d){
@@ -132,27 +140,28 @@ var ERR={taken:'이미 쓰고 있는 코드예요. 다시 만들어 주세요',n
 function myName(){ var n=$('coName').value.trim().slice(0,20)||T('손님'); lsSet(LSN,n); return n; }
 function fail(kind){ setSt(T(ERR[kind]||ERR.net)); reset(); }
 function reset(){ clearTimeout(joinT); clearTimeout(touchT); clearTimeout(selT); try{ if(room) room.close(); }catch(e){} try{ if(guest) guest.close(); }catch(e){}
+  if(ptr){ ptr.stop(); ptr=null; }
   room=guest=null; role=''; myId=''; code=''; peers=[]; pres={}; base=null; ready=false; pend={}; sent={}; lastSel=''; remoteSince=false; show(); drawPres(); }
 function leave(keepMsg){ var was=role; reset(); if(!keepMsg&&was) { setSt(''); H.toast(T('같이 고치기를 마쳤어요')); } }
 function make(){
-  if(role) return; role='host'; myId='host'; setSt(T('방을 만드는 중…')); base=mkBase(); ready=false; var nm=myName();
+  if(role) return; role='host'; myId='host'; mountPtr(); setSt(T('방을 만드는 중…')); base=mkBase(); ready=false; var nm=myName();
   room=FFRoom.host({app:'sheet',name:nm,
     open:function(c){ code=c; ready=true; peers=room.peers(); show(); setSt(''); sel(); },
     error:fail,
     join:function(p){ var snap={t:'snap',name:H.name(),sheets:H.doc.sheets,names:H.doc.names,pres:Object.assign({host:pres.host||mySel()},pres)}; flushNow(); room.send(p.id,snap); H.toast(F('{0} 님이 들어왔어요',p.name)); },
     leave:function(p){ delete pres[p.id]; drawPres(); H.toast(F('{0} 님이 나갔어요',p.name)); },
     msg:onHost,
-    peers:function(l){ peers=l; renderPeers(); drawPres(); } });
+    peers:function(l){ peers=l; renderPeers(); drawPres(); if(ptr) ptr.update(); } });
 }
 function flushNow(){ clearTimeout(touchT); flush(); }
 function join(txt){
   if(role) return; var m=/[#&]r=([A-Za-z0-9]{6})/.exec(txt)||[0,txt], c=FFRoom.cleanCode(m[1]);
   if(c.length<6) return setSt(T('초대 코드는 영문과 숫자 6자리예요'));
-  role='guest'; ready=false; setSt(T('방에 들어가는 중…')); var nm=myName();
+  role='guest'; ready=false; mountPtr(); setSt(T('방에 들어가는 중…')); var nm=myName();
   guest=FFRoom.join(c,{app:'sheet',name:nm,
     open:function(info){ myId=info.id; code=c; setSt(T('시트를 받는 중…')); },
     msg:onGuest,
-    peers:function(l){ peers=l; renderPeers(); drawPres(); },
+    peers:function(l){ peers=l; renderPeers(); drawPres(); if(ptr) ptr.update(); },
     end:function(why){ var r=why==='closed'?T('방을 만든 사람이 같이 고치기를 끝냈어요. 받은 시트는 내 문서로 남아 있어요'):T('연결이 끊겼어요. 받은 시트는 내 문서로 남아 있어요'); reset(); H.toast(r); },
     error:fail });
   joinT=setTimeout(function(){ if(role==='guest'&&!ready){ setSt(T('시트를 받지 못했어요. 다시 해 보세요')); reset(); } },25000);
