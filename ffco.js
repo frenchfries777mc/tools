@@ -100,13 +100,22 @@ function opsFor(st,keys){ var ops=[]; keys.forEach(function(k){ if(k==='o'){ if(
 var inq=[], inT=null, bypass=false;
 function gate(fn){ if(bypass) return false; var b=false; try{ b=!!(A.busy&&A.busy()); }catch(e){} if(!inq.length&&!b) return false; inq.push(fn); clearTimeout(inT); inT=setTimeout(drain,150); return true; }
 function drain(){ inT=null; while(inq.length){ var b=false; try{ b=!!(A.busy&&A.busy()); }catch(e){} if(b){ inT=setTimeout(drain,150); return; } var f=inq.shift(); bypass=true; try{ f(); }catch(e){ if(root.console) console.error(e); } finally{ bypass=false; } } }
+/* who is in at the top and the other people's mouse pointers (ffptr.js); a tool turns it on with adapter.ptr() -> {ref, layer, area?, top?, before?, yPx?, key?()} */
+var ptr=null, ptrCfg=null;
+function mountPtr(){ if(ptr||!A||!A.ptr||!root.FFPtr) return; var c=null; try{ c=A.ptr(); }catch(e){} if(!c||!c.ref||!c.layer) return; ptrCfg=c;
+  ptr=FFPtr.mount({ref:c.ref,layer:c.layer,area:c.area||c.layer,top:c.top,before:c.before,yPx:!!c.yPx,
+    send:function(o){ if(!role||!ready) return; var m={t:'ptr',x:o.x,y:o.y,s:c.key?String(c.key()):''}; if(role==='host') room.all(Object.assign({by:'host'},m)); else guest.send(m); },
+    me:function(){ return myId; }, peers:function(){ return role?peers:[]; }}); }
+function gotPtr(by,d){ if(!ptr) return; var mine=ptrCfg&&ptrCfg.key?String(ptrCfg.key()):''; ptr.got(by,d.s!=null&&String(d.s)!==mine?{x:null,y:null}:d); }
 function onHost(from,d){
+  if(d&&d.t==='ptr'&&room){ gotPtr(from,d); room.relay(from,{t:'ptr',x:d.x,y:d.y,s:d.s,by:from}); return; }
   if(!d||typeof d!=='object'||!ready) return; if(gate(function(){ if(room) onHost(from,d); })) return;
   if(d.t==='ops'&&Array.isArray(d.ops)){ var ops=d.ops.slice(0,5000); clearTimeout(touchT); flush(); var r=apply(ops,false);
     room.relay(from,{t:'ops',ops:ops,by:from}); room.send(from,{t:'ack',bid:d.bid,fix:r.fix}); touch(); }
   else if(d.t==='need'&&Array.isArray(d.keys)){ var st=A.read(); if(st) room.send(from,{t:'ops',ops:opsFor(st,d.keys.filter(function(k){ return typeof k==='string'; }).slice(0,500)),by:'host',force:true}); }
 }
 function onGuest(d){
+  if(d&&d.t==='ptr'&&typeof d.by==='string'){ gotPtr(d.by,d); return; }
   if(!d||typeof d!=='object') return;
   if(d.t==='snap') return takeSnap(d);
   if(!ready) return; if(gate(function(){ if(guest) onGuest(d); })) return;
@@ -133,28 +142,28 @@ function takeSnap(d){
 /* ---------- start, join, leave ---------- */
 function myName(){ var n=$('ffcoName').value.trim().slice(0,20)||T('손님'); lsSet(LSN,n); return n; }
 function fail(kind){ setSt(T(ERR[kind]||ERR.net)); reset(); }
-function reset(){ inq=[]; clearTimeout(inT); clearTimeout(joinT); clearTimeout(touchT); clearInterval(hbT); try{ if(room) room.close(); }catch(e){} try{ if(guest) guest.close(); }catch(e){}
+function reset(){ if(ptr){ ptr.stop(); ptr=null; } inq=[]; clearTimeout(inT); clearTimeout(joinT); clearTimeout(touchT); clearInterval(hbT); try{ if(room) room.close(); }catch(e){} try{ if(guest) guest.close(); }catch(e){}
   room=guest=null; role=''; myId=''; code=''; peers=[]; base=null; ready=false; pend={}; sent={}; sus={}; remoteSince=false; show(); if(A&&A.left) A.left(); }
 function leave(keepMsg){ var was=role; reset(); if(!keepMsg&&was){ setSt(''); toast(T('같이 고치기를 마쳤어요')); } }
 function make(){
-  if(role) return; role='host'; myId='host'; setSt(T('방을 만드는 중…')); var st0=A.read(); if(!st0){ role=''; return setSt(T('같이 고치기 문서를 받지 못했어요')); } base=mkBase(st0); ready=false; var nm=myName();
+  if(role) return; role='host'; myId='host'; mountPtr(); setSt(T('방을 만드는 중…')); var st0=A.read(); if(!st0){ role=''; return setSt(T('같이 고치기 문서를 받지 못했어요')); } base=mkBase(st0); ready=false; var nm=myName();
   room=FFRoom.host({app:A.app,name:nm,
     open:function(c){ code=c; ready=true; peers=room.peers(); show(); setSt(''); hbT=setInterval(heartbeat,6000); if(A.joined) A.joined(true); },
     error:fail,
     join:function(p){ clearTimeout(touchT); flush(); room.send(p.id,{t:'snap',name:A.name(),state:A.read()}); toast(F('{0} 님이 들어왔어요',p.name)); },
     leave:function(p){ toast(F('{0} 님이 나갔어요',p.name)); },
     msg:onHost,
-    peers:function(l){ peers=l; renderPeers(); } });
+    peers:function(l){ peers=l; renderPeers(); if(ptr) ptr.update(); } });
 }
 function heartbeat(){ if(role!=='host'||!ready||applying||peers.length<2) return; var st; try{ st=A.read(); }catch(e){ return; } if(st) room.all({t:'h',h:stateHashes(st)}); }
 function join(txt){
   if(role) return; var m=/[#&]r=([A-Za-z0-9]{6})/.exec(txt)||[0,txt], c=FFRoom.cleanCode(m[1]);
   if(c.length<6) return setSt(T('초대 코드는 영문과 숫자 6자리예요'));
-  role='guest'; ready=false; setSt(T('방에 들어가는 중…')); var nm=myName();
+  role='guest'; ready=false; mountPtr(); setSt(T('방에 들어가는 중…')); var nm=myName();
   guest=FFRoom.join(c,{app:A.app,name:nm,
     open:function(info){ myId=info.id; code=c; setSt(T('문서를 받는 중…')); },
     msg:onGuest,
-    peers:function(l){ peers=l; renderPeers(); },
+    peers:function(l){ peers=l; renderPeers(); if(ptr) ptr.update(); },
     end:function(why){ var r=why==='closed'?T('방을 만든 사람이 같이 고치기를 끝냈어요. 받은 문서는 내 문서로 남아 있어요'):T('연결이 끊겼어요. 받은 문서는 내 문서로 남아 있어요'); reset(); toast(r); },
     error:fail });
   joinT=setTimeout(function(){ if(role==='guest'&&!ready){ setSt(T('문서를 받지 못했어요. 다시 해 보세요')); reset(); } },25000);

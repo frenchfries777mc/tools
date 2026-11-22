@@ -3,6 +3,24 @@
  "name": "Fry Draw",
  "notes": [
   {
+   "date": "2026-11-22",
+   "build": "v26",
+   "title": "같이 고칠 때 접속자와 마우스 포인터 보이기",
+   "items": [
+    "같이 고치는 중에는 위쪽에 접속자 수와 이름이 보여요 (사람마다 색이 달라요)",
+    "같은 페이지를 보고 있는 다른 사람의 마우스 포인터가 그 사람 색과 이름표로 보여요. 내 포인터는 따로 그리지 않아요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Show who is in and their mouse pointers when editing together",
+     "items": [
+      "While editing together, the number of people and their names are shown at the top (each person has a colour)",
+      "The mouse pointers of other people looking at the same page appear in their colour with a name tag. Your own pointer is not drawn"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-06",
    "build": "v25",
    "title": "Fry Draw 25: 버전 저장, 시작 틀",
