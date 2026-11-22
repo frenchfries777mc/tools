@@ -64,3 +64,4 @@ code/index.html·app.js, score/js/text.js, video/app.js, lab/report.js, ai-chat/
 code/app.js, blocks/app.js, draw/app.js, score/js/ui.js·coedit.js, lab/app.js | 같이 고치는 동안 다른 파일·프로젝트·그림·악보·실험으로 못 바꾼다는 문구, 되돌리기 안내 문구 | tools v65 | 2026-11-13
 lang-js.js·lang-py.js·lang-bs.js·multi.js, blocks/index.html·app.js | 언어 버튼(HTML·JavaScript·Python·BeaconScript), 새 블록 이름·설명·예제 이름, 결과 칸·오류·바로 적용 문구 전체 (한국어만) | site v66 | 2026-11-15
 code/langs.js, code/index.html | PHP·SQL 언어: 단어 뜻, 예제 이름, 검사·결과·안내 문구 (한국어만) | python v40 | 2026-11-22
+video/app.js | 일러스트 이름 10개, 「일러스트」 제목·「내 일러스트 넣기」·안내 문구 (한국어만) | video v34 | 2026-11-22

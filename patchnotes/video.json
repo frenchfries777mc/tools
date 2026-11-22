@@ -3,6 +3,26 @@
  "name": "Fry Video",
  "notes": [
   {
+   "date": "2026-11-22",
+   "build": "v34",
+   "title": "일러스트 넣기, 지우기는 Delete 키만",
+   "items": [
+    "「넣기」 탭에 일러스트 10가지(해, 구름, 하트, 별, 말풍선, 번개, 왕관, 체크, 화살표, 깃발)가 생겼어요. 누르면 재생 막대 위치에 그림 클립으로 들어가요",
+    "「내 일러스트 넣기」로 SVG·PNG·WebP 그림 파일도 넣을 수 있어요",
+    "장면이나 글자를 지울 때 Backspace 키로는 더 이상 지워지지 않고 Delete 키로만 지워져요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Add illustrations, delete only with the Delete key",
+     "items": [
+      "The Insert tab has 10 illustrations (sun, cloud, heart, star, speech bubble, lightning, crown, check, arrow, flag). Press one to add it as a picture clip at the playhead",
+      "'Add my illustration' lets you pick an SVG, PNG or WebP picture file",
+      "Backspace no longer deletes a scene or text. Only the Delete key does"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-12",
    "build": "v33",
    "title": "AI 대본 만들기·자막 번역",
