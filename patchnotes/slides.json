@@ -3,6 +3,26 @@
  "name": "Fry Slides",
  "notes": [
   {
+   "date": "2026-11-22",
+   "build": "v38",
+   "title": "실시간 함께 편집에서 접속자와 마우스 포인터 보이기",
+   "items": [
+    "실시간 함께 편집 중에는 위쪽에 접속자 수와 이름이 보여요 (사람마다 색이 달라요)",
+    "같은 슬라이드를 보고 있는 다른 사람의 마우스 포인터가 그 사람 색과 이름표로 보여요. 내 포인터는 따로 그리지 않아요",
+    "위쪽 줄이 좁으면 두 줄로 내려와요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Show who is in and their mouse pointers in live co-editing",
+     "items": [
+      "While co-editing live, the number of people and their names are shown at the top (each person has a colour)",
+      "The mouse pointers of other people looking at the same slide appear in their colour with a name tag. Your own pointer is not drawn",
+      "The top row wraps onto a second line when it is narrow"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-04",
    "build": "v37",
    "title": "글자 크기를 포인트(pt)로 고르기",

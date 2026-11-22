@@ -84,9 +84,16 @@ function drain(){ if(!R||!X.still()) return; if(R.redraw&&X.quiet()){ R.redraw=f
   paint(); }
 setInterval(function(){ drain(); },250);
 
+/* ---------- who is in at the top, and the other people's mouse pointers (ffptr.js) ---------- */
+function curSid(){ var d=X.deck; return d&&d.slides[X.cur]?d.slides[X.cur].id:''; }
+function mountPtr(r){ if(r.ptr||!window.FFPtr) return; var top=document.querySelector('header.top'), host=$('slideHost'); if(!top||!host) return;
+  r.ptr=FFPtr.mount({ref:host,layer:$('canvasWrap'),area:$('canvasWrap'),top:top,before:top.querySelector('.sp'),
+    send:function(o){ if(R!==r||!r.ready||!r.room) return; var m={t:'ptr',x:o.x,y:o.y,s:curSid()}; if(r.role==='guest') r.room.send(m); else { m.u='host'; r.room.all(m); } },
+    me:function(){ return r.me?r.me.id:''; }, peers:function(){ return r.ready?usersList().map(function(u){ return {id:u.id,name:u.n,color:u.c}; }):[]; }}); }
+function gotPtr(u,o){ if(!R||!R.ptr) return; R.ptr.got(u,o.s&&o.s!==curSid()?{x:null,y:null}:o); }
 /* ---------- who is here, who picked what ---------- */
 function usersList(){ return Object.keys(R.users).map(function(i){ return R.users[i]; }); }
-function setUsers(list){ R.users={}; (list||[]).forEach(function(p){ R.users[p.id]={id:p.id,n:p.name,c:p.color}; }); Object.keys(R.sels).forEach(function(i){ if(!R.users[i]) delete R.sels[i]; }); X.redrawTags(); paint(); }
+function setUsers(list){ R.users={}; (list||[]).forEach(function(p){ R.users[p.id]={id:p.id,n:p.name,c:p.color}; }); Object.keys(R.sels).forEach(function(i){ if(!R.users[i]) delete R.sels[i]; }); X.redrawTags(); paint(); if(R.ptr) R.ptr.update(); }
 var selT=null;
 X.onSel=function(s,k){ if(!R||!R.ready) return; R.mine={s:s,k:k}; clearTimeout(selT); selT=setTimeout(function(){ if(!R) return; var m={t:'sel',s:R.mine.s,k:R.mine.k};
   if(R.role==='guest') R.room.send(m); else { m.u='host'; R.room.all(m); } },80); };
@@ -98,6 +105,7 @@ function errText(k){ return k==='taken'?'방 코드가 겹쳤어요. 다시 만�
 /* ---------- the host ---------- */
 function startHost(){ if(R) return; var d=X.deck; if(!d||!d.slides.length){ say('슬라이드가 하나 이상 있어야 방을 만들 수 있어요',true); return; }
   say('방을 만드는 중…'); var mine=R={role:'host', code:'', room:null, users:{}, me:{id:'host'}, base:payload(d), pend:{}, queue:[], seq:0, sels:{}, mine:{s:'',k:[]}, ready:false};
+  mountPtr(mine);
   myName().then(function(n){ if(R!==mine) return; n=n||T('방장');
     mine.room=RM.host({app:'slides', name:n,
       open:function(code){ if(R!==mine) return; mine.code=code; mine.ready=true; setUsers(mine.room.peers()); X.resel(); say(''); paint(); X.toast(T('방을 만들었어요')); },
@@ -107,13 +115,14 @@ function startHost(){ if(R) return; var d=X.deck; if(!d||!d.slides.length){ say(
       leave:function(p){ if(R!==mine) return; delete mine.sels[p.id]; X.redrawTags(); X.toast(F('{0}님이 나갔어요',p.name)); },
       msg:function(id,o){ if(R!==mine||!o) return;
         if(o.t==='ops'&&Array.isArray(o.ops)){ mine.queue.push({u:id,ops:o.ops.filter(okOp).slice(0,400)}); drain(); }
+        else if(o.t==='ptr'){ gotPtr(id,o); mine.room.all({t:'ptr',u:id,x:o.x,y:o.y,s:o.s},id); }
         else if(o.t==='sel'){ setSel(id,o); mine.room.all({t:'sel',u:id,s:o.s,k:o.k},id); } } });
     mine.code=mine.room.code; paint(); }); }
 
 /* ---------- a guest ---------- */
 function startGuest(code){ if(R) return; code=String(code||'').toUpperCase().replace(/[^A-Z0-9]/g,''); if(code.length<6){ say('방 코드는 6글자예요',true); return; } say('들어가는 중…');
   var mine=R={role:'guest', code:code, room:null, users:{}, me:null, base:null, pend:{}, queue:[], seq:0, sels:{}, mine:{s:'',k:[]}, ready:false}, gotSnap=false, give=setTimeout(function(){ if(R===mine&&!gotSnap){ say('방이 열려 있는지 확인해 주세요',true); stop(true); } },20000);
-  paint();
+  paint(); mountPtr(mine);
   myName().then(function(n){ if(R!==mine) return;
     mine.room=RM.join(code,{app:'slides', name:n||T('손님')+' '+(1+Math.floor(Math.random()*98)),
       peers:function(l){ if(R===mine&&mine.me) setUsers(l); },
@@ -123,11 +132,12 @@ function startGuest(code){ if(R) return; code=String(code||'').toUpperCase().rep
           X.openDeck(d); mine.base=payload(X.deck); mine.ready=true; X.resel(); mine.sels={}; Object.keys(o.sels||{}).forEach(function(i){ setSel(i,o.sels[i]); }); say(''); paint(); X.toast(T('함께 편집하는 방에 들어왔어요')); return; }
         if(!mine.ready) return;
         if(o.t==='ops'&&Array.isArray(o.ops)){ mine.queue.push({own:o.u===mine.me.id, u:o.u, ops:o.ops.filter(okOp).slice(0,400)}); drain(); }
+        else if(o.t==='ptr'&&o.u!==mine.me.id) gotPtr(o.u,o);
         else if(o.t==='sel'&&o.u!==mine.me.id) setSel(o.u,o); },
       end:function(why){ if(R!==mine) return; if(mine.ready) stop(false,why==='closed'?'방장이 방을 닫았어요. 이 기기에는 자료가 남아 있어요':'함께 편집하는 방과 연결이 끊겼어요. 이 기기에는 자료가 남아 있어요'); else { say('방이 열려 있는지 확인해 주세요',true); stop(true); } },
       error:function(k){ if(R!==mine) return; say(errText(k),true); stop(true); } }); }); }
 
-function stop(quiet,msg){ var r=R; if(!r) return; R=null; clearTimeout(soonT); clearTimeout(selT); try{ if(r.room) r.room.close(); }catch(e){} X.redrawTags(); paint(); if(msg) X.toast(T(msg)); else if(!quiet) X.toast(T('함께 편집을 끝냈어요')); }
+function stop(quiet,msg){ var r=R; if(!r) return; R=null; clearTimeout(soonT); clearTimeout(selT); if(r.ptr) r.ptr.stop(); try{ if(r.room) r.room.close(); }catch(e){} X.redrawTags(); paint(); if(msg) X.toast(T(msg)); else if(!quiet) X.toast(T('함께 편집을 끝냈어요')); }
 
 /* ---------- the share dialog and the chip in the top bar ---------- */
 function say(t,bad){ var e=$('rtMsg'); if(!e) return; e.textContent=t?T(t):''; e.className='coMsg'+(bad?' bad':''); }
