@@ -4,6 +4,22 @@
  "notes": [
   {
    "date": "2026-11-22",
+   "build": "v35",
+   "title": "가로 화면 배치",
+   "items": [
+    "휴대폰을 가로로 눕히면 미리보기가 너무 작던 것을 고쳤어요 (안내 칸과 오른쪽 칸을 줄임). 위쪽 바도 더 얇아요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Sideways phone layout",
+     "items": [
+      "On a phone held sideways the preview is bigger (the help box and side panel are shorter) and the top bar is slimmer"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-22",
    "build": "v34",
    "title": "일러스트 넣기, 지우기는 Delete 키만",
    "items": [

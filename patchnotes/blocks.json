@@ -4,6 +4,22 @@
  "notes": [
   {
    "date": "2026-11-22",
+   "build": "v70",
+   "title": "탭 글자 줄바꿈 고침",
+   "items": [
+    "「미리보기」, 「HTML 코드」 탭 글자가 두 줄로 꺾이지 않게 고쳤어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Tab labels no longer wrap",
+     "items": [
+      "Preview and HTML code tab labels no longer wrap onto two lines"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-22",
    "build": "v69",
    "title": "처음 시작 블록과 새 블록",
    "items": [

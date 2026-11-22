@@ -4,6 +4,22 @@
  "notes": [
   {
    "date": "2026-11-22",
+   "build": "v27",
+   "title": "가로 화면 배치",
+   "items": [
+    "휴대폰을 가로로 눕히면 그림 영역이 너무 작던 것을 고쳤어요 (속성 칸이 오른쪽으로 가요). 위쪽 바도 더 얇아요"
+   ],
+   "tr": {
+    "en": {
+     "title": "Sideways phone layout",
+     "items": [
+      "On a phone held sideways the drawing area is bigger (the panel moves to the right) and the top bar is slimmer"
+     ]
+    }
+   }
+  },
+  {
+   "date": "2026-11-22",
    "build": "v26",
    "title": "같이 고칠 때 접속자와 마우스 포인터 보이기",
    "items": [
