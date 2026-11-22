@@ -16,6 +16,7 @@
 'use strict';
 if(!root.document||root.FFPtr) return;
 var T=function(s){ return root.FFT&&root.FFT.T?root.FFT.T(s):s; };
+if(root.FFT&&root.FFT.add) root.FFT.add({"접속자": ["In room", "En la sala", "Dans la salle", "Im Raum", "接続中", "在线", "Na sala", "В комнате", "Odada", null, null, "In stanza", "W pokoju", "في الغرفة"], "명": [" people", " personas", " personnes", " Personen", "人", "人", " pessoas", " чел.", " kişi", null, null, " persone", " osób", " أشخاص"]});
 var CSS='.ffp-lay{position:absolute;left:0;top:0;width:0;height:0;z-index:60;pointer-events:none}'
  +'.ffp-c{position:absolute;left:0;top:0;transition:opacity .25s;will-change:transform}.ffp-c svg{display:block;width:16px;height:20px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.45))}'
  +'.ffp-c b{position:absolute;left:14px;top:14px;font:600 11px/1.2 system-ui,sans-serif;color:#fff;padding:2px 6px;border-radius:6px;white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis}'
