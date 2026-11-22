@@ -66,3 +66,4 @@ lang-js.js·lang-py.js·lang-bs.js·multi.js, blocks/index.html·app.js | 언어
 code/langs.js, code/index.html | PHP·SQL 언어: 단어 뜻, 예제 이름, 검사·결과·안내 문구 (한국어만) | python v40 | 2026-11-22
 video/app.js | 일러스트 이름 10개, 「일러스트」 제목·「내 일러스트 넣기」·안내 문구 (한국어만) | video v34 | 2026-11-22
 ffptr.js, docs/room.js | 위쪽 접속자 칩 「접속자 N명」 (한국어만, 「명」 붙임) | docs v23 | 2026-11-22
+ffptr.js, sheet/coedit.js | 위쪽 접속자 칩 「접속자 N명」 (한국어만, 「명」 붙임) | sheet v48 | 2026-11-22
