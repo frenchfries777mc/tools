@@ -266,13 +266,15 @@ function tpump(){ tur.raf=0; var budget=0, q=tur.q, n=0;
     if(c[0]==='l'){ var cost=sp===0?0:1/Math.max(1,Math.round(Math.pow(sp,1.7)/2)); if(budget+cost>1&&n) break; budget+=cost; n++; }
     tdraw(q.shift()); if(budget>=1) break; }
   tshow(); if(q.length) tur.raf=requestAnimationFrame(tpump); else checkDone(); }
-function onTurtle(j){ var cmds; try{ cmds=JSON.parse(j); }catch(e){ return; } var t=turtleCanvas(); Array.prototype.push.apply(t.q,cmds); if(!t.raf) t.raf=requestAnimationFrame(tpump); }
+var drew=false;
+function emptyHint(){ if(outChars===0&&!drew&&!(tur&&tur.q&&tur.q.length)&&!$('pv').children.length) sys(T('(출력이 없어요 — print나 console.log가 한 번도 실행되지 않았어요)')); }
+function onTurtle(j){ drew=true; var cmds; try{ cmds=JSON.parse(j); }catch(e){ return; } var t=turtleCanvas(); Array.prototype.push.apply(t.q,cmds); if(!t.raf) t.raf=requestAnimationFrame(tpump); }
 
 /* ---------- graphs ---------- */
 function nice(lo,hi,n){ var span=hi-lo||1, step=Math.pow(10,Math.floor(Math.log10(span/n))), err=span/n/step; step*=err>=7.5?10:err>=3.5?5:err>=1.5?2:1;
   var a=Math.floor(lo/step)*step, ticks=[]; for(var v=a;v<=hi+step*1e-9;v+=step) if(v>=lo-step*1e-9) ticks.push(+v.toFixed(10)); return ticks; }
 function fmtN(v){ var a=Math.abs(v); return a!==0&&(a>=1e6||a<1e-3)?v.toExponential(1):String(+v.toFixed(4)); }
-function onPlot(j){ var f; try{ f=JSON.parse(j); }catch(e){ return; }
+function onPlot(j){ drew=true; var f; try{ f=JSON.parse(j); }catch(e){ return; }
   var W=Math.round(Math.max(3,Math.min(12,f.w||6.4))*100), H=Math.round(Math.max(2,Math.min(10,f.h||4.8))*100), dpr=Math.min(2,window.devicePixelRatio||1);
   var cv=document.createElement('canvas'); cv.width=W*dpr; cv.height=H*dpr; cv.style.width=W+'px'; out.appendChild(cv); lastPre=null;
   var g=cv.getContext('2d'); g.scale(dpr,dpr); g.fillStyle='#fff'; g.fillRect(0,0,W,H); var FONT='"Noto Sans KR",sans-serif';
@@ -346,13 +348,13 @@ function mkWorker(){ worker=new Worker('worker.js?v=p1'); ready=false;
   worker.onerror=function(e){ console.error(e); };
   worker.postMessage({boot:true}); }
 function checkDone(){ var d=pendingDone; if(!d||(tur&&tur.q.length)) return; pendingDone=null; running=false; ui(); state('');
-  if(d.ok){ sys(F('✔ 끝났어요 ({0}초)',((Date.now()-t0)/1000).toFixed(1)),'ok'); return; }
+  if(d.ok){ emptyHint(); sys(F('✔ 끝났어요 ({0}초)',((Date.now()-t0)/1000).toFixed(1)),'ok'); return; }
   write(trErr(d.error)+'\n','err'); errLine=d.line||0; paint();
   if(errLine){ var lh=parseFloat(getComputedStyle(code).lineHeight)||21; if(errLine*lh<code.scrollTop||errLine*lh>code.scrollTop+code.clientHeight) code.scrollTop=Math.max(0,(errLine-4)*lh); }
   lastErr={code:code.value, error:d.error, last:d.last, line:d.line}; whyBox(lastErr); }
 var t0=0;
 function run(){ if(running) return; if(curLang!=='python') return runOther(false); saveNow(); errLine=0; paint();
-  out.innerHTML=''; lastPre=null; outChars=0; tur=null; atBottom=true; pendingDone=null;
+  out.innerHTML=''; lastPre=null; outChars=0; drew=false; tur=null; atBottom=true; pendingDone=null;
   if(!worker) mkWorker();
   running=true; ui(); runId++; t0=Date.now(); state(ready?'실행 중…':'파이썬을 불러오는 중…',true);
   var stdin=$('stdin').value.replace(/\r/g,''), lines=stdin?stdin.split('\n'):[];
@@ -380,13 +382,13 @@ function whyBox(er){ var box=document.createElement('div'); box.className='why';
 var stopFn=null, liveT=0, otherGen=0;
 function stopOther(){ if(stopFn){ try{ stopFn(); }catch(e){} stopFn=null; } otherGen++; running=false; ui(); state(''); sys(T('■ 멈췄어요'),'err'); }
 function showTab(id){ if(id!=='wd'&&wdFrame) wdOff(true); out.hidden=(id!=='out'); $('pv').hidden=(id!=='pv'); $('wd').hidden=(id!=='wd'); $('st').hidden=(id!=='st'); if(id==='st') stDraw(); if(wdBtn) wdBtn.classList.toggle('lvon',!!wdFrame&&id==='wd'); if(stBtn) stBtn.classList.toggle('on',id==='st'); Array.prototype.forEach.call($('rtabs').children,function(b){ b.classList.toggle('on',b.dataset.t===id); }); }
-function runOther(live){ var L=LG(); if(!L.run) return; if(!live) saveNow(); errLine=0; paint(); out.innerHTML=''; $('pv').innerHTML=''; lastPre=null; outChars=0;
+function runOther(live){ var L=LG(); if(!L.run) return; if(!live) saveNow(); errLine=0; paint(); out.innerHTML=''; $('pv').innerHTML=''; lastPre=null; outChars=0; drew=false;
   if(stopFn){ try{ stopFn(); }catch(e){} stopFn=null; } var gen=++otherGen; running=!live; ui(); var t1=Date.now();
   var ctx={code:code.value, out:out, pv:$('pv'), write:write, sys:sys, show:function(id){ if(wdFrame) return; if(!live||gen===otherGen) showTab(id); }, T:T,
     errLine:function(n){ errLine=n; paint(); },
     setCode:function(t){ code.focus(); code.select(); ins(t); },
     onStop:function(fn){ var old=stopFn; stopFn=function(){ if(old) old(); fn(); }; },
-    done:function(ok){ if(gen!==otherGen) return; running=false; ui(); if(!live&&ok&&curLang==='javascript') sys(F('✔ 끝났어요 ({0}초)',((Date.now()-t1)/1000).toFixed(1)),'ok'); }};
+    done:function(ok){ if(gen!==otherGen) return; running=false; ui(); if(!live&&ok&&curLang==='javascript'){ emptyHint(); sys(F('✔ 끝났어요 ({0}초)',((Date.now()-t1)/1000).toFixed(1)),'ok'); } }};
   try{ L.run(ctx); }catch(e){ write(String((e&&e.message)||e)+'\n','err'); ctx.done(false); } }
 
 /* ---------- BeaconScript: 바로 적용 (Beaconfall world in an iframe) ---------- */
