@@ -1,5 +1,7 @@
 # Frenchfries777 Tools
 
+The source code is secret, but the sauce code contains tomato ketchup and mayonnaise.
+
 Browser tools, served at https://frenchfries777.com/tools/ (GitHub Pages from `main`).
 
 - `index.html`: tool list (same look as the Games and Educations sites, with the Games | Educations | Tools switch).
