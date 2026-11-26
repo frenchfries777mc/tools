@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<script src="https://frenchfries777.com/games/ff-lang.js?v=20261120c"></script>
+<script src="https://frenchfries777.com/games/ff-lang.js?v=20261126a"></script>
 <script src="i18n.js"></script>
 <script>
 FFT.add({
@@ -155,57 +155,332 @@ img{max-width:100%}
   .ffx-root>main>div{padding-left:18px!important;padding-right:18px!important}
 }
 </style>
-<link rel="stylesheet" href="https://frenchfries777.com/ff-themes.css?v=20261126b">
-</head>
-<body>
-<div class="ffx-root" style="background:#000000;color:#ffffff;min-height:1600px;display:flex;flex-wrap:wrap;align-items:stretch">
-<aside style="flex:0 0 232px;box-sizing:border-box;background:#000000;border-right:1px solid #262626;padding:24px 16px;display:flex;flex-direction:column;gap:6px;min-width:0">
-<a href="/" style="display:block;padding:4px 10px 22px;font-family:'Oswald',sans-serif;font-size:21px;line-height:1;letter-spacing:.03em;white-space:nowrap"><span style="font-weight:500">FRENCH</span><span style="font-weight:700">FRIES</span><span style="font-weight:700;color:#ffd54a">777</span></a>
+<link rel="stylesheet" href="https://frenchfries777.com/ff-themes.css?v=20261126c">
+<style>
+  :root{ --bg:#08090d; --panel:#10131b; --line:#222837; --text:#eef0f5; --dim:#8a93a6; --fry:#ffc93c; --fry2:#ff8a3d; }
+  *{box-sizing:border-box;}
+  html,body{margin:0; padding:0; background:var(--bg); color:var(--text);}
+  body{font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif; font-size:16px; line-height:1.6; min-height:100vh;
+    padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+    background:none;}
+  html{background-image:radial-gradient(ellipse 900px 520px at 10% -10%, rgba(255,201,60,.10), transparent 60%), radial-gradient(ellipse 800px 600px at 110% 30%, rgba(63,224,143,.07), transparent 60%), radial-gradient(ellipse 800px 600px at -10% 90%, rgba(61,127,224,.12), transparent 60%);
+  background-attachment:fixed;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 22px;}
+  header{display:flex; align-items:center; justify-content:space-between; padding:26px 0 0;}
+  .logo{display:flex; align-items:center; gap:10px; font-family:'Oswald',sans-serif; font-weight:600; font-size:20px; letter-spacing:.04em; color:var(--text); text-decoration:none;}
+  .logo .fry{width:34px; height:34px; border-radius:9px; display:grid; place-items:center; font-size:20px; background:linear-gradient(135deg,var(--fry),var(--fry2)); box-shadow:0 6px 18px rgba(255,160,60,.25);}
+  .logo img.lg{width:36px; height:36px; display:block; flex:0 0 auto; border-radius:10px; filter:drop-shadow(0 6px 14px rgba(255,160,60,.25));}
+  .logo b{color:var(--fry); font-weight:700;}
+  header nav a{color:var(--dim); text-decoration:none; font-size:15px; margin-left:18px;}
+  header nav a:hover{color:var(--text);}
+  header .right{display:flex; align-items:center;}
+  .tb{display:inline-flex; align-items:center; gap:2px; margin-left:16px; padding:3px; background:var(--panel); border:1px solid var(--line); border-radius:12px; vertical-align:middle;}
+  .tb [data-ff-account] .ffa-wrap{margin-left:0; display:inline-flex; align-items:center; gap:2px;}
+  .tb .ffa-set,.tb .ffa-bell,.tb .ffa-vote,.tb .ffa-chip{background:transparent!important; border:0!important; margin:0!important; border-radius:9px!important; padding:6px 10px!important;}
+  .tb .ffa-set:hover,.tb .ffa-bell:hover,.tb .ffa-vote:hover,.tb .ffa-chip:hover{background:rgba(255,201,60,.12)!important;}
+  .tb .ffa-btn{margin-left:2px; border-radius:9px;}
+  @media(max-width:520px){ .tb{margin-left:8px;} .tb .ffa-set,.tb .ffa-bell,.tb .ffa-vote,.tb .ffa-chip{padding:6px 7px!important;} }
+  .langSel{background:var(--panel); color:var(--dim); border:1px solid var(--line); border-radius:8px; padding:6px 9px; font:inherit; font-size:14px; cursor:pointer; margin-left:16px;}
+  .langSel:hover{color:var(--text); border-color:var(--fry);}
+  .swr{margin:0 auto 0 20px;}
+  .swr{display:flex; align-items:center; gap:8px;}
+  .srx-btn{background:var(--panel); color:var(--text); border:1px solid var(--line); border-radius:99px; width:38px; height:38px; display:inline-grid; place-items:center; cursor:pointer; font-size:15px; flex:0 0 auto;}
+  .srx-btn:hover{border-color:var(--fry);}
+  .hn-bg{position:fixed; inset:0; z-index:2147482300; background:rgba(5,6,10,.72); display:none; align-items:center; justify-content:center; padding:16px;}
+  .hn-b{width:100%; max-width:560px; max-height:calc(100vh - 32px); overflow-y:auto; background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:18px 20px; box-sizing:border-box; overscroll-behavior:contain;}
+  .hn-h{display:flex; justify-content:space-between; align-items:center; font-size:19px; margin-bottom:6px;} .hn-x{background:none; border:0; color:var(--dim); font-size:24px; cursor:pointer; line-height:1;}
+  .srx .hn-b{max-width:640px; align-self:flex-start; margin-top:8vh;}
+  .srx input{width:100%; background:var(--bg); color:var(--text); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font:inherit; font-size:17px; box-sizing:border-box;}
+  .srx input:focus{outline:none; border-color:var(--fry);}
+  .srx .sg{margin-top:14px;} .srx .sg h4{margin:0 0 6px; font-size:12.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--dim);}
+  .srx .sr{display:block; text-decoration:none; color:var(--text); background:var(--bg); border:1px solid var(--line); border-radius:11px; padding:9px 12px; margin-bottom:6px; cursor:pointer; text-align:left; width:100%; font:inherit; box-sizing:border-box;}
+  .srx .sr:hover,.srx .sr.sel{border-color:var(--fry);} .srx .sr b{font-weight:700;} .srx .sr small{display:block; color:var(--dim); font-size:13px; margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .srx .sr .gt{font-size:11.5px; font-weight:800; margin-right:7px; color:#6aa8ff;}
+  .srx mark{background:rgba(255,201,60,.35); color:inherit; border-radius:3px;}
+  .srx .se{color:var(--dim); font-size:14px; padding:14px 2px 4px;}
+  html[data-ff-theme=light] .srx input, html[data-ff-theme=light] .srx .sr{background:#faf8f3;} html[data-ff-theme=light] .srx .sr .gt{color:#1f5fbf;}
+  .sw{display:inline-flex; padding:3px; border-radius:99px; border:1px solid var(--line); background:var(--panel);}
+  .sw a{font-family:'Oswald',sans-serif; font-weight:600; font-size:13.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--dim); text-decoration:none; padding:4px 13px; border-radius:99px; transition:color .15s,background .15s;}
+  .sw a:hover{color:var(--text);}
+  .sw a.on{background:linear-gradient(90deg,var(--fry),var(--fry2)); color:#1c1405;}
+  @media(max-width:520px){ header{flex-wrap:wrap;} .swr{order:3; flex:1 0 100%; margin:14px 0 0;} }
+  .hero{padding:58px 0 34px;}
+  .hero .eyebrow{display:inline-block; font-size:13px; font-weight:700; letter-spacing:.14em; color:var(--fry); text-transform:uppercase;}
+  .hero h1{font-family:'Oswald','Noto Sans KR',sans-serif; font-weight:700; font-size:clamp(40px,7vw,76px); line-height:1.02; margin:10px 0 0; text-transform:uppercase; letter-spacing:.01em;}
+  .hero h1 span{background:linear-gradient(90deg,var(--fry),var(--fry2)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  .hero{display:flex; align-items:center; justify-content:space-between; gap:28px;}
+  .hero .hero-t{min-width:0;}
+  /* 첫 화면 배경: 이 사이트 도구·게임 장면이 번갈아 천천히 나타나요 (오른쪽에서 왼쪽으로 사라지게 깔려서 글자는 그대로 읽혀요) */
+  .hero{position:relative;}
+  body{overflow-x:clip;}
+  .hero-bg{position:absolute; z-index:-1; left:50%; width:100vw; margin-left:-50vw; top:-130px; bottom:-30px; pointer-events:none; overflow:hidden; -webkit-mask-image:linear-gradient(180deg,#000 0,#000 66%,transparent 100%); mask-image:linear-gradient(180deg,#000 0,#000 66%,transparent 100%);}
+  .hero-bg i{position:absolute; inset:0; opacity:0; animation:hbFade 32s linear infinite;}
+  .hero-bg i:nth-child(1){animation-delay:-2s;} .hero-bg i:nth-child(2){animation-delay:6s;} .hero-bg i:nth-child(3){animation-delay:14s;} .hero-bg i:nth-child(4){animation-delay:22s;}
+  .hero-bg img,.hero-bg video{position:absolute; top:0; right:0; width:72%; height:100%; object-fit:cover; opacity:.8; -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 48%); mask-image:linear-gradient(90deg,transparent 0,#000 48%); animation:hbKen 32s ease-in-out infinite alternate;}
+  .hero-bg i::after{content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 80% at 82% 55%, color-mix(in srgb,var(--c) 38%,transparent), transparent 70%), radial-gradient(ellipse 50% 60% at 8% 30%, color-mix(in srgb,var(--c) 14%,transparent), transparent 70%);}
+  .hero-bg::after{content:''; position:absolute; inset:0; background:linear-gradient(180deg,color-mix(in srgb,var(--bg) 90%,transparent) 0,color-mix(in srgb,var(--bg) 55%,transparent) 14%,transparent 34%);}
+  @keyframes hbFade{0%{opacity:0;} 5%{opacity:1;} 25%{opacity:1;} 31%{opacity:0;} 100%{opacity:0;}}
+  @keyframes hbKen{from{transform:scale(1.03) translate3d(0,0,0);} to{transform:scale(1.14) translate3d(-2%,-2%,0);}}
+  @keyframes hbRise{from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:none;}}
+  .hero-t>*:not(.ffs){animation:hbRise .6s cubic-bezier(.2,.7,.2,1) both;} .hero-t>:nth-child(2){animation-delay:.07s;} .hero-t>:nth-child(3){animation-delay:.14s;} .hero-t>:nth-child(4){animation-delay:.21s;} .hero-t>:nth-child(5){animation-delay:.28s;}
+  @media(max-width:640px){ .hero-bg img,.hero-bg video{width:100%; -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 30%); mask-image:linear-gradient(90deg,transparent 0,#000 30%); opacity:.55;} }
+  @media(prefers-reduced-motion:reduce){ .hero-bg i{animation:none;} .hero-bg i:first-child{opacity:1;} .hero-bg img,.hero-bg video,.hero-t>*:not(.ffs){animation:none;} }
+  /* 도구 화면은 글자가 빽빽해서 더 흐리고 어둡게 깔아요 */
+  .hero-bg img{opacity:.42; filter:blur(1.5px) saturate(1.15);}
+  /* 숫자로 보는 줄 */
+  .hstats{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:0 0 18px; padding:18px 8px; border:1px solid var(--line); border-radius:18px; background:color-mix(in srgb,var(--panel) 80%,transparent); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);}
+  .hstats div{text-align:center; padding:2px 6px; border-left:1px solid var(--line);} .hstats div:first-child{border-left:0;}
+  .hstats b{display:block; font-family:'Oswald','Noto Sans KR',sans-serif; font-weight:700; font-size:clamp(26px,4.2vw,42px); line-height:1.1; background:linear-gradient(90deg,var(--fry),var(--fry2)); -webkit-background-clip:text; background-clip:text; color:transparent; font-variant-numeric:tabular-nums;}
+  .hstats span{display:block; margin-top:4px; font-size:13px; color:var(--dim);}
+  @media(max-width:640px){ .hstats{gap:4px; padding:14px 4px;} .hstats div{padding:2px 2px;} .hstats span{font-size:12px;} }
+  /* 게임 카드: 스크롤하면 차례로 나타나고, 올리면 장면이 커지며 대표색 빛이 번져요 */
+  .game.fs{--gc:63,224,143;}
+  .game.bh{--gc:255,179,71;}
+  .game.sl{--gc:255,106,138;}
+  .game.fl{--gc:122,140,255;}
+  .game{--rx:0deg; --ry:0deg; --mx:50%; --my:30%;}
+  .game.rv{opacity:0; transform:translateY(34px);}
+  .game.rv.in{opacity:1; transform:none; transition:opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1);}
+  .game.in.tilt:hover{transform:perspective(1000px) translateY(-6px) rotateX(var(--rx)) rotateY(var(--ry)); transition:transform .12s ease-out, box-shadow .2s, border-color .2s;}
+  .game:hover{border-color:rgba(var(--gc),.55); box-shadow:0 24px 54px -16px rgba(var(--gc),.42);}
+  .game::after{content:''; position:absolute; inset:0; z-index:2; pointer-events:none; opacity:0; transition:opacity .25s; background:radial-gradient(420px circle at var(--mx) var(--my), rgba(var(--gc),.16), transparent 62%);}
+  .game:hover::after{opacity:1;}
+  .game:hover .shot img{transform:scale(1.09);}
+  @media(prefers-reduced-motion:reduce){ .game.rv{opacity:1; transform:none;} .game.in.tilt:hover{transform:translateY(-4px);} }
+  .hero-lg{order:2; flex:0 0 auto; width:clamp(150px,21vw,230px); height:auto; filter:drop-shadow(0 18px 50px rgba(255,150,40,.28)); transform:rotate(4deg);}
+  @media(max-width:640px){ .hero{flex-direction:column; align-items:flex-start; gap:12px;} .hero-lg{order:0; width:92px; transform:none;} }
+  .hero p{color:var(--dim); font-size:18px; margin:16px 0 0; max-width:46ch;}
+  .games{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr)); gap:22px; padding-bottom:20px;}
+  .game{position:relative; border-radius:18px; overflow:hidden; display:flex; flex-direction:column; border:1px solid var(--line); background:var(--panel); transition:transform .18s ease, box-shadow .18s ease, border-color .18s;}
+  .game:hover{transform:translateY(-4px);}
+  .shot{position:relative; aspect-ratio:16/9; overflow:hidden; display:block;}
+  .shot img{width:100%; height:100%; object-fit:cover; object-position:left top; display:block; transition:transform .5s ease;}
+  .game:hover .shot img{transform:scale(1.045);}
+  .shot::after{content:''; position:absolute; inset:0; background:linear-gradient(180deg,transparent 45%,var(--card) 100%);}
+  .badge{position:absolute; top:14px; left:14px; z-index:1; font-size:12.5px; font-weight:700; padding:4px 11px; border-radius:99px; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);}
+  .body{padding:4px 26px 26px; margin-top:-34px; position:relative; z-index:1; display:flex; flex-direction:column; flex:1;}
+  .game h2{margin:0; line-height:1.05; font-family:'Oswald',sans-serif; font-weight:700; font-size:40px; letter-spacing:.02em; color:#eef0f5;}
+  .motto{display:flex; align-items:center; gap:10px; font-size:12px; font-weight:700; letter-spacing:.2em; margin-top:6px; white-space:nowrap;}
+  .motto i{flex:0 0 26px; height:1px; opacity:.6;}
+  .tags{display:flex; flex-wrap:wrap; gap:6px; margin:12px 0 0;}
+  .tags span{font-size:13px; font-weight:500; padding:3px 10px; border-radius:99px;}
+  .desc{margin:14px 0 0; font-size:15.5px; flex:1;}
+  .desc ul{margin:10px 0 0; padding-left:18px;} .desc li{margin:3px 0;}
+  .acts{display:flex; flex-wrap:wrap; gap:10px; margin-top:22px;}
+  .play{display:inline-flex; align-items:center; gap:10px; padding:14px 24px; border-radius:10px; font-weight:700; font-size:17px; text-decoration:none; transition:filter .12s, transform .12s;}
+  .play:hover{filter:brightness(1.1);} .play:active{transform:scale(.98);}
+  .play svg{width:18px; height:18px;}
+  /* Fry Sheet: spreadsheet green on the hub's dark panel */
+  .fs{--card:#0c1310; background:#0c1310; border-color:#1d3a2b;}
+  .fs:hover{border-color:#3fe08f; box-shadow:0 18px 50px rgba(63,224,143,.14);}
+  .fs .badge{background:rgba(63,224,143,.92); color:#04170c;}
+  .fs h2 b{color:#3fe08f;}
+  .fs .motto{color:#3fe08f;} .fs .motto i{background:#3fe08f;}
+  .fs .tags span{background:rgba(63,224,143,.08); color:#c6f5dc; border:1px solid rgba(63,224,143,.28);}
+  .fs .desc{color:#a3b8ad;} .fs .desc li::marker{color:#3fe08f;}
+  .fs .play{background:#3fe08f; color:#04170c;}
+  /* Block HTML: block blue with the fry yellow */
+  .bh{--card:#0b111b; background:#0b111b; border-color:#1d3346;}
+  .bh:hover{border-color:#4f9dff; box-shadow:0 18px 50px rgba(79,157,255,.16);}
+  .bh .badge{background:rgba(79,157,255,.92); color:#04101f;}
+  .bh h2 b{color:var(--fry);}
+  .bh .motto{color:#7db6ff;} .bh .motto i{background:#7db6ff;}
+  .bh .tags span{background:rgba(79,157,255,.08); color:#cfe2ff; border:1px solid rgba(79,157,255,.28);}
+  .bh .desc{color:#a3b0c2;} .bh .desc li::marker{color:var(--fry);}
+  .bh .play{background:linear-gradient(90deg,var(--fry),var(--fry2)); color:#1c1405;}
+  /* Fry Slides: presentation coral */
+  .sl{--card:#150f0d; background:#150f0d; border-color:#3e2620;}
+  .sl:hover{border-color:#ff7a59; box-shadow:0 18px 50px rgba(255,122,89,.16);}
+  .sl .badge{background:rgba(255,122,89,.92); color:#1f0904;}
+  .sl h2 b{color:#ff7a59;}
+  .sl .motto{color:#ff9d84;} .sl .motto i{background:#ff9d84;}
+  .sl .tags span{background:rgba(255,122,89,.08); color:#ffd9cf; border:1px solid rgba(255,122,89,.28);}
+  .sl .desc{color:#b8a7a2;} .sl .desc li::marker{color:#ff7a59;}
+  .sl .play{background:#ff7a59; color:#1f0904;}
+  .fl{--card:#110f1a; background:#110f1a; border-color:#2e2648;}
+  .fl:hover{border-color:#a78bfa; box-shadow:0 18px 50px rgba(167,139,250,.16);}
+  .fl .badge{background:rgba(167,139,250,.92); color:#140a2b;}
+  .fl h2 b{color:#a78bfa;}
+  .fl .motto{color:#c4b5fd;} .fl .motto i{background:#c4b5fd;}
+  .fl .tags span{background:rgba(167,139,250,.08); color:#e4dcff; border:1px solid rgba(167,139,250,.28);}
+  .fl .desc{color:#aba5bd;} .fl .desc li::marker{color:#a78bfa;}
+  .fl .play{background:#a78bfa; color:#140a2b;}
+  .tags span.ai{border-color:var(--fry); color:var(--fry); font-weight:600;}
+  .why{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin:40px 0 0;}
+  .why > div{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px 18px 16px;}
+  .why .ic{font-size:24px;} .why h3{margin:6px 0 4px; font-size:16.5px;} .why p{margin:0; color:var(--dim); font-size:14.5px;}
+  .inst{margin:32px 0 -24px; padding:12px 14px; background:var(--panel); border:1px solid var(--line); border-radius:12px; color:var(--dim); font-size:14px; line-height:1.6;}
+  footer{margin:56px 0 40px; padding-top:20px; border-top:1px solid var(--line); color:var(--dim); font-size:14px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;}
+  footer a{color:var(--dim);}
+  html[data-ff-theme=light]{--bg:#f6f3ec; --panel:#ffffff; --line:#e2dccf; --text:#1f1b14; --dim:#6d6658;}
+  html[data-ff-theme=light] body{background-image:radial-gradient(ellipse 900px 520px at 10% -10%, rgba(255,201,60,.22), transparent 60%), radial-gradient(ellipse 800px 600px at 110% 30%, rgba(63,224,143,.10), transparent 60%);}
+  html[data-ff-theme=light] .langSel{background:#fff;} html[data-ff-theme=light] .ffa-set,html[data-ff-theme=light] .ffa-bell{background:#fff; color:#1f1b14; border-color:#d9d2c3;}
+  @media(max-width:860px){ .why{grid-template-columns:1fr;} }
+  @media(max-width:520px){
+    .wrap{padding:0 16px;} header nav{display:none;} header{gap:8px;} .logo{font-size:16px; gap:8px; min-width:0; flex:1 1 auto;} .logo span:last-child{min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;} header .right{flex:0 0 auto;} .logo .fry{width:30px; height:30px; font-size:17px;} .langSel{margin-left:0; padding:6px 6px;} .ffa-wrap{margin-left:8px !important;} .ffa-chip{max-width:118px !important;} .ffa-btn{padding:7px 10px !important;} .hero{padding:38px 0 24px;} .hero p{font-size:16.5px;}
+    .body{padding:4px 18px 20px;} .game h2{font-size:34px;}
+    .play{flex:1; justify-content:center;}
+  }
+</style><style id="ffnew">
+#ffTop .srx-btn{flex:none;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:rgba(14,14,14,.6);border:1px solid #262626;color:#fff;font-size:16px;cursor:pointer;padding:0}
+#ffTop{display:flex;align-items:center;gap:10px}
+html[data-ff-theme=light][data-ff-size]{background:var(--bg)!important}
+/* light theme: the page is flipped by a filter; the hero (dark pictures and video behind white text) is flipped back so it stays readable and the art is visible */
+html[data-ff-theme=light] .hero{filter:invert(1) hue-rotate(180deg);background:var(--bg)}html[data-ff-theme=light] .hero img,html[data-ff-theme=light] .hero video{filter:none}
+html body .hero #onlineBar{border:0;background:none;padding:0;height:auto;border-radius:0;max-width:none;overflow:visible;flex-wrap:wrap;white-space:normal}
+.games{grid-template-columns:repeat(3,minmax(0,1fr))!important}@media(max-width:1000px){.games{grid-template-columns:repeat(2,minmax(0,1fr))!important}}@media(max-width:640px){.games{grid-template-columns:1fr!important}}
+.game.tcode{--card:#0b1513; background:#0b1513; border-color:#1c4038; --ac:linear-gradient(90deg,#4fe3c1,#4fe3c1); --gc:79,227,193;}
+.tcode:hover{border-color:#4fe3c1; box-shadow:0 18px 50px rgba(79,227,193,.16);}
+.tcode .badge{background:rgba(79,227,193,.92); color:#031813;}
+.tcode h2{font-family:'Oswald',sans-serif; font-weight:700; font-size:40px; letter-spacing:.03em; text-transform:uppercase;} .tcode h2 b{color:#4fe3c1;}
+.tcode .motto{display:flex; align-items:center; gap:10px; font-size:11px; font-weight:700; letter-spacing:.16em; margin-top:6px; white-space:nowrap; color:#4fe3c1;} .tcode .motto i{flex:0 0 26px; height:1px; opacity:.7; background:#4fe3c1;}
+.tcode .tags span{background:rgba(79,227,193,.09); color:#c9f5ea; border:1px solid rgba(79,227,193,.3);}
+.tcode .desc{color:#a0bab3;} .tcode .desc li::marker{color:#4fe3c1;}
+.tcode .play{background:#4fe3c1; color:#031813;}
+.game.tdocs{--card:#1a130a; background:#1a130a; border-color:#4a3317; --ac:linear-gradient(90deg,#ffa94d,#ffa94d); --gc:255,169,77;}
+.tdocs:hover{border-color:#ffa94d; box-shadow:0 18px 50px rgba(255,169,77,.16);}
+.tdocs .badge{background:rgba(255,169,77,.92); color:#1c1005;}
+.tdocs h2{font-family:'Oswald',sans-serif; font-weight:700; font-size:40px; letter-spacing:.03em; text-transform:uppercase;} .tdocs h2 b{color:#ffa94d;}
+.tdocs .motto{display:flex; align-items:center; gap:10px; font-size:11px; font-weight:700; letter-spacing:.16em; margin-top:6px; white-space:nowrap; color:#ffa94d;} .tdocs .motto i{flex:0 0 26px; height:1px; opacity:.7; background:#ffa94d;}
+.tdocs .tags span{background:rgba(255,169,77,.09); color:#ffe1bd; border:1px solid rgba(255,169,77,.3);}
+.tdocs .desc{color:#c4b29b;} .tdocs .desc li::marker{color:#ffa94d;}
+.tdocs .play{background:#ffa94d; color:#1c1005;}
+.game.tdraw{--card:#1c0e0e; background:#1c0e0e; border-color:#4d2323; --ac:linear-gradient(90deg,#ff6b6b,#ff6b6b); --gc:255,107,107;}
+.tdraw:hover{border-color:#ff6b6b; box-shadow:0 18px 50px rgba(255,107,107,.16);}
+.tdraw .badge{background:rgba(255,107,107,.92); color:#2a0808;}
+.tdraw h2{font-family:'Oswald',sans-serif; font-weight:700; font-size:40px; letter-spacing:.03em; text-transform:uppercase;} .tdraw h2 b{color:#ff6b6b;}
+.tdraw .motto{display:flex; align-items:center; gap:10px; font-size:11px; font-weight:700; letter-spacing:.16em; margin-top:6px; white-space:nowrap; color:#ff6b6b;} .tdraw .motto i{flex:0 0 26px; height:1px; opacity:.7; background:#ff6b6b;}
+.tdraw .tags span{background:rgba(255,107,107,.09); color:#ffd3d3; border:1px solid rgba(255,107,107,.3);}
+.tdraw .desc{color:#c9a8a8;} .tdraw .desc li::marker{color:#ff6b6b;}
+.tdraw .play{background:#ff6b6b; color:#2a0808;}
+.game.tscore{--card:#120f1d; background:#120f1d; border-color:#33274f; --ac:linear-gradient(90deg,#b79cff,#b79cff); --gc:183,156,255;}
+.tscore:hover{border-color:#b79cff; box-shadow:0 18px 50px rgba(183,156,255,.16);}
+.tscore .badge{background:rgba(183,156,255,.92); color:#120a2a;}
+.tscore h2{font-family:'Oswald',sans-serif; font-weight:700; font-size:40px; letter-spacing:.03em; text-transform:uppercase;} .tscore h2 b{color:#b79cff;}
+.tscore .motto{display:flex; align-items:center; gap:10px; font-size:11px; font-weight:700; letter-spacing:.16em; margin-top:6px; white-space:nowrap; color:#b79cff;} .tscore .motto i{flex:0 0 26px; height:1px; opacity:.7; background:#b79cff;}
+.tscore .tags span{background:rgba(183,156,255,.09); color:#e2d8ff; border:1px solid rgba(183,156,255,.3);}
+.tscore .desc{color:#b0a8c8;} .tscore .desc li::marker{color:#b79cff;}
+.tscore .play{background:#b79cff; color:#120a2a;}
+.game.tvideo{--card:#0b1519; background:#0b1519; border-color:#1c3d4a; --ac:linear-gradient(90deg,#5ad1ff,#5ad1ff); --gc:90,209,255;}
+.tvideo:hover{border-color:#5ad1ff; box-shadow:0 18px 50px rgba(90,209,255,.16);}
+.tvideo .badge{background:rgba(90,209,255,.92); color:#031620;}
+.tvideo h2{font-family:'Oswald',sans-serif; font-weight:700; font-size:40px; letter-spacing:.03em; text-transform:uppercase;} .tvideo h2 b{color:#5ad1ff;}
+.tvideo .motto{display:flex; align-items:center; gap:10px; font-size:11px; font-weight:700; letter-spacing:.16em; margin-top:6px; white-space:nowrap; color:#5ad1ff;} .tvideo .motto i{flex:0 0 26px; height:1px; opacity:.7; background:#5ad1ff;}
+.tvideo .tags span{background:rgba(90,209,255,.09); color:#cdf1ff; border:1px solid rgba(90,209,255,.3);}
+.tvideo .desc{color:#9fb9c3;} .tvideo .desc li::marker{color:#5ad1ff;}
+.tvideo .play{background:#5ad1ff; color:#031620;}</style></head>
+<body data-fftop><div id="ffTop"><button type="button" class="srx-btn" id="srxBtn" aria-label="검색" title="검색">🔍</button><div class="tb"><span data-ff-account data-ff-nohub></span></div></div><script>(function(){var b=document.getElementById('srxBtn');if(!b)return;b.addEventListener('click',function f(e){if(b.onclick)return;b.removeEventListener('click',f);e.stopImmediatePropagation();e.preventDefault();var s=document.createElement('script');s.src='https://frenchfries777.com/games/hub.js?v=20261126a';s.onload=function(){setTimeout(function(){if(b.onclick)b.click();},500);};document.head.appendChild(s);},true);})();</script>
+<div class="wrap">
+  
 
-<a href="/" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:15px;font-weight:500;background:transparent;color:#e6e6e6"><span style="width:8px;height:8px;border-radius:2px;background:#333333"></span>Hub</a>
+  <section class="hero">
+    <div class="hero-bg" aria-hidden="true"><i style="--c:#3fe08f"><img src="sheet.webp" alt=""></i><i style="--c:#ffb347"><img src="blocks.webp" alt=""></i><i style="--c:#ff6a8a"><img src="slides.webp" alt=""></i><i style="--c:#7a8cff"><img src="lab.webp" alt=""></i></div>
+    <img class="hero-lg" src="logo.svg" alt="" width="230" height="230">
+    <div class="hero-t">
+    <span class="eyebrow">Handy Tools</span>
+    <h1>Frenchfries777<br><span>Tools</span></h1>
+    <p>공부하고 만들 때 쓰는 도구 모음이에요. 링크를 열면 설치 없이 바로 써요. AI는 Fry Sheet의 수식·그래프·표 만들기에 가장 잘 맞아요.</p>
+    </div>
+  </section>
 
-<a href="/games/" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:15px;font-weight:500;background:transparent;color:#e6e6e6"><span style="width:8px;height:8px;border-radius:2px;background:#333333"></span>Games</a>
+  <section class="hstats" id="heroStats" aria-label="숫자로 보기">
+    <div><b data-n="4" id="hsCount">4</b><span>도구</span></div>
+    <div><b data-n="17">17</b><span>언어</span></div>
+    <div><b data-n="231">231</b><span>블록 종류</span></div>
+  </section>
 
-<a href="/educations/" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:15px;font-weight:500;background:transparent;color:#e6e6e6"><span style="width:8px;height:8px;border-radius:2px;background:#333333"></span>Educations</a>
+  <section class="games" id="tools">
+    <article class="game tcode"><a class="shot" href="code/" aria-label="Fry Code 열기"><span class="badge">코딩</span><img src="card/code.webp" alt="" loading="lazy"></a><div class="body"><h2>FRY <b>CODE</b></h2><div class="motto"><i></i>CODE EDITOR<i></i></div><div class="tags"><span>파이썬 · 자바스크립트 · 자바</span><span>HTML · JSON · BeaconScript</span><span>예제와 사전</span><span>같이 고치기</span></div><div class="desc">설치 없이 브라우저에서 코드를 쓰고 바로 미리 보는 코드 도구예요. 파이썬은 거북이 그림과 그래프도 그려요.<ul><li>실행(Ctrl+Enter)을 누르면 결과 칸에 바로 나와요. 파이썬은 처음 실행할 때 약 10MB를 받아요</li><li>input()에 입력값을 한 줄씩 차례로 넣을 수 있고, 예제와 사전이 곁에 있어요</li><li>AI 도우미가 코드 설명, 고치기, 만들어 주기를 해요. AI는 틀릴 수 있어서 실행해서 확인하세요</li></ul></div><div class="acts"><a class="play" href="code/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div></div></article>
+<article class="game bh">
+      <a class="shot" href="blocks/" aria-label="Block HTML 열기"><span class="badge">블록 코딩</span><img src="blocks.webp" alt="Block HTML 화면" loading="lazy"></a>
+      <div class="body">
+        <h2>BLOCK <b>HTML</b></h2>
+        <div class="motto"><i></i>JAVASCRIPT BLOCKS<i></i></div>
+        <div class="tags"><span>블록 → HTML 파일</span><span>한 블록씩 실행</span><span>예제 5개</span><span>로그인 없이</span></div>
+        <div class="desc">
+          자바스크립트를 블록으로 조립해 웹페이지를 만들고, 완성되면 HTML 파일로 받아요. 만든 페이지는 어디서든 열려요.
+          <ul>
+            <li>제목, 버튼, 입력칸, 그림판 같은 화면 블록</li>
+            <li>누르면, 키를 누르면, 초마다 같은 이벤트와 조건, 반복, 변수, 함수</li>
+            <li>바로 보이는 미리보기와 읽기 쉬운 HTML 코드</li>
+            <li>AI 도우미(시험 기능)로 블록 초안을 받을 수도 있어요. 거친 초안이라 직접 확인하고 고쳐야 해요</li>
+          </ul>
+        </div>
+        <div class="acts"><a class="play" href="blocks/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
+      </div>
+    </article>
+<article class="game fs">
+      <a class="shot" href="sheet/" aria-label="Fry Sheet 열기"><span class="badge">스프레드시트</span><img src="sheet.webp" alt="Fry Sheet 화면" loading="lazy"></a>
+      <div class="body">
+        <h2>FRY <b>SHEET</b></h2>
+        <div class="motto"><i></i>SPREADSHEET<i></i></div>
+        <div class="tags"><span>수식 · 차트 · 엑셀 파일</span><span class="ai">수식·그래프·표 AI</span><span>자동 저장</span><span>로그인 없이</span></div>
+        <div class="desc">
+          엑셀처럼 표를 만들고 계산하는 스프레드시트예요. 엑셀 파일을 열고 저장할 수 있고, 몇 가지 기능을 더했어요.
+          <ul>
+            <li>SUM, IF, VLOOKUP 같은 함수 60여 개</li>
+            <li>표를 고치면 바로 바뀌는 차트, 색 단계, 데이터 막대, 체크박스</li>
+            <li>수식·그래프·표를 AI가 만들어 줘요. 짧고 정해진 형식이라 결과를 확인하고 바로 쓸 수 있어요</li>
+            <li>=AI("영어로 번역", A2)처럼 쓰면 칸마다 답을 채워요. 표에 대한 질문·요약도 되지만 답이 틀릴 수 있어요</li>
+            <li>아이패드에서도 손가락으로 범위 선택과 채우기</li>
+          </ul>
+        </div>
+        <div class="acts"><a class="play" href="sheet/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
+      </div>
+    </article>
+<article class="game tdocs"><a class="shot" href="docs/" aria-label="Fry Docs 열기"><span class="badge">문서</span><img src="card/docs.webp" alt="" loading="lazy"></a><div class="body"><h2>FRY <b>DOCS</b></h2><div class="motto"><i></i>WORD PROCESSOR<i></i></div><div class="tags"><span>제목 · 표 · 그림</span><span>docx · PDF로 저장</span><span>AI 도우미(시험)</span><span>버전</span></div><div class="desc">워드처럼 글 문서를 쓰는 도구예요. 제목, 표, 그림을 넣고 docx나 PDF로 받아요.<ul><li>홈, 삽입, 레이아웃, 검토 탭에서 글꼴, 줄 간격, 목록 모양, 정렬을 바꿔요</li><li>고른 글자에 메모를 달고, 고친 곳을 모두 받아들이거나 되돌려요. 체크 표시, 도형, 수식 기호도 넣어요</li><li>메모는 Word 파일로 받을 때 Word의 메모로 들어가요</li></ul></div><div class="acts"><a class="play" href="docs/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div></div></article>
+<article class="game sl">
+      <a class="shot" href="slides/" aria-label="Fry Slides 열기"><span class="badge">발표 자료</span><img src="slides.webp" alt="Fry Slides 화면" loading="lazy"></a>
+      <div class="body">
+        <h2>FRY <b>SLIDES</b></h2>
+        <div class="motto"><i></i>PRESENTATIONS<i></i></div>
+        <div class="tags"><span>슬라이드 편집</span><span>PPTX 파일</span><span>발표 모드</span><span>로그인 없이</span></div>
+        <div class="desc">
+          글자를 눌러 바로 고치고, 테마와 레이아웃을 골라 발표 자료를 만들어요. 바로 발표하거나 파워포인트 파일로 받아요.
+          <ul>
+            <li>주제를 쓰면 AI가 초안을 써 주는 시험 기능도 있어요. 거친 초안이라 내용과 사실은 직접 확인하고 고쳐야 해요</li>
+            <li>글자를 눌러 바로 고치고, 슬라이드마다 다시 쓰기·더 짧게·더 자세히</li>
+            <li>테마 6가지, 레이아웃 7가지, 끌어서 순서 바꾸기</li>
+            <li>전체 화면 발표, 고칠 수 있는 PPTX 파일, PDF 인쇄</li>
+          </ul>
+        </div>
+        <div class="acts"><a class="play" href="slides/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
+      </div>
+    </article>
+<article class="game fl">
+      <a class="shot" href="lab/" aria-label="Fry Lab 열기"><span class="badge">실험실</span><img src="lab.webp" alt="Fry Lab 화면" loading="lazy"></a>
+      <div class="body">
+        <h2>FRY <b>LAB</b></h2>
+        <div class="motto"><i></i>SCIENCE &amp; MATH LAB<i></i></div>
+        <div class="tags"><span>실험 9가지</span><span>기록·그래프·CSV</span><span>탐구 과제</span><span>로그인 없이</span></div>
+        <div class="desc">
+          슬라이더를 움직이면 바로 바뀌는 중고등 과학·수학 실험실이에요. 값을 재서 표에 기록하고, 그래프로 규칙을 찾아요.
+          <ul>
+            <li>함수 그래프, 확률, 삼각함수, 포물선 운동, 진자, 용수철, 빛의 굴절, 물결파 간섭, 옴의 법칙</li>
+            <li>끌어서 바꾸는 시뮬레이션과 실시간 측정값, 해 볼 만한 탐구 과제</li>
+            <li>기록한 표로 그래프와 추세선을 그리고 CSV로 내보내기</li>
+            <li>AI 도우미(시험 기능)에게 원리를 물어볼 수 있어요. 답이 틀릴 수 있으니 직접 확인해요</li>
+          </ul>
+        </div>
+        <div class="acts"><a class="play" href="lab/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
+      </div>
+    </article>
+<article class="game tdraw"><a class="shot" href="draw/" aria-label="Fry Draw 열기"><span class="badge">그림</span><img src="card/draw.webp" alt="" loading="lazy"></a><div class="body"><h2>FRY <b>DRAW</b></h2><div class="motto"><i></i>VECTOR DRAW<i></i></div><div class="tags"><span>도형 · 곡선 · 기하학 무늬</span><span>레이어</span><span>PNG · SVG로 저장</span><span>AI 그림</span></div><div class="desc">도형, 곡선, 기하학 무늬를 그리는 벡터 그림 도구예요. AI에게 그림도 시켜 볼 수 있어요.<ul><li>고르기, 연필, 직선, 붓, 펜, 도형, 글자, 지우개 도구로 그리고, Shift를 누르면 비율과 각도가 맞춰져요</li><li>속성, 무늬, 레이어, AI, 캔버스 탭이 있고, 지금 색에 어울리는 보색·이웃색·3색 조화를 보여 줘요</li><li>선 모양은 실선, 점선, 긴 점선, 동그란 점이고 그림은 PNG나 SVG로 받아요</li></ul></div><div class="acts"><a class="play" href="draw/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div></div></article>
+<article class="game tscore"><a class="shot" href="score/" aria-label="Fry Score 열기"><span class="badge">악보</span><img src="card/score.webp" alt="" loading="lazy"></a><div class="body"><h2>FRY <b>SCORE</b></h2><div class="motto"><i></i>MUSIC SCORE<i></i></div><div class="tags"><span>음표 찍기</span><span>여러 악기 재생</span><span>MIDI · MusicXML · PNG</span><span>휴대폰 건반</span></div><div class="desc">악보를 그리고 바로 들어 보는 도구예요. 음표를 찍고 여러 악기로 재생해요.<ul><li>오선을 누르면 고른 길이의 음표가 찍혀요. 키보드에서 A~G는 음, 1~7은 길이, R은 쉼표예요</li><li>Space로 재생하고, 방향키로 이동하고, Shift로 범위와 화음을 골라요</li><li>휴대폰에서는 🎹 건반을 켜서 입력하고, 악보는 MIDI, MusicXML, PNG로 받아요</li></ul></div><div class="acts"><a class="play" href="score/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div></div></article>
+<article class="game tvideo"><a class="shot" href="video/" aria-label="Fry Video 열기"><span class="badge">영상</span><img src="video.webp" alt="" loading="lazy"></a><div class="body"><h2>FRY <b>VIDEO</b></h2><div class="motto"><i></i>VIDEO EDITOR<i></i></div><div class="tags"><span>자르기 · 이어 붙이기</span><span>글자 넣기</span><span>mp4 · webm</span><span>내 기기 안에서만</span></div><div class="desc">영상 클립을 자르고 이어 붙이고 글자와 소리를 넣어 mp4나 webm으로 받는 브라우저 영상 편집 도구예요.<ul><li>영상, 그림, 소리를 넣고 타임라인에서 클립을 끌어 옮기고, 양 끝을 끌어 줄여요</li><li>재생 막대를 놓고 ✂ 자르기(S)로 나누고, T로 자막을 넣어요</li><li>파일은 이 기기 안에서만 쓰이고 서버로 올라가지 않아요. 영상 만들기는 처음부터 재생하며 녹화해요</li></ul></div><div class="acts"><a class="play" href="video/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div></div></article>
+  </section>
 
-<a href="/tools/" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:15px;font-weight:500;background:#26221a;color:#ffd54a"><span style="width:8px;height:8px;border-radius:2px;background:#ffd54a"></span>Tools</a>
+  <section class="why">
+    <div><div class="ic">⚡</div><h3>바로 시작</h3><p>다운로드 없이 브라우저에서 열면 끝. PC와 태블릿, 휴대폰 모두 돼요.</p></div>
+    <div><div class="ic">💾</div><h3>내 기기에 저장</h3><p>만든 것은 이 브라우저에 자동으로 저장되고, 파일로도 받을 수 있어요.</p></div>
+    <div><div class="ic">🤖</div><h3>AI는 필요할 때만</h3><p>AI는 선택 기능이에요. 자체 AI가 기기 안에서 돌아가서 키가 없어도 되지만 작은 모델이라 틀릴 수 있어요. 가장 잘 맞는 곳은 Fry Sheet의 수식·그래프·표예요. 원하면 Claude, Gemini, OpenAI 키를 넣어 더 나은 답을 받을 수 있어요.</p></div>
+    <div><div class="ic">📤</div><h3>파일로 주고받기</h3><p>엑셀, 파워포인트, HTML 파일로 내보내서 다른 프로그램이나 친구에게 그대로 넘겨요.</p></div>
+  </section>
 
-<a href="/wiki/" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:15px;font-weight:500;background:transparent;color:#e6e6e6"><span style="width:8px;height:8px;border-radius:2px;background:#333333"></span>위키</a>
-
-<a href="/community/" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:15px;font-weight:500;background:transparent;color:#e6e6e6"><span style="width:8px;height:8px;border-radius:2px;background:#333333"></span>커뮤니티</a>
-
-<a href="/lounge/" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:15px;font-weight:500;background:transparent;color:#e6e6e6"><span style="width:8px;height:8px;border-radius:2px;background:#333333"></span>라운지</a>
-
-<a href="/prototypes/" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:15px;font-weight:500;background:transparent;color:#e6e6e6"><span style="width:8px;height:8px;border-radius:2px;background:#333333"></span>Prototypes</a>
-<a href="/settings/" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:15px;font-weight:500;background:transparent;color:#e6e6e6"><span style="width:8px;height:8px;border-radius:2px;background:#333333"></span>설정</a>
-
-<div style="margin-top:auto;padding:14px 12px;border-top:1px solid #262626;display:flex;flex-direction:column;gap:3px;font-size:12px;color:#9a9a9a"><span>Made by Frenchfries777 with Claude AI</span><span>© 2026 Frenchfries777 · CC BY-NC-ND 4.0</span></div>
-</aside>
-<main style="position:relative;overflow:hidden;flex:1 1 640px;min-width:0;box-sizing:border-box;display:flex;flex-direction:column;background:#000000">
-<img src="https://frenchfries777.com/pics/pixel-bg.png" alt="도트 풍경" style="position:absolute;left:0;top:0;width:100%;height:auto;display:block;image-rendering:pixelated">
-<div style="position:absolute;left:0;top:0;width:100%;height:100%;background:linear-gradient(180deg,rgba(14,14,14,.1) 0,rgba(14,14,14,.1) 120px,rgba(14,14,14,.8) 430px,rgba(14,14,14,.78) 100%)"></div>
-<div style="position:relative;padding:0 40px;display:flex;flex-direction:column">
-<div id="ffTop"><button type="button" class="srx-btn" id="srxBtn" aria-label="검색" title="검색">🔍</button><div id="onlineBar"></div><div class="tb"><span data-ff-account data-ff-nohub></span></div></div><script>(function(){var b=document.getElementById('srxBtn');if(!b)return;b.addEventListener('click',function f(e){if(b.onclick)return;b.removeEventListener('click',f);e.stopImmediatePropagation();e.preventDefault();var s=document.createElement('script');s.src='https://frenchfries777.com/games/hub.js?v=20261126a';s.onload=function(){setTimeout(function(){if(b.onclick)b.click();},500);};document.head.appendChild(s);},true);})();</script>
-<div style="padding:70px 0 34px;display:flex;flex-direction:column;gap:16px">
-<span style="font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;letter-spacing:.2em;color:#ffd54a">TOOLS · 9개</span>
-<h1 style="margin:0;font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(48px,7vw,96px);line-height:.95;letter-spacing:.01em">Tools</h1>
-<p style="margin:0;max-width:640px;min-height:61px;font-size:18px;line-height:1.7;color:#ffffff">직접 쓰려고 만든 도구예요. 누구나 쓸 수 있고, 여럿이 같이 작업할 수도 있어요.</p>
-<div style="height:60px"></div>
+  <p id="installHint" class="inst" hidden>아이폰이나 아이패드는 Safari 아래쪽 공유 버튼을 누르고 '홈 화면에 추가'를 눌러요. 한 번 열어 본 도구는 인터넷 없이도 열려요.</p>
+  <footer><span>Made by Frenchfries777 with Claude AI</span> <span class="ff-copy">© 2026 Frenchfries777 · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.ko" target="_blank" rel="noopener">CC BY-NC-ND 4.0</a></span><a href="patchnotes/">패치노트</a><a id="teachLink" href="teach/" hidden>AI 가르치기</a><a id="installLink" href="#" hidden>앱으로 설치</a><a href="/settings/">설정</a><a href="https://github.com/frenchfries777mc" target="_blank" rel="noopener">github.com/frenchfries777mc</a></footer>
 </div>
-<section style="padding:28px 0 24px;display:flex;flex-direction:column;gap:22px">
-<h2 style="margin:0;font-family:'Oswald','Noto Sans KR',sans-serif;font-weight:600;font-size:28px;letter-spacing:.04em">모든 도구</h2>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr));gap:16px"><a href="/tools/code/" style="display:block;border-radius:14px;overflow:hidden;border:1px solid #262626;min-width:0"><img src="/tools/og/code.jpg" alt="Fry Code" style="width:100%;aspect-ratio:1200/630;object-fit:cover;display:block"></a><a href="/tools/blocks/" style="display:block;border-radius:14px;overflow:hidden;border:1px solid #262626;min-width:0"><img src="/tools/og/blocks.jpg" alt="Fry Blocks" style="width:100%;aspect-ratio:1200/630;object-fit:cover;display:block"></a><a href="/tools/sheet/" style="display:block;border-radius:14px;overflow:hidden;border:1px solid #262626;min-width:0"><img src="/tools/og/sheet.jpg" alt="Fry Sheet" style="width:100%;aspect-ratio:1200/630;object-fit:cover;display:block"></a><a href="/tools/docs/" style="display:block;border-radius:14px;overflow:hidden;border:1px solid #262626;min-width:0"><img src="/tools/og/docs.jpg" alt="Fry Docs" style="width:100%;aspect-ratio:1200/630;object-fit:cover;display:block"></a><a href="/tools/slides/" style="display:block;border-radius:14px;overflow:hidden;border:1px solid #262626;min-width:0"><img src="/tools/og/slides.jpg" alt="Fry Slides" style="width:100%;aspect-ratio:1200/630;object-fit:cover;display:block"></a><a href="/tools/lab/" style="display:block;border-radius:14px;overflow:hidden;border:1px solid #262626;min-width:0"><img src="/tools/og/lab.jpg" alt="Fry Lab" style="width:100%;aspect-ratio:1200/630;object-fit:cover;display:block"></a><a href="/tools/draw/" style="display:block;border-radius:14px;overflow:hidden;border:1px solid #262626;min-width:0"><img src="/tools/og/draw.jpg" alt="Fry Draw" style="width:100%;aspect-ratio:1200/630;object-fit:cover;display:block"></a><a href="/tools/score/" style="display:block;border-radius:14px;overflow:hidden;border:1px solid #262626;min-width:0"><img src="/tools/og/score.jpg" alt="Fry Score" style="width:100%;aspect-ratio:1200/630;object-fit:cover;display:block"></a><a href="/tools/video/" style="display:block;position:relative;container-type:inline-size;border-radius:14px;overflow:hidden;border:1px solid #262626;min-width:0;aspect-ratio:1200/630;background:#150b0f"><img src="/tools/video.webp" alt="Fry Video" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover"><span style="position:absolute;left:0;top:0;width:100%;height:100%;background:linear-gradient(180deg,rgba(0,0,0,0) 35%,rgba(10,10,12,.88) 100%)"></span><span style="position:absolute;right:2.2cqw;top:3cqw;display:flex;align-items:center;gap:1.2cqw;padding:.9cqw 1.8cqw;border-radius:999px;background:rgba(14,14,14,.85);font-size:2.2cqw;font-weight:700;color:#ffd54a"><span style="width:2cqw;height:2cqw;border-radius:50%;background:#f5a623"></span>FRENCHFRIES777</span><span style="position:absolute;left:4cqw;bottom:6.4cqw;display:flex;flex-direction:column;gap:1cqw;align-items:flex-start"><span style="padding:.6cqw 2cqw;border-radius:999px;background:#ff6a8a;color:#1c0509;font-size:2.4cqw;font-weight:500">영상 편집</span><span style="font-family:'Inter','Noto Sans KR',sans-serif;font-weight:800;font-size:8.3cqw;line-height:1.05;color:#fff">FRY<br>VIDEO</span><span style="font-size:2.5cqw;color:#fff">영상을 자르고 이어 붙이기</span></span><span style="position:absolute;left:0;bottom:0;width:100%;height:1.2cqw;background:#ff6a8a"></span></a></div>
-</section>
-<section style="padding:28px 0 72px;display:flex;flex-direction:column;gap:22px">
-<h2 style="margin:0;font-family:'Oswald','Noto Sans KR',sans-serif;font-weight:600;font-size:28px;letter-spacing:.04em">이런 점이 좋아요</h2>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px"><div style="padding:22px;border-radius:14px;background:rgba(23,23,23,.88);border:1px solid #262626;display:flex;flex-direction:column;gap:8px"><b style="font-size:17px">무료, 광고 없음</b><span style="font-size:14px;line-height:1.65;color:#9a9a9a">돈도 광고도 없이 바로 써요.</span></div><div style="padding:22px;border-radius:14px;background:rgba(23,23,23,.88);border:1px solid #262626;display:flex;flex-direction:column;gap:8px"><b style="font-size:17px">계정 만들기가 쉬워요</b><span style="font-size:14px;line-height:1.65;color:#9a9a9a">계정 하나로 모든 곳에 로그인돼요.</span></div><div style="padding:22px;border-radius:14px;background:rgba(23,23,23,.88);border:1px solid #262626;display:flex;flex-direction:column;gap:8px"><b style="font-size:17px">Claude AI를 바로 써요</b><span style="font-size:14px;line-height:1.65;color:#9a9a9a">문서와 표 같은 도구에서 AI의 도움을 받아요.</span></div><div style="padding:22px;border-radius:14px;background:rgba(23,23,23,.88);border:1px solid #262626;display:flex;flex-direction:column;gap:8px"><b style="font-size:17px">같이 작업</b><span style="font-size:14px;line-height:1.65;color:#9a9a9a">링크로 여럿이 같이 고쳐요.</span></div></div>
-</section>
-<div class="ffx-foot"><span>Made by Frenchfries777 with Claude AI</span> <span data-notr>Created by Frenchfries777</span> · <span class="ff-copy">© 2026 Frenchfries777 · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.ko" target="_blank" rel="noopener">CC BY-NC-ND 4.0</a></span><a href="patchnotes/">패치노트</a><a id="backupLink" href="#">내 작업 백업</a><a href="claude-key/">Claude와 연결하기</a><a id="teachLink" href="teach/" hidden>AI 가르치기</a><a id="installLink" href="#" hidden>앱으로 설치</a><a href="https://frenchfries777.com/settings/">설정</a><a href="https://github.com/frenchfries777mc" target="_blank" rel="noopener">github.com/frenchfries777mc</a></div>
-</div>
-</main>
-</div>
-<script src="https://frenchfries777.com/games/ff-auth.js?v=20261126e"></script>
-<script src="https://frenchfries777.com/games/ff-online.js?v=20261114a"></script>
+<script src="/games/ff-auth.js"></script>
 <script>
 /* the developer-only "AI 가르치기" page link shows only for the developer account */
 (function(){ if(!window.FFAuth) return; var a=document.getElementById('teachLink');
@@ -237,14 +512,8 @@ img{max-width:100%}
     el.style.display='flex'; var i=el.querySelector('input'); i.focus(); i.select(); load().then(function(){ if(i.value) run(i.value); });
   }
   function close(){ var el=document.getElementById('srxBox'); if(el&&el.style.display!=='none'){ el.style.display='none'; var i=el.querySelector('input'); if(i) i.blur(); } }
-
-  var SXA=null;
-  function sxaLoad(done){ if(SXA){ return; } SXA=[]; try{ fetch('https://apps.frenchfries777.com/apps.json').then(function(r){ return r.ok?r.json():{apps:[]}; }).then(function(a){ SXA=((a&&a.apps)||[]).map(function(x){ return {name:String(x.name||''),url:String(x.url||''),tag:String(x.tagline||''),txt:(x.name+' '+(x.tagline||'')+' '+(x.tags||[]).join(' ')).toLowerCase()}; }); done(); }).catch(function(){}); }catch(e){} }
-  function sxaHtml(ql,q,have){ var m=(SXA||[]).filter(function(x){ return x.url&&x.txt.indexOf(ql)>=0&&x.url.indexOf('/tools/')<0&&have.indexOf(x.url)<0; }).slice(0,8); if(!m.length) return '';
-  return '<div class="sg"><h4>사이트 전체 · 프로그램과 앱</h4>'+m.map(function(x){ return '<a class="sr" href="'+esc(x.url)+'"><b>'+smark(x.name,q)+'</b><small>'+smark(x.tag,q)+'</small></a>'; }).join('')+'</div>'; }
   function run(v){
     var el=document.getElementById('srxBox'), R=el&&el.querySelector('.srs'); if(!R) return; var q=String(v||'').trim(); SX.sel=-1;
-    sxaLoad(function(){ var i=document.querySelector('#srxBox input'); if(i&&i.value) run(i.value); });
     if(!q){ R.innerHTML=''; return; } var ql=q.toLowerCase(), h='';
     var ts=tools().filter(function(t){ return (t.name+' '+t.text).toLowerCase().indexOf(ql)>=0; });
     if(ts.length) h+='<div class="sg"><h4>도구</h4>'+ts.map(function(t){ return '<a class="sr" href="'+esc(t.href)+'"><b>'+smark(t.name,q)+'</b><small>'+ssnip(t.text,q)+'</small></a>'; }).join('')+'</div>';
@@ -252,7 +521,6 @@ img{max-width:100%}
     if(fs.length) h+='<div class="sg"><h4>기능</h4>'+fs.map(function(f){ return '<a class="sr" href="#tools"><b>'+smark(f.name,q)+'</b><small>'+ssnip(f.text,q)+'</small></a>'; }).join('')+'</div>';
     var ps=(SX.pn||[]).map(function(p){ var sc=0; if(p.title.toLowerCase().indexOf(ql)>=0) sc+=10; if(p.text.toLowerCase().indexOf(ql)>=0) sc+=2; return {p:p,sc:sc}; }).filter(function(x){ return x.sc; }).sort(function(a,b){ return b.sc-a.sc||(a.p.date<b.p.date?1:-1); }).slice(0,8);
     if(ps.length) h+='<div class="sg"><h4>패치노트</h4>'+ps.map(function(x){ var p=x.p; return '<a class="sr" href="patchnotes/#'+esc(p.key)+'"><span class="gt">'+esc(p.prog)+' '+esc(p.build)+'</span><b>'+smark(p.title,q)+'</b><small>'+ssnip(p.text,q)+'</small></a>'; }).join('')+'</div>';
-    h+=sxaHtml(ql,q,h);
     R.innerHTML=h||'<div class="se">검색 결과가 없어요.</div>';
   }
   var b=document.getElementById('srxBtn'); if(b) b.onclick=open;
@@ -262,18 +530,13 @@ img{max-width:100%}
     else if(e.key==='Escape') close(); });
 })();
 </script>
-<script src="backup.js?v=1" defer></script>
-<script>document.getElementById('backupLink').onclick=function(e){ e.preventDefault(); if(window.FFBackup) FFBackup.open(); };</script>
+<script src="/games/ff-splash.js" defer></script>
 <script src="pwa.js" defer></script>
-<script src="ping.js" defer></script>
-<script src="https://frenchfries777.com/games/ff-splash.js" defer></script>
-<script src="lab/logos.js?v=l25"></script>
 <script>
 (function(){
   var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   var io=('IntersectionObserver' in window)?IntersectionObserver:null;
   /* 숫자 올라가기: 처음 보일 때 한 번 */
-  var he=document.getElementById('hsExp'); if(he&&window.LABLOGOS){ var ne=Object.keys(window.LABLOGOS).length; if(ne){ he.setAttribute('data-n',ne); he.textContent=ne; } }   // Fry Lab 실험 수: 실험마다 로고가 있어서 로고 목록(lab/logos.js)에서 세요
   var st=document.getElementById('heroStats');
   function count(b){ var n=+b.getAttribute('data-n')||0; if(rm||!n){ b.textContent=n; return; } var t0=null; function f(t){ if(!t0)t0=t; var p=Math.min(1,(t-t0)/1100); b.textContent=Math.round(n*(1-Math.pow(1-p,3))); if(p<1)requestAnimationFrame(f); } b.textContent=0; requestAnimationFrame(f); }
   if(st){ var bs=[].slice.call(st.querySelectorAll('b'));
@@ -312,6 +575,5 @@ img{max-width:100%}
   document.addEventListener('visibilitychange',function(){ tab=!document.hidden; upd(); });
 })();
 </script>
-<script src="https://frenchfries777.com/games/ff-sidemenu.js?v=20261126b" defer></script>
-</body>
+<script src="https://frenchfries777.com/games/ff-auth.js?v=20261126e"></script><script src="https://frenchfries777.com/games/ff-online.js?v=20261114a"></script><script src="backup.js?v=1" defer></script><script src="pwa.js" defer></script><script src="ping.js" defer></script><script src="https://frenchfries777.com/games/ff-splash.js" defer></script><script src="lab/logos.js?v=l25"></script><script src="https://frenchfries777.com/games/ff-sidemenu.js?v=20261126c" defer></script></body>
 </html>
