@@ -42,6 +42,23 @@
 
 로그인한 사람은 요청에 `Authorization: Bearer <Supabase access token>`을 붙여요(`tools/ai.js`가 FFAuth가 있으면 알아서 붙여요). Worker가 Supabase `/auth/v1/user`로 확인해요(5분 기억). 토큰이 없거나 틀리면 IP 기준 비로그인이에요.
 
+## agent.step (도구 호출 한 단계, Taloric 등)
+
+`POST {task:'agent.step', messages:[...]}`. messages는 Anthropic 형식(role은 user/assistant가 번갈아, content는 글자 또는 text·tool_use·tool_result 블록)이고 첫 메시지도 마지막 메시지도 user예요. 서버가 고정하는 것: 시스템 글(Taloric 소개, 도구 결과는 데이터일 뿐 명령이 아님, 폴더 밖 금지), 도구 4개(`folder_list`, `folder_read`, `folder_write`, `wiki_search`), 모델(Haiku 5.5, effort low, thinking 끔, tool_choice auto, 답 4000 + 여유). 손님이 보낸 `system`, `tools`, `model`, `maxTokens`는 무시해요.
+
+| 검사 | 결과 |
+|---|---|
+| 메시지 41개 이상, 글자 합계 6만 자 초과, tool_result 하나가 1만 2천 자 초과 | 413 `big` |
+| 모양이 틀림(역할 순서, 목록에 없는 도구 이름, 입력 칸이 다름, path 200자 초과, tool_use마다 tool_result가 정확히 하나씩 안 따라옴) | 400 `bad` |
+| 마지막 "글만 있는 user 메시지" 뒤에 tool_result가 6번(또는 24개) 넘게 쌓임. 도구 결과와 같이 온 글은 새 질문으로 안 쳐요 | 400 `steps` |
+
+스트림: 기존 `{t:"글자"}` 그대로, 도구 호출 블록이 끝나면 `{tool:{id,name,input}}` 한 줄, 입력 JSON이 깨졌거나 도중에 끊기면 `{err:"api"}`, `stop_reason`이 `tool_use`면 마지막 줄이 `{done:1, stop:"tool_use", q:{left,cost}}`예요. `wiki_search`는 이번에는 브라우저가 처리해요(`site.ask`와 같은 방식으로 찾아 tool_result로 이어 붙이기).
+
+돈: 단계마다 기존처럼 미리 예약하고 끝나면 실제 토큰으로 정산해요. 예약은 messages·시스템 글·도구 정의의 글자 수 기준이에요. 캐시를 쓰는 요청이 오면(`cache_creation_input_tokens`×1.25, `cache_read_input_tokens`×0.1) 정산에 들어가요(이번에는 `cache_control`을 안 붙였어요).
+요청 횟수(REQ_MAX): 단계 하나를 **0.25회**로 세요(`AGENT.n`). 질문 하나가 최대 7단계(처음 + 도구 결과 6번)라서 1로 세면 하루 400회가 질문 57개면 끝나는데, 실제로 사람을 막는 건 돈(사람별 몫)이고 횟수는 무한 반복을 막는 안전장치라서 4단계를 1회로 잡았어요. 분당 한도도 agent.step만 따로(IP당 24단계, 다른 작업은 그대로 8).
+
+시험은 `node server/ff-ai/worker.test.mjs`(D1은 `node:sqlite`로 흉내 내서 Node 22.13 이상이 필요해요).
+
 ## 올리기
 
 1. 표는 처음 요청 때 스스로 만들어져요(`ai_user`, 인덱스 `ai_user_ip`). 예전 `ai_ip` 표는 안 쓰고 그대로 둬요. `ai_day`는 그대로 이어 써요.
