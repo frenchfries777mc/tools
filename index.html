@@ -391,7 +391,14 @@ html body .hero #onlineBar{border:0;background:none;padding:0;height:auto;border
   </section>
 
   <section class="games" id="tools">
-    <article class="game tcode"><a class="shot" href="code/" aria-label="Fry Code 열기"><span class="badge">코딩</span><img src="card/code.webp" alt="" loading="lazy"></a><div class="body"><h2>FRY <b>CODE</b></h2><div class="motto"><i></i>CODE EDITOR<i></i></div><div class="tags"><span>파이썬 · 자바스크립트 · 자바</span><span>HTML · JSON · BeaconScript</span><span>예제와 사전</span><span>같이 고치기</span></div><div class="desc">설치 없이 브라우저에서 코드를 쓰고 바로 미리 보는 코드 도구예요. 파이썬은 거북이 그림과 그래프도 그려요.<ul><li>실행(Ctrl+Enter)을 누르면 결과 칸에 바로 나와요. 파이썬은 처음 실행할 때 약 10MB를 받아요</li><li>input()에 입력값을 한 줄씩 차례로 넣을 수 있고, 예제와 사전이 곁에 있어요</li><li>AI 도우미가 코드 설명, 고치기, 만들어 주기를 해요. AI는 틀릴 수 있어서 실행해서 확인하세요</li></ul></div><div class="acts"><a class="play" href="code/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div></div></article>
+    <article class="game tcode"><a class="shot" href="code/" aria-label="Fry Code 열기"><span class="badge">코딩</span><img src="card/code.webp" alt="" loading="lazy"></a><div class="body"><h2>FRY <b>CODE</b></h2><div class="motto"><i></i>CODE EDITOR<i></i></div><div class="tags"><span>파이썬 · 자바스크립트 · 자바</span><span>HTML · JSON · BeaconScript</span><span>예제와 사전</span><span>같이 고치기</span></div><div class="desc">
+          설치 없이 브라우저에서 코드를 쓰고 바로 미리 보는 코드 도구예요. 파이썬은 거북이 그림과 그래프도 그려요.
+          <ul>
+            <li>실행(Ctrl+Enter)하면 결과가 바로 나와요. 파이썬은 처음에 약 10MB를 받아요</li>
+            <li>input() 입력값 넣기, 곁에 예제와 사전</li>
+            <li>AI 도우미가 코드 설명과 고치기를 도와요. AI는 틀릴 수 있어요</li>
+          </ul>
+        </div><div class="acts"><a class="play" href="code/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div></div></article>
 <article class="game bh">
       <a class="shot" href="blocks/" aria-label="Block HTML 열기"><span class="badge">블록 코딩</span><img src="blocks.webp" alt="Block HTML 화면" loading="lazy"></a>
       <div class="body">
@@ -399,12 +406,11 @@ html body .hero #onlineBar{border:0;background:none;padding:0;height:auto;border
         <div class="motto"><i></i>JAVASCRIPT BLOCKS<i></i></div>
         <div class="tags"><span>블록 → HTML 파일</span><span>한 블록씩 실행</span><span>예제 5개</span><span>로그인 없이</span></div>
         <div class="desc">
-          자바스크립트를 블록으로 조립해 웹페이지를 만들고, 완성되면 HTML 파일로 받아요. 만든 페이지는 어디서든 열려요.
+          자바스크립트를 블록으로 조립해 웹페이지를 만들고 HTML 파일로 받는 도구예요. 만든 페이지는 어디서든 열려요.
           <ul>
             <li>제목, 버튼, 입력칸, 그림판 같은 화면 블록</li>
-            <li>누르면, 키를 누르면, 초마다 같은 이벤트와 조건, 반복, 변수, 함수</li>
-            <li>바로 보이는 미리보기와 읽기 쉬운 HTML 코드</li>
-            <li>AI 도우미(시험 기능)로 블록 초안을 받을 수도 있어요. 거친 초안이라 직접 확인하고 고쳐야 해요</li>
+            <li>이벤트, 조건, 반복, 변수, 함수 블록</li>
+            <li>바로 보이는 미리보기, AI 도우미(시험 기능)로 블록 초안 받기</li>
           </ul>
         </div>
         <div class="acts"><a class="play" href="blocks/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
@@ -417,19 +423,24 @@ html body .hero #onlineBar{border:0;background:none;padding:0;height:auto;border
         <div class="motto"><i></i>SPREADSHEET<i></i></div>
         <div class="tags"><span>수식 · 차트 · 엑셀 파일</span><span class="ai">수식·그래프·표 AI</span><span>자동 저장</span><span>로그인 없이</span></div>
         <div class="desc">
-          엑셀처럼 표를 만들고 계산하는 스프레드시트예요. 엑셀 파일을 열고 저장할 수 있고, 몇 가지 기능을 더했어요.
+          엑셀처럼 표를 만들고 계산하는 스프레드시트예요. 엑셀 파일을 열고 저장할 수 있어요.
           <ul>
             <li>SUM, IF, VLOOKUP 같은 함수 60여 개</li>
-            <li>표를 고치면 바로 바뀌는 차트, 색 단계, 데이터 막대, 체크박스</li>
-            <li>수식·그래프·표를 AI가 만들어 줘요. 짧고 정해진 형식이라 결과를 확인하고 바로 쓸 수 있어요</li>
-            <li>=AI("영어로 번역", A2)처럼 쓰면 칸마다 답을 채워요. 표에 대한 질문·요약도 되지만 답이 틀릴 수 있어요</li>
-            <li>아이패드에서도 손가락으로 범위 선택과 채우기</li>
+            <li>바로 바뀌는 차트, 색 단계, 데이터 막대, 체크박스</li>
+            <li>AI가 수식·그래프·표를 만들고 =AI() 함수도 있어요. 답이 틀릴 수 있어요</li>
           </ul>
         </div>
         <div class="acts"><a class="play" href="sheet/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
       </div>
     </article>
-<article class="game tdocs"><a class="shot" href="docs/" aria-label="Fry Docs 열기"><span class="badge">문서</span><img src="card/docs.webp" alt="" loading="lazy"></a><div class="body"><h2>FRY <b>DOCS</b></h2><div class="motto"><i></i>WORD PROCESSOR<i></i></div><div class="tags"><span>제목 · 표 · 그림</span><span>docx · PDF로 저장</span><span>AI 도우미(시험)</span><span>버전</span></div><div class="desc">워드처럼 글 문서를 쓰는 도구예요. 제목, 표, 그림을 넣고 docx나 PDF로 받아요.<ul><li>홈, 삽입, 레이아웃, 검토 탭에서 글꼴, 줄 간격, 목록 모양, 정렬을 바꿔요</li><li>고른 글자에 메모를 달고, 고친 곳을 모두 받아들이거나 되돌려요. 체크 표시, 도형, 수식 기호도 넣어요</li><li>메모는 Word 파일로 받을 때 Word의 메모로 들어가요</li></ul></div><div class="acts"><a class="play" href="docs/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div></div></article>
+<article class="game tdocs"><a class="shot" href="docs/" aria-label="Fry Docs 열기"><span class="badge">문서</span><img src="card/docs.webp" alt="" loading="lazy"></a><div class="body"><h2>FRY <b>DOCS</b></h2><div class="motto"><i></i>WORD PROCESSOR<i></i></div><div class="tags"><span>제목 · 표 · 그림</span><span>docx · PDF로 저장</span><span>AI 도우미(시험)</span><span>버전</span></div><div class="desc">
+          워드처럼 글 문서를 쓰는 도구예요. 제목, 표, 그림을 넣고 docx나 PDF로 받아요.
+          <ul>
+            <li>탭에서 글꼴, 줄 간격, 목록 모양, 정렬 바꾸기</li>
+            <li>글자에 메모를 달고 고친 곳을 받아들이거나 되돌리기</li>
+            <li>메모는 Word 파일로 받을 때 Word의 메모로 들어가요</li>
+          </ul>
+        </div><div class="acts"><a class="play" href="docs/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div></div></article>
 <article class="game sl">
       <a class="shot" href="slides/" aria-label="Fry Slides 열기"><span class="badge">발표 자료</span><img src="slides.webp" alt="Fry Slides 화면" loading="lazy"></a>
       <div class="body">
@@ -437,12 +448,11 @@ html body .hero #onlineBar{border:0;background:none;padding:0;height:auto;border
         <div class="motto"><i></i>PRESENTATIONS<i></i></div>
         <div class="tags"><span>슬라이드 편집</span><span>PPTX 파일</span><span>발표 모드</span><span>로그인 없이</span></div>
         <div class="desc">
-          글자를 눌러 바로 고치고, 테마와 레이아웃을 골라 발표 자료를 만들어요. 바로 발표하거나 파워포인트 파일로 받아요.
+          글자를 눌러 바로 고치며 발표 자료를 만드는 도구예요. 바로 발표하거나 파워포인트 파일로 받아요.
           <ul>
-            <li>주제를 쓰면 AI가 초안을 써 주는 시험 기능도 있어요. 거친 초안이라 내용과 사실은 직접 확인하고 고쳐야 해요</li>
-            <li>글자를 눌러 바로 고치고, 슬라이드마다 다시 쓰기·더 짧게·더 자세히</li>
             <li>테마 6가지, 레이아웃 7가지, 끌어서 순서 바꾸기</li>
-            <li>전체 화면 발표, 고칠 수 있는 PPTX 파일, PDF 인쇄</li>
+            <li>슬라이드마다 다시 쓰기·더 짧게·더 자세히</li>
+            <li>전체 화면 발표, PPTX, PDF. AI 초안(시험 기능)은 직접 확인해요</li>
           </ul>
         </div>
         <div class="acts"><a class="play" href="slides/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
@@ -458,17 +468,37 @@ html body .hero #onlineBar{border:0;background:none;padding:0;height:auto;border
           슬라이더를 움직이면 바로 바뀌는 중고등 과학·수학 실험실이에요. 값을 재서 표에 기록하고, 그래프로 규칙을 찾아요.
           <ul>
             <li>함수 그래프, 확률, 삼각함수, 포물선 운동, 진자, 용수철, 빛의 굴절, 물결파 간섭, 옴의 법칙</li>
-            <li>끌어서 바꾸는 시뮬레이션과 실시간 측정값, 해 볼 만한 탐구 과제</li>
+            <li>끌어서 바꾸는 시뮬레이션과 실시간 측정값</li>
             <li>기록한 표로 그래프와 추세선을 그리고 CSV로 내보내기</li>
-            <li>AI 도우미(시험 기능)에게 원리를 물어볼 수 있어요. 답이 틀릴 수 있으니 직접 확인해요</li>
           </ul>
         </div>
         <div class="acts"><a class="play" href="lab/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div>
       </div>
     </article>
-<article class="game tdraw"><a class="shot" href="draw/" aria-label="Fry Draw 열기"><span class="badge">그림</span><img src="card/draw.webp" alt="" loading="lazy"></a><div class="body"><h2>FRY <b>DRAW</b></h2><div class="motto"><i></i>VECTOR DRAW<i></i></div><div class="tags"><span>도형 · 곡선 · 기하학 무늬</span><span>레이어</span><span>PNG · SVG로 저장</span><span>AI 그림</span></div><div class="desc">도형, 곡선, 기하학 무늬를 그리는 벡터 그림 도구예요. AI에게 그림도 시켜 볼 수 있어요.<ul><li>고르기, 연필, 직선, 붓, 펜, 도형, 글자, 지우개 도구로 그리고, Shift를 누르면 비율과 각도가 맞춰져요</li><li>속성, 무늬, 레이어, AI, 캔버스 탭이 있고, 지금 색에 어울리는 보색·이웃색·3색 조화를 보여 줘요</li><li>선 모양은 실선, 점선, 긴 점선, 동그란 점이고 그림은 PNG나 SVG로 받아요</li></ul></div><div class="acts"><a class="play" href="draw/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div></div></article>
-<article class="game tscore"><a class="shot" href="score/" aria-label="Fry Score 열기"><span class="badge">악보</span><img src="card/score.webp" alt="" loading="lazy"></a><div class="body"><h2>FRY <b>SCORE</b></h2><div class="motto"><i></i>MUSIC SCORE<i></i></div><div class="tags"><span>음표 찍기</span><span>여러 악기 재생</span><span>MIDI · MusicXML · PNG</span><span>휴대폰 건반</span></div><div class="desc">악보를 그리고 바로 들어 보는 도구예요. 음표를 찍고 여러 악기로 재생해요.<ul><li>오선을 누르면 고른 길이의 음표가 찍혀요. 키보드에서 A~G는 음, 1~7은 길이, R은 쉼표예요</li><li>Space로 재생하고, 방향키로 이동하고, Shift로 범위와 화음을 골라요</li><li>휴대폰에서는 🎹 건반을 켜서 입력하고, 악보는 MIDI, MusicXML, PNG로 받아요</li></ul></div><div class="acts"><a class="play" href="score/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div></div></article>
-<article class="game tvideo"><a class="shot" href="video/" aria-label="Fry Video 열기"><span class="badge">영상</span><img src="video.webp" alt="" loading="lazy"></a><div class="body"><h2>FRY <b>VIDEO</b></h2><div class="motto"><i></i>VIDEO EDITOR<i></i></div><div class="tags"><span>자르기 · 이어 붙이기</span><span>글자 넣기</span><span>mp4 · webm</span><span>내 기기 안에서만</span></div><div class="desc">영상 클립을 자르고 이어 붙이고 글자와 소리를 넣어 mp4나 webm으로 받는 브라우저 영상 편집 도구예요.<ul><li>영상, 그림, 소리를 넣고 타임라인에서 클립을 끌어 옮기고, 양 끝을 끌어 줄여요</li><li>재생 막대를 놓고 ✂ 자르기(S)로 나누고, T로 자막을 넣어요</li><li>파일은 이 기기 안에서만 쓰이고 서버로 올라가지 않아요. 영상 만들기는 처음부터 재생하며 녹화해요</li></ul></div><div class="acts"><a class="play" href="video/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div></div></article>
+<article class="game tdraw"><a class="shot" href="draw/" aria-label="Fry Draw 열기"><span class="badge">그림</span><img src="card/draw.webp" alt="" loading="lazy"></a><div class="body"><h2>FRY <b>DRAW</b></h2><div class="motto"><i></i>VECTOR DRAW<i></i></div><div class="tags"><span>도형 · 곡선 · 기하학 무늬</span><span>레이어</span><span>PNG · SVG로 저장</span><span>AI 그림</span></div><div class="desc">
+          도형, 곡선, 기하학 무늬를 그리는 벡터 그림 도구예요. AI에게 그림도 시켜 볼 수 있어요.
+          <ul>
+            <li>고르기, 연필, 직선, 붓, 펜, 도형, 글자, 지우개 도구</li>
+            <li>레이어와 지금 색에 어울리는 보색·이웃색·3색 조화</li>
+            <li>그림은 PNG나 SVG로 받아요</li>
+          </ul>
+        </div><div class="acts"><a class="play" href="draw/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div></div></article>
+<article class="game tscore"><a class="shot" href="score/" aria-label="Fry Score 열기"><span class="badge">악보</span><img src="card/score.webp" alt="" loading="lazy"></a><div class="body"><h2>FRY <b>SCORE</b></h2><div class="motto"><i></i>MUSIC SCORE<i></i></div><div class="tags"><span>음표 찍기</span><span>여러 악기 재생</span><span>MIDI · MusicXML · PNG</span><span>휴대폰 건반</span></div><div class="desc">
+          악보를 그리고 바로 들어 보는 도구예요. 음표를 찍고 여러 악기로 재생해요.
+          <ul>
+            <li>오선을 누르면 음표가 찍혀요. A~G는 음, 1~7은 길이, R은 쉼표</li>
+            <li>Space로 재생, 방향키로 이동, Shift로 범위와 화음</li>
+            <li>휴대폰은 🎹 건반으로 입력하고, 악보는 MIDI, MusicXML, PNG로 받아요</li>
+          </ul>
+        </div><div class="acts"><a class="play" href="score/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div></div></article>
+<article class="game tvideo"><a class="shot" href="video/" aria-label="Fry Video 열기"><span class="badge">영상</span><img src="video.webp" alt="" loading="lazy"></a><div class="body"><h2>FRY <b>VIDEO</b></h2><div class="motto"><i></i>VIDEO EDITOR<i></i></div><div class="tags"><span>자르기 · 이어 붙이기</span><span>글자 넣기</span><span>mp4 · webm</span><span>내 기기 안에서만</span></div><div class="desc">
+          영상 클립을 자르고 이어 붙이고 글자와 소리를 넣는 브라우저 영상 편집 도구예요. mp4나 webm으로 받아요.
+          <ul>
+            <li>영상, 그림, 소리를 넣고 타임라인에서 끌어 옮기고 줄이기</li>
+            <li>✂ 자르기(S)로 나누고, T로 자막 넣기</li>
+            <li>파일은 이 기기 안에서만 쓰이고 서버로 올라가지 않아요</li>
+          </ul>
+        </div><div class="acts"><a class="play" href="video/"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>열기</a></div></div></article>
   </section>
 
   <section class="why">
