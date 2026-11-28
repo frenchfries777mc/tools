@@ -357,7 +357,9 @@ function send(c,o){ return c.local?askLocal(c,o):c.provider==='claude'?askClaude
    person picked in AI settings). Someone who put in their own API key in AI settings keeps using that key. */
 var CLOUD=window.FFAI_CLOUD_URL||'https://ff-ai.frenchfries777mc.workers.dev';
 var useC=null, useT=0;   // how much of the free share is left (GET on the Worker), kept for a few seconds
-function usage(force){ if(!force&&useC&&Date.now()-useT<15000) return Promise.resolve(useC); return fetch(CLOUD).then(function(r){ return r.json(); }).then(function(j){ useC=j; useT=Date.now(); return j; },function(){ return null; }); }
+function tok(){ try{ if(!(window.FFAuth&&FFAuth.user&&FFAuth.user())) return Promise.resolve(''); return FFAuth.ready.then(function(sb){ return sb&&sb.auth?sb.auth.getSession():null; }).then(function(r){ return r&&r.data&&r.data.session?r.data.session.access_token:''; }).catch(function(){ return ''; }); }catch(e){ return Promise.resolve(''); } }   // logged in (FFAuth from the games hub): the Worker gives a bigger personal share to a verified account
+function hdr(h){ return tok().then(function(t){ if(t) h.authorization='Bearer '+t; return h; }); }
+function usage(force){ if(!force&&useC&&Date.now()-useT<15000) return Promise.resolve(useC); return hdr({}).then(function(h){ return fetch(CLOUD,{headers:h}); }).then(function(r){ return r.json(); }).then(function(j){ useC=j; useT=Date.now(); return j; },function(){ return null; }); }
 function freeErr(e){ if(!e||e.kind!=='quota') return e;
   var m={day:'오늘 무료 사용량을 다 썼어요. 내일 오전 9시에 다시 채워져요. 지금 쓰려면 내 API 키를 넣거나 FF777을 골라 주세요',budget:'이번 달 무료 사용량이 다 떨어졌어요. 내 API 키를 넣거나 FF777을 골라 주세요',rate:'요청이 너무 많아요. 조금 뒤에 다시 해 주세요'}[e.code];
   return AIError(T(m||'클라우드 AI를 지금 쓸 수 없어요'),'api'); }
@@ -365,7 +367,7 @@ var CLOUD_SOFT={bad:1,rate:1,day:1,budget:1,busy:1,off:1,key:1,db:1,net:1,api:1,
 function askCloud(task,o){
   useT=0;
   var ac=new AbortController(); stopNow=function(){ ac.abort(); };
-  return fetch(CLOUD,{method:'POST',headers:{'content-type':'application/json'},signal:ac.signal,body:JSON.stringify({task:task,system:o.system||'',prompt:o.prompt,maxTokens:o.maxTokens||800})})
+  return hdr({'content-type':'application/json'}).then(function(h){ return fetch(CLOUD,{method:'POST',headers:h,signal:ac.signal,body:JSON.stringify({task:task,system:o.system||'',prompt:o.prompt,maxTokens:o.maxTokens||800})}); })
     .then(function(res){
       if(!res.ok) return res.json().catch(function(){ return {}; }).then(function(j){ var e=AIError(T('클라우드 AI를 지금 쓸 수 없어요'),CLOUD_SOFT[j.error]?'quota':'api'); e.code=j.error; throw e; });
       var out='', rd=res.body.getReader(), dec=new TextDecoder(), buf='';
@@ -470,7 +472,7 @@ function paintUse(force){
     if(!j.month){ box.innerHTML='<small>'+T('하루 사용량이 정해져 있어요')+'</small>'; return; }
     var mp=Math.round(j.month.left*100), meP=Math.round((j.me?j.me.left:1)*100), left=Math.max(0,j.month.cap-j.month.spent);
     var row=function(t,pc,extra){ return '<div><span>'+t+' <b>'+pc+'%</b>'+(extra?' <small>'+extra+'</small>':'')+'</span><div class="ub"><i class="'+(pc<=10?'low':'')+'" style="width:'+pc+'%"></i></div></div>'; };
-    box.innerHTML=row(T('이번 달 남은 무료 사용량'),mp,'$'+left.toFixed(2)+' / $'+j.month.cap)+row(T('오늘 내가 쓸 수 있는 양'),meP,'')+'<small>'+T('매일 오전 9시에 내 몫이 다시 채워져요')+'</small>';
+    box.innerHTML=row(T('이번 달 남은 무료 사용량'),mp,'$'+left.toFixed(2)+' / $'+j.month.cap)+row(T('오늘 내가 쓸 수 있는 양'),meP,j.me&&j.me.quota?'$'+Math.max(0,j.me.quota-j.me.used).toFixed(2)+' / $'+j.me.quota.toFixed(2):'')+'<small>'+T('매일 오전 9시에 내 몫이 다시 채워져요')+'</small>';
   });
 }
 function fill(){
