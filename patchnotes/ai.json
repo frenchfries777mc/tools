@@ -3,6 +3,28 @@
  "name": "자체 AI (FF777)",
  "notes": [
   {
+   "date": "2026-11-28",
+   "build": "v74",
+   "title": "AI 체험을 Claude 사이트 안내로",
+   "items": [
+    "AI 체험이 Claude 하나로 바뀌었어요. 사이트의 기능과 사용법을 찾아서 알려줘요",
+    "사이트에 관한 질문에만 답해요. 질문은 서버로 보내지고, 사람마다 하루에 물을 수 있는 횟수가 정해져 있어요",
+    "tarius, lectus, premus는 AI 설정에서 그대로 쓸 수 있어요",
+    "AI 대결장은 없앴어요"
+   ],
+   "tr": {
+    "en": {
+     "title": "AI experience is now a Claude site guide",
+     "items": [
+      "The AI experience is now Claude only. It finds the site's features and how to use them for you",
+      "It only answers questions about this site. Questions are sent to a server, and each person has a daily limit",
+      "tarius, lectus and premus are still available in the AI settings",
+      "The AI arena was removed"
+     ]
+    }
+   }
+  },
+  {
    "date": "2026-11-12",
    "build": "v73",
    "title": "AI 설정을 Claude / FF777 / Gemini로 정리",
